@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>IFoA SP1 Practice Questions Tool</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap');
+
+:root {
+  --bg: #0d0f14;
+  --surface: #151923;
+  --surface2: #1c2230;
+  --surface3: #242b3d;
+  --border: #2a324b;
+  --border2: #363f5f;
+  --text: #e2e4ed;
+  --text2: #949ebf;
+  --text3: #565f80;
+  --accent: #00d4ff; /* Cyan for Principles Paper */
+  --accent2: #00a3cc;
+  --accentbg: #0a1f2e;
+  --green: #2ecc71;
+  --greenbg: #0d2a1a;
+  --amber: #f1c40f;
+  --amberbg: #2a240a;
+  --red: #e74c3c;
+  --redbg: #2a0f0f;
+  --radius: 6px;
+  --radius2: 10px;
+  --mono: 'IBM Plex Mono', monospace;
+  --sans: 'IBM Plex Sans', sans-serif;
+}
+
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;}
+
+/* TOP BAR */
+.topbar{background:var(--surface);border-bottom:1px solid var(--border);padding:10px 20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;}
+.logo{font-family:var(--mono);font-weight:600;font-size:15px;color:var(--accent);letter-spacing:.05em;white-space:nowrap;}
+.logo span{color:var(--text3);}
+.logo .ifoa{color:var(--accent);}
+.tagline{font-size:12px;color:var(--text3);}
+.topbar-actions{margin-left:auto;display:flex;align-items:center;gap:8px;}
+.top-btn{font-family:var(--mono);font-size:11px;font-weight:600;padding:4px 10px;border-radius:4px;cursor:pointer;background:var(--surface2);border:1px solid var(--border);color:var(--text2);transition:all .2s;}
+.top-btn:hover{background:var(--surface3);color:var(--text);}
+.btn-exit{border-color:var(--red);color:var(--red);background:var(--redbg);}
+.btn-exit:hover{background:var(--red);color:#fff;}
+
+/* SERVER NOTICE */
+#server-notice{background:#12141d;border-bottom:1px solid #1a1e2e;padding:8px 20px;font-size:12.5px;color:var(--text2);display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+#server-notice.hidden{display:none;}
+.notice-cmd{font-family:var(--mono);background:#060e1c;border:1px solid var(--border2);border-radius:4px;padding:2px 8px;color:#00d4ff;cursor:pointer;font-size:12px;}
+.notice-cmd:hover{background:#1a1e2e;}
+.notice-dismiss{margin-left:auto;background:none;border:none;color:var(--text3);cursor:pointer;font-size:16px;padding:0 4px;}
+.cors-alert{display:none;background:var(--redbg);border:1px solid var(--red);border-radius:var(--radius);padding:4px 10px;color:var(--red);font-size:12px;}
+
+/* SELECTORS */
+.selectors{display:flex;align-items:flex-end;gap:10px;padding:12px 16px;border-bottom:1px solid var(--border);background:var(--surface);}
+.sel-chapter-wrap{flex:0 0 250px;} .sel-question-wrap{flex:1;} .sel-sub-wrap{flex:1;}
+.sel-group{display:flex;flex-direction:column;gap:5px;}
+.sel-label{font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;}
+select{font-family:var(--sans);font-size:14px;color:var(--text);background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:8px 10px;cursor:pointer;width:100%;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23484f58'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;}
+select:focus{outline:none;border-color:var(--accent);}
+.marks-pill{display:inline-block;font-family:var(--mono);font-size:14px;font-weight:600;background:var(--accentbg);color:var(--accent);border:1px solid var(--accent2);border-radius:20px;padding:4px 14px;}
+
+/* MAIN LAYOUT */
+.main{display:grid;grid-template-columns:1fr 1fr;flex:1;min-height:0;}
+@media(max-width:900px){.main{grid-template-columns:1fr;}}
+
+/* LEFT PANE */
+.left-pane{border-right:1px solid var(--border);display:flex;flex-direction:column;min-height:0;overflow:hidden;}
+.pane-header{padding:10px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.pane-title{font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;}
+
+.scenario-wrap{padding:14px 16px;border-bottom:1px solid var(--border);background:rgba(43, 44, 48, 0.4);}
+.scenario-toggle{font-size:12px;color:var(--accent);cursor:pointer;user-select:none;display:flex;align-items:center;gap:6px;}
+.scenario-toggle:hover{color:#00d4ff;}
+.scenario-body{font-size:14.5px;color:var(--text);line-height:1.75;margin-top:10px;display:none;max-height:450px;overflow-y:auto;white-space:pre-line;padding-right:12px;scrollbar-width:thin;scrollbar-color:var(--accent) transparent;}
+.scenario-body::-webkit-scrollbar{width:6px;}
+.scenario-body::-webkit-scrollbar-thumb{background-color:var(--accent);border-radius:10px;}
+.scenario-body.open{display:block;}
+.question-text{padding:14px 16px;font-size:15px;font-weight:500;color:var(--text);line-height:1.6;border-bottom:1px solid var(--border);max-height:180px;overflow-y:auto;white-space:pre-line;}
+
+/* TIMER */
+.timer-zone{padding:6px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;flex-wrap:nowrap;background:var(--surface);overflow:hidden;}
+.timer-display{font-family:var(--mono);font-size:17px;font-weight:600;color:var(--text);min-width:48px;letter-spacing:.02em;flex-shrink:0;}
+.timer-display.amber{color:var(--amber);}
+.timer-display.red{color:var(--red);animation:blink 1s ease-in-out infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.timer-bar-wrap{flex:1;min-width:60px;}
+.timer-bar-track{height:4px;background:var(--surface3);border-radius:2px;}
+.timer-bar-fill{height:4px;border-radius:2px;background:var(--accent);transition:width .5s,background .5s;width:0%;}
+.timer-bar-fill.amber{background:var(--amber);}
+.timer-bar-fill.red{background:var(--red);}
+.timer-controls{display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.tbtn{font-family:var(--sans);font-size:12px;font-weight:500;padding:5px 10px;border-radius:var(--radius);border:1px solid var(--border);background:var(--surface2);color:var(--text2);cursor:pointer;white-space:nowrap;flex-shrink:0;}
+.tbtn:hover{background:var(--surface3);color:var(--text);}
+.tbtn:disabled{opacity:.3;cursor:default;}
+.countdown-wrap{display:flex;align-items:center;gap:6px;}
+.countdown-label{font-size:12px;color:var(--text3);}
+.countdown-input{width:52px;font-family:var(--mono);font-size:13px;text-align:center;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:4px;color:var(--text);}
+
+/* ANSWER */
+.answer-wrap{flex:1;display:flex;flex-direction:column;padding:12px 16px;gap:8px;min-height:200px;}
+.answer-label{font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;}
+textarea{flex:1;font-family:var(--sans);font-size:14px;color:var(--text);background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:10px 12px;resize:none;line-height:1.65;min-height:200px;}
+textarea:focus{outline:none;border-color:var(--accent);}
+.action-row{display:flex;gap:8px;flex-wrap:wrap;}
+.btn{font-family:var(--sans);font-size:14px;font-weight:500;padding:8px 16px;border-radius:var(--radius);border:1px solid var(--border);background:var(--surface2);color:var(--text);cursor:pointer;transition:background .15s;}
+.btn:hover{background:var(--surface3);}
+.btn:active{transform:scale(.98);}
+.btn-primary{background:var(--accent);border-color:var(--accent);color:#fff;}
+.btn-primary:hover{background:var(--accent2);}
+.btn:disabled{opacity:.3;cursor:default;transform:none;}
+
+/* RIGHT PANE */
+.right-pane{display:flex;flex-direction:column;min-height:0;}
+.review-header{padding:10px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;flex-shrink:0;}
+.progress-label{font-size:12px;color:var(--text3);}
+.progress-label strong{color:var(--text);font-family:var(--mono);}
+.progress-track{height:3px;background:var(--surface3);border-radius:2px;flex:1;min-width:80px;}
+.progress-fill{height:3px;background:var(--accent);border-radius:2px;transition:width .3s;}
+
+.loading-pane{display:none;flex:1;align-items:center;justify-content:center;flex-direction:column;gap:16px;}
+.loading-pane.active{display:flex;}
+.loading-text{font-size:14px;color:var(--text2);}
+.dots{display:flex;gap:6px;}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--accent);animation:pulse 1.2s ease-in-out infinite;}
+.dot:nth-child(2){animation-delay:.2s;}
+.dot:nth-child(3){animation-delay:.4s;}
+@keyframes pulse{0%,100%{opacity:.2}50%{opacity:1}}
+
+.points-outer{flex:1;overflow-y:auto;padding:12px 16px;display:flex;flex-direction:column;gap:0;}
+.points-outer::-webkit-scrollbar{width:4px;}
+.points-outer::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
+.section-label{font-size:10.5px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.09em;padding:10px 0 4px;border-top:1px solid var(--border);margin-top:8px;}
+.point-block{margin-bottom:6px;}
+.examiner-text{font-size:14px;color:var(--text);line-height:1.65;padding:9px 12px;background:var(--surface2);border-left:2px solid var(--border2);border-radius:0 var(--radius) var(--radius) 0;}
+.examiner-text.current{border-left-color:var(--accent);background:var(--accentbg);}
+.match-row{font-size:12.5px;padding:5px 12px;display:flex;align-items:flex-start;gap:7px;border-radius:0 0 var(--radius) 0;}
+.match-row.hit{background:var(--greenbg);border-left:2px solid var(--green);}
+.match-row.miss{background:var(--amberbg);border-left:2px solid var(--amber);}
+.match-icon{font-size:11px;flex-shrink:0;margin-top:2px;}
+
+/* STICKY HEADER */
+.left-pane { position: relative; }
+.review-header { position: sticky; top: 0; z-index: 10; background: var(--bg); }
+
+/* ANIMATIONS */
+@keyframes reveal-pulse {
+  0% { transform: scale(1); background: var(--surface3); }
+  50% { transform: scale(1.01); background: var(--accentbg); }
+  100% { transform: scale(1); background: var(--surface2); }
+}
+.point-block.new { animation: reveal-pulse 0.4s ease-out; }
+
+.review-controls{padding:6px 16px;border-top:1px solid var(--border);display:flex;align-items:center;gap:8px;flex-wrap:wrap;background:var(--surface);flex-shrink:0;}
+.key-hint{font-size:11px;color:var(--text3);margin-left:auto;}
+kbd{background:var(--surface2);border:1px solid var(--border2);border-radius:3px;padding:1px 5px;font-family:var(--mono);font-size:10px;}
+
+.marks-stack { display: flex; flex-direction: column; gap: 4px; align-self: flex-end; margin-bottom: 2px; flex-shrink: 0; align-items: flex-end; }
+.marks-pill { font-size: 11px; padding: 2px 10px; border-radius: 12px; border: 1px solid var(--border); background: var(--surface2); color: var(--text3); font-weight: 600; white-space: nowrap; }
+#total-marks-pill { background: var(--accentbg); border-color: var(--accent); color: var(--accent); font-size: 11.5px; }
+
+.right-empty-pane { flex: 1; display: flex; align-items: center; justify-content: center; color: var(--text3); font-family: var(--sans); font-size: 14px; text-align: center; padding: 40px; }
+
+/* NOTES & SYNOPSIS */
+.notes-wrap{display:none;padding:12px 16px;flex-direction:column;gap:8px;border-top:1px solid var(--border);background:var(--surface);}
+.notes-label{font-size:11px;font-weight:600;color:var(--accent);text-transform:uppercase;letter-spacing:.08em;}
+#notes-box{width:100%;height:100px;font-family:var(--sans);font-size:13.5px;color:var(--text);background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:8px 12px;resize:none;}
+
+.scroller-ctrl{display:flex;align-items:center;gap:4px;margin-bottom:2px;}
+.scroll-btn{background:var(--surface3);border:1px solid var(--border2);color:var(--text2);padding:2px 6px;border-radius:3px;cursor:pointer;font-size:10px;}
+.scroll-btn:hover{color:var(--text);border-color:var(--accent);}
+.scroll-btn:disabled{opacity:.3;cursor:default;}
+
+/* SUMMARY */
+.summary{margin:4px 16px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:6px 10px;display:none;flex-shrink:0;}
+.summary.show{display:flex;flex-direction:column;gap:4px;}
+.summary-header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+.summary-title{font-size:11px;font-weight:700;color:var(--text);letter-spacing:.05em;}
+.stat-row{display:flex;gap:6px;}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:2px 8px;display:flex;align-items:center;gap:6px;}
+.stat-num{font-family:var(--mono);font-size:14px;font-weight:700;}
+.stat-num.g{color:var(--green);}
+.stat-num.a{color:var(--amber);}
+.stat-num.b{color:var(--accent);}
+.stat-lbl{font-size:10px;color:var(--text3);}
+.time-badge{font-family:var(--mono);font-size:10px;color:var(--text2);background:var(--surface3);border:1px solid var(--border);border-radius:var(--radius);padding:1px 6px;display:none;}
+
+/* Self-assess logic */
+.self-row{display:flex;align-items:flex-start;gap:8px;padding:5px 10px 5px 12px;background:var(--surface3);border-left:2px solid var(--border2);border-radius:0 0 var(--radius) 0;margin-top:1px;}
+.self-row.checked{background:var(--greenbg);border-left-color:var(--green);}
+.self-row.unchecked{background:var(--amberbg);border-left-color:var(--amber);}
+.self-cb{width:15px;height:15px;flex-shrink:0;margin-top:3px;cursor:pointer;accent-color:var(--green);}
+.self-label{font-size:12px;color:var(--text3);flex-shrink:0;margin-top:2px;user-select:none;cursor:pointer;white-space:nowrap;}
+.self-note{flex:1;font-family:var(--sans);font-size:12px;color:var(--text);background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:3px 8px;display:none;min-width:0;}
+.self-note.visible{display:block;}
+.self-note:focus{outline:none;border-color:var(--green);}
+.empty-pane{flex:1;display:flex;align-items:center;justify-content:center;}
+.empty-text{font-size:13px;color:var(--text3);text-align:center;line-height:1.8;}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="logo">IFoA<span> / </span>SP1 Practice Tool</div>
+  <div class="tagline">Health and Care Principles &nbsp;·&nbsp; Practice Questions Tool</div>
+  <div class="topbar-actions">
+    <button class="top-btn" onclick="location.reload()">&#8635; Refresh</button>
+    <button class="top-btn btn-exit" onclick="exitTool()">&#10005; Exit</button>
+    <div style="font-family:var(--mono);font-size:11px;color:var(--text3);background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:2px 8px;">v2.0</div>
+  </div>
+</div>
+
+<!-- SERVER NOTICE -->
+<div id="server-notice">
+  <span style="color:var(--accent);font-weight:600;">&#9889; AI review requires a local server.</span>
+  <span>Run:</span> <code class="notice-cmd" onclick="copyNoticeCmd(this,'python -m http.server 8080')">python -m http.server 8080</code>
+  <div class="cors-alert" id="cors-alert">&#9888; file:// detected — AI disabled</div>
+  <button class="notice-dismiss" onclick="document.getElementById('server-notice').classList.add('hidden')">&#10005;</button>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="left-pane">
+    <div class="selectors">
+      <div class="sel-group sel-chapter-wrap">
+        <div class="sel-label">Chapter <span id="assign-timer" style="display:none;font-family:var(--mono);font-size:12px;font-weight:400;color:var(--text3);letter-spacing:.03em;">— 00:00:00</span></div>
+        <select id="sel-chapter" onchange="onChapterChange()">
+          <option value="">— select —</option>
+          <option value="Ch00">Chapter 0: Introduction</option>
+          <option value="Ch01">Chapter 1: Income Protection</option>
+          <option value="Ch02">Chapter 2: Critical Illness</option>
+          <option value="Ch03">Chapter 3: Long-Term Care</option>
+          <option value="Ch04">Chapter 4: Private Medical Insurance</option>
+        </select>
+      </div>
+      <div class="sel-group sel-question-wrap">
+        <div class="sel-label">Question
+          <button id="btn-q-prev" onclick="navQuestion(-1)" disabled>◀</button>
+          <button id="btn-q-next" onclick="navQuestion(1)" disabled>▶</button>
+        </div>
+        <select id="sel-question" onchange="onQuestionChange()" disabled>
+          <option value="">— select —</option>
+        </select>
+      </div>
+      <div class="sel-group sel-sub-wrap" id="sub-wrap" style="display:none;">
+        <div class="scroller-ctrl">
+          <div class="sel-label">Part</div>
+          <button class="scroll-btn" onclick="navSub(-1)" id="btn-s-prev">◀</button>
+          <button class="scroll-btn" onclick="navSub(1)" id="btn-s-next">▶</button>
+        </div>
+        <select id="sel-sub" onchange="onSubChange()">
+          <option value="">— part —</option>
+        </select>
+      </div>
+      <div class="marks-stack">
+        <div id="total-marks-pill" class="marks-pill" style="display:none;">Total: <span id="total-marks-val">0</span> marks</div>
+        <div id="marks-pill" class="marks-pill" style="display:none;"></div>
+      </div>
+    </div>
+
+    <div class="scenario-wrap" id="scenario-wrap" style="display:none;">
+      <div class="scenario-toggle" onclick="toggleScenario()"><span id="scenario-arrow">&#9654;</span> <span>Scenario</span></div>
+      <div class="scenario-body" id="scenario-body"></div>
+    </div>
+
+    <div class="review-header">
+      <div class="pane-title">Examiner Solution</div>
+      <div class="progress-label"><strong id="pcnt">0</strong> / <strong id="ptotal">0</strong> points</div>
+      <div class="progress-track"><div class="progress-fill" id="pbar" style="width:0%"></div></div>
+    </div>
+
+    <div class="loading-pane" id="loading-pane">
+      <div class="loading-text">Analyzing answer&#8230;</div>
+      <div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+    </div>
+
+    <div class="empty-pane" id="empty-pane">
+      <div class="empty-text">Select a chapter and question<br>to begin.</div>
+    </div>
+
+    <div class="summary" id="summary">
+      <div class="summary-header">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <div class="summary-title">RESULT</div>
+          <div id="time-badge" class="time-badge"></div>
+        </div>
+        <div class="stat-row">
+          <div class="stat-card"><div class="stat-num g" id="s-hit">—</div><div class="stat-lbl">Matched</div></div>
+          <div class="stat-card"><div class="stat-num a" id="s-miss">—</div><div class="stat-lbl">Missed</div></div>
+          <div class="stat-card"><div class="stat-num b" id="s-extra">—</div><div class="stat-lbl">Extras</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="points-outer" id="points-outer" style="display:none;"></div>
+
+    <div class="review-controls" id="review-controls" style="display:none;">
+      <button class="btn" id="btn-prev" onclick="prev()" disabled>&#9664; Back</button>
+      <button class="btn btn-primary" id="btn-next" onclick="next()">Next point</button>
+      <button class="btn" onclick="resetAll()">&#8635; New</button>
+      <div class="key-hint"><kbd>Space</kbd> next &nbsp; <kbd>1/0</kbd> mark</div>
+    </div>
+  </div>
+
+  <div class="right-pane">
+    <div class="pane-header"><div class="pane-title">Your Answer</div></div>
+    <div id="right-empty-pane" class="right-empty-pane">Select a question to begin.</div>
+    <div class="timer-zone" id="timer-zone" style="display:none;">
+      <div class="timer-display" id="timer-display">0:00</div>
+      <div class="timer-bar-wrap" id="timer-bar-wrap" style="display:none;">
+        <div class="timer-bar-track"><div class="timer-bar-fill" id="timer-bar-fill"></div></div>
+      </div>
+      <div class="timer-controls">
+        <button class="tbtn" id="btn-pause" onclick="togglePause()" disabled>Pause</button>
+        <div class="countdown-wrap">
+          <span class="countdown-label">Target:</span>
+          <input type="text" class="countdown-input" id="countdown-input" readonly/>
+          <span class="countdown-label">min</span>
+        </div>
+      </div>
+      <div class="timer-status" id="timer-status">Starts when you type</div>
+    </div>
+    <div class="question-text" id="question-text" style="display:none;"></div>
+    <div class="answer-wrap" id="answer-wrap" style="display:none;">
+      <textarea id="answer-box" placeholder="Start writing..." oninput="startTimerIfNeeded();"></textarea>
+      <div class="action-row">
+        <button class="btn btn-primary" id="btn-review" onclick="startReview()" disabled>AI review &#8599;</button>
+        <button class="btn" id="btn-skip" onclick="skipToReveal()" disabled>Reveal &amp; self-assess</button>
+        <button class="btn" onclick="exportToWord()">&#8225; Export .doc</button>
+      </div>
+    </div>
+    <div class="notes-wrap" id="notes-wrap">
+      <div class="notes-label">Revision Notes</div>
+      <textarea id="notes-box" placeholder="Key concepts to remember for this question..."></textarea>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════
+// STATE & LOGIC
+// ═══════════════════════════════════════════════════════════
+
+let currentChapterData = null;
+let currentQuestionId = null;
+let currentPartId = null;
+let currentPoints = [];
+let currentIdx = -1;
+let startTime = null;
+let timerInterval = null;
+let isPaused = false;
+let elapsedSeconds = 0;
+let targetSeconds = 0;
+
+// HELPERS
+const $ = id => document.getElementById(id);
+
+function exitTool() { if(confirm("Exit tool?")) window.close(); }
+
+function copyNoticeCmd(el, cmd) {
+  navigator.clipboard.writeText(cmd);
+  const old = el.innerText;
+  el.innerText = "COPIED!";
+  el.style.color = "var(--green)";
+  setTimeout(() => { el.innerText = old; el.style.color = ""; }, 1500);
+}
+
+// DATA LOADING
+async function onChapterChange() {
+  const chapterId = $("sel-chapter").value;
+  if (!chapterId) { resetAll(); return; }
+
+  try {
+    const res = await fetch(`data/${chapterId}.json`);
+    currentChapterData = await res.json();
+    populateQuestions();
+  } catch (e) {
+    alert("Error loading chapter data. Ensure you are running a local server.");
+    console.error(e);
+  }
+}
+
+function populateQuestions() {
+  const sel = $("sel-question");
+  sel.innerHTML = '<option value="">— select —</option>';
+  const ids = Object.keys(currentChapterData.questions).sort();
+  ids.forEach(id => {
+    const q = currentChapterData.questions[id];
+    sel.innerHTML += `<option value="${id}">${id}: ${q.label || ''}</option>`;
+  });
+  sel.disabled = false;
+  $("btn-q-prev").disabled = false;
+  $("btn-q-next").disabled = false;
+  resetUI();
+}
+
+function onQuestionChange() {
+  currentQuestionId = $("sel-question").value;
+  if (!currentQuestionId) { resetUI(); return; }
+
+  const q = currentChapterData.questions[currentQuestionId];
+  currentPartId = null;
+
+  // Handle Scenario
+  if (q.scenario) {
+    $("scenario-body").innerText = q.scenario;
+    $("scenario-wrap").style.display = "block";
+    $("scenario-body").classList.remove("open");
+    $("scenario-arrow").innerHTML = "&#9654;";
+  } else {
+    $("scenario-wrap").style.display = "none";
+  }
+
+  // Handle Parts vs Single Question
+  if (q.parts) {
+    $("sub-wrap").style.display = "block";
+    const subSel = $("sel-sub");
+    subSel.innerHTML = '<option value="">— part —</option>';
+    Object.keys(q.parts).forEach(pId => {
+      subSel.innerHTML += `<option value="${pId}">${pId}</option>`;
+    });
+    $("question-text").style.display = "none";
+    $("answer-wrap").style.display = "none";
+    $("right-empty-pane").style.display = "flex";
+    $("right-empty-pane").innerText = "Select a part to begin.";
+    $("marks-pill").style.display = "none";
+    if (q.marks) {
+        $("total-marks-pill").style.display = "block";
+        $("total-marks-val").innerText = q.marks;
+    } else {
+        $("total-marks-pill").style.display = "none";
+    }
+  } else {
+    $("sub-wrap").style.display = "none";
+    loadQuestionContent(q);
+  }
+}
+
+function onSubChange() {
+  currentPartId = $("sel-sub").value;
+  if (!currentPartId) return;
+  const q = currentChapterData.questions[currentQuestionId];
+  loadQuestionContent(q.parts[currentPartId]);
+}
+
+function loadQuestionContent(node) {
+  $("right-empty-pane").style.display = "none";
+  $("question-text").style.display = "block";
+  $("question-text").innerText = node.question || "";
+  $("answer-wrap").style.display = "flex";
+  $("answer-box").value = "";
+  $("answer-box").focus();
+  
+  // Marks
+  if (node.marks) {
+    $("marks-pill").innerText = `${node.marks} marks`;
+    $("marks-pill").style.display = "inline-block";
+    targetSeconds = node.marks * 1.8 * 60;
+    $("countdown-input").value = (node.marks * 1.8).toFixed(1);
+  } else {
+    $("marks-pill").style.display = "none";
+    targetSeconds = 0;
+  }
+
+  resetTimer();
+  $("timer-zone").style.display = "flex";
+  $("btn-review").disabled = false;
+  $("btn-skip").disabled = false;
+  $("empty-pane").style.display = "flex";
+  $("points-outer").style.display = "none";
+  $("review-controls").style.display = "none";
+  $("summary").classList.remove("show");
+  $("notes-wrap").style.display = "none";
+}
+
+// NAVIGATION
+function navQuestion(dir) {
+  const sel = $("sel-question");
+  const nextIdx = sel.selectedIndex + dir;
+  if (nextIdx >= 1 && nextIdx < sel.options.length) {
+    sel.selectedIndex = nextIdx;
+    onQuestionChange();
+  }
+}
+
+function navSub(dir) {
+  const sel = $("sel-sub");
+  const nextIdx = sel.selectedIndex + dir;
+  if (nextIdx >= 1 && nextIdx < sel.options.length) {
+    sel.selectedIndex = nextIdx;
+    onSubChange();
+  }
+}
+
+function toggleScenario() {
+  const body = $("scenario-body");
+  const arrow = $("scenario-arrow");
+  body.classList.toggle("open");
+  arrow.innerHTML = body.classList.contains("open") ? "&#9660;" : "&#9654;";
+}
+
+// TIMER
+function resetTimer() {
+  stopTimer();
+  elapsedSeconds = 0;
+  isPaused = false;
+  $("timer-display").innerText = "0:00";
+  $("timer-display").className = "timer-display";
+  $("timer-bar-fill").style.width = "0%";
+  $("timer-bar-fill").className = "timer-bar-fill";
+  $("timer-status").innerText = "Starts when you type";
+  $("btn-pause").disabled = true;
+  $("btn-pause").innerText = "Pause";
+}
+
+function startTimerIfNeeded() {
+  if (!startTime && !isPaused) {
+    startTime = Date.now() - (elapsedSeconds * 1000);
+    timerInterval = setInterval(updateTimer, 1000);
+    $("timer-status").innerText = "Running";
+    $("btn-pause").disabled = false;
+  }
+}
+
+function stopTimer() {
+  clearInterval(timerInterval);
+  timerInterval = null;
+  startTime = null;
+}
+
+function togglePause() {
+  if (isPaused) {
+    isPaused = false;
+    startTime = Date.now() - (elapsedSeconds * 1000);
+    timerInterval = setInterval(updateTimer, 1000);
+    $("btn-pause").innerText = "Pause";
+    $("timer-status").innerText = "Running";
+  } else {
+    isPaused = true;
+    stopTimer();
+    $("btn-pause").innerText = "Resume";
+    $("timer-status").innerText = "Paused";
+  }
+}
+
+function updateTimer() {
+  elapsedSeconds = Math.floor((Date.now() - startTime) / 1000);
+  const m = Math.floor(elapsedSeconds / 60);
+  const s = elapsedSeconds % 60;
+  $("timer-display").innerText = `${m}:${s < 10 ? '0' : ''}${s}`;
+
+  if (targetSeconds > 0) {
+    $("timer-bar-wrap").style.display = "block";
+    const pct = Math.min(100, (elapsedSeconds / targetSeconds) * 100);
+    const fill = $("timer-bar-fill");
+    fill.style.width = pct + "%";
+    
+    if (pct >= 100) {
+      fill.className = "timer-bar-fill red";
+      $("timer-display").className = "timer-display red";
+    } else if (pct >= 80) {
+      fill.className = "timer-bar-fill amber";
+      $("timer-display").className = "timer-display amber";
+    }
+  }
+}
+
+// REVIEW LOGIC
+function skipToReveal() {
+  stopTimer();
+  const q = currentChapterData.questions[currentQuestionId];
+  const node = currentPartId ? q.parts[currentPartId] : q;
+  preparePoints(node.sections, []);
+}
+
+async function startReview() {
+  const text = $("answer-box").value.trim();
+  if (!text) { alert("Please type an answer first."); return; }
+  
+  stopTimer();
+  $("loading-pane").classList.add("active");
+  $("empty-pane").style.display = "none";
+  
+  const q = currentChapterData.questions[currentQuestionId];
+  const node = currentPartId ? q.parts[currentPartId] : q;
+
+  // Format all points for comparison
+  const solutionPoints = [];
+  Object.entries(node.sections).forEach(([sec, pts]) => {
+    pts.forEach(p => solutionPoints.push({ section: sec, text: p }));
+  });
+
+  try {
+    const response = await fetch('http://localhost:8080/analyze', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        answer: text,
+        solution: solutionPoints.map(p => p.text)
+      })
+    });
+    
+    const result = await response.json();
+    preparePoints(node.sections, result.matches || []);
+  } catch (e) {
+    console.error(e);
+    alert("AI Review requires the local server. Reverting to self-assessment.");
+    preparePoints(node.sections, []);
+  } finally {
+    $("loading-pane").classList.remove("active");
+  }
+}
+
+function preparePoints(sections, matches) {
+  currentPoints = [];
+  Object.entries(sections).forEach(([sec, pts]) => {
+    currentPoints.push({ type: 'header', text: sec });
+    pts.forEach(p => {
+      const isMatch = matches.some(m => m.toLowerCase().includes(p.toLowerCase().substring(0, 20)));
+      currentPoints.push({ type: 'point', text: p, hit: isMatch });
+    });
+  });
+
+  $("points-outer").innerHTML = "";
+  $("points-outer").style.display = "block";
+  $("review-controls").style.display = "flex";
+  $("notes-wrap").style.display = "flex";
+  $("notes-box").value = "";
+  
+  currentIdx = -1;
+  next();
+}
+
+function next() {
+  if (currentIdx < currentPoints.length - 1) {
+    currentIdx++;
+    renderPoint(currentIdx);
+    updateProgress();
+  } else {
+    showSummary();
+  }
+}
+
+function prev() {
+  if (currentIdx > 0) {
+    currentIdx--;
+    renderPoint(currentIdx);
+    updateProgress();
+  }
+}
+
+function renderPoint(idx) {
+  const p = currentPoints[idx];
+  const container = $("points-outer");
+  
+  // If it's a point, we either show hit/miss (AI) or checkbox (Self)
+  let html = "";
+  if (p.type === 'header') {
+    html = `<div class="section-label">${p.text}</div>`;
+  } else {
+    const statusClass = p.hit === true ? 'hit' : (p.hit === false ? 'miss' : '');
+    const selfClass = p.hit === null ? 'self-row' : `match-row ${statusClass}`;
+    
+    html = p.hit !== undefined ? `
+      <div class="point-block new">
+        <div class="examiner-text">${p.text}</div>
+        <div class="${selfClass}">
+          <span class="match-icon">${p.hit ? '&#10003;' : '&#10007;'}</span>
+          <span>${p.hit ? 'Match detected' : 'Point missed'}</span>
+        </div>
+      </div>
+    ` : `
+      <div class="point-block new" id="pb-${idx}">
+        <div class="examiner-text current">${p.text}</div>
+        <div class="self-row" id="sr-${idx}">
+          <input type="checkbox" class="self-cb" onchange="toggleSelf(${idx})" id="cb-${idx}">
+          <label class="self-label" for="cb-${idx}">I made this point</label>
+        </div>
+      </div>
+    `;
+  }
+  
+  container.innerHTML += html;
+  container.scrollTop = container.scrollHeight;
+  $("btn-prev").disabled = (idx <= 0);
+  $("btn-next").innerText = (idx === currentPoints.length - 1) ? "Finish" : "Next point";
+}
+
+function toggleSelf(idx) {
+  const cb = $(`cb-${idx}`);
+  const row = $(`sr-${idx}`);
+  currentPoints[idx].hit = cb.checked;
+  row.className = cb.checked ? 'self-row checked' : 'self-row';
+}
+
+function updateProgress() {
+  const total = currentPoints.filter(p => p.type === 'point').length;
+  const current = currentPoints.slice(0, currentIdx + 1).filter(p => p.type === 'point').length;
+  $("ptotal").innerText = total;
+  $("pcnt").innerText = current;
+  $("pbar").style.width = (current / total * 100) + "%";
+}
+
+function showSummary() {
+  const pts = currentPoints.filter(p => p.type === 'point');
+  const hits = pts.filter(p => p.hit).length;
+  const misses = pts.length - hits;
+  
+  $("s-hit").innerText = hits;
+  $("s-miss").innerText = misses;
+  $("s-extra").innerText = "0";
+  $("summary").classList.add("show");
+  $("btn-next").disabled = true;
+}
+
+function resetAll() {
+  location.reload();
+}
+
+function resetUI() {
+  $("right-empty-pane").style.display = "flex";
+  $("right-empty-pane").innerText = "Select a question to begin.";
+  $("question-text").style.display = "none";
+  $("answer-wrap").style.display = "none";
+  $("timer-zone").style.display = "none";
+  $("points-outer").style.display = "none";
+  $("review-controls").style.display = "none";
+  $("summary").classList.remove("show");
+  $("notes-wrap").style.display = "none";
+  $("total-marks-pill").style.display = "none";
+  $("marks-pill").style.display = "none";
+  resetTimer();
+}
+
+// WORD EXPORT
+function exportToWord() {
+  const chapter = $("sel-chapter").options[$("sel-chapter").selectedIndex].text;
+  const qId = currentQuestionId;
+  const part = currentPartId ? ` Part ${currentPartId}` : "";
+  const answer = $("answer-box").value;
+  const notes = $("notes-box").value;
+
+  const content = `
+    <html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'>
+    <head><title>Export</title><style>body{font-family:Arial;}</style></head>
+    <body>
+      <h1>${chapter}</h1>
+      <h2>Question ${qId}${part}</h2>
+      <hr/>
+      <h3>Your Answer</h3>
+      <p style="white-space:pre-wrap;">${answer}</p>
+      <hr/>
+      <h3>Revision Notes</h3>
+      <p style="white-space:pre-wrap;">${notes}</p>
+    </body>
+    </html>
+  `;
+
+  const blob = new Blob(['\ufeff', content], { type: 'application/msword' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = `SP1_${qId}${part.replace(' ','_')}.doc`;
+  link.click();
+}
+
+// KEYBOARD SHORTCUTS
+window.addEventListener('keydown', e => {
+  if (document.activeElement.tagName === 'TEXTAREA' || document.activeElement.tagName === 'INPUT') return;
+  
+  if (e.code === 'Space' || e.code === 'ArrowRight') { e.preventDefault(); next(); }
+  if (e.code === 'ArrowLeft' || e.code === 'Backspace') { e.preventDefault(); prev(); }
+  if (e.code === 'Digit1') { 
+    const cb = $(`cb-${currentIdx}`);
+    if (cb) { cb.checked = true; toggleSelf(currentIdx); }
+  }
+  if (e.code === 'Digit0') {
+    const cb = $(`cb-${currentIdx}`);
+    if (cb) { cb.checked = false; toggleSelf(currentIdx); }
+  }
+});
+
+// Initialization
+document.addEventListener('DOMContentLoaded', () => {
+    // Check if running via file://
+    if (window.location.protocol === 'file:') {
+        $("cors-alert").style.display = "block";
+    }
+});
+
+</script>
+</body>
+</html>
