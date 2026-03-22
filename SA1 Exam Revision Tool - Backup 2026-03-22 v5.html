@@ -302,7 +302,6 @@ kbd{background:var(--surface2);border:1px solid var(--border2);border-radius:3px
     <button id="src-iai" class="src-btn" data-src="iai" onclick="if(confirmChange())setSource('iai')">IAI Exam</button>
     <button id="src-assignment" class="src-btn" data-src="assignment" onclick="if(confirmChange())setSource('assignment')">Assignment</button>
     <button id="src-sp1" class="src-btn" data-src="sp1" onclick="if(confirmChange())setSource('sp1')">SP1 PQ</button>
-    <button id="src-sa1pq" class="src-btn" data-src="sa1pq" onclick="if(confirmChange())setSource('sa1pq')">SA1 PQ</button>
   </div>
   <!-- Centred title -->
   <div style="flex:1; text-align:center;">
@@ -532,9 +531,8 @@ const SOURCE_FILES = {
       'iai_0318.json', 'iai_0918.json', 'iai_0619.json', 'iai_1119.json', 
       'iai_1120.json', 'iai_0321.json', 'iai_0921.json', 'iai_0322.json', 
       'iai_0722.json', 'iai_1222.json', 'iai_0523.json', 'iai_1123.json', 
-      'iai_0524.json',      'iai_1124.json', 'iai_0525.json', 'iai_1125.json'
-    ],
-    sa1pq: ['sa1_pq_sample.json']
+      'iai_0524.json', 'iai_1124.json', 'iai_0525.json', 'iai_1125.json'
+    ]
 };
 
 let currentSource = 'ifoa';
@@ -643,15 +641,13 @@ function updateHeaderUI() {
         ifoa: 'IFoA<span> / </span>Exam Revision',
         sp1: 'SP1<span> / </span>Practice Questions',
         assignment: 'SA1<span> / </span>Assignments',
-        iai: 'IAI<span> / </span>Exam Revision',
-        sa1pq: 'SA1<span> / </span>Practice Questions'
+        iai: 'IAI<span> / </span>Exam Revision'
     };
     const taglines = {
         ifoa: 'Health and Care Advanced',
         sp1: 'Health and Care Principles',
         assignment: 'SA1 Advanced',
-        iai: 'IAI SA1 & SP1',
-        sa1pq: 'SA1 Health and Care Advanced'
+        iai: 'IAI SA1 & SP1'
     };
     const logoEl = document.querySelector('.logo');
     const tagEl = document.querySelector('.tagline');
