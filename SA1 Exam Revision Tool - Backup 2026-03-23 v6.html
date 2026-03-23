@@ -115,11 +115,11 @@ select:focus{outline:none;border-color:var(--accent);}
 .scenario-wrap{padding:14px 16px;border-bottom:1px solid var(--border);background:rgba(43, 44, 48, 0.4);}
 .scenario-toggle{font-size:12px;color:var(--accent);cursor:pointer;user-select:none;display:flex;align-items:center;gap:6px;}
 .scenario-toggle:hover{color:#a78bfa;}
-.scenario-body{font-size:14.5px;color:var(--text);line-height:1.75;margin-top:10px;display:none;max-height:450px;overflow-y:auto;white-space:pre-line;padding-right:12px;scrollbar-width:thin;scrollbar-color:var(--accent) transparent;}
+.scenario-body{font-size:14.5px;color:var(--text);line-height:1.75;margin-top:10px;display:none;max-height:450px;overflow-y:auto;white-space:pre-line;padding-right:12px;scrollbar-width:thin;scrollbar-color:var(--accent) transparent;word-break:break-word;overflow-wrap:anywhere;}
 .scenario-body::-webkit-scrollbar{width:6px;}
 .scenario-body::-webkit-scrollbar-thumb{background-color:var(--accent);border-radius:10px;}
 .scenario-body.open{display:block;}
-.question-text{padding:14px 16px;font-size:15px;font-weight:400;color:var(--text);line-height:1.6;border-bottom:1px solid var(--border);max-height:180px;overflow-y:auto;white-space:pre-line;}
+.question-text{padding:14px 16px;font-size:15px;font-weight:400;color:var(--text);line-height:1.6;border-bottom:1px solid var(--border);max-height:180px;overflow-y:auto;white-space:pre-line;word-break:break-word;overflow-wrap:anywhere;}
 
 /* TIMER */
 .timer-zone{padding:6px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;flex-wrap:nowrap;background:var(--surface);overflow:hidden;}
@@ -169,6 +169,8 @@ textarea:focus{outline:none;border-color:var(--accent);}
 .blueprint-mode .review-item .para-heading, .blueprint-mode .synopsis-text .para-heading { font-weight: 700; color: var(--accent); display: block; margin-bottom: 4px; font-size: 15px; }
 .blueprint-mode .review-item ul, .blueprint-mode .synopsis-text ul { list-style: disc; margin-left: 18px; color: var(--text2); }
 .blueprint-mode .review-item li, .blueprint-mode .synopsis-text li { margin-bottom: 3px; font-size: 14px; }
+.review-item.head { margin-top: 15px; padding-top: 15px; border-top: 2px dashed var(--border); font-size: 16px; font-weight: 700; color: var(--accent); }
+.gap-analysis-item { animation: reveal-pulse 0.4s ease-out; }
 .blueprint-mode .kw { font-weight: 700; color: #fff; text-decoration: underline decoration-var(--accent) 2px; }
 .action-row{display:flex;gap:8px;flex-wrap:wrap;}
 .btn{font-family:var(--sans);font-size:14px;font-weight:500;padding:8px 16px;border-radius:var(--radius);border:1px solid var(--border);background:var(--surface2);color:var(--text);cursor:pointer;transition:background .15s;}
@@ -296,12 +298,13 @@ kbd{background:var(--surface2);border:1px solid var(--border2);border-radius:3px
 
 <!-- TOP BAR -->
 <div class="topbar">
-  <!-- Source buttons: top-left -->
-  <div style="display:flex; gap:4px; flex-shrink:0;">
+  <!-- Source buttons: top-left (grouped) -->
+  <div id="src-btn-group" style="display:flex; gap:2px; align-items:center; background:var(--surface2); padding:2px; border-radius:6px; border:1px solid var(--border); flex-shrink:0;">
     <button id="src-ifoa" class="src-btn active" data-src="ifoa" onclick="if(confirmChange())setSource('ifoa')">IFoA Exam</button>
     <button id="src-iai" class="src-btn" data-src="iai" onclick="if(confirmChange())setSource('iai')">IAI Exam</button>
     <button id="src-assignment" class="src-btn" data-src="assignment" onclick="if(confirmChange())setSource('assignment')">Assignment</button>
     <button id="src-sp1" class="src-btn" data-src="sp1" onclick="if(confirmChange())setSource('sp1')">SP1 PQ</button>
+    <button id="src-sa1pq" class="src-btn" data-src="sa1pq" onclick="if(confirmChange())setSource('sa1pq')">SA1 PQ</button>
   </div>
   <!-- Centred title -->
   <div style="flex:1; text-align:center;">
@@ -310,14 +313,19 @@ kbd{background:var(--surface2);border:1px solid var(--border2);border-radius:3px
   </div>
   <!-- Right actions -->
   <div class="topbar-actions">
-    <div class="mode-switcher" style="display:flex; gap:4px; background:var(--surface2); padding:2px; border-radius:6px; border:1px solid var(--border);">
+    <div style="width:2px; height:24px; background:var(--border); margin:0 6px;"></div>
+    <div class="mode-switcher" style="display:flex; gap:4px; align-items:center; background:var(--surface2); padding:2px; border-radius:6px; border:1px solid var(--border);">
       <button id="btn-mode-chrono" class="mode-btn active" onclick="if(confirmChange())setMode('chrono')">Chrono</button>
       <button id="btn-mode-theme" class="mode-btn" onclick="if(confirmChange())setMode('theme')">Theme</button>
+      <button id="btn-mode-frameworks" class="mode-btn" onclick="if(confirmChange())setMode('frameworks')">Frameworks</button>
     </div>
-    <button class="top-btn" onclick="toggleFullScreen(event)">&#9111; Full Screen</button>
-    <button class="top-btn" onclick="confirmRefresh()">&#8635; Refresh</button>
-    <button class="top-btn btn-exit" onclick="exitTool()">&#10005; Exit</button>
-    <div style="font-family:var(--mono);font-size:11px;color:var(--text3);background:var(--surface2);border:1px solid var(--border);border-radius:4px;padding:2px 8px;">v1.1</div>
+    <div style="width:2px; height:24px; background:var(--border); margin:0 6px;"></div>
+    <!-- Utility buttons: icon-only, grouped -->
+    <div style="display:flex; gap:2px; align-items:center; background:var(--surface2); padding:2px; border-radius:6px; border:1px solid var(--border);">
+      <button class="mode-btn" onclick="toggleFullScreen(event)" title="Full Screen">&#9111;</button>
+      <button class="mode-btn" onclick="confirmRefresh()" title="Refresh">&#8635;</button>
+      <button class="mode-btn" onclick="exitTool()" title="Exit" style="color:var(--red);">&#10005;</button>
+    </div>
   </div>
 </div>
 
@@ -333,7 +341,24 @@ kbd{background:var(--surface2);border:1px solid var(--border2);border-radius:3px
 
 <!-- MAIN -->
 <div class="main">
-  <div class="left-pane">
+  <!-- FRAMEWORKS PANE (Hidden) -->
+  <div class="left-pane" id="fw-left-pane" style="display:none; background:var(--surface2); border-right:1px solid var(--border); overflow-y:auto; flex: 0 0 250px;">
+    <div class="pane-header"><div class="pane-title" style="color:var(--accent);">Master Themes</div></div>
+    <div id="fw-topics-list" style="padding:10px; display:flex; flex-direction:column; gap:4px;"></div>
+  </div>
+  <div class="left-pane" id="fw-mid-pane" style="display:none; background:var(--surface); border-right:1px solid var(--border); overflow-y:auto; flex: 0 0 300px;">
+    <div class="pane-header"><div class="pane-title" style="color:var(--text);"><span id="fw-mid-title">Subtopics</span></div></div>
+    <div id="fw-subtopics-list" style="padding:12px; display:flex; flex-direction:column; gap:6px;">
+       <div style="color:var(--text3); font-size:13px; text-align:center; margin-top:40px;">Select a Master Theme first</div>
+    </div>
+  </div>
+  <div class="right-pane" id="fw-right-pane" style="display:none; overflow-y:auto; background:var(--bg); padding:40px; flex: 1;">
+    <div id="fw-content" style="max-width:800px; margin:0 auto; color:var(--text); font-size:15px; line-height:1.6;">
+      <h2 style="color:var(--text3); text-align:center; margin-top:100px;">Select a Subtopic to view details</h2>
+    </div>
+  </div>
+
+  <div class="left-pane" id="left-pane">
 
     <!-- SITTING ROW (Chrono) + DATA STATUS -->
     <div class="sitting-row" id="chrono-sitting-row">
@@ -343,6 +368,9 @@ kbd{background:var(--surface2);border:1px solid var(--border2);border-radius:3px
       </select>
       <div id="pill-sitting" class="marks-pill pill-sitting" style="display:none;"></div>
       <div id="data-status" style="font-size:11px; color:var(--text3); font-family:var(--mono); flex-shrink:0;">Loading...</div>
+      <!-- Explicit Start/Stop sitting timer buttons -->
+      <button id="btn-start-sitting" onclick="startSittingExplicitly()" style="display:none;font-family:var(--mono);font-size:11px;font-weight:600;padding:4px 10px;border-radius:4px;border:1px solid var(--green);background:var(--greenbg);color:var(--green);cursor:pointer;white-space:nowrap;flex-shrink:0;">&#9654; Start</button>
+      <button id="btn-stop-sitting" onclick="stopSittingExplicitly()" style="display:none;font-family:var(--mono);font-size:11px;font-weight:600;padding:4px 10px;border-radius:4px;border:1px solid var(--red);background:var(--redbg);color:var(--red);cursor:pointer;white-space:nowrap;flex-shrink:0;">&#9646;&#9646; Stop</button>
       <div id="sitting-timer-wrap" style="margin-left:auto; display:none; align-items:center; gap:8px;">
         <span style="font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.05em;">TIMER</span>
         <span id="assign-timer" style="font-family:var(--mono);font-size:13px;color:var(--text);font-weight:600;">00:00:00</span>
@@ -453,7 +481,7 @@ kbd{background:var(--surface2);border:1px solid var(--border2);border-radius:3px
     </div>
   </div>
 
-  <div class="right-pane">
+  <div class="right-pane" id="right-pane">
     <div id="right-empty-pane" class="right-empty-pane">Select a sitting, then a question to begin.</div>
     <div class="timer-zone" id="timer-zone" style="display:none;">
       <div class="timer-display" id="timer-display">0:00</div>
@@ -509,6 +537,21 @@ kbd{background:var(--surface2);border:1px solid var(--border2);border-radius:3px
       <button class="btn btn-primary" onclick="exportCurrentQuestionDoc()">Download as Doc</button>
       <button class="btn" onclick="closeModal()">Close</button>
     </div>
+</div>
+</div>
+
+<div id="pillar-modal" class="modal">
+  <div class="modal-content" style="max-width:600px;">
+    <div class="modal-header" style="background:var(--accentbg);border-bottom:2px solid var(--accent);">
+      <h2 style="color:var(--accent);margin:0;">Pillar Challenge</h2>
+      <button class="modal-close" onclick="closePillarModal()">&#10005;</button>
+    </div>
+    <div id="pillar-body" class="modal-body" style="text-align:center; padding: 30px;">
+      <!-- Dynamic content -->
+    </div>
+    <div class="modal-footer" style="justify-content:center;">
+      <button class="btn btn-primary" onclick="completePillarChallenge()" style="font-size:16px; padding: 10px 24px;">I Have Recalled the Details &amp; Ready to Reveal</button>
+    </div>
   </div>
 </div>
 
@@ -520,19 +563,46 @@ kbd{background:var(--surface2);border:1px solid var(--border2);border-radius:3px
 // ═══════════════════════════════════════════════════════════
 let SITTINGS = {};
 let THEMATICS = []; // Array of matches representing sub-questions mapped to themes
+let TOPIC_FRAMEWORKS = {}; // Loaded securely from data/Topic_Frameworks.json
+let PILLARS_HOOKS = null; // Loaded securely from data/Pillars_Hooks.json
 
 // Configuration of all available source files
+const MASTER_TAXONOMY = {
+  "Pricing": ["Data & Assumptions", "Risk Profile", "Expenses", "Profit Margin", "Cross-subsidy", "Sensitivity Analysis", "Return on Capital", "Equation of Value", "Cashflow Techniques"],
+  "Claims Management": ["Definitions", "Rehabilitation", "Fraud & Verification", "Reserving", "Claim Control", "Return to Work", "Assessment of claims"],
+  "Regulation": ["Treating Customers Fairly", "Capital Requirements", "Taxation", "State Provision", "IRDAI", "Compliance", "Policyholder Protection Schemes", "Solvency II Framework"],
+  "Underwriting": ["Anti-selection", "Financial Underwriting", "Medical Underwriting", "Free Cover Limits", "Tele-underwriting", "Genetic Testing", "Pre-existing Conditions"],
+  "Data & Models": ["Credibility", "Heterogeneity", "Proxies", "AI & Machine Learning", "Backtesting", "Sensitivity", "Model Governance", "Stochastic & Deterministic", "Multi-state Models"],
+  "Reserving & Valuation": ["IBNR / IBNER", "Bornhuetter-Ferguson", "Run-off Triangles", "Best Estimate Liabilities", "Risk Margin", "Prudence", "Supervisory Reserves", "Market Consistent Valuation"],
+  "Risk Management & Capital": ["Economic Capital", "Stress Testing", "Asset Liability Management", "Risk Appetite", "Concentration of Risk", "Pandemics", "Catastrophes", "Options & Guarantees", "Climate Risks"],
+  "Reinsurance": ["Risk Transfer", "Capital Relief", "Technical Assistance", "Quota Share", "Excess of Loss", "Catastrophe Cover", "Retention Optimization", "Badging"],
+  "Investments": ["Matching", "Liquidity", "Standard Formula", "Internal Models", "Asset Classes", "Yield Curve", "Asset-liability matching strategy"],
+  "Product Design": ["Benefits & Conditions", "Target Market", "Options & Guarantees", "Exclusions", "Surrender Values", "Marketability", "Bundling & Unbundling"],
+  "Group Products": ["Master Trust", "Take-up Rates", "Administration", "Unit Cost Savings", "Employer Involvement", "Free Cover Limits"],
+  "Professional Guidance": ["Actuarial Standards", "Peer Review", "Conflicts of Interest", "Whistleblowing", "Communication", "Data Quality", "Statutory Actuarial Roles"],
+  "Capital & Solvency": ["Solvency Capital Requirements (SCR)", "Value at Risk (VaR)", "Return on Capital", "Internal Models", "Solvency II mapping"],
+  "Private Medical Insurance (PMI)": ["Moratorium Underwriting", "Community Rating", "Indemnity", "Excesses & Co-payments", "Provider Networks", "Medical Inflation"],
+  "Critical Illness": ["Survival Period", "Standard Definitions", "Advances in Medicine", "Accelerated Benefits", "Standalone Cover"],
+  "Income Protection": ["Deferred Period", "Replacement Ratio", "Definition of Incapacity", "State Benefits integration", "Rehabilitation"],
+  "Pricing & Rating": ["Age Banding", "Community Rating", "Experience Rating", "No Claims Discount (NCD)", "Renewable Premiums"],
+  "State Healthcare & Demographics": ["Pradhan Mantri Jan Arogya Yojana (PMJAY)", "Mass Health Schemes", "Aging Population", "QALYs", "Medical Inflation", "Public vs Private funding"],
+  "Long-Term Care (LTC)": ["Activities of Daily Living (ADLs)", "Pre-funding vs Immediate Needs", "Cognitive Impairment", "Care Home Costs", "State limitations"],
+  "Legislation & Taxation": ["Premium Taxes", "Benefit Taxes", "Profit Taxation", "Employment Law", "Data Protection (GDPR/DPA)"],
+  "Product Design (Protection)": ["Guaranteed vs Reviewable premiums", "Term Assurance riders", "Unit-Linked Wrappers", "Renewability"],
+  "Administration": ["Policy setup", "Premium Collection", "Lapsation processes", "Customer Service", "Outsourcing / Counterparties"]
+};
 const SOURCE_FILES = {
     ifoa: ['201904.json', '201909.json', '202004.json', '202009.json', '202104.json', '202109.json', '202204.json', '202209.json', '202304.json', '202309.json', '202404.json', '202409.json', '202504.json', '202509.json'],
     assignment: ['X1.json', 'X2.json', 'X3.json', 'X4.json', 'X5.json', 'X6.json'],
-    sp1: ['Ch00.json', 'Ch01.json', 'Ch02.json', 'Ch03.json', 'Ch04.json'],
+    sp1: ['Ch00.json', 'Ch01.json', 'Ch02.json', 'Ch03.json', 'Ch04.json', 'Ch05.json'],
     iai: [
-      'iai_0416.json', 'iai_0916.json', 'iai_0317.json', 'iai_0917.json', 
+      'iai_1115.json', 'iai_0416.json', 'iai_0916.json', 'iai_0317.json', 'iai_0917.json', 
       'iai_0318.json', 'iai_0918.json', 'iai_0619.json', 'iai_1119.json', 
       'iai_1120.json', 'iai_0321.json', 'iai_0921.json', 'iai_0322.json', 
       'iai_0722.json', 'iai_1222.json', 'iai_0523.json', 'iai_1123.json', 
-      'iai_0524.json', 'iai_1124.json', 'iai_0525.json', 'iai_1125.json'
-    ]
+      'iai_0524.json',      'iai_1124.json', 'iai_0525.json', 'iai_1125.json'
+    ],
+    sa1pq: ['sa1_pq_sample.json']
 };
 
 let currentSource = 'ifoa';
@@ -549,11 +619,24 @@ let brainstormWordsReq = 0, brainstormTimeLeft = 0, brainstormInterval = null;
 window.onload = async function() {
     let loadedCount = 0;
 
+    // Load Topic Frameworks Dictionary First
+    try {
+        const fwRes = await fetch('data/Topic_Frameworks.json?t=' + new Date().getTime());
+        if (fwRes.ok) TOPIC_FRAMEWORKS = await fwRes.json();
+    } catch(e) { console.warn("Frameworks not loaded", e); }
+
+    // Load Pillars & Hooks JSON
+    try {
+        const phRes = await fetch('data/Pillars_Hooks.json?t=' + new Date().getTime());
+        if (phRes.ok) PILLARS_HOOKS = await phRes.json();
+    } catch(e) { console.warn("Pillars & Hooks not loaded", e); }
+
     // Load ALL files from ALL sources
     for (const [source, files] of Object.entries(SOURCE_FILES)) {
         for (const f of files) {
             try {
-                const res = await fetch('data/' + f);
+                const url = 'data/' + f + '?t=' + new Date().getTime();
+                const res = await fetch(url);
                 if (res.ok) {
                     const data = await res.json();
                     const key = f.replace('.json', '');
@@ -641,13 +724,15 @@ function updateHeaderUI() {
         ifoa: 'IFoA<span> / </span>Exam Revision',
         sp1: 'SP1<span> / </span>Practice Questions',
         assignment: 'SA1<span> / </span>Assignments',
-        iai: 'IAI<span> / </span>Exam Revision'
+        iai: 'IAI<span> / </span>Exam Revision',
+        sa1pq: 'SA1<span> / </span>Practice Questions'
     };
     const taglines = {
         ifoa: 'Health and Care Advanced',
         sp1: 'Health and Care Principles',
         assignment: 'SA1 Advanced',
-        iai: 'IAI SA1 & SP1'
+        iai: 'IAI SA1 & SP1',
+        sa1pq: 'SA1 Health and Care Advanced'
     };
     const logoEl = document.querySelector('.logo');
     const tagEl = document.querySelector('.tagline');
@@ -712,7 +797,7 @@ function indexThematics(sittingKey, sittingData, source) {
 }
 
 const COMMAND_VERBS = ["Discuss", "Explain", "Outline", "List", "Suggest", "Describe", "State", "Recommend", "Compare"];
-const SA1_KEYWORDS = ["Solvency II", "SCR", "Best Estimate", "Risk Margin", "PMI", "Income Protection", "Morbidity", "Mortalilty", "Lapse", "Anti-selection", "Moral Hazard", "Diversification", "Technical Provisions", "Capital", "Underwriting", "Claims Management", "Product Design", "Pricing", "Expenses", "Taxation", "Regulation", "State Provision", "Reinsurance", "Social Care", "Long Term Care", "Critical Illness", "IP", "CI", "LTC"];
+const SA1_KEYWORDS = ["Solvency II", "SCR", "Best Estimate", "Risk Margin", "PMI", "Income Protection", "Morbidity", "Mortality", "Lapse", "Anti-selection", "Moral Hazard", "Diversification", "Technical Provisions", "Capital", "Underwriting", "Claims Management", "Product Design", "Pricing", "Expenses", "Taxation", "Regulation", "State Provision", "Reinsurance", "Social Care", "Long Term Care", "Critical Illness", "IP", "CI", "LTC", "IRDAI", "PMJAY", "Treating Customers Fairly", "Genetic Testing", "Yield Curve", "Asset Liability", "QALYs", "Value at Risk", "Run-off", "Bornhuetter", "IBNR"];
 
 let TAXONOMY = {};
 let VERB_INDEX = {}; 
@@ -765,16 +850,160 @@ function setMode(mode) {
     appMode = mode;
     document.getElementById('btn-mode-chrono').classList.toggle('active', mode==='chrono');
     document.getElementById('btn-mode-theme').classList.toggle('active', mode==='theme');
-    document.getElementById('chrono-selectors').style.display = mode === 'chrono' ? 'grid' : 'none';
+    const fbtn = document.getElementById('btn-mode-frameworks');
+    if (fbtn) fbtn.classList.toggle('active', mode==='frameworks');
+    
+    // Show/hide the chrono sitting row and dot bars
+    const chronoRow = document.getElementById('chrono-sitting-row');
+    if (chronoRow) chronoRow.style.display = mode === 'chrono' ? '' : 'none';
+    const qDotBar = document.getElementById('q-dot-bar');
+    if (qDotBar) qDotBar.style.display = mode === 'chrono' ? '' : 'none';
+    const subDotBar = document.getElementById('sub-dot-bar');
+    if (subDotBar) subDotBar.style.display = mode === 'chrono' ? '' : 'none';
+    // Theme selectors
     document.getElementById('theme-selectors').style.display = mode === 'theme' ? 'grid' : 'none';
+
+    // Toggle Panes
+    const isFW = (mode === 'frameworks');
+    
+    // Hide source selector buttons since they aren't relevant in Frameworks Mode
+    const srcGrp = document.getElementById('src-btn-group');
+    if (srcGrp) srcGrp.style.display = isFW ? 'none' : 'flex';
+
+    // Update Topbar Title contextually
+    const topTitle = document.getElementById('topbar-title');
+    if (topTitle) {
+        if (isFW) {
+            topTitle.textContent = "Master Exam Frameworks";
+        } else {
+            updateHeaderUI();
+        }
+    }
+
+    document.getElementById('left-pane').style.display = isFW ? 'none' : '';
+    document.getElementById('right-pane').style.display = isFW ? 'none' : '';
+    document.getElementById('fw-left-pane').style.display = isFW ? 'flex' : 'none';
+    document.getElementById('fw-mid-pane').style.display = isFW ? 'flex' : 'none';
+    document.getElementById('fw-right-pane').style.display = isFW ? 'block' : 'none';
+    
+    // Change layout of main container to support 3-column flex instead of 2-column grid
+    const mainCont = document.querySelector('.main');
+    if (isFW) {
+        mainCont.style.display = 'flex';
+    } else {
+        mainCont.style.display = '';
+    }
+
+    if (isFW) {
+        renderFrameworkList();
+        return; // skip resetAll for framework mode so you don't lose timer if you just peeked!
+    }
 
     resetAll();
 
     if (mode === 'chrono') {
         onAssignChange();
-    } else {
+    } else if (mode === 'theme') {
         onThemeChange();
     }
+}
+
+function renderFrameworkList() {
+    const listEl = document.getElementById('fw-topics-list');
+    listEl.innerHTML = '';
+    const themes = Object.keys(TOPIC_FRAMEWORKS).sort();
+    
+    themes.forEach(t => {
+        const btn = document.createElement('div');
+        btn.style.cssText = 'padding:12px; border-radius:6px; cursor:pointer; font-size:13px; font-weight:600; color:var(--text); border:1px solid var(--border); transition:all 0.2s; background:var(--surface);';
+        btn.innerHTML = t;
+        btn.onmouseover = () => { if (!btn.classList.contains('active')) btn.style.borderColor = 'var(--accent)'; };
+        btn.onmouseout = () => { if (!btn.classList.contains('active')) btn.style.borderColor = 'var(--border)'; };
+        btn.onclick = () => {
+            Array.from(listEl.children).forEach(c => { c.classList.remove('active'); c.style.borderColor='var(--border)'; c.style.background='var(--surface)'; c.style.color='var(--text)'; });
+            btn.classList.add('active');
+            btn.style.background = 'var(--accent)';
+            btn.style.color = '#fff';
+            btn.style.borderColor = 'var(--accent)';
+            renderFrameworkMidContent(t);
+        };
+        listEl.appendChild(btn);
+    });
+}
+
+let currentFrameworkData = null;
+
+function renderFrameworkMidContent(theme) {
+    const listEl = document.getElementById('fw-subtopics-list');
+    document.getElementById('fw-mid-title').textContent = theme;
+    
+    // Reset right pane
+    document.getElementById('fw-content').innerHTML = '<h2 style="color:var(--text3); text-align:center; margin-top:100px;">Select a Subtopic to view details</h2>';
+
+    let data = TOPIC_FRAMEWORKS[theme];
+    if (!data) {
+        listEl.innerHTML = `<div style="color:var(--text3); font-size:13px; text-align:center; margin-top:40px;">No framework data available yet.</div>`;
+        return;
+    }
+    
+    // Parse data into subtopics
+    let subtopics = [];
+    data.forEach(line => {
+        if (line.startsWith('- **')) {
+            let match = line.match(/^- \*\*(.*?)\*\*(.*)$/);
+            if (match) {
+                let st = { title: match[1].replace(':', '').trim(), content: match[2].trim() };
+                subtopics.push(st);
+            }
+        }
+    });
+    currentFrameworkData = subtopics;
+
+    listEl.innerHTML = '';
+    subtopics.forEach((st, idx) => {
+        const btn = document.createElement('div');
+        btn.style.cssText = 'padding:12px 14px; border-radius:6px; cursor:pointer; font-size:13px; font-weight:600; color:var(--text); border:1px solid var(--border); transition:all 0.2s; background:var(--surface2); display:flex; align-items:center; justify-content:space-between; margin-bottom: 2px; line-height:1.4;';
+        btn.innerHTML = `<span>${st.title}</span> <span style="font-size:16px; color:var(--text3);">&#8250;</span>`;
+        btn.onmouseover = () => { if (!btn.classList.contains('active')) { btn.style.borderColor = 'var(--accent)'; btn.style.transform = 'translateX(2px)'; } };
+        btn.onmouseout = () => { if (!btn.classList.contains('active')) { btn.style.borderColor = 'var(--border)'; btn.style.transform = 'translateX(0)'; } };
+        btn.onclick = () => {
+            Array.from(listEl.children).forEach(c => { c.classList.remove('active'); c.style.borderColor='var(--border)'; c.style.background='var(--surface2)'; c.style.color='var(--text)'; c.style.transform='translateX(0)'; });
+            btn.classList.add('active');
+            btn.style.background = 'var(--accentbg)';
+            btn.style.color = 'var(--accent)';
+            btn.style.borderColor = 'var(--accent)';
+            btn.style.transform = 'translateX(2px)';
+            renderFrameworkRightContent(idx);
+        };
+        listEl.appendChild(btn);
+    });
+}
+
+function renderFrameworkRightContent(idx) {
+    const cEl = document.getElementById('fw-content');
+    if (!currentFrameworkData || !currentFrameworkData[idx]) return;
+    
+    let st = currentFrameworkData[idx];
+    
+    let html = `<h1 style="color:var(--accent); border-bottom:2px solid var(--border); padding-bottom:12px; margin-bottom:24px;">${st.title}</h1>`;
+    html += `<div style="background:var(--surface2); border-left:4px solid var(--accent); padding:20px; border-radius:var(--radius); box-shadow:0 4px 12px rgba(0,0,0,0.1); font-size:15px; line-height:1.7;">`;
+    
+    let parts = st.content.split(/(?<=[.!?])\s+|(?<=[,;])\s+/).filter(p => p.trim());
+    
+    if (parts.length > 1) {
+        html += `<ul style="margin:0; padding-left:20px; color:var(--text); display:flex; flex-direction:column; gap:10px;">`;
+        parts.forEach(p => {
+             let fwP = p.trim();
+             fwP = fwP.charAt(0).toUpperCase() + fwP.slice(1);
+             html += `<li>${highlightKeywords(fwP, false)}</li>`;
+        });
+        html += `</ul>`;
+    } else {
+        html += `<div style="color:var(--text);">${highlightKeywords(st.content, false)}</div>`;
+    }
+    
+    html += `</div>`;
+    cEl.innerHTML = html;
 }
 
 function onThemeChange() {
@@ -827,7 +1056,12 @@ function onAssignChange() {
     if (ass && SITTINGS[ass]) {
         const data = SITTINGS[ass];
         renderQDotBar(data);
-        startAssignTimer();
+        // Show the Start button — timer does NOT auto-start
+        const btnStart = document.getElementById('btn-start-sitting');
+        const btnStop = document.getElementById('btn-stop-sitting');
+        if (btnStart) btnStart.style.display = 'inline-block';
+        if (btnStop) btnStop.style.display = 'none';
+        document.getElementById('sitting-timer-wrap').style.display = 'none';
         // Auto-select first question
         const firstQk = Object.keys(data.questions)[0];
         if (firstQk) {
@@ -1302,16 +1536,10 @@ function setupQuestion(q) {
   if (awrap) awrap.classList.remove('collapsed');
   colBtn.innerHTML = '&#9660; Collapse';
 
-  // Restore read-only + retake if previously revealed
+  // Restore full review state if previously revealed
   if (localStorage.getItem(revealKey(ak, qk, sk))) {
-    ab.readOnly = true;
-    document.getElementById('btn-retake').style.display = 'inline-block';
-    document.getElementById('ans-collapse').style.display = 'block';
-    document.getElementById('btn-skip').disabled = true;
-    if (brainstormInterval) { clearInterval(brainstormInterval); brainstormInterval = null; }
-    manualMode = true;
-    const statusEl = document.getElementById('brainstorm-status');
-    if (statusEl) statusEl.innerHTML = '<span style="color:var(--text3);">Review Mode</span> <span style="color:var(--green);font-size:10px;">(Unlocked)</span>';
+    // Defer so the DOM is fully set up first, then rebuild the full reveal view
+    setTimeout(() => skipToReveal(true), 0);
   }
 }
 
@@ -1650,7 +1878,139 @@ function startAssignTimer() {
     if(stEl) stEl.textContent = pad(h) + ':' + pad(m) + ':' + pad(s);
   }, 1000);
 }
-function resetAssignTimer() { clearInterval(assignTimer); assignTimer = null; assignSeconds = 0; const e = document.getElementById('assign-timer'); if(e) e.textContent = '00:00:00'; }
+function resetAssignTimer() {
+  clearInterval(assignTimer); assignTimer = null; assignSeconds = 0;
+  const e = document.getElementById('assign-timer'); if(e) e.textContent = '00:00:00';
+  const btnStart = document.getElementById('btn-start-sitting');
+  const btnStop = document.getElementById('btn-stop-sitting');
+  if (btnStart) btnStart.style.display = 'none';
+  if (btnStop) btnStop.style.display = 'none';
+  const stWrap = document.getElementById('sitting-timer-wrap');
+  if (stWrap) stWrap.style.display = 'none';
+}
+function startSittingExplicitly() {
+  startAssignTimer();
+  document.getElementById('btn-start-sitting').style.display = 'none';
+  document.getElementById('btn-stop-sitting').style.display = 'inline-block';
+  document.getElementById('sitting-timer-wrap').style.display = 'flex';
+}
+function stopSittingExplicitly() {
+  if (!confirm('Stop the sitting timer? The timer will reset.')) return;
+  resetAssignTimer();
+  // Show Start button again so user can restart
+  const ass = document.getElementById('sel-assign').value;
+  if (ass) {
+    const btnStart = document.getElementById('btn-start-sitting');
+    if (btnStart) btnStart.style.display = 'inline-block';
+  }
+}
+
+let pillarChallengePendingTarget = null;
+
+function showPillarChallenge(themes, skipCallback) {
+  const pb = document.getElementById('pillar-body');
+  let html = '<p style="font-size:16px; margin-bottom:20px; color:var(--text2);">Before diving into the detailed solution, test your mental framework. Can you recall the key points for these high-level pillars?</p>';
+  
+  // 1. Identify relevant pillars from themes
+  let relevantPillars = new Set();
+  
+  if (PILLARS_HOOKS && PILLARS_HOOKS.themeMapping) {
+    themes.forEach(t => {
+       if (PILLARS_HOOKS.themeMapping[t]) {
+           PILLARS_HOOKS.themeMapping[t].forEach(p => relevantPillars.add(p));
+       }
+    });
+  }
+
+  // 2. Fallback to generic Taxonomy if no pillars mapped
+  if (relevantPillars.size === 0) {
+      themes.forEach(t => {
+         html += '<div style="margin: 15px 0; padding: 15px; background: var(--surface3); border: 1px solid var(--border2); border-left: 5px solid var(--accent); border-radius: var(--radius); text-align:left;">';
+         html += '<div style="font-size: 18px; font-weight: 700; color: #ffffff;">' + t + '</div>';
+         if (MASTER_TAXONOMY[t]) {
+            html += '<div style="font-size: 14px; font-weight: 500; color: var(--text2); margin-top: 8px; line-height: 1.5;"><span style="color:var(--text3); font-size:12px; text-transform:uppercase; letter-spacing:1px; margin-right:4px;">Hints:</span> ' + MASTER_TAXONOMY[t].join(' <span style="color:var(--text3)">•</span> ') + '</div>';
+         }
+         html += '</div>';
+      });
+  } else {
+      // 3. Render specific Hook titles for relevant Pillars
+      Array.from(relevantPillars).sort().forEach(pId => {
+          let pDef = PILLARS_HOOKS.pillars.find(p => p.id === pId);
+          if (!pDef) return;
+          
+          html += '<div style="margin: 15px 0; border: 1px solid var(--border2); border-left: 5px solid '+pDef.color+'; border-radius: var(--radius); overflow: hidden;">';
+          html += '<div style="padding: 10px 15px; background: var(--surface2); border-bottom: 1px solid var(--border2); display:flex; justify-content:space-between; align-items:center;">';
+          html += '<span style="font-size: 16px; font-weight: 700; color: #fff;">' + pDef.name + '</span>';
+          html += '<span style="font-size: 12px; font-weight: bold; color: var(--text3); background: var(--surface3); padding: 2px 8px; border-radius: 10px;">' + pDef.weight + '</span>';
+          html += '</div>';
+          html += '<div style="padding: 15px; background: var(--surface3); text-align:left;">';
+          
+          let pCards = PILLARS_HOOKS.hooks.filter(h => h.pillar === pId);
+          if (pCards.length > 0) {
+              html += '<ul style="margin:0; padding-left:20px; color:var(--text2); font-size: 14px; line-height:1.6;">';
+              pCards.forEach(card => {
+                  let tagColor = card.tag === 'VERY HIGH' ? 'var(--red)' : (card.tag === 'HIGH' ? 'var(--orange)' : 'var(--blue)');
+                  html += '<li style="margin-bottom:6px;"><strong style="color:var(--text);">' + card.title + '</strong> <span style="font-size:11px; color:'+tagColor+'; margin-left:8px; font-weight:bold;">[' + card.tag + ']</span> <span style="font-size:12px; color:var(--text3); margin-left:4px;">(' + card.bullets.length + ' key points)</span></li>';
+              });
+              html += '</ul>';
+          } else {
+              html += '<div style="color:var(--text3); font-size:13px; font-style:italic;">No specific hooks defined for this pillar.</div>';
+          }
+           
+          html += '</div></div>';
+      });
+  }
+  
+  pb.innerHTML = html;
+  document.getElementById('pillar-modal').style.display = 'block';
+  pillarChallengePendingTarget = skipCallback;
+}
+
+function closePillarModal() {
+  document.getElementById('pillar-modal').style.display = 'none';
+  if (pillarChallengePendingTarget) {
+     pillarChallengePendingTarget = null;
+  }
+}
+
+function completePillarChallenge() {
+  document.getElementById('pillar-modal').style.display = 'none';
+  if (pillarChallengePendingTarget) {
+     let cb = pillarChallengePendingTarget;
+     pillarChallengePendingTarget = null;
+     cb(); 
+  }
+}
+
+function performGapAnalysis(target, answerText) {
+  if (!target || !target.themes || target.themes.length === 0) return '';
+  const text = answerText.toLowerCase();
+  
+  let html = '<div style="margin-bottom: 20px; padding: 15px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface2);">';
+  html += '<div style="font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 15px;">Topic Gap Analysis (AI Estimate)</div>';
+  html += '<div style="display:flex; flex-direction:column; gap:8px;">';
+
+  target.themes.forEach(theme => {
+    let hooks = MASTER_TAXONOMY[theme] || [];
+    let keywords = [theme, ...hooks].map(k => k.toLowerCase());
+    
+    // Check if any keyword matches
+    let hitKeyword = keywords.find(kw => text.includes(kw) || text.includes(kw.replace(/s$/, '')));
+    
+    if (hitKeyword) {
+      html += '<div style="padding: 10px; background: var(--greenbg); border-left: 3px solid var(--green); border-radius: 4px; font-size: 13px;">';
+      html += '<strong>✅ Mastered: ' + theme + '</strong><br><span style="color:var(--text3); font-size:12px;">You touched on concepts related to "' + hitKeyword + '".</span>';
+      html += '</div>';
+    } else {
+      html += '<div style="padding: 10px; background: var(--amberbg); border-left: 3px solid var(--amber); border-radius: 4px; font-size: 13px;">';
+      html += '<strong>⚠️ Missed: ' + theme + '</strong><br><span style="color:var(--text3); font-size:12px;">Keep these in mind: ' + hooks.join(', ') + '.</span>';
+      html += '</div>';
+    }
+  });
+
+  html += '</div></div>';
+  return html;
+}
 
 // REVIEW ENGINE
 function startReview() {
@@ -1658,7 +2018,38 @@ function startReview() {
   skipToReveal();
 }
 
-function skipToReveal() {
+function skipToReveal(bypassPillar = false) {
+  const target = currentSub || currentQ;
+  
+  // PILLAR CHALLENGE INTERCEPT
+  if (!bypassPillar && target && target.themes && target.themes.length > 0) {
+      const k = getActiveKeys();
+      const pKey = "pillar_" + k.ak + "_" + k.qk + (k.sk ? "_" + k.sk : "");
+      if (!localStorage.getItem(pKey)) {
+          showPillarChallenge(target.themes, () => {
+              localStorage.setItem(pKey, '1');
+              
+              const synEl = document.getElementById('synopsis-text');
+              const synWrap = document.getElementById('synopsis-wrap');
+              if (synEl && synWrap) {
+                  let synHtml = '<strong style="color:var(--accent)">🧠 Pillars & Hooks Memory Aid:</strong><br>';
+                  target.themes.forEach(t => {
+                      synHtml += `<span style="color:var(--text);font-weight:600">${t}</span>`;
+                      if (MASTER_TAXONOMY[t]) synHtml += ': <span style="color:var(--text2)">' + MASTER_TAXONOMY[t].join(' · ') + '</span>';
+                      synHtml += '<br>';
+                  });
+                  synEl.innerHTML = synHtml;
+                  synWrap.style.display = 'flex';
+              }
+              const nw = document.getElementById('notes-wrap');
+              if (nw) nw.classList.add('visible');
+              
+              skipToReveal(true);
+          });
+          return; // Stop execution until challenge is completed
+      }
+  }
+
   manualMode = true; stopTimer();
   document.getElementById('answer-box').readOnly = true;
   document.getElementById('notes-wrap').classList.add('expanded');
@@ -1667,14 +2058,16 @@ function skipToReveal() {
   const rk = getActiveKeys();
   if (rk.ak) localStorage.setItem(revealKey(rk.ak, rk.qk, rk.sk), '1');
 
-  // Collapse the Answer Box to make room for Notes
+  // Collapse the Answer Box to make room for Notes - ONLY on first manual reveal
   document.getElementById('ans-collapse').style.display = 'block';
   const ab = document.getElementById('answer-box');
-  if (ab.style.display !== 'none') toggleAnswer();
+  if (!bypassPillar && ab.style.display !== 'none') toggleAnswer();
 
   if(brainstormInterval) clearInterval(brainstormInterval);
 
-  const target = currentSub || currentQ;
+  const k = getActiveKeys();
+  const savedRevCount = parseInt(localStorage.getItem(revCountKey(k.ak, k.qk, k.sk)) || "0");
+
   const nw = document.getElementById('notes-wrap');
   if (target && target.synopsis) {
     nw.classList.add('visible');
@@ -1711,52 +2104,73 @@ function skipToReveal() {
   }
   document.getElementById('ptotal').textContent = currentPoints.filter(p => p.type === 'point').length;
   revealed = 0;
-  next();
+  
+  // Restore all points that were previously revealed
+  const toReveal = Math.max(1, savedRevCount); 
+  for (let i = 0; i < toReveal; i++) {
+    next(true); // pass true to suppress scroll for large restorations
+  }
 }
 
-function next() {
+function next(suppressScroll = false) {
   if (revealed >= currentPoints.length) return;
   const p = currentPoints[revealed];
   const outer = document.getElementById('points-outer');
   const div = document.createElement('div');
-  div.className = 'review-item' + (p.type === 'head' ? ' head' : '');
-  div.innerHTML = formatBlueprint(p.text);
-  
-  if (p.type === 'point') {
-     const idx = revealed;
-     const row = document.createElement('div');
-     row.className = 'self-row unchecked';
-     row.id = 'srow_' + idx;
-     
-     const k = getActiveKeys();
-     const savedGroups = JSON.parse(localStorage.getItem(groupKey(k.ak, k.qk, k.sk)) || '{}');
-     const savedNote = savedGroups[idx] || '';
+  const k = getActiveKeys();
 
-     row.innerHTML = `
-        <input type="checkbox" class="self-cb" id="cb_${idx}">
-        <label for="cb_${idx}" class="self-label">I covered this</label>
-        <input type="text" class="self-note ${savedNote ? 'visible' : ''}" id="note_${idx}" placeholder="Tag/Category..." value="${savedNote}" oninput="saveGroupNotes()">
-     `;
-     
-     const cb = row.querySelector('#cb_' + idx);
-     cb.addEventListener('change', (e) => {
-         row.className = e.target.checked ? 'self-row checked' : 'self-row unchecked';
-         const note = row.querySelector('#note_' + idx);
-         if (e.target.checked) note.classList.add('visible');
-         else if (!note.value) note.classList.remove('visible');
-     });
-     
-     div.appendChild(row);
+  if (p.type === 'gap_analysis') {
+      div.className = 'review-item gap-analysis-item';
+      div.innerHTML = p.html;
+  } else {
+      div.className = 'review-item' + (p.type === 'head' ? ' head' : '');
+      div.innerHTML = formatBlueprint(p.text);
+      
+      if (p.type === 'point') {
+         const idx = revealed;
+         const row = document.createElement('div');
+         
+         const savedGroups = JSON.parse(localStorage.getItem(groupKey(k.ak, k.qk, k.sk)) || '{}');
+         const savedNote = savedGroups[idx] || '';
+         const isChecked = localStorage.getItem(checkedKey(k.ak, k.qk, k.sk, idx)) === '1';
+
+         row.className = isChecked ? 'self-row checked' : 'self-row unchecked';
+         row.id = 'srow_' + idx;
+         
+         row.innerHTML = `
+            <input type="checkbox" class="self-cb" id="cb_${idx}" ${isChecked ? 'checked' : ''}>
+            <label for="cb_${idx}" class="self-label">I covered this</label>
+            <input type="text" class="self-note ${(savedNote || isChecked) ? 'visible' : ''}" id="note_${idx}" placeholder="Tag/Category..." value="${savedNote}" oninput="saveGroupNotes()">
+         `;
+         
+         const cb = row.querySelector('#cb_' + idx);
+         cb.addEventListener('change', (e) => {
+             row.className = e.target.checked ? 'self-row checked' : 'self-row unchecked';
+             const note = row.querySelector('#note_' + idx);
+             if (e.target.checked) {
+                 note.classList.add('visible');
+                 localStorage.setItem(checkedKey(k.ak, k.qk, k.sk, idx), '1');
+             } else {
+                 if (!note.value) note.classList.remove('visible');
+                 localStorage.removeItem(checkedKey(k.ak, k.qk, k.sk, idx));
+             }
+         });
+         
+         div.appendChild(row);
+      }
   }
   
   outer.appendChild(div);
-  div.scrollIntoView({ behavior: 'smooth', block: 'end' });
+  if (!suppressScroll) div.scrollIntoView({ behavior: 'smooth', block: 'end' });
 
   revealed++;
+  localStorage.setItem(revCountKey(k.ak, k.qk, k.sk), String(revealed));
+  const revealedPoints = currentPoints.slice(0, revealed).filter(x => x.type === 'point').length;
+  const totalPoints = currentPoints.filter(p => p.type === 'point').length;
   const pc = document.getElementById('pcnt');
-  if(pc) pc.textContent = currentPoints.slice(0, revealed).filter(x => x.type === 'point').length;
+  if(pc) pc.textContent = revealedPoints;
   const pb = document.getElementById('pbar');
-  if(pb) pb.style.width = (revealed / currentPoints.length * 100) + '%';
+  if(pb) pb.style.width = totalPoints > 0 ? (revealedPoints / totalPoints * 100) + '%' : '0%';
 
   if (revealed >= currentPoints.length) {
     document.getElementById('btn-next').disabled = true;
@@ -1769,11 +2183,15 @@ function prev() {
   const outer = document.getElementById('points-outer');
   if (outer.lastChild) outer.removeChild(outer.lastChild);
   revealed--;
+  const k = getActiveKeys();
+  localStorage.setItem(revCountKey(k.ak, k.qk, k.sk), String(revealed));
   
+  const revealedPoints = currentPoints.slice(0, revealed).filter(x => x.type === 'point').length;
+  const totalPoints = currentPoints.filter(p => p.type === 'point').length;
   const pc = document.getElementById('pcnt');
-  if(pc) pc.textContent = currentPoints.slice(0, revealed).filter(x => x.type === 'point').length;
+  if(pc) pc.textContent = revealedPoints;
   const pb = document.getElementById('pbar');
-  if(pb) pb.style.width = (revealed / currentPoints.length * 100) + '%';
+  if(pb) pb.style.width = totalPoints > 0 ? (revealedPoints / totalPoints * 100) + '%' : '0%';
   
   document.getElementById('btn-next').disabled = false;
 }
@@ -1927,6 +2345,11 @@ function resetAll() {
   const nb = document.getElementById('notes-box');
   if (nb) nb.value = "";
 
+  const synEl = document.getElementById('synopsis-text');
+  if (synEl) synEl.innerHTML = "";
+  const synWrap = document.getElementById('synopsis-wrap');
+  if (synWrap) synWrap.style.display = "none";
+
   if(brainstormInterval) clearInterval(brainstormInterval);
 
   document.getElementById('timer-zone').style.display = 'none';
@@ -1965,7 +2388,8 @@ function updateMetricsUI(activeQ = null) {
         tzone.style.display = (subSelected || qSelectedNoParts) ? 'flex' : 'none';
     }
     if (swrap) {
-        swrap.style.display = 'flex'; // Always show sitting timer if sitting is active
+        // Only show sitting-timer-wrap if the timer is explicitly running
+        swrap.style.display = assignTimer ? 'flex' : 'none';
     }
 
     // Update Pills
@@ -2024,14 +2448,15 @@ function elapsedKey(ak, qk, sk) { return `sa1_e_elapsed_${ak}_${qk}_${sk}`; }
 function notesKey(ak, qk, sk) { return `sa1_e_notes_${ak}_${qk}_${sk}`; }
 function groupKey(ak, qk, sk) { return `sa1_e_groups_${ak}_${qk}_${sk}`; }
 function revealKey(ak, qk, sk) { return `sa1_e_revealed_${ak}_${qk}_${sk}`; }
+function revCountKey(ak, qk, sk) { return `sa1_e_rev_cnt_${ak}_${qk}_${sk}`; }
+function checkedKey(ak, qk, sk, idx) { return `sa1_e_chk_${ak}_${qk}_${sk}_${idx}`; }
 
 function highlightKeywords(text, isExport = false) {
   if(!text) return text;
   let html = text;
-  const highlightColor = isExport ? "#000" : "var(--accent)";
   SA1_KEYWORDS.forEach(kw => {
     const regex = new RegExp(`\\b(${kw})(s|es)?\\b`, 'gi');
-    html = html.replace(regex, `<strong style="color:${highlightColor};font-weight:700;">$1$2</strong>`);
+    html = html.replace(regex, `<span style="font-weight:600;">$1$2</span>`);
   });
   return html;
 }
@@ -2095,9 +2520,11 @@ const KeyboardHandler = {
   onKeyDown: function(e) {
     if (this.isTyping()) return;
 
-    // 1. Question Navigation (Always ArrowUp/Down)
-    if (e.key === 'ArrowUp') { e.preventDefault(); navQuestion(-1); return; }
-    if (e.key === 'ArrowDown') { e.preventDefault(); navQuestion(1); return; }
+    // 1. Question Navigation (Always ArrowUp/Down - Only if NOT Reviewing)
+    if (!manualMode) {
+      if (e.key === 'ArrowUp') { e.preventDefault(); navQuestion(-1); return; }
+      if (e.key === 'ArrowDown') { e.preventDefault(); navQuestion(1); return; }
+    }
 
     // 2. Sub-Question Navigation (ArrowLeft/Right - Only if NOT Reviewing)
     if (!manualMode) {
@@ -2140,6 +2567,10 @@ function retakeQuestion() {
     localStorage.removeItem(ansKey(k.ak, k.qk, k.sk));
     localStorage.removeItem(elapsedKey(k.ak, k.qk, k.sk));
     localStorage.removeItem(revealKey(k.ak, k.qk, k.sk));
+    localStorage.removeItem(revCountKey(k.ak, k.qk, k.sk));
+    localStorage.removeItem("pillar_" + k.ak + "_" + k.qk + (k.sk ? "_" + k.sk : ""));
+    // Clear all checked states
+    for(let i=0; i<300; i++) localStorage.removeItem(checkedKey(k.ak, k.qk, k.sk, i));
   }
   const target = currentSub || currentQ;
   setupQuestion(target);
