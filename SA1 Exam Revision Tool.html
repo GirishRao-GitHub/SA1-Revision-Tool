@@ -951,9 +951,9 @@ function renderFrameworkMidContent(theme) {
     let subtopics = [];
     data.forEach(line => {
         if (line.startsWith('- **')) {
-            let match = line.match(/^- \*\*(.*?)\*\*(.*)$/);
+            let match = line.match(/^- \*\*(.*?)\*\*\s*(?::\s*)?(.*)$/);
             if (match) {
-                let st = { title: match[1].replace(':', '').trim(), content: match[2].trim() };
+                let st = { title: match[1].trim(), content: match[2].trim() };
                 subtopics.push(st);
             }
         }
