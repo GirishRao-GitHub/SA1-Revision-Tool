@@ -115,11 +115,11 @@ select:focus{outline:none;border-color:var(--accent);}
 .scenario-wrap{padding:14px 16px;border-bottom:1px solid var(--border);background:rgba(43, 44, 48, 0.4);}
 .scenario-toggle{font-size:12px;color:var(--accent);cursor:pointer;user-select:none;display:flex;align-items:center;gap:6px;}
 .scenario-toggle:hover{color:#a78bfa;}
-.scenario-body{font-size:14.5px;color:var(--text);line-height:1.75;margin-top:10px;display:none;max-height:450px;overflow-y:auto;white-space:pre-line;padding-right:12px;scrollbar-width:thin;scrollbar-color:var(--accent) transparent;}
+.scenario-body{font-size:14.5px;color:var(--text);line-height:1.75;margin-top:10px;display:none;max-height:450px;overflow-y:auto;white-space:pre-line;padding-right:12px;scrollbar-width:thin;scrollbar-color:var(--accent) transparent;word-break:break-word;overflow-wrap:anywhere;}
 .scenario-body::-webkit-scrollbar{width:6px;}
 .scenario-body::-webkit-scrollbar-thumb{background-color:var(--accent);border-radius:10px;}
 .scenario-body.open{display:block;}
-.question-text{padding:14px 16px;font-size:15px;font-weight:400;color:var(--text);line-height:1.6;border-bottom:1px solid var(--border);max-height:180px;overflow-y:auto;white-space:pre-line;}
+.question-text{padding:14px 16px;font-size:15px;font-weight:400;color:var(--text);line-height:1.6;border-bottom:1px solid var(--border);max-height:180px;overflow-y:auto;white-space:pre-line;word-break:break-word;overflow-wrap:anywhere;}
 
 /* TIMER */
 .timer-zone{padding:6px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;flex-wrap:nowrap;background:var(--surface);overflow:hidden;}
@@ -169,6 +169,8 @@ textarea:focus{outline:none;border-color:var(--accent);}
 .blueprint-mode .review-item .para-heading, .blueprint-mode .synopsis-text .para-heading { font-weight: 700; color: var(--accent); display: block; margin-bottom: 4px; font-size: 15px; }
 .blueprint-mode .review-item ul, .blueprint-mode .synopsis-text ul { list-style: disc; margin-left: 18px; color: var(--text2); }
 .blueprint-mode .review-item li, .blueprint-mode .synopsis-text li { margin-bottom: 3px; font-size: 14px; }
+.review-item.head { margin-top: 15px; padding-top: 15px; border-top: 2px dashed var(--border); font-size: 16px; font-weight: 700; color: var(--accent); }
+.gap-analysis-item { animation: reveal-pulse 0.4s ease-out; }
 .blueprint-mode .kw { font-weight: 700; color: #fff; text-decoration: underline decoration-var(--accent) 2px; }
 .action-row{display:flex;gap:8px;flex-wrap:wrap;}
 .btn{font-family:var(--sans);font-size:14px;font-weight:500;padding:8px 16px;border-radius:var(--radius);border:1px solid var(--border);background:var(--surface2);color:var(--text);cursor:pointer;transition:background .15s;}
@@ -311,10 +313,13 @@ kbd{background:var(--surface2);border:1px solid var(--border2);border-radius:3px
   </div>
   <!-- Right actions -->
   <div class="topbar-actions">
-    <div class="mode-switcher" style="display:flex; gap:4px; background:var(--surface2); padding:2px; border-radius:6px; border:1px solid var(--border);">
+    <div style="width:2px; height:24px; background:var(--border); margin:0 6px;"></div>
+    <div class="mode-switcher" style="display:flex; gap:4px; align-items:center; background:var(--surface2); padding:2px; border-radius:6px; border:1px solid var(--border);">
       <button id="btn-mode-chrono" class="mode-btn active" onclick="if(confirmChange())setMode('chrono')">Chrono</button>
       <button id="btn-mode-theme" class="mode-btn" onclick="if(confirmChange())setMode('theme')">Theme</button>
+      <button id="btn-mode-frameworks" class="mode-btn" onclick="if(confirmChange())setMode('frameworks')" style="color:var(--accent);">Frameworks</button>
     </div>
+    <div style="width:2px; height:24px; background:var(--border); margin:0 6px;"></div>
     <button class="top-btn" onclick="toggleFullScreen(event)">&#9111; Full Screen</button>
     <button class="top-btn" onclick="confirmRefresh()">&#8635; Refresh</button>
     <button class="top-btn btn-exit" onclick="exitTool()">&#10005; Exit</button>
@@ -334,7 +339,18 @@ kbd{background:var(--surface2);border:1px solid var(--border2);border-radius:3px
 
 <!-- MAIN -->
 <div class="main">
-  <div class="left-pane">
+  <!-- FRAMEWORKS PANE (Hidden) -->
+  <div class="left-pane" id="fw-left-pane" style="display:none; background:var(--surface2); border-right:1px solid var(--border); overflow-y:auto;">
+    <div class="pane-header"><div class="pane-title" style="color:var(--accent);">Master Themes</div></div>
+    <div id="fw-topics-list" style="padding:10px; display:flex; flex-direction:column; gap:4px;"></div>
+  </div>
+  <div class="right-pane" id="fw-right-pane" style="display:none; overflow-y:auto; background:var(--bg); padding:40px;">
+    <div id="fw-content" style="max-width:800px; margin:0 auto; color:var(--text); font-size:15px; line-height:1.6;">
+      <h2 style="color:var(--text3); text-align:center; margin-top:100px;">Select a Master Theme to view its Exam Framework & Hooks</h2>
+    </div>
+  </div>
+
+  <div class="left-pane" id="left-pane">
 
     <!-- SITTING ROW (Chrono) + DATA STATUS -->
     <div class="sitting-row" id="chrono-sitting-row">
@@ -454,7 +470,7 @@ kbd{background:var(--surface2);border:1px solid var(--border2);border-radius:3px
     </div>
   </div>
 
-  <div class="right-pane">
+  <div class="right-pane" id="right-pane">
     <div id="right-empty-pane" class="right-empty-pane">Select a sitting, then a question to begin.</div>
     <div class="timer-zone" id="timer-zone" style="display:none;">
       <div class="timer-display" id="timer-display">0:00</div>
@@ -510,6 +526,21 @@ kbd{background:var(--surface2);border:1px solid var(--border2);border-radius:3px
       <button class="btn btn-primary" onclick="exportCurrentQuestionDoc()">Download as Doc</button>
       <button class="btn" onclick="closeModal()">Close</button>
     </div>
+</div>
+</div>
+
+<div id="pillar-modal" class="modal">
+  <div class="modal-content" style="max-width:600px;">
+    <div class="modal-header" style="background:var(--accentbg);border-bottom:2px solid var(--accent);">
+      <h2 style="color:var(--accent);margin:0;">Pillar Challenge</h2>
+      <button class="modal-close" onclick="closePillarModal()">&#10005;</button>
+    </div>
+    <div id="pillar-body" class="modal-body" style="text-align:center; padding: 30px;">
+      <!-- Dynamic content -->
+    </div>
+    <div class="modal-footer" style="justify-content:center;">
+      <button class="btn btn-primary" onclick="completePillarChallenge()" style="font-size:16px; padding: 10px 24px;">I Have Recalled the Details &amp; Ready to Reveal</button>
+    </div>
   </div>
 </div>
 
@@ -521,12 +552,37 @@ kbd{background:var(--surface2);border:1px solid var(--border2);border-radius:3px
 // ═══════════════════════════════════════════════════════════
 let SITTINGS = {};
 let THEMATICS = []; // Array of matches representing sub-questions mapped to themes
+let TOPIC_FRAMEWORKS = {}; // Loaded securely from data/Topic_Frameworks.json
 
 // Configuration of all available source files
+const MASTER_TAXONOMY = {
+  "Pricing": ["Data & Assumptions", "Risk Profile", "Expenses", "Profit Margin", "Cross-subsidy", "Sensitivity Analysis", "Return on Capital", "Equation of Value", "Cashflow Techniques"],
+  "Claims Management": ["Definitions", "Rehabilitation", "Fraud & Verification", "Reserving", "Claim Control", "Return to Work", "Assessment of claims"],
+  "Regulation": ["Treating Customers Fairly", "Capital Requirements", "Taxation", "State Provision", "IRDAI", "Compliance", "Policyholder Protection Schemes", "Solvency II Framework"],
+  "Underwriting": ["Anti-selection", "Financial Underwriting", "Medical Underwriting", "Free Cover Limits", "Tele-underwriting", "Genetic Testing", "Pre-existing Conditions"],
+  "Data & Models": ["Credibility", "Heterogeneity", "Proxies", "AI & Machine Learning", "Backtesting", "Sensitivity", "Model Governance", "Stochastic & Deterministic", "Multi-state Models"],
+  "Reserving & Valuation": ["IBNR / IBNER", "Bornhuetter-Ferguson", "Run-off Triangles", "Best Estimate Liabilities", "Risk Margin", "Prudence", "Supervisory Reserves", "Market Consistent Valuation"],
+  "Risk Management & Capital": ["Economic Capital", "Stress Testing", "Asset Liability Management", "Risk Appetite", "Concentration of Risk", "Pandemics", "Catastrophes", "Options & Guarantees", "Climate Risks"],
+  "Reinsurance": ["Risk Transfer", "Capital Relief", "Technical Assistance", "Quota Share", "Excess of Loss", "Catastrophe Cover", "Retention Optimization", "Badging"],
+  "Investments": ["Matching", "Liquidity", "Standard Formula", "Internal Models", "Asset Classes", "Yield Curve", "Asset-liability matching strategy"],
+  "Product Design": ["Benefits & Conditions", "Target Market", "Options & Guarantees", "Exclusions", "Surrender Values", "Marketability", "Bundling & Unbundling"],
+  "Group Products": ["Master Trust", "Take-up Rates", "Administration", "Unit Cost Savings", "Employer Involvement", "Free Cover Limits"],
+  "Professional Guidance": ["Actuarial Standards", "Peer Review", "Conflicts of Interest", "Whistleblowing", "Communication", "Data Quality", "Statutory Actuarial Roles"],
+  "Capital & Solvency": ["Solvency Capital Requirements (SCR)", "Value at Risk (VaR)", "Return on Capital", "Internal Models", "Solvency II mapping"],
+  "Private Medical Insurance (PMI)": ["Moratorium Underwriting", "Community Rating", "Indemnity", "Excesses & Co-payments", "Provider Networks", "Medical Inflation"],
+  "Critical Illness": ["Survival Period", "Standard Definitions", "Advances in Medicine", "Accelerated Benefits", "Standalone Cover"],
+  "Income Protection": ["Deferred Period", "Replacement Ratio", "Definition of Incapacity", "State Benefits integration", "Rehabilitation"],
+  "Pricing & Rating": ["Age Banding", "Community Rating", "Experience Rating", "No Claims Discount (NCD)", "Renewable Premiums"],
+  "State Healthcare & Demographics": ["Pradhan Mantri Jan Arogya Yojana (PMJAY)", "Mass Health Schemes", "Aging Population", "QALYs", "Medical Inflation", "Public vs Private funding"],
+  "Long-Term Care (LTC)": ["Activities of Daily Living (ADLs)", "Pre-funding vs Immediate Needs", "Cognitive Impairment", "Care Home Costs", "State limitations"],
+  "Legislation & Taxation": ["Premium Taxes", "Benefit Taxes", "Profit Taxation", "Employment Law", "Data Protection (GDPR/DPA)"],
+  "Product Design (Protection)": ["Guaranteed vs Reviewable premiums", "Term Assurance riders", "Unit-Linked Wrappers", "Renewability"],
+  "Administration": ["Policy setup", "Premium Collection", "Lapsation processes", "Customer Service", "Outsourcing / Counterparties"]
+};
 const SOURCE_FILES = {
     ifoa: ['201904.json', '201909.json', '202004.json', '202009.json', '202104.json', '202109.json', '202204.json', '202209.json', '202304.json', '202309.json', '202404.json', '202409.json', '202504.json', '202509.json'],
     assignment: ['X1.json', 'X2.json', 'X3.json', 'X4.json', 'X5.json', 'X6.json'],
-    sp1: ['Ch00.json', 'Ch01.json', 'Ch02.json', 'Ch03.json', 'Ch04.json'],
+    sp1: ['Ch00.json', 'Ch01.json', 'Ch02.json', 'Ch03.json', 'Ch04.json', 'Ch05.json'],
     iai: [
       'iai_1115.json', 'iai_0416.json', 'iai_0916.json', 'iai_0317.json', 'iai_0917.json', 
       'iai_0318.json', 'iai_0918.json', 'iai_0619.json', 'iai_1119.json', 
@@ -551,11 +607,18 @@ let brainstormWordsReq = 0, brainstormTimeLeft = 0, brainstormInterval = null;
 window.onload = async function() {
     let loadedCount = 0;
 
+    // Load Topic Frameworks Dictionary First
+    try {
+        const fwRes = await fetch('data/Topic_Frameworks.json?t=' + new Date().getTime());
+        if (fwRes.ok) TOPIC_FRAMEWORKS = await fwRes.json();
+    } catch(e) { console.warn("Frameworks not loaded", e); }
+
     // Load ALL files from ALL sources
     for (const [source, files] of Object.entries(SOURCE_FILES)) {
         for (const f of files) {
             try {
-                const res = await fetch('data/' + f);
+                const url = 'data/' + f + '?t=' + new Date().getTime();
+                const res = await fetch(url);
                 if (res.ok) {
                     const data = await res.json();
                     const key = f.replace('.json', '');
@@ -716,7 +779,7 @@ function indexThematics(sittingKey, sittingData, source) {
 }
 
 const COMMAND_VERBS = ["Discuss", "Explain", "Outline", "List", "Suggest", "Describe", "State", "Recommend", "Compare"];
-const SA1_KEYWORDS = ["Solvency II", "SCR", "Best Estimate", "Risk Margin", "PMI", "Income Protection", "Morbidity", "Mortalilty", "Lapse", "Anti-selection", "Moral Hazard", "Diversification", "Technical Provisions", "Capital", "Underwriting", "Claims Management", "Product Design", "Pricing", "Expenses", "Taxation", "Regulation", "State Provision", "Reinsurance", "Social Care", "Long Term Care", "Critical Illness", "IP", "CI", "LTC"];
+const SA1_KEYWORDS = ["Solvency II", "SCR", "Best Estimate", "Risk Margin", "PMI", "Income Protection", "Morbidity", "Mortality", "Lapse", "Anti-selection", "Moral Hazard", "Diversification", "Technical Provisions", "Capital", "Underwriting", "Claims Management", "Product Design", "Pricing", "Expenses", "Taxation", "Regulation", "State Provision", "Reinsurance", "Social Care", "Long Term Care", "Critical Illness", "IP", "CI", "LTC", "IRDAI", "PMJAY", "Treating Customers Fairly", "Genetic Testing", "Yield Curve", "Asset Liability", "QALYs", "Value at Risk", "Run-off", "Bornhuetter", "IBNR"];
 
 let TAXONOMY = {};
 let VERB_INDEX = {}; 
@@ -769,16 +832,86 @@ function setMode(mode) {
     appMode = mode;
     document.getElementById('btn-mode-chrono').classList.toggle('active', mode==='chrono');
     document.getElementById('btn-mode-theme').classList.toggle('active', mode==='theme');
+    const fbtn = document.getElementById('btn-mode-frameworks');
+    if (fbtn) fbtn.classList.toggle('active', mode==='frameworks');
+    
     document.getElementById('chrono-selectors').style.display = mode === 'chrono' ? 'grid' : 'none';
     document.getElementById('theme-selectors').style.display = mode === 'theme' ? 'grid' : 'none';
+
+    // Toggle Panes
+    const isFW = (mode === 'frameworks');
+    document.getElementById('left-pane').style.display = isFW ? 'none' : 'flex';
+    document.getElementById('right-pane').style.display = isFW ? 'none' : 'flex';
+    document.getElementById('fw-left-pane').style.display = isFW ? 'flex' : 'none';
+    document.getElementById('fw-right-pane').style.display = isFW ? 'block' : 'none';
+
+    if (isFW) {
+        renderFrameworkList();
+        return; // skip resetAll for framework mode so you don't lose timer if you just peeked!
+    }
 
     resetAll();
 
     if (mode === 'chrono') {
         onAssignChange();
-    } else {
+    } else if (mode === 'theme') {
         onThemeChange();
     }
+}
+
+function renderFrameworkList() {
+    const listEl = document.getElementById('fw-topics-list');
+    listEl.innerHTML = '';
+    const themes = Object.keys(TOPIC_FRAMEWORKS).sort();
+    
+    themes.forEach(t => {
+        const btn = document.createElement('div');
+        btn.style.cssText = 'padding:12px; border-radius:6px; cursor:pointer; font-size:13px; font-weight:600; color:var(--text); border:1px solid var(--border); transition:all 0.2s; background:var(--surface);';
+        btn.innerHTML = t;
+        btn.onmouseover = () => { if (!btn.classList.contains('active')) btn.style.borderColor = 'var(--accent)'; };
+        btn.onmouseout = () => { if (!btn.classList.contains('active')) btn.style.borderColor = 'var(--border)'; };
+        btn.onclick = () => {
+            Array.from(listEl.children).forEach(c => { c.classList.remove('active'); c.style.borderColor='var(--border)'; c.style.background='var(--surface)'; c.style.color='var(--text)'; });
+            btn.classList.add('active');
+            btn.style.background = 'var(--accent)';
+            btn.style.color = '#fff';
+            btn.style.borderColor = 'var(--accent)';
+            renderFrameworkContent(t);
+        };
+        listEl.appendChild(btn);
+    });
+}
+
+function renderFrameworkContent(theme) {
+    const cEl = document.getElementById('fw-content');
+    const data = TOPIC_FRAMEWORKS[theme];
+    let html = `<h1 style="color:var(--accent); border-bottom:2px solid var(--border); padding-bottom:10px;">${theme}</h1>`;
+    
+    if (!data) {
+        cEl.innerHTML = html + `<p style="color:var(--text3);">No framework data available yet.</p>`;
+        return;
+    }
+    
+    html += `<div style="margin-top:20px;">`;
+    data.forEach(line => {
+        if (line.startsWith('### ')) {
+            html += `<h3 style="color:#fff; margin-top:25px; margin-bottom:10px; font-size:18px;">${line.replace('### ', '')}</h3>`;
+        } else if (line.startsWith('- **')) {
+            let fLine = line.replace(/^- \*\*(.*?)\*\*(.*)$/, '<li style="margin-bottom:12px; font-size:14px; line-height:1.6;"><strong style="color:var(--green);">$1</strong>$2</li>');
+            if (!html.endsWith('</ul>')) {
+                if(html.includes('<li')) html += '</ul>'; // Close previous
+                html += `<ul style="list-style:none; padding-left:10px; border-left:2px solid var(--accent); margin-left:5px;">${fLine}`;
+            } else {
+                html = html.replace(/<\/ul>$/, fLine + '</ul>');
+            }
+        } else {
+            html += `<p style="font-size:14px; color:var(--text2); margin-bottom:10px;">${line}</p>`;
+        }
+    });
+    if (!html.endsWith('</ul>') && html.includes('<ul')) html += '</ul>';
+    html += `</div>`;
+    
+    cEl.innerHTML = html;
 }
 
 function onThemeChange() {
@@ -1656,13 +1789,110 @@ function startAssignTimer() {
 }
 function resetAssignTimer() { clearInterval(assignTimer); assignTimer = null; assignSeconds = 0; const e = document.getElementById('assign-timer'); if(e) e.textContent = '00:00:00'; }
 
+let pillarChallengePendingTarget = null;
+
+function showPillarChallenge(themes, skipCallback) {
+  const pb = document.getElementById('pillar-body');
+  let html = '<p style="font-size:16px; margin-bottom:20px; color:var(--text2);">Before diving into the detailed solution, test your mental framework. Can you recall the key points for these high-level pillars?</p>';
+  
+  themes.forEach(t => {
+     html += '<div style="margin: 15px 0; padding: 15px; background: var(--surface3); border: 1px solid var(--border2); border-left: 5px solid var(--accent); border-radius: var(--radius); text-align:left;">';
+     html += '<div style="font-size: 18px; font-weight: 700; color: #ffffff;">' + t + '</div>';
+     if (MASTER_TAXONOMY[t]) {
+        html += '<div style="font-size: 14px; font-weight: 500; color: var(--text2); margin-top: 8px; line-height: 1.5;"><span style="color:var(--text3); font-size:12px; text-transform:uppercase; letter-spacing:1px; margin-right:4px;">Hints:</span> ' + MASTER_TAXONOMY[t].join(' <span style="color:var(--text3)">•</span> ') + '</div>';
+     }
+     html += '</div>';
+  });
+  
+  pb.innerHTML = html;
+  document.getElementById('pillar-modal').style.display = 'block';
+  pillarChallengePendingTarget = skipCallback;
+}
+
+function closePillarModal() {
+  document.getElementById('pillar-modal').style.display = 'none';
+  if (pillarChallengePendingTarget) {
+     pillarChallengePendingTarget = null;
+  }
+}
+
+function completePillarChallenge() {
+  document.getElementById('pillar-modal').style.display = 'none';
+  if (pillarChallengePendingTarget) {
+     let cb = pillarChallengePendingTarget;
+     pillarChallengePendingTarget = null;
+     cb(); 
+  }
+}
+
+function performGapAnalysis(target, answerText) {
+  if (!target || !target.themes || target.themes.length === 0) return '';
+  const text = answerText.toLowerCase();
+  
+  let html = '<div style="margin-bottom: 20px; padding: 15px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface2);">';
+  html += '<div style="font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 15px;">Topic Gap Analysis (AI Estimate)</div>';
+  html += '<div style="display:flex; flex-direction:column; gap:8px;">';
+
+  target.themes.forEach(theme => {
+    let hooks = MASTER_TAXONOMY[theme] || [];
+    let keywords = [theme, ...hooks].map(k => k.toLowerCase());
+    
+    // Check if any keyword matches
+    let hitKeyword = keywords.find(kw => text.includes(kw) || text.includes(kw.replace(/s$/, '')));
+    
+    if (hitKeyword) {
+      html += '<div style="padding: 10px; background: var(--greenbg); border-left: 3px solid var(--green); border-radius: 4px; font-size: 13px;">';
+      html += '<strong>✅ Mastered: ' + theme + '</strong><br><span style="color:var(--text3); font-size:12px;">You touched on concepts related to "' + hitKeyword + '".</span>';
+      html += '</div>';
+    } else {
+      html += '<div style="padding: 10px; background: var(--amberbg); border-left: 3px solid var(--amber); border-radius: 4px; font-size: 13px;">';
+      html += '<strong>⚠️ Missed: ' + theme + '</strong><br><span style="color:var(--text3); font-size:12px;">Keep these in mind: ' + hooks.join(', ') + '.</span>';
+      html += '</div>';
+    }
+  });
+
+  html += '</div></div>';
+  return html;
+}
+
 // REVIEW ENGINE
 function startReview() {
   // Aliasing AI Review to Reveal for now, but both will show the Memory Aid/Notes
   skipToReveal();
 }
 
-function skipToReveal() {
+function skipToReveal(bypassPillar = false) {
+  const target = currentSub || currentQ;
+  
+  // PILLAR CHALLENGE INTERCEPT
+  if (!bypassPillar && target && target.themes && target.themes.length > 0) {
+      const k = getActiveKeys();
+      const pKey = "pillar_" + k.ak + "_" + k.qk + (k.sk ? "_" + k.sk : "");
+      if (!localStorage.getItem(pKey)) {
+          showPillarChallenge(target.themes, () => {
+              localStorage.setItem(pKey, '1');
+              
+              const nb = document.getElementById('notes-box');
+              if (nb && nb.value.trim() === '') {
+                  let text = "🧠 PILLARS & HOOKS REVISION:\n";
+                  target.themes.forEach(t => {
+                      text += `• ${t}\n`;
+                      if (MASTER_TAXONOMY[t]) {
+                          MASTER_TAXONOMY[t].forEach(hook => {
+                              text += `   - ${hook}\n`;
+                          });
+                      }
+                  });
+                  nb.value = text;
+                  if (typeof saveNotes === 'function') saveNotes();
+              }
+              
+              skipToReveal(true);
+          });
+          return; // Stop execution until challenge is completed
+      }
+  }
+
   manualMode = true; stopTimer();
   document.getElementById('answer-box').readOnly = true;
   document.getElementById('notes-wrap').classList.add('expanded');
@@ -1678,7 +1908,6 @@ function skipToReveal() {
 
   if(brainstormInterval) clearInterval(brainstormInterval);
 
-  const target = currentSub || currentQ;
   const nw = document.getElementById('notes-wrap');
   if (target && target.synopsis) {
     nw.classList.add('visible');
@@ -1713,6 +1942,12 @@ function skipToReveal() {
         target.sections[head].forEach(p => currentPoints.push({ type: 'point', text: p }));
       });
   }
+
+  const gapHtml = performGapAnalysis(target, ab.value);
+  if (gapHtml) {
+      currentPoints.unshift({ type: 'gap_analysis', html: gapHtml });
+  }
+
   document.getElementById('ptotal').textContent = currentPoints.filter(p => p.type === 'point').length;
   revealed = 0;
   next();
@@ -1723,44 +1958,52 @@ function next() {
   const p = currentPoints[revealed];
   const outer = document.getElementById('points-outer');
   const div = document.createElement('div');
-  div.className = 'review-item' + (p.type === 'head' ? ' head' : '');
-  div.innerHTML = formatBlueprint(p.text);
-  
-  if (p.type === 'point') {
-     const idx = revealed;
-     const row = document.createElement('div');
-     row.className = 'self-row unchecked';
-     row.id = 'srow_' + idx;
-     
-     const k = getActiveKeys();
-     const savedGroups = JSON.parse(localStorage.getItem(groupKey(k.ak, k.qk, k.sk)) || '{}');
-     const savedNote = savedGroups[idx] || '';
 
-     row.innerHTML = `
-        <input type="checkbox" class="self-cb" id="cb_${idx}">
-        <label for="cb_${idx}" class="self-label">I covered this</label>
-        <input type="text" class="self-note ${savedNote ? 'visible' : ''}" id="note_${idx}" placeholder="Tag/Category..." value="${savedNote}" oninput="saveGroupNotes()">
-     `;
-     
-     const cb = row.querySelector('#cb_' + idx);
-     cb.addEventListener('change', (e) => {
-         row.className = e.target.checked ? 'self-row checked' : 'self-row unchecked';
-         const note = row.querySelector('#note_' + idx);
-         if (e.target.checked) note.classList.add('visible');
-         else if (!note.value) note.classList.remove('visible');
-     });
-     
-     div.appendChild(row);
+  if (p.type === 'gap_analysis') {
+      div.className = 'review-item gap-analysis-item';
+      div.innerHTML = p.html;
+  } else {
+      div.className = 'review-item' + (p.type === 'head' ? ' head' : '');
+      div.innerHTML = formatBlueprint(p.text);
+      
+      if (p.type === 'point') {
+         const idx = revealed;
+         const row = document.createElement('div');
+         row.className = 'self-row unchecked';
+         row.id = 'srow_' + idx;
+         
+         const k = getActiveKeys();
+         const savedGroups = JSON.parse(localStorage.getItem(groupKey(k.ak, k.qk, k.sk)) || '{}');
+         const savedNote = savedGroups[idx] || '';
+
+         row.innerHTML = `
+            <input type="checkbox" class="self-cb" id="cb_${idx}">
+            <label for="cb_${idx}" class="self-label">I covered this</label>
+            <input type="text" class="self-note ${savedNote ? 'visible' : ''}" id="note_${idx}" placeholder="Tag/Category..." value="${savedNote}" oninput="saveGroupNotes()">
+         `;
+         
+         const cb = row.querySelector('#cb_' + idx);
+         cb.addEventListener('change', (e) => {
+             row.className = e.target.checked ? 'self-row checked' : 'self-row unchecked';
+             const note = row.querySelector('#note_' + idx);
+             if (e.target.checked) note.classList.add('visible');
+             else if (!note.value) note.classList.remove('visible');
+         });
+         
+         div.appendChild(row);
+      }
   }
   
   outer.appendChild(div);
   div.scrollIntoView({ behavior: 'smooth', block: 'end' });
 
   revealed++;
+  const revealedPoints = currentPoints.slice(0, revealed).filter(x => x.type === 'point').length;
+  const totalPoints = currentPoints.filter(p => p.type === 'point').length;
   const pc = document.getElementById('pcnt');
-  if(pc) pc.textContent = currentPoints.slice(0, revealed).filter(x => x.type === 'point').length;
+  if(pc) pc.textContent = revealedPoints;
   const pb = document.getElementById('pbar');
-  if(pb) pb.style.width = (revealed / currentPoints.length * 100) + '%';
+  if(pb) pb.style.width = totalPoints > 0 ? (revealedPoints / totalPoints * 100) + '%' : '0%';
 
   if (revealed >= currentPoints.length) {
     document.getElementById('btn-next').disabled = true;
@@ -1774,10 +2017,12 @@ function prev() {
   if (outer.lastChild) outer.removeChild(outer.lastChild);
   revealed--;
   
+  const revealedPoints = currentPoints.slice(0, revealed).filter(x => x.type === 'point').length;
+  const totalPoints = currentPoints.filter(p => p.type === 'point').length;
   const pc = document.getElementById('pcnt');
-  if(pc) pc.textContent = currentPoints.slice(0, revealed).filter(x => x.type === 'point').length;
+  if(pc) pc.textContent = revealedPoints;
   const pb = document.getElementById('pbar');
-  if(pb) pb.style.width = (revealed / currentPoints.length * 100) + '%';
+  if(pb) pb.style.width = totalPoints > 0 ? (revealedPoints / totalPoints * 100) + '%' : '0%';
   
   document.getElementById('btn-next').disabled = false;
 }
@@ -2144,6 +2389,7 @@ function retakeQuestion() {
     localStorage.removeItem(ansKey(k.ak, k.qk, k.sk));
     localStorage.removeItem(elapsedKey(k.ak, k.qk, k.sk));
     localStorage.removeItem(revealKey(k.ak, k.qk, k.sk));
+    localStorage.removeItem("pillar_" + k.ak + "_" + k.qk + (k.sk ? "_" + k.sk : ""));
   }
   const target = currentSub || currentQ;
   setupQuestion(target);
