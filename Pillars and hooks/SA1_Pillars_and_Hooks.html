@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SA1 Pillars & Hooks Framework</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap');
+
+  :root {
+    --bg: #0f0f0f;
+    --surface: #1a1a1a;
+    --surface2: #222222;
+    --border: #2e2e2e;
+    --accent: #c8f135;
+    --accent2: #5be8c8;
+    --accent3: #f4a347;
+    --accent4: #e85b8a;
+    --accent5: #8ab4f8;
+    --accent6: #d0a0f0;
+    --text: #e8e8e0;
+    --muted: #7a7a72;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'IBM Plex Sans', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--sans);
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  header {
+    border-bottom: 1px solid var(--border);
+    padding: 24px 32px 20px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .header-left h1 {
+    font-family: var(--mono);
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--accent);
+    letter-spacing: -0.02em;
+  }
+
+  .header-left p {
+    color: var(--muted);
+    font-size: 12px;
+    font-family: var(--mono);
+    margin-top: 4px;
+  }
+
+  .pill-row {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .pill {
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    border: 1px solid;
+    cursor: pointer;
+    transition: all 0.15s;
+    background: transparent;
+    color: var(--text);
+  }
+
+  .pill:hover, .pill.active { color: var(--bg); }
+
+  .layout { display: grid; grid-template-columns: 220px 1fr; min-height: calc(100vh - 73px); }
+
+  /* Sidebar */
+  .sidebar {
+    border-right: 1px solid var(--border);
+    padding: 20px 0;
+    position: sticky;
+    top: 0;
+    height: calc(100vh - 73px);
+    overflow-y: auto;
+  }
+
+  .sidebar-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+    padding: 0 16px 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .pillar-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 16px;
+    cursor: pointer;
+    border: none;
+    background: none;
+    color: var(--muted);
+    font-family: var(--sans);
+    font-size: 12px;
+    width: 100%;
+    text-align: left;
+    transition: all 0.15s;
+    border-left: 2px solid transparent;
+  }
+
+  .pillar-btn:hover { color: var(--text); background: var(--surface); }
+  .pillar-btn.active { color: var(--text); background: var(--surface); }
+
+  .pillar-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .pillar-name { flex: 1; line-height: 1.3; }
+
+  .pillar-freq {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+    flex-shrink: 0;
+  }
+
+  /* Main content */
+  .main { padding: 0; overflow: hidden; }
+
+  /* Master table view */
+  .master-view { padding: 24px 32px; }
+
+  .section-title {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 16px;
+  }
+
+  .master-table-wrap { overflow-x: auto; }
+
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 11px;
+  }
+
+  th {
+    font-family: var(--mono);
+    font-weight: 500;
+    text-align: left;
+    padding: 8px 10px;
+    border-bottom: 1px solid var(--border);
+    color: var(--muted);
+    white-space: nowrap;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  td {
+    padding: 8px 10px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+    color: var(--text);
+  }
+
+  tr:hover td { background: var(--surface); }
+
+  td:first-child {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  td:nth-child(2) { font-weight: 500; min-width: 180px; }
+
+  .dot-cell { display: flex; flex-wrap: wrap; gap: 4px; }
+
+  .dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    opacity: 0.9;
+  }
+
+  .dot.hollow {
+    background: transparent;
+    border: 1px solid;
+    opacity: 0.3;
+  }
+
+  .marks-badge {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--muted);
+  }
+
+  /* Hook library view */
+  .hook-view { display: none; padding: 0; }
+  .hook-view.active { display: block; }
+
+  .pillar-header {
+    padding: 24px 32px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .pillar-header .big-dot {
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .pillar-header h2 {
+    font-family: var(--mono);
+    font-size: 16px;
+    font-weight: 500;
+  }
+
+  .pillar-header .weight-tag {
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 4px;
+    margin-left: auto;
+  }
+
+  .hook-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1px;
+    background: var(--border);
+  }
+
+  .hook-card {
+    background: var(--bg);
+    padding: 20px 24px;
+    transition: background 0.15s;
+  }
+
+  .hook-card:hover { background: var(--surface); }
+
+  .hook-tag {
+    font-family: var(--mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .hook-tag .freq-dots { display: flex; gap: 2px; }
+  .hook-tag .freq-dot { width: 5px; height: 5px; border-radius: 50%; }
+
+  .hook-card h3 {
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 8px;
+    line-height: 1.4;
+  }
+
+  .hook-card ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .hook-card ul li {
+    font-size: 12px;
+    color: var(--muted);
+    padding-left: 12px;
+    position: relative;
+    line-height: 1.5;
+  }
+
+  .hook-card ul li::before {
+    content: '–';
+    position: absolute;
+    left: 0;
+    color: var(--border);
+  }
+
+  .years-row {
+    margin-top: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  .year-chip {
+    font-family: var(--mono);
+    font-size: 9px;
+    padding: 2px 6px;
+    border-radius: 3px;
+    background: var(--surface2);
+    color: var(--muted);
+  }
+
+  /* Tabs */
+  .tabs {
+    display: flex;
+    gap: 0;
+    border-bottom: 1px solid var(--border);
+    padding: 0 32px;
+  }
+
+  .tab-btn {
+    font-family: var(--mono);
+    font-size: 11px;
+    padding: 12px 16px;
+    background: none;
+    border: none;
+    color: var(--muted);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    transition: all 0.15s;
+  }
+
+  .tab-btn:hover { color: var(--text); }
+  .tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+
+  .india-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+    padding: 24px 32px;
+  }
+
+  .india-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 16px;
+  }
+
+  .india-card h4 {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent3);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .india-card ul {
+    list-style: none;
+  }
+
+  .india-card ul li {
+    font-size: 12px;
+    color: var(--muted);
+    padding: 3px 0 3px 12px;
+    position: relative;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .india-card ul li:last-child { border-bottom: none; }
+
+  .india-card ul li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: var(--accent3);
+    font-size: 9px;
+  }
+
+  .overview-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    padding: 24px 32px;
+  }
+
+  @media (max-width: 900px) {
+    .layout { grid-template-columns: 1fr; }
+    .sidebar { display: none; }
+    .overview-grid { grid-template-columns: 1fr 1fr; }
+  }
+
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 16px 20px;
+  }
+
+  .stat-card .num {
+    font-family: var(--mono);
+    font-size: 28px;
+    font-weight: 500;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .stat-card .label {
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  .bar-section { padding: 0 32px 24px; }
+
+  .bar-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+
+  .bar-label { font-size: 12px; width: 180px; flex-shrink: 0; }
+
+  .bar-track {
+    flex: 1;
+    height: 6px;
+    background: var(--surface2);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .bar-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.5s ease;
+  }
+
+  .bar-count {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    width: 40px;
+    text-align: right;
+    flex-shrink: 0;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-left">
+    <h1>SA1 // Pillars & Hooks</h1>
+    <p>16 sittings · 2017–2025 · SP1 + SA1 syllabus · IAI Health & Care</p>
+  </div>
+  <div class="pill-row" id="viewPills">
+    <button class="pill active" onclick="showView('overview')" style="border-color:#c8f135">Overview</button>
+    <button class="pill" onclick="showView('master')" style="border-color:#5be8c8">Master Table</button>
+    <button class="pill" onclick="showView('hooks')" style="border-color:#f4a347">Hook Library</button>
+    <button class="pill" onclick="showView('india')" style="border-color:#e85b8a">India Overlay</button>
+  </div>
+</header>
+
+<div class="layout">
+
+  <!-- Sidebar -->
+  <nav class="sidebar">
+    <div class="sidebar-label">Pillars</div>
+    <button class="pillar-btn" onclick="selectPillar(0)" id="pb0">
+      <span class="pillar-dot" style="background:#c8f135"></span>
+      <span class="pillar-name">P1 · Products & Environment</span>
+      <span class="pillar-freq">15%</span>
+    </button>
+    <button class="pillar-btn" onclick="selectPillar(1)" id="pb1">
+      <span class="pillar-dot" style="background:#5be8c8"></span>
+      <span class="pillar-name">P2 · Product Design</span>
+      <span class="pillar-freq">25%</span>
+    </button>
+    <button class="pillar-btn" onclick="selectPillar(2)" id="pb2">
+      <span class="pillar-dot" style="background:#f4a347"></span>
+      <span class="pillar-name">P3 · Risks & Risk Mgmt</span>
+      <span class="pillar-freq">30%</span>
+    </button>
+    <button class="pillar-btn" onclick="selectPillar(3)" id="pb3">
+      <span class="pillar-dot" style="background:#e85b8a"></span>
+      <span class="pillar-name">P4 · Models & Valuation</span>
+      <span class="pillar-freq">15%</span>
+    </button>
+    <button class="pillar-btn" onclick="selectPillar(4)" id="pb4">
+      <span class="pillar-dot" style="background:#8ab4f8"></span>
+      <span class="pillar-name">P5 · Monitoring & Assumptions</span>
+      <span class="pillar-freq">15%</span>
+    </button>
+    <button class="pillar-btn" onclick="selectPillar(5)" id="pb5">
+      <span class="pillar-dot" style="background:#d0a0f0"></span>
+      <span class="pillar-name">P6 · India Context</span>
+      <span class="pillar-freq">SA1</span>
+    </button>
+  </nav>
+
+  <!-- Main -->
+  <main class="main">
+
+    <!-- Overview -->
+    <div id="view-overview" class="tab-content active">
+      <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('ov-stats')">Stats</button>
+        <button class="tab-btn" onclick="switchTab('ov-freq')">Pillar frequency</button>
+      </div>
+
+      <div id="ov-stats" class="tab-content active">
+        <div class="overview-grid">
+          <div class="stat-card"><div class="num" style="color:#c8f135">16</div><div class="label">Exam sittings analysed (2017–2025)</div></div>
+          <div class="stat-card"><div class="num" style="color:#5be8c8">6</div><div class="label">Pillars (5 SP1 + 1 SA1 India)</div></div>
+          <div class="stat-card"><div class="num" style="color:#f4a347">47</div><div class="label">Distinct hooks identified</div></div>
+          <div class="stat-card"><div class="num" style="color:#e85b8a">P3</div><div class="label">Most tested pillar — Risks & Risk Mgmt</div></div>
+          <div class="stat-card"><div class="num" style="color:#8ab4f8">P4</div><div class="label">Highest marks per question — Valuation</div></div>
+          <div class="stat-card"><div class="num" style="color:#d0a0f0">P6</div><div class="label">India overlay present in every paper</div></div>
+        </div>
+        <div style="padding:0 32px 8px"><p style="font-size:12px;color:#7a7a72;line-height:1.7">Every SA1 question maps to at least one pillar. Most questions draw on <strong style="color:#e8e8e0">2–3 pillars simultaneously</strong> — the examiner wraps a scenario around a core pillar and layers hooks from adjacent pillars. The India overlay (P6) is rarely a standalone question; it surfaces as hooks within P1–P5. PMI and IP products dominate the scenario pool but the pillars tested vary each sitting.</p></div>
+      </div>
+
+      <div id="ov-freq" class="tab-content">
+        <div class="bar-section" style="padding-top:24px">
+          <p style="font-size:12px;color:#7a7a72;margin-bottom:20px">Number of question-parts across all 16 sittings that tested each pillar (a question can test multiple pillars)</p>
+          <div class="bar-row">
+            <span class="bar-label">P3 · Risks & Risk Mgmt</span>
+            <div class="bar-track"><div class="bar-fill" style="width:90%;background:#f4a347"></div></div>
+            <span class="bar-count">~58</span>
+          </div>
+          <div class="bar-row">
+            <span class="bar-label">P2 · Product Design</span>
+            <div class="bar-track"><div class="bar-fill" style="width:82%;background:#5be8c8"></div></div>
+            <span class="bar-count">~52</span>
+          </div>
+          <div class="bar-row">
+            <span class="bar-label">P4 · Models & Valuation</span>
+            <div class="bar-track"><div class="bar-fill" style="width:72%;background:#e85b8a"></div></div>
+            <span class="bar-count">~46</span>
+          </div>
+          <div class="bar-row">
+            <span class="bar-label">P5 · Monitoring & Assumptions</span>
+            <div class="bar-track"><div class="bar-fill" style="width:60%;background:#8ab4f8"></div></div>
+            <span class="bar-count">~38</span>
+          </div>
+          <div class="bar-row">
+            <span class="bar-label">P6 · India Context</span>
+            <div class="bar-track"><div class="bar-fill" style="width:52%;background:#d0a0f0"></div></div>
+            <span class="bar-count">~33</span>
+          </div>
+          <div class="bar-row">
+            <span class="bar-label">P1 · Products & Environment</span>
+            <div class="bar-track"><div class="bar-fill" style="width:44%;background:#c8f135"></div></div>
+            <span class="bar-count">~28</span>
+          </div>
+          <p style="font-size:11px;color:#4a4a42;margin-top:16px;font-style:italic">P3 dominates because risk questions (reinsurance, underwriting, ALM, pandemic, anti-selection) appear in nearly every paper. P1 appears less as a standalone but underpins every scenario.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Master Table -->
+    <div id="view-master" class="tab-content">
+      <div class="master-view">
+        <div class="section-title">All sittings × pillars tested — ● = major focus, · = minor hook</div>
+        <div class="master-table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Sitting</th>
+                <th>Q / Theme</th>
+                <th title="Products & Environment" style="color:#c8f135">P1</th>
+                <th title="Product Design" style="color:#5be8c8">P2</th>
+                <th title="Risks & Risk Mgmt" style="color:#f4a347">P3</th>
+                <th title="Models & Valuation" style="color:#e85b8a">P4</th>
+                <th title="Monitoring & Assumptions" style="color:#8ab4f8">P5</th>
+                <th title="India Context" style="color:#d0a0f0">P6</th>
+                <th>Key hooks</th>
+              </tr>
+            </thead>
+            <tbody id="masterTbody"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hook Library -->
+    <div id="view-hooks" class="tab-content">
+      <div id="hook-library-content"></div>
+    </div>
+
+    <!-- India Overlay -->
+    <div id="view-india" class="tab-content">
+      <div style="padding:24px 32px 8px">
+        <div class="section-title">India-specific hooks that layer onto SP1 pillars</div>
+        <p style="font-size:12px;color:#7a7a72;margin-bottom:20px">These hooks don't form a separate pillar — they are India context that the examiner expects you to layer on top of your SP1 answer. Every generic answer needs at least one India hook to score full marks in SA1.</p>
+      </div>
+      <div class="india-grid" id="indiaGrid"></div>
+    </div>
+
+  </main>
+</div>
+
+<script>
+const COLORS = ['#c8f135','#5be8c8','#f4a347','#e85b8a','#8ab4f8','#d0a0f0'];
+
+const PILLARS = [
+  { name: 'P1 · Products & Environment', weight: '15% SP1', color: '#c8f135' },
+  { name: 'P2 · Product Design', weight: '25% SP1', color: '#5be8c8' },
+  { name: 'P3 · Risks & Risk Management', weight: '30% SP1', color: '#f4a347' },
+  { name: 'P4 · Models & Valuation', weight: '15% SP1', color: '#e85b8a' },
+  { name: 'P5 · Monitoring & Assumptions', weight: '15% SP1', color: '#8ab4f8' },
+  { name: 'P6 · India Context', weight: 'SA1 Overlay', color: '#d0a0f0' },
+];
+
+// Master table data: [sitting, theme, p1,p2,p3,p4,p5,p6, keyHooks]
+// 2=major, 1=minor, 0=absent
+const PAPERS = [
+  ['Mar 2017 Q1','Wearable device fitness product',1,2,2,1,0,1,'Product design; pricing discounts; counterparty risk; mispricing/reputational risk; rider premium'],
+  ['Mar 2017 Q2','JV entry; CI vs IP experience; micro IP; reinstatement benefit',2,2,1,1,1,2,'JV partner criteria; product filing guidelines; micro-insurance; reinstatement pricing'],
+  ['Sep 2017 Q1','Bundled/capitation dental; payment for quality; CDM; reserving',1,2,2,2,1,1,'Bundled payments; capitation; IBNR; adequacy of reserving process'],
+  ['Sep 2017 Q2','Expenses of management regulation; expense analysis',0,0,1,1,2,2,'IRDAI EOM Regulations; expense analysis; ceding commission; overhead reduction'],
+  ['Mar 2018 Q1','Digital dental insurer; AI pricing; toothpaste distribution',1,2,2,1,0,1,'Product launch considerations; AI/technology risks; distribution channel risk'],
+  ['Mar 2018 Q2','PMI new business decline; universal health care; UW relaxation; cross-subsidy',2,2,2,0,1,2,'Demand drivers; state provision impact; UW factors; anti-selection; cross-subsidy'],
+  ['Sep 2018 Q1','ALM; asset classes; experience analysis; group product filing',0,1,1,2,2,2,'ALM objectives; asset-liability matching; IRDAI group product guidelines; EV analysis'],
+  ['Sep 2018 Q2','Risk-based solvency (Solvency II); SCR; internal model; reinsurance financing',0,0,2,2,0,1,'RBS guiding principles; risk margin; SCR standard vs internal; reinsurance financing'],
+  ['Jun 2019 Q1','PMI with premium guarantee; renewal rates; claim ratio analysis; reinsurance level',0,1,2,1,2,1,'Renewal analysis; gross vs net claim ratio; reinsurance level; guarantee withdrawal'],
+  ['Jun 2019 Q2','Policyholder complaints; IRDAI PPH regulations; mental illness cover; medical at inception',2,2,1,0,1,2,'TCF; PPH regulations; mental illness impact; waiting period removal'],
+  ['Nov 2019 Q1','LTC product design; pre-funded vs immediate; ALM for LTC; EV operating variances',1,2,1,2,2,1,'Fixed vs variable benefit; pre-funded vs immediate; EV assumptions; LTC asset classes'],
+  ['Nov 2019 Q2','M&A of GI and SAHI; appraisal value',2,0,1,2,0,2,'Merger motives; regulatory approval; appraisal value methodology'],
+  ['Nov 2020 Q1','Group health volatility; IBNR; XL vs QS reinsurance; top-up plan; pandemic solvency',1,2,2,2,1,1,'Financial volatility; IBNR alternative; QS vs XL; top-up pricing; pandemic risks'],
+  ['Nov 2020 Q2','COVID-19 product design and pricing; legislation impact',1,2,2,1,0,2,'Rider vs standalone; COVID product design; pricing & reserving; legislation impact'],
+  ['Mar 2021 Q1','Group long-term IP; terms & conditions; two-scheme structure; spouse extension; stochastic ALM',1,2,2,1,1,0,'Group IP T&C; UW; claims management; spouse extension; stochastic asset modelling'],
+  ['Mar 2021 Q2','Virtual health insurer; product design for digital; AA role challenges',2,2,2,0,0,2,'Virtual insurer; digital product design; AA statutory responsibilities'],
+  ['Sep 2021 Q1','Pandemic catastrophe risk; reinsurance structures; catastrophe pool',1,0,2,0,0,1,'Risk/rating factors; pandemic reinsurance types; cat pool design'],
+  ['Sep 2021 Q2','Solvency II assets & liabilities; PVBS; P&L volatility',0,0,1,2,0,1,'Investment income estimation; Solvency II valuation; BEL; risk margin; TVOG'],
+  ['Sep 2021 Q3','Top-up PMI product; pricing; reserves; anti-selection; cannibalization',1,2,2,1,1,1,'Top-up design; pricing; IBNR reserves; anti-selection controls'],
+  ['Jul 2022 Q1','CI repudiated claims; solvency ratio; shareholder fund investment',1,1,2,2,1,2,'Claim repudiation; RSM/ASM mechanics; solvency ratio attribution; equity in SF'],
+  ['Jul 2022 Q2','OP cover for PMI; pricing; underwriting; capitation arrangement',1,2,2,1,1,1,'IP vs OP features; OP pricing; capitation merits; CRO argument'],
+  ['Mar 2022 Q1','EV movement analysis; impaired life annuity; surplus analysis',0,0,1,2,2,0,'EV movement heads; PVIF; VIF; sale vs EV; surplus analysis short vs long term'],
+  ['Mar 2022 Q2','Solvency ratio recovery plan; expense analysis; financial reinsurance',0,0,2,2,1,2,'Solvency ratio drivers; recovery plan; expense loadings; financial reinsurance'],
+  ['May 2023 Q1','CI/IP/IIA valuation; asset-liability; gross/net policy liability; MAD; quota share',0,1,2,2,1,1,'Reinsurance purposes; ALM for IP; policy liability progression; MAD direction; QS impact'],
+  ['May 2023 Q2','Group IP parametric scheme; overseas market entry; solvency/liquidity',2,2,2,1,1,1,'Parametric scheme design; employer/insurer risks; overseas entry risks; data sources'],
+  ['Nov 2023 Q1','Unit-linked health product; NB strain; non-unit reserve; EV; Solvency II TP; SCR',0,2,0,2,1,0,'UL reserve mechanics; DAC; shareholder value profit; risk margin; internal model'],
+  ['Nov 2023 Q2','Gender-based pricing; legislative change; risk mitigation',2,1,2,0,1,2,'Morbidity gender differences; gender rating rationale; legislative risk; data collection'],
+  ['May 2024 Q1','NCD scheme for PMI; extension to IP/ASU',1,2,1,0,1,0,'NCD advantages; NCD vs excess; NCD feasibility for long-term business'],
+  ['May 2024 Q2','3 new products: ILA, Group IP, UL Hospital Cash; UW, reinsurance, distribution',2,2,2,2,2,2,'UW policy per product; reinsurance per product; distribution; costs/risks; Solvency II internal model'],
+  ['May 2024 Q3','IRDAI (Insurance Products) Regulations 2024',1,2,0,0,0,2,'Classification; scope; PED; waiting periods; moratorium — IRDAI 2024 Regulations'],
+  ['Nov 2024 Q1','Chronic disease; morbidity impact; product performance; govt vs insurer',2,2,2,1,2,2,'Chronic disease definition; morbidity analysis; performance monitoring; state provision'],
+  ['Nov 2024 Q2','PMI in new market; electronic patient record; data; corrective actions',2,1,2,1,2,1,'Uncertainty in new market; EPR data types; EPR advantages/disadvantages; corrective actions'],
+  ['May 2025 Q1','Prepaid hospital procedure product; design; pricing',1,2,1,2,0,1,'Product design for certainty/transparency; suitable procedures; pricing methodology'],
+  ['May 2025 Q2','IBNR for reinsurance; chain ladder; underwriting year vs accident year',0,0,1,1,2,1,'Reinsurance IBNR; grouping; UW vs accident year; earned vs written premium'],
+  ['May 2025 Q3','Income protection: customer needs; monitoring; ALM; asset classes',2,1,2,2,2,1,'IP customer needs; monitoring experience; experience methods; ALM/asset classes for IP'],
+];
+
+// Hook library
+const HOOKS = [
+  {
+    pillar: 0, tag: 'HIGH FREQUENCY', title: 'Product types & their purpose',
+    bullets: ['Know all 6 types: PMI, IP, CI, LTCI, HCP, Major Medical', 'Individual vs Group distinctions', 'Retail vs corporate market dynamics', 'State provision interaction — substitutive, complementary, supplementary'],
+    years: ['Mar17','Jun19','Mar18','Nov24']
+  },
+  {
+    pillar: 0, tag: 'MEDIUM', title: 'Distribution channels',
+    bullets: ['Tied agents vs brokers vs bancassurance vs direct/digital', 'Suitability of channel to product complexity', 'Commission structures; expense implications', 'Emerging: digital/virtual models (Mar21, Mar18)'],
+    years: ['Mar21','Mar18','May24']
+  },
+  {
+    pillar: 0, tag: 'MEDIUM', title: 'Market entry & JV assessment',
+    bullets: ['5 key criteria: partner strength, regulatory, distribution, data, capital', 'Overseas market assessment factors', 'First-mover vs late-entry considerations', 'Regulatory approval process'],
+    years: ['Mar17','May23','Dec22']
+  },
+  {
+    pillar: 0, tag: 'MEDIUM', title: 'State vs private provision',
+    bullets: ['Impact of government scheme on private demand (Mar18 universal HC)', 'Cross-subsidy, cream-skimming risks', 'PMJAY and mass health schemes', 'Quality-adjusted life years (QALYs)'],
+    years: ['Mar18','Nov20','Nov24']
+  },
+  {
+    pillar: 1, tag: 'VERY HIGH', title: 'Policy conditions & product features',
+    bullets: ['Waiting periods: initial, specific, PED, moratorium', 'Renewability: yearly, lifetime, guaranteed', 'Sum insured: reinstatement, restoration, top-up', 'Exclusions, sub-limits, co-payments, deductibles', 'NCD/NCB schemes'],
+    years: ['Nov15','Mar18','Jun19','May24','Mar24']
+  },
+  {
+    pillar: 1, tag: 'VERY HIGH', title: 'New product design & launch considerations',
+    bullets: ['Customer need; market research; demand assessment', 'Regulatory filing and approval (IRDAI)', 'System/IT readiness; administration complexity', 'Competition and marketability', 'Capital requirements at launch'],
+    years: ['Mar17','Mar18','Sep17','Nov20','May25']
+  },
+  {
+    pillar: 1, tag: 'HIGH', title: 'Product comparisons & design trade-offs',
+    bullets: ['Indemnity vs fixed benefit', 'Individual vs group; retail vs micro-insurance', 'Pre-funded vs immediate needs (LTC)', 'Rider vs standalone product', 'Guaranteed vs reviewable premiums'],
+    years: ['Nov19','Nov20','Mar17','Dec22']
+  },
+  {
+    pillar: 1, tag: 'HIGH', title: 'Benefit structures — income & health products',
+    bullets: ['IP: deferred period, benefit period, definition of disability', 'CI: listed conditions, survival period, early-stage CI', 'LTCI: care triggers, benefit form (cash vs services)', 'PMI: inpatient vs outpatient, cashless vs reimbursement'],
+    years: ['Mar21','Nov19','Sep21','May24']
+  },
+  {
+    pillar: 1, tag: 'MEDIUM', title: 'Group product design specifics',
+    bullets: ['Free cover limits; actively-at-work clause', 'Master policy vs individual certificates', 'Renewal process; rate review triggers', 'Scheme structure — single vs multiple (workers/executives)'],
+    years: ['Mar21','Sep18','Jul22']
+  },
+  {
+    pillar: 1, tag: 'MEDIUM', title: 'Technology & innovation in product design',
+    bullets: ['Wearable/fitness-linked premiums; telematics', 'Electronic patient records (EPR)', 'AI-based pricing; real-time UW', 'Digital/virtual insurer model'],
+    years: ['Mar17','Mar18','Nov24','Mar21']
+  },
+  {
+    pillar: 2, tag: 'VERY HIGH', title: 'Reinsurance — types & selection',
+    bullets: ['QS vs XL vs surplus vs aggregate XL vs stop-loss', 'Per person vs per occurrence vs aggregate', 'Retention level factors: risk appetite, capital, data quality', 'Treaty vs facultative; proportional vs non-proportional'],
+    years: ['Sep21','Nov20','Jun19','May23','Dec22']
+  },
+  {
+    pillar: 2, tag: 'VERY HIGH', title: 'Reinsurance — purposes (FTAB)',
+    bullets: ['Financing: capital relief, solvency, NB strain', 'Technical assistance: data, underwriting expertise, pricing', 'Anti-selection and catastrophe protection', 'Badging: reinsurer brand/credibility'],
+    years: ['May23','Sep18','Mar22','May24']
+  },
+  {
+    pillar: 2, tag: 'VERY HIGH', title: 'Underwriting — approaches & factors',
+    bullets: ['Full UW vs moratorium vs CPME; free cover limits for group', 'Rating factors: age, gender, occupation, location, smoker status', 'Relaxing UW: anti-selection risk, portfolio implications', 'Actions after medical assessment (6 actions — Mar18)'],
+    years: ['Mar18','Jun19','May24','Mar21']
+  },
+  {
+    pillar: 2, tag: 'HIGH', title: 'Claims management & control',
+    bullets: ['Pre-authorisation; cashless vs reimbursement', 'Claim repudiation reasons and trends (Jul22)', 'Fraud detection; clinical audits', 'CDM and payment-for-quality arrangements'],
+    years: ['Jul22','Sep17','Jun19','Nov24']
+  },
+  {
+    pillar: 2, tag: 'HIGH', title: 'Anti-selection & adverse selection',
+    bullets: ['Anti-selective lapses by healthy lives', 'Relaxed UW attracting poor risks', 'Cross-subsidy implications', 'Controls: waiting periods, co-pay, free cover limits, NCD'],
+    years: ['Mar17','Mar18','Sep21','May24']
+  },
+  {
+    pillar: 2, tag: 'HIGH', title: 'Counterparty & provider risks',
+    bullets: ['Bundled payments & capitation — provider incentive risk', 'Provider collusion, over-treatment, claim splitting', 'Device manufacturer partnership risk', 'TPAs and outsourced claims'],
+    years: ['Mar17','Sep17','Nov24']
+  },
+  {
+    pillar: 2, tag: 'HIGH', title: 'Catastrophe & pandemic risk',
+    bullets: ['Pandemic risks: morbidity spike, liquidity, operational', 'Cat pool design and contribution factors', 'Aggregate XL vs per-occurrence XL for pandemic', 'Impact on solvency; stress testing'],
+    years: ['Nov20','Sep21','Mar21']
+  },
+  {
+    pillar: 2, tag: 'MEDIUM', title: 'Asset-Liability Management',
+    bullets: ['ALM objectives; matching by nature, term, currency', 'Asset classes by liability type (PMI = short = cash; IP/LTCI = long = bonds)', 'Shareholder fund: proximity to minimum solvency drives asset choice', 'Stochastic asset modelling for long-term liabilities'],
+    years: ['Sep18','Nov19','Mar21','May23']
+  },
+  {
+    pillar: 2, tag: 'MEDIUM', title: 'Mispricing & experience risk',
+    bullets: ['Data quality & credibility at inception', 'New product = no own data → reinsurer/market data', 'Medical inflation assumptions', 'Guaranteed premiums: rate lock risk'],
+    years: ['Mar17','Jun19','Dec22']
+  },
+  {
+    pillar: 3, tag: 'VERY HIGH', title: 'Pricing methodology',
+    bullets: ['Burning cost approach; loss ratio method', 'Equation of value / cashflow approach', 'Group risk assessment; free cover limit pricing', 'Expense loadings; profit margin; ROC', 'Sensitivity analysis on key assumptions'],
+    years: ['Mar17','Sep17','Jul22','May25']
+  },
+  {
+    pillar: 3, tag: 'VERY HIGH', title: 'Reserving — IBNR & policy reserves',
+    bullets: ['Chain ladder; Bornhuetter-Ferguson; burning cost', 'IBNR for group health: alternative when data limited', 'Gross policy liability; reinsurance credit; net liability', 'MAD over best estimate; prudent vs best estimate'],
+    years: ['Sep17','Nov20','May23','May25']
+  },
+  {
+    pillar: 3, tag: 'VERY HIGH', title: 'Solvency & capital requirements',
+    bullets: ['ASM vs RSM; solvency ratio = ASM/RSM', 'Drivers of ASM: profit, capital injection; drivers of RSM: business volume', 'Risk-based solvency (Solvency II principles)', 'SCR: standard formula vs internal model; USPs', 'Risk margin: cost of capital method'],
+    years: ['Sep18','Mar22','Jul22','Nov23','May24']
+  },
+  {
+    pillar: 3, tag: 'HIGH', title: 'Embedded value',
+    bullets: ['EV = net assets + PVIF (value of in-force)', 'EV movement heads: expected return, operating variances, economic variances, NB', 'Operating variances: morbidity, expense, renewal, investment', 'MCEV vs traditional EV; VNB; appraisal value'],
+    years: ['Nov19','Mar22','Sep18','Nov23','Nov19']
+  },
+  {
+    pillar: 3, tag: 'HIGH', title: 'Stop-loss & reinsurance pricing',
+    bullets: ['Burning cost vs statistical/distributional approach', 'Standard deviation and skewness of claims distribution', 'Layer pricing: attachment point, limit, exhaustion', 'Evaluation process for stop-loss treaty'],
+    years: ['Dec22']
+  },
+  {
+    pillar: 3, tag: 'HIGH', title: 'Solvency II technical provisions',
+    bullets: ['Best estimate liability (BEL): probability-weighted, discounted', 'Risk margin: cost of capital (6%) on future SCR', 'Matching adjustment conditions for annuity portfolios', 'TVOG: time value of options and guarantees'],
+    years: ['Sep21','Nov23','May24']
+  },
+  {
+    pillar: 3, tag: 'MEDIUM', title: 'Unit-linked product valuation',
+    bullets: ['Unit reserve = unit fund value at valuation date', 'Non-unit reserve = PV of future non-unit cash flows', 'New business strain under UL products (Nov23)', 'Fund management charges; morbidity charge mechanics'],
+    years: ['Nov23','Sep18']
+  },
+  {
+    pillar: 4, tag: 'VERY HIGH', title: 'Experience monitoring — why & how',
+    bullets: ['Why: pricing basis validity; assumption updates; reserving; regulatory', 'What to monitor: morbidity, mortality, lapses, expenses, investment, NB', 'Data required: claim counts, amounts, exposure, policy data', 'Financial impact attribution of deviations'],
+    years: ['Nov19','Sep18','Mar22','May25','Nov24']
+  },
+  {
+    pillar: 4, tag: 'VERY HIGH', title: 'Setting assumptions — pricing vs valuation',
+    bullets: ['Best estimate for pricing; prudent (MAD) for valuation', 'Direction of MAD depends on risk type (mortality vs morbidity)', 'Reinsurance premium rates as proxy for best estimate morbidity', 'Why valuation assumptions differ from pricing'],
+    years: ['May23','Nov23','Nov19']
+  },
+  {
+    pillar: 4, tag: 'HIGH', title: 'Analysis of surplus / profit',
+    bullets: ['Surplus = actual vs expected emergence of profits', 'Heads: interest, mortality/morbidity, expense, lapse, NB', 'Short-term PMI surplus vs long-term IP/LTCI — key differences', 'Relationship to EV movement analysis'],
+    years: ['Mar22','Sep18']
+  },
+  {
+    pillar: 4, tag: 'HIGH', title: 'Renewal rate analysis',
+    bullets: ['Define and measure persistency by cohort', 'Reasons for higher/lower renewal than assumed', 'Anti-selective lapse risk: healthy lives lapse, sick lives stay', 'Follow-up analysis: by plan, channel, age, claim history'],
+    years: ['Jun19','Mar17']
+  },
+  {
+    pillar: 4, tag: 'HIGH', title: 'Claim ratio analysis — gross vs net',
+    bullets: ['Gross claim ratio = gross claims / gross premium', 'Net claim ratio = net claims / net premium', 'Net ratio rising faster → reinsurance structure issue or mix change', 'Further analysis: by cause, age, hospital, product, duration'],
+    years: ['Jun19']
+  },
+  {
+    pillar: 4, tag: 'MEDIUM', title: 'Experience analysis — financial impact',
+    bullets: ['Morbidity variance: actual vs expected claims', 'Expense variance: actual vs loaded expenses', 'Renewal/lapse variance: impact on projected profits', 'Investment income variance: actual vs assumed return'],
+    years: ['Sep18','Nov19','Mar22']
+  },
+  {
+    pillar: 5, tag: 'VERY HIGH', title: 'IRDAI regulatory framework',
+    bullets: ['IRDAI (Health Insurance) Regulations — standardisation, product filing', 'Guidelines on Product Filing in Health Insurance 2016', 'IRDAI (Insurance Products) Regulations 2024 — classification, PED, waiting periods', 'EOM Regulations 2016 — expense allowance, ceding commission', 'Group product filing guidelines (Jul 2016)'],
+    years: ['Mar17','Sep17','Sep18','Jun19','May24']
+  },
+  {
+    pillar: 5, tag: 'HIGH', title: 'Policyholder protection & TCF',
+    bullets: ['PPH Regulations 2017 — objectives and provisions', 'Treating Customers Fairly — policy, board oversight', 'Grievance redressal; complaints management', 'Mental illness parity (Jun19)'],
+    years: ['Jun19','Mar18']
+  },
+  {
+    pillar: 5, tag: 'HIGH', title: 'Appointed Actuary role (India)',
+    bullets: ['Statutory responsibilities: reserving, solvency certificate, product filing', 'AA role in virtual insurer context (Mar21)', 'Professional standards and guidance (APS)', 'Challenges: data adequacy, systems, independence'],
+    years: ['Mar21','Sep17']
+  },
+  {
+    pillar: 5, tag: 'HIGH', title: 'PMJAY & mass health schemes',
+    bullets: ['Pradhan Mantri Jan Arogya Yojana — scope and design', 'Administration, pricing and risk under mass schemes', 'Government as counterparty risk; premium rate approval process', 'Impact on private market demand'],
+    years: ['Nov19','Mar18']
+  },
+  {
+    pillar: 5, tag: 'MEDIUM', title: 'Taxation of health insurance (India)',
+    bullets: ['Section 80D tax deduction on health premiums', 'GST on health insurance premiums', 'Tax treatment of benefits and claims', 'Impact of tax on pricing and demand'],
+    years: ['Mar17','Mar18']
+  },
+  {
+    pillar: 5, tag: 'MEDIUM', title: 'Solvency II in Indian context',
+    bullets: ['India moving towards RBS; current factor-based regime', 'Required Solvency Margin (RSM) mechanics', 'ASM components; dividend implications', 'Financial reinsurance as solvency management tool'],
+    years: ['Sep18','Mar22','Jul22']
+  },
+];
+
+const INDIA_CARDS = [
+  { title: 'IRDAI product regulations', items: ['IRDAI (Health Insurance) Regulations — standardisation of waiting periods, PED, renewability', 'Guidelines on Product Filing 2016 — Banca products, premium rates, benefit structure', 'IRDAI (Insurance Products) Regulations 2024 — classification, moratorium, scope', 'Group product guidelines July 2016 — master policy, certificate, reporting'] },
+  { title: 'IRDAI expense & solvency regulations', items: ['Expenses of Management (EOM) Regulations 2016 — allowed expense ratio by line of business', 'Ceding commission treatment under EOM', 'RSM/ASM framework; 150% solvency target', 'Financial reinsurance — permitted as solvency tool'] },
+  { title: 'Policyholder protection', items: ['IRDAI (Protection of Policyholders\' Interests) Regulations 2017', 'Grievance redressal timelines', 'Mental illness parity directive (2019)', 'Standardised exclusions — IRDAI mandated coverage items'] },
+  { title: 'Mass health & government schemes', items: ['PMJAY (Ayushman Bharat) — scope, 50cr beneficiaries, empanelled hospitals', 'State-sponsored schemes — pricing, administration, tender risk', 'Government as counterparty: premium fixation, political risk', 'Impact on private PMI demand and adverse selection'] },
+  { title: 'India-specific product features', items: ['PED waiting period: standard 2–4 year, first-30-day initial waiting period', 'Portability rights on health policies', 'No-claim bonus (NCB) vs No-claim discount (NCD) distinction', 'Restoration and reinstatement of sum insured'] },
+  { title: 'Indian market context', items: ['Standalone health insurers (SAHI) vs composite GI companies', 'Low insurance penetration; high OOP expenditure', 'Rising medical inflation (12–15% p.a.)', 'Hospital network empanelment and cashless ecosystem'] },
+];
+
+// Render master table
+function renderMasterTable() {
+  const tbody = document.getElementById('masterTbody');
+  PAPERS.forEach(row => {
+    const [sitting, theme, p1, p2, p3, p4, p5, p6, hooks] = row;
+    const tr = document.createElement('tr');
+    const dots = [p1,p2,p3,p4,p5,p6].map((v,i) => {
+      if(v===2) return `<span class="dot" style="background:${COLORS[i]}"></span>`;
+      if(v===1) return `<span class="dot hollow" style="border-color:${COLORS[i]}"></span>`;
+      return '';
+    });
+    tr.innerHTML = `
+      <td>${sitting}</td>
+      <td>${theme}</td>
+      ${dots.map(d=>`<td><div class="dot-cell">${d}</div></td>`).join('')}
+      <td style="color:#7a7a72;font-size:11px;max-width:260px">${hooks}</td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+// Render hook library
+function renderHookLibrary(filterPillar = -1) {
+  const container = document.getElementById('hook-library-content');
+  container.innerHTML = '';
+
+  const pillarsToShow = filterPillar >= 0 ? [filterPillar] : [0,1,2,3,4,5];
+
+  pillarsToShow.forEach(pi => {
+    const p = PILLARS[pi];
+    const header = document.createElement('div');
+    header.className = 'pillar-header';
+    header.innerHTML = `
+      <span class="big-dot" style="background:${p.color}"></span>
+      <h2 style="color:${p.color}">${p.name}</h2>
+      <span class="weight-tag" style="background:${p.color}22;color:${p.color};border:1px solid ${p.color}44">${p.weight}</span>
+    `;
+    container.appendChild(header);
+
+    const grid = document.createElement('div');
+    grid.className = 'hook-grid';
+
+    const pillarHooks = HOOKS.filter(h => h.pillar === pi);
+    pillarHooks.forEach(h => {
+      const freqLevel = h.tag.includes('VERY HIGH') ? 4 : h.tag.includes('HIGH') ? 3 : h.tag.includes('MEDIUM') ? 2 : 1;
+      const dots = Array.from({length:4}, (_,i) =>
+        `<span class="freq-dot" style="background:${i<freqLevel?p.color:'#2e2e2e'}"></span>`
+      ).join('');
+      const card = document.createElement('div');
+      card.className = 'hook-card';
+      card.innerHTML = `
+        <div class="hook-tag" style="color:${p.color}">
+          <div class="freq-dots">${dots}</div>
+          ${h.tag}
+        </div>
+        <h3>${h.title}</h3>
+        <ul>${h.bullets.map(b=>`<li>${b}</li>`).join('')}</ul>
+        <div class="years-row">${h.years.map(y=>`<span class="year-chip">${y}</span>`).join('')}</div>
+      `;
+      grid.appendChild(card);
+    });
+
+    container.appendChild(grid);
+  });
+}
+
+// Render India overlay
+function renderIndia() {
+  const grid = document.getElementById('indiaGrid');
+  INDIA_CARDS.forEach(c => {
+    const card = document.createElement('div');
+    card.className = 'india-card';
+    card.innerHTML = `
+      <h4>${c.title}</h4>
+      <ul>${c.items.map(i=>`<li>${i}</li>`).join('')}</ul>
+    `;
+    grid.appendChild(card);
+  });
+}
+
+// View switching
+function showView(v) {
+  ['overview','master','hooks','india'].forEach(id => {
+    document.getElementById('view-'+id).classList.remove('active');
+  });
+  document.getElementById('view-'+v).classList.add('active');
+  document.querySelectorAll('#viewPills .pill').forEach((p,i) => {
+    p.classList.toggle('active', ['overview','master','hooks','india'][i]===v);
+    if(p.classList.contains('active')) {
+      const colors = ['#c8f135','#5be8c8','#f4a347','#e85b8a'];
+      p.style.background = colors[i];
+      p.style.color = '#0f0f0f';
+    } else {
+      p.style.background = 'transparent';
+      p.style.color = '#e8e8e0';
+    }
+  });
+}
+
+// Pillar selection in sidebar
+let activePillar = -1;
+function selectPillar(i) {
+  activePillar = i;
+  document.querySelectorAll('.pillar-btn').forEach((b,j) => {
+    b.classList.toggle('active', j===i);
+    b.style.borderLeftColor = j===i ? COLORS[i] : 'transparent';
+  });
+  showView('hooks');
+  renderHookLibrary(i);
+}
+
+// Tab switching (within overview)
+function switchTab(id) {
+  document.querySelectorAll('.tab-btn').forEach(b => {
+    b.classList.toggle('active', b.getAttribute('onclick').includes(id));
+  });
+  document.querySelectorAll('.tab-content').forEach(c => {
+    c.classList.toggle('active', c.id===id);
+  });
+}
+
+// Init
+renderMasterTable();
+renderHookLibrary();
+renderIndia();
+</script>
+</body>
+</html>
