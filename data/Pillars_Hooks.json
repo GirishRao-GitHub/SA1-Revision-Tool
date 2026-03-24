@@ -1,72 +1,173 @@
 {
   "version": "2025.1",
   "_comment": "Update this file when new exam papers are added. Map new themes to pillars in themeMapping. Add/update hook cards in hooks array. The Revision Tool loads this file dynamically at startup.",
-
   "pillars": [
-    { "id": "P1", "name": "P1 · Products & Distribution",       "color": "#c8f135", "weight": "~12%" },
-    { "id": "P2", "name": "P2 · Pricing & Underwriting",         "color": "#5be8c8", "weight": "~26%" },
-    { "id": "P3", "name": "P3 · Claims Management",               "color": "#f4a347", "weight": "~20%" },
-    { "id": "P4", "name": "P4 · Risk Mgmt & Reinsurance",        "color": "#e85b8a", "weight": "~14%" },
-    { "id": "P5", "name": "P5 · Valuation, Data & Investments",  "color": "#8ab4f8", "weight": "~23%" },
-    { "id": "P6", "name": "P6 · Regulation & Professionalism",   "color": "#d0a0f0", "weight": "~13%" }
+    {
+      "id": "P1",
+      "name": "P1 \u00b7 Products & Distribution",
+      "color": "#c8f135",
+      "weight": "~12%"
+    },
+    {
+      "id": "P2",
+      "name": "P2 \u00b7 Pricing & Underwriting",
+      "color": "#5be8c8",
+      "weight": "~26%"
+    },
+    {
+      "id": "P3",
+      "name": "P3 \u00b7 Claims Management",
+      "color": "#f4a347",
+      "weight": "~20%"
+    },
+    {
+      "id": "P4",
+      "name": "P4 \u00b7 Risk Mgmt & Reinsurance",
+      "color": "#e85b8a",
+      "weight": "~14%"
+    },
+    {
+      "id": "P5",
+      "name": "P5 \u00b7 Valuation, Data & Investments",
+      "color": "#8ab4f8",
+      "weight": "~23%"
+    },
+    {
+      "id": "P6",
+      "name": "P6 \u00b7 Regulation & Professionalism",
+      "color": "#d0a0f0",
+      "weight": "~13%"
+    }
   ],
-
   "themeMapping": {
-    "Pricing":                         ["P2"],
-    "Pricing & Rating":                ["P2"],
-    "Claims Management":               ["P3"],
-    "Regulation":                      ["P6"],
-    "Underwriting":                    ["P2"],
-    "Data":                            ["P5"],
-    "Models":                          ["P5"],
-    "Reserving & Valuation":           ["P5"],
-    "Risk Management & Capital":       ["P4"],
-    "Reinsurance":                     ["P4"],
-    "Investments":                     ["P5"],
-    "Product Design":                  ["P1"],
-    "Product Design (Protection)":     ["P1"],
-    "Group Products":                  ["P1"],
-    "Professional Guidance":           ["P6"],
-    "Capital & Solvency":              ["P4"],
-    "Private Medical Insurance (PMI)": ["P1"],
-    "Critical Illness":                ["P1"],
-    "Income Protection":               ["P1"],
-    "Long-Term Care (LTC)":            ["P1"],
-    "State Healthcare & Demographics": ["P1", "P6"],
-    "Legislation & Taxation":          ["P6"],
-    "Administration":                  ["P6"]
+    "Pricing": [
+      "P2"
+    ],
+    "Pricing & Rating": [
+      "P2"
+    ],
+    "Claims Management": [
+      "P3"
+    ],
+    "Regulation": [
+      "P6"
+    ],
+    "Underwriting": [
+      "P2"
+    ],
+    "Data": [
+      "P5"
+    ],
+    "Models": [
+      "P5"
+    ],
+    "Reserving & Valuation": [
+      "P5"
+    ],
+    "Risk Management & Capital": [
+      "P4"
+    ],
+    "Reinsurance": [
+      "P4"
+    ],
+    "Investments": [
+      "P5"
+    ],
+    "Product Design": [
+      "P1"
+    ],
+    "Product Design (Protection)": [
+      "P1"
+    ],
+    "Group Products": [
+      "P1"
+    ],
+    "Professional Guidance": [
+      "P6"
+    ],
+    "Capital & Solvency": [
+      "P4"
+    ],
+    "Private Medical Insurance (PMI)": [
+      "P1"
+    ],
+    "Critical Illness": [
+      "P1"
+    ],
+    "Income Protection": [
+      "P1"
+    ],
+    "Long-Term Care (LTC)": [
+      "P1"
+    ],
+    "State Healthcare & Demographics": [
+      "P1",
+      "P6"
+    ],
+    "Legislation & Taxation": [
+      "P6"
+    ],
+    "Administration": [
+      "P6"
+    ]
   },
-
   "hooks": [
     {
-      "pillar": "P1", "tag": "VERY HIGH",
+      "pillar": "P1",
+      "tag": "VERY HIGH",
       "title": "PMI design & benefit structure",
       "bullets": [
-        "Benefit: indemnity (reimburse actual cost) vs fixed-cash (set sum); indemnity passes medical inflation risk to insurer",
-        "Scope of cover: in-patient, day-patient, out-patient, diagnostics — each must be precisely defined",
-        "Sum insured restoration, reinstatement, NCB are India-specific features with material pricing and anti-selection implications",
-        "Co-payment and deductibles reduce moral hazard and premium but must be balanced against customer value",
-        "PED waiting period: standard 2-4 years; 48-month moratorium under IRDAI 2024 regulations; initial 30-day for non-accident",
-        "IRDAI mandates standard Arogya Sanjeevani; portability right at renewal; renewability guarantee — all affect pricing",
-        "Policy features to define: area of cover, second opinion, home nursing, organ transplant, AYUSH treatments"
+        "Indemnity vs benefit: general/health insurers may offer both; life insurers may only offer benefit-based health products (not indemnity) \u2014 critical distinction under Schedule III of Insurance Products Regulations 2024",
+        "PED waiting period: max 36 months continuous coverage under Insurance Products Regulations 2024 (reduced from 48 months under old 2016 rules); specific waiting period also max 36 months",
+        "Moratorium: 60 continuous months (including portability/migration credits); after which no claim or policy contestable except for established fraud; applies to original sum insured; enhanced SI has fresh 60-month clock",
+        "Renewability: insurer cannot deny renewal on grounds of prior claims; cannot require fresh medical examination at renewal unless sum insured is being increased; grace period 15 days (monthly) / 30 days (other modes)",
+        "Cashless TAT: insurer must approve within 1 hour of request; discharge authorisation within 3 hours; delay beyond 3 hours \u2014 additional hospital charges borne by insurer from shareholders funds",
+        "NCB: insurer may offer as cumulative bonus (increase in SI without premium increase) or discount in renewal premium; policyholder chooses form at renewal",
+        "AYUSH coverage: insurers must have board-approved policy treating AYUSH at par with allopathy; must offer policyholder choice of treatment system",
+        "Portability: all credits (SI, NCB, waiting periods, moratorium) transferable; existing insurer provides data via IIB within 72 hours; acquiring insurer decides within 5 days"
       ],
-      "years": ["Apr19","Sep19","Apr20","Sep21","Apr22","Sep22","Apr23","Sep23","Apr24","Sep24","Apr25","Sep25"]
+      "years": [
+        "Apr19",
+        "Sep19",
+        "Apr20",
+        "Sep21",
+        "Apr22",
+        "Sep22",
+        "Apr23",
+        "Sep23",
+        "Apr24",
+        "Sep24",
+        "Apr25",
+        "Sep25"
+      ]
     },
     {
-      "pillar": "P1", "tag": "HIGH",
+      "pillar": "P1",
+      "tag": "HIGH",
       "title": "Income Protection design",
       "bullets": [
-        "IP pays a regular income benefit on inability to work; benefit = 50-75% of pre-disability earnings (capped to prevent over-insurance)",
-        "Deferred period (4, 13, 26, 52 weeks): longer deferred = lower premium; adverse selection risk",
-        "Benefit period: to retirement, to max age, or limited term; longer period increases longevity and investment risk",
-        "Own-occupation vs any-occupation definition: own-occ is more generous and expensive; any-occ harder to claim",
-        "Group IP: FCL avoids individual UW below limit; employer administers absences; rehabilitation reduces claim duration",
-        "Key pricing risks: incidence rate, recovery rate, claims duration, mortality of claimants, lapse behaviour"
+        "Life insurers may offer IP as benefit-based product only; general/health insurers may offer on indemnity basis; product must be approved by PMC before launch",
+        "IP pays regular income benefit on inability to work; benefit typically 50-75% of pre-disability earnings \u2014 cap prevents over-insurance and moral hazard",
+        "Deferred period (4, 13, 26, 52 weeks): longer deferred period = lower premium; adverse selection risk at shorter periods; own-occupation vs any-occupation definition critical",
+        "Group IP: Free Cover Limit avoids individual UW below FCL; employer administers absences; rehabilitation and early intervention reduce claim duration and cost",
+        "Key pricing risks: incidence rate, recovery rate, claims duration, mortality of claimants, lapse behaviour; medical inflation affects severity of long-duration claims",
+        "Appointed Actuary must review IP product at least annually; rate revisions must be based on credible underlying experience of relevant risk parameters"
       ],
-      "years": ["Sep19","Sep20","Sep21","Apr22","Sep22","Sep23","Apr24","Sep24","Apr25"]
+      "years": [
+        "Sep19",
+        "Sep20",
+        "Sep21",
+        "Apr22",
+        "Sep22",
+        "Sep23",
+        "Apr24",
+        "Sep24",
+        "Apr25"
+      ]
     },
     {
-      "pillar": "P1", "tag": "HIGH",
+      "pillar": "P1",
+      "tag": "HIGH",
       "title": "Critical Illness & LTC design",
       "bullets": [
         "CI: lump sum on first diagnosis of specified condition(s); definitions must be precise and updated with medical practice",
@@ -76,35 +177,67 @@
         "Pre-funded LTC vs immediate-needs annuity: different timing, pricing risk, and target market",
         "CI reviewable premiums: reduces long-term pricing risk for insurer; creates repricing and lapse risk at review dates"
       ],
-      "years": ["Sep19","Apr20","Sep20","Apr21","Sep21","Apr22","Sep22","Apr23","Sep23","Sep24","Apr25","Sep25"]
+      "years": [
+        "Sep19",
+        "Apr20",
+        "Sep20",
+        "Apr21",
+        "Sep21",
+        "Apr22",
+        "Sep22",
+        "Apr23",
+        "Sep23",
+        "Sep24",
+        "Apr25",
+        "Sep25"
+      ]
     },
     {
-      "pillar": "P1", "tag": "HIGH",
+      "pillar": "P1",
+      "tag": "HIGH",
       "title": "Group scheme design",
       "bullets": [
-        "Group master policy: employer/association is policyholder; employees are insured lives; individual certificates issued",
-        "Free Cover Limit (FCL): lives below FCL require no individual UW; above FCL, individual evidence required",
-        "Employer-sponsored: employees may opt in/out creating adverse selection within scheme",
-        "Group IP: rehabilitation support; early intervention key; rate-at-risk vs pooled renewal depending on size",
-        "Mass government schemes: government as sponsor; political risk on premium; empanelled hospital fraud risk",
-        "PMJAY: Rs 5L per family per year; ~50 crore beneficiaries; tender-based pricing; experience monitoring critical"
+        "Group defined under Insurance Products Regulations 2024: persons with commonality of purpose or common economic activity; employer-employee and non-employer-employee groups both permitted",
+        "Master policyholder is employer or association; individual certificates issued to members; PMC must approve group product design and pricing before launch",
+        "FCL (Free Cover Limit): lives below FCL require no individual UW; above FCL, individual evidence required; group IP: FCL design critical to control adverse selection",
+        "Cashless for group: insurer must obtain member details from master policyholder at commencement; no claim denied for non-availability of member details at time of claim",
+        "Government sponsored group schemes (PMJAY etc.): defined separately; may be fully/partly subsidised by Central/State government; tender-based pricing; political risk on premium revision",
+        "TPA performance: insurers must have board-approved criteria for monitoring TPA performance, TATs, service levels; TPA remuneration must not depend on Incurred Claim Ratio"
       ],
-      "years": ["Apr19","Sep19","Sep20","Sep21","Apr22","Sep22","Apr24","Apr25"]
+      "years": [
+        "Apr19",
+        "Sep19",
+        "Sep20",
+        "Sep21",
+        "Apr22",
+        "Sep22",
+        "Apr24",
+        "Apr25"
+      ]
     },
     {
-      "pillar": "P1", "tag": "HIGH",
+      "pillar": "P1",
+      "tag": "HIGH",
       "title": "State healthcare & national systems",
       "bullets": [
         "Healthcare system models: Beveridge (state-funded, UK), Bismarck (social insurance, Germany), out-of-pocket (India pre-PMJAY)",
-        "QALY (Quality Adjusted Life Year): HTA tool — one year of perfect health = 1 QALY; NICE threshold ~£30k/QALY",
+        "QALY (Quality Adjusted Life Year): HTA tool \u2014 one year of perfect health = 1 QALY; NICE threshold ~\u00a330k/QALY",
         "State provision defines floor for private demand; gaps drive product design and distribution strategy",
         "India: low public spending (~1.3% GDP); OOP ~60% of total health spend; large private sector role",
         "Risk equalisation: regulator redistributes risk between insurers; prevents adverse selection spiral under community rating"
       ],
-      "years": ["Apr19","Apr20","Apr21","Sep20","Apr23","Apr24"]
+      "years": [
+        "Apr19",
+        "Apr20",
+        "Apr21",
+        "Sep20",
+        "Apr23",
+        "Apr24"
+      ]
     },
     {
-      "pillar": "P1", "tag": "MEDIUM",
+      "pillar": "P1",
+      "tag": "MEDIUM",
       "title": "Unit-linked & hybrid products",
       "bullets": [
         "Unit-linked H&C: benefit paid from investment units; insurer deducts morbidity charge periodically from unit fund",
@@ -112,10 +245,14 @@
         "New business strain under UL: initial expenses exceed early charges; recovered from future fund charges",
         "Risk under UL: morbidity charge reviewable but TCF limits increases; unit fund value fluctuates with markets"
       ],
-      "years": ["Sep20","Apr22"]
+      "years": [
+        "Sep20",
+        "Apr22"
+      ]
     },
     {
-      "pillar": "P1", "tag": "MEDIUM",
+      "pillar": "P1",
+      "tag": "MEDIUM",
       "title": "New product development & market entry",
       "bullets": [
         "Market assessment: size, demographics, competition, distribution readiness, regulatory environment, reinsurance availability",
@@ -124,10 +261,15 @@
         "Product feasibility: data availability, reinsurance support, UW system capability, distribution partner readiness",
         "IRDAI product filing: rate filing, benefit structure approval mandatory before launch; changes require re-filing"
       ],
-      "years": ["Apr20","Apr21","Sep23"]
+      "years": [
+        "Apr20",
+        "Apr21",
+        "Sep23"
+      ]
     },
     {
-      "pillar": "P1", "tag": "MEDIUM",
+      "pillar": "P1",
+      "tag": "MEDIUM",
       "title": "Micro-insurance & mass products",
       "bullets": [
         "Designed for low-income: simple benefits, low premiums, minimal UW, basis risk accepted by policyholder",
@@ -135,24 +277,45 @@
         "High lapse risk if premium burden is felt; government subsidy may be required to make viable",
         "PMJAY: Rs 5L cover; cashless at empanelled hospitals; ~50 crore beneficiaries; state government co-contribution"
       ],
-      "years": ["Apr19","Apr21","Apr24"]
+      "years": [
+        "Apr19",
+        "Apr21",
+        "Apr24"
+      ]
     },
     {
-      "pillar": "P2", "tag": "VERY HIGH",
+      "pillar": "P2",
+      "tag": "VERY HIGH",
       "title": "Pricing methodology & assumptions",
       "bullets": [
-        "Claim cost = claim frequency × average claim severity; estimated separately; each requires IBNR-adjusted data",
+        "Claim cost = claim frequency \u00d7 average claim severity; estimated separately; each requires IBNR-adjusted data",
         "Burning cost = actual claims / exposure; must be on ultimate basis; trend to future pricing period",
         "Key assumptions: morbidity rates, medical inflation, expenses, lapses, investment income, commission, capital cost",
-        "Medical inflation ~12-15% p.a. in India; applying historical trend forward is essential — failure leads to rapid deterioration",
-        "Profit loading = target ROE × required capital / premium; capital allocation method is a key modelling choice",
+        "Medical inflation ~12-15% p.a. in India; applying historical trend forward is essential \u2014 failure leads to rapid deterioration",
+        "Profit loading = target ROE \u00d7 required capital / premium; capital allocation method is a key modelling choice",
         "Contingency loading: larger for new products, limited data, volatile lines; must be documented and justified",
         "IRDAI rate filing: premium schedule filed before launch; rate changes require regulatory approval"
       ],
-      "years": ["Apr19","Sep19","Apr20","Sep20","Apr21","Sep21","Apr22","Sep22","Apr23","Sep23","Apr24","Sep24","Apr25","Sep25"]
+      "years": [
+        "Apr19",
+        "Sep19",
+        "Apr20",
+        "Sep20",
+        "Apr21",
+        "Sep21",
+        "Apr22",
+        "Sep22",
+        "Apr23",
+        "Sep23",
+        "Apr24",
+        "Sep24",
+        "Apr25",
+        "Sep25"
+      ]
     },
     {
-      "pillar": "P2", "tag": "VERY HIGH",
+      "pillar": "P2",
+      "tag": "VERY HIGH",
       "title": "Underwriting approaches",
       "bullets": [
         "UW aims: classify risks into homogeneous groups; price commensurate with risk; decline only where risk cannot be quantified",
@@ -163,34 +326,60 @@
         "AI-based UW (photo, wearables): faster; improves risk classification; raises regulatory fairness and data privacy concerns",
         "Non-disclosure: if applicant withholds material fact, insurer may avoid or reduce benefit; burden of proof on insurer"
       ],
-      "years": ["Sep19","Sep20","Apr21","Apr22","Sep22","Sep23","Apr24","Sep24","Apr25"]
+      "years": [
+        "Sep19",
+        "Sep20",
+        "Apr21",
+        "Apr22",
+        "Sep22",
+        "Sep23",
+        "Apr24",
+        "Sep24",
+        "Apr25"
+      ]
     },
     {
-      "pillar": "P2", "tag": "HIGH",
+      "pillar": "P2",
+      "tag": "HIGH",
       "title": "Anti-selection & moral hazard",
       "bullets": [
         "Anti-selection: higher-risk individuals more likely to purchase; pricing mix worse than general population assumed",
         "Adverse selection spiral: healthy lives lapse when premiums rise; pool worsens; premiums rise further; repeat",
-        "Moral hazard: post-insurance behavioural change — over-utilisation, unnecessary procedures, delayed RTW",
+        "Moral hazard: post-insurance behavioural change \u2014 over-utilisation, unnecessary procedures, delayed RTW",
         "Controls: UW at entry, co-payments, deductibles, pre-authorisation, waiting periods, benefit limits",
         "Anti-selective lapsing at renewal: premium increase drives healthy lives out; leaving sicker, higher-cost pool"
       ],
-      "years": ["Sep19","Apr20","Apr21","Apr22","Sep22","Sep23","Sep24"]
+      "years": [
+        "Sep19",
+        "Apr20",
+        "Apr21",
+        "Apr22",
+        "Sep22",
+        "Sep23",
+        "Sep24"
+      ]
     },
     {
-      "pillar": "P2", "tag": "HIGH",
+      "pillar": "P2",
+      "tag": "HIGH",
       "title": "Community vs risk rating",
       "bullets": [
         "Community rating: all lives pay same premium regardless of age/health; cross-subsidy from low-risk to high-risk",
         "Risk rating: individual premium reflects individual risk profile; actuarially fair but excludes high-risk from affordable cover",
         "Community rating requires: open enrolment, minimum benefit standards, risk equalisation to prevent adverse selection spiral",
-        "Age-banding: intermediate approach — premium varies by age band not individual health; partial risk classification",
+        "Age-banding: intermediate approach \u2014 premium varies by age band not individual health; partial risk classification",
         "IRDAI requirements contain community rating elements: renewability guarantee, portability, PED standardisation"
       ],
-      "years": ["Apr20","Apr21","Sep22","Apr23"]
+      "years": [
+        "Apr20",
+        "Apr21",
+        "Sep22",
+        "Apr23"
+      ]
     },
     {
-      "pillar": "P2", "tag": "HIGH",
+      "pillar": "P2",
+      "tag": "HIGH",
       "title": "Experience analysis & repricing",
       "bullets": [
         "Compare A/E (actual vs expected) claims: frequency, severity, claim ratio; by age, sex, duration, cause, channel",
@@ -200,33 +389,51 @@
         "Credibility: Z = n/(n+k); blend own vs industry data; Z near 1 if own data credible; k from variance analysis",
         "Repricing decision: competitive position, lapse risk from premium increase, regulatory approval requirements"
       ],
-      "years": ["Apr22","Sep22","Sep23","Apr24","Sep24"]
+      "years": [
+        "Apr22",
+        "Sep22",
+        "Sep23",
+        "Apr24",
+        "Sep24"
+      ]
     },
     {
-      "pillar": "P2", "tag": "HIGH",
+      "pillar": "P2",
+      "tag": "HIGH",
       "title": "Renewal process & persistency",
       "bullets": [
         "Rated renewal (individual): risk re-assessed; allows premium adjustment for changed health status at renewal",
         "Pooled renewal (group): scheme repriced as whole based on scheme experience; no individual adjustment",
         "NCD/NCB: reward claim-free years with SI increase or premium reduction; must be actuarially justified",
         "Portability right (IRDAI): policyholder switches insurer at renewal; no fresh waiting periods for completed periods",
-        "Anti-selective lapsing: healthy lives leave if premiums rise too fast; worsens remaining pool — classic spiral trigger"
+        "Anti-selective lapsing: healthy lives leave if premiums rise too fast; worsens remaining pool \u2014 classic spiral trigger"
       ],
-      "years": ["Sep19","Apr22","Sep22","Sep23","Sep24"]
+      "years": [
+        "Sep19",
+        "Apr22",
+        "Sep22",
+        "Sep23",
+        "Sep24"
+      ]
     },
     {
-      "pillar": "P2", "tag": "MEDIUM",
+      "pillar": "P2",
+      "tag": "MEDIUM",
       "title": "Genetic testing & new data sources",
       "bullets": [
         "Genetic results: most jurisdictions prohibit use as UW rating factor; creates asymmetric information risk for insurer",
-        "If insured knows poor genetic risk: adverse selection — loads up on CI/IP cover; insurer cannot detect or price",
+        "If insured knows poor genetic risk: adverse selection \u2014 loads up on CI/IP cover; insurer cannot detect or price",
         "Wearables: real-time health metrics; reward healthy behaviour with premium discounts; privacy and data governance challenges",
         "AI/photo-based UW: estimates age, BMI, health markers; faster processing; regulatory fairness concerns"
       ],
-      "years": ["Sep20","Apr24"]
+      "years": [
+        "Sep20",
+        "Apr24"
+      ]
     },
     {
-      "pillar": "P2", "tag": "MEDIUM",
+      "pillar": "P2",
+      "tag": "MEDIUM",
       "title": "Distribution & competition",
       "bullets": [
         "Direct (internet/phone): low cost; limited product complexity; adverse selection risk if no UW at entry",
@@ -235,49 +442,84 @@
         "Group (employer): low UW, low unit cost, captive audience; high lapse on employment change",
         "Commission-based: mis-selling risk; fee-based better aligned with TCF; IRDAI regulates commission levels"
       ],
-      "years": ["Apr19","Sep20","Apr21","Sep21","Apr23"]
+      "years": [
+        "Apr19",
+        "Sep20",
+        "Apr21",
+        "Sep21",
+        "Apr23"
+      ]
     },
     {
-      "pillar": "P3", "tag": "VERY HIGH",
+      "pillar": "P3",
+      "tag": "VERY HIGH",
       "title": "Claims control & management framework",
       "bullets": [
         "Claims management objectives: fair and timely settlement; cost control; fraud prevention; accurate data for experience loop",
-        "Claims process: notification → assessment → authorisation → payment → monitoring → data capture; controls at each stage",
+        "Claims process: notification \u2192 assessment \u2192 authorisation \u2192 payment \u2192 monitoring \u2192 data capture; controls at each stage",
         "Pre-authorisation: treatment approved by insurer before it occurs; most effective against over-treatment; requires TPA capacity",
         "Cashless settlement: insurer settles directly with empanelled hospital; requires tariff agreements; popular India; improves NPS",
         "TPA (Third Party Administrator): outsourced processing; improves speed; introduces operational, data quality, and oversight risk",
         "Case management: complex/high-cost claims actively managed by specialist team; improves health outcome and controls cost",
-        "Claims data: ICD code (diagnosis), procedure code, hospital, insured demographics — feeds pricing, UW, and experience analysis"
+        "Claims data: ICD code (diagnosis), procedure code, hospital, insured demographics \u2014 feeds pricing, UW, and experience analysis"
       ],
-      "years": ["Apr19","Sep19","Sep20","Apr21","Apr22","Sep22","Sep23","Sep24","Apr25"]
+      "years": [
+        "Apr19",
+        "Sep19",
+        "Sep20",
+        "Apr21",
+        "Apr22",
+        "Sep22",
+        "Sep23",
+        "Sep24",
+        "Apr25"
+      ]
     },
     {
-      "pillar": "P3", "tag": "VERY HIGH",
+      "pillar": "P3",
+      "tag": "VERY HIGH",
       "title": "Fraud detection & prevention",
       "bullets": [
         "Claim fraud types: ghost patients (non-existent), inflated bills, unnecessary procedures, duplicate claims, staged events",
         "Provider-induced fraud: hospital/doctor inflates treatment for volume; harder to detect than policyholder fraud",
-        "Non-disclosure at application: withheld material facts; insurer may avoid policy at claim — burden of proof on insurer",
+        "Non-disclosure at application: withheld material facts; insurer may avoid policy at claim \u2014 burden of proof on insurer",
         "Controls: pre-auth, random hospital audits, benchmarking actual vs expected cost per procedure/hospital, case management",
-        "Data analytics: flag outliers in claim patterns — high frequency, unusual procedure combinations, specific hospital clusters",
+        "Data analytics: flag outliers in claim patterns \u2014 high frequency, unusual procedure combinations, specific hospital clusters",
         "Co-payment and deductibles: reduce moral hazard; make small-scale fraud economically unattractive"
       ],
-      "years": ["Sep19","Sep20","Apr22","Sep22","Sep23","Sep24"]
+      "years": [
+        "Sep19",
+        "Sep20",
+        "Apr22",
+        "Sep22",
+        "Sep23",
+        "Sep24"
+      ]
     },
     {
-      "pillar": "P3", "tag": "HIGH",
+      "pillar": "P3",
+      "tag": "HIGH",
       "title": "Medical inflation & cost containment",
       "bullets": [
         "Medical inflation in India ~12-15% p.a.; driven by new technology, drug costs, hospital tariff increases, rising utilisation",
         "Cost containment: preferred provider networks (PPNs) with negotiated tariffs; DRG-based fixed payments by diagnosis",
-        "Utilisation management: pre-auth, second medical opinion, disease management, discharge planning — reduces unnecessary treatment",
-        "Diagnostic-Related Groups (DRGs): fixed tariff per diagnosis regardless of actual length of stay — reduces over-treatment incentive",
+        "Utilisation management: pre-auth, second medical opinion, disease management, discharge planning \u2014 reduces unnecessary treatment",
+        "Diagnostic-Related Groups (DRGs): fixed tariff per diagnosis regardless of actual length of stay \u2014 reduces over-treatment incentive",
         "Volume discount: large insurer with high referral volume can negotiate better tariffs; competitive advantage"
       ],
-      "years": ["Sep19","Apr21","Sep21","Apr22","Sep23","Sep24","Apr25"]
+      "years": [
+        "Sep19",
+        "Apr21",
+        "Sep21",
+        "Apr22",
+        "Sep23",
+        "Sep24",
+        "Apr25"
+      ]
     },
     {
-      "pillar": "P3", "tag": "HIGH",
+      "pillar": "P3",
+      "tag": "HIGH",
       "title": "Cashless claims & network management",
       "bullets": [
         "Cashless: insurer settles directly with empanelled hospital; policyholder pays co-pay only; improves customer experience",
@@ -286,10 +528,18 @@
         "Non-network claims: reimbursement basis; allowed in emergencies; higher cost risk and fraud exposure",
         "Network adequacy: geographic coverage including tier-2/3 cities; specialist care access; critical for customer satisfaction"
       ],
-      "years": ["Sep19","Apr22","Sep22","Sep23","Apr24","Sep24"]
+      "years": [
+        "Sep19",
+        "Apr22",
+        "Sep22",
+        "Sep23",
+        "Apr24",
+        "Sep24"
+      ]
     },
     {
-      "pillar": "P3", "tag": "HIGH",
+      "pillar": "P3",
+      "tag": "HIGH",
       "title": "IBNR & outstanding claims reserving",
       "bullets": [
         "IBNR = Incurred But Not Reported; delay between treatment and claim notification; material for all H&C lines",
@@ -298,22 +548,34 @@
         "Methods: chain-ladder (link ratio development), Bornhuetter-Ferguson (blends actual with prior), Cape Cod; use data triangles",
         "IBNR reserve uncertainty is a key audit focus; regulator monitors reserve adequacy via experience run-off analysis"
       ],
-      "years": ["Sep21","Apr22","Sep22","Sep25"]
+      "years": [
+        "Sep21",
+        "Apr22",
+        "Sep22",
+        "Sep25"
+      ]
     },
     {
-      "pillar": "P3", "tag": "MEDIUM",
+      "pillar": "P3",
+      "tag": "MEDIUM",
       "title": "Claim triggers & definitions",
       "bullets": [
         "CI trigger: first diagnosis of specified condition meeting precise medical criteria; ambiguity is a major litigation risk",
         "CI definitions must be updated as medical practice evolves; outdated definitions create disputes",
-        "IP trigger: own-occupation vs any-occupation; stepped definitions (own-occ for 2 years → any-occ) are common",
+        "IP trigger: own-occupation vs any-occupation; stepped definitions (own-occ for 2 years \u2192 any-occ) are common",
         "LTC trigger: inability to perform 2+ ADLs from 6; objective third-party assessment is essential to reduce disputes",
         "ADLs: washing, dressing, feeding, mobility, continence, toileting; cognitive impairment clause for dementia-related claims"
       ],
-      "years": ["Sep21","Sep22","Sep24","Sep25"]
+      "years": [
+        "Sep21",
+        "Sep22",
+        "Sep24",
+        "Sep25"
+      ]
     },
     {
-      "pillar": "P3", "tag": "MEDIUM",
+      "pillar": "P3",
+      "tag": "MEDIUM",
       "title": "Rehabilitation & return to work",
       "bullets": [
         "Early intervention in IP claims reduces claim duration and total cost; vocational rehabilitation, occupational therapy",
@@ -321,10 +583,15 @@
         "Mental health claims: fastest growing IP category; specialist rehabilitation pathway required; stigma a barrier to early reporting",
         "Rehabilitation spend is a claims cost but generates savings via shorter durations; net benefit must be demonstrated"
       ],
-      "years": ["Sep20","Sep21","Sep24"]
+      "years": [
+        "Sep20",
+        "Sep21",
+        "Sep24"
+      ]
     },
     {
-      "pillar": "P4", "tag": "VERY HIGH",
+      "pillar": "P4",
+      "tag": "VERY HIGH",
       "title": "Risk identification & classification",
       "bullets": [
         "H&C risk taxonomy: morbidity, claims inflation, anti-selection, lapse, longevity (IP/LTC), expense, concentration, credit, operational",
@@ -334,10 +601,26 @@
         "Correlation in stress: recession simultaneously increases IP claims, lapses, and reduces investment income",
         "Risk appetite: board-approved tolerance by risk type; drives reinsurance purchase, capital holding, UW strictness"
       ],
-      "years": ["Apr19","Sep19","Apr20","Sep20","Apr21","Sep21","Apr22","Sep22","Apr23","Sep23","Apr24","Sep24","Apr25","Sep25"]
+      "years": [
+        "Apr19",
+        "Sep19",
+        "Apr20",
+        "Sep20",
+        "Apr21",
+        "Sep21",
+        "Apr22",
+        "Sep22",
+        "Apr23",
+        "Sep23",
+        "Apr24",
+        "Sep24",
+        "Apr25",
+        "Sep25"
+      ]
     },
     {
-      "pillar": "P4", "tag": "VERY HIGH",
+      "pillar": "P4",
+      "tag": "VERY HIGH",
       "title": "Reinsurance structures & purposes",
       "bullets": [
         "Proportional reinsurance: quota share (fixed % all risk) and surplus (above retention); insurer and reinsurer share premium and claims proportionally",
@@ -348,35 +631,67 @@
         "Reinsurance also provides: technical support (pricing, claims, UW), badging (credibility for new entrant), capital relief",
         "Reinsurer selection: financial strength (credit rating), technical expertise, treaty terms, pricing, claims handling track record"
       ],
-      "years": ["Sep19","Sep20","Apr21","Sep21","Apr22","Apr23","Apr24","Apr25"]
+      "years": [
+        "Sep19",
+        "Sep20",
+        "Apr21",
+        "Sep21",
+        "Apr22",
+        "Apr23",
+        "Apr24",
+        "Apr25"
+      ]
     },
     {
-      "pillar": "P4", "tag": "HIGH",
+      "pillar": "P4",
+      "tag": "HIGH",
       "title": "Capital requirements & solvency (India)",
       "bullets": [
-        "Available Solvency Margin (ASM): admissible assets − total liabilities; must be ≥ 150% of RSM at all times",
+        "Available Solvency Margin (ASM): admissible assets \u2212 total liabilities; must be \u2265 150% of RSM at all times",
         "Required Solvency Margin (RSM): maximum of (premium test: 20% net premiums, claims test: 26% net incurred claims)",
         "Actions to improve solvency: new equity, sub-debt (within limits), financial reinsurance, expense reduction, repricing, portfolio run-off",
         "IRDAI moving to Risk-Based Supervision; ICAAP/ORSA-style approach being introduced; more risk-sensitive than current factor-based",
         "Capital vs reserving: both use same data but different bases; capital calculation uses net (after reinsurance) figures"
       ],
-      "years": ["Apr19","Sep19","Apr20","Sep20","Apr21","Sep21","Apr23","Sep23","Apr25"]
+      "years": [
+        "Apr19",
+        "Sep19",
+        "Apr20",
+        "Sep20",
+        "Apr21",
+        "Sep21",
+        "Apr23",
+        "Sep23",
+        "Apr25"
+      ]
     },
     {
-      "pillar": "P4", "tag": "HIGH",
+      "pillar": "P4",
+      "tag": "HIGH",
       "title": "Solvency II framework (SP1/SA1)",
       "bullets": [
         "Three-pillar: Pillar 1 (quantitative requirements), Pillar 2 (governance/risk management), Pillar 3 (reporting/disclosure)",
         "Pillar 1: SCR calibrated to 99.5% VaR over 1 year; MCR is lower bound (~25-45% of SCR); breach of MCR triggers supervisor action",
         "Standard Formula (SF): prescribed factors by risk module; aggregated with correlations; conservative for complex portfolios",
         "Internal Model (IM): requires regulatory approval; better reflects actual risk profile; significant model governance burden",
-        "Risk Margin: 6% CoC × Σ(SCR(t) × discount factor); declines as liabilities run off; can be material for LTC/IP",
+        "Risk Margin: 6% CoC \u00d7 \u03a3(SCR(t) \u00d7 discount factor); declines as liabilities run off; can be material for LTC/IP",
         "Pillar 2: ORSA, governance requirements, actuarial function, risk function; independent from each other"
       ],
-      "years": ["Apr19","Sep19","Apr20","Sep20","Apr21","Sep21","Sep22","Apr23","Sep23"]
+      "years": [
+        "Apr19",
+        "Sep19",
+        "Apr20",
+        "Sep20",
+        "Apr21",
+        "Sep21",
+        "Sep22",
+        "Apr23",
+        "Sep23"
+      ]
     },
     {
-      "pillar": "P4", "tag": "HIGH",
+      "pillar": "P4",
+      "tag": "HIGH",
       "title": "Stop-loss & XL layer pricing",
       "bullets": [
         "Layer: insurer pays ground-up to attachment point; reinsurer pays between attachment and limit (exhaustion)",
@@ -385,10 +700,16 @@
         "Risk loading: function of standard deviation and skewness of loss in layer; increases as layer attaches higher",
         "Aggregate stop-loss: triggers when total claims/year exceed threshold; pricing requires full distribution"
       ],
-      "years": ["Sep21","Sep22","Apr23","Apr24"]
+      "years": [
+        "Sep21",
+        "Sep22",
+        "Apr23",
+        "Apr24"
+      ]
     },
     {
-      "pillar": "P4", "tag": "MEDIUM",
+      "pillar": "P4",
+      "tag": "MEDIUM",
       "title": "Pandemic & catastrophe risk",
       "bullets": [
         "Pandemic: simultaneous surge across products, geographies; non-diversifiable; cannot be reinsured cheaply post-COVID",
@@ -396,10 +717,15 @@
         "Stress testing: model pandemic scenarios (mild/severe/extreme); assess capital adequacy; develop management actions pre-crisis",
         "Many standard XL/stop-loss treaties now include pandemic exclusion clauses; specialist pandemic covers available but expensive"
       ],
-      "years": ["Sep20","Sep21","Apr23"]
+      "years": [
+        "Sep20",
+        "Sep21",
+        "Apr23"
+      ]
     },
     {
-      "pillar": "P4", "tag": "MEDIUM",
+      "pillar": "P4",
+      "tag": "MEDIUM",
       "title": "Financial reinsurance & capital management",
       "bullets": [
         "Financial reinsurance: structured to provide capital relief or financing; risk transfer element must be genuine for regulatory recognition",
@@ -408,36 +734,65 @@
         "IRDAI permits financial reinsurance as solvency management tool for Indian insurers",
         "Distinction from pure financing: must have genuine insurance risk transfer to qualify as reinsurance for regulatory purposes"
       ],
-      "years": ["Sep21","Apr23"]
+      "years": [
+        "Sep21",
+        "Apr23"
+      ]
     },
     {
-      "pillar": "P5", "tag": "VERY HIGH",
+      "pillar": "P5",
+      "tag": "VERY HIGH",
       "title": "Reserving & best estimate liabilities",
       "bullets": [
         "Premium reserve: UPP (unearned premium) for unexpired risk + AURR (additional unexpired risk reserve) if expected loss-making",
         "Claims reserve: case reserves (open reported) + IBNR + IBNER; use of development triangles; BF method blends actual with a priori",
-        "IP/LTC prospective reserve: PV(future claim payments) − PV(future premiums); requires seriatim calculation with recovery rates",
+        "IP/LTC prospective reserve: PV(future claim payments) \u2212 PV(future premiums); requires seriatim calculation with recovery rates",
         "Best estimate: unbiased, probability-weighted mean of discounted cash flows; no prudence margins; separate for Pillar 1",
-        "Valuation basis: prudent (MAD — Maximum Allowable Divergence) from best estimate; direction of prudence depends on risk type",
+        "Valuation basis: prudent (MAD \u2014 Maximum Allowable Divergence) from best estimate; direction of prudence depends on risk type",
         "Reserve adequacy tested via run-off: actual experience vs prior reserve estimate; deviations flagged to board and actuary"
       ],
-      "years": ["Apr19","Sep19","Apr20","Sep20","Apr21","Sep21","Sep22","Sep23","Sep24","Sep25"]
+      "years": [
+        "Apr19",
+        "Sep19",
+        "Apr20",
+        "Sep20",
+        "Apr21",
+        "Sep21",
+        "Sep22",
+        "Sep23",
+        "Sep24",
+        "Sep25"
+      ]
     },
     {
-      "pillar": "P5", "tag": "VERY HIGH",
+      "pillar": "P5",
+      "tag": "VERY HIGH",
       "title": "Assumption setting & data quality",
       "bullets": [
         "Data quality dimensions: completeness, accuracy, consistency (across systems), timeliness; poor quality requires additional margins",
         "Validation: reconcile policy count/premium to admin system; claims to accounts; exposure calculations; check for outliers/duplicates",
         "Assumption hierarchy: own experience (if credible) > industry data > reinsurer experience > expert judgement; document rationale",
-        "Credibility: Z = n/(n+k); n = actual claims; k derived from variance; Z near 1 → own data dominant; near 0 → industry table",
+        "Credibility: Z = n/(n+k); n = actual claims; k derived from variance; Z near 1 \u2192 own data dominant; near 0 \u2192 industry table",
         "Best estimate: unbiased central estimate; explicitly separate from prudence margin added for valuation basis",
-        "Actuarial control cycle: assumptions → model → results → experience analysis → revised assumptions; board-reported"
+        "Actuarial control cycle: assumptions \u2192 model \u2192 results \u2192 experience analysis \u2192 revised assumptions; board-reported"
       ],
-      "years": ["Apr19","Sep19","Apr20","Sep20","Apr21","Sep21","Apr22","Sep22","Apr23","Apr24","Sep24"]
+      "years": [
+        "Apr19",
+        "Sep19",
+        "Apr20",
+        "Sep20",
+        "Apr21",
+        "Sep21",
+        "Apr22",
+        "Sep22",
+        "Apr23",
+        "Apr24",
+        "Sep24"
+      ]
     },
     {
-      "pillar": "P5", "tag": "HIGH",
+      "pillar": "P5",
+      "tag": "HIGH",
       "title": "Embedded value & appraisal value",
       "bullets": [
         "EV = Free Surplus + Required Capital + Value of In-Force (VIF)",
@@ -446,12 +801,21 @@
         "MCEV (Market Consistent EV): values options and guarantees at market-consistent prices; more theoretically rigorous",
         "TVOG (Time Value of Options and Guarantees): negative adjustment for embedded options in reviewable or participating products",
         "EV movement analysis: expected unwind of discount + experience variances + assumption changes + VNB + capital flows",
-        "Appraisal value = EV + multiplier × VNB; used in M&A; multiplier reflects franchise value, growth prospects, and execution risk"
+        "Appraisal value = EV + multiplier \u00d7 VNB; used in M&A; multiplier reflects franchise value, growth prospects, and execution risk"
       ],
-      "years": ["Sep19","Apr20","Sep20","Sep21","Apr22","Sep22","Apr23"]
+      "years": [
+        "Sep19",
+        "Apr20",
+        "Sep20",
+        "Sep21",
+        "Apr22",
+        "Sep22",
+        "Apr23"
+      ]
     },
     {
-      "pillar": "P5", "tag": "HIGH",
+      "pillar": "P5",
+      "tag": "HIGH",
       "title": "Experience investigations",
       "bullets": [
         "Purpose: update pricing/valuation assumptions; test model adequacy; identify adverse trends early for management action",
@@ -460,10 +824,17 @@
         "Lapse investigation: A/E persistency by policy year, channel, premium level, claims history; lapse assumptions affect VIF",
         "Expense investigation: actual vs allocated expenses per policy, per claim, per NB case; identifies cost overruns"
       ],
-      "years": ["Sep19","Apr22","Sep22","Sep23","Sep24"]
+      "years": [
+        "Sep19",
+        "Apr22",
+        "Sep22",
+        "Sep23",
+        "Sep24"
+      ]
     },
     {
-      "pillar": "P5", "tag": "HIGH",
+      "pillar": "P5",
+      "tag": "HIGH",
       "title": "ALM & investment strategy",
       "bullets": [
         "PMI liabilities: short duration (annual policy; claims settled <6 months); assets: liquid, short-term, high credit quality",
@@ -472,115 +843,198 @@
         "IRDAI investment regulations: prescribed minimum in government securities; limits on equity and alternative assets for GI companies",
         "Matching Adjustment (Solvency II): applicable to annuity-like IP/LTC; requires matched bond portfolio; reduces BEL discount rate"
       ],
-      "years": ["Sep19","Sep20","Sep21","Apr22","Sep22"]
+      "years": [
+        "Sep19",
+        "Sep20",
+        "Sep21",
+        "Apr22",
+        "Sep22"
+      ]
     },
     {
-      "pillar": "P5", "tag": "MEDIUM",
+      "pillar": "P5",
+      "tag": "MEDIUM",
       "title": "Analysis of surplus & profit sources",
       "bullets": [
         "Analysis of surplus: decomposes actual profit vs expected profit into component sources; management information tool",
-        "Morbidity surplus = expected claims − actual claims; positive = better than expected experience",
-        "Expense surplus = expense loadings − actual expenses; positive = cost better than assumed",
+        "Morbidity surplus = expected claims \u2212 actual claims; positive = better than expected experience",
+        "Expense surplus = expense loadings \u2212 actual expenses; positive = cost better than assumed",
         "Lapse surplus = impact of actual lapses vs expected; direction depends on whether product is lapse-supported or not",
-        "Investment surplus = actual investment income − assumed; sensitive to interest rate environment"
+        "Investment surplus = actual investment income \u2212 assumed; sensitive to interest rate environment"
       ],
-      "years": ["Sep21","Apr22","Sep22"]
+      "years": [
+        "Sep21",
+        "Apr22",
+        "Sep22"
+      ]
     },
     {
-      "pillar": "P5", "tag": "MEDIUM",
+      "pillar": "P5",
+      "tag": "MEDIUM",
       "title": "Solvency II technical provisions (deep-dive)",
       "bullets": [
         "BEL: probability-weighted discounted cash flows at risk-free rate; premium provision + claims provision calculated separately",
         "Premium provision: future cash flows on bound but unearned business; can be negative if profitable (premium > future claims)",
         "Claims provision: future payments on claims incurred (reported cases + IBNR + IBNER); discounted at risk-free",
-        "Risk Margin = 6% (CoC) × Σ(SCR(t) × DF(t)) over full liability run-off; projected SCR declines as liabilities run off",
+        "Risk Margin = 6% (CoC) \u00d7 \u03a3(SCR(t) \u00d7 DF(t)) over full liability run-off; projected SCR declines as liabilities run off",
         "Volatility Adjustment (VA): adds spread component to risk-free rate; reduces BEL; sector/currency specific"
       ],
-      "years": ["Apr19","Sep19","Apr20","Sep20","Apr23"]
+      "years": [
+        "Apr19",
+        "Sep19",
+        "Apr20",
+        "Sep20",
+        "Apr23"
+      ]
     },
     {
-      "pillar": "P6", "tag": "VERY HIGH",
+      "pillar": "P6",
+      "tag": "VERY HIGH",
       "title": "IRDAI regulatory framework",
       "bullets": [
-        "IRDAI (Health Insurance) Regulations: standardise PED waiting periods (48-month moratorium under 2024 rules), renewability, exclusions",
-        "IRDAI (Insurance Products) Regulations 2024: new product classification; updated moratorium; clarified scope for standard products",
-        "Guidelines on Product Filing 2016: rate filing, benefit structure, policy wording; mandatory IRDAI approval before product launch",
-        "EOM Regulations 2016: caps on expense ratio by line of business; ceding commission treated as offset to EOM",
-        "IRDAI standardised products: Arogya Sanjeevani (indemnity), Arogya Rakshak (fixed benefit); must be offered before proprietary products",
-        "IRDAI annual return requirements: actuarial report, solvency certificate, experience statistics; Appointed Actuary must certify"
+        "IRDAI (Insurance Products) Regulations 2024 (w.e.f. 1 Apr 2024): repeals 2016 Health Insurance Regs; consolidates all product types under one regulation; Schedule III governs health insurance specifically",
+        "PED definition: condition diagnosed or treated within 36 months prior to policy commencement; waiting period capped at 36 months continuous coverage; specific waiting period also max 36 months",
+        "Moratorium period: 60 continuous months (including portability/migration credits); after which no claim or policy contestable except on grounds of established fraud",
+        "Product filing: PMC (Product Management Committee) must approve all products before launch; PMC must include Appointed Actuary, Chief Marketing Officer, CIO, CTO, CCO; quorum = 3 members + AA",
+        "File and use vs Use and file: File and use requires prior IRDAI filing and UIN before launch; Use and file allows launch after UIN without prior filing; PMC approves both categories",
+        "Appointed Actuary must review all products at least annually considering policyholder expectations, financial viability and emerging experience; results presented to PMC",
+        "IRDAI standard products: Arogya Sanjeevani (indemnity) must be offered; IRDAI can direct withdrawal of any product not in policyholder interests"
       ],
-      "years": ["Apr19","Sep19","Apr20","Apr21","Sep21","Apr22","Sep22","Apr23","Apr24","Sep24"]
+      "years": [
+        "Apr19",
+        "Sep19",
+        "Apr20",
+        "Apr21",
+        "Sep21",
+        "Apr22",
+        "Sep22",
+        "Apr23",
+        "Apr24",
+        "Sep24"
+      ]
     },
     {
-      "pillar": "P6", "tag": "HIGH",
+      "pillar": "P6",
+      "tag": "HIGH",
       "title": "Treating Customers Fairly & PPH",
       "bullets": [
-        "TCF principle: fair outcomes at every stage — product design, marketing, sales, servicing, claims, renewal, lapse",
-        "Board-level TCF policy required; outcomes monitored via complaints data, claims settlement rate, renewal rate, sales MI",
-        "IRDAI (Protection of Policyholders Interests) Regulations 2017: grievance resolution within 15 days; Ombudsman as escalation",
-        "Grievance redressal: internal process → Ombudsman → Consumer Forum → Court; IRDAI monitors insurer complaint ratios",
-        "Mental illness parity: IRDAI mandates equal treatment; health insurers cannot exclude mental health conditions"
+        "Customer Information Sheet (CIS): mandatory with every policy (individual and group); must cover sum insured, coverage, exclusions, sub-limits, deductibles, waiting periods, free look, portability, moratorium; acknowledgement required; available in local language on request",
+        "Free Look Period: 30 days from receipt of policy document for all policies with term \u2265 1 year; policyholder can cancel and receive proportionate refund if no claim made",
+        "Cashless authorisation TAT: insurer must decide on cashless request within 1 hour of receipt (by 31 Jul 2024); final discharge authorisation within 3 hours; if delay beyond 3 hours, additional hospital charges borne by insurer from shareholders funds",
+        "Claim repudiation: no claim shall be repudiated without approval of PMC or 3-member Claims Review Committee (CRC); reason must be communicated with reference to specific policy terms; documents to be collected by insurer/TPA \u2014 policyholder not required to submit",
+        "Ombudsman award: insurer must comply within 30 days of receipt; non-compliance attracts penalty of Rs 5,000 per day to complainant, in addition to penal interest under Ombudsman Rules 2017",
+        "Renewability guarantee: insurer cannot deny renewal on grounds of claims made in prior years; cannot call for fresh medical examination at renewal unless sum insured is being increased",
+        "Portability: policyholder entitled to transfer all credits (sum insured, NCB, waiting periods, moratorium) to new insurer; existing insurer must provide underwriting and claims data within 72 hours via IIB portal; acquiring insurer must decide within 5 days"
       ],
-      "years": ["Sep19","Sep20","Apr21","Sep21","Apr22","Apr24"]
+      "years": [
+        "Sep19",
+        "Sep20",
+        "Apr21",
+        "Sep21",
+        "Apr22",
+        "Apr24"
+      ]
     },
     {
-      "pillar": "P6", "tag": "HIGH",
+      "pillar": "P6",
+      "tag": "HIGH",
       "title": "Appointed Actuary role (India)",
       "bullets": [
-        "Statutory role under IRDAI Act: must be Fellow IAI with practice certificate; independent from executive management line",
-        "Responsibilities: certify solvency margin (annually), review premium rates adequacy, sign actuarial report, board advisory",
-        "AA product filing: certifies premiums adequate and non-exploitative; cannot be overridden by management instruction",
-        "AA whistleblowing: if regulations not complied with, must report to IRDAI; cannot simply resign without disclosure",
-        "Professional standards: APS 33 (Appointed Actuary role), APS 34 (GI actuarial work); IAI mandatory; breach is disciplinary matter"
+        "Statutory role under IRDAI Act; must be Fellow of IAI with valid certificate of practice; independent advisory role to Board",
+        "Core duties: certify annual solvency margin; review adequacy of premium rates; sign actuarial report filed with IRDAI; advise Board on product viability and risk",
+        "PMC membership mandatory: AA is a required member of Product Management Committee; must sign off on product-level risks (capital, profitability, underwriting, reinsurance) before PMC approval",
+        "AA product review: all products reviewed at least annually; AA presents findings to PMC and makes recommendations for modification or withdrawal; revision of rates must be based on credible experience",
+        "Whistleblowing obligation: if regulatory non-compliance detected, AA must report to IRDAI; cannot resign without disclosure; false solvency certification is a serious offence",
+        "Professional standards: APS 33 (AA role), APS 34 (GI actuarial work); IAI Code of Conduct mandatory; peer review required for key regulatory filings"
       ],
-      "years": ["Sep19","Apr20","Sep20","Apr21","Sep21","Apr23","Apr24"]
+      "years": [
+        "Sep19",
+        "Apr20",
+        "Sep20",
+        "Apr21",
+        "Sep21",
+        "Apr23",
+        "Apr24"
+      ]
     },
     {
-      "pillar": "P6", "tag": "HIGH",
+      "pillar": "P6",
+      "tag": "HIGH",
       "title": "PMJAY & mass government health schemes",
       "bullets": [
-        "PMJAY (Ayushman Bharat): Rs 5L per family per year; ~50 crore beneficiaries (bottom 40% of India population)",
-        "Cashless at ~25,000 empanelled government and private hospitals; benefit package defined by government",
-        "Pricing: tender process; private insurers bid on premium per family; government sets benefit scope — political risk on revision",
-        "Government as counterparty: risk that premium revision does not keep pace with medical inflation; no automatic adjustment clause",
-        "Fraud risk: empanelled hospitals have strong incentive to claim for procedures not performed; robust audit essential"
+        "PMJAY (Ayushman Bharat): Rs 5L per family per year; targets bottom 40% of population (~50 crore beneficiaries); cashless at ~25,000 empanelled hospitals",
+        "Government sponsored insurance scheme defined under Insurance Products Regulations 2024: any scheme designed/notified/sponsored by Central or State government; may or may not be subsidised",
+        "Pricing risk: tender-based; private insurers bid on per-family premium; government controls benefit scope \u2014 political risk if revision does not keep pace with medical inflation; no automatic adjustment clause",
+        "Fraud risk: empanelled hospitals incentivised to claim for procedures not performed; robust audit, data analytics and pre-authorisation controls essential; insurers must have board-approved fraud prevention systems",
+        "ABHA number: Ayushman Bharat Health Account \u2014 digital health record identifier; insurers may facilitate creation with policyholder consent; enables seamless sharing of records with verified healthcare providers",
+        "NHCX: National Health Claims Exchange \u2014 insurers encouraged to onboard hospitals for faster cashless claim settlement; part of broader digital health infrastructure"
       ],
-      "years": ["Apr19","Sep19","Apr21","Apr24"]
+      "years": [
+        "Apr19",
+        "Sep19",
+        "Apr21",
+        "Apr24"
+      ]
     },
     {
-      "pillar": "P6", "tag": "HIGH",
+      "pillar": "P6",
+      "tag": "HIGH",
       "title": "Solvency & capital regulation (India)",
       "bullets": [
-        "RSM = max(premium test, claims test): 20% net premiums (first Rs 50 cr) + 10% excess vs 26% net incurred claims",
-        "ASM/RSM ≥ 150% at all times; breach triggers regulatory intervention; IRDAI may appoint administrator",
-        "Capital actions: rights issue, subordinated debt (within prescribed limits), financial reinsurance, dividend restriction",
-        "IRDAI moving to Risk-Based Supervision: more risk-sensitive capital framework; ORSA/ICAAP concept being piloted",
-        "Solvency certificate: issued by Appointed Actuary annually; regulatory filing; false certification is a serious offence"
+        "RSM formula: max(premium test, claims test) \u2014 premium test: 20% of net premiums up to Rs 50 cr + 10% excess; claims test: 26% of net incurred claims",
+        "ASM/RSM ratio must be \u2265 150% at all times; breach triggers regulatory intervention; IRDAI may appoint administrator or restrict new business",
+        "Solvency certificate: issued by Appointed Actuary annually; filed with IRDAI; false certification is a serious offence under IRDAI Act",
+        "Capital actions to restore solvency: rights issue, subordinated debt (within prescribed limits), financial reinsurance, dividend restriction, portfolio transfer",
+        "IRDAI moving to Risk-Based Supervision (RBS): more risk-sensitive capital framework being developed; ORSA/ICAAP concepts being piloted for larger insurers",
+        "Product management link to solvency: PMC must assess capital requirements as part of product due diligence before launch; CEO countersigns certifications on product risk"
       ],
-      "years": ["Apr19","Sep19","Apr20","Sep20","Apr21","Apr23","Sep23","Apr25"]
+      "years": [
+        "Apr19",
+        "Sep19",
+        "Apr20",
+        "Sep20",
+        "Apr21",
+        "Apr23",
+        "Sep23",
+        "Apr25"
+      ]
     },
     {
-      "pillar": "P6", "tag": "MEDIUM",
+      "pillar": "P6",
+      "tag": "MEDIUM",
       "title": "Taxation of health insurance (India)",
       "bullets": [
-        "Section 80D: tax deduction on health insurance premiums — ₹25,000 for self/family; ₹50,000 if policyholder is senior citizen",
-        "Additional ₹50,000 deduction if premium paid for senior citizen parents; total up to ₹1L deduction available",
-        "GST at 18% on health insurance premiums; significantly increases effective premium; government pressure to reduce to 5%",
-        "Premium tax relief incentivises purchase; removal or reduction would suppress demand — especially middle income segment"
+        "Section 80D: deduction on health insurance premiums \u2014 Rs 25,000 for self/family; Rs 50,000 if policyholder or insured is senior citizen; additional Rs 50,000 for senior citizen parents; maximum total deduction up to Rs 1 lakh",
+        "GST at 18% on health insurance premiums; significantly increases effective cost to policyholder; government under pressure to reduce \u2014 reduction to 5% has been debated but not enacted as of 2024",
+        "Tax incentives are a key demand driver especially for middle-income segment; any removal or cap reduction would suppress new business volumes",
+        "Section 80D also allows deduction for preventive health check-up expenses up to Rs 5,000 within the overall limit; incentivises wellness behaviour"
       ],
-      "years": ["Apr19","Sep19","Apr23","Apr24"]
+      "years": [
+        "Apr19",
+        "Sep19",
+        "Apr23",
+        "Apr24"
+      ]
     },
     {
-      "pillar": "P6", "tag": "MEDIUM",
+      "pillar": "P6",
+      "tag": "MEDIUM",
       "title": "Professional guidance & ethics",
       "bullets": [
-        "IAI Code of Conduct: integrity, competence, confidentiality, professional behaviour; applies to all Fellows and Associates",
-        "APS (Actuarial Practice Standards): mandatory technical standards; non-compliance reportable to IAI Disciplinary Committee",
-        "Peer review: independent actuary reviews work before sign-off; reduces model error and judgement risk; required for key filings",
-        "Conflicts of interest: must be disclosed promptly; actuary cannot serve opposing parties simultaneously without consent",
-        "Expert judgement documentation: when data sparse, judgement must be documented with rationale, alternatives considered, sensitivity"
+        "IAI Code of Conduct: integrity, competence, confidentiality, professional behaviour; applies to all Fellows and Associates; breach reportable to IAI Disciplinary Committee",
+        "Actuarial Practice Standards (APS): mandatory technical standards issued by IAI; APS 33 (Appointed Actuary), APS 34 (GI actuarial work); non-compliance is disciplinary matter",
+        "Peer review: independent actuary reviews work before sign-off on key filings; reduces model error and judgement risk; required for regulatory submissions",
+        "Conflicts of interest: must be disclosed promptly to all relevant parties; actuary cannot serve opposing parties simultaneously without informed consent",
+        "Expert judgement documentation: when data sparse, judgement must be documented with rationale, alternatives considered, sensitivity analysis; standard of care under APS"
       ],
-      "years": ["Sep19","Sep20","Apr21","Sep21","Apr22","Apr23"]
+      "years": [
+        "Sep19",
+        "Sep20",
+        "Apr21",
+        "Sep21",
+        "Apr22",
+        "Apr23"
+      ]
     }
   ]
 }
