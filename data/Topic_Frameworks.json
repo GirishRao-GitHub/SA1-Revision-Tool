@@ -1,13 +1,24 @@
 {
+  "The Six Pillar Framework (P1-P6)": [
+    "### Strategic Overview: The Pillar Map",
+    "- **P1: Product & Distribution (Design)**: Focus on New Product features, Target Market, and Benefit Design. [Linked Themes: Product Design, Group Products, CI, IP, LTC, PMI, State Healthcare].",
+    "- **P2: Pricing & Underwriting (Sell)**: Focus on Assumptions (Morbidity/Mortality), Rating Factors, and Selective Underwriting. [Linked Themes: Pricing, Underwriting].",
+    "- **P3: Claims Management (Pay)**: Focus on Fraud control, Triage, TPA management, and Cost containment. [Linked Themes: Claims Management].",
+    "- **P4: Risk Mgmt & Reinsurance (Protect)**: Focus on Risk Taxonomy, Reinsurance structures, and SCR/Capital. [Linked Themes: Risks, Reinsurance, Risk Management & Capital].",
+    "- **P5: Valuation & Data (Measure)**: Focus on BEL/Risk Margin, IBNR methods, Data quality, and Investments. [Linked Themes: Reserving & Valuation, Data, Models, Investments].",
+    "- **P6: Regulation & Ethics (Comply)**: Focus on IRDAI 2024 updates, PPH, and the Appointed Actuary role. [Linked Themes: Regulation, IRDAI Regulations, Professionalism]."
+  ],
   "Pricing": [
     "### Pricing Framework",
-    "- **Data**: Experience vs. Industry, internal vs. external credibility.",
-    "- **Assumptions (Demographic)**: Morbidity, Mortality, Selection effects.",
-    "- **Assumptions (Financial)**: Interest rates/Yield curves, Expenses (initial/renewal/claim), Medical inflation.",
-    "- **Formula**: Equation of value vs. Cashflow modeling, stochastic vs. deterministic.",
-    "- **Profitability & Capital**: Target return on capital, margin for risk/uncertainty, capital cost.",
-    "- **Commercial Constraints**: Competitor rates (benchmarking), cross-subsidy, saleability.",
-    "- **Sensitivity & Options**: Testing sensitivity to lapse rates and option-take up."
+    "- **Data & Assumptions**: Experience vs Industry; internal/external credibility; proxies for new products.",
+    "- **Demographic Assumptions**: Morbidity/Mortality trends; initial vs selective selection; anti-selection risk.",
+    "- **Financial Assumptions**: Risk-free yield curves; medical inflation (~12-15% India); expense loadings (initial/renewal).",
+    "- **Risk Profile**: Impact of age, gender, occupation, and geography on claim frequency and severity.",
+    "- **Methodology**: Equation of Value (simplistic) vs. Cashflow Projection (dynamic); stochastic vs deterministic.",
+    "- **Profitability & Capital**: Target Return on Capital (RoC); Cost of Capital; risk-based capital allocation (SCR).",
+    "- **Commercial Constraints**: Competitor benchmarking; sales channel commissions; affordability vs adequacy.",
+    "- **Cross-subsidy**: Inter-generational (young subsidizing old) vs Intra-group; regulatory limits on subsidies.",
+    "- **Sensitivity & Options**: Stress testing for lapses, medical advances, and option-take up (e.g. renewal guarantees)."
   ],
   "Claims Management": [
     "### Claims Management Process",
@@ -19,11 +30,49 @@
   ],
   "Regulation": [
     "### Regulatory / Compliance Framework",
-    "- **Prudential Regulation**: Solvency capital rules (SCR/MCR under Solvency II / IRDAI), statutory reserving.",
-    "- **Business Conduct / Consumer Protection**: Treating Customers Fairly (TCF), clear policy wording, cooling-off periods.",
-    "- **Pricing Constraints**: Gender-neutral pricing (EU), community rating vs. age-banded.",
-    "- **Data Protection**: GDPR or local data privacy laws limits underwriting questions (e.g. genetic testing restrictions).",
-    "- **Systemic / State Interaction**: Means-tested benefits, integration with National Health (PMJAY)."
+    "- **IRDAI**: See 'IRDA Regulations' theme for detailed mapping of: Health (2024), Products (2024), PPH (2024), EOM (2024), Actuarial (2024), Re-insurance (2024), and AA (2022).",
+    "- **Key 2024 Updates**: 48-month moratorium; 1-hr/3-hr cashless timelines; 30-day Free Look; removal of entry age limits; Board-governed commission.",
+    "- **Prudential Norms**: Available Solvency Margin (ASM) >= 150% of Required Solvency Margin (RSM); statutory reserves certified by AA.",
+    "- **State Interaction**: Integration with PMJAY (Ayushman Bharat); public provision defining the floor for private demand.",
+    "- **Conduct of Business**: Treating Customers Fairly (TCF) principles; mandatory 15-day grievance resolution via GRM.",
+    "- **Capital Frameworks**: Solvency II Pillar 1/2/3 analogues; transition to Risk-Based Capital (RBC) and IFRS 17/Ind AS 117.",
+    "- **Taxation**: Section 80D benefits (up to Rs 1L for seniors); 18% GST impact on premiums and affordability.",
+    "- **Grievance Redressal**: Ombudsman hierarchy (internal -> Ombudsman -> Consumer Forum -> Civil Court).",
+    "- **Professional Roles**: Statutory role of Appointed Actuary (AA); whistleblowing; compliance with IAI APS 33/34."
+  ],
+  "IRDA Regulations": [
+    "### Official IRDAI Regulations (2024)",
+    "- **Health Insurance Regulations 2024**: Consolidates 2016 rules; 48-month moratorium on PED; mandatory 100% cashless in-network; 1-hr/3-hr authorization timelines.",
+    "- **Insurance Products Regulations 2024**: No entry age limit; maximum 3-year waiting for PED; moratorium reduced to 5 years (general) / 4 years (health).",
+    "- **Protection of Policyholders' Interests 2024**: 30-day Free Look regardless of channel; Customer Info Sheet (CIS) mandate; 30-day Ombudsman award compliance.",
+    "- **Expenses of Management (EOM) 2024**: Removal of individual product commission caps; shifted to Board-approved aggregate expense policies.",
+    "- **Actuarial, Finance & Investment 2024**: Merged reporting for BEL/Risk Margin; statutory auditing of ASM/RSM; certification of technical provisions.",
+    "- **Re-insurance Regulations 2024**: Simplified Quota Share/XL structures; defined retention hierarchies; Cross-Border Reinsurer (CBR) residency rules.",
+    "- **Registration & Capital 2024**: Minimum capital entry (Rs 100 Cr); structure for amalgamations and transfer of shares; net worth requirements.",
+    "- **Appointed Actuary Regulations 2022**: Minimum post-qualification experience (3+ years health); statutory dual-reporting to Board and IRDAI."
+  ],
+  "Risks": [
+    "### SP1 Textbook: Nature of Risks (Chapters 23-24)",
+    "- **Nature of Risk Components**: Model Risk (inappropriate structure); Parameter Risk (wrong variables used); Random Fluctuations (sample error/heterogeneity).",
+    "- **Policy & Other Data Risks**: Inaccurate/incomplete records; Model Point risk (not representing portfolio); External data mismatch (e.g., using USA data for India).",
+    "- **Claim Rates (Morbidity/Mortality)**: Future parameters uncertain due to new diseases/trends; 'Expanding Funnel of Doubt' as projections go further.",
+    "- **Claim Amounts (PMI specific)**: Short-term variability in procedure costs; medical advances impact (e.g. hip replacement rehab time shifts).",
+    "- **Earlier Screening & Diagnosis**: Critical Illness risk—earlier diagnosis = earlier payment; screening prompts claims that might have otherwise lapsed.",
+    "- **Investment Performance & Assets**: Capital values risk (snapshot solvency); low reserves in CI/PMI mean low investment importance vs long-term products.",
+    "- **Expenses and Inflation**: Mismatch between inflation and loadings; volume impact (low volume = high fixed costs per policy); third-party TPA fees.",
+    "- **Persistency & Selective Withdrawal**: Selective effect (healthy leave, substandard remain); amortization risk (initial costs not recouped if early lapse).",
+    "- **Mix & Volume of New Business**: Mix by nature/size (smaller policies = lower contribution to fixed costs); Volume risk (High = capital drain; Low = overhead mismatch).",
+    "- **Guarantees and Options**: Complexity in terms offered in advance; health events harder to predict than life events; requirement for stochastic models.",
+    "- **Competition & Management Actions**: Reduced price/increased coverage to stay competitive; Management may override Actuary's prudence for market share.",
+    "- **Counterparties (RI/Distributors/TPAs)**: Reinsurer default; Distributor holding premiums; TPA commitment of expenditure on behalf of insurer.",
+    "- **Legal, Regulatory & Tax**: Retrospective changes overriding policy terms; prohibition of certain rating factors (e.g., race/genetics).",
+    "- **Reputation & Operational Fraud**: Disrepute via media/social media (especially for sick/elderly); Internal fraud / Audit failure (Embezzlement).",
+    "- **Aggregation, Concentration & Cat**: Localized outbreaks (Aggregation); industry concentration (e.g. mining industrial disease); Pandemic/War/Terrorism.",
+    "- **Non-disclosure & Anti-selection**: Moratorium approach complications; asymmetric info at proposal; genetic testing debate.",
+    "- **Product-specific: IP Insurance**: Sickness transition probabilities (inception/termination); moral hazard (return to work disincentive); leniency of definition.",
+    "- **Product-specific: CI Insurance**: Diagnosis rates; limited historical data in new markets; rider vs standalone capital requirements.",
+    "- **Product-specific: LTC Insurance**: High claim inception; transfer between dependency levels; investment/reserve significance; marketing risk (expectation of 100% cover).",
+    "- **Product-specific: PMI**: Third-party control over claims (consultants/doctors); single large claims vs accumulation; low capital strain vs long-term."
   ],
   "Underwriting": [
     "### Underwriting Strategy",
@@ -56,11 +105,15 @@
   ],
   "Product Design": [
     "### Product Design Elements",
-    "- **Needs**: Target market demand, filling State gaps.",
-    "- **Features**: Core benefits, waiting periods/deferred periods, exclusions, riders/add-ons.",
-    "- **Constraints**: Systems and Admin capabilities, Reinsurance availability, sales channel ease-of-sale.",
-    "- **Risks**: Moral hazard, anti-selection, uninsurable risks.",
-    "- **Pricing/Capital**: Ensuring the intended design is actually profitable and capital efficient."
+    "- **Target Market**: Segmenting by age, income, and needs; filling gaps in State provision (PMJAY etc).",
+    "- **Benefits & Conditions**: Core coverage; waiting/deferred periods; benefit limits; reinstatement terms.",
+    "- **Exclusions**: Standard medical exclusions; occupational/lifestyle risks; territorial limits.",
+    "- **Options & Guarantees**: GIOs (no medicals); conversion options; guaranteed renewability/premiums.",
+    "- **Surrender Values**: Discontinuance benefits (usually nil for indemnity PMI/CI); impact on model pricing.",
+    "- **Marketability**: Brand positioning; 'saleability' vs 'adequacy'; bundling CI/IP riders onto life cover.",
+    "- **Constraints**: IT/Admin platform capacity; reinsurance treaties; commission-driven distribution.",
+    "- **Risks**: Moral hazard (over-insurance); anti-selection at entry; complexity leading to mis-selling.",
+    "- **Profitability/Capital**: Solvency II capital strain (Pillar 1); hurdle rates; ROI vs VNB targets."
   ],
   "Data": [
     "### Data Framework",
