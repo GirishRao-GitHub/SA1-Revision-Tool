@@ -22,6 +22,21 @@
   --red: #e74c3c;
   --redbg: #2a0f0f;
   --amber: #f1c40f;
+  --amberbg: #2a1f00;
+  --green: #2ecc71;
+  --greenbg: #0a2a1a;
+  --blue: #3b82f6;
+  --bluebg: #0a1628;
+  --cyan: #06b6d4;
+  --cyanbg: #051a20;
+  --orange: #f97316;
+  --orangebg: #2a1000;
+  --pink: #ec4899;
+  --pinkbg: #2a0a18;
+  --teal: #14b8a6;
+  --tealbg: #051a18;
+  --indigo: #6366f1;
+  --indigobg: #0f1030;
   --radius: 6px;
   --radius2: 10px;
   --mono: 'IBM Plex Mono', monospace;
@@ -30,8 +45,9 @@
 
 *{box-sizing:border-box;margin:0;padding:0;}
 html,body{height:100%;}
-body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh;}
 
+/* TOPBAR */
 .topbar{position:fixed;top:0;left:0;width:100%;background:var(--surface);border-bottom:1px solid var(--border);padding:10px 20px;display:flex;align-items:center;gap:16px;z-index:100;}
 .logo{font-family:var(--mono);font-weight:600;font-size:15px;color:var(--accent);letter-spacing:.05em;}
 .logo span{color:var(--text3);}
@@ -40,14 +56,99 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:1
 .back-btn:hover{background:var(--surface3);color:var(--text);}
 #clock{font-family:var(--mono);font-size:11px;color:var(--text3);}
 
-.coming-soon{text-align:center;padding:40px;max-width:520px;}
-.cs-icon{font-size:56px;margin-bottom:24px;}
-.cs-title{font-family:var(--mono);font-size:22px;font-weight:700;color:var(--accent);margin-bottom:12px;letter-spacing:.04em;}
-.cs-sub{font-size:14px;color:var(--text2);line-height:1.7;margin-bottom:28px;}
-.cs-tags{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:32px;}
-.cs-tag{font-family:var(--mono);font-size:11px;font-weight:600;padding:4px 10px;border-radius:4px;background:var(--surface2);border:1px solid var(--border);color:var(--text2);}
-.cs-tag.risk{background:var(--redbg);border-color:var(--red);color:var(--red);}
-.cs-note{font-family:var(--mono);font-size:11px;color:var(--text3);background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px 16px;line-height:1.6;}
+/* LAYOUT */
+.main{padding:80px 24px 48px;max-width:1400px;margin:0 auto;}
+
+/* HEADER */
+.page-header{margin-bottom:28px;}
+.page-title{font-family:var(--mono);font-size:20px;font-weight:700;color:var(--accent);letter-spacing:.04em;margin-bottom:6px;}
+.page-sub{font-size:13px;color:var(--text2);line-height:1.6;}
+
+/* FILTER BAR */
+.filter-bar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px;align-items:center;}
+.filter-label{font-family:var(--mono);font-size:11px;color:var(--text3);margin-right:4px;}
+.filter-btn{font-family:var(--mono);font-size:11px;font-weight:600;padding:4px 12px;border-radius:4px;cursor:pointer;background:var(--surface2);border:1px solid var(--border);color:var(--text2);transition:all .2s;}
+.filter-btn:hover{background:var(--surface3);color:var(--text);}
+.filter-btn.active{color:#fff;border-color:transparent;}
+.search-box{font-family:var(--mono);font-size:12px;padding:5px 12px;border-radius:4px;background:var(--surface2);border:1px solid var(--border);color:var(--text);outline:none;width:220px;margin-left:auto;}
+.search-box::placeholder{color:var(--text3);}
+.search-box:focus{border-color:var(--border2);}
+
+/* RISK GRID */
+.risk-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:18px;}
+
+/* RISK CARD */
+.risk-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius2);overflow:hidden;transition:border-color .2s,box-shadow .2s;display:flex;flex-direction:column;}
+.risk-card:hover{border-color:var(--border2);box-shadow:0 4px 24px rgba(0,0,0,.3);}
+.risk-card.hidden{display:none;}
+
+.card-header{padding:14px 16px 12px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:12px;cursor:pointer;user-select:none;}
+.card-icon{font-size:20px;flex-shrink:0;margin-top:1px;}
+.card-title-block{flex:1;}
+.card-category{font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;margin-bottom:4px;}
+.card-title{font-size:14px;font-weight:600;color:var(--text);line-height:1.3;}
+.card-badge{font-family:var(--mono);font-size:10px;padding:2px 8px;border-radius:3px;white-space:nowrap;flex-shrink:0;align-self:flex-start;margin-top:2px;}
+.toggle-arrow{font-size:11px;color:var(--text3);flex-shrink:0;align-self:center;transition:transform .2s;}
+.risk-card.expanded .toggle-arrow{transform:rotate(180deg);}
+
+.card-body{padding:0 16px;max-height:0;overflow:hidden;transition:max-height .35s ease,padding .2s;}
+.risk-card.expanded .card-body{max-height:2000px;padding:14px 16px 16px;}
+
+.bullet-list{list-style:none;display:flex;flex-direction:column;gap:9px;}
+.bullet-item{font-size:12.5px;line-height:1.65;color:var(--text2);padding-left:14px;position:relative;}
+.bullet-item::before{content:"›";position:absolute;left:0;color:var(--text3);}
+.bullet-item strong{color:var(--text);font-weight:600;}
+
+.source-tag{display:inline-block;font-family:var(--mono);font-size:10px;padding:2px 8px;border-radius:3px;background:var(--surface2);border:1px solid var(--border);color:var(--text3);margin-top:12px;}
+
+/* SUMMARY ROW */
+.summary-row{display:flex;flex-wrap:wrap;gap:12px;margin-bottom:24px;}
+.summary-pill{display:flex;align-items:center;gap:7px;padding:6px 14px;border-radius:20px;border:1px solid var(--border);background:var(--surface);font-size:12px;color:var(--text2);}
+.summary-pill .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+
+/* EMPTY STATE */
+.empty-state{grid-column:1/-1;text-align:center;padding:60px 20px;color:var(--text3);font-family:var(--mono);font-size:13px;}
+
+/* COLOR THEMES PER CATEGORY */
+.theme-insurance .card-category{color:var(--red);}
+.theme-insurance .card-badge{background:var(--redbg);color:var(--red);border:1px solid var(--red);}
+.theme-insurance.risk-card:hover{border-color:var(--red);box-shadow:0 4px 24px rgba(231,76,60,.1);}
+
+.theme-market .card-category{color:var(--blue);}
+.theme-market .card-badge{background:var(--bluebg);color:var(--blue);border:1px solid var(--blue);}
+.theme-market.risk-card:hover{border-color:var(--blue);box-shadow:0 4px 24px rgba(59,130,246,.1);}
+
+.theme-credit .card-category{color:var(--amber);}
+.theme-credit .card-badge{background:var(--amberbg);color:var(--amber);border:1px solid var(--amber);}
+.theme-credit.risk-card:hover{border-color:var(--amber);box-shadow:0 4px 24px rgba(241,196,15,.1);}
+
+.theme-operational .card-category{color:var(--orange);}
+.theme-operational .card-badge{background:var(--orangebg);color:var(--orange);border:1px solid var(--orange);}
+.theme-operational.risk-card:hover{border-color:var(--orange);box-shadow:0 4px 24px rgba(249,115,22,.1);}
+
+.theme-liquidity .card-category{color:var(--cyan);}
+.theme-liquidity .card-badge{background:var(--cyanbg);color:var(--cyan);border:1px solid var(--cyan);}
+.theme-liquidity.risk-card:hover{border-color:var(--cyan);box-shadow:0 4px 24px rgba(6,182,212,.1);}
+
+.theme-regulatory .card-category{color:var(--green);}
+.theme-regulatory .card-badge{background:var(--greenbg);color:var(--green);border:1px solid var(--green);}
+.theme-regulatory.risk-card:hover{border-color:var(--green);box-shadow:0 4px 24px rgba(46,204,113,.1);}
+
+.theme-reputational .card-category{color:var(--pink);}
+.theme-reputational .card-badge{background:var(--pinkbg);color:var(--pink);border:1px solid var(--pink);}
+.theme-reputational.risk-card:hover{border-color:var(--pink);box-shadow:0 4px 24px rgba(236,72,153,.1);}
+
+.theme-catastrophe .card-category{color:var(--accent);}
+.theme-catastrophe .card-badge{background:var(--accentbg);color:var(--accent);border:1px solid var(--accent);}
+.theme-catastrophe.risk-card:hover{border-color:var(--accent);box-shadow:0 4px 24px rgba(139,92,246,.1);}
+
+.theme-model .card-category{color:var(--teal);}
+.theme-model .card-badge{background:var(--tealbg);color:var(--teal);border:1px solid var(--teal);}
+.theme-model.risk-card:hover{border-color:var(--teal);box-shadow:0 4px 24px rgba(20,184,166,.1);}
+
+.theme-persistency .card-category{color:var(--indigo);}
+.theme-persistency .card-badge{background:var(--indigobg);color:var(--indigo);border:1px solid var(--indigo);}
+.theme-persistency.risk-card:hover{border-color:var(--indigo);box-shadow:0 4px 24px rgba(99,102,241,.1);}
 </style>
 </head>
 <body>
@@ -61,38 +162,497 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:1
   <a class="back-btn" href="SA1ity_Check.html">← Back to Main</a>
 </div>
 
-<div class="coming-soon">
-  <div class="cs-icon">⚠️</div>
-  <div class="cs-title">Coming Soon</div>
-  <div class="cs-sub">
-    The <strong style="color:var(--accent)">Risks</strong> view will organise SA1 exam topics by risk category — giving you a structured taxonomy to approach any "identify the risks" exam question with confidence.
+<div class="main">
+  <div class="page-header">
+    <div class="page-title">⚠️ Risk Taxonomy</div>
+    <div class="page-sub">SA1 exam topics organised by risk category. Click any card to expand its bullet points. Use filters to focus by category.</div>
   </div>
-  <div class="cs-tags">
-    <span class="cs-tag risk">Insurance Risk</span>
-    <span class="cs-tag risk">Market / Investment Risk</span>
-    <span class="cs-tag risk">Credit / Default Risk</span>
-    <span class="cs-tag risk">Operational Risk</span>
-    <span class="cs-tag risk">Liquidity Risk</span>
-    <span class="cs-tag risk">Regulatory Risk</span>
-    <span class="cs-tag risk">Reputational Risk</span>
-    <span class="cs-tag risk">Catastrophe Risk</span>
-    <span class="cs-tag risk">Model Risk</span>
-    <span class="cs-tag risk">Persistency Risk</span>
+
+  <div class="summary-row" id="summaryRow"></div>
+
+  <div class="filter-bar">
+    <span class="filter-label">Filter:</span>
+    <button class="filter-btn active" data-cat="all" onclick="filterCards('all',this)">All</button>
+    <button class="filter-btn" data-cat="insurance" onclick="filterCards('insurance',this)" style="color:var(--red)">Insurance</button>
+    <button class="filter-btn" data-cat="market" onclick="filterCards('market',this)" style="color:var(--blue)">Market / Investment</button>
+    <button class="filter-btn" data-cat="credit" onclick="filterCards('credit',this)" style="color:var(--amber)">Credit / Default</button>
+    <button class="filter-btn" data-cat="operational" onclick="filterCards('operational',this)" style="color:var(--orange)">Operational</button>
+    <button class="filter-btn" data-cat="liquidity" onclick="filterCards('liquidity',this)" style="color:var(--cyan)">Liquidity</button>
+    <button class="filter-btn" data-cat="regulatory" onclick="filterCards('regulatory',this)" style="color:var(--green)">Regulatory</button>
+    <button class="filter-btn" data-cat="reputational" onclick="filterCards('reputational',this)" style="color:var(--pink)">Reputational</button>
+    <button class="filter-btn" data-cat="catastrophe" onclick="filterCards('catastrophe',this)" style="color:var(--accent)">Catastrophe</button>
+    <button class="filter-btn" data-cat="model" onclick="filterCards('model',this)" style="color:var(--teal)">Model</button>
+    <button class="filter-btn" data-cat="persistency" onclick="filterCards('persistency',this)" style="color:var(--indigo)">Persistency</button>
+    <input class="search-box" id="searchBox" placeholder="Search risks…" oninput="searchCards(this.value)"/>
   </div>
-  <div class="cs-note">
-    📂 Data source: Topic_Frameworks.json · Reads the same file as the main Frameworks mode.<br>
-    🔧 Page structure: under development — confirm risk taxonomy groupings to build.
-  </div>
+
+  <div class="risk-grid" id="riskGrid"></div>
 </div>
 
 <script>
+// ─── DATA ─────────────────────────────────────────────────────────────────
+// Risk cards built from Topic_Frameworks.json, categorised by risk taxonomy.
+// Each card: { id, category, theme, icon, title, badge, bullets, source }
+
+const RISK_DATA = [
+
+  // ══════════════════════════ INSURANCE RISK ══════════════════════════
+  {
+    id: "ins-01",
+    category: "Insurance Risk",
+    theme: "insurance",
+    icon: "🏥",
+    title: "Morbidity & Mortality — Claim Rate Risk",
+    badge: "Insurance Risk",
+    source: "Risks · Pricing",
+    bullets: [
+      "<strong>Expanding Funnel of Doubt:</strong> Future claim rate parameters uncertain due to new diseases, emerging trends, and medical advances — uncertainty grows the further projections extend.",
+      "<strong>Demographic Assumptions:</strong> Morbidity/mortality trends; initial vs selective selection effects; anti-selection risk on underwriting.",
+      "<strong>Earlier Screening & Diagnosis (CI):</strong> Earlier diagnosis triggers earlier lump-sum payment; screening prompts claims that might otherwise have lapsed.",
+      "<strong>IP Sickness Transitions:</strong> Inception and termination probabilities uncertain; moral hazard around return-to-work disincentive; leniency of disability definition creates parameter risk.",
+      "<strong>CI Diagnosis Rates:</strong> Limited historical data in new markets; rider vs standalone capital requirements differ significantly.",
+    ]
+  },
+  {
+    id: "ins-02",
+    category: "Insurance Risk",
+    theme: "insurance",
+    icon: "💊",
+    title: "Claim Amount Risk — Medical Inflation",
+    badge: "Insurance Risk",
+    source: "Risks · PMI · Pricing",
+    bullets: [
+      "<strong>PMI Medical Inflation:</strong> Typically super-inflation (~12–15% p.a. in India); failure to trend forward in pricing leads to rapid portfolio deterioration.",
+      "<strong>Short-term Variability:</strong> Procedure costs fluctuate; medical advances shift treatment protocols (e.g., hip replacement rehab time changes claim duration).",
+      "<strong>Burning Cost Components:</strong> Frequency × severity; must be split by IP vs OP, age, gender, duration, UW method, and channel.",
+      "<strong>Third-party Control (PMI):</strong> Consultants/doctors drive treatment choices; insurer bears utilisation risk under fee-for-service but not capitation.",
+      "<strong>Single Large Claims vs Accumulation:</strong> PMI individual claims can reach hundreds of thousands — XL reinsurance specifically relevant.",
+    ]
+  },
+  {
+    id: "ins-03",
+    category: "Insurance Risk",
+    theme: "insurance",
+    icon: "🚫",
+    title: "Anti-selection & Non-disclosure",
+    badge: "Insurance Risk",
+    source: "Risks · Underwriting · PMI",
+    bullets: [
+      "<strong>Asymmetric Information:</strong> Proposer knows more about their health than the insurer; non-disclosure may be deliberate (fraud) or inadvertent.",
+      "<strong>Moratorium Complications:</strong> Moratorium UW defers the anti-selection problem rather than eliminating it — claim disputes arise when conditions are later flagged as PED.",
+      "<strong>Genetic Testing Debate:</strong> Prohibition on using genetic test results limits insurer's ability to price accurately; creates adverse selection potential.",
+      "<strong>Adverse Selection Spiral (PMI):</strong> Community rating without risk equalisation allows healthier lives to leave, leaving a progressively worse risk pool and ever-rising premiums.",
+      "<strong>FCL Risk (Group):</strong> Free Cover Limits avoid individual UW but introduce anti-selection if voluntary take-up is low or concentrated in higher-risk lives.",
+    ]
+  },
+  {
+    id: "ins-04",
+    category: "Insurance Risk",
+    theme: "insurance",
+    icon: "🧾",
+    title: "Underwriting Risk — Adverse Mix & Volume",
+    badge: "Insurance Risk",
+    source: "Risks · Underwriting · Group Products",
+    bullets: [
+      "<strong>Mix Risk:</strong> Smaller policies contribute less to fixed cost recovery; adverse mix by nature or size erodes profitability.",
+      "<strong>Volume Risk:</strong> High volume strains capital (new business strain); low volume causes overhead mismatch — fixed expenses per policy balloon.",
+      "<strong>New Business Strain:</strong> At outset, reserves exceed first premium received; requires capital funding.",
+      "<strong>Concentration Risk (Group):</strong> Single employer group — one catastrophic event (building explosion) hits the whole portfolio simultaneously.",
+      "<strong>Changing Workforce Demographics:</strong> Aging workforce in a group scheme increases expected claim rates without premium adjustment.",
+    ]
+  },
+  {
+    id: "ins-05",
+    category: "Insurance Risk",
+    theme: "insurance",
+    icon: "🔁",
+    title: "Guarantees, Options & Moral Hazard",
+    badge: "Insurance Risk",
+    source: "Risks · Product Design",
+    bullets: [
+      "<strong>Health Guarantees:</strong> Health events harder to predict than life events; guaranteed renewability without repricing locks in a deteriorating risk pool.",
+      "<strong>Stochastic Modelling Required:</strong> Complexity in terms offered in advance; stochastic models needed to price options and guarantees correctly.",
+      "<strong>Moral Hazard (PMI):</strong> Over-insurance creates incentive for excessive utilisation; pre-authorisation and co-payments mitigate.",
+      "<strong>GIOs / Conversion Options:</strong> Guaranteed Insurability Options allow cover increases without medicals — potential for adverse selection at option exercise.",
+      "<strong>Option Take-up Uncertainty:</strong> Renewal guarantees and reviewable premiums create option risk; sensitivity testing across lapse/renewal scenarios required.",
+    ]
+  },
+  {
+    id: "ins-06",
+    category: "Insurance Risk",
+    theme: "insurance",
+    icon: "🧓",
+    title: "LTC & IP Product-Specific Insurance Risks",
+    badge: "Insurance Risk",
+    source: "Risks · LTC · Income Protection",
+    bullets: [
+      "<strong>LTC Claim Inception:</strong> High claim inception rates; transfers between dependency levels hard to model; investment and reserve significance is high.",
+      "<strong>LTC Marketing Risk:</strong> Policyholder expectation of 100% cover vs actual policy terms; claims disputes and reputational damage if expectations unmet.",
+      "<strong>LTC Longevity:</strong> Extreme longevity risk combined with massive care-cost inflation creates compounding liability.",
+      "<strong>IP Moral Hazard:</strong> Return-to-work disincentive; replacement ratio capped at 50–75% specifically to maintain work incentive.",
+      "<strong>IP Economic Sensitivity:</strong> Economic downturns significantly increase claim inception rates as IP becomes 'unemployment disguise'.",
+    ]
+  },
+
+  // ══════════════════════════ MARKET / INVESTMENT RISK ══════════════════════════
+  {
+    id: "mkt-01",
+    category: "Market / Investment Risk",
+    theme: "market",
+    icon: "📈",
+    title: "Investment Performance & Asset Risk",
+    badge: "Market Risk",
+    source: "Risks · Investments · Capital & Solvency",
+    bullets: [
+      "<strong>Capital Values Risk:</strong> Snapshot solvency affected by market movements; equities and property subject to mark-to-market volatility.",
+      "<strong>ALM Mismatch:</strong> Failure to match liability duration with asset duration creates interest rate exposure; yield curve shifts cause solvency ratio fluctuations.",
+      "<strong>Low Reserve Impact (CI/PMI):</strong> Short-term products have low reserves so investment risk is less significant than for long-term savings products — but still material for solvency.",
+      "<strong>LTC Investment Significance:</strong> Long-duration LTC liabilities make investment returns highly material; reserve discount rate sensitivity is substantial.",
+      "<strong>Solvency II Capital Charges:</strong> Risky assets attract higher SCR capital charges; impacts optimal asset allocation under RBC frameworks.",
+    ]
+  },
+  {
+    id: "mkt-02",
+    category: "Market / Investment Risk",
+    theme: "market",
+    icon: "💹",
+    title: "Medical & Expense Inflation Risk",
+    badge: "Market Risk",
+    source: "Risks · Pricing",
+    bullets: [
+      "<strong>Medical Inflation Super-cycle:</strong> Medical cost inflation structurally exceeds general CPI — ~12–15% p.a. in India; pure premium inadequacy risk if not modelled forward.",
+      "<strong>Expense Inflation Mismatch:</strong> Mismatch between actual expense inflation and the inflation loadings assumed at pricing; volume impact means fixed costs per policy rise if growth slows.",
+      "<strong>TPA Fee Risk:</strong> Third-party administrator fees are a variable cost that can escalate independently of claims experience.",
+      "<strong>Climate/Inflation Repricing Risk:</strong> Repricing to recover rising costs may trigger selective lapsing — healthiest lives leave, adverse risk pool remains.",
+    ]
+  },
+
+  // ══════════════════════════ CREDIT / DEFAULT RISK ══════════════════════════
+  {
+    id: "crd-01",
+    category: "Credit / Default Risk",
+    theme: "credit",
+    icon: "🏦",
+    title: "Reinsurer & Counterparty Default",
+    badge: "Credit Risk",
+    source: "Risks · Reinsurance",
+    bullets: [
+      "<strong>Reinsurer Default:</strong> Even if fully reinsured, cedant remains liable to policyholders; minimum capital must always be held regardless of reinsurance cover.",
+      "<strong>Deposit Back Mitigation:</strong> Reinsurer deposits its reserve share with cedant — eliminates investment risk transfer and significantly mitigates default exposure.",
+      "<strong>Distributor Premium Holding:</strong> Distributor holding collected premiums before remittance creates credit risk on the insurer's cash flow.",
+      "<strong>TPA Expenditure Commitment:</strong> TPA can commit expenditure on behalf of the insurer (authorising claims); insurer retains liability if TPA acts beyond authority or fails.",
+      "<strong>Reinsurance Credit in Solvency:</strong> Reinsurance reduces SCR/solvency capital in proportion to cession — but subject to upper limit precisely because of reinsurer default risk.",
+    ]
+  },
+
+  // ══════════════════════════ OPERATIONAL RISK ══════════════════════════
+  {
+    id: "ops-01",
+    category: "Operational Risk",
+    theme: "operational",
+    icon: "⚙️",
+    title: "Data Quality & Policy Record Risk",
+    badge: "Operational Risk",
+    source: "Risks · Data",
+    bullets: [
+      "<strong>Inaccurate/Incomplete Records:</strong> Incorrect policy data leads to mispricing, reserve errors, and claim disputes.",
+      "<strong>Model Point Risk:</strong> Model points not representative of the actual portfolio produce systematic valuation errors.",
+      "<strong>External Data Mismatch:</strong> Using overseas data (e.g., US morbidity tables) as a proxy for Indian policyholders without appropriate adjustment introduces parameter bias.",
+      "<strong>Data Quality Dimensions:</strong> Accuracy, completeness, consistency, and timeliness all required — referenced in TAS 100 / AS 34.",
+      "<strong>Reporting Lags:</strong> Delays in claims reporting inflate IBNR uncertainty; changes in internal processes create structural breaks in data series.",
+    ]
+  },
+  {
+    id: "ops-02",
+    category: "Operational Risk",
+    theme: "operational",
+    icon: "🕵️",
+    title: "Fraud — Internal & Claims",
+    badge: "Operational Risk",
+    source: "Risks · Claims Management · PMI",
+    bullets: [
+      "<strong>Internal Fraud / Embezzlement:</strong> Audit failures expose the insurer to losses from employee misconduct; governance controls and separation of duties are the primary mitigant.",
+      "<strong>Policyholder Claims Fraud (PMI):</strong> Inflated claims, fictitious procedures, collusion with providers — particularly material given high-volume OP claims.",
+      "<strong>Mental Illness Fraud Risk:</strong> Mental illness parity mandated by IRDAI — difficult to diagnose and control; higher frequency and fraud risk than physical conditions.",
+      "<strong>Non-disclosure as Fraud:</strong> Deliberate concealment of PEDs at proposal; post-claim UW and moratorium rules are the primary defence.",
+      "<strong>AI UW Fraud Detection:</strong> ABHA/electronic patient records enable better fraud detection but introduce data privacy risk and require high uptake to be effective.",
+    ]
+  },
+  {
+    id: "ops-03",
+    category: "Operational Risk",
+    theme: "operational",
+    icon: "🖥️",
+    title: "IT, Admin & Third-Party Operational Risk",
+    badge: "Operational Risk",
+    source: "Administration · Claims Management",
+    bullets: [
+      "<strong>Legacy IT Constraints:</strong> Inability of legacy platforms to handle complex tiered benefits, unit deductions, or high-volume OP claims processing.",
+      "<strong>TPA Oversight Risk:</strong> Outsourcing claims and call centre functions to TPAs introduces principal-agent risk; the insurer retains full policyholder liability.",
+      "<strong>Straight-Through Processing:</strong> Speed of onboarding vs cost of underwriting information — operational trade-off with direct risk implications.",
+      "<strong>Cashless TAT Risk:</strong> IRDAI 2024 mandates 1-hour cashless authorisation and 3-hour final discharge; delay risk borne by insurer from shareholders' funds.",
+      "<strong>Competition & Management Override:</strong> Management may override actuarial prudence for market share — a process risk that translates into underwriting and pricing risk.",
+    ]
+  },
+
+  // ══════════════════════════ LIQUIDITY RISK ══════════════════════════
+  {
+    id: "liq-01",
+    category: "Liquidity Risk",
+    theme: "liquidity",
+    icon: "💧",
+    title: "Claims Settlement & Liquidity Mismatch",
+    badge: "Liquidity Risk",
+    source: "Investments · Risks",
+    bullets: [
+      "<strong>PMI Sudden Claims:</strong> PMI claims are unexpected and short-notice — asset portfolio must maintain sufficient liquid assets to settle promptly.",
+      "<strong>Cashless Settlement Pressure:</strong> 100% cashless target means provider networks must be funded in near-real-time; liquidity buffer essential.",
+      "<strong>Asset Regulatory Constraints:</strong> IRDAI regulations limit the asset classes available; constraints may prevent full ALM optimisation and force holding of liquid low-yield assets.",
+      "<strong>New Business Strain Liquidity:</strong> Capital outflow at new business strain point requires available liquidity before future premiums start flowing back in.",
+      "<strong>Stop Loss / XL Recoveries:</strong> Reinsurance recoveries under XL/stop loss may be delayed — insurer must fund claims upfront even when reinsurance applies.",
+    ]
+  },
+
+  // ══════════════════════════ REGULATORY RISK ══════════════════════════
+  {
+    id: "reg-01",
+    category: "Regulatory Risk",
+    theme: "regulatory",
+    icon: "⚖️",
+    title: "Legal, Regulatory & Tax Change Risk",
+    badge: "Regulatory Risk",
+    source: "Risks · Regulation · IRDA Regulations",
+    bullets: [
+      "<strong>Retrospective Regulatory Changes:</strong> Changes overriding existing policy terms (e.g., IRDAI 2024 moratorium change from 48 to 60 months) affect in-force liabilities.",
+      "<strong>Rating Factor Prohibition:</strong> Prohibition on using race, genetics, or disability data removes pricing levers; creates cross-subsidy and adverse selection.",
+      "<strong>IRDAI 2024 Key Changes:</strong> 60-month moratorium; max 36-month PED waiting period; 1-hr/3-hr cashless TATs; 30-day Free Look; no entry age limits — all create operational and pricing obligations.",
+      "<strong>EOM Constraints:</strong> Expenses of Management limits (35% standalone / 30% general insurers); Board-governed commission structures — restrict commercial flexibility.",
+      "<strong>RBC / IFRS 17 Transition:</strong> Move to Risk-Based Capital and Ind AS 117 requires significant model, system, and reporting investment; transition risk material.",
+    ]
+  },
+  {
+    id: "reg-02",
+    category: "Regulatory Risk",
+    theme: "regulatory",
+    icon: "🏛️",
+    title: "Solvency & Capital Adequacy Risk",
+    badge: "Regulatory Risk",
+    source: "Capital & Solvency · Reporting",
+    bullets: [
+      "<strong>Current ASM Requirement:</strong> ASM ≥ 150% RSM at all times; RSM uses fixed percentages regardless of actual risk profile — blunt instrument.",
+      "<strong>SCR Breach Consequence:</strong> SCR breach expected once in 200 years; MCR breach every 6–7 years — breach triggers regulator-forced action including new business cessation.",
+      "<strong>Solvency II Pillar Structure:</strong> Pillar 1 (quantitative BEL/Risk Margin/SCR); Pillar 2 (ORSA, governance); Pillar 3 (SFCR/RSR disclosure) — each creates compliance obligation.",
+      "<strong>Capital Add-on Risk:</strong> Supervisory Pillar 2 review can require additional capital if risks are inadequately modelled in the standard formula.",
+      "<strong>Group Supervision Double Leverage:</strong> Group solvency framework addresses double use of capital and double leverage; third-country equivalence rules add complexity.",
+    ]
+  },
+
+  // ══════════════════════════ REPUTATIONAL RISK ══════════════════════════
+  {
+    id: "rep-01",
+    category: "Reputational Risk",
+    theme: "reputational",
+    icon: "📣",
+    title: "Media, Social Media & Conduct Risk",
+    badge: "Reputational Risk",
+    source: "Risks · Regulation",
+    bullets: [
+      "<strong>Social Media Amplification:</strong> Disrepute spreads rapidly via media and social media — particularly damaging when claims involve sick or elderly policyholders.",
+      "<strong>Mis-selling Risk:</strong> Product complexity leads to customer misunderstanding; high complaint volumes are characteristic of PMI — regulatory and reputational consequences.",
+      "<strong>Treating Customers Fairly (TCF):</strong> Regulatory mandate requires fair conduct; failure triggers Ombudsman escalation, Consumer Forum, and civil court proceedings.",
+      "<strong>Claim Repudiation Risk:</strong> No claim may be repudiated without PMC or 3-member Claims Review Committee approval; failure attracts Rs 5,000/day penalty to complainant.",
+      "<strong>LTC Expectation Risk:</strong> Policyholders expect 100% cover; partial cover or exclusions generate disproportionate reputational damage when claims arise in old age.",
+    ]
+  },
+
+  // ══════════════════════════ CATASTROPHE RISK ══════════════════════════
+  {
+    id: "cat-01",
+    category: "Catastrophe Risk",
+    theme: "catastrophe",
+    icon: "🌪️",
+    title: "Pandemic, Aggregation & Concentration Risk",
+    badge: "Catastrophe Risk",
+    source: "Risks · Reinsurance",
+    bullets: [
+      "<strong>Pandemic / War / Terrorism:</strong> Single event triggering mass simultaneous claims across the portfolio; individual claims may be small but aggregate is severe.",
+      "<strong>Localized Outbreak Aggregation:</strong> Epidemic confined to a geographic area or industrial cluster (e.g., mining industrial disease) creates correlated claims.",
+      "<strong>Cat XL Unavailability:</strong> Pandemic-specific reinsurance cover is rarely available at affordable price; government intervention may be the ultimate backstop.",
+      "<strong>Aggregate XL / Stop Loss:</strong> Covers accumulation of multiple claims over 12 months expressed as % of earned premium; reinsurers reluctant to provide due to limited UW control.",
+      "<strong>Group Concentration:</strong> Single-employer group PMI — one building explosion wipes out the entire insured group; concentration risk must be managed via treaty limits.",
+    ]
+  },
+
+  // ══════════════════════════ MODEL RISK ══════════════════════════
+  {
+    id: "mdl-01",
+    category: "Model Risk",
+    theme: "model",
+    icon: "🧮",
+    title: "Model Structure, Parameter & Process Risk",
+    badge: "Model Risk",
+    source: "Risks · Models · Reserving & Valuation",
+    bullets: [
+      "<strong>Model Risk Components:</strong> Model risk (inappropriate structure selected); Parameter risk (wrong variables used); Random fluctuations (sample error / heterogeneity within groups).",
+      "<strong>Stochastic vs Deterministic:</strong> Guarantees and options in health products require stochastic models; deterministic models underestimate tail risk.",
+      "<strong>Multi-state Markov Appropriateness:</strong> Assumes transitions depend only on current state (memoryless) — may be inappropriate where prior claim duration affects future recovery.",
+      "<strong>Reserving Method Risk:</strong> Chain Ladder / BF / cashflow projection each have limitations; choice of method and tail factor affects IBNR and PDR materially.",
+      "<strong>Model Governance:</strong> Peer review, backtesting against actual experience, and sensitivity testing are required governance controls — inadequate governance is itself a model risk.",
+    ]
+  },
+  {
+    id: "mdl-02",
+    category: "Model Risk",
+    theme: "model",
+    icon: "📐",
+    title: "Assumption & Parameter Uncertainty",
+    badge: "Model Risk",
+    source: "Risks · Pricing · Monitoring",
+    bullets: [
+      "<strong>Best Estimate vs Prudent:</strong> Pricing uses realistic best-estimate; supervisory reserving requires prudent margins — gap between the two represents the 'buffer' against adverse deviation.",
+      "<strong>Medical Inflation Assumption:</strong> Embedding the wrong forward inflation rate has a compounding effect on projected claims costs.",
+      "<strong>Longevity Uncertainty:</strong> LTC liabilities are particularly sensitive to longevity improvements; allowance for future improvements must be explicit.",
+      "<strong>Experience Monitoring:</strong> A/E (actual vs expected) ratios by assumption type; identification of systematic bias vs random fluctuation triggers assumption updates.",
+      "<strong>EV Sensitivity Disclosures:</strong> ±1% risk discount rate, ±10% mortality, ±10% lapses — mandatory sensitivities quantify parameter risk for stakeholders.",
+    ]
+  },
+
+  // ══════════════════════════ PERSISTENCY RISK ══════════════════════════
+  {
+    id: "per-01",
+    category: "Persistency Risk",
+    theme: "persistency",
+    icon: "📉",
+    title: "Lapse, Withdrawal & Selective Persistency",
+    badge: "Persistency Risk",
+    source: "Risks · Pricing · Monitoring",
+    bullets: [
+      "<strong>Selective Withdrawal Effect:</strong> Healthier lives lapse preferentially; remaining policyholders have worse-than-average experience — deteriorates the risk pool progressively.",
+      "<strong>Amortisation Risk:</strong> Initial acquisition costs are not recouped if policyholders lapse early; new business strain is lost without future premium recovery.",
+      "<strong>Adverse Selection Spiral:</strong> In community-rated PMI, price increases drive out healthy lives → remaining pool worsens → further price increase required → spiral continues.",
+      "<strong>Persistency Surplus Analysis:</strong> Actual vs expected lapses tracked separately in analysis of surplus; selective lapses identified as a distinct performance driver.",
+      "<strong>Repricing Lapse Risk:</strong> Medical inflation requires premium increases at renewal; price-sensitive healthy lives may lapse, worsening portfolio composition.",
+    ]
+  },
+
+];
+
+// ─── CATEGORY METADATA ────────────────────────────────────────────────────
+const CAT_META = {
+  insurance:    { color: "var(--red)",    dot: "#e74c3c" },
+  market:       { color: "var(--blue)",   dot: "#3b82f6" },
+  credit:       { color: "var(--amber)",  dot: "#f1c40f" },
+  operational:  { color: "var(--orange)", dot: "#f97316" },
+  liquidity:    { color: "var(--cyan)",   dot: "#06b6d4" },
+  regulatory:   { color: "var(--green)",  dot: "#2ecc71" },
+  reputational: { color: "var(--pink)",   dot: "#ec4899" },
+  catastrophe:  { color: "var(--accent)", dot: "#8b5cf6" },
+  model:        { color: "var(--teal)",   dot: "#14b8a6" },
+  persistency:  { color: "var(--indigo)", dot: "#6366f1" },
+};
+
+// ─── RENDER ───────────────────────────────────────────────────────────────
+function renderCards(data) {
+  const grid = document.getElementById("riskGrid");
+  grid.innerHTML = "";
+  if (!data.length) {
+    grid.innerHTML = '<div class="empty-state">No risks match this filter.</div>';
+    return;
+  }
+  data.forEach(card => {
+    const li = card.bullets.map(b => `<li class="bullet-item">${b}</li>`).join("");
+    grid.insertAdjacentHTML("beforeend", `
+      <div class="risk-card theme-${card.theme}" id="${card.id}" data-cat="${card.theme}">
+        <div class="card-header" onclick="toggleCard('${card.id}')">
+          <div class="card-icon">${card.icon}</div>
+          <div class="card-title-block">
+            <div class="card-category">${card.category}</div>
+            <div class="card-title">${card.title}</div>
+          </div>
+          <div class="card-badge">${card.badge}</div>
+          <div class="toggle-arrow">▼</div>
+        </div>
+        <div class="card-body">
+          <ul class="bullet-list">${li}</ul>
+          <div class="source-tag">📂 ${card.source}</div>
+        </div>
+      </div>
+    `);
+  });
+}
+
+function buildSummary() {
+  const counts = {};
+  RISK_DATA.forEach(c => { counts[c.theme] = (counts[c.theme] || 0) + 1; });
+  const row = document.getElementById("summaryRow");
+  row.innerHTML = "";
+  Object.entries(counts).forEach(([theme, n]) => {
+    const m = CAT_META[theme];
+    row.insertAdjacentHTML("beforeend", `
+      <div class="summary-pill">
+        <span class="dot" style="background:${m.dot}"></span>
+        <span style="color:${m.color};font-weight:600">${n}</span>
+        <span>${theme.charAt(0).toUpperCase()+theme.slice(1)}</span>
+      </div>
+    `);
+  });
+  row.insertAdjacentHTML("beforeend", `
+    <div class="summary-pill" style="margin-left:auto">
+      <span style="font-family:var(--mono);font-size:11px;color:var(--text3)">${RISK_DATA.length} total risk cards</span>
+    </div>
+  `);
+}
+
+function toggleCard(id) {
+  const el = document.getElementById(id);
+  el.classList.toggle("expanded");
+}
+
+let activeFilter = "all";
+let searchTerm = "";
+
+function filterCards(cat, btn) {
+  activeFilter = cat;
+  document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+  applyFilters();
+}
+
+function searchCards(val) {
+  searchTerm = val.toLowerCase();
+  applyFilters();
+}
+
+function applyFilters() {
+  document.querySelectorAll(".risk-card").forEach(card => {
+    const catMatch = activeFilter === "all" || card.dataset.cat === activeFilter;
+    const text = card.textContent.toLowerCase();
+    const searchMatch = !searchTerm || text.includes(searchTerm);
+    card.classList.toggle("hidden", !(catMatch && searchMatch));
+  });
+  // show empty state if all hidden
+  const grid = document.getElementById("riskGrid");
+  const visible = [...grid.querySelectorAll(".risk-card:not(.hidden)")];
+  let empty = grid.querySelector(".empty-state");
+  if (!visible.length) {
+    if (!empty) grid.insertAdjacentHTML("beforeend", '<div class="empty-state">No risks match this filter.</div>');
+  } else {
+    if (empty) empty.remove();
+  }
+}
+
+// ─── CLOCK ────────────────────────────────────────────────────────────────
 function updateClock() {
   const now = new Date();
-  document.getElementById('clock').textContent =
-    now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  document.getElementById("clock").textContent =
+    now.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
 }
 setInterval(updateClock, 1000);
 updateClock();
+
+// ─── INIT ─────────────────────────────────────────────────────────────────
+renderCards(RISK_DATA);
+buildSummary();
 </script>
 </body>
 </html>
