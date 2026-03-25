@@ -231,107 +231,33 @@ mark{background:rgba(139,92,246,0.3);color:#fff;border-radius:2px;padding:0 2px;
 <script>
 // ── STAGE DEFINITIONS ──────────────────────────────────────────────────────
 // Mapped from SP1 Chapter 0 Product Cycle diagram + Topic_Frameworks.json
-const PC_STAGES = [
-  {
-    key: 'sp1',
-    num: 'S1',
-    name: 'Product Design',
-    ref: 'SP1 Chs 1–5',
-    desc: 'Define the product: contract type, benefits, target market, options & guarantees',
-    topics: [
-      'Product Design',
-      'Product Design (Protection)',
-      'Private Medical Insurance (PMI)',
-      'Critical Illness',
-      'Income Protection',
-      'Long-Term Care (LTC)',
-      'Group Products',
-      'State Healthcare & Demographics'
-    ]
-  },
-  {
-    key: 'sp2',
-    num: 'S2',
-    name: 'Pricing',
-    ref: 'SP1 Chs 17–20',
-    desc: 'Set premiums: assumptions, methodology, profitability, rating factors',
-    topics: [
-      'Pricing',
-      'Pricing & Rating',
-      'Legislation & Taxation'
-    ]
-  },
-  {
-    key: 'sp3',
-    num: 'S3',
-    name: 'Marketing',
-    ref: 'SP1 Ch 6–8',
-    desc: 'Bring the product to market: positioning, channels, customer needs',
-    topics: [
-      'Administration'
-    ]
-  },
-  {
-    key: 'sp4',
-    num: 'S4',
-    name: 'Sales',
-    ref: 'SP1 Ch 6–8',
-    desc: 'Distribute and sell: intermediaries, direct, group schemes, commission',
-    topics: [
-      'Administration'   // overlapping — Administration covers distribution & customer journey
-    ]
-  },
-  {
-    key: 'sp5',
-    num: 'S5',
-    name: 'Underwriting',
-    ref: 'SP1 Ch 26',
-    desc: 'Assess individual risk at point of sale: methods, outcomes, anti-selection',
-    topics: [
-      'Underwriting'
-    ]
-  },
-  {
-    key: 'sp6',
-    num: 'S6',
-    name: 'Claims Management',
-    ref: 'SP1 Ch 25',
-    desc: 'Assess and settle claims: triage, fraud control, cost containment',
-    topics: [
-      'Claims Management'
-    ]
-  },
-  {
-    key: 'sp7',
-    num: 'S7',
-    name: 'Experience Monitoring',
-    ref: 'SP1 Ch 29',
-    desc: 'Compare actual vs expected: A/E analysis, surplus, assumption updates',
-    topics: [
-      'Monitoring',
-      'Data',
-      'Models'
-    ]
-  },
-  {
-    key: 'sp8',
-    num: 'S8',
-    name: 'Valuation',
-    ref: 'SP1 Chs 21–22, 28',
-    desc: 'Reserve, report and protect capital: BEL, SCR, EV, reinsurance, ALM',
-    topics: [
-      'Reserving & Valuation',
-      'Reporting',
-      'Capital & Solvency',
-      'Risk Management & Capital',
-      'Risks',
-      'Reinsurance',
-      'Investments'
-    ]
-  }
+// PC stage shells — topics populated dynamically from _meta.pc_stage
+const PC_STAGE_DEFS = [
+  { key: 'sp1', num: 'S1', name: 'Product Design',         ref: 'SP1 Chs 1–5',      desc: 'Define the product: contract type, benefits, target market, options & guarantees' },
+  { key: 'sp2', num: 'S2', name: 'Pricing',                ref: 'SP1 Chs 17–20',    desc: 'Set premiums: assumptions, methodology, profitability, rating factors' },
+  { key: 'sp3', num: 'S3', name: 'Marketing',              ref: 'SP1 Ch 6–8',       desc: 'Bring the product to market: positioning, channels, customer needs' },
+  { key: 'sp4', num: 'S4', name: 'Sales',                  ref: 'SP1 Ch 6–8',       desc: 'Distribute and sell: intermediaries, direct, group schemes, commission' },
+  { key: 'sp5', num: 'S5', name: 'Underwriting',           ref: 'SP1 Ch 26',        desc: 'Assess individual risk at point of sale: methods, outcomes, anti-selection' },
+  { key: 'sp6', num: 'S6', name: 'Claims Management',      ref: 'SP1 Ch 25',        desc: 'Assess and settle claims: triage, fraud control, cost containment' },
+  { key: 'sp7', num: 'S7', name: 'Experience Monitoring',  ref: 'SP1 Ch 29',        desc: 'Compare actual vs expected: A/E analysis, surplus, assumption updates' },
+  { key: 'sp8', num: 'S8', name: 'Valuation',              ref: 'SP1 Chs 21–22, 28',desc: 'Reserve, report and protect capital: BEL, SCR, EV, reinsurance, ALM' }
 ];
 
+function buildPCStages() {
+  const stageMap = { S1:0, S2:1, S3:2, S4:3, S5:4, S6:5, S7:6, S8:7 };
+  const PC_STAGES = PC_STAGE_DEFS.map(s => ({ ...s, topics: [] }));
+  Object.keys(TOPIC_FRAMEWORKS).forEach(key => {
+    const entry = TOPIC_FRAMEWORKS[key];
+    const pcStage = entry && entry._meta ? entry._meta.pc_stage : null;
+    if (pcStage && stageMap[pcStage] !== undefined) {
+      PC_STAGES[stageMap[pcStage]].topics.push(key);
+    }
+  });
+  return PC_STAGES;
+}
+
 let TOPIC_FRAMEWORKS = {};
+let PC_STAGES = [];
 let recallMode = false;
 
 // ── LOAD DATA ──────────────────────────────────────────────────────────────
@@ -351,6 +277,7 @@ async function loadData() {
       return;
     }
   }
+  PC_STAGES = buildPCStages();
   renderAll();
 }
 
@@ -397,12 +324,12 @@ function buildStageBlock(stage, si, query, renderedTopics) {
   } else {
     const uniqueTopics = [...new Set(stage.topics)];
     uniqueTopics.forEach(topicKey => {
-      const data = TOPIC_FRAMEWORKS[topicKey];
-      if (!data) return;
+      const entry = TOPIC_FRAMEWORKS[topicKey];
+      if (!entry) return;
       // For Marketing, mark Admin as rendered; skip in later stages
       if (renderedTopics.has(topicKey)) return;
       renderedTopics.add(topicKey);
-      const el = buildTopicItem(topicKey, data, stage.key, query);
+      const el = buildTopicItem(topicKey, entry, stage.key, query);
       if (el) topicEls.push(el);
     });
   }
@@ -433,10 +360,11 @@ function buildStageBlock(stage, si, query, renderedTopics) {
 }
 
 function buildTopicItem(topicKey, data, stageKey, query) {
+  const lines = (data && data.bullets) ? data.bullets : (Array.isArray(data) ? data : []);
   let heading = '';
   let bullets = [];
 
-  data.forEach(line => {
+  lines.forEach(line => {
     if (line.startsWith('###')) {
       heading = line.replace(/^###\s*/, '').trim();
     } else if (line.startsWith('- **')) {

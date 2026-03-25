@@ -217,352 +217,89 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:1
 </div>
 
 <script>
-// ─── DATA ─────────────────────────────────────────────────────────────────
-// Risk cards built from Topic_Frameworks.json, categorised by risk taxonomy.
-// Each card: { id, category, theme, icon, title, badge, bullets, source }
+// ─── DYNAMIC DATA LOADER ─────────────────────────────────────────────────
+// Risk cards are now driven by Topic_Frameworks.json.
+// 1. The "Risks" topic entry provides the master SA1 risk taxonomy bullets.
+// 2. Every topic's _meta.risk_categories determines which risk themes it touches.
+// A curated RISK_CATALOG maps theme → { label, icon, color } for display.
 
-const RISK_DATA = [
+const RISK_CATALOG = {
+  insurance:    { label: 'Insurance Risk',          icon: '🏥', color: 'insurance' },
+  market:       { label: 'Market / Investment Risk', icon: '📈', color: 'market' },
+  credit:       { label: 'Credit / Default Risk',   icon: '🏦', color: 'credit' },
+  operational:  { label: 'Operational Risk',         icon: '⚙️', color: 'operational' },
+  liquidity:    { label: 'Liquidity Risk',           icon: '💧', color: 'liquidity' },
+  regulatory:   { label: 'Regulatory Risk',          icon: '⚖️', color: 'regulatory' },
+  reputational: { label: 'Reputational Risk',        icon: '📣', color: 'reputational' },
+  catastrophe:  { label: 'Catastrophe Risk',         icon: '🌪️', color: 'catastrophe' },
+  model:        { label: 'Model Risk',               icon: '🧮', color: 'model' },
+  persistency:  { label: 'Persistency Risk',         icon: '📉', color: 'persistency' },
+};
 
-  // ══════════════════════════ INSURANCE RISK ══════════════════════════
-  {
-    id: "ins-01",
-    category: "Insurance Risk",
-    theme: "insurance",
-    icon: "🏥",
-    title: "Morbidity & Mortality — Claim Rate Risk",
-    badge: "Insurance Risk",
-    source: "Risks · Pricing",
-    bullets: [
-      "<strong>Expanding Funnel of Doubt:</strong> Future claim rate parameters uncertain due to new diseases, emerging trends, and medical advances — uncertainty grows the further projections extend.",
-      "<strong>Demographic Assumptions:</strong> Morbidity/mortality trends; initial vs selective selection effects; anti-selection risk on underwriting.",
-      "<strong>Earlier Screening & Diagnosis (CI):</strong> Earlier diagnosis triggers earlier lump-sum payment; screening prompts claims that might otherwise have lapsed.",
-      "<strong>IP Sickness Transitions:</strong> Inception and termination probabilities uncertain; moral hazard around return-to-work disincentive; leniency of disability definition creates parameter risk.",
-      "<strong>CI Diagnosis Rates:</strong> Limited historical data in new markets; rider vs standalone capital requirements differ significantly.",
-    ]
-  },
-  {
-    id: "ins-02",
-    category: "Insurance Risk",
-    theme: "insurance",
-    icon: "💊",
-    title: "Claim Amount Risk — Medical Inflation",
-    badge: "Insurance Risk",
-    source: "Risks · PMI · Pricing",
-    bullets: [
-      "<strong>PMI Medical Inflation:</strong> Typically super-inflation (~12–15% p.a. in India); failure to trend forward in pricing leads to rapid portfolio deterioration.",
-      "<strong>Short-term Variability:</strong> Procedure costs fluctuate; medical advances shift treatment protocols (e.g., hip replacement rehab time changes claim duration).",
-      "<strong>Burning Cost Components:</strong> Frequency × severity; must be split by IP vs OP, age, gender, duration, UW method, and channel.",
-      "<strong>Third-party Control (PMI):</strong> Consultants/doctors drive treatment choices; insurer bears utilisation risk under fee-for-service but not capitation.",
-      "<strong>Single Large Claims vs Accumulation:</strong> PMI individual claims can reach hundreds of thousands — XL reinsurance specifically relevant.",
-    ]
-  },
-  {
-    id: "ins-03",
-    category: "Insurance Risk",
-    theme: "insurance",
-    icon: "🚫",
-    title: "Anti-selection & Non-disclosure",
-    badge: "Insurance Risk",
-    source: "Risks · Underwriting · PMI",
-    bullets: [
-      "<strong>Asymmetric Information:</strong> Proposer knows more about their health than the insurer; non-disclosure may be deliberate (fraud) or inadvertent.",
-      "<strong>Moratorium Complications:</strong> Moratorium UW defers the anti-selection problem rather than eliminating it — claim disputes arise when conditions are later flagged as PED.",
-      "<strong>Genetic Testing Debate:</strong> Prohibition on using genetic test results limits insurer's ability to price accurately; creates adverse selection potential.",
-      "<strong>Adverse Selection Spiral (PMI):</strong> Community rating without risk equalisation allows healthier lives to leave, leaving a progressively worse risk pool and ever-rising premiums.",
-      "<strong>FCL Risk (Group):</strong> Free Cover Limits avoid individual UW but introduce anti-selection if voluntary take-up is low or concentrated in higher-risk lives.",
-    ]
-  },
-  {
-    id: "ins-04",
-    category: "Insurance Risk",
-    theme: "insurance",
-    icon: "🧾",
-    title: "Underwriting Risk — Adverse Mix & Volume",
-    badge: "Insurance Risk",
-    source: "Risks · Underwriting · Group Products",
-    bullets: [
-      "<strong>Mix Risk:</strong> Smaller policies contribute less to fixed cost recovery; adverse mix by nature or size erodes profitability.",
-      "<strong>Volume Risk:</strong> High volume strains capital (new business strain); low volume causes overhead mismatch — fixed expenses per policy balloon.",
-      "<strong>New Business Strain:</strong> At outset, reserves exceed first premium received; requires capital funding.",
-      "<strong>Concentration Risk (Group):</strong> Single employer group — one catastrophic event (building explosion) hits the whole portfolio simultaneously.",
-      "<strong>Changing Workforce Demographics:</strong> Aging workforce in a group scheme increases expected claim rates without premium adjustment.",
-    ]
-  },
-  {
-    id: "ins-05",
-    category: "Insurance Risk",
-    theme: "insurance",
-    icon: "🔁",
-    title: "Guarantees, Options & Moral Hazard",
-    badge: "Insurance Risk",
-    source: "Risks · Product Design",
-    bullets: [
-      "<strong>Health Guarantees:</strong> Health events harder to predict than life events; guaranteed renewability without repricing locks in a deteriorating risk pool.",
-      "<strong>Stochastic Modelling Required:</strong> Complexity in terms offered in advance; stochastic models needed to price options and guarantees correctly.",
-      "<strong>Moral Hazard (PMI):</strong> Over-insurance creates incentive for excessive utilisation; pre-authorisation and co-payments mitigate.",
-      "<strong>GIOs / Conversion Options:</strong> Guaranteed Insurability Options allow cover increases without medicals — potential for adverse selection at option exercise.",
-      "<strong>Option Take-up Uncertainty:</strong> Renewal guarantees and reviewable premiums create option risk; sensitivity testing across lapse/renewal scenarios required.",
-    ]
-  },
-  {
-    id: "ins-06",
-    category: "Insurance Risk",
-    theme: "insurance",
-    icon: "🧓",
-    title: "LTC & IP Product-Specific Insurance Risks",
-    badge: "Insurance Risk",
-    source: "Risks · LTC · Income Protection",
-    bullets: [
-      "<strong>LTC Claim Inception:</strong> High claim inception rates; transfers between dependency levels hard to model; investment and reserve significance is high.",
-      "<strong>LTC Marketing Risk:</strong> Policyholder expectation of 100% cover vs actual policy terms; claims disputes and reputational damage if expectations unmet.",
-      "<strong>LTC Longevity:</strong> Extreme longevity risk combined with massive care-cost inflation creates compounding liability.",
-      "<strong>IP Moral Hazard:</strong> Return-to-work disincentive; replacement ratio capped at 50–75% specifically to maintain work incentive.",
-      "<strong>IP Economic Sensitivity:</strong> Economic downturns significantly increase claim inception rates as IP becomes 'unemployment disguise'.",
-    ]
-  },
+let RISK_DATA = []; // populated from JSON
 
-  // ══════════════════════════ MARKET / INVESTMENT RISK ══════════════════════════
-  {
-    id: "mkt-01",
-    category: "Market / Investment Risk",
-    theme: "market",
-    icon: "📈",
-    title: "Investment Performance & Asset Risk",
-    badge: "Market Risk",
-    source: "Risks · Investments · Capital & Solvency",
-    bullets: [
-      "<strong>Capital Values Risk:</strong> Snapshot solvency affected by market movements; equities and property subject to mark-to-market volatility.",
-      "<strong>ALM Mismatch:</strong> Failure to match liability duration with asset duration creates interest rate exposure; yield curve shifts cause solvency ratio fluctuations.",
-      "<strong>Low Reserve Impact (CI/PMI):</strong> Short-term products have low reserves so investment risk is less significant than for long-term savings products — but still material for solvency.",
-      "<strong>LTC Investment Significance:</strong> Long-duration LTC liabilities make investment returns highly material; reserve discount rate sensitivity is substantial.",
-      "<strong>Solvency II Capital Charges:</strong> Risky assets attract higher SCR capital charges; impacts optimal asset allocation under RBC frameworks.",
-    ]
-  },
-  {
-    id: "mkt-02",
-    category: "Market / Investment Risk",
-    theme: "market",
-    icon: "💹",
-    title: "Medical & Expense Inflation Risk",
-    badge: "Market Risk",
-    source: "Risks · Pricing",
-    bullets: [
-      "<strong>Medical Inflation Super-cycle:</strong> Medical cost inflation structurally exceeds general CPI — ~12–15% p.a. in India; pure premium inadequacy risk if not modelled forward.",
-      "<strong>Expense Inflation Mismatch:</strong> Mismatch between actual expense inflation and the inflation loadings assumed at pricing; volume impact means fixed costs per policy rise if growth slows.",
-      "<strong>TPA Fee Risk:</strong> Third-party administrator fees are a variable cost that can escalate independently of claims experience.",
-      "<strong>Climate/Inflation Repricing Risk:</strong> Repricing to recover rising costs may trigger selective lapsing — healthiest lives leave, adverse risk pool remains.",
-    ]
-  },
+function loadRiskData(frameworks) {
+  RISK_DATA = [];
+  // Group topics by their risk_categories
+  const categoryTopics = {}; // theme -> [{topicKey, entry}]
+  Object.keys(frameworks).forEach(topicKey => {
+    const entry = frameworks[topicKey];
+    const cats = (entry && entry._meta && entry._meta.risk_categories) ? entry._meta.risk_categories : [];
+    cats.forEach(cat => {
+      if (!categoryTopics[cat]) categoryTopics[cat] = [];
+      categoryTopics[cat].push({ topicKey, entry });
+    });
+  });
 
-  // ══════════════════════════ CREDIT / DEFAULT RISK ══════════════════════════
-  {
-    id: "crd-01",
-    category: "Credit / Default Risk",
-    theme: "credit",
-    icon: "🏦",
-    title: "Reinsurer & Counterparty Default",
-    badge: "Credit Risk",
-    source: "Risks · Reinsurance",
-    bullets: [
-      "<strong>Reinsurer Default:</strong> Even if fully reinsured, cedant remains liable to policyholders; minimum capital must always be held regardless of reinsurance cover.",
-      "<strong>Deposit Back Mitigation:</strong> Reinsurer deposits its reserve share with cedant — eliminates investment risk transfer and significantly mitigates default exposure.",
-      "<strong>Distributor Premium Holding:</strong> Distributor holding collected premiums before remittance creates credit risk on the insurer's cash flow.",
-      "<strong>TPA Expenditure Commitment:</strong> TPA can commit expenditure on behalf of the insurer (authorising claims); insurer retains liability if TPA acts beyond authority or fails.",
-      "<strong>Reinsurance Credit in Solvency:</strong> Reinsurance reduces SCR/solvency capital in proportion to cession — but subject to upper limit precisely because of reinsurer default risk.",
-    ]
-  },
+  // One card per topic per risk category it belongs to
+  // But to avoid explosion, create one card per topic showing ALL its risk categories
+  const seen = new Set();
+  Object.keys(frameworks).forEach(topicKey => {
+    const entry = frameworks[topicKey];
+    const cats = (entry && entry._meta && entry._meta.risk_categories) ? entry._meta.risk_categories : [];
+    if (!cats.length) return;
+    if (seen.has(topicKey)) return;
+    seen.add(topicKey);
 
-  // ══════════════════════════ OPERATIONAL RISK ══════════════════════════
-  {
-    id: "ops-01",
-    category: "Operational Risk",
-    theme: "operational",
-    icon: "⚙️",
-    title: "Data Quality & Policy Record Risk",
-    badge: "Operational Risk",
-    source: "Risks · Data",
-    bullets: [
-      "<strong>Inaccurate/Incomplete Records:</strong> Incorrect policy data leads to mispricing, reserve errors, and claim disputes.",
-      "<strong>Model Point Risk:</strong> Model points not representative of the actual portfolio produce systematic valuation errors.",
-      "<strong>External Data Mismatch:</strong> Using overseas data (e.g., US morbidity tables) as a proxy for Indian policyholders without appropriate adjustment introduces parameter bias.",
-      "<strong>Data Quality Dimensions:</strong> Accuracy, completeness, consistency, and timeliness all required — referenced in TAS 100 / AS 34.",
-      "<strong>Reporting Lags:</strong> Delays in claims reporting inflate IBNR uncertainty; changes in internal processes create structural breaks in data series.",
-    ]
-  },
-  {
-    id: "ops-02",
-    category: "Operational Risk",
-    theme: "operational",
-    icon: "🕵️",
-    title: "Fraud — Internal & Claims",
-    badge: "Operational Risk",
-    source: "Risks · Claims Management · PMI",
-    bullets: [
-      "<strong>Internal Fraud / Embezzlement:</strong> Audit failures expose the insurer to losses from employee misconduct; governance controls and separation of duties are the primary mitigant.",
-      "<strong>Policyholder Claims Fraud (PMI):</strong> Inflated claims, fictitious procedures, collusion with providers — particularly material given high-volume OP claims.",
-      "<strong>Mental Illness Fraud Risk:</strong> Mental illness parity mandated by IRDAI — difficult to diagnose and control; higher frequency and fraud risk than physical conditions.",
-      "<strong>Non-disclosure as Fraud:</strong> Deliberate concealment of PEDs at proposal; post-claim UW and moratorium rules are the primary defence.",
-      "<strong>AI UW Fraud Detection:</strong> ABHA/electronic patient records enable better fraud detection but introduce data privacy risk and require high uptake to be effective.",
-    ]
-  },
-  {
-    id: "ops-03",
-    category: "Operational Risk",
-    theme: "operational",
-    icon: "🖥️",
-    title: "IT, Admin & Third-Party Operational Risk",
-    badge: "Operational Risk",
-    source: "Administration · Claims Management",
-    bullets: [
-      "<strong>Legacy IT Constraints:</strong> Inability of legacy platforms to handle complex tiered benefits, unit deductions, or high-volume OP claims processing.",
-      "<strong>TPA Oversight Risk:</strong> Outsourcing claims and call centre functions to TPAs introduces principal-agent risk; the insurer retains full policyholder liability.",
-      "<strong>Straight-Through Processing:</strong> Speed of onboarding vs cost of underwriting information — operational trade-off with direct risk implications.",
-      "<strong>Cashless TAT Risk:</strong> IRDAI 2024 mandates 1-hour cashless authorisation and 3-hour final discharge; delay risk borne by insurer from shareholders' funds.",
-      "<strong>Competition & Management Override:</strong> Management may override actuarial prudence for market share — a process risk that translates into underwriting and pricing risk.",
-    ]
-  },
+    const primaryCat = cats[0];
+    const catalog = RISK_CATALOG[primaryCat] || { label: primaryCat, icon: '⚠️', color: 'insurance' };
+    const icon = (entry._meta && entry._meta.icon) ? entry._meta.icon : catalog.icon;
+    const lines = entry.bullets || [];
+    
+    // Extract bullet points
+    const bullets = [];
+    lines.forEach(line => {
+      if (line.startsWith('- **')) {
+        const m = line.match(/^- \*\*(.*?)\*\*\s*(?::\s*)?(.*)$/);
+        if (m) {
+          const title = m[1].trim();
+          const detail = m[2].trim();
+          bullets.push(`<strong>${title}:</strong> ${detail}`);
+        }
+      }
+    });
 
-  // ══════════════════════════ LIQUIDITY RISK ══════════════════════════
-  {
-    id: "liq-01",
-    category: "Liquidity Risk",
-    theme: "liquidity",
-    icon: "💧",
-    title: "Claims Settlement & Liquidity Mismatch",
-    badge: "Liquidity Risk",
-    source: "Investments · Risks",
-    bullets: [
-      "<strong>PMI Sudden Claims:</strong> PMI claims are unexpected and short-notice — asset portfolio must maintain sufficient liquid assets to settle promptly.",
-      "<strong>Cashless Settlement Pressure:</strong> 100% cashless target means provider networks must be funded in near-real-time; liquidity buffer essential.",
-      "<strong>Asset Regulatory Constraints:</strong> IRDAI regulations limit the asset classes available; constraints may prevent full ALM optimisation and force holding of liquid low-yield assets.",
-      "<strong>New Business Strain Liquidity:</strong> Capital outflow at new business strain point requires available liquidity before future premiums start flowing back in.",
-      "<strong>Stop Loss / XL Recoveries:</strong> Reinsurance recoveries under XL/stop loss may be delayed — insurer must fund claims upfront even when reinsurance applies.",
-    ]
-  },
+    // Category display: show all risk categories for this topic
+    const catLabels = cats.map(c => (RISK_CATALOG[c] || { label: c }).label).join(' · ');
 
-  // ══════════════════════════ REGULATORY RISK ══════════════════════════
-  {
-    id: "reg-01",
-    category: "Regulatory Risk",
-    theme: "regulatory",
-    icon: "⚖️",
-    title: "Legal, Regulatory & Tax Change Risk",
-    badge: "Regulatory Risk",
-    source: "Risks · Regulation · IRDA Regulations",
-    bullets: [
-      "<strong>Retrospective Regulatory Changes:</strong> Changes overriding existing policy terms (e.g., IRDAI 2024 moratorium change from 48 to 60 months) affect in-force liabilities.",
-      "<strong>Rating Factor Prohibition:</strong> Prohibition on using race, genetics, or disability data removes pricing levers; creates cross-subsidy and adverse selection.",
-      "<strong>IRDAI 2024 Key Changes:</strong> 60-month moratorium; max 36-month PED waiting period; 1-hr/3-hr cashless TATs; 30-day Free Look; no entry age limits — all create operational and pricing obligations.",
-      "<strong>EOM Constraints:</strong> Expenses of Management limits (35% standalone / 30% general insurers); Board-governed commission structures — restrict commercial flexibility.",
-      "<strong>RBC / IFRS 17 Transition:</strong> Move to Risk-Based Capital and Ind AS 117 requires significant model, system, and reporting investment; transition risk material.",
-    ]
-  },
-  {
-    id: "reg-02",
-    category: "Regulatory Risk",
-    theme: "regulatory",
-    icon: "🏛️",
-    title: "Solvency & Capital Adequacy Risk",
-    badge: "Regulatory Risk",
-    source: "Capital & Solvency · Reporting",
-    bullets: [
-      "<strong>Current ASM Requirement:</strong> ASM ≥ 150% RSM at all times; RSM uses fixed percentages regardless of actual risk profile — blunt instrument.",
-      "<strong>SCR Breach Consequence:</strong> SCR breach expected once in 200 years; MCR breach every 6–7 years — breach triggers regulator-forced action including new business cessation.",
-      "<strong>Solvency II Pillar Structure:</strong> Pillar 1 (quantitative BEL/Risk Margin/SCR); Pillar 2 (ORSA, governance); Pillar 3 (SFCR/RSR disclosure) — each creates compliance obligation.",
-      "<strong>Capital Add-on Risk:</strong> Supervisory Pillar 2 review can require additional capital if risks are inadequately modelled in the standard formula.",
-      "<strong>Group Supervision Double Leverage:</strong> Group solvency framework addresses double use of capital and double leverage; third-country equivalence rules add complexity.",
-    ]
-  },
+    RISK_DATA.push({
+      id: `risk-${topicKey.replace(/[^a-zA-Z0-9]/g, '_')}`,
+      category: catLabels,
+      theme: primaryCat,
+      icon: icon,
+      title: topicKey,
+      badge: catalog.label,
+      source: topicKey,
+      bullets: bullets.length ? bullets : ['No bullet data available — check Topic_Frameworks.json']
+    });
+  });
 
-  // ══════════════════════════ REPUTATIONAL RISK ══════════════════════════
-  {
-    id: "rep-01",
-    category: "Reputational Risk",
-    theme: "reputational",
-    icon: "📣",
-    title: "Media, Social Media & Conduct Risk",
-    badge: "Reputational Risk",
-    source: "Risks · Regulation",
-    bullets: [
-      "<strong>Social Media Amplification:</strong> Disrepute spreads rapidly via media and social media — particularly damaging when claims involve sick or elderly policyholders.",
-      "<strong>Mis-selling Risk:</strong> Product complexity leads to customer misunderstanding; high complaint volumes are characteristic of PMI — regulatory and reputational consequences.",
-      "<strong>Treating Customers Fairly (TCF):</strong> Regulatory mandate requires fair conduct; failure triggers Ombudsman escalation, Consumer Forum, and civil court proceedings.",
-      "<strong>Claim Repudiation Risk:</strong> No claim may be repudiated without PMC or 3-member Claims Review Committee approval; failure attracts Rs 5,000/day penalty to complainant.",
-      "<strong>LTC Expectation Risk:</strong> Policyholders expect 100% cover; partial cover or exclusions generate disproportionate reputational damage when claims arise in old age.",
-    ]
-  },
-
-  // ══════════════════════════ CATASTROPHE RISK ══════════════════════════
-  {
-    id: "cat-01",
-    category: "Catastrophe Risk",
-    theme: "catastrophe",
-    icon: "🌪️",
-    title: "Pandemic, Aggregation & Concentration Risk",
-    badge: "Catastrophe Risk",
-    source: "Risks · Reinsurance",
-    bullets: [
-      "<strong>Pandemic / War / Terrorism:</strong> Single event triggering mass simultaneous claims across the portfolio; individual claims may be small but aggregate is severe.",
-      "<strong>Localized Outbreak Aggregation:</strong> Epidemic confined to a geographic area or industrial cluster (e.g., mining industrial disease) creates correlated claims.",
-      "<strong>Cat XL Unavailability:</strong> Pandemic-specific reinsurance cover is rarely available at affordable price; government intervention may be the ultimate backstop.",
-      "<strong>Aggregate XL / Stop Loss:</strong> Covers accumulation of multiple claims over 12 months expressed as % of earned premium; reinsurers reluctant to provide due to limited UW control.",
-      "<strong>Group Concentration:</strong> Single-employer group PMI — one building explosion wipes out the entire insured group; concentration risk must be managed via treaty limits.",
-    ]
-  },
-
-  // ══════════════════════════ MODEL RISK ══════════════════════════
-  {
-    id: "mdl-01",
-    category: "Model Risk",
-    theme: "model",
-    icon: "🧮",
-    title: "Model Structure, Parameter & Process Risk",
-    badge: "Model Risk",
-    source: "Risks · Models · Reserving & Valuation",
-    bullets: [
-      "<strong>Model Risk Components:</strong> Model risk (inappropriate structure selected); Parameter risk (wrong variables used); Random fluctuations (sample error / heterogeneity within groups).",
-      "<strong>Stochastic vs Deterministic:</strong> Guarantees and options in health products require stochastic models; deterministic models underestimate tail risk.",
-      "<strong>Multi-state Markov Appropriateness:</strong> Assumes transitions depend only on current state (memoryless) — may be inappropriate where prior claim duration affects future recovery.",
-      "<strong>Reserving Method Risk:</strong> Chain Ladder / BF / cashflow projection each have limitations; choice of method and tail factor affects IBNR and PDR materially.",
-      "<strong>Model Governance:</strong> Peer review, backtesting against actual experience, and sensitivity testing are required governance controls — inadequate governance is itself a model risk.",
-    ]
-  },
-  {
-    id: "mdl-02",
-    category: "Model Risk",
-    theme: "model",
-    icon: "📐",
-    title: "Assumption & Parameter Uncertainty",
-    badge: "Model Risk",
-    source: "Risks · Pricing · Monitoring",
-    bullets: [
-      "<strong>Best Estimate vs Prudent:</strong> Pricing uses realistic best-estimate; supervisory reserving requires prudent margins — gap between the two represents the 'buffer' against adverse deviation.",
-      "<strong>Medical Inflation Assumption:</strong> Embedding the wrong forward inflation rate has a compounding effect on projected claims costs.",
-      "<strong>Longevity Uncertainty:</strong> LTC liabilities are particularly sensitive to longevity improvements; allowance for future improvements must be explicit.",
-      "<strong>Experience Monitoring:</strong> A/E (actual vs expected) ratios by assumption type; identification of systematic bias vs random fluctuation triggers assumption updates.",
-      "<strong>EV Sensitivity Disclosures:</strong> ±1% risk discount rate, ±10% mortality, ±10% lapses — mandatory sensitivities quantify parameter risk for stakeholders.",
-    ]
-  },
-
-  // ══════════════════════════ PERSISTENCY RISK ══════════════════════════
-  {
-    id: "per-01",
-    category: "Persistency Risk",
-    theme: "persistency",
-    icon: "📉",
-    title: "Lapse, Withdrawal & Selective Persistency",
-    badge: "Persistency Risk",
-    source: "Risks · Pricing · Monitoring",
-    bullets: [
-      "<strong>Selective Withdrawal Effect:</strong> Healthier lives lapse preferentially; remaining policyholders have worse-than-average experience — deteriorates the risk pool progressively.",
-      "<strong>Amortisation Risk:</strong> Initial acquisition costs are not recouped if policyholders lapse early; new business strain is lost without future premium recovery.",
-      "<strong>Adverse Selection Spiral:</strong> In community-rated PMI, price increases drive out healthy lives → remaining pool worsens → further price increase required → spiral continues.",
-      "<strong>Persistency Surplus Analysis:</strong> Actual vs expected lapses tracked separately in analysis of surplus; selective lapses identified as a distinct performance driver.",
-      "<strong>Repricing Lapse Risk:</strong> Medical inflation requires premium increases at renewal; price-sensitive healthy lives may lapse, worsening portfolio composition.",
-    ]
-  },
-
-];
+  // Also add a dedicated "Risks Master List" card from the Risks topic
+  const risksEntry = frameworks['Risks'];
+  if (risksEntry && risksEntry.bullets) {
+    // Already included above as a normal topic — remove the generic version and re-add enriched
+  }
+}
 
 // ─── CATEGORY METADATA ────────────────────────────────────────────────────
 const CAT_META = {
@@ -792,8 +529,25 @@ setInterval(updateClock, 1000);
 updateClock();
 
 // ─── INIT ─────────────────────────────────────────────────────────────────
-renderCards(RISK_DATA);
-buildSummary();
+async function init() {
+  try {
+    let fw = {};
+    try {
+      const res = await fetch('data/Topic_Frameworks.json?t=' + Date.now());
+      if (res.ok) fw = await res.json();
+    } catch {
+      const res2 = await fetch('Topic_Frameworks.json?t=' + Date.now());
+      if (res2.ok) fw = await res2.json();
+    }
+    loadRiskData(fw);
+  } catch(e) {
+    console.warn('Risks: could not load Topic_Frameworks.json, using built-in data', e);
+    // RISK_DATA stays empty — renderCards will show empty state
+  }
+  renderCards(RISK_DATA);
+  buildSummary();
+}
+init();
 </script>
 </body>
 </html>

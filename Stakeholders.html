@@ -19,33 +19,99 @@
   --text3: #565f80;
   --accent: #8b5cf6;
   --accentbg: #221a3a;
-  --amber: #f1c40f;
-  --amberbg: #2a240a;
   --radius: 6px;
   --radius2: 10px;
   --mono: 'IBM Plex Mono', monospace;
   --sans: 'IBM Plex Sans', sans-serif;
+
+  /* Stakeholder colours */
+  --sh1: #f87171; --sh1bg: #2a1a1a;
+  --sh2: #60a5fa; --sh2bg: #1a222a;
+  --sh3: #34d399; --sh3bg: #1a2a22;
+  --sh4: #fbbf24; --sh4bg: #2a241a;
+  --sh5: #a78bfa; --sh5bg: #221a2a;
+  --sh6: #f472b6; --sh6bg: #2a1a24;
+  --sh7: #38bdf8; --sh7bg: #1a242e;
+  --sh8: #fb923c; --sh8bg: #2a1e0a;
+  --sh9: #2ecc71; --sh9bg: #0d2a1a;
+  --sh10:#e67e22; --sh10bg:#2a1a00;
 }
 
 *{box-sizing:border-box;margin:0;padding:0;}
 html,body{height:100%;}
-body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;}
 
-.topbar{position:fixed;top:0;left:0;width:100%;background:var(--surface);border-bottom:1px solid var(--border);padding:10px 20px;display:flex;align-items:center;gap:16px;z-index:100;}
+.topbar{background:var(--surface);border-bottom:1px solid var(--border);padding:10px 20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;flex-shrink:0;}
 .logo{font-family:var(--mono);font-weight:600;font-size:15px;color:var(--accent);letter-spacing:.05em;}
 .logo span{color:var(--text3);}
 .tagline{font-size:12px;color:var(--text3);font-family:var(--mono);}
-.back-btn{margin-left:auto;font-family:var(--mono);font-size:11px;font-weight:600;padding:4px 12px;border-radius:4px;cursor:pointer;background:var(--surface2);border:1px solid var(--border);color:var(--text2);transition:all .2s;text-decoration:none;}
-.back-btn:hover{background:var(--surface3);color:var(--text);}
+.topbar-right{margin-left:auto;display:flex;align-items:center;gap:8px;}
+.top-btn{font-family:var(--mono);font-size:11px;font-weight:600;padding:4px 10px;border-radius:4px;cursor:pointer;background:var(--surface2);border:1px solid var(--border);color:var(--text2);transition:all .2s;text-decoration:none;display:inline-block;}
+.top-btn:hover{background:var(--surface3);color:var(--text);}
 #clock{font-family:var(--mono);font-size:11px;color:var(--text3);}
 
-.coming-soon{text-align:center;padding:40px;max-width:520px;}
-.cs-icon{font-size:56px;margin-bottom:24px;}
-.cs-title{font-family:var(--mono);font-size:22px;font-weight:700;color:var(--accent);margin-bottom:12px;letter-spacing:.04em;}
-.cs-sub{font-size:14px;color:var(--text2);line-height:1.7;margin-bottom:28px;}
-.cs-tags{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:32px;}
-.cs-tag{font-family:var(--mono);font-size:11px;font-weight:600;padding:4px 10px;border-radius:4px;background:var(--surface2);border:1px solid var(--border);color:var(--text2);}
-.cs-note{font-family:var(--mono);font-size:11px;color:var(--text3);background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px 16px;line-height:1.6;}
+.page{display:flex;flex:1;min-height:0;overflow:hidden;}
+.sidebar{width:240px;flex-shrink:0;border-right:1px solid var(--border);background:var(--surface);overflow-y:auto;}
+.sidebar-header{padding:14px 16px;border-bottom:1px solid var(--border);}
+.sidebar-title{font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px;}
+.sidebar-sub{font-size:12px;color:var(--text3);}
+.sh-list{padding:8px;}
+
+.sh-btn{padding:10px 12px;border-radius:var(--radius);cursor:pointer;border:1px solid var(--border);background:var(--surface2);transition:all .2s;display:flex;align-items:center;gap:8px;margin-bottom:4px;}
+.sh-btn:hover{border-color:var(--border2);background:var(--surface3);}
+.sh-btn.active{background:var(--accentbg);border-color:var(--accent);}
+.sh-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+.sh-name{font-size:12px;font-weight:600;color:var(--text);}
+.sh-count{font-family:var(--mono);font-size:10px;color:var(--text3);margin-left:auto;}
+
+.main-content{flex:1;overflow-y:auto;padding:28px 32px;}
+
+.welcome{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;text-align:center;gap:14px;color:var(--text3);}
+.welcome-icon{font-size:48px;opacity:.3;}
+.welcome-title{font-size:18px;font-weight:600;color:var(--text2);}
+.welcome-sub{font-size:13px;line-height:1.6;max-width:380px;}
+
+.sh-header{margin-bottom:24px;padding-bottom:18px;border-bottom:2px solid var(--border);}
+.sh-title-row{display:flex;align-items:center;gap:12px;margin-bottom:8px;}
+.sh-badge{font-family:var(--mono);font-size:11px;font-weight:700;padding:4px 10px;border-radius:4px;}
+.sh-emoji{font-size:22px;}
+.sh-title{font-size:22px;font-weight:600;color:var(--text);}
+.sh-desc{font-size:13px;color:var(--text2);line-height:1.6;}
+
+.stats-bar{display:flex;gap:12px;margin-bottom:22px;flex-wrap:wrap;}
+.stat-pill{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:8px 14px;display:flex;align-items:center;gap:8px;}
+.stat-num{font-family:var(--mono);font-size:18px;font-weight:700;}
+.stat-lbl{font-size:11px;color:var(--text3);line-height:1.3;}
+
+.topic-card{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius2);overflow:hidden;margin-bottom:10px;transition:border-color .2s;}
+.topic-card:hover{border-color:var(--border2);}
+.topic-card-header{padding:12px 16px;display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none;}
+.topic-icon{font-size:16px;flex-shrink:0;}
+.topic-name{font-size:13px;font-weight:600;color:var(--text);flex:1;}
+.topic-chevron{color:var(--text3);font-size:12px;transition:transform .2s;flex-shrink:0;}
+.topic-card.open .topic-chevron{transform:rotate(90deg);}
+.topic-body{display:none;padding:0 16px 14px;border-top:1px solid var(--border);}
+.topic-card.open .topic-body{display:block;}
+.topic-bullets{margin-top:10px;display:flex;flex-direction:column;gap:6px;}
+.topic-bullet{display:flex;align-items:flex-start;gap:8px;font-size:13px;color:var(--text);line-height:1.5;}
+.bullet-dot{width:5px;height:5px;border-radius:50%;margin-top:6px;flex-shrink:0;}
+.bullet-title{font-weight:600;}
+.bullet-detail{color:var(--text2);font-size:12px;}
+
+.pillar-tag{font-family:var(--mono);font-size:9px;font-weight:700;padding:1px 5px;border-radius:3px;border:1px solid;vertical-align:middle;}
+.pillar-tag.p1{color:#f87171;border-color:#f87171;background:#2a1a1a;}
+.pillar-tag.p2{color:#fbbf24;border-color:#fbbf24;background:#2a241a;}
+.pillar-tag.p3{color:#34d399;border-color:#34d399;background:#1a2a22;}
+.pillar-tag.p4{color:#60a5fa;border-color:#60a5fa;background:#1a222a;}
+.pillar-tag.p5{color:#a78bfa;border-color:#a78bfa;background:#221a2a;}
+.pillar-tag.p6{color:#f472b6;border-color:#f472b6;background:#2a1a24;}
+
+.loading{display:flex;align-items:center;justify-content:center;flex:1;gap:8px;color:var(--text3);font-size:14px;padding:60px;}
+.dots{display:flex;gap:5px;}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--accent);animation:pulse 1.2s ease-in-out infinite;}
+.dot:nth-child(2){animation-delay:.2s;}
+.dot:nth-child(3){animation-delay:.4s;}
+@keyframes pulse{0%,100%{opacity:.2}50%{opacity:1}}
 </style>
 </head>
 <body>
@@ -55,35 +121,252 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:1
     <div class="logo">Stakeholders <span>//</span> SA1ity Check</div>
     <div class="tagline">Stakeholder Mapping · Topic Frameworks</div>
   </div>
-  <span id="clock"></span>
-  <a class="back-btn" href="SA1ity_Check.html">← Back to Main</a>
+  <div class="topbar-right">
+    <span id="clock"></span>
+    <a class="top-btn" href="SA1ity_Check.html">← Back to Main</a>
+  </div>
 </div>
 
-<div class="coming-soon">
-  <div class="cs-icon">🏗️</div>
-  <div class="cs-title">Coming Soon</div>
-  <div class="cs-sub">
-    The <strong style="color:var(--accent)">Stakeholders</strong> view will map SA1 exam topics through the lens of key stakeholder groups — showing what each party cares about, their objectives, and how topics connect to their interests.
+<div class="page">
+  <div class="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-title">Stakeholder Groups</div>
+      <div class="sidebar-sub">Click to explore topics by stakeholder</div>
+    </div>
+    <div class="sh-list" id="sh-list">
+      <div class="loading"><div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div></div>
+    </div>
   </div>
-  <div class="cs-tags">
-    <span class="cs-tag">Policyholders</span>
-    <span class="cs-tag">Insurers</span>
-    <span class="cs-tag">Reinsurers</span>
-    <span class="cs-tag">Regulators (IRDAI)</span>
-    <span class="cs-tag">Distributors</span>
-    <span class="cs-tag">TPAs</span>
-    <span class="cs-tag">Government</span>
-    <span class="cs-tag">Appointed Actuary</span>
-    <span class="cs-tag">Shareholders</span>
-    <span class="cs-tag">Healthcare Providers</span>
-  </div>
-  <div class="cs-note">
-    📂 Data source: Topic_Frameworks.json · Reads the same file as the main Frameworks mode.<br>
-    🔧 Page structure: under development — confirm stakeholder groupings to build.
+
+  <div class="main-content" id="main-content">
+    <div class="welcome" id="welcome">
+      <div class="welcome-icon">🤝</div>
+      <div class="welcome-title">Stakeholder View</div>
+      <div class="welcome-sub">Select a stakeholder group from the left panel to see which SA1 topics are relevant to their interests and objectives.</div>
+    </div>
+    <div id="sh-content" style="display:none;"></div>
   </div>
 </div>
 
 <script>
+// ── STAKEHOLDER DEFINITIONS ──────────────────────────────────────────────
+const STAKEHOLDERS = [
+  {
+    id: 'Policyholders',
+    emoji: '👤',
+    color: 'var(--sh1)',
+    colorBg: 'var(--sh1bg)',
+    dot: '#f87171',
+    desc: 'Individuals or groups purchasing health and care insurance. Their primary interests are fair treatment, value for money, coverage certainty, and prompt claims settlement.'
+  },
+  {
+    id: 'Insurer',
+    emoji: '🏢',
+    color: 'var(--sh2)',
+    colorBg: 'var(--sh2bg)',
+    dot: '#60a5fa',
+    desc: 'The health and care insurer. Balances commercial viability, solvency, regulatory compliance, and policyholder obligations across all operational functions.'
+  },
+  {
+    id: 'Appointed Actuary',
+    emoji: '🧮',
+    color: 'var(--sh3)',
+    colorBg: 'var(--sh3bg)',
+    dot: '#34d399',
+    desc: 'The statutory actuary with responsibility for pricing, reserving, capital assessment, and professional sign-off. Operates under IRDAI Appointed Actuary Regulations 2022.'
+  },
+  {
+    id: 'Reinsurers',
+    emoji: '🔄',
+    color: 'var(--sh4)',
+    colorBg: 'var(--sh4bg)',
+    dot: '#fbbf24',
+    desc: 'Provide risk transfer, capital relief, and technical expertise. Interested in cedant's underwriting quality, exposure concentration, and claims experience.'
+  },
+  {
+    id: 'Regulators (IRDAI)',
+    emoji: '⚖️',
+    color: 'var(--sh5)',
+    colorBg: 'var(--sh5bg)',
+    dot: '#a78bfa',
+    desc: 'Insurance Regulatory and Development Authority of India. Mandate covers policyholder protection, market stability, solvency standards, and product approval.'
+  },
+  {
+    id: 'Distributors',
+    emoji: '📢',
+    color: 'var(--sh6)',
+    colorBg: 'var(--sh6bg)',
+    dot: '#f472b6',
+    desc: 'Agents, brokers, and corporate agents. Interested in commission structures, product simplicity, and competitive pricing. Their sales behaviour affects risk profile and anti-selection.'
+  },
+  {
+    id: 'TPAs',
+    emoji: '🏥',
+    color: 'var(--sh7)',
+    colorBg: 'var(--sh7bg)',
+    dot: '#38bdf8',
+    desc: 'Third Party Administrators. Handle claims processing, cashless authorisation, and provider network management on behalf of the insurer. IRDAI 2024 mandates 1-hour cashless TAT.'
+  },
+  {
+    id: 'Government',
+    emoji: '🏛️',
+    color: 'var(--sh8)',
+    colorBg: 'var(--sh8bg)',
+    dot: '#fb923c',
+    desc: 'Central and state governments. Drive public health schemes (PMJAY), taxation policy, mandated benefits, and the boundary between state and private health provision.'
+  },
+  {
+    id: 'Shareholders',
+    emoji: '💹',
+    color: 'var(--sh9)',
+    colorBg: 'var(--sh9bg)',
+    dot: '#2ecc71',
+    desc: 'Equity owners and investors. Focus on return on capital, embedded value, VNB margins, solvency adequacy, and sustainable growth. EV and VNB are key KPIs.'
+  },
+  {
+    id: 'Healthcare Providers',
+    emoji: '🩺',
+    color: 'var(--sh10)',
+    colorBg: 'var(--sh10bg)',
+    dot: '#e67e22',
+    desc: 'Hospitals, clinics, and specialists within provider networks. Their fee structures, utilisation patterns, and quality of care directly drive PMI claim costs.'
+  }
+];
+
+let TOPIC_FRAMEWORKS = {};
+let activeSH = null;
+
+// ── LOAD DATA ───────────────────────────────────────────────────────────
+async function loadData() {
+  try {
+    const res = await fetch('data/Topic_Frameworks.json?t=' + Date.now());
+    if (res.ok) TOPIC_FRAMEWORKS = await res.json();
+  } catch {
+    try {
+      const res2 = await fetch('Topic_Frameworks.json?t=' + Date.now());
+      if (res2.ok) TOPIC_FRAMEWORKS = await res2.json();
+    } catch(e) { console.warn('Stakeholders: could not load JSON', e); }
+  }
+  renderSidebar();
+}
+
+// ── SIDEBAR ─────────────────────────────────────────────────────────────
+function renderSidebar() {
+  const list = document.getElementById('sh-list');
+  list.innerHTML = '';
+
+  STAKEHOLDERS.forEach(sh => {
+    // Count relevant topics
+    const count = Object.keys(TOPIC_FRAMEWORKS).filter(key => {
+      const entry = TOPIC_FRAMEWORKS[key];
+      return entry && entry._meta && entry._meta.stakeholders && entry._meta.stakeholders.includes(sh.id);
+    }).length;
+
+    const btn = document.createElement('div');
+    btn.className = 'sh-btn';
+    btn.id = 'sh-btn-' + sh.id;
+    btn.innerHTML = `
+      <div class="sh-dot" style="background:${sh.dot};"></div>
+      <div class="sh-name">${sh.emoji} ${sh.id}</div>
+      <div class="sh-count">${count}</div>
+    `;
+    btn.onclick = () => selectStakeholder(sh.id);
+    list.appendChild(btn);
+  });
+}
+
+// ── SELECT STAKEHOLDER ───────────────────────────────────────────────────
+function selectStakeholder(shId) {
+  activeSH = shId;
+  const sh = STAKEHOLDERS.find(s => s.id === shId);
+
+  document.querySelectorAll('.sh-btn').forEach(b => b.classList.remove('active'));
+  const activeBtn = document.getElementById('sh-btn-' + shId);
+  if (activeBtn) activeBtn.classList.add('active');
+
+  document.getElementById('welcome').style.display = 'none';
+  const content = document.getElementById('sh-content');
+  content.style.display = 'block';
+
+  // Find relevant topics
+  const relevantTopics = Object.keys(TOPIC_FRAMEWORKS).filter(key => {
+    const entry = TOPIC_FRAMEWORKS[key];
+    return entry && entry._meta && entry._meta.stakeholders && entry._meta.stakeholders.includes(shId);
+  });
+
+  content.innerHTML = `
+    <div class="sh-header">
+      <div class="sh-title-row">
+        <div class="sh-badge" style="background:${sh.colorBg};color:${sh.color};border:1px solid ${sh.color}44;">${sh.emoji} ${sh.id}</div>
+      </div>
+      <div class="sh-title">${sh.id}</div>
+      <div class="sh-desc">${sh.desc}</div>
+    </div>
+    <div class="stats-bar">
+      <div class="stat-pill">
+        <div class="stat-num" style="color:${sh.color};">${relevantTopics.length}</div>
+        <div class="stat-lbl">Relevant<br>Topics</div>
+      </div>
+    </div>
+    <div id="topics-for-${shId}">
+      ${relevantTopics.length === 0
+        ? '<div style="color:var(--text3);font-size:13px;text-align:center;padding:40px;">No topics mapped to this stakeholder yet.</div>'
+        : relevantTopics.map(t => renderTopicCard(t, sh)).join('')}
+    </div>
+  `;
+}
+
+// ── TOPIC CARD ───────────────────────────────────────────────────────────
+function renderTopicCard(topicKey, sh) {
+  const entry = TOPIC_FRAMEWORKS[topicKey];
+  const meta = entry ? entry._meta : {};
+  const lines = entry && entry.bullets ? entry.bullets : [];
+  const icon = meta.icon || '📌';
+  const pillar = meta.pillar || '';
+  const pillarTag = pillar ? `<span class="pillar-tag ${pillar.toLowerCase()}">${pillar}</span>` : '';
+
+  const bullets = [];
+  lines.forEach(line => {
+    if (line.startsWith('- **')) {
+      const m = line.match(/^- \*\*(.*?)\*\*\s*(?::\s*)?(.*)$/);
+      if (m) bullets.push({ title: m[1].trim(), detail: m[2].trim().substring(0, 180) + (m[2].length > 180 ? '…' : '') });
+    }
+  });
+
+  const bulletsHtml = bullets.slice(0, 6).map(b => `
+    <div class="topic-bullet">
+      <div class="bullet-dot" style="background:${sh.dot};opacity:.7;margin-top:6px;width:5px;height:5px;border-radius:50%;flex-shrink:0;"></div>
+      <div><span class="bullet-title">${escHtml(b.title)}</span>${b.detail ? `<span class="bullet-detail"> — ${escHtml(b.detail)}</span>` : ''}</div>
+    </div>
+  `).join('');
+
+  const cardId = 'shcard-' + topicKey.replace(/[^a-zA-Z0-9]/g, '_');
+  return `
+    <div class="topic-card" id="${cardId}" style="border-left:3px solid ${sh.color}33;">
+      <div class="topic-card-header" onclick="toggleCard('${cardId}')">
+        <span class="topic-icon">${icon}</span>
+        <span class="topic-name">${escHtml(topicKey)}</span>
+        ${pillarTag}
+        <span style="font-family:var(--mono);font-size:10px;color:var(--text3);margin-left:8px;">${bullets.length} pts</span>
+        <span class="topic-chevron">&#9654;</span>
+      </div>
+      <div class="topic-body">
+        <div class="topic-bullets">${bulletsHtml || '<div style="color:var(--text3);font-size:13px;font-style:italic;">No bullets available.</div>'}</div>
+      </div>
+    </div>
+  `;
+}
+
+function toggleCard(id) {
+  const card = document.getElementById(id);
+  if (card) card.classList.toggle('open');
+}
+
+function escHtml(str) {
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+// ── CLOCK ────────────────────────────────────────────────────────────────
 function updateClock() {
   const now = new Date();
   document.getElementById('clock').textContent =
@@ -91,6 +374,9 @@ function updateClock() {
 }
 setInterval(updateClock, 1000);
 updateClock();
+
+// ── INIT ─────────────────────────────────────────────────────────────────
+loadData();
 </script>
 </body>
 </html>

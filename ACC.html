@@ -218,40 +218,31 @@ mark{background:rgba(139,92,246,0.3);color:#fff;border-radius:2px;padding:0 2px;
 <script>
 // ─── DATA ──────────────────────────────────────────────────────────────────
 
-const ACC_STAGES = [
-  {
-    key: 's1',
-    num: 'S1',
-    name: 'General Commercial & Economic Environment',
-    topics: ['The Six Pillar Framework (P1-P6)', 'State Healthcare & Demographics', 'Legislation & Taxation', 'Regulation', 'IRDA Regulations']
-  },
-  {
-    key: 's2',
-    num: 'S2',
-    name: 'Specifying the Problem',
-    topics: ['Risks', 'Risk Management & Capital', 'Data', 'Models', 'Underwriting', 'Group Products', 'Private Medical Insurance (PMI)', 'Critical Illness', 'Income Protection', 'Long-Term Care (LTC)']
-  },
-  {
-    key: 's3',
-    num: 'S3',
-    name: 'Developing the Solution',
-    topics: ['Product Design', 'Product Design (Protection)', 'Pricing', 'Pricing & Rating', 'Reinsurance', 'Investments', 'Administration', 'Capital & Solvency']
-  },
-  {
-    key: 's4',
-    num: 'S4',
-    name: 'Monitoring the Experience',
-    topics: ['Claims Management', 'Reserving & Valuation', 'Monitoring', 'Reporting']
-  },
-  {
-    key: 's5',
-    num: 'S5',
-    name: 'Professionalism',
-    topics: ['Professional Guidance']
-  }
+// ACC stages are driven by _meta.acc_stage — no hardcoded topic lists
+const ACC_STAGE_DEFS = [
+  { key: 's1', num: 'S1', name: 'General Commercial & Economic Environment' },
+  { key: 's2', num: 'S2', name: 'Specifying the Problem' },
+  { key: 's3', num: 'S3', name: 'Developing the Solution' },
+  { key: 's4', num: 'S4', name: 'Monitoring the Experience' },
+  { key: 's5', num: 'S5', name: 'Professionalism' }
 ];
 
+// Build ACC_STAGES dynamically from JSON _meta after data load
+function buildACCStages() {
+  const stageMap = { S1: 0, S2: 1, S3: 2, S4: 3, S5: 4 };
+  const ACC_STAGES = ACC_STAGE_DEFS.map(s => ({ ...s, topics: [] }));
+  Object.keys(TOPIC_FRAMEWORKS).forEach(key => {
+    const entry = TOPIC_FRAMEWORKS[key];
+    const accStage = entry && entry._meta ? entry._meta.acc_stage : null;
+    if (accStage && stageMap[accStage] !== undefined) {
+      ACC_STAGES[stageMap[accStage]].topics.push(key);
+    }
+  });
+  return ACC_STAGES;
+}
+
 let TOPIC_FRAMEWORKS = {};
+let ACC_STAGES = [];
 let recallMode = false;
 let revealedTopics = new Set();
 
@@ -274,6 +265,7 @@ async function loadData() {
       return;
     }
   }
+  ACC_STAGES = buildACCStages();
   renderAll();
 }
 
@@ -316,10 +308,10 @@ function buildStageBlock(stage, si, query) {
   }
 
   stage.topics.forEach(topicKey => {
-    const data = TOPIC_FRAMEWORKS[topicKey];
-    if (!data) return;
+    const entry = TOPIC_FRAMEWORKS[topicKey];
+    if (!entry) return;
 
-    const el = buildTopicItem(topicKey, data, stage.key, query);
+    const el = buildTopicItem(topicKey, entry, stage.key, query);
     if (el) topicEls.push(el);
   });
 
@@ -354,11 +346,13 @@ function buildStageBlock(stage, si, query) {
 }
 
 function buildTopicItem(topicKey, data, stageKey, query) {
+  // Support both new {_meta, bullets} schema and legacy array schema
+  const lines = (data && data.bullets) ? data.bullets : (Array.isArray(data) ? data : []);
   // Parse heading and bullets
   let heading = '';
   let bullets = [];
 
-  data.forEach(line => {
+  lines.forEach(line => {
     if (line.startsWith('###')) {
       heading = line.replace(/^###\s*/, '').trim();
     } else if (line.startsWith('- **')) {

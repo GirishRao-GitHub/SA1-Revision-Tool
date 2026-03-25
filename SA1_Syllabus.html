@@ -225,46 +225,17 @@ const CATEGORIES = [
   }
 ];
 
-// Mapping: which Topic_Frameworks keys belong to which syllabus category
-const TOPIC_CATEGORY_MAP = {
-  // Category 1: Products & Business Environment
-  "Private Medical Insurance (PMI)": 1,
-  "Critical Illness": 1,
-  "Income Protection": 1,
-  "Long-Term Care (LTC)": 1,
-  "State Healthcare & Demographics": 1,
-  "Product Design": 1,
-  "Product Design (Protection)": 1,
-  "Group Products": 1,
-  "Administration": 1,
-  "The Six Pillar Framework (P1-P6)": 1,
+// TOPIC_CATEGORY_MAP is now driven by _meta.syllabus_category in Topic_Frameworks.json
+// No hardcoded list needed — populated dynamically after data load.
+const TOPIC_CATEGORY_MAP = {}; // kept as fallback shell, populated in buildCategoryMap()
 
-  // Category 2: Regulatory, Legislative & Taxation
-  "Regulation": 2,
-  "IRDA Regulations": 2,
-  "Legislation & Taxation": 2,
-  "Professional Guidance": 2,
-
-  // Category 3: Rating, Pricing & Underwriting
-  "Pricing": 3,
-  "Pricing & Rating": 3,
-  "Underwriting": 3,
-  "Data": 3,
-  "Models": 3,
-  "Claims Management": 3,
-
-  // Category 4: Valuation, ALM & Reinsurance
-  "Reserving & Valuation": 4,
-  "Reinsurance": 4,
-  "Risk Management & Capital": 4,
-  "Capital & Solvency": 4,
-  "Investments": 4,
-  "Risks": 4,
-
-  // Category 5: Monitoring & Strategy
-  "Monitoring": 5,
-  "Reporting": 5,
-};
+function buildCategoryMap() {
+  Object.keys(TOPIC_FRAMEWORKS).forEach(key => {
+    const entry = TOPIC_FRAMEWORKS[key];
+    const cat = entry && entry._meta ? entry._meta.syllabus_category : null;
+    if (cat) TOPIC_CATEGORY_MAP[key] = cat;
+  });
+}
 
 let TOPIC_FRAMEWORKS = {};
 let activeCatId = null;
@@ -286,7 +257,8 @@ window.onload = async function() {
     } catch(e2) { console.warn('Fallback also failed:', e2); }
   }
 
-  // Distribute topics into categories
+  // Build category map from _meta, then distribute
+  buildCategoryMap();
   Object.keys(TOPIC_FRAMEWORKS).forEach(topicKey => {
     const catId = TOPIC_CATEGORY_MAP[topicKey];
     if (catId) {
@@ -459,8 +431,9 @@ function filterTopics(query, catId) {
 
 // ── HELPERS ────────────────────────────────────────────────────
 function parseBullets(data) {
+  const lines = (data && data.bullets) ? data.bullets : (Array.isArray(data) ? data : []);
   const bullets = [];
-  data.forEach(line => {
+  lines.forEach(line => {
     if (line.startsWith('- **')) {
       const match = line.match(/^- \*\*(.*?)\*\*\s*(?::\s*)?(.*)$/);
       if (match) {
@@ -488,37 +461,10 @@ function sanitizeId(str) {
 }
 
 function topicIcon(name) {
-  const icons = {
-    'Private Medical Insurance (PMI)': '🏥',
-    'Critical Illness': '❤️',
-    'Income Protection': '🛡️',
-    'Long-Term Care (LTC)': '🧓',
-    'State Healthcare & Demographics': '🏛️',
-    'Product Design': '✏️',
-    'Product Design (Protection)': '✏️',
-    'Group Products': '👥',
-    'Administration': '🗂️',
-    'Regulation': '⚖️',
-    'IRDA Regulations': '📜',
-    'Legislation & Taxation': '📋',
-    'Professional Guidance': '🎓',
-    'Pricing': '💰',
-    'Pricing & Rating': '💰',
-    'Underwriting': '🔍',
-    'Data': '📊',
-    'Models': '🔢',
-    'Claims Management': '📝',
-    'Reserving & Valuation': '📈',
-    'Reinsurance': '🔄',
-    'Risk Management & Capital': '⚠️',
-    'Capital & Solvency': '💎',
-    'Investments': '💹',
-    'Risks': '⚠️',
-    'Monitoring': '📡',
-    'Reporting': '📄',
-    'The Six Pillar Framework (P1-P6)': '🏛️',
-  };
-  return icons[name] || '📌';
+  // Prefer icon from _meta if available
+  const entry = TOPIC_FRAMEWORKS[name];
+  if (entry && entry._meta && entry._meta.icon) return entry._meta.icon;
+  return '📌';
 }
 
 function startLiveClock() {
