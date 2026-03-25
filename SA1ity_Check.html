@@ -877,8 +877,16 @@ window.onload = async function() {
     // Load Topic Frameworks Dictionary First
     try {
         const fwRes = await fetch('data/Topic_Frameworks.json?t=' + new Date().getTime());
-        if (fwRes.ok) {
-            TOPIC_FRAMEWORKS = await fwRes.json();
+        if (!fwRes.ok) throw new Error('data/ path returned ' + fwRes.status);
+        TOPIC_FRAMEWORKS = await fwRes.json();
+    } catch {
+        try {
+            const fwRes2 = await fetch('Topic_Frameworks.json?t=' + new Date().getTime());
+            if (!fwRes2.ok) throw new Error('root path returned ' + fwRes2.status);
+            TOPIC_FRAMEWORKS = await fwRes2.json();
+        } catch(e) { console.warn("Frameworks not loaded", e); }
+    }
+    if (Object.keys(TOPIC_FRAMEWORKS).length > 0) {
             // Populate MASTER_TAXONOMY sub-themes from framework bullets
             MASTER_TAXONOMY = {};
             Object.keys(TOPIC_FRAMEWORKS).forEach(key => {
@@ -907,8 +915,7 @@ window.onload = async function() {
             Object.entries(aliases).forEach(([short, full]) => {
                 if (TOPIC_FRAMEWORKS[full]) MASTER_TAXONOMY[short] = TOPIC_FRAMEWORKS[full];
             });
-        }
-    } catch(e) { console.warn("Frameworks not loaded", e); }
+    }
 
     // Load Pillars & Hooks JSON
     try {

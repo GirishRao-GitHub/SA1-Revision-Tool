@@ -240,11 +240,13 @@ let activeSH = null;
 async function loadData() {
   try {
     const res = await fetch('data/Topic_Frameworks.json?t=' + Date.now());
-    if (res.ok) TOPIC_FRAMEWORKS = await res.json();
+    if (!res.ok) throw new Error('data/ path returned ' + res.status);
+    TOPIC_FRAMEWORKS = await res.json();
   } catch {
     try {
       const res2 = await fetch('Topic_Frameworks.json?t=' + Date.now());
-      if (res2.ok) TOPIC_FRAMEWORKS = await res2.json();
+      if (!res2.ok) throw new Error('root path returned ' + res2.status);
+      TOPIC_FRAMEWORKS = await res2.json();
     } catch(e) { console.warn('Stakeholders: could not load JSON', e); }
   }
   renderSidebar();
