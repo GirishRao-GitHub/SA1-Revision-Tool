@@ -241,21 +241,33 @@ let TOPIC_FRAMEWORKS = {};
 let activeCatId = null;
 
 // ── LOAD DATA ──────────────────────────────────────────────────
+// Try each path in order; move to next on 404 *or* network error.
+async function loadJSON() {
+  const PATHS = [
+    'data/Topic_Frameworks.json',
+    'Topic_Frameworks.json',
+    './Topic_Frameworks.json'
+  ];
+  for (const path of PATHS) {
+    try {
+      const res = await fetch(path + '?t=' + Date.now());
+      if (res.ok) {
+        const data = await res.json();
+        console.log('Loaded Topic_Frameworks.json from:', path);
+        return data;
+      }
+      console.warn('Not found at:', path, '— status', res.status);
+    } catch(e) {
+      console.warn('Fetch error for:', path, e);
+    }
+  }
+  console.error('Topic_Frameworks.json could not be loaded from any path.');
+  return {};
+}
+
 window.onload = async function() {
   startLiveClock();
-  try {
-    const res = await fetch('data/Topic_Frameworks.json?t=' + Date.now());
-    if (res.ok) {
-      TOPIC_FRAMEWORKS = await res.json();
-    }
-  } catch(e) {
-    console.warn('Could not load Topic_Frameworks.json from /data, trying local...', e);
-    // Fallback: try same directory
-    try {
-      const res2 = await fetch('Topic_Frameworks.json?t=' + Date.now());
-      if (res2.ok) TOPIC_FRAMEWORKS = await res2.json();
-    } catch(e2) { console.warn('Fallback also failed:', e2); }
-  }
+  TOPIC_FRAMEWORKS = await loadJSON();
 
   // Build category map from _meta, then distribute
   buildCategoryMap();
