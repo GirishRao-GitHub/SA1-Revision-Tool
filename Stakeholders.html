@@ -239,18 +239,18 @@ let activeSH = null;
 // ── LOAD DATA ───────────────────────────────────────────────────────────
 async function loadData() {
   try {
-    const res = await fetch('data/Topic_Frameworks.json?t=' + Date.now());
-    if (!res.ok) throw new Error('data/ path returned ' + res.status);
-    TOPIC_FRAMEWORKS = await res.json();
-  } catch {
     try {
-      const res2 = await fetch('Topic_Frameworks.json?t=' + Date.now());
-      if (!res2.ok) throw new Error('root path returned ' + res2.status);
-      TOPIC_FRAMEWORKS = await res2.json();
-    } catch(e) {
-      console.warn('Stakeholders: could not load JSON', e);
+      const res = await fetch('data/Topic_Frameworks.json?t=' + Date.now());
+      if (!res.ok) throw new Error('data/ path returned ' + res.status);
+      TOPIC_FRAMEWORKS = await res.json();
+    } catch {
+      try {
+        const res2 = await fetch('Topic_Frameworks.json?t=' + Date.now());
+        if (!res2.ok) throw new Error('root path returned ' + res2.status);
+        TOPIC_FRAMEWORKS = await res2.json();
+      } catch(e2) { console.warn('Stakeholders: fallback also failed', e2); }
     }
-  }
+  } catch(e) { console.warn('Stakeholders: could not load JSON', e); }
   renderSidebar();
 }
 
