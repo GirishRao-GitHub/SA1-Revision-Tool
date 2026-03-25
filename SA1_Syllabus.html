@@ -318,8 +318,7 @@ function selectCategory(catId) {
   content.style.display = 'block';
 
   const totalBullets = cat.topics.reduce((sum, t) => {
-    const data = TOPIC_FRAMEWORKS[t] || [];
-    return sum + data.filter(l => l.startsWith('- ')).length;
+    return sum + parseBullets(TOPIC_FRAMEWORKS[t] || {}).length;
   }, 0);
 
   content.innerHTML = `
