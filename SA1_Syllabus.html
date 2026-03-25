@@ -267,20 +267,24 @@ async function loadJSON() {
 
 window.onload = async function() {
   startLiveClock();
-  TOPIC_FRAMEWORKS = await loadJSON();
+  try {
+    TOPIC_FRAMEWORKS = await loadJSON();
 
-  // Build category map from _meta, then distribute
-  buildCategoryMap();
-  Object.keys(TOPIC_FRAMEWORKS).forEach(topicKey => {
-    const catId = TOPIC_CATEGORY_MAP[topicKey];
-    if (catId) {
-      const cat = CATEGORIES.find(c => c.id === catId);
-      if (cat) cat.topics.push(topicKey);
-    }
-  });
+    // Build category map from _meta, then distribute
+    buildCategoryMap();
+    Object.keys(TOPIC_FRAMEWORKS).forEach(topicKey => {
+      const catId = TOPIC_CATEGORY_MAP[topicKey];
+      if (catId) {
+        const cat = CATEGORIES.find(c => c.id === catId);
+        if (cat) cat.topics.push(topicKey);
+      }
+    });
 
-  // Sort topics alphabetically within each category
-  CATEGORIES.forEach(cat => cat.topics.sort());
+    // Sort topics alphabetically within each category
+    CATEGORIES.forEach(cat => cat.topics.sort());
+  } catch(e) {
+    console.warn('SA1_Syllabus: init error', e);
+  }
 
   document.getElementById('loading-state').style.display = 'none';
   document.getElementById('welcome-state').style.display = 'flex';
