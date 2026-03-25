@@ -247,7 +247,9 @@ async function loadData() {
       const res2 = await fetch('Topic_Frameworks.json?t=' + Date.now());
       if (!res2.ok) throw new Error('root path returned ' + res2.status);
       TOPIC_FRAMEWORKS = await res2.json();
-    } catch(e) { console.warn('Stakeholders: could not load JSON', e); }
+    } catch(e) {
+      console.warn('Stakeholders: could not load JSON', e);
+    }
   }
   renderSidebar();
 }
