@@ -764,10 +764,19 @@ function renderRightContent(idx) {
       .replace(/^\s*\d+[.)]\s*/, '')
       .replace(/^\s*-\s+/, '');
 
+    // Detect and strip ⬡ exam-derived marker
+    const isExamDerived = rawText.startsWith('⬡ ');
+    if (isExamDerived) rawText = rawText.slice(2).trimStart();
+
     const { cleanText, badgesHtml } = parseSrcTags(rawText);
 
     let text = cleanText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
     text = highlightKeywords(text);
+
+    // Prepend tiny ⬡ glyph for exam-derived bullets
+    const examGlyph = isExamDerived
+      ? '<span title="Exam-derived bullet" style="font-size:9px;color:var(--accent);opacity:0.7;flex-shrink:0;margin-right:4px;position:relative;top:-1px;">⬡</span>'
+      : '';
 
     const cbId = 'cb_' + idx + '_' + bIdx;
     const cbHtml = '<input type="checkbox" id="' + cbId + '" autocomplete="off" '
@@ -775,8 +784,9 @@ function renderRightContent(idx) {
       + 'onchange="this.style.opacity=this.checked?\'1\':\'0.45\';" '
       + 'title="Tick if recalled">';
 
-    // Layout: [text] [badges?] [checkbox]  — badges sit flush against text, checkbox at far right
+    // Layout: [⬡?] [text] [badges?] [checkbox]
     const liInner = '<span style="display:flex;align-items:baseline;justify-content:space-between;gap:6px;width:100%;">'
+                  + examGlyph
                   + '<span style="flex:1;">' + text + (badgesHtml ? '&ensp;' + badgesHtml : '') + '</span>'
                   + cbHtml + '</span>';
 
