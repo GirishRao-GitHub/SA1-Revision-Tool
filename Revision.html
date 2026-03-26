@@ -359,10 +359,6 @@ body {
 
   <!-- Right controls -->
   <div class="topbar-actions">
-    <button id="btn-recall" onclick="toggleRecall()">Recall: OFF</button>
-    <div style="width:1px; height:24px; background:var(--border); margin:0 4px;"></div>
-    <button id="btn-toggle-sub" onclick="toggleSubThemes()">Hide Sub-themes</button>
-    <div style="width:1px; height:24px; background:var(--border); margin:0 4px;"></div>
     <button class="mode-btn" onclick="toggleFullscreen()" title="Full Screen" style="font-size:15px;">⛶</button>
     <div style="width:1px; height:24px; background:var(--border); margin:0 4px;"></div>
     <button onclick="window.location.href='SA1ity_Check.html'" title="Back to SA1ity Check" style="font-family:var(--mono);font-size:11px;font-weight:600;padding:4px 12px;border-radius:4px;border:1px solid var(--border2);background:var(--surface2);color:var(--text2);cursor:pointer;transition:all 0.2s;white-space:nowrap;" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)';" onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--text2)';">← Back</button>
@@ -388,6 +384,7 @@ body {
   <div id="fw-left-pane">
     <div class="pane-header">
       <div class="pane-title" style="color:var(--accent);">Master Themes</div>
+      <button id="btn-recall-left" onclick="toggleRecallLeft()" style="font-family:var(--sans);font-size:10px;font-weight:600;padding:2px 8px;border-radius:4px;border:1px solid var(--border);background:var(--surface3);color:var(--text2);cursor:pointer;transition:all 0.2s;white-space:nowrap;">Recall: OFF</button>
     </div>
     <div id="fw-topics-list"></div>
   </div>
@@ -396,6 +393,7 @@ body {
   <div id="fw-mid-pane">
     <div class="mid-header">
       <div class="pane-title" id="fw-mid-title" style="color:var(--text);">Subtopics</div>
+      <button id="btn-recall-mid" onclick="toggleRecallMid()" style="font-family:var(--sans);font-size:10px;font-weight:600;padding:2px 8px;border-radius:4px;border:1px solid var(--border);background:var(--surface3);color:var(--text2);cursor:pointer;transition:all 0.2s;white-space:nowrap;">Recall: OFF</button>
     </div>
     <div id="fw-subtopics-list">
       <div style="color:var(--text3); font-size:13px; text-align:center; margin-top:40px;">Select a Master Theme first</div>
@@ -435,19 +433,19 @@ function highlightKeywords(text) {
 let TOPIC_FRAMEWORKS = {};
 let currentPillarFilter = 'ALL';
 let currentFrameworkData = null;
-let recallMode = false;
-let subHidden = false;
 let checkboxState = {};      // { subtopicIdx: { bulletIdx: bool } }
 let currentSubtopicIdx = null;
+let recallLeft = false;   // hides subtopic names in mid pane
+let recallMid  = false;   // hides bullet text in right pane
 
 // ── Boot ───────────────────────────────────────────────────────────────────
 window.onload = async function() {
   // Load localStorage prefs
-  recallMode  = localStorage.getItem('rv_recall_mode') === 'true';
-  subHidden   = localStorage.getItem('rv_sub_hidden')  === 'true';
+  recallLeft = localStorage.getItem('rv_recall_left') === 'true';
+  recallMid  = localStorage.getItem('rv_recall_mid')  === 'true';
 
-  applyRecallUI();
-  applySubHiddenUI();
+  applyRecallLeftUI();
+  applyRecallMidUI();
 
   // Try to fetch Topic_Frameworks.json
   let loaded = false;
@@ -641,7 +639,7 @@ function renderMidContent(theme) {
   subtopics.forEach((st, idx) => {
     const btn = document.createElement('div');
     btn.style.cssText = 'padding:12px 14px; border-radius:6px; cursor:pointer; font-size:13px; font-weight:600; color:var(--text); border:1px solid var(--border); transition:all 0.2s; background:var(--surface2); display:flex; align-items:center; justify-content:space-between; margin-bottom:2px; line-height:1.4;';
-    btn.innerHTML = '<span>' + st.title + '</span><span style="font-size:16px;color:var(--text3);">›</span>';
+    btn.innerHTML = '<span>' + (recallLeft ? '—' : st.title) + '</span><span style="font-size:16px;color:var(--text3);">›</span>';
     btn.onmouseover = () => { if (!btn.classList.contains('active')) { btn.style.borderColor='var(--accent)'; btn.style.transform='translateX(2px)'; } };
     btn.onmouseout  = () => { if (!btn.classList.contains('active')) { btn.style.borderColor='var(--border)'; btn.style.transform='translateX(0)'; } };
     btn.onclick = () => {
@@ -688,7 +686,7 @@ function renderRightContent(idx) {
 
   html += '<div id="fw-bullets-container" style="position:relative; background:var(--surface2); border-left:4px solid var(--accent); padding:20px; border-radius:var(--radius); box-shadow:0 4px 12px rgba(0,0,0,0.1); font-size:15px; line-height:1.7; transition:all 0.3s; min-height:100px;">';
 
-  if (recallMode) {
+  if (recallMid) {
     html += '<div style="position:absolute; top:12px; right:12px; display:flex; align-items:center; gap:8px; background:var(--surface3); padding:4px 8px; border-radius:4px; border:1px solid var(--border); z-index:10;">'
           + '<span style="font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;">Reveal ' + totalBullets + ' Bullets</span>'
           + '<input type="checkbox" onchange="document.getElementById(\'fw-bullets-reveal-box\').style.display=this.checked?\'block\':\'none\';" style="width:16px;height:16px;cursor:pointer;accent-color:var(--accent);">'
@@ -750,46 +748,49 @@ function renderRightContent(idx) {
   });
 }
 
-// ── Recall Toggle ──────────────────────────────────────────────────────────
-function toggleRecall() {
-  recallMode = !recallMode;
-  localStorage.setItem('rv_recall_mode', recallMode);
-  applyRecallUI();
-
-  // Re-render active subtopic if any
-  const activeMid = document.querySelector('#fw-subtopics-list .active');
-  if (activeMid) {
-    const children = Array.from(activeMid.parentNode.children).filter(c => c.tagName !== 'DIV' || !c.style.background.includes('surface3'));
-    const idx = Array.from(activeMid.parentNode.children).indexOf(activeMid);
-    renderRightContent(idx);
+// ── Left Recall (hides subtopic names in mid pane) ─────────────────────────
+function toggleRecallLeft() {
+  recallLeft = !recallLeft;
+  localStorage.setItem('rv_recall_left', recallLeft);
+  applyRecallLeftUI();
+  // Re-render mid pane if a topic is already selected
+  const activeLeft = document.querySelector('#fw-topics-list .active');
+  if (activeLeft) {
+    const activeTopic = activeLeft.querySelector('span:first-child').textContent;
+    // Find the real topic key (strip icon prefix if any)
+    const topicKey = Object.keys(TOPIC_FRAMEWORKS).find(t => activeLeft.innerHTML.includes(t));
+    if (topicKey) renderMidContent(topicKey);
   }
 }
 
-function applyRecallUI() {
-  const btn = document.getElementById('btn-recall');
+function applyRecallLeftUI() {
+  const btn = document.getElementById('btn-recall-left');
   if (!btn) return;
-  btn.textContent = recallMode ? 'Recall: ON' : 'Recall: OFF';
-  btn.style.background   = recallMode ? 'var(--accent)' : 'var(--surface3)';
-  btn.style.color        = recallMode ? '#fff'          : 'var(--text2)';
-  btn.style.borderColor  = recallMode ? 'var(--accent)' : 'var(--border)';
+  btn.textContent     = recallLeft ? 'Recall: ON' : 'Recall: OFF';
+  btn.style.background  = recallLeft ? 'var(--accent)' : 'var(--surface3)';
+  btn.style.color       = recallLeft ? '#fff'          : 'var(--text2)';
+  btn.style.borderColor = recallLeft ? 'var(--accent)' : 'var(--border)';
 }
 
-// ── Sub-themes Toggle ──────────────────────────────────────────────────────
-function toggleSubThemes() {
-  subHidden = !subHidden;
-  localStorage.setItem('rv_sub_hidden', subHidden);
-  applySubHiddenUI();
+// ── Mid Recall (hides bullet text in right pane) ───────────────────────────
+function toggleRecallMid() {
+  recallMid = !recallMid;
+  localStorage.setItem('rv_recall_mid', recallMid);
+  applyRecallMidUI();
+  // Re-render active subtopic if any
+  const activeMid = document.querySelector('#fw-subtopics-list .active');
+  if (activeMid && currentSubtopicIdx !== null) {
+    renderRightContent(currentSubtopicIdx);
+  }
 }
 
-function applySubHiddenUI() {
-  const btn    = document.getElementById('btn-toggle-sub');
-  const midP   = document.getElementById('fw-mid-pane');
-  if (!btn || !midP) return;
-  btn.textContent = subHidden ? 'Show Sub-themes' : 'Hide Sub-themes';
-  btn.style.background  = subHidden ? 'var(--accent)' : 'var(--surface3)';
-  btn.style.color       = subHidden ? '#fff'          : 'var(--text2)';
-  btn.style.borderColor = subHidden ? 'var(--accent)' : 'var(--border)';
-  midP.style.display    = subHidden ? 'none'          : 'flex';
+function applyRecallMidUI() {
+  const btn = document.getElementById('btn-recall-mid');
+  if (!btn) return;
+  btn.textContent     = recallMid ? 'Recall: ON' : 'Recall: OFF';
+  btn.style.background  = recallMid ? 'var(--accent)' : 'var(--surface3)';
+  btn.style.color       = recallMid ? '#fff'          : 'var(--text2)';
+  btn.style.borderColor = recallMid ? 'var(--accent)' : 'var(--border)';
 }
 
 // ── Tooltip ────────────────────────────────────────────────────────────────
