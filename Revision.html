@@ -111,6 +111,40 @@ body {
   box-shadow: 0 0 15px rgba(139,92,246,0.4) !important;
 }
 
+/* Src filter buttons (IAI / IFoA) */
+#src-filter-group {
+  display: flex;
+  gap: 2px;
+  align-items: center;
+  background: var(--surface2);
+  padding: 2px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.src-filter-btn {
+  padding: 3px 10px;
+  font-size: 11px;
+  font-weight: 700;
+  font-family: var(--mono);
+  border-radius: 4px;
+  border: 1px solid var(--border2);
+  background: var(--surface2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.2s;
+  letter-spacing: 0.04em;
+  min-width: 40px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.src-filter-btn:hover { background: var(--surface3); }
+.src-filter-btn[data-src="ALL"].active  { background: var(--surface3); color: var(--text);    border-color: var(--text3); }
+.src-filter-btn[data-src="IAI"].active  { background: #1a2a22;         color: #34d399;         border-color: #34d399; box-shadow: 0 0 10px rgba(52,211,153,0.25); }
+.src-filter-btn[data-src="IFoA"].active { background: #1a222a;         color: #60a5fa;         border-color: #60a5fa; box-shadow: 0 0 10px rgba(96,165,250,0.25); }
+
 /* Controls group right side */
 .topbar-actions { margin-left: auto; display: flex; align-items: center; gap: 6px; }
 .mode-btn {
@@ -378,6 +412,13 @@ body {
     <button class="src-btn p-filter" style="color:#f472b6;" onclick="filterPillar('P6')" onmouseover="showTooltip(this,'P6','Regulation & Ethics')" onmouseout="hideTooltip()">P6</button>
   </div>
 
+  <!-- Source filter buttons -->
+  <div id="src-filter-group">
+    <button class="src-filter-btn" data-src="ALL"  onclick="filterSrc('ALL')" >ALL</button>
+    <button class="src-filter-btn" data-src="IAI"  onclick="filterSrc('IAI')" style="color:#34d399;">IAI</button>
+    <button class="src-filter-btn" data-src="IFoA" onclick="filterSrc('IFoA')" style="color:#60a5fa;">IFoA</button>
+  </div>
+
   <!-- Title -->
   <div style="flex:1; text-align:center;">
     <span class="logo">Master Exam Frameworks</span>
@@ -485,6 +526,7 @@ function parseSrcTags(rawText) {
 // ── State ──────────────────────────────────────────────────────────────────
 let TOPIC_FRAMEWORKS = {};
 let currentPillarFilter = 'ALL';
+let currentSrcFilter = 'ALL';
 let currentFrameworkData = null;
 let checkboxState = {};      // { subtopicIdx: { bulletIdx: bool } }
 let currentSubtopicIdx = null;
@@ -499,6 +541,7 @@ window.onload = async function() {
 
   applyRecallLeftUI();
   applyRecallMidUI();
+  applySrcFilterUI();
 
   // Try to fetch Topic_Frameworks.json
   let loaded = false;
@@ -540,6 +583,36 @@ function updateClock() {
   if (el) el.textContent = `${days[now.getDay()]}, ${now.getDate()} ${months[now.getMonth()]} ${h}:${m}:${s}`;
 }
 
+// ── Source Filter (IAI / IFoA) ─────────────────────────────────────────────
+function bulletMatchesSrc(line, srcFilter) {
+  if (srcFilter === 'ALL') return true;
+  const m = line.match(/\[src:([^\]]+)\]/);
+  if (!m) return false;
+  return m[1].split(',').some(c => c.trim().toUpperCase().startsWith(srcFilter.toUpperCase() + '_'));
+}
+
+function filterSrc(s) {
+  currentSrcFilter = s;
+  applySrcFilterUI();
+  renderFrameworkList();
+}
+
+function applySrcFilterUI() {
+  document.querySelectorAll('.src-filter-btn').forEach(btn => {
+    const val = btn.dataset.src;
+    const isActive = val === currentSrcFilter;
+    btn.classList.toggle('active', isActive);
+    if (!isActive) {
+      // restore default colour when inactive
+      if (val === 'IAI')       btn.style.color = '#34d399';
+      else if (val === 'IFoA') btn.style.color = '#60a5fa';
+      else                     btn.style.color = 'var(--text2)';
+      btn.style.background  = '';
+      btn.style.borderColor = '';
+    }
+  });
+}
+
 // ── Pillar Filter ──────────────────────────────────────────────────────────
 function filterPillar(p) {
   currentPillarFilter = p;
@@ -571,6 +644,14 @@ function renderFrameworkList() {
     themes = themes.filter(t => {
       const entry = TOPIC_FRAMEWORKS[t];
       return entry && entry._meta && entry._meta.pillar === currentPillarFilter;
+    });
+  }
+
+  if (currentSrcFilter !== 'ALL') {
+    themes = themes.filter(t => {
+      const entry = TOPIC_FRAMEWORKS[t];
+      const lines = entry && entry.bullets ? entry.bullets : (Array.isArray(entry) ? entry : []);
+      return lines.some(l => bulletMatchesSrc(l, currentSrcFilter));
     });
   }
 
@@ -693,7 +774,13 @@ function renderMidContent(theme) {
     return;
   }
 
-  subtopics.forEach((st, idx) => {
+  subtopics.forEach((st, origIdx) => {
+    // Skip subtopics with no matching src bullets when a src filter is active
+    if (currentSrcFilter !== 'ALL') {
+      const hasSrc = (st.bullets || []).some(l => bulletMatchesSrc(l, currentSrcFilter));
+      if (!hasSrc) return;
+    }
+
     const btn = document.createElement('div');
     btn.style.cssText = 'padding:12px 14px; border-radius:6px; cursor:pointer; font-size:13px; font-weight:600; color:var(--text); border:1px solid var(--border); transition:all 0.2s; background:var(--surface2); display:flex; align-items:center; justify-content:space-between; margin-bottom:2px; line-height:1.4;';
     btn.innerHTML = '<span>' + (recallLeft ? '—' : st.title) + '</span><span style="font-size:16px;color:var(--text3);">›</span>';
@@ -713,7 +800,7 @@ function renderMidContent(theme) {
       btn.style.color       = 'var(--accent)';
       btn.style.borderColor = 'var(--accent)';
       btn.style.transform   = 'translateX(2px)';
-      renderRightContent(idx);
+      renderRightContent(origIdx);
     };
     listEl.appendChild(btn);
   });
@@ -735,7 +822,7 @@ function renderRightContent(idx) {
   currentSubtopicIdx = idx;
 
   const st = currentFrameworkData[idx];
-  const bulletLines = (st.bullets || []).filter(l => l.trim() !== '' && !/^#{3,}/.test(l));
+  const bulletLines = (st.bullets || []).filter(l => l.trim() !== '' && !/^#{3,}/.test(l) && bulletMatchesSrc(l, currentSrcFilter));
   const totalBullets = bulletLines.length;
 
   let html = '<div style="margin-bottom:24px; border-bottom:2px solid var(--border); padding-bottom:12px;">'
