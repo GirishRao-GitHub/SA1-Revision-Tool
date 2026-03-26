@@ -364,6 +364,8 @@ body {
     <button id="btn-toggle-sub" onclick="toggleSubThemes()">Hide Sub-themes</button>
     <div style="width:1px; height:24px; background:var(--border); margin:0 4px;"></div>
     <button class="mode-btn" onclick="toggleFullscreen()" title="Full Screen" style="font-size:15px;">⛶</button>
+    <div style="width:1px; height:24px; background:var(--border); margin:0 4px;"></div>
+    <button onclick="window.location.href='SA1ity_Check.html'" title="Back to SA1ity Check" style="font-family:var(--mono);font-size:11px;font-weight:600;padding:4px 12px;border-radius:4px;border:1px solid var(--border2);background:var(--surface2);color:var(--text2);cursor:pointer;transition:all 0.2s;white-space:nowrap;" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)';" onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--text2)';">← Back</button>
   </div>
 </div>
 
@@ -435,6 +437,8 @@ let currentPillarFilter = 'ALL';
 let currentFrameworkData = null;
 let recallMode = false;
 let subHidden = false;
+let checkboxState = {};      // { subtopicIdx: { bulletIdx: bool } }
+let currentSubtopicIdx = null;
 
 // ── Boot ───────────────────────────────────────────────────────────────────
 window.onload = async function() {
@@ -606,6 +610,10 @@ function renderMidContent(theme) {
   document.getElementById('fw-content').innerHTML =
     '<h2 style="color:var(--text3);text-align:center;margin-top:100px;">Select a Subtopic to view details</h2>';
 
+  // Reset checkbox state for the new topic
+  checkboxState = {};
+  currentSubtopicIdx = null;
+
   const frameEntry = TOPIC_FRAMEWORKS[theme];
   if (!frameEntry) {
     listEl.innerHTML = '<div style="color:var(--text3);font-size:13px;text-align:center;margin-top:40px;">No framework data available yet.</div>';
@@ -660,6 +668,16 @@ function renderRightContent(idx) {
   const cEl = document.getElementById('fw-content');
   if (!currentFrameworkData || !currentFrameworkData[idx]) return;
 
+  // Save current subtopic's checkbox states before switching
+  if (currentSubtopicIdx !== null) {
+    const saved = {};
+    cEl.querySelectorAll('input[type="checkbox"]').forEach((cb, i) => {
+      saved[i] = cb.checked;
+    });
+    checkboxState[currentSubtopicIdx] = saved;
+  }
+  currentSubtopicIdx = idx;
+
   const st = currentFrameworkData[idx];
   const bulletLines = (st.bullets || []).filter(l => l.trim() !== '' && !/^#{3,}/.test(l));
   const totalBullets = bulletLines.length;
@@ -685,7 +703,7 @@ function renderRightContent(idx) {
 
   html += '<ul style="margin:0;padding-left:20px;color:var(--text);display:flex;flex-direction:column;gap:10px;">';
 
-  bulletLines.forEach(function(line) {
+  bulletLines.forEach(function(line, bIdx) {
     const isNumbered  = /^\s{1,}\d+[.)]\s/.test(line);
     const isSubBullet = /^\s{2,}-\s/.test(line);
 
@@ -696,16 +714,25 @@ function renderRightContent(idx) {
 
     text = highlightKeywords(text);
 
+    const cbId = 'cb_' + idx + '_' + bIdx;
+    const cbHtml = '<input type="checkbox" id="' + cbId + '" autocomplete="off" '
+      + 'style="width:11px;height:11px;flex-shrink:0;margin-left:10px;cursor:pointer;accent-color:var(--accent);opacity:0.45;vertical-align:middle;position:relative;top:-1px;" '
+      + 'onchange="this.style.opacity=this.checked?\'1\':\'0.45\';" '
+      + 'title="Tick if recalled">';
+
+    const liInner = '<span style="display:flex;align-items:baseline;justify-content:space-between;gap:6px;width:100%;">'
+                  + '<span>' + text + '</span>' + cbHtml + '</span>';
+
     if (isNumbered) {
       const numMatch = line.match(/^\s*(\d+)[.)]/);
       const num = numMatch ? numMatch[1] : '';
       html += '<li style="margin-left:20px;list-style-type:none;position:relative;">'
             + '<span style="position:absolute;left:-20px;font-weight:700;color:var(--accent);">' + num + '.</span>'
-            + text + '</li>';
+            + liInner + '</li>';
     } else if (isSubBullet) {
-      html += '<li style="margin-left:20px;list-style-type:circle;">' + text + '</li>';
+      html += '<li style="margin-left:20px;list-style-type:circle;">' + liInner + '</li>';
     } else {
-      html += '<li>' + text + '</li>';
+      html += '<li>' + liInner + '</li>';
     }
   });
 
@@ -714,6 +741,13 @@ function renderRightContent(idx) {
   html += '</div>'; // close bullets-container
 
   cEl.innerHTML = html;
+
+  // Restore saved checkbox states for this subtopic, or ensure all start unchecked
+  const saved = checkboxState[idx] || {};
+  cEl.querySelectorAll('input[type="checkbox"]').forEach((cb, i) => {
+    cb.checked = saved[i] || false;
+    cb.style.opacity = cb.checked ? '1' : '0.45';
+  });
 }
 
 // ── Recall Toggle ──────────────────────────────────────────────────────────
