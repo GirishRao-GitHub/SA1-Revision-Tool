@@ -209,6 +209,33 @@ body {
 .pillar-tag.p5 { color: #a78bfa; border-color: #a78bfa; background: #221a2a; }
 .pillar-tag.p6 { color: #f472b6; border-color: #f472b6; background: #2a1a24; }
 
+/* ── SOURCE BADGES ── */
+.src-badge {
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 700;
+  padding: 1px 5px;
+  border-radius: 3px;
+  border: 1px solid;
+  display: inline-block;
+  vertical-align: middle;
+  position: relative;
+  top: -1px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  letter-spacing: 0.02em;
+  cursor: default;
+}
+.src-badge.iai  { color: #34d399; border-color: #34d399; background: #1a2a22; }
+.src-badge.ifoa { color: #60a5fa; border-color: #60a5fa; background: #1a222a; }
+.src-badges-wrap {
+  display: inline-flex;
+  gap: 3px;
+  align-items: center;
+  flex-shrink: 0;
+  margin-left: 5px;
+}
+
 /* ── MAIN LAYOUT ── */
 .main {
   flex: 1;
@@ -427,6 +454,32 @@ function highlightKeywords(text) {
     text = text.replace(re, '<span style="font-weight:700;color:#fff;text-decoration:underline;text-decoration-color:var(--accent);text-underline-offset:2px;">$1</span>');
   });
   return text;
+}
+
+// ── Source-tag helpers ─────────────────────────────────────────────────────
+// Bullets may end with [src:IAI_0722,IFoA_0923] — extract tags and return
+// { cleanText: string, badgesHtml: string }
+function parseSrcTags(rawText) {
+  const match = rawText.match(/\[src:([^\]]+)\]\s*$/);
+  if (!match) return { cleanText: rawText, badgesHtml: '' };
+
+  const cleanText = rawText.slice(0, match.index).trimEnd();
+  const codes = match[1].split(',').map(s => s.trim()).filter(Boolean);
+
+  const badges = codes.map(code => {
+    // code format: IAI_MMYY or IFoA_MMYY  (e.g. IAI_0722, IFoA_0923)
+    const m = code.match(/^(IAI|IFoA)_(\d{2})(\d{2})$/i);
+    if (!m) return '';
+    const org   = m[1].toUpperCase() === 'IFOA' ? 'IFoA' : 'IAI';
+    const month = m[2];
+    const year  = m[3];
+    const cls   = org === 'IFoA' ? 'ifoa' : 'iai';
+    const label = org + '\u00a0' + month + '/' + year;   // e.g. "IAI 07/22"
+    return '<span class="src-badge ' + cls + '" title="' + org + ' exam sitting ' + month + '/' + year + '">' + label + '</span>';
+  }).join('');
+
+  const badgesHtml = badges ? '<span class="src-badges-wrap">' + badges + '</span>' : '';
+  return { cleanText, badgesHtml };
 }
 
 // ── State ──────────────────────────────────────────────────────────────────
@@ -706,21 +759,26 @@ function renderRightContent(idx) {
     const isNumbered  = /^\s{1,}\d+[.)]\s/.test(line);
     const isSubBullet = /^\s{2,}-\s/.test(line);
 
-    let text = line
+    // Strip markdown prefix first, then extract source tags
+    let rawText = line
       .replace(/^\s*\d+[.)]\s*/, '')
-      .replace(/^\s*-\s+/, '')
-      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+      .replace(/^\s*-\s+/, '');
 
+    const { cleanText, badgesHtml } = parseSrcTags(rawText);
+
+    let text = cleanText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
     text = highlightKeywords(text);
 
     const cbId = 'cb_' + idx + '_' + bIdx;
     const cbHtml = '<input type="checkbox" id="' + cbId + '" autocomplete="off" '
-      + 'style="width:11px;height:11px;flex-shrink:0;margin-left:10px;cursor:pointer;accent-color:var(--accent);opacity:0.45;vertical-align:middle;position:relative;top:-1px;" '
+      + 'style="width:11px;height:11px;flex-shrink:0;margin-left:6px;cursor:pointer;accent-color:var(--accent);opacity:0.45;vertical-align:middle;position:relative;top:-1px;" '
       + 'onchange="this.style.opacity=this.checked?\'1\':\'0.45\';" '
       + 'title="Tick if recalled">';
 
+    // Layout: [text] [badges?] [checkbox]  — badges sit flush against text, checkbox at far right
     const liInner = '<span style="display:flex;align-items:baseline;justify-content:space-between;gap:6px;width:100%;">'
-                  + '<span>' + text + '</span>' + cbHtml + '</span>';
+                  + '<span style="flex:1;">' + text + (badgesHtml ? '&ensp;' + badgesHtml : '') + '</span>'
+                  + cbHtml + '</span>';
 
     if (isNumbered) {
       const numMatch = line.match(/^\s*(\d+)[.)]/);
