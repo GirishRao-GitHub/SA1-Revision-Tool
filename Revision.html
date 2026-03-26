@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Revision — Master Exam Frameworks</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap');
+
+:root {
+  --bg: #0d0f14;
+  --surface: #151923;
+  --surface2: #1c2230;
+  --surface3: #242b3d;
+  --border: #2a324b;
+  --border2: #363f5f;
+  --text: #e2e4ed;
+  --text2: #949ebf;
+  --text3: #565f80;
+  --accent: #8b5cf6;
+  --accent2: #7c3aed;
+  --accentbg: #221a3a;
+  --radius: 6px;
+  --radius2: 10px;
+  --mono: 'IBM Plex Mono', monospace;
+  --sans: 'IBM Plex Sans', sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body {
+  font-family: var(--sans);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── TOPBAR ── */
+.topbar {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+  flex-shrink: 0;
+}
+.logo {
+  font-family: var(--mono);
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--accent);
+  letter-spacing: .05em;
+  white-space: nowrap;
+}
+.tagline { font-size: 12px; color: var(--text3); }
+
+/* Pillar filter buttons */
+#pillar-btn-group {
+  display: flex;
+  gap: 2px;
+  align-items: center;
+  background: var(--surface2);
+  padding: 2px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  margin-left: 4px;
+  flex-shrink: 0;
+}
+.src-btn {
+  padding: 3px 10px;
+  font-size: 11px;
+  font-weight: 700;
+  font-family: var(--sans);
+  border-radius: 4px;
+  border: 1px solid var(--border2);
+  background: var(--surface2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.2s;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  min-width: 44px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+}
+.src-btn:hover { background: var(--surface3); color: var(--text); border-color: var(--text3); }
+.src-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); box-shadow: 0 1px 6px rgba(139,92,246,0.15); }
+
+.p-filter {
+  font-size: 13px !important;
+  font-weight: 800 !important;
+  transition: all 0.2s cubic-bezier(0.4,0,0.2,1) !important;
+  text-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+.p-filter:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  background: var(--surface3) !important;
+}
+.p-filter.active {
+  background: var(--accent) !important;
+  color: #fff !important;
+  border-color: var(--accent) !important;
+  box-shadow: 0 0 15px rgba(139,92,246,0.4) !important;
+}
+
+/* Controls group right side */
+.topbar-actions { margin-left: auto; display: flex; align-items: center; gap: 6px; }
+.mode-btn {
+  padding: 4px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  font-family: var(--sans);
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: transparent;
+  color: var(--text2);
+}
+.mode-btn:hover { color: var(--text); }
+
+/* Recall toggle */
+#btn-recall {
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: all 0.2s;
+  background: var(--surface3);
+  color: var(--text2);
+}
+
+/* Hide/show sub-themes toggle */
+#btn-toggle-sub {
+  font-family: var(--sans);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  cursor: pointer;
+  transition: all 0.2s;
+  background: var(--surface3);
+  color: var(--text2);
+}
+
+/* ── TOOLTIP ── */
+.fw-tooltip {
+  position: fixed;
+  z-index: 10000;
+  background: rgba(21,25,35,0.97);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--border2);
+  border-radius: 8px;
+  padding: 10px 14px;
+  color: var(--text);
+  font-size: 13px;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(5px);
+  transition: opacity 0.2s, transform 0.2s;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.05);
+  max-width: 250px;
+  line-height: 1.4;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.fw-tooltip.visible { opacity: 1; transform: translateY(0); }
+.fw-tooltip-tag {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--accent);
+  letter-spacing: 0.05em;
+}
+.fw-tooltip-desc { font-weight: 500; }
+
+/* ── PILLAR TAGS ── */
+.pillar-tag {
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 700;
+  padding: 1px 4px;
+  border-radius: 3px;
+  background: var(--surface3);
+  color: var(--text3);
+  border: 1px solid var(--border);
+  text-transform: uppercase;
+  display: inline-block;
+  flex-shrink: 0;
+}
+.pillar-tag.p1 { color: #f87171; border-color: #f87171; background: #2a1a1a; }
+.pillar-tag.p2 { color: #fbbf24; border-color: #fbbf24; background: #2a241a; }
+.pillar-tag.p3 { color: #34d399; border-color: #34d399; background: #1a2a22; }
+.pillar-tag.p4 { color: #60a5fa; border-color: #60a5fa; background: #1a222a; }
+.pillar-tag.p5 { color: #a78bfa; border-color: #a78bfa; background: #221a2a; }
+.pillar-tag.p6 { color: #f472b6; border-color: #f472b6; background: #2a1a24; }
+
+/* ── MAIN LAYOUT ── */
+.main {
+  flex: 1;
+  display: flex;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* ── LEFT PANE (Master Themes) ── */
+#fw-left-pane {
+  background: var(--surface2);
+  border-right: 1px solid var(--border);
+  overflow-y: auto;
+  flex: 0 0 250px;
+  display: flex;
+  flex-direction: column;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border2) transparent;
+}
+#fw-left-pane::-webkit-scrollbar { width: 4px; }
+#fw-left-pane::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+
+.pane-header {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: var(--surface2);
+}
+.pane-title {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+#fw-topics-list {
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* ── MID PANE (Subtopics) ── */
+#fw-mid-pane {
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  overflow-y: auto;
+  flex: 0 0 300px;
+  display: flex;
+  flex-direction: column;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border2) transparent;
+}
+#fw-mid-pane::-webkit-scrollbar { width: 4px; }
+#fw-mid-pane::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+
+.mid-header {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+  position: sticky;
+  top: 0;
+  z-index: 5;
+  background: var(--surface);
+}
+#fw-subtopics-list {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* ── RIGHT PANE (Content) ── */
+#fw-right-pane {
+  flex: 1;
+  overflow-y: auto;
+  background: var(--bg);
+  padding: 40px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent) transparent;
+}
+#fw-right-pane::-webkit-scrollbar { width: 6px; }
+#fw-right-pane::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 3px; }
+
+#fw-content {
+  max-width: 800px;
+  margin: 0 auto;
+  color: var(--text);
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+/* Reveal animation */
+@keyframes reveal-pulse {
+  0%   { transform: scale(1);    background: var(--surface3); }
+  50%  { transform: scale(1.01); background: var(--accentbg); }
+  100% { transform: scale(1);    background: var(--surface2); }
+}
+
+/* Loading overlay */
+#loading-overlay {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  position: absolute;
+  inset: 0;
+  background: var(--bg);
+  z-index: 100;
+}
+.loading-text { font-size: 14px; color: var(--text2); }
+.dots { display: flex; gap: 6px; }
+.dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); animation: pulse 1.2s ease-in-out infinite; }
+.dot:nth-child(2) { animation-delay: .2s; }
+.dot:nth-child(3) { animation-delay: .4s; }
+@keyframes pulse { 0%,100%{opacity:.2} 50%{opacity:1} }
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <!-- Pillar filter buttons -->
+  <div id="pillar-btn-group">
+    <button class="src-btn p-filter active" onclick="filterPillar('ALL')">ALL</button>
+    <button class="src-btn p-filter" style="color:#f87171;" onclick="filterPillar('P1')" onmouseover="showTooltip(this,'P1','Product Design & Distribution')" onmouseout="hideTooltip()">P1</button>
+    <button class="src-btn p-filter" style="color:#fbbf24;" onclick="filterPillar('P2')" onmouseover="showTooltip(this,'P2','Pricing & Underwriting')" onmouseout="hideTooltip()">P2</button>
+    <button class="src-btn p-filter" style="color:#34d399;" onclick="filterPillar('P3')" onmouseover="showTooltip(this,'P3','Claims Management')" onmouseout="hideTooltip()">P3</button>
+    <button class="src-btn p-filter" style="color:#60a5fa;" onclick="filterPillar('P4')" onmouseover="showTooltip(this,'P4','Risk Management & Reinsurance')" onmouseout="hideTooltip()">P4</button>
+    <button class="src-btn p-filter" style="color:#a78bfa;" onclick="filterPillar('P5')" onmouseover="showTooltip(this,'P5','Valuation & Data')" onmouseout="hideTooltip()">P5</button>
+    <button class="src-btn p-filter" style="color:#f472b6;" onclick="filterPillar('P6')" onmouseover="showTooltip(this,'P6','Regulation & Ethics')" onmouseout="hideTooltip()">P6</button>
+  </div>
+
+  <!-- Title -->
+  <div style="flex:1; text-align:center;">
+    <span class="logo">Master Exam Frameworks</span>
+    <span style="font-size:12px; color:var(--text3); margin-left:10px; font-family:var(--mono);" id="live-clock"></span>
+  </div>
+
+  <!-- Right controls -->
+  <div class="topbar-actions">
+    <button id="btn-recall" onclick="toggleRecall()">Recall: OFF</button>
+    <div style="width:1px; height:24px; background:var(--border); margin:0 4px;"></div>
+    <button id="btn-toggle-sub" onclick="toggleSubThemes()">Hide Sub-themes</button>
+    <div style="width:1px; height:24px; background:var(--border); margin:0 4px;"></div>
+    <button class="mode-btn" onclick="toggleFullscreen()" title="Full Screen" style="font-size:15px;">⛶</button>
+  </div>
+</div>
+
+<!-- TOOLTIP -->
+<div class="fw-tooltip" id="fw-tooltip">
+  <span class="fw-tooltip-tag" id="fw-tooltip-tag"></span>
+  <span class="fw-tooltip-desc" id="fw-tooltip-desc"></span>
+</div>
+
+<!-- MAIN -->
+<div class="main" style="position:relative;">
+
+  <!-- Loading overlay -->
+  <div id="loading-overlay">
+    <div class="loading-text">Loading frameworks…</div>
+    <div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+  </div>
+
+  <!-- LEFT: Master Themes -->
+  <div id="fw-left-pane">
+    <div class="pane-header">
+      <div class="pane-title" style="color:var(--accent);">Master Themes</div>
+    </div>
+    <div id="fw-topics-list"></div>
+  </div>
+
+  <!-- MID: Subtopics -->
+  <div id="fw-mid-pane">
+    <div class="mid-header">
+      <div class="pane-title" id="fw-mid-title" style="color:var(--text);">Subtopics</div>
+    </div>
+    <div id="fw-subtopics-list">
+      <div style="color:var(--text3); font-size:13px; text-align:center; margin-top:40px;">Select a Master Theme first</div>
+    </div>
+  </div>
+
+  <!-- RIGHT: Content -->
+  <div id="fw-right-pane">
+    <div id="fw-content">
+      <h2 style="color:var(--text3); text-align:center; margin-top:100px;">Select a Subtopic to view details</h2>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ── SA1 Keyword list for highlighting ──────────────────────────────────────
+const SA1_KEYWORDS = [
+  "Solvency II","SCR","Best Estimate","Risk Margin","PMI","Income Protection",
+  "Morbidity","Mortality","Lapse","Anti-selection","Moral Hazard","Diversification",
+  "Technical Provisions","Capital","Underwriting","Claims Management","Product Design",
+  "Pricing","Expenses","Taxation","Regulation","State Provision","Reinsurance",
+  "Social Care","Long Term Care","Critical Illness","IP","CI","LTC","IRDAI","PMJAY",
+  "Treating Customers Fairly","Genetic Testing","Yield Curve","Asset Liability","QALYs",
+  "Value at Risk","Run-off","Bornhuetter","IBNR"
+];
+
+function highlightKeywords(text) {
+  SA1_KEYWORDS.forEach(kw => {
+    const re = new RegExp('\\b(' + kw.replace(/[.*+?^${}()|[\]\\]/g,'\\$&') + ')\\b','g');
+    text = text.replace(re, '<span style="font-weight:700;color:#fff;text-decoration:underline;text-decoration-color:var(--accent);text-underline-offset:2px;">$1</span>');
+  });
+  return text;
+}
+
+// ── State ──────────────────────────────────────────────────────────────────
+let TOPIC_FRAMEWORKS = {};
+let currentPillarFilter = 'ALL';
+let currentFrameworkData = null;
+let recallMode = false;
+let subHidden = false;
+
+// ── Boot ───────────────────────────────────────────────────────────────────
+window.onload = async function() {
+  // Load localStorage prefs
+  recallMode  = localStorage.getItem('rv_recall_mode') === 'true';
+  subHidden   = localStorage.getItem('rv_sub_hidden')  === 'true';
+
+  applyRecallUI();
+  applySubHiddenUI();
+
+  // Try to fetch Topic_Frameworks.json
+  let loaded = false;
+  const paths = ['data/Topic_Frameworks.json', 'Topic_Frameworks.json'];
+  for (const p of paths) {
+    try {
+      const res = await fetch(p + '?t=' + Date.now());
+      if (res.ok) { TOPIC_FRAMEWORKS = await res.json(); loaded = true; break; }
+    } catch(e) {}
+  }
+
+  document.getElementById('loading-overlay').style.display = 'none';
+
+  if (!loaded || Object.keys(TOPIC_FRAMEWORKS).length === 0) {
+    document.getElementById('fw-content').innerHTML =
+      '<div style="color:var(--text3);text-align:center;margin-top:80px;font-size:14px;">' +
+      '⚠️ Could not load <code>Topic_Frameworks.json</code>.<br><br>' +
+      'Make sure this file is in the same folder as <code>Revision.html</code><br>' +
+      'and open via a local server (e.g. <code>python -m http.server 8080</code>).</div>';
+    return;
+  }
+
+  renderFrameworkList();
+  startLiveClock();
+};
+
+// ── Clock ──────────────────────────────────────────────────────────────────
+function startLiveClock() {
+  updateClock(); setInterval(updateClock, 1000);
+}
+function updateClock() {
+  const now = new Date();
+  const days   = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const h = String(now.getHours()).padStart(2,'0');
+  const m = String(now.getMinutes()).padStart(2,'0');
+  const s = String(now.getSeconds()).padStart(2,'0');
+  const el = document.getElementById('live-clock');
+  if (el) el.textContent = `${days[now.getDay()]}, ${now.getDate()} ${months[now.getMonth()]} ${h}:${m}:${s}`;
+}
+
+// ── Pillar Filter ──────────────────────────────────────────────────────────
+function filterPillar(p) {
+  currentPillarFilter = p;
+  document.querySelectorAll('.p-filter').forEach(btn => {
+    const txt = btn.textContent.trim();
+    const isActive = (p === 'ALL' && txt === 'ALL') || txt === p;
+    btn.classList.toggle('active', isActive);
+    if (isActive) {
+      btn.style.background = 'var(--accent)';
+      btn.style.color = '#fff';
+      btn.style.borderColor = 'var(--accent)';
+    } else {
+      btn.style.background = '';
+      btn.style.borderColor = '';
+      const c = { P1:'#f87171', P2:'#fbbf24', P3:'#34d399', P4:'#60a5fa', P5:'#a78bfa', P6:'#f472b6' };
+      btn.style.color = c[txt] || '';
+    }
+  });
+  renderFrameworkList();
+}
+
+// ── Render Left Pane ────────────────────────────────────────────────────────
+function renderFrameworkList() {
+  const listEl = document.getElementById('fw-topics-list');
+  listEl.innerHTML = '';
+  let themes = Object.keys(TOPIC_FRAMEWORKS).sort();
+
+  if (currentPillarFilter !== 'ALL') {
+    themes = themes.filter(t => {
+      const entry = TOPIC_FRAMEWORKS[t];
+      return entry && entry._meta && entry._meta.pillar === currentPillarFilter;
+    });
+  }
+
+  if (themes.length === 0) {
+    listEl.innerHTML = '<div style="color:var(--text3);font-size:13px;text-align:center;margin-top:30px;">No topics for this pillar.</div>';
+    return;
+  }
+
+  themes.forEach(t => {
+    const btn = document.createElement('div');
+    btn.style.cssText = 'padding:10px 12px; border-radius:6px; cursor:pointer; font-size:12px; font-weight:600; color:var(--text); border:1px solid var(--border); transition:all 0.2s; background:var(--surface); display:flex; align-items:center; justify-content:space-between; gap:8px;';
+
+    const entry = TOPIC_FRAMEWORKS[t];
+    const pillar = (entry && entry._meta && entry._meta.pillar) ? entry._meta.pillar : '';
+    const icon   = (entry && entry._meta && entry._meta.icon)   ? entry._meta.icon   : '';
+    const tagHtml = pillar ? `<span class="pillar-tag ${pillar.toLowerCase()}">${pillar}</span>` : '';
+
+    btn.innerHTML = `<span>${icon ? icon + ' ' : ''}${t}</span>${tagHtml}`;
+
+    btn.onmouseover = () => { if (!btn.classList.contains('active')) btn.style.borderColor = 'var(--accent)'; };
+    btn.onmouseout  = () => { if (!btn.classList.contains('active')) btn.style.borderColor = 'var(--border)';  };
+    btn.onclick = () => {
+      Array.from(listEl.children).forEach(c => {
+        c.classList.remove('active');
+        c.style.borderColor = 'var(--border)';
+        c.style.background  = 'var(--surface)';
+        c.style.color       = 'var(--text)';
+      });
+      btn.classList.add('active');
+      btn.style.background  = 'var(--accent)';
+      btn.style.color       = '#fff';
+      btn.style.borderColor = 'var(--accent)';
+      renderMidContent(t);
+    };
+    listEl.appendChild(btn);
+  });
+}
+
+// ── Parse Framework Lines ──────────────────────────────────────────────────
+function parseFrameworkLines(lines) {
+  let chapterTitle = '';
+  const subtopics = [];
+
+  const h3lines = lines.filter(l => /^###\s+/.test(l));
+  if (h3lines.length > 0) chapterTitle = h3lines[0].replace(/^###\s+/, '').trim();
+
+  const h4lines = lines.filter(l => /^####\s+/.test(l));
+  const multiH3 = h3lines.length > 1;
+
+  if (h4lines.length > 0) {
+    let current = null;
+    lines.forEach(line => {
+      const m = line.match(/^####\s+(.+)$/);
+      if (m) {
+        current = { title: m[1].trim(), bullets: [] };
+        subtopics.push(current);
+      } else if (current && !/^#{3,}/.test(line) && line.trim() !== '') {
+        current.bullets.push(line);
+      }
+    });
+  } else if (multiH3) {
+    let current = null;
+    lines.forEach(line => {
+      const m = line.match(/^###\s+(.+)$/);
+      if (m) {
+        current = { title: m[1].trim(), bullets: [] };
+        subtopics.push(current);
+      } else if (current && line.trim() !== '') {
+        current.bullets.push(line);
+      }
+    });
+  } else {
+    lines.forEach(line => {
+      if (line.startsWith('- **')) {
+        const m = line.match(/^- \*\*(.*?)\*\*\s*(?::\s*)?(.*)$/);
+        if (m) subtopics.push({ title: m[1].trim(), bullets: [line] });
+      }
+    });
+  }
+
+  return { chapterTitle, subtopics };
+}
+
+// ── Render Mid Pane ────────────────────────────────────────────────────────
+function renderMidContent(theme) {
+  const listEl = document.getElementById('fw-subtopics-list');
+  document.getElementById('fw-mid-title').textContent = theme;
+  document.getElementById('fw-content').innerHTML =
+    '<h2 style="color:var(--text3);text-align:center;margin-top:100px;">Select a Subtopic to view details</h2>';
+
+  const frameEntry = TOPIC_FRAMEWORKS[theme];
+  if (!frameEntry) {
+    listEl.innerHTML = '<div style="color:var(--text3);font-size:13px;text-align:center;margin-top:40px;">No framework data available yet.</div>';
+    return;
+  }
+
+  const lines = frameEntry.bullets ? frameEntry.bullets : (Array.isArray(frameEntry) ? frameEntry : []);
+  const { chapterTitle, subtopics } = parseFrameworkLines(lines);
+  currentFrameworkData = subtopics;
+
+  listEl.innerHTML = '';
+
+  if (chapterTitle) {
+    const badge = document.createElement('div');
+    badge.style.cssText = 'font-size:11px; font-weight:600; color:var(--text3); background:var(--surface3); border:1px solid var(--border); border-radius:4px; padding:3px 8px; margin-bottom:8px; line-height:1.5; text-align:center; letter-spacing:0.03em;';
+    badge.textContent = chapterTitle;
+    listEl.appendChild(badge);
+  }
+
+  if (subtopics.length === 0) {
+    listEl.innerHTML += '<div style="color:var(--text3);font-size:13px;text-align:center;margin-top:30px;">No subtopics found.</div>';
+    return;
+  }
+
+  subtopics.forEach((st, idx) => {
+    const btn = document.createElement('div');
+    btn.style.cssText = 'padding:12px 14px; border-radius:6px; cursor:pointer; font-size:13px; font-weight:600; color:var(--text); border:1px solid var(--border); transition:all 0.2s; background:var(--surface2); display:flex; align-items:center; justify-content:space-between; margin-bottom:2px; line-height:1.4;';
+    btn.innerHTML = '<span>' + st.title + '</span><span style="font-size:16px;color:var(--text3);">›</span>';
+    btn.onmouseover = () => { if (!btn.classList.contains('active')) { btn.style.borderColor='var(--accent)'; btn.style.transform='translateX(2px)'; } };
+    btn.onmouseout  = () => { if (!btn.classList.contains('active')) { btn.style.borderColor='var(--border)'; btn.style.transform='translateX(0)'; } };
+    btn.onclick = () => {
+      Array.from(listEl.children).forEach(c => {
+        c.classList.remove('active');
+        c.style.borderColor = 'var(--border)';
+        c.style.background  = 'var(--surface2)';
+        c.style.color       = 'var(--text)';
+        c.style.transform   = 'translateX(0)';
+      });
+      btn.classList.add('active');
+      btn.style.background  = 'var(--accentbg)';
+      btn.style.color       = 'var(--accent)';
+      btn.style.borderColor = 'var(--accent)';
+      btn.style.transform   = 'translateX(2px)';
+      renderRightContent(idx);
+    };
+    listEl.appendChild(btn);
+  });
+}
+
+// ── Render Right Pane ──────────────────────────────────────────────────────
+function renderRightContent(idx) {
+  const cEl = document.getElementById('fw-content');
+  if (!currentFrameworkData || !currentFrameworkData[idx]) return;
+
+  const st = currentFrameworkData[idx];
+  const bulletLines = (st.bullets || []).filter(l => l.trim() !== '' && !/^#{3,}/.test(l));
+  const totalBullets = bulletLines.length;
+
+  let html = '<div style="margin-bottom:24px; border-bottom:2px solid var(--border); padding-bottom:12px;">'
+           + '<h1 style="color:var(--accent); margin:0; font-family:var(--sans); font-size:22px;">' + st.title + '</h1>'
+           + '</div>';
+
+  html += '<div id="fw-bullets-container" style="position:relative; background:var(--surface2); border-left:4px solid var(--accent); padding:20px; border-radius:var(--radius); box-shadow:0 4px 12px rgba(0,0,0,0.1); font-size:15px; line-height:1.7; transition:all 0.3s; min-height:100px;">';
+
+  if (recallMode) {
+    html += '<div style="position:absolute; top:12px; right:12px; display:flex; align-items:center; gap:8px; background:var(--surface3); padding:4px 8px; border-radius:4px; border:1px solid var(--border); z-index:10;">'
+          + '<span style="font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;">Reveal ' + totalBullets + ' Bullets</span>'
+          + '<input type="checkbox" onchange="document.getElementById(\'fw-bullets-reveal-box\').style.display=this.checked?\'block\':\'none\';" style="width:16px;height:16px;cursor:pointer;accent-color:var(--accent);">'
+          + '</div>';
+    html += '<div style="color:var(--text3);font-style:italic;margin-bottom:15px;font-size:13px;max-width:70%;line-height:1.4;">'
+          + 'Mental Challenge: Can you recall the ' + totalBullets + ' key points for this subtopic?'
+          + '</div>';
+    html += '<div id="fw-bullets-reveal-box" style="display:none;animation:reveal-pulse 0.4s ease-out;">';
+  } else {
+    html += '<div id="fw-bullets-reveal-box" style="display:block;">';
+  }
+
+  html += '<ul style="margin:0;padding-left:20px;color:var(--text);display:flex;flex-direction:column;gap:10px;">';
+
+  bulletLines.forEach(function(line) {
+    const isNumbered  = /^\s{1,}\d+[.)]\s/.test(line);
+    const isSubBullet = /^\s{2,}-\s/.test(line);
+
+    let text = line
+      .replace(/^\s*\d+[.)]\s*/, '')
+      .replace(/^\s*-\s+/, '')
+      .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+
+    text = highlightKeywords(text);
+
+    if (isNumbered) {
+      const numMatch = line.match(/^\s*(\d+)[.)]/);
+      const num = numMatch ? numMatch[1] : '';
+      html += '<li style="margin-left:20px;list-style-type:none;position:relative;">'
+            + '<span style="position:absolute;left:-20px;font-weight:700;color:var(--accent);">' + num + '.</span>'
+            + text + '</li>';
+    } else if (isSubBullet) {
+      html += '<li style="margin-left:20px;list-style-type:circle;">' + text + '</li>';
+    } else {
+      html += '<li>' + text + '</li>';
+    }
+  });
+
+  html += '</ul>';
+  html += '</div>'; // close reveal box
+  html += '</div>'; // close bullets-container
+
+  cEl.innerHTML = html;
+}
+
+// ── Recall Toggle ──────────────────────────────────────────────────────────
+function toggleRecall() {
+  recallMode = !recallMode;
+  localStorage.setItem('rv_recall_mode', recallMode);
+  applyRecallUI();
+
+  // Re-render active subtopic if any
+  const activeMid = document.querySelector('#fw-subtopics-list .active');
+  if (activeMid) {
+    const children = Array.from(activeMid.parentNode.children).filter(c => c.tagName !== 'DIV' || !c.style.background.includes('surface3'));
+    const idx = Array.from(activeMid.parentNode.children).indexOf(activeMid);
+    renderRightContent(idx);
+  }
+}
+
+function applyRecallUI() {
+  const btn = document.getElementById('btn-recall');
+  if (!btn) return;
+  btn.textContent = recallMode ? 'Recall: ON' : 'Recall: OFF';
+  btn.style.background   = recallMode ? 'var(--accent)' : 'var(--surface3)';
+  btn.style.color        = recallMode ? '#fff'          : 'var(--text2)';
+  btn.style.borderColor  = recallMode ? 'var(--accent)' : 'var(--border)';
+}
+
+// ── Sub-themes Toggle ──────────────────────────────────────────────────────
+function toggleSubThemes() {
+  subHidden = !subHidden;
+  localStorage.setItem('rv_sub_hidden', subHidden);
+  applySubHiddenUI();
+}
+
+function applySubHiddenUI() {
+  const btn    = document.getElementById('btn-toggle-sub');
+  const midP   = document.getElementById('fw-mid-pane');
+  if (!btn || !midP) return;
+  btn.textContent = subHidden ? 'Show Sub-themes' : 'Hide Sub-themes';
+  btn.style.background  = subHidden ? 'var(--accent)' : 'var(--surface3)';
+  btn.style.color       = subHidden ? '#fff'          : 'var(--text2)';
+  btn.style.borderColor = subHidden ? 'var(--accent)' : 'var(--border)';
+  midP.style.display    = subHidden ? 'none'          : 'flex';
+}
+
+// ── Tooltip ────────────────────────────────────────────────────────────────
+function showTooltip(el, tag, desc) {
+  const tt    = document.getElementById('fw-tooltip');
+  const tTag  = document.getElementById('fw-tooltip-tag');
+  const tDesc = document.getElementById('fw-tooltip-desc');
+  tTag.textContent  = tag;
+  tDesc.textContent = desc;
+  const c = { P1:'#f87171', P2:'#fbbf24', P3:'#34d399', P4:'#60a5fa', P5:'#a78bfa', P6:'#f472b6' };
+  tTag.style.color = c[tag] || 'var(--accent)';
+  const rect = el.getBoundingClientRect();
+  tt.style.left = rect.left + 'px';
+  tt.style.top  = (rect.bottom + 8) + 'px';
+  tt.classList.add('visible');
+}
+function hideTooltip() {
+  document.getElementById('fw-tooltip').classList.remove('visible');
+}
+
+// ── Fullscreen ─────────────────────────────────────────────────────────────
+function toggleFullscreen() {
+  if (!document.fullscreenElement) {
+    document.documentElement.requestFullscreen && document.documentElement.requestFullscreen();
+  } else {
+    document.exitFullscreen && document.exitFullscreen();
+  }
+}
+</script>
+</body>
+</html>
