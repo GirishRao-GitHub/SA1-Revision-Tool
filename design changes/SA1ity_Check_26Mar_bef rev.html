@@ -1,0 +1,3270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>SA1ity Check</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap');
+
+:root {
+  --bg: #0d0f14;
+  --surface: #151923;
+  --surface2: #1c2230;
+  --surface3: #242b3d;
+  --border: #2a324b;
+  --border2: #363f5f;
+  --text: #e2e4ed;
+  --text2: #949ebf;
+  --text3: #565f80;
+  --accent: #8b5cf6; /* Deep Indigo for Advanced Paper */
+  --accent2: #7c3aed;
+  --accentbg: #221a3a;
+  --green: #2ecc71;
+  --greenbg: #0d2a1a;
+  --amber: #f1c40f;
+  --amberbg: #2a240a;
+  --red: #e74c3c;
+  --redbg: #2a0f0f;
+  --radius: 6px;
+  --radius2: 10px;
+  --mono: 'IBM Plex Mono', monospace;
+  --sans: 'IBM Plex Sans', sans-serif;
+}
+
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;}
+
+/* TOP BAR */
+.topbar{background:var(--surface);border-bottom:1px solid var(--border);padding:10px 20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;}
+.logo{font-family:var(--mono);font-weight:600;font-size:15px;color:var(--accent);letter-spacing:.05em;white-space:nowrap;}
+.logo span{color:var(--text3);}
+.logo .ifoa{color:var(--accent);}
+.tagline{font-size:12px;color:var(--text3);}
+.topbar-actions{margin-left:auto;display:flex;align-items:center;gap:8px;}
+.top-btn{font-family:var(--mono);font-size:11px;font-weight:600;padding:4px 10px;border-radius:4px;cursor:pointer;background:var(--surface2);border:1px solid var(--border);color:var(--text2);transition:all .2s;}
+.top-btn:hover{background:var(--surface3);color:var(--text);}
+.btn-exit{border-color:var(--red);color:var(--red);background:var(--redbg);}
+.btn-exit:hover{background:var(--red);color:#fff;}
+.topbar-clock {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text3);
+  margin-left: 12px;
+  vertical-align: middle;
+  letter-spacing: 0.02em;
+}
+
+/* SERVER NOTICE */
+#server-notice{background:#12141d;border-bottom:1px solid #1a1e2e;padding:8px 20px;font-size:12.5px;color:var(--text2);display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+#server-notice.hidden{display:none;}
+.notice-cmd{font-family:var(--mono);background:#060e1c;border:1px solid var(--border2);border-radius:4px;padding:2px 8px;color:#a78bfa;cursor:pointer;font-size:12px;}
+.notice-cmd:hover{background:#1a1e2e;}
+.notice-dismiss{margin-left:auto;background:none;border:none;color:var(--text3);cursor:pointer;font-size:16px;padding:0 4px;}
+.cors-alert{display:none;background:var(--redbg);border:1px solid var(--red);border-radius:var(--radius);padding:4px 10px;color:var(--red);font-size:12px;}
+
+
+/* SOURCE SELECTOR */
+.source-nav { display: flex; align-items: center; justify-content: flex-start; padding: 6px 12px; background: var(--surface); border-bottom: 1px solid var(--border); gap: 4px; overflow-x: auto; }
+.src-btn { padding: 3px 10px; font-size: 11px; font-weight: 700; font-family: var(--sans); border-radius: 4px; border: 1px solid var(--border2); background: var(--surface2); color: var(--text2); cursor: pointer; transition: all 0.2s; text-transform: uppercase; letter-spacing: 0.02em; min-width: 80px; white-space: nowrap; }
+.src-btn:hover { background: var(--surface3); color: var(--text); border-color: var(--text3); }
+.src-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); box-shadow: 0 1px 6px rgba(139,92,246,0.15); }
+
+/* MODE TOGGLE */
+.mode-btn { padding: 4px 12px; font-size: 11px; font-weight: 600; font-family: var(--sans); border-radius: 4px; border: none; cursor: pointer; transition: all 0.2s; background: transparent; color: var(--text2); }
+.mode-btn.active { background: var(--accent); color: #fff; box-shadow: 0 0 8px rgba(139,92,246,0.3); }
+
+/* SELECTORS (theme mode) */
+    .selectors { display: grid; grid-template-columns: repeat(3, 1fr); align-items: stretch; gap: 12px; padding: 12px 16px; border-bottom: 1px solid var(--border); background: var(--surface); }
+    .sel-group { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+    .sel-label { font-size: 11px; font-weight: 600; color: var(--text3); text-transform: uppercase; letter-spacing: .08em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    select { padding: 8px 10px; border-radius: 6px; border: 1px solid var(--border); background: var(--bg); color: var(--text); font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.2s ease; width: 100%; min-height: 36px; box-sizing: border-box; }
+
+/* SITTING ROW (chrono mode) */
+.sitting-row { display: flex; align-items: center; gap: 10px; padding: 7px 14px; border-bottom: 1px solid var(--border); background: var(--surface); flex-wrap: nowrap; }
+.sitting-row .sel-label { font-size: 11px; font-weight: 700; color: var(--text3); text-transform: uppercase; letter-spacing: .08em; white-space: nowrap; flex-shrink: 0; }
+.sitting-row select { padding: 5px 8px; font-size: 13px; min-height: 30px; width: auto; flex: 1; max-width: 260px; }
+
+/* Q DOT BAR */
+.dot-bar { display: none; align-items: center; gap: 6px; padding: 6px 14px; border-bottom: 1px solid var(--border); background: var(--surface2); flex-wrap: nowrap; }
+.dot-bar.visible { display: flex; }
+.dot-bar-label { font-size: 10px; font-weight: 700; color: var(--accent); text-transform: uppercase; letter-spacing: .08em; flex-shrink: 0; margin-right: 6px; font-style: italic; border-right: 1px solid var(--border2); padding-right: 8px; }
+.dot-bar-items { display: flex; gap: 5px; overflow-x: auto; flex: 1; padding-bottom: 1px; scrollbar-width: none; }
+.dot-bar-items::-webkit-scrollbar { display: none; }
+.dot-bar-marks { font-family: var(--mono); font-size: 10px; font-weight: 600; color: var(--text3); background: var(--surface3); border: 1px solid var(--border); border-radius: 4px; padding: 2px 7px; flex-shrink: 0; margin-left: auto; white-space: nowrap; transition: all 0.2s; }
+.dot-bar-marks.active { color: var(--text); border-color: var(--border2); }
+select:focus{outline:none;border-color:var(--accent);}
+.marks-pill{display:inline-flex;align-items:center;justify-content:center;box-sizing:border-box;height:18px;line-height:18px;font-family:var(--mono);font-size:10px;font-weight:600;border-radius:3px;padding:0 6px;white-space:nowrap;gap:3px;transition:all 0.2s;}
+.pill-sub{background:#475569;color:#f8fafc;border:1px solid #64748b;}
+.pill-q{background:#334155;color:#f8fafc;border:1px solid #475569;}
+.pill-sitting{background:#1e293b;color:#f8fafc;border:1px solid #334155;box-shadow:0 0 10px rgba(0,0,0,0.2);}
+.marks-row{display:flex;gap:8px;align-items:center;flex-wrap:nowrap;}
+.btn-export:hover{background:#64748b;color:#fff;border-color:#94a3b8;}
+
+/* PILLAR TAGS */
+.pillar-tag {
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 700;
+  padding: 1px 4px;
+  border-radius: 3px;
+  margin-left: 6px;
+  background: var(--surface3);
+  color: var(--text3);
+  border: 1px solid var(--border);
+  vertical-align: middle;
+  text-transform: uppercase;
+  display: inline-block;
+}
+.pillar-tag.p1 { color: #f87171; border-color: #f87171; background: #2a1a1a; }
+.pillar-tag.p2 { color: #fbbf24; border-color: #fbbf24; background: #2a241a; }
+.pillar-tag.p3 { color: #34d399; border-color: #34d399; background: #1a2a22; }
+.pillar-tag.p4 { color: #60a5fa; border-color: #60a5fa; background: #1a222a; }
+.pillar-tag.p5 { color: #a78bfa; border-color: #a78bfa; background: #221a2a; }
+.pillar-tag.p6 { color: #f472b6; border-color: #f472b6; background: #2a1a24; }
+
+/* TOPBAR PILLAR BUTTONS */
+.p-filter {
+  min-width: 44px !important;
+  height: 32px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 13px !important;
+  font-weight: 800 !important;
+  border-radius: 6px !important;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  padding: 0 8px !important;
+  text-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+.p-filter:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  background: var(--surface3) !important;
+}
+.p-filter.active {
+  background: var(--accent) !important;
+  color: #fff !important;
+  border-color: var(--accent) !important;
+  box-shadow: 0 0 15px rgba(139, 92, 246, 0.4) !important;
+}
+
+/* MAIN LAYOUT */
+.main{display:grid;grid-template-columns:1fr 1fr;flex:1;min-height:0;height:0;}
+@media(max-width:900px){.main{grid-template-columns:1fr;}}
+
+/* LEFT PANE */
+.left-pane{border-right:1px solid var(--border);display:flex;flex-direction:column;min-height:0;overflow:hidden;}
+.pane-header{padding:10px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.pane-title{font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;}
+
+.scenario-wrap{padding:14px 16px;border-bottom:1px solid var(--border);background:rgba(43, 44, 48, 0.4);}
+.scenario-toggle{font-size:12px;color:var(--accent);cursor:pointer;user-select:none;display:flex;align-items:center;gap:6px;}
+.scenario-toggle:hover{color:#a78bfa;}
+.scenario-body{font-size:14.5px;color:var(--text);line-height:1.75;margin-top:10px;display:none;max-height:450px;overflow-y:auto;white-space:pre-line;padding-right:12px;scrollbar-width:thin;scrollbar-color:var(--accent) transparent;word-break:break-word;overflow-wrap:anywhere;}
+.scenario-body::-webkit-scrollbar{width:6px;}
+.scenario-body::-webkit-scrollbar-thumb{background-color:var(--accent);border-radius:10px;}
+.scenario-body.open{display:block;}
+.question-text{padding:14px 16px;font-size:15px;font-weight:400;color:var(--text);line-height:1.6;border-bottom:1px solid var(--border);max-height:180px;overflow-y:auto;white-space:pre-line;word-break:break-word;overflow-wrap:anywhere;}
+
+/* ATTRACTIVE TOOLTIP */
+.fw-tooltip {
+  position: fixed;
+  z-index: 10000;
+  background: rgba(21, 25, 35, 0.95);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--border2);
+  border-radius: 8px;
+  padding: 10px 14px;
+  color: var(--text);
+  font-size: 13px;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(5px);
+  transition: opacity 0.2s, transform 0.2s;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.05);
+  max-width: 250px;
+  line-height: 1.4;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.fw-tooltip.visible { opacity: 1; transform: translateY(0); }
+.fw-tooltip-tag {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--accent);
+  letter-spacing: 0.05em;
+}
+.fw-tooltip-desc { font-weight: 500; font-family: var(--sans); }
+
+/* TIMER */
+.timer-zone{padding:6px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;flex-wrap:nowrap;background:var(--surface);overflow:hidden;}
+
+/* NAV SCROLLER */
+.nav-scroller{padding:6px 12px;border-bottom:1px solid var(--border);margin-bottom:2px;display:flex;align-items:center;}
+.nav-scroller::-webkit-scrollbar{display:none;}
+.nav-label{font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;margin-right:12px;letter-spacing:.05em;}
+.nav-scroller-items{display:flex;gap:4px;overflow-x:auto;padding-bottom:2px;}
+.nav-scroller-items::-webkit-scrollbar{height:0;}
+.sub-nav-row{padding:4px 12px 6px;background:var(--surface2);border-bottom:1px solid var(--border);display:none;align-items:center;}
+.sub-nav-row.visible{display:flex;}
+
+.nav-dot{min-width:28px;height:28px;border-radius:6px;background:var(--surface2);color:var(--text3);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;cursor:pointer;transition:all 0.2s cubic-bezier(0.4,0,0.2,1);border:1px solid var(--border);position:relative;flex-shrink:0;}
+.nav-dot.attempted{border-color:var(--green);color:var(--green);border-width:2px;background:rgba(16,185,129,0.05);}
+.nav-dot.active{background:var(--accent) !important;color:white !important;border-color:var(--accent) !important;box-shadow:0 2px 8px rgba(139,92,246,0.35);transform:translateY(-1px);z-index:10;}
+.nav-dot.attempted.active{background:var(--accent) !important;color:white !important;border-color:var(--accent) !important;}
+
+.nav-sub-dot{min-width:24px;height:24px;padding:0 8px;border-radius:12px;background:var(--surface3);color:var(--text2);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;cursor:pointer;transition:all 0.2s;border:1px solid var(--border2);white-space:nowrap;}
+.nav-sub-dot.active{background:var(--accent);color:white;border-color:var(--accent);}
+.nav-sub-dot.attempted{color:var(--green);border-color:var(--green);background:var(--greenbg);}
+.nav-sub-dot.attempted.active{background:var(--green);color:white;}
+.timer-display{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--text);letter-spacing:.02em;flex-shrink:0;min-width:42px;}
+.timer-display.amber{color:var(--amber);}
+.timer-display.red{color:var(--red);animation:blink 1s ease-in-out infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+.timer-bar-wrap{flex:1;min-width:40px;margin-right:8px;}
+.timer-bar-track{height:3px;background:var(--surface3);border-radius:2px;}
+.timer-bar-fill{height:3px;border-radius:2px;background:var(--accent);transition:width .5s,background .5s;width:0%;}
+.timer-bar-fill.amber{background:var(--amber);}
+.timer-bar-fill.red{background:var(--red);}
+.timer-controls{display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+.tbtn{font-family:var(--sans);font-size:11px;font-weight:600;padding:4px 8px;border-radius:var(--radius);border:1px solid var(--border);background:var(--surface2);color:var(--text2);cursor:pointer;white-space:nowrap;flex-shrink:0;}
+.tbtn:hover{background:var(--surface3);color:var(--text);}
+.tbtn:disabled{opacity:.3;cursor:default;}
+.countdown-wrap{display:flex;align-items:center;gap:4px;}
+.countdown-label{font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.02em;}
+.countdown-input{width:38px;font-family:var(--mono);font-size:12px;text-align:center;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:2px 4px;color:var(--text);}
+.timer-status{font-size:11px;color:var(--text3);margin-left:auto;}
+
+/* ANSWER */
+.answer-wrap{flex:1;display:flex;flex-direction:column;padding:12px 16px;gap:8px;min-height:100px;transition:flex 0.3s ease;}
+.answer-wrap.collapsed{flex: 0 0 auto; min-height: 0; padding-bottom: 4px;}
+.answer-label{font-size:11px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;}
+textarea{flex:1;font-family:var(--sans);font-size:14px;color:var(--text);background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:10px 12px;resize:none;line-height:1.65;min-height:100px;}
+textarea:focus{outline:none;border-color:var(--accent);}
+.blueprint-mode .review-item .para-heading, .blueprint-mode .synopsis-text .para-heading { font-weight: 700; color: var(--accent); display: block; margin-bottom: 4px; font-size: 15px; }
+.blueprint-mode .review-item ul, .blueprint-mode .synopsis-text ul { list-style: disc; margin-left: 18px; color: var(--text2); }
+.blueprint-mode .review-item li, .blueprint-mode .synopsis-text li { margin-bottom: 3px; font-size: 14px; }
+.review-item.head { margin-top: 15px; padding-top: 15px; border-top: 2px dashed var(--border); font-size: 16px; font-weight: 700; color: var(--accent); }
+.gap-analysis-item { animation: reveal-pulse 0.4s ease-out; }
+.blueprint-mode .kw { font-weight: 700; color: #fff; text-decoration: underline decoration-var(--accent) 2px; }
+.action-row{display:flex;gap:8px;flex-wrap:wrap;}
+.btn{font-family:var(--sans);font-size:14px;font-weight:500;padding:8px 16px;border-radius:var(--radius);border:1px solid var(--border);background:var(--surface2);color:var(--text);cursor:pointer;transition:background .15s;}
+.btn:hover{background:var(--surface3);}
+.btn:active{transform:scale(.98);}
+.btn-primary{background:#334155;color:#f8fafc;border:1px solid #475569;}
+.btn-primary:hover{background:#475569;border-color:#64748b;}
+.btn:disabled{opacity:.3;cursor:default;transform:none;}
+
+/* RIGHT PANE */
+.right-pane{display:flex;flex-direction:column;min-height:0;height:100%;overflow:hidden;}
+.review-header{padding:10px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;flex-shrink:0;}
+.progress-label{font-size:12px;color:var(--text3);}
+.progress-label strong{color:var(--text);font-family:var(--mono);}
+.progress-track{height:3px;background:var(--surface3);border-radius:2px;flex:1;min-width:80px;}
+.progress-fill{height:3px;background:var(--accent);border-radius:2px;transition:width .3s;}
+
+.loading-pane{display:none;flex:1;align-items:center;justify-content:center;flex-direction:column;gap:16px;}
+.loading-pane.active{display:flex;}
+.loading-text{font-size:14px;color:var(--text2);}
+.dots{display:flex;gap:6px;}
+.dot{width:7px;height:7px;border-radius:50%;background:var(--accent);animation:pulse 1.2s ease-in-out infinite;}
+.dot:nth-child(2){animation-delay:.2s;}
+.dot:nth-child(3){animation-delay:.4s;}
+@keyframes pulse{0%,100%{opacity:.2}50%{opacity:1}}
+
+.points-outer{flex:1;overflow-y:auto;padding:12px 16px;display:flex;flex-direction:column;gap:0;}
+.points-outer::-webkit-scrollbar{width:4px;}
+.points-outer::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
+.section-label{font-size:10.5px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.09em;padding:10px 0 4px;border-top:1px solid var(--border);margin-top:8px;}
+.point-block{margin-bottom:6px;}
+.examiner-text{font-size:14px;color:var(--text);line-height:1.65;padding:9px 12px;background:var(--surface2);border-left:2px solid var(--border2);border-radius:0 var(--radius) var(--radius) 0;}
+.examiner-text.current{border-left-color:var(--accent);background:var(--accentbg);}
+.match-row{font-size:12.5px;padding:5px 12px;display:flex;align-items:flex-start;gap:7px;border-radius:0 0 var(--radius) 0;}
+.match-row.hit{background:var(--greenbg);border-left:2px solid var(--green);}
+.match-row.miss{background:var(--amberbg);border-left:2px solid var(--amber);}
+.match-icon{font-size:11px;flex-shrink:0;margin-top:2px;}
+
+/* STICKY HEADER */
+.left-pane { position: relative; }
+.review-header { position: sticky; top: 0; z-index: 10; background: var(--bg); }
+
+/* ANIMATIONS */
+@keyframes reveal-pulse {
+  0% { transform: scale(1); background: var(--surface3); }
+  50% { transform: scale(1.01); background: var(--accentbg); }
+  100% { transform: scale(1); background: var(--surface2); }
+}
+.point-block.new { animation: reveal-pulse 0.4s ease-out; }
+
+.review-controls{padding:6px 16px;border-top:1px solid var(--border);display:flex;align-items:center;gap:8px;flex-wrap:wrap;background:var(--surface);flex-shrink:0;}
+.key-hint{font-size:11px;color:var(--text3);margin-left:auto;}
+kbd{background:var(--surface2);border:1px solid var(--border2);border-radius:3px;padding:1px 5px;font-family:var(--mono);font-size:10px;}
+
+/* (Removed old marks stack styles) */
+
+.right-empty-pane { flex: 1; display: flex; align-items: center; justify-content: center; color: var(--text3); font-family: var(--sans); font-size: 14px; text-align: center; padding: 40px; }
+
+/* NOTES & SYNOPSIS */
+.notes-wrap{display:none;padding:12px 16px;flex-direction:column;gap:8px;border-top:1px solid var(--border);background:var(--surface);transition:flex 0.3s ease;}
+.notes-wrap.visible{display:flex;}
+.notes-wrap.expanded{display:flex;flex:1;}
+.notes-label{font-size:11px;font-weight:600;color:var(--accent);text-transform:uppercase;letter-spacing:.08em;}
+#notes-box{width:100%;height:100px;font-family:var(--sans);font-size:13.5px;color:var(--text);background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:8px 12px;resize:none;}
+.notes-wrap.expanded #notes-box{flex:1;height:auto;}
+
+.synopsis-wrap{padding:10px 16px;background:var(--accentbg);border-bottom:1px solid var(--accent);display:none;align-items:center;justify-content:space-between;}
+.synopsis-text{font-size:13px;color:var(--text);font-style:italic;line-height:1.5;flex:1;}
+.synopsis-label{font-size:10px;font-weight:700;color:var(--accent);text-transform:uppercase;margin-right:10px;flex-shrink:0;}
+
+.scroller-ctrl{display:flex;align-items:center;gap:4px;margin-bottom:2px;}
+.scroll-btn{background:var(--surface3);border:1px solid var(--border2);color:var(--text2);padding:2px 6px;border-radius:3px;cursor:pointer;font-size:10px;}
+.scroll-btn:hover{color:var(--text);border-color:var(--accent);}
+.scroll-btn:disabled{opacity:.3;cursor:default;}
+
+/* SUMMARY */
+.summary{margin:4px 16px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:6px 10px;display:none;flex-shrink:0;}
+.summary.show{display:flex;flex-direction:column;gap:4px;}
+.summary-header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;}
+.summary-title{font-size:11px;font-weight:700;color:var(--text);letter-spacing:.05em;}
+.stat-row{display:flex;gap:6px;}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:2px 8px;display:flex;align-items:center;gap:6px;}
+.stat-num{font-family:var(--mono);font-size:14px;font-weight:700;}
+.stat-num.g{color:var(--green);}
+.stat-num.a{color:var(--amber);}
+.stat-num.b{color:var(--accent);}
+.stat-lbl{font-size:10px;color:var(--text3);}
+.time-badge{font-family:var(--mono);font-size:10px;color:var(--text2);background:var(--surface3);border:1px solid var(--border);border-radius:var(--radius);padding:1px 6px;display:none;}
+
+/* Self-assess logic */
+.self-row{display:flex;align-items:flex-start;gap:8px;padding:5px 10px 5px 12px;background:var(--surface3);border-left:2px solid var(--border2);border-radius:0 0 var(--radius) 0;margin-top:1px;}
+.self-row.checked{background:var(--greenbg);border-left-color:var(--green);}
+.self-row.unchecked{background:var(--amberbg);border-left-color:var(--amber);}
+.self-cb{width:15px;height:15px;flex-shrink:0;margin-top:3px;cursor:pointer;accent-color:var(--green);}
+.self-label{font-size:12px;color:var(--text3);flex-shrink:0;margin-top:2px;user-select:none;cursor:pointer;white-space:nowrap;}
+.self-note{flex:0 0 220px; margin-left: auto; font-family:var(--sans);font-size:11px;color:var(--text);background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:4px 8px;display:none;min-width:0;}
+.self-note.visible{display:block;}
+.self-note:focus{outline:none;border-color:var(--green);}
+.empty-text{font-size:13px;color:var(--text3);text-align:center;line-height:1.8;}
+
+#brainstorm-status { font-family:var(--sans); font-size:12px; font-weight:700; color:var(--amber); margin-right: 12px; letter-spacing:0.02em; }
+
+/* WELCOME SPLASH */
+#welcome-splash {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+  padding: 40px;
+  animation: fade-in 0.8s ease-out;
+}
+.splash-img {
+  max-width: 500px;
+  width: 100%;
+  border-radius: var(--radius2);
+  box-shadow: 0 0 50px rgba(139, 92, 246, 0.3);
+  margin-bottom: 24px;
+}
+.splash-text {
+  font-family: var(--mono);
+  font-size: 14px;
+  color: var(--text3);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 30px;
+}
+.splash-buttons {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.portal-btn {
+  padding: 12px 24px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s;
+  min-width: 140px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+.portal-btn:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(139, 92, 246, 0.4);
+}
+.portal-btn.accent {
+  background: var(--amberbg);
+  border-color: var(--amber);
+  color: var(--amber);
+}
+.portal-btn.accent:hover {
+  background: var(--amber);
+  color: #000;
+  box-shadow: 0 8px 20px rgba(251, 191, 36, 0.4);
+}
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+
+/* MODAL */
+.modal{display:none;position:fixed;z-index:2000;left:0;top:0;width:100%;height:100%;background:rgba(0,0,0,0.6);backdrop-filter:blur(4px);padding-top:40px;}
+.modal-content{background:#fff;margin:auto;padding:0;border-radius:var(--radius2);width:85%;max-width:900px;max-height:85vh;overflow:hidden;box-shadow:0 25px 50px -12px rgba(0,0,0,0.5);display:flex;flex-direction:column;border:1px solid #ddd;}
+.modal-header{padding:16px 24px;border-bottom:1px solid #ddd;display:flex;justify-content:space-between;align-items:center;background:#eee;}
+.modal-header h2{font-size:18px;margin:0;color:#000;}
+.modal-close{background:none;border:none;color:#666;font-size:20px;cursor:pointer;}
+.modal-close:hover{color:#000;}
+.modal-body{padding:24px;overflow-y:auto;flex:1;background:#fff;}
+.modal-footer{padding:12px 24px;border-top:1px solid #ddd;display:flex;justify-content:flex-end;gap:12px;background:#eee;}
+
+/* POPUP CONTENT STYLES (MATCH DOC) */
+.pop-label{font-size:11px;font-weight:700;color:#000;text-transform:uppercase;margin-top:20px;margin-bottom:6px;display:block;border-bottom:1px solid #ddd;}
+.pop-text{background:#fff;padding:12px;border-left:3px solid #ccc;font-size:14px;white-space:pre-wrap;margin-bottom:4px;color:#000;}
+.pop-ans{background:#fff;border:1px solid #000;border-left:5px solid #000;padding:12px;border-radius:2px;font-size:14px;white-space:pre-wrap;color:#000;}
+.pop-notes{font-style:italic;color:#000;background:#f9f9f9;padding:10px;border-left:3px solid #666;margin-top:10px;white-space:pre-wrap;}
+.pop-sol{border-left:3px solid #333;background:#fff;padding:12px;margin-top:10px;border-radius:2px;color:#000;}
+.pop-sol ul{margin:5px 0 15px 20px;padding:0;}
+.pop-sol li{margin-bottom:6px;font-size:13.5px;}
+.pop-sol strong{display:block;margin-top:12px;color:#000;font-size:12px;font-weight:700;}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <!-- Source buttons: top-left (grouped) -->
+  <div id="src-btn-group" style="display:flex; gap:2px; align-items:center; background:var(--surface2); padding:2px; border-radius:6px; border:1px solid var(--border); flex-shrink:0;">
+    <button id="src-ifoa" class="src-btn" data-src="ifoa" onclick="if(confirmChange())setSource('ifoa')">IFoA Exam</button>
+    <button id="src-iai" class="src-btn" data-src="iai" onclick="if(confirmChange())setSource('iai')">IAI Exam</button>
+    <button id="src-assignment" class="src-btn" data-src="assignment" onclick="if(confirmChange())setSource('assignment')">Assignment</button>
+    <button id="src-sp1" class="src-btn" data-src="sp1" onclick="if(confirmChange())setSource('sp1')">SP1 PQ</button>
+    <button id="src-sa1pq" class="src-btn" data-src="sa1pq" onclick="if(confirmChange())setSource('sa1pq')">SA1 PQ</button>
+  </div>
+  <!-- Strategic Pillar Buttons: only visible in Frameworks mode -->
+  <div id="pillar-btn-group" style="display:none; gap:2px; align-items:center; background:var(--surface2); padding:2px; border-radius:6px; border:1px solid var(--border); margin-left:12px; flex-shrink:0;">
+    <button class="src-btn p-filter active" onclick="filterPillar('ALL')">ALL</button>
+    <button class="src-btn p-filter" style="color:#f87171;" onclick="filterPillar('P1')" onmouseover="showFwTooltip(this, 'P1', 'Product Design & Distribution')" onmouseout="hideFwTooltip()">P1</button>
+    <button class="src-btn p-filter" style="color:#fbbf24;" onclick="filterPillar('P2')" onmouseover="showFwTooltip(this, 'P2', 'Pricing & Underwriting')" onmouseout="hideFwTooltip()">P2</button>
+    <button class="src-btn p-filter" style="color:#34d399;" onclick="filterPillar('P3')" onmouseover="showFwTooltip(this, 'P3', 'Claims Management')" onmouseout="hideFwTooltip()">P3</button>
+    <button class="src-btn p-filter" style="color:#60a5fa;" onclick="filterPillar('P4')" onmouseover="showFwTooltip(this, 'P4', 'Risk Management & Reinsurance')" onmouseout="hideFwTooltip()">P4</button>
+    <button class="src-btn p-filter" style="color:#a78bfa;" onclick="filterPillar('P5')" onmouseover="showFwTooltip(this, 'P5', 'Valuation & Data')" onmouseout="hideFwTooltip()">P5</button>
+    <button class="src-btn p-filter" style="color:#f472b6;" onclick="filterPillar('P6')" onmouseover="showFwTooltip(this, 'P6', 'Regulation & Ethics')" onmouseout="hideFwTooltip()">P6</button>
+  </div>
+  <!-- Centred title -->
+  <div style="flex:1; text-align:center;">
+    <span class="logo" id="topbar-title">SA1ity Check</span>
+    <span id="live-clock" class="topbar-clock"></span>
+  </div>
+  <!-- Right actions -->
+  <div class="topbar-actions">
+    <div style="width:2px; height:24px; background:var(--border); margin:0 6px;"></div>
+    <div class="mode-switcher" style="display:flex; gap:4px; align-items:center; background:var(--surface2); padding:2px; border-radius:6px; border:1px solid var(--border);">
+      <button id="btn-mode-chrono" class="mode-btn" onclick="if(confirmChange())setMode('chrono')">Chrono</button>
+      <button id="btn-mode-theme" class="mode-btn" onclick="if(confirmChange())setMode('theme')">Theme</button>
+      <button id="btn-mode-frameworks" class="mode-btn" onclick="if(confirmChange())setMode('frameworks')">Frameworks</button>
+    </div>
+    <div style="width:2px; height:24px; background:var(--border); margin:0 6px;"></div>
+    <button class="mode-btn" onclick="window.location.href='SA1_Syllabus.html'" title="SA1 Syllabus" style="white-space:nowrap;">SA1 Syllabus</button>
+    <div style="width:2px; height:24px; background:var(--border); margin:0 6px;"></div>
+    <!-- Utility buttons: icon-only, grouped -->
+    <div style="display:flex; gap:2px; align-items:center; background:var(--surface2); padding:2px; border-radius:6px; border:1px solid var(--border);">
+      <button class="mode-btn" onclick="toggleFullScreen(event)" title="Full Screen">&#9111;</button>
+      <button class="mode-btn" onclick="confirmRefresh()" title="Refresh">&#8635;</button>
+      <button class="mode-btn" onclick="exitTool()" title="Exit" style="color:var(--red);">&#10005;</button>
+    </div>
+  </div>
+</div>
+
+<!-- SERVER NOTICE -->
+<div id="server-notice" class="hidden">
+  <span style="color:var(--accent);font-weight:600;">&#9889; AI review requires a local server.</span>
+  <span>Run:</span> <code class="notice-cmd" onclick="copyNoticeCmd(this,'python -m http.server 8080')">python -m http.server 8080</code>
+  <span>then open <a href="http://localhost:8080" style="color:var(--accent);">localhost:8080</a></span>
+  <div class="cors-alert" id="cors-alert">&#9888; file:// detected — AI disabled</div>
+  <div id="key-status" style="margin-left:10px;font-size:11px;color:var(--text3);"></div>
+  <button class="notice-dismiss" onclick="document.getElementById('server-notice').classList.add('hidden')">&#10005;</button>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+  <!-- WELCOME SPLASH -->
+  <div id="welcome-splash">
+    <div style="display:flex; gap:12px; flex-wrap:wrap; justify-content:center; margin-bottom:20px;">
+      <button class="portal-btn accent" onclick="window.location.href='ProductCycle.html'" style="min-width:140px;">Product Cycle</button>
+      <button class="portal-btn accent" onclick="window.location.href='ACC.html'" style="min-width:140px;">Actuarial Control Cycle</button>
+      <button class="portal-btn accent" onclick="window.location.href='Stakeholders.html'" style="min-width:140px;">Stakeholders</button>
+      <button class="portal-btn accent" onclick="window.location.href='Risks.html'" style="min-width:140px;">Risks</button>
+      <button class="portal-btn accent" onclick="setMode('frameworks')" style="min-width:140px;">Topics</button>
+      <button class="portal-btn accent" onclick="window.location.href='SA1_Syllabus.html'" style="min-width:140px;">SA1 Syllabus</button>
+    </div>
+    <img src="sa1ity_check_splash.png" class="splash-img" alt="SA1ity Check">
+    <div class="splash-text">Select your Armoury Entry Path</div>
+    <div class="splash-buttons">
+      <button class="portal-btn" onclick="setSource('ifoa')">IFoA Exam</button>
+      <button class="portal-btn" onclick="setSource('iai')">IAI Exam</button>
+      <button class="portal-btn" onclick="setSource('assignment')">Assignments</button>
+      <button class="portal-btn" onclick="setSource('sp1')">SP1 PQ</button>
+      <button class="portal-btn" onclick="setSource('sa1pq')">SA1 PQ</button>
+    </div>
+  </div>
+  <!-- FRAMEWORKS PANE (Hidden) -->
+  <div class="left-pane" id="fw-left-pane" style="display:none; background:var(--surface2); border-right:1px solid var(--border); overflow-y:auto; flex: 0 0 250px;">
+    <div class="pane-header" style="display:flex; justify-content:space-between; align-items:center;">
+      <div class="pane-title" style="color:var(--accent);">Master Themes</div>
+      <button id="btn-toggle-subthemes" class="tbtn" onclick="toggleSubThemes()" style="font-size:10px; padding:2px 8px; border-color:var(--border);">Hide Sub-themes</button>
+    </div>
+    <div id="fw-topics-list" style="padding:10px; display:flex; flex-direction:column; gap:4px;"></div>
+  </div>
+  <div class="left-pane" id="fw-mid-pane" style="display:none; background:var(--surface); border-right:1px solid var(--border); overflow-y:auto; flex: 0 0 300px;">
+    <div class="pane-header" style="display:flex; justify-content:space-between; align-items:center;">
+        <div class="pane-title" style="color:var(--text);"><span id="fw-mid-title">Subtopics</span></div>
+        <button id="btn-fw-recall" class="tbtn" onclick="toggleFrameworkRecall()" style="font-size:10px; padding:2px 8px; border-color:var(--border);">Recall: OFF</button>
+    </div>
+    <div id="fw-subtopics-list" style="padding:12px; display:flex; flex-direction:column; gap:6px;">
+       <div style="color:var(--text3); font-size:13px; text-align:center; margin-top:40px;">Select a Master Theme first</div>
+    </div>
+  </div>
+  <div class="right-pane" id="fw-right-pane" style="display:none; overflow-y:auto; background:var(--bg); padding:40px; flex: 1;">
+    <div id="fw-content" style="max-width:800px; margin:0 auto; color:var(--text); font-size:15px; line-height:1.6;">
+      <h2 style="color:var(--text3); text-align:center; margin-top:100px;">Select a Subtopic to view details</h2>
+    </div>
+  </div>
+
+  <div class="left-pane" id="left-pane" style="display:none; border-right:1px solid var(--border);">
+
+    <!-- SITTING ROW (Chrono) + DATA STATUS -->
+    <div class="sitting-row" id="chrono-sitting-row" style="display:none;">
+      <span class="sel-label" style="flex-shrink:0;">Sitting</span>
+      <select id="sel-assign" onchange="onAssignChange()" disabled style="flex:1;max-width:260px;">
+        <option value="">— select —</option>
+      </select>
+      <div id="pill-sitting" class="marks-pill pill-sitting" style="display:none;"></div>
+      <div id="data-status" style="font-size:11px; color:var(--text3); font-family:var(--mono); flex-shrink:0;">Loading...</div>
+      <!-- Explicit Start/Stop sitting timer buttons -->
+      <button id="btn-start-sitting" onclick="startSittingExplicitly()" style="display:none;font-family:var(--mono);font-size:11px;font-weight:600;padding:4px 10px;border-radius:4px;border:1px solid var(--green);background:var(--greenbg);color:var(--green);cursor:pointer;white-space:nowrap;flex-shrink:0;">&#9654; Start</button>
+      <button id="btn-stop-sitting" onclick="stopSittingExplicitly()" style="display:none;font-family:var(--mono);font-size:11px;font-weight:600;padding:4px 10px;border-radius:4px;border:1px solid var(--red);background:var(--redbg);color:var(--red);cursor:pointer;white-space:nowrap;flex-shrink:0;">&#9632; Stop</button>
+      <div id="sitting-timer-wrap" style="margin-left:auto; display:none; align-items:center; gap:8px;">
+        <span style="font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.05em;">TIMER</span>
+        <span id="assign-timer" style="font-family:var(--mono);font-size:13px;color:var(--text);font-weight:600;">00:00:00</span>
+        <button id="btn-export" class="tbtn btn-export" onclick="exportSittingSummary()" title="Export this sitting to a Word doc" style="margin-left:4px; border-color:var(--border2);">&#11015; Export Doc</button>
+      </div>
+    </div>
+
+    <!-- Q DOT BAR (Chrono) -->
+    <div class="dot-bar" id="q-dot-bar">
+      <span class="dot-bar-label">Questions</span>
+      <div class="dot-bar-items" id="q-dot-items"></div>
+      <div class="dot-bar-marks" id="q-dot-marks" style="display:none;"></div>
+    </div>
+
+    <!-- SUB-Q DOT BAR (Chrono) -->
+    <div class="dot-bar" id="sub-dot-bar">
+      <span class="dot-bar-label">Parts</span>
+      <div class="dot-bar-items" id="sub-dot-items"></div>
+      <div class="dot-bar-marks" id="sub-dot-marks" style="display:none;"></div>
+    </div>
+
+    <!-- THEMATIC SELECTORS -->
+    <div class="selectors" id="theme-selectors" data-pill-mode="theme" style="display:none;">
+      <div class="sel-group sel-chapter-wrap" style="min-width: 200px;">
+        <div class="sel-label" style="display:flex; justify-content:space-between; align-items:center;">
+          <span>Theme / Topic</span>
+          <div class="marks-pill pill-sitting" style="display:none;"></div>
+        </div>
+        <select id="sel-theme" onchange="onThemeChange()" style="width:auto;" disabled>
+          <option value="">— select theme —</option>
+        </select>
+      </div>
+      <div class="sel-group sel-verb-wrap">
+        <div class="sel-label">Verb</div>
+        <select id="sel-verb" onchange="onThemeChange()" disabled>
+          <option value="">All Verbs</option>
+          <option value="List">List / State</option>
+          <option value="Outline">Outline / Describe</option>
+          <option value="Explain">Explain</option>
+          <option value="Discuss">Discuss</option>
+          <option value="Recommend">Recommend / Advise</option>
+          <option value="Compare">Compare / Contrast</option>
+        </select>
+      </div>
+      <div class="sel-group sel-question-wrap">
+        <div class="sel-label" style="display:flex; justify-content:space-between; align-items:center; gap:8px;">
+          <div class="scroller-ctrl" style="display:flex; align-items:center; gap:4px; margin:0;">
+            Matches
+            <button id="btn-t-prev" class="scroll-btn" onclick="navThemeMatch(-1)" disabled>◀</button>
+            <button id="btn-t-next" class="scroll-btn" onclick="navThemeMatch(1)" disabled>▶</button>
+          </div>
+          <div style="display:flex; gap:4px;">
+            <div class="marks-pill pill-sub" style="display:none;"></div>
+            <div class="marks-pill pill-q" style="display:none;"></div>
+          </div>
+        </div>
+        <select id="sel-match" onchange="onMatchChange()" disabled>
+          <option value="">— select —</option>
+        </select>
+      </div>
+    </div>
+    <div class="scenario-wrap" id="scenario-wrap" style="display:none;">
+      <div class="scenario-toggle" onclick="toggleScenario()"><span id="scenario-arrow">&#9654;</span> <span>Scenario</span></div>
+      <div class="scenario-body" id="scenario-body"></div>
+    </div>
+
+    <div class="review-header" id="review-header" style="display:none;">
+      <div class="pane-title">Examiner Solution</div>
+      <div class="progress-label"><strong id="pcnt">0</strong> / <strong id="ptotal">0</strong> points</div>
+      <div class="progress-track"><div class="progress-fill" id="pbar" style="width:0%"></div></div>
+    </div>
+
+    <div class="loading-pane" id="loading-pane">
+      <div class="loading-text">Analyzing answer&#8230;</div>
+      <div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+    </div>
+
+    <div class="empty-pane" id="empty-pane">
+      <div class="empty-text">Select an assignment and question<br>to begin.</div>
+    </div>
+
+    <div class="summary" id="summary">
+      <div class="summary-header">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <div class="summary-title">RESULT</div>
+          <div id="time-badge" class="time-badge"></div>
+        </div>
+        <div class="stat-row">
+          <div class="stat-card"><div class="stat-num g" id="s-hit">—</div><div class="stat-lbl">Matched</div></div>
+          <div class="stat-card"><div class="stat-num a" id="s-miss">—</div><div class="stat-lbl">Missed</div></div>
+          <div class="stat-card"><div class="stat-num b" id="s-extra">—</div><div class="stat-lbl">Extras</div></div>
+          <button class="btn" id="btn-save-sm" onclick="exportCurrentQuestionDoc()" style="display:none;padding:2px 8px;font-size:11px;background:var(--greenbg);border-color:var(--green);color:var(--green);font-weight:600;">&#11015; Save</button>
+        </div>
+      </div>
+      <div id="extras-section" style="display:none;border-top:1px solid var(--border);padding-top:4px;margin-top:2px;">
+        <div class="extras-label" style="font-size:10px;font-weight:600;">Good points not in solution:</div>
+        <div id="extras-list" style="font-size:10px;max-height:40px;overflow-y:auto;color:var(--text3);"></div>
+      </div>
+    </div>
+
+    <div class="points-outer" id="points-outer" style="display:none;"></div>
+
+    <div class="review-controls" id="review-controls" style="display:none;">
+      <button class="btn btn-primary" id="btn-next" onclick="next()">Next point</button>
+      <button class="btn" id="btn-compile" onclick="compileSelfAssess()" style="display:none;">&#10003; Compile</button>
+      <button class="btn" onclick="resetAll()">&#8635; New</button>
+      <div class="key-hint"><kbd>Space</kbd> next &nbsp; <kbd>Tab</kbd> note &nbsp; <kbd>1/0</kbd> mark</div>
+    </div>
+  </div>
+
+  <div class="right-pane" id="right-pane" style="display:none;">
+    <div id="right-empty-pane" class="right-empty-pane">Select a sitting, then a question to begin.</div>
+    <div class="timer-zone" id="timer-zone" style="display:none;">
+      <div class="timer-display" id="timer-display">0:00</div>
+      <div class="timer-bar-wrap" id="timer-bar-wrap">
+        <div class="timer-bar-track"><div class="timer-bar-fill" id="timer-bar-fill"></div></div>
+      </div>
+      <div class="countdown-wrap">
+        <span class="countdown-label">Limit:</span>
+        <span id="countdown-input" style="font-family:var(--mono);font-size:12px;font-weight:600;color:var(--text);background:var(--surface3);border:1px solid var(--border);border-radius:4px;padding:2px 8px;"></span>
+        <span class="countdown-label">min</span>
+      </div>
+      <button class="tbtn" id="btn-pause" onclick="togglePause()" disabled>Pause</button>
+      <div class="timer-status" id="timer-status">Starts when you type</div>
+    </div>
+    <div class="question-text" id="question-text" style="display:none;"></div>
+    <div class="answer-wrap" id="answer-wrap" style="display:none;">
+      <div class="answer-label" style="display:flex; justify-content:space-between; align-items:center;">
+        <span id="brainstorm-status">Brainstorm Active Recall</span>
+        <div style="display:flex; gap:12px; align-items:center;">
+          <button id="btn-pillar-hint" class="tbtn" style="color:var(--accent); display:none;" onclick="showPillarHint()">💡 Pillar Hint</button>
+          <span id="ans-collapse" style="cursor:pointer; color:var(--accent); font-size:11px; text-transform:none; display:none;" onclick="toggleAnswer()">&#9660; Collapse</span>
+        </div>
+      </div>
+      <textarea id="answer-box" placeholder="Start writing..." oninput="startTimerIfNeeded();saveAnswer();checkBrainstormLock();" onkeydown="handleAnswerTab(event)"></textarea>
+      <div class="status-msg" id="status-msg"></div>
+      <div class="action-row">
+        <button class="btn btn-primary" id="btn-review" onclick="startReview()" disabled>AI review &#8599;</button>
+        <button class="btn" id="btn-skip" onclick="skipToReveal()" disabled>Reveal &amp; self-assess</button>
+        <button class="btn" id="btn-print-q" onclick="saveQuestionOnlyDoc()" disabled>&#128422; Print</button>
+        <button class="btn" id="btn-retake" onclick="retakeQuestion()" style="display:none;">&#8635; Retake</button>
+        <button class="btn" id="btn-reset" onclick="resetAll()" style="display:none;">&#8635; Reset</button>
+      </div>
+    </div>
+    <div class="notes-wrap" id="notes-wrap">
+      <div class="notes-label" style="display:flex; justify-content:space-between; align-items:center;">
+        <span>Memory Aid &amp; Notes</span>
+        <button id="btn-blueprint" class="tbtn" onclick="toggleBlueprint()" title="Transform text into Subheadings & Bullets" style="font-size:10px; padding:2px 8px;">Recall Blueprint</button>
+      </div>
+      <div class="synopsis-wrap" id="synopsis-wrap">
+        <span class="synopsis-label">SYNOPSIS</span>
+        <div class="synopsis-text" id="synopsis-text"></div>
+      </div>
+      <textarea id="notes-box" placeholder="What did you miss? Key concepts for revision..." oninput="saveNotes()"></textarea>
+    </div>
+  </div>
+</div>
+
+<div id="result-modal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2 id="modal-title">Revision Note</h2>
+      <button class="modal-close" onclick="closeModal()">&#10005;</button>
+    </div>
+    <div id="modal-body" class="modal-body"></div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" onclick="exportCurrentQuestionDoc()">Download as Doc</button>
+      <button class="btn" onclick="closeModal()">Close</button>
+    </div>
+</div>
+</div>
+
+<div id="pillar-modal" class="modal">
+  <div class="modal-content" style="max-width:800px;">
+    <div class="modal-header" style="background:var(--accentbg);border-bottom:2px solid var(--accent);">
+      <h2 style="color:var(--accent);margin:0;">Strategic Pillar Challenge</h2>
+      <button class="modal-close" onclick="closePillarModal()">&#10005;</button>
+    </div>
+    <div id="pillar-body" class="modal-body" style="padding: 24px; min-height: 300px;">
+      <!-- Dynamic content -->
+    </div>
+    <div class="modal-footer" style="justify-content:center;">
+      <button class="btn btn-primary" onclick="completePillarChallenge()" style="font-size:16px; padding: 10px 24px;">I Have Recalled the Details &amp; Ready to Reveal</button>
+    </div>
+  </div>
+</div>
+
+<!-- FW TOOLTIP ELEMENT -->
+<div id="fw-tooltip" class="fw-tooltip">
+  <div id="fw-tooltip-tag" class="fw-tooltip-tag"></div>
+  <div id="fw-tooltip-desc" class="fw-tooltip-desc"></div>
+</div>
+
+<datalist id="synopsis-list"></datalist>
+
+<script>
+// ═══════════════════════════════════════════════════════════
+// DATA STRATEGY (Dynamic Load)
+// ═══════════════════════════════════════════════════════════
+let SITTINGS = {};
+let THEMATICS = []; // Array of matches representing sub-questions mapped to themes
+let TOPIC_FRAMEWORKS = {}; // Loaded securely from data/Topic_Frameworks.json
+let PILLARS_HOOKS = null; // Loaded securely from data/Pillars_Hooks.json
+
+// Configuration of all available source files
+let MASTER_TAXONOMY = {
+  "Pricing": ["Data & Assumptions", "Risk Profile", "Expenses", "Profit Margin", "Cross-subsidy", "Sensitivity Analysis", "Return on Capital", "Equation of Value", "Cashflow Techniques"],
+  "Claims Management": ["Definitions", "Rehabilitation", "Fraud & Verification", "Reserving", "Claim Control", "Return to Work", "Assessment of claims"],
+  "Regulation": ["Treating Customers Fairly", "Capital Requirements", "Taxation", "State Provision", "IRDAI", "Compliance", "Policyholder Protection Schemes", "Solvency II Framework"],
+  "IRDA Regulations": [
+    "IRDAI (Health Insurance) Regulations 2024",
+    "IRDAI (Insurance Products) Regulations 2024",
+    "IRDAI (Protection of Policyholders' Interests) Regulations 2024",
+    "IRDAI (Expenses of Management including Commission) Regulations 2024",
+    "IRDAI (Actuarial, Finance and Investment Functions) Regulations 2024",
+    "IRDAI (Re-insurance) Regulations 2024",
+    "IRDAI (Registration and Capital Structure) Regulations 2024",
+    "IRDAI (Appointed Actuary) Regulations 2022"
+  ],
+  "Underwriting": ["Anti-selection", "Financial Underwriting", "Medical Underwriting", "Free Cover Limits", "Tele-underwriting", "Genetic Testing", "Pre-existing Conditions"],
+  "Data": ["Credibility", "Heterogeneity", "Proxies", "AI & Machine Learning", "Data Quality", "Completeness", "Accuracy", "Timeliness"],
+  "Models": ["Backtesting", "Sensitivity", "Model Governance", "Stochastic & Deterministic", "Multi-state Models", "Formula", "Equation of Value", "Projection"],
+  "Reserving & Valuation": ["IBNR / IBNER", "Bornhuetter-Ferguson", "Run-off Triangles", "Best Estimate Liabilities", "Risk Margin", "Prudence", "Supervisory Reserves", "Market Consistent Valuation"],
+  "Risk Management & Capital": ["Economic Capital", "Stress Testing", "Asset Liability Management", "Risk Appetite", "Concentration of Risk", "Pandemics", "Catastrophes", "Options & Guarantees", "Climate Risks"],
+  "Risks": [
+    "Nature of Risk Components",
+    "Policy & Other Data Risks",
+    "Claim Rates (Morbidity/Mortality)",
+    "Claim Amounts (PMI specific)",
+    "Earlier Screening & Diagnosis",
+    "Investment Performance & Assets",
+    "Expenses and Inflation",
+    "Persistency & Selective Withdrawal",
+    "Mix & Volume of New Business",
+    "Guarantees and Options",
+    "Competition & Management Actions",
+    "Counterparties (RI/Distributors/TPAs)",
+    "Legal, Regulatory & Tax",
+    "Reputation & Operational Fraud",
+    "Aggregation, Concentration & Cat",
+    "Non-disclosure & Anti-selection",
+    "Product-specific Risks (IP/CI/LTC/PMI)"
+  ],
+  "Reinsurance": ["Risk Transfer", "Capital Relief", "Technical Assistance", "Quota Share", "Excess of Loss", "Catastrophe Cover", "Retention Optimization", "Badging"],
+  "Investments": ["Matching", "Liquidity", "Standard Formula", "Internal Models", "Asset Classes", "Yield Curve", "Asset-liability matching strategy"],
+  "Product Design": ["Benefits & Conditions", "Target Market", "Options & Guarantees", "Exclusions", "Surrender Values", "Marketability", "Bundling & Unbundling"],
+  "Group Products": ["Master Trust", "Take-up Rates", "Administration", "Unit Cost Savings", "Employer Involvement", "Free Cover Limits"],
+  "Professional Guidance": ["Actuarial Standards", "Peer Review", "Conflicts of Interest", "Whistleblowing", "Communication", "Data Quality", "Statutory Actuarial Roles"],
+  "Capital & Solvency": ["Solvency Capital Requirements (SCR)", "Value at Risk (VaR)", "Return on Capital", "Internal Models", "Solvency II mapping"],
+  "Private Medical Insurance (PMI)": ["Moratorium Underwriting", "Community Rating", "Indemnity", "Excesses & Co-payments", "Provider Networks", "Medical Inflation"],
+  "Critical Illness": ["Survival Period", "Standard Definitions", "Advances in Medicine", "Accelerated Benefits", "Standalone Cover"],
+  "Income Protection": ["Deferred Period", "Replacement Ratio", "Definition of Incapacity", "State Benefits integration", "Rehabilitation"],
+  "Pricing & Rating": ["Age Banding", "Community Rating", "Experience Rating", "No Claims Discount (NCD)", "Renewable Premiums"],
+  "State Healthcare & Demographics": ["Pradhan Mantri Jan Arogya Yojana (PMJAY)", "Mass Health Schemes", "Aging Population", "QALYs", "Medical Inflation", "Public vs Private funding"],
+  "Long-Term Care (LTC)": ["Activities of Daily Living (ADLs)", "Pre-funding vs Immediate Needs", "Cognitive Impairment", "Care Home Costs", "State limitations"],
+  "Legislation & Taxation": ["Premium Taxes", "Benefit Taxes", "Profit Taxation", "Employment Law", "Data Protection (GDPR/DPA)"],
+  "Product Design (Protection)": ["Guaranteed vs Reviewable premiums", "Term Assurance riders", "Unit-Linked Wrappers", "Renewability"],
+  "Administration": ["Policy setup", "Premium Collection", "Lapsation processes", "Customer Service", "Outsourcing / Counterparties"]
+};
+const SOURCE_FILES = {
+    ifoa: ['201904.json', '201909.json', '202004.json', '202009.json', '202104.json', '202109.json', '202204.json', '202209.json', '202304.json', '202309.json', '202404.json', '202409.json', '202504.json', '202509.json'],
+    assignment: ['X1.json', 'X2.json', 'X3.json', 'X4.json', 'X5.json', 'X6.json'],
+    sp1: ['Ch00.json', 'Ch01.json', 'Ch02.json', 'Ch03.json', 'Ch04.json', 'Ch05.json'],
+    iai: [
+      'iai_1115.json', 'iai_0416.json', 'iai_0916.json', 'iai_0317.json', 'iai_0917.json', 
+      'iai_0318.json', 'iai_0918.json', 'iai_0619.json', 'iai_1119.json', 
+      'iai_1120.json', 'iai_0321.json', 'iai_0921.json', 'iai_0322.json', 
+      'iai_0722.json', 'iai_1222.json', 'iai_0523.json', 'iai_1123.json', 
+      'iai_0524.json',      'iai_1124.json', 'iai_0525.json', 'iai_1125.json'
+    ],
+    sa1pq: ['sa1_pq_sample.json']
+};
+
+let currentSource = '';
+let appMode = '';
+let currentQ = null, currentSub = null, currentPoints = [];
+let currentQk = null, currentPk = null; // track active dot keys
+let revealed = 0, hits = null, manualMode = false;
+let timer = null, seconds = 0, limitSecs = 0, isPaused = false;
+let assignTimer = null, assignSeconds = 0;
+
+// Brainstorm Lock globals
+let brainstormWordsReq = 0, brainstormTimeLeft = 0, brainstormInterval = null;
+
+// Framework Filtering
+let currentPillarFilter = 'ALL';
+function filterPillar(p) {
+    if (appMode !== 'frameworks') {
+        setMode('frameworks');
+    }
+    currentPillarFilter = p;
+    document.querySelectorAll('.p-filter').forEach(btn => {
+        const isActive = (p === 'ALL' && btn.textContent === 'ALL') || (btn.textContent === p);
+        btn.classList.toggle('active', isActive);
+        if (isActive) {
+             btn.style.background = 'var(--accent)';
+             btn.style.color = '#fff';
+             btn.style.borderColor = 'var(--accent)';
+        } else {
+             btn.style.background = '';
+             // Restore pillar colors if not active
+             const txt = btn.textContent;
+             if (txt === 'P1') btn.style.color = '#f87171';
+             else if (txt === 'P2') btn.style.color = '#fbbf24';
+             else if (txt === 'P3') btn.style.color = '#34d399';
+             else if (txt === 'P4') btn.style.color = '#60a5fa';
+             else if (txt === 'P5') btn.style.color = '#a78bfa';
+             else if (txt === 'P6') btn.style.color = '#f472b6';
+             else btn.style.color = '';
+             btn.style.borderColor = '';
+        }
+    });
+    renderFrameworkList();
+}
+
+window.onload = async function() {
+    let loadedCount = 0;
+
+    // Load Topic Frameworks Dictionary First
+    try {
+        const fwRes = await fetch('data/Topic_Frameworks.json?t=' + new Date().getTime());
+        if (!fwRes.ok) throw new Error('data/ path returned ' + fwRes.status);
+        TOPIC_FRAMEWORKS = await fwRes.json();
+    } catch {
+        try {
+            const fwRes2 = await fetch('Topic_Frameworks.json?t=' + new Date().getTime());
+            if (!fwRes2.ok) throw new Error('root path returned ' + fwRes2.status);
+            TOPIC_FRAMEWORKS = await fwRes2.json();
+        } catch(e) { console.warn("Frameworks not loaded", e); }
+    }
+    if (Object.keys(TOPIC_FRAMEWORKS).length > 0) {
+            // Populate MASTER_TAXONOMY sub-themes from framework bullets
+            MASTER_TAXONOMY = {};
+            Object.keys(TOPIC_FRAMEWORKS).forEach(key => {
+                const entry = TOPIC_FRAMEWORKS[key];
+                const lines = (entry && entry.bullets) ? entry.bullets : (Array.isArray(entry) ? entry : []);
+                const subThemes = [];
+                lines.forEach(line => {
+                    if (line.startsWith('- **')) {
+                        const m = line.match(/^- \*\*(.*?)\*\*/);
+                        if (m) subThemes.push(m[1].trim());
+                    }
+                });
+                MASTER_TAXONOMY[key] = subThemes;
+            });
+            
+            // Add Smart Aliases for common shorthand themes found in exam papers
+            const aliases = {
+                "Risks": "Risks (Master List)",
+                "IP": "Income Protection",
+                "CI": "Critical Illness",
+                "LTC": "Long-Term Care (LTC)",
+                "PMI": "Private Medical Insurance (PMI)",
+                "State Healthcare": "State Healthcare & Demographics",
+                "Regulation": "Regulation & Ethics"
+            };
+            Object.entries(aliases).forEach(([short, full]) => {
+                if (TOPIC_FRAMEWORKS[full]) MASTER_TAXONOMY[short] = TOPIC_FRAMEWORKS[full];
+            });
+    }
+
+    // Load Pillars & Hooks JSON
+    try {
+        const phRes = await fetch('data/Pillars_Hooks.json?t=' + new Date().getTime());
+        if (phRes.ok) PILLARS_HOOKS = await phRes.json();
+    } catch(e) { console.warn("Pillars & Hooks not loaded", e); }
+
+    // Load ALL files from ALL sources
+    for (const [source, files] of Object.entries(SOURCE_FILES)) {
+        for (const f of files) {
+            try {
+                const url = 'data/' + f + '?t=' + new Date().getTime();
+                const res = await fetch(url);
+                if (res.ok) {
+                    const data = await res.json();
+                    const key = f.replace('.json', '');
+                    SITTINGS[key] = data;
+
+                    // Ensure questions have labels (important for IAI)
+                    if (data.questions) {
+                        for (const [qk, qv] of Object.entries(data.questions)) {
+                            if (!qv.label) qv.label = qk;
+                        }
+                    }
+
+                    // Index to Thematics with Source aware
+                    indexThematics(key, data, source);
+                    loadedCount++;
+                    console.log(`Loaded ${source}: ${f}`);
+                } else {
+                    console.warn(`Fetch failed for ${f}: ${res.status}`);
+                }
+            } catch(e) { console.warn("Failed to load " + f, e); }
+        }
+    }
+
+    updateSourceUI();
+    updateHeaderUI();
+    populateThemes(); 
+    // onAssignChange(); // Removed auto-load to allow user selection
+    startLiveClock();
+    document.getElementById('data-status').textContent = `${loadedCount} Files`;
+};
+
+function startLiveClock() {
+    updateLiveClock();
+    setInterval(updateLiveClock, 1000);
+}
+
+function updateLiveClock() {
+    const now = new Date();
+    const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    
+    const day = days[now.getDay()];
+    const date = now.getDate();
+    const month = months[now.getMonth()];
+    const h = String(now.getHours()).padStart(2, '0');
+    const m = String(now.getMinutes()).padStart(2, '0');
+    const s = String(now.getSeconds()).padStart(2, '0');
+    
+    const clockEl = document.getElementById('live-clock');
+    if (clockEl) {
+        clockEl.textContent = `${day}, ${date} ${month} ${h}:${m}:${s}`;
+    }
+}
+
+function setSource(src) {
+    try {
+        console.log("Setting source to:", src);
+        currentSource = src;
+
+        // Auto-default to Chrono if no mode is selected yet
+        if (appMode === '') {
+            appMode = 'chrono';
+            document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.toggle('active', btn.textContent === 'Chrono'));
+        }
+
+        // Update button states in both topbar and source-nav (if any)
+        document.querySelectorAll('.src-btn').forEach(btn => {
+            btn.classList.toggle('active', btn.dataset.src === src);
+        });
+
+        // REVEAL PANES & SITTING ROW
+        const splash = document.getElementById('welcome-splash');
+        if (splash) splash.style.display = 'none';
+
+        const lp = document.getElementById('left-pane');
+        if (lp) lp.style.display = 'flex';
+
+        const rp = document.getElementById('right-pane');
+        if (rp) rp.style.display = 'flex';
+
+        const csr = document.getElementById('chrono-sitting-row');
+        if (csr) csr.style.display = (appMode === 'chrono') ? 'flex' : 'none';
+
+        updateSourceUI();
+        updateHeaderUI();
+        resetAll();
+        
+        // Reset sitting dropdown
+        document.getElementById('sel-assign').value = "";
+        renderQDotBar(null);
+        renderSubDotBar(null, null);
+
+        if (appMode === 'chrono') {
+            onAssignChange();
+        } else if (appMode === 'theme') {
+            onThemeChange();
+        }
+    } catch(e) { console.error("setSource failed:", e); }
+}
+
+function updateHeaderUI() {
+    const logos = {
+        '': 'SA1ity Check',
+        ifoa: 'IFoA<span> / </span>Exam Revision',
+        sp1: 'SP1<span> / </span>Practice Questions',
+        assignment: 'SA1<span> / </span>Assignments',
+        iai: 'IAI<span> / </span>Exam Revision',
+        sa1pq: 'SA1<span> / </span>Practice Questions'
+    };
+    const taglines = {
+        ifoa: 'Health and Care Advanced',
+        sp1: 'Health and Care Principles',
+        assignment: 'SA1 Advanced',
+        iai: 'IAI SA1 & SP1',
+        sa1pq: 'SA1 Health and Care Advanced'
+    };
+    const logoEl = document.querySelector('.logo');
+    const tagEl = document.querySelector('.tagline');
+    const displayLogo = logos[currentSource] || 'SA1ity Check';
+    const displayTag = taglines[currentSource] || 'Strategic Armoury Hub';
+    if (logoEl) logoEl.innerHTML = displayLogo;
+    if (tagEl) tagEl.textContent = displayTag;
+}
+
+function updateSourceUI() {
+    const ssel = document.getElementById('sel-assign');
+    ssel.innerHTML = '<option value="">— select —</option>';
+
+    const files = SOURCE_FILES[currentSource] || [];
+    console.log("updateSourceUI: source =", currentSource, "files expected =", files.length);
+    let count = 0;
+
+    files.forEach(f => {
+        const key = f.replace('.json', '');
+        if (SITTINGS[key]) {
+            const opt = document.createElement('option');
+            opt.value = key;
+            const sit = SITTINGS[key];
+            opt.textContent = currentSource === 'assignment' ? `Assignment ${key}` : (sit.label || sit.assignment || key);
+            ssel.appendChild(opt);
+            count++;
+        }
+    });
+
+    console.log("updateSourceUI: source =", currentSource, "count loaded =", count);
+    ssel.disabled = count === 0;
+    // Let CSS grid handle widths now
+    if (count === 0 && currentSource === 'iai') {
+        const opt = document.createElement('option');
+        opt.textContent = "(No IAI data files found in /data)";
+        ssel.appendChild(opt);
+    }
+}
+
+
+function indexThematics(sittingKey, sittingData, source) {
+    if(!sittingData.questions) return;
+    Object.keys(sittingData.questions).forEach(qk => {
+        const qData = sittingData.questions[qk];
+        // Does the parent question have themes?
+        if (qData.themes && qData.themes.length > 0) {
+            qData.themes.forEach(t => {
+                THEMATICS.push({ theme: t, source: source, sitting: sittingKey, qk: qk, pk: null, label: `${sittingData.label} ${qData.label} (Whole)` });
+            });
+        }
+
+        // Parts
+        if (qData.parts) {
+            Object.keys(qData.parts).forEach(pk => {
+                const pData = qData.parts[pk];
+                if (pData.themes && pData.themes.length > 0) {
+                    pData.themes.forEach(t => {
+                        THEMATICS.push({ theme: t, source: source, sitting: sittingKey, qk: qk, pk: pk, label: `${sittingData.label} ${qk} ${pk}` });
+                    });
+                }
+            });
+        }
+    });
+}
+
+const COMMAND_VERBS = ["Discuss", "Explain", "Outline", "List", "Suggest", "Describe", "State", "Recommend", "Compare"];
+const SA1_KEYWORDS = ["Solvency II", "SCR", "Best Estimate", "Risk Margin", "PMI", "Income Protection", "Morbidity", "Mortality", "Lapse", "Anti-selection", "Moral Hazard", "Diversification", "Technical Provisions", "Capital", "Underwriting", "Claims Management", "Product Design", "Pricing", "Expenses", "Taxation", "Regulation", "State Provision", "Reinsurance", "Social Care", "Long Term Care", "Critical Illness", "IP", "CI", "LTC", "IRDAI", "PMJAY", "Treating Customers Fairly", "Genetic Testing", "Yield Curve", "Asset Liability", "QALYs", "Value at Risk", "Run-off", "Bornhuetter", "IBNR"];
+
+let TAXONOMY = {};
+let VERB_INDEX = {}; 
+
+function populateThemes() {
+    TAXONOMY = {};
+    VERB_INDEX = {};
+    console.log("Populating Themes & Verbs...");
+    
+    Object.entries(SITTINGS).forEach(([ak, data]) => {
+        if (!data.questions) return;
+        Object.entries(data.questions).forEach(([qk, qv]) => {
+            const processQ = (item, sk = null) => {
+                // Themes
+                (item.themes || []).forEach(t => {
+                    if (!TAXONOMY[t]) TAXONOMY[t] = [];
+                    TAXONOMY[t].push({ ak, qk, sk, label: item.label || qk + (sk ? ' ' + sk : '') });
+                });
+                // Verbs
+                const qText = item.question || "";
+                COMMAND_VERBS.forEach(v => {
+                    if (qText.trim().toLowerCase().startsWith(v.toLowerCase())) {
+                        if (!VERB_INDEX[v]) VERB_INDEX[v] = [];
+                        VERB_INDEX[v].push({ ak, qk, sk, label: item.label || qk + (sk ? ' ' + sk : '') });
+                    }
+                });
+            };
+
+            if (qv.parts) {
+                Object.entries(qv.parts).forEach(([pk, pv]) => processQ(pv, pk));
+            } else {
+                processQ(qv);
+            }
+        });
+    });
+
+    const tsel = document.getElementById('sel-theme');
+    tsel.innerHTML = '<option value="">— select theme —</option>';
+    Object.keys(TAXONOMY).sort().forEach(t => {
+        const opt = document.createElement('option');
+        opt.value = t; opt.textContent = t;
+        tsel.appendChild(opt);
+    });
+    tsel.disabled = false;
+    
+    document.getElementById('sel-verb').disabled = false;
+}
+
+function setMode(mode) {
+    appMode = mode;
+
+    // REVEAL PANES & HIDE SPLASH
+    const splash = document.getElementById('welcome-splash');
+    if (splash) splash.style.display = 'none';
+
+    const lp = document.getElementById('left-pane');
+    if (lp) lp.style.display = 'flex';
+
+    const rp = document.getElementById('right-pane');
+    if (rp) rp.style.display = 'block';
+
+    document.getElementById('btn-mode-chrono').classList.toggle('active', mode==='chrono');
+    document.getElementById('btn-mode-theme').classList.toggle('active', mode==='theme');
+    const fbtn = document.getElementById('btn-mode-frameworks');
+    if (fbtn) fbtn.classList.toggle('active', mode==='frameworks');
+    
+    // Show/hide the chrono sitting row and dot bars
+    const chronoRow = document.getElementById('chrono-sitting-row');
+    if (chronoRow) chronoRow.style.display = mode === 'chrono' ? '' : 'none';
+    const qDotBar = document.getElementById('q-dot-bar');
+    if (qDotBar) qDotBar.style.display = mode === 'chrono' ? '' : 'none';
+    const subDotBar = document.getElementById('sub-dot-bar');
+    if (subDotBar) subDotBar.style.display = mode === 'chrono' ? '' : 'none';
+    // Theme selectors
+    document.getElementById('theme-selectors').style.display = mode === 'theme' ? 'grid' : 'none';
+
+    // Toggle Panes
+    const isFW = (mode === 'frameworks');
+    
+    // Show/hide Pillar buttons in topbar
+    const pGrp = document.getElementById('pillar-btn-group');
+    if (pGrp) pGrp.style.display = isFW ? 'flex' : 'none';
+
+    // Initialize Recall button in Frameworks pane
+    if (isFW) {
+        const isON = localStorage.getItem('fw_recall_mode') === 'true';
+        const fwBtn = document.getElementById('btn-fw-recall');
+        if (fwBtn) {
+            fwBtn.textContent = isON ? 'Recall: ON' : 'Recall: OFF';
+            fwBtn.style.background = isON ? 'var(--accent)' : 'var(--surface3)';
+            fwBtn.style.color = isON ? '#fff' : 'var(--text2)';
+            fwBtn.style.borderColor = isON ? 'var(--accent)' : 'var(--border)';
+        }
+
+        const subHidden = localStorage.getItem('fw_sub_hidden') === 'true';
+        const subBtn = document.getElementById('btn-toggle-subthemes');
+        if (subBtn) {
+            subBtn.textContent = subHidden ? 'Show Sub-themes' : 'Hide Sub-themes';
+            subBtn.style.background = subHidden ? 'var(--accent)' : 'var(--surface3)';
+            subBtn.style.color = subHidden ? '#fff' : 'var(--text2)';
+        }
+        const midPane = document.getElementById('fw-mid-pane');
+        if (midPane) midPane.style.display = (isFW && !subHidden) ? 'block' : 'none';
+    }
+
+    // Hide source selector buttons since they aren't relevant in Frameworks Mode
+    const srcGrp = document.getElementById('src-btn-group');
+    if (srcGrp) srcGrp.style.display = isFW ? 'none' : 'flex';
+
+    // Update Topbar Title contextually
+    const topTitle = document.getElementById('topbar-title');
+    if (topTitle) {
+        if (isFW) {
+            topTitle.textContent = "Master Exam Frameworks";
+        } else {
+            updateHeaderUI();
+        }
+    }
+
+    document.getElementById('left-pane').style.display = isFW ? 'none' : '';
+    document.getElementById('right-pane').style.display = isFW ? 'none' : '';
+    document.getElementById('fw-left-pane').style.display = isFW ? 'flex' : 'none';
+    document.getElementById('fw-mid-pane').style.display = isFW ? 'flex' : 'none';
+    document.getElementById('fw-right-pane').style.display = isFW ? 'block' : 'none';
+    
+    // Change layout of main container to support 3-column flex instead of 2-column grid
+    const mainCont = document.querySelector('.main');
+    if (isFW) {
+        mainCont.style.display = 'flex';
+    } else {
+        mainCont.style.display = '';
+    }
+
+    if (isFW) {
+        renderFrameworkList();
+        return; 
+    }
+
+    if (mode === '') {
+        resetAll();
+        return; 
+    }
+
+    resetAll();
+
+    if (mode === 'chrono') {
+        onAssignChange();
+    } else if (mode === 'theme') {
+        onThemeChange();
+    }
+}
+
+function renderFrameworkList() {
+    const listEl = document.getElementById('fw-topics-list');
+    listEl.innerHTML = '';
+    let themes = Object.keys(TOPIC_FRAMEWORKS).sort();
+    
+    // Pillar read from _meta.pillar — no hardcoded map needed
+    if (currentPillarFilter !== 'ALL') {
+        themes = themes.filter(t => {
+            const entry = TOPIC_FRAMEWORKS[t];
+            const p = entry && entry._meta ? entry._meta.pillar : null;
+            return p === currentPillarFilter;
+        });
+    }
+
+    themes.forEach(t => {
+        const btn = document.createElement('div');
+        btn.style.cssText = 'padding:10px 12px; border-radius:6px; cursor:pointer; font-size:12px; font-weight:600; color:var(--text); border:1px solid var(--border); transition:all 0.2s; background:var(--surface); display:flex; align-items:center; justify-content:space-between;';
+        
+        const entry = TOPIC_FRAMEWORKS[t];
+        let pillar = (entry && entry._meta) ? (entry._meta.pillar || "") : "";
+        let tagHtml = pillar ? `<span class="pillar-tag ${pillar.toLowerCase()}">${pillar}</span>` : "";
+        
+        btn.innerHTML = `<span>${t}</span>${tagHtml}`;
+        
+        btn.onmouseover = () => { if (!btn.classList.contains('active')) btn.style.borderColor = 'var(--accent)'; };
+        btn.onmouseout = () => { if (!btn.classList.contains('active')) btn.style.borderColor = 'var(--border)'; };
+        btn.onclick = () => {
+            Array.from(listEl.children).forEach(c => { c.classList.remove('active'); c.style.borderColor='var(--border)'; c.style.background='var(--surface)'; c.style.color='var(--text)'; });
+            btn.classList.add('active');
+            btn.style.background = 'var(--accent)';
+            btn.style.color = '#fff';
+            btn.style.borderColor = 'var(--accent)';
+            renderFrameworkMidContent(t);
+        };
+        listEl.appendChild(btn);
+    });
+}
+
+let currentFrameworkData = null;
+
+// ─── UNIFIED PARSING RULE ────────────────────────────────────────────────────
+// Step 1 (always):   first ### line → chapter badge above sidebar list
+// Step 2 (priority): #### lines exist  → each #### = one sidebar card
+//                    >1 ### lines      → each ### = one sidebar card (Type E)
+//                    fallback          → each "- **Bold**" = one sidebar card
+// Step 3 (right pane):
+//   "- **Bold**: text"  → bullet with bold key
+//   "  - indented"      → sub-bullet (indented, circle marker)
+//   "  1. numbered"     → numbered item (indented, accent number)
+//   empty / ### / ####  → skipped
+// ─────────────────────────────────────────────────────────────────────────────
+
+function parseFrameworkLines(lines) {
+    let chapterTitle = '';
+    let subtopics = [];
+
+    // Step 1: extract chapter badge from first ### line
+    const h3lines = lines.filter(l => /^###\s+/.test(l));
+    if (h3lines.length > 0) {
+        chapterTitle = h3lines[0].replace(/^###\s+/, '').trim();
+    }
+
+    // Step 2: determine sidebar card source by priority
+    const h4lines = lines.filter(l => /^####\s+/.test(l));
+    const multiH3 = h3lines.length > 1;
+
+    if (h4lines.length > 0) {
+        // Type B / C / D — group by ####
+        let current = null;
+        lines.forEach(line => {
+            const m = line.match(/^####\s+(.+)$/);
+            if (m) {
+                current = { title: m[1].trim(), bullets: [] };
+                subtopics.push(current);
+            } else if (current && !/^#{3,}/.test(line) && line.trim() !== '') {
+                current.bullets.push(line);
+            }
+        });
+    } else if (multiH3) {
+        // Type E — group by ### (e.g. Reinsurance)
+        let current = null;
+        lines.forEach(line => {
+            const m = line.match(/^###\s+(.+)$/);
+            if (m) {
+                current = { title: m[1].trim(), bullets: [] };
+                subtopics.push(current);
+            } else if (current && line.trim() !== '') {
+                current.bullets.push(line);
+            }
+        });
+    } else {
+        // Type A — flat: each "- **Bold**" is its own card
+        lines.forEach(line => {
+            if (line.startsWith('- **')) {
+                const m = line.match(/^- \*\*(.*?)\*\*\s*(?::\s*)?(.*)$/);
+                if (m) subtopics.push({ title: m[1].trim(), bullets: [line] });
+            }
+        });
+    }
+
+    return { chapterTitle, subtopics };
+}
+
+function renderFrameworkMidContent(theme) {
+    const listEl = document.getElementById('fw-subtopics-list');
+    document.getElementById('fw-mid-title').textContent = theme;
+
+    // Reset right pane
+    document.getElementById('fw-content').innerHTML = '<h2 style="color:var(--text3); text-align:center; margin-top:100px;">Select a Subtopic to view details</h2>';
+
+    const frameEntry = TOPIC_FRAMEWORKS[theme];
+    if (!frameEntry) {
+        listEl.innerHTML = '<div style="color:var(--text3); font-size:13px; text-align:center; margin-top:40px;">No framework data available yet.</div>';
+        return;
+    }
+
+    const lines = (frameEntry.bullets) ? frameEntry.bullets : (Array.isArray(frameEntry) ? frameEntry : []);
+    const { chapterTitle, subtopics } = parseFrameworkLines(lines);
+    currentFrameworkData = subtopics;
+
+    listEl.innerHTML = '';
+
+    // Step 1: render chapter badge
+    if (chapterTitle) {
+        const badge = document.createElement('div');
+        badge.style.cssText = 'font-size:11px; font-weight:600; color:var(--text3); background:var(--surface3); border:1px solid var(--border); border-radius:4px; padding:3px 8px; margin-bottom:8px; line-height:1.5; text-align:center; letter-spacing:0.03em;';
+        badge.textContent = chapterTitle;
+        listEl.appendChild(badge);
+    }
+
+    // Step 2: render sidebar cards
+    subtopics.forEach((st, idx) => {
+        const btn = document.createElement('div');
+        btn.style.cssText = 'padding:12px 14px; border-radius:6px; cursor:pointer; font-size:13px; font-weight:600; color:var(--text); border:1px solid var(--border); transition:all 0.2s; background:var(--surface2); display:flex; align-items:center; justify-content:space-between; margin-bottom:2px; line-height:1.4;';
+        btn.innerHTML = '<span>' + st.title + '</span> <span style="font-size:16px; color:var(--text3);">&#8250;</span>';
+        btn.onmouseover = () => { if (!btn.classList.contains('active')) { btn.style.borderColor = 'var(--accent)'; btn.style.transform = 'translateX(2px)'; } };
+        btn.onmouseout  = () => { if (!btn.classList.contains('active')) { btn.style.borderColor = 'var(--border)';  btn.style.transform = 'translateX(0)'; } };
+        btn.onclick = () => {
+            Array.from(listEl.children).forEach(c => {
+                c.classList.remove('active');
+                c.style.borderColor = 'var(--border)';
+                c.style.background  = 'var(--surface2)';
+                c.style.color       = 'var(--text)';
+                c.style.transform   = 'translateX(0)';
+            });
+            btn.classList.add('active');
+            btn.style.background  = 'var(--accentbg)';
+            btn.style.color       = 'var(--accent)';
+            btn.style.borderColor = 'var(--accent)';
+            btn.style.transform   = 'translateX(2px)';
+            renderFrameworkRightContent(idx);
+        };
+        listEl.appendChild(btn);
+    });
+}
+
+function renderFrameworkRightContent(idx) {
+    const cEl = document.getElementById('fw-content');
+    if (!currentFrameworkData || !currentFrameworkData[idx]) return;
+
+    const st = currentFrameworkData[idx];
+    const isRecallMode = localStorage.getItem('fw_recall_mode') === 'true';
+
+    // Only count visible content lines for the recall counter
+    const bulletLines = (st.bullets || []).filter(l => l.trim() !== '' && !/^#{3,}/.test(l));
+    const totalBullets = bulletLines.length;
+
+    let html = '<div style="margin-bottom:24px; border-bottom:2px solid var(--border); padding-bottom:12px;">'
+             + '<h1 style="color:var(--accent); margin:0;">' + st.title + '</h1>'
+             + '</div>';
+
+    html += '<div id="fw-bullets-container" style="position:relative; background:var(--surface2); border-left:4px solid var(--accent); padding:20px; border-radius:var(--radius); box-shadow:0 4px 12px rgba(0,0,0,0.1); font-size:15px; line-height:1.7; transition:all 0.3s; min-height:100px;">';
+
+    if (isRecallMode) {
+        html += '<div style="position:absolute; top:12px; right:12px; display:flex; align-items:center; gap:8px; background:var(--surface3); padding:4px 8px; border-radius:4px; border:1px solid var(--border); z-index:10;">'
+              + '<span style="font-size:10px; font-weight:700; color:var(--text3); text-transform:uppercase;">Reveal ' + totalBullets + ' Bullets</span>'
+              + '<input type="checkbox" onchange="document.getElementById(\'fw-bullets-reveal-box\').style.display = this.checked ? \'block\' : \'none\';" style="width:16px; height:16px; cursor:pointer; accent-color:var(--accent);">'
+              + '</div>';
+        html += '<div id="fw-challenge-prompt" style="color:var(--text3); font-style:italic; margin-bottom:15px; font-size:13px; max-width:70%; line-height:1.4;">'
+              + 'Mental Challenge: Can you recall the ' + totalBullets + ' key points for this subtopic?'
+              + '</div>';
+        html += '<div id="fw-bullets-reveal-box" style="display:none; animation: reveal-pulse 0.4s ease-out;">';
+    } else {
+        html += '<div id="fw-bullets-reveal-box" style="display:block;">';
+    }
+
+    // Step 3: render each line by type
+    html += '<ul style="margin:0; padding-left:20px; color:var(--text); display:flex; flex-direction:column; gap:10px;">';
+    bulletLines.forEach(function(line) {
+        const isNumbered  = /^\s{1,}\d+[.)]\s/.test(line);
+        const isSubBullet = /^\s{2,}-\s/.test(line);
+
+        let text = line
+            .replace(/^\s*\d+[.)]\s*/, '')
+            .replace(/^\s*-\s+/, '')
+            .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+
+        if (isNumbered) {
+            const numMatch = line.match(/^\s*(\d+)[.)]/);
+            const num = numMatch ? numMatch[1] : '';
+            html += '<li style="margin-left:20px; list-style-type:none; position:relative;">'
+                  + '<span style="position:absolute; left:-20px; font-weight:700; color:var(--accent);">' + num + '.</span>'
+                  + highlightKeywords(text, false)
+                  + '</li>';
+        } else if (isSubBullet) {
+            html += '<li style="margin-left:20px; list-style-type:circle;">' + highlightKeywords(text, false) + '</li>';
+        } else {
+            html += '<li>' + highlightKeywords(text, false) + '</li>';
+        }
+    });
+    html += '</ul>';
+
+    html += '</div>'; // close reveal box
+    html += '</div>'; // close bullets-container
+    cEl.innerHTML = html;
+}
+
+function toggleFrameworkRecall() {
+    let current = localStorage.getItem('fw_recall_mode') === 'true';
+    let isON = !current;
+    localStorage.setItem('fw_recall_mode', isON);
+    
+    // Update button in mid-pane
+    const fwBtn = document.getElementById('btn-fw-recall');
+    if (fwBtn) {
+        fwBtn.textContent = isON ? 'Recall: ON' : 'Recall: OFF';
+        fwBtn.style.background = isON ? 'var(--accent)' : 'var(--surface3)';
+        fwBtn.style.color = isON ? '#fff' : 'var(--text2)';
+        fwBtn.style.borderColor = isON ? 'var(--accent)' : 'var(--border)';
+    }
+
+    // Re-render content if a subtopic is selected
+    const activeMid = document.querySelector('#fw-subtopics-list .active');
+    if (activeMid) {
+        const idx = Array.from(activeMid.parentNode.children).indexOf(activeMid);
+        renderFrameworkRightContent(idx);
+    }
+}
+
+function toggleSubThemes() {
+    let current = localStorage.getItem('fw_sub_hidden') === 'true';
+    let subHidden = !current;
+    localStorage.setItem('fw_sub_hidden', subHidden);
+    
+    const subBtn = document.getElementById('btn-toggle-subthemes');
+    if (subBtn) {
+        subBtn.textContent = subHidden ? 'Show Sub-themes' : 'Hide Sub-themes';
+        subBtn.style.background = subHidden ? 'var(--accent)' : 'var(--surface3)';
+        subBtn.style.color = subHidden ? '#fff' : 'var(--text2)';
+    }
+    
+    const midPane = document.getElementById('fw-mid-pane');
+    if (midPane) midPane.style.display = subHidden ? 'none' : 'block';
+}
+
+// Tooltip Logic
+function showFwTooltip(el, tag, desc) {
+    const tt = document.getElementById('fw-tooltip');
+    const tTag = document.getElementById('fw-tooltip-tag');
+    const tDesc = document.getElementById('fw-tooltip-desc');
+    
+    tTag.textContent = tag;
+    tDesc.textContent = desc;
+    
+    // Set tag color based on pillar
+    const colors = { P1:'#f87171', P2:'#fbbf24', P3:'#34d399', P4:'#60a5fa', P5:'#a78bfa', P6:'#f472b6' };
+    tTag.style.color = colors[tag] || 'var(--accent)';
+    
+    // Position
+    const rect = el.getBoundingClientRect();
+    tt.style.left = rect.left + 'px';
+    tt.style.top = (rect.bottom + 8) + 'px';
+    
+    tt.classList.add('visible');
+}
+function hideFwTooltip() {
+    document.getElementById('fw-tooltip').classList.remove('visible');
+}
+
+function showPillarHint() {
+    const q = currentSub || currentQ;
+    const themes = (q && q.themes && q.themes.length > 0) ? q.themes : (currentQ && currentQ.themes ? currentQ.themes : []);
+    
+    if (themes.length === 0 || !PILLARS_HOOKS || !PILLARS_HOOKS.themeMapping) return;
+    
+    let foundPillars = new Set();
+    themes.forEach(t => {
+        const mapping = PILLARS_HOOKS.themeMapping[t];
+        if (mapping) {
+            mapping.forEach(p => foundPillars.add(p));
+        }
+    });
+
+    if (foundPillars.size > 0) {
+        const pList = Array.from(foundPillars).sort().join(" & ");
+        
+        document.getElementById('modal-title').textContent = "Strategic Pillar Hint";
+        document.getElementById('modal-body').innerHTML = `
+            <div style="text-align:center; padding:15px;">
+                <div style="font-size:32px; margin-bottom:12px;">💡</div>
+                <p style="font-size:15px; line-height:1.6; color:var(--text);">This question's themes are governed by:<br>
+                <span style="font-size:24px; font-weight:700; color:var(--accent); margin:10px 0; display:block;">Pillar ${pList}</span>
+                <p style="color:var(--text2); font-size:13px;">Mental Action: Open the ${pList} drawer in your armoury map.</p>
+            </div>
+        `;
+        document.getElementById('result-modal').style.display = 'flex';
+    } else {
+        console.warn("showPillarHint: No pillar mapping found for themes:", q.themes);
+    }
+}
+
+function onThemeChange() {
+    const theme = document.getElementById('sel-theme').value;
+    const verb = document.getElementById('sel-verb').value;
+    const msel = document.getElementById('sel-match');
+    msel.innerHTML = '<option value="">— select —</option>';
+    
+    if (!theme && !verb) {
+        msel.disabled = true;
+        return;
+    }
+
+    let matches = [];
+    if (theme && TAXONOMY[theme]) {
+        matches = TAXONOMY[theme];
+        if (verb) {
+            matches = matches.filter(m => {
+                const qObj = m.sk ? SITTINGS[m.ak].questions[m.qk].parts[m.sk] : SITTINGS[m.ak].questions[m.qk];
+                return (qObj.question || "").toLowerCase().startsWith(verb.toLowerCase());
+            });
+        }
+    } else if (verb && VERB_INDEX[verb]) {
+        matches = VERB_INDEX[verb];
+    }
+
+    matches.forEach((m, idx) => {
+        const opt = document.createElement('option');
+        opt.value = idx;
+        opt.textContent = `${m.ak}: ${m.label}`;
+        opt.dataset.ak = m.ak; opt.dataset.qk = m.qk; opt.dataset.sk = m.sk;
+        msel.appendChild(opt);
+    });
+    msel.disabled = matches.length === 0;
+    currentMatches = matches;
+}
+
+// (old scrollNav/checkNavOverflow removed — no longer needed)
+
+// ═══════════════════════════════════════════════════════════
+// UI LOGIC (CHRONO)
+// ═══════════════════════════════════════════════════════════
+function onAssignChange() {
+    const ass = document.getElementById('sel-assign').value;
+    document.getElementById('sel-assign').blur();
+    console.log("onAssignChange: sitting selected =", ass);
+    resetAll();
+    currentQk = null; currentPk = null;
+
+    if (ass && SITTINGS[ass]) {
+        const data = SITTINGS[ass];
+        renderQDotBar(data);
+        // Show the Start button — timer does NOT auto-start
+        const btnStart = document.getElementById('btn-start-sitting');
+        const btnStop = document.getElementById('btn-stop-sitting');
+        if (btnStart) btnStart.style.display = 'inline-block';
+        if (btnStop) btnStop.style.display = 'none';
+        document.getElementById('sitting-timer-wrap').style.display = 'none';
+        // Auto-select first question
+        const firstQk = Object.keys(data.questions)[0];
+        if (firstQk) {
+            setTimeout(() => selectQuestion(firstQk), 0);
+        }
+    } else {
+        renderQDotBar(null);
+        renderSubDotBar(null, null);
+        resetAssignTimer();
+    }
+}
+
+let isBlueprintActive = false;
+function toggleBlueprint() {
+    isBlueprintActive = !isBlueprintActive;
+    const btn = document.getElementById('btn-blueprint');
+    const container = document.body; // Toggle on body for global CSS scope
+    
+    if (isBlueprintActive) {
+        container.classList.add('blueprint-mode');
+        btn.textContent = "Standard View";
+        btn.style.background = "var(--accent)";
+    } else {
+        container.classList.remove('blueprint-mode');
+        btn.textContent = "Recall Blueprint";
+        btn.style.background = "";
+    }
+    
+    // Refresh Synopsis
+    const target = currentSub || currentQ;
+    if (target && target.synopsis) {
+        document.getElementById('synopsis-text').innerHTML = formatBlueprint(target.synopsis);
+    }
+    
+    // Refresh Points
+    if (document.getElementById('points-outer').style.display !== 'none') {
+        const items = document.querySelectorAll('.review-item');
+        items.forEach((div, idx) => {
+            // Find the original point from currentPoints
+            const p = currentPoints[idx];
+            if (p) {
+                div.innerHTML = formatBlueprint(p.text || p);
+            }
+        });
+    }
+}
+
+function formatBlueprint(text) {
+    if (!isBlueprintActive) return highlightKeywords(text);
+    
+    // Split into sentences
+    const sentences = text.split(/(?<=[.!?])\s+/);
+    if (sentences.length <= 1) return highlightKeywords(text);
+    
+    const heading = sentences[0];
+    const bullets = sentences.slice(1);
+    
+    let html = `<span class="para-heading">${highlightKeywords(heading)}</span>`;
+    html += `<ul>`;
+    bullets.forEach(b => {
+        if (b.trim().length > 0) {
+            html += `<li>${highlightKeywords(b)}</li>`;
+        }
+    });
+    html += `</ul>`;
+    return html;
+}
+
+
+// ── NEW DOT-BAR RENDERING ─────────────────────────────────
+function renderQDotBar(sittingData) {
+    const bar = document.getElementById('q-dot-bar');
+    const items = document.getElementById('q-dot-items');
+    const marksEl = document.getElementById('q-dot-marks');
+    items.innerHTML = '';
+
+    if (!sittingData || !sittingData.questions) {
+        bar.classList.remove('visible');
+        marksEl.style.display = 'none';
+        return;
+    }
+
+    bar.classList.add('visible');
+    const ak = document.getElementById('sel-assign').value;
+
+    Object.keys(sittingData.questions).forEach(qk => {
+        const qObj = sittingData.questions[qk];
+        const dot = document.createElement('div');
+        dot.className = 'nav-dot';
+        dot.textContent = qk.replace('Q', '');
+        dot.title = qObj.label || qk;
+
+        // Attempted?
+        let attempted = false;
+        if (qObj.parts) {
+            attempted = Object.keys(qObj.parts).some(pk => localStorage.getItem(ansKey(ak, qk, pk)));
+        } else {
+            attempted = !!localStorage.getItem(ansKey(ak, qk, null));
+        }
+        if (attempted) dot.classList.add('attempted');
+        if (String(currentQk) === String(qk)) dot.classList.add('active');
+
+        dot.onclick = () => selectQuestion(qk);
+        items.appendChild(dot);
+    });
+
+    // Update Q marks pill
+    if (currentQk && sittingData.questions[currentQk]) {
+        const qMarks = sittingData.questions[currentQk].marks || 0;
+        marksEl.textContent = `${qMarks} Marks`;
+        marksEl.classList.toggle('active', qMarks > 0);
+        marksEl.style.display = qMarks > 0 ? 'inline-block' : 'none';
+    } else {
+        marksEl.style.display = 'none';
+    }
+}
+
+function renderSubDotBar(sittingData, qk) {
+    const bar = document.getElementById('sub-dot-bar');
+    const items = document.getElementById('sub-dot-items');
+    const marksEl = document.getElementById('sub-dot-marks');
+    items.innerHTML = '';
+
+    if (!sittingData || !qk || !sittingData.questions || !sittingData.questions[qk] || !sittingData.questions[qk].parts) {
+        bar.classList.remove('visible');
+        marksEl.style.display = 'none';
+        return;
+    }
+
+    bar.classList.add('visible');
+    const ak = document.getElementById('sel-assign').value;
+    const parts = sittingData.questions[qk].parts;
+
+    Object.keys(parts).forEach(pk => {
+        const subDot = document.createElement('div');
+        subDot.className = 'nav-sub-dot';
+        subDot.textContent = pk;
+        subDot.title = `Part ${pk}`;
+
+        const attempted = !!localStorage.getItem(ansKey(ak, qk, pk));
+        if (attempted) subDot.classList.add('attempted');
+        if (String(currentPk) === String(pk)) subDot.classList.add('active');
+
+        subDot.onclick = () => selectSub(pk);
+        items.appendChild(subDot);
+    });
+
+    // Update Sub-Q marks pill
+    if (currentPk && parts[currentPk]) {
+        const subMarks = parts[currentPk].marks || 0;
+        marksEl.textContent = `${subMarks} Marks`;
+        marksEl.classList.toggle('active', subMarks > 0);
+        marksEl.style.display = subMarks > 0 ? 'inline-block' : 'none';
+    } else {
+        marksEl.style.display = 'none';
+    }
+}
+
+function selectQuestion(qk) {
+    const ak = document.getElementById('sel-assign').value;
+    if (!ak || !SITTINGS[ak]) return;
+    const data = SITTINGS[ak];
+
+    currentQk = qk;
+  const sit = SITTINGS[document.getElementById('sel-assign').value];
+  currentQ = sit.questions[qk];
+  currentPk = null;
+  currentSub = null;
+  document.activeElement.blur();
+
+    renderQDotBar(data);
+
+    // If has parts, auto-select first part
+    if (currentQ && currentQ.parts) {
+        const firstPk = Object.keys(currentQ.parts)[0];
+        currentPk = firstPk;
+        currentSub = currentQ.parts[firstPk] || null;
+        renderSubDotBar(data, qk);
+        setupQuestion(currentSub);
+    } else {
+        renderSubDotBar(data, qk); // hides bar
+        setupQuestion(currentQ);
+    }
+    updateMetricsUI(currentQ);
+}
+
+function selectSub(pk) {
+    const ak = document.getElementById('sel-assign').value;
+    if (!ak || !SITTINGS[ak] || !currentQk) return;
+    const data = SITTINGS[ak];
+
+    currentPk = pk;
+    currentSub = (currentQ && currentQ.parts) ? currentQ.parts[pk] : null;
+
+    renderSubDotBar(data, currentQk);
+    setupQuestion(currentSub || currentQ);
+    updateMetricsUI(currentQ);
+    document.activeElement.blur();
+}
+
+// Kept for keyboard navigation compatibility
+function navQuestion(dir) {
+    const ak = document.getElementById('sel-assign').value;
+    if (!ak || !SITTINGS[ak]) return;
+    const qKeys = Object.keys(SITTINGS[ak].questions);
+    const idx = qKeys.indexOf(currentQk);
+    const next = idx + dir;
+    if (next >= 0 && next < qKeys.length) selectQuestion(qKeys[next]);
+}
+function navSub(dir) {
+    if (!currentQ || !currentQ.parts) return;
+    const pKeys = Object.keys(currentQ.parts);
+    const idx = pKeys.indexOf(currentPk);
+    const next = idx + dir;
+    if (next >= 0 && next < pKeys.length) selectSub(pKeys[next]);
+}
+
+// ═══════════════════════════════════════════════════════════
+// UI LOGIC (THEMATIC)
+// ═══════════════════════════════════════════════════════════
+function onThemeChange() {
+    resetAll();
+    const t = document.getElementById('sel-theme').value;
+    document.getElementById('sel-theme').blur();
+    document.getElementById('sel-verb').blur();
+    const msel = document.getElementById('sel-match');
+    msel.innerHTML = '<option value="">— select —</option>';
+
+    if (t) {
+        // Updated to pick from ALL sources
+        const matches = THEMATICS.filter(x => x.theme === t);
+        matches.forEach(m => {
+            const opt = document.createElement('option');
+            opt.dataset.json = JSON.stringify(m);
+            opt.textContent = `[${m.source.toUpperCase()}] ${m.label}`;
+            msel.appendChild(opt);
+        });
+        msel.disabled = false;
+        
+        if (msel.options.length > 1) {
+            msel.selectedIndex = 1;
+            setTimeout(() => onMatchChange(), 0);
+        }
+    } else {
+        msel.disabled = true;
+    }
+    currentQ = null;
+    currentSub = null;
+    updateThemeNavButtons();
+}
+
+function onMatchChange() {
+    const msel = document.getElementById('sel-match');
+    msel.blur();
+    const opt = msel.options[msel.selectedIndex];
+
+    const metrics = document.getElementById('marks-row');
+    if (metrics) {
+      metrics.style.display = (msel.selectedIndex > 0 && opt.dataset.json) ? 'flex' : 'none';
+      if (msel.selectedIndex > 0 && opt.dataset.json) startAssignTimer();
+    }
+
+    if (msel.selectedIndex === 0 || !opt.dataset.json) {
+        currentQ = null;
+        currentSub = null;
+        setupQuestion(null);
+        updateThemeNavButtons();
+        return;
+    }
+
+    const m = JSON.parse(opt.dataset.json);
+    currentQ = SITTINGS[m.sitting].questions[m.qk];
+    currentSub = m.pk ? currentQ.parts[m.pk] : null;
+
+    setupQuestion(currentSub || currentQ);
+    updateThemeNavButtons();
+}
+
+function navThemeMatch(dir) {
+    const msel = document.getElementById('sel-match');
+    if (msel.selectedIndex + dir >= 1 && msel.selectedIndex + dir < msel.options.length) {
+        msel.selectedIndex += dir;
+        onMatchChange();
+    }
+}
+
+function updateThemeNavButtons() {
+  const msel = document.getElementById('sel-match');
+  document.getElementById('btn-t-prev').disabled = msel.selectedIndex <= 1;
+  document.getElementById('btn-t-next').disabled = msel.selectedIndex >= msel.options.length - 1;
+}
+
+// ═══════════════════════════════════════════════════════════
+// CORE SETUP
+// ═══════════════════════════════════════════════════════════
+function setupQuestion(q) {
+  let ak = "", qk = "", sk = "";
+  stopTimer();
+  isPaused = false;  // always reset pause state on new question
+  if (brainstormInterval) { clearInterval(brainstormInterval); brainstormInterval = null; }
+  revealed = 0; hits = null; manualMode = false;
+  document.getElementById('points-outer').innerHTML = '';
+  document.getElementById('points-outer').style.display = 'none';
+  document.getElementById('empty-pane').style.display = 'flex';
+  document.getElementById('loading-pane').classList.remove('active');
+  document.getElementById('summary').classList.remove('show');
+  document.getElementById('extras-section').style.display = 'none';
+  document.getElementById('btn-save-sm').style.display = 'none';
+  document.getElementById('review-controls').style.display = 'none';
+  document.getElementById('btn-retake').style.display = 'none';
+  document.getElementById('pbar').style.width = '0%';
+  document.getElementById('pcnt').textContent = '0';
+  document.getElementById('ptotal').textContent = '0';
+
+  const ab = document.getElementById('answer-box');
+  const nb = document.getElementById('notes-box');
+  const nw = document.getElementById('notes-wrap');
+  const synw = document.getElementById('synopsis-wrap');
+  ab.readOnly = false;
+  nw.classList.remove('visible', 'expanded');
+  synw.style.display = 'none';
+  nb.value = '';
+
+  if (!q) {
+    document.getElementById('right-empty-pane').style.display = 'flex';
+    document.getElementById('question-text').style.display = 'none';
+    document.getElementById('answer-wrap').style.display = 'none';
+    document.getElementById('scenario-wrap').style.display = 'none';
+    updateMetricsUI(null);
+    return;
+  }
+
+  document.getElementById('right-empty-pane').style.display = 'none';
+  document.getElementById('timer-zone').style.display = 'flex';
+  const qtx = document.getElementById('question-text');
+  qtx.style.display = 'block';
+  document.getElementById('answer-wrap').style.display = 'flex';
+
+  if (q.parts) {
+    // Parent question with parts
+    qtx.innerHTML = `<div style="font-weight:600; color:var(--accent); margin-bottom:10px;">${q.label || "Question"}</div>` +
+                    `<div style="font-style:italic; color:#64748b;">Please select a sub-question to begin answering.</div>`;
+  } else {
+    qtx.innerHTML = q.question || q.label || "(No question text)";
+  }
+  qtx.style.visibility = 'visible';
+  qtx.style.opacity = '1';
+
+  ak = "";
+  if (appMode === 'chrono') {
+    ak = document.getElementById('sel-assign').value;
+  } else {
+    const msel = document.getElementById('sel-match');
+    if (msel.selectedIndex > 0 && msel.selectedOptions[0].dataset.json) {
+      ak = JSON.parse(msel.selectedOptions[0].dataset.json).sitting;
+    }
+  }
+  const sitting = ak ? SITTINGS[ak] : null;
+
+  updateMetricsUI(q);
+
+  if (!q) return; // double check
+
+  // THEMATIC CONTEXT PRESERVATION: If a sub-question is selected, load the Master Scenario AND previous sub-questions for context.
+  const sw = document.getElementById('scenario-wrap');
+  const sb = document.getElementById('scenario-body');
+  const sa = document.getElementById('scenario-arrow');
+
+  let fullContext = "";
+  if (currentQ.scenario) fullContext += currentQ.scenario + "<br><br>";
+
+  // In thematic mode, pulling previous context is super helpful
+  if (appMode === 'theme' && currentSub && currentQ.parts) {
+      let priorContext = "";
+      for (const pk of Object.keys(currentQ.parts)) {
+          if (pk === currentSub.partLabel || currentQ.parts[pk] === currentSub) break; // Reached current
+          priorContext += `<b>${pk}</b> ` + currentQ.parts[pk].question + "<br><br>";
+      }
+      if (priorContext) {
+          fullContext += `<i>--- Previous Sub-Question Context ---</i><br>` + priorContext;
+      }
+  }
+
+  if (fullContext) {
+    sw.style.display = 'block';
+    sb.innerHTML = fullContext;
+    sb.classList.add('open');
+    sa.innerHTML = '&#9660;';
+  } else {
+    sw.style.display = 'none';
+  }
+
+  if (appMode === 'chrono') {
+      ak = document.getElementById('sel-assign').value;
+      qk = currentQk || '';
+      sk = currentPk || '';
+  } else {
+      const mopt = document.getElementById('sel-match').selectedOptions[0];
+      if (mopt && mopt.dataset.json) {
+         const mj = JSON.parse(mopt.dataset.json);
+         ak = mj.sitting; qk = mj.qk; sk = mj.pk;
+      }
+  }
+
+  ab.value = localStorage.getItem(ansKey(ak, qk, sk)) || '';
+
+  seconds = 0;
+  // Standard SA1 marking speed: 1.8 mins/mark
+  limitSecs = Math.ceil(q.marks * 1.8 * 60);
+  updateTimerDisplay();
+  document.getElementById('btn-pause').disabled = true;
+  document.getElementById('timer-status').textContent = 'Starts when you type';
+  document.getElementById('timer-status').className = 'timer-status';
+
+  const savedElapsed = localStorage.getItem(elapsedKey(ak, qk, sk));
+  if (savedElapsed) {
+    seconds = parseInt(savedElapsed, 10);
+    updateTimerDisplay();
+    document.getElementById('timer-status').textContent = 'Timer paused';
+  }
+
+  ab.value = ""; // Always reset textarea first
+  const saved = localStorage.getItem(ansKey(ak, qk, sk));
+  if (saved) ab.value = saved;
+  
+  manualMode = false;
+
+  const nbVal = localStorage.getItem(notesKey(ak, qk, sk));
+  if (nbVal) {
+    nb.value = nbVal;
+  }
+
+  document.getElementById('btn-print-q').disabled = false;
+
+  // Initialize Active Recall Brainstorm Lock
+  const totalM = currentQ ? (currentSub ? currentSub.marks : currentQ.marks) : 0;
+  // Brainstorm Lock logic: 1/3 of the time limit
+  brainstormWordsReq = Math.max(10, Math.floor(limitSecs / 10));
+  brainstormTimeLeft = Math.floor(limitSecs / 3);
+
+  brainstormInterval = setInterval(() => {
+      if (brainstormTimeLeft > 0) brainstormTimeLeft--;
+      checkBrainstormLock();
+  }, 1000);
+
+  // Call once to set initial state immediately
+  checkBrainstormLock();
+
+  const notesWrap = document.getElementById('notes-wrap');
+  if (notesWrap) {
+      notesWrap.classList.remove('expanded');
+      notesWrap.classList.remove('visible');
+  }
+  document.getElementById('synopsis-wrap').style.display = 'none';
+
+  if (q && q.synopsis) {
+      document.getElementById('synopsis-text').innerHTML = formatBlueprint(q.synopsis);
+
+      const dlist = document.getElementById('synopsis-list');
+      dlist.innerHTML = '';
+      q.synopsis.split(',').forEach(s => {
+          const opt = document.createElement('option');
+          opt.value = s.trim();
+          dlist.appendChild(opt);
+      });
+  }
+
+  const colBtn = document.getElementById('ans-collapse');
+  colBtn.style.display = 'none';
+  ab.style.display = 'block';
+  const awrap = document.getElementById('answer-wrap');
+  if (awrap) awrap.classList.remove('collapsed');
+  colBtn.innerHTML = '&#9660; Collapse';
+
+  // Restore full review state if previously revealed
+  if (localStorage.getItem(revealKey(ak, qk, sk))) {
+    // Defer so the DOM is fully set up first, then rebuild the full reveal view
+    setTimeout(() => skipToReveal(true), 0);
+  }
+
+  // Show Pillar Hint button if question (or parent) has themes
+  const hintBtn = document.getElementById('btn-pillar-hint');
+  if (hintBtn) {
+    const hasThemes = (q && q.themes && q.themes.length > 0) || (currentQ && currentQ.themes && currentQ.themes.length > 0);
+    hintBtn.style.display = hasThemes ? 'inline-block' : 'none';
+  }
+}
+
+function toggleScenario() {
+  const b = document.getElementById('scenario-body');
+  const a = document.getElementById('scenario-arrow');
+  b.classList.toggle('open');
+  a.innerHTML = b.classList.contains('open') ? '&#9660;' : '&#9654;';
+}
+
+function toggleAnswer() {
+  const t = document.getElementById('answer-box');
+  const b = document.getElementById('ans-collapse');
+  const w = document.getElementById('answer-wrap');
+  const nw = document.getElementById('notes-wrap');
+  if (t.style.display === 'none') {
+      t.style.display = 'block';
+      w.classList.remove('collapsed');
+      nw.classList.remove('expanded');
+      b.innerHTML = '&#9660; Collapse';
+  } else {
+      t.style.display = 'none';
+      w.classList.add('collapsed');
+      if (nw.classList.contains('visible')) nw.classList.add('expanded');
+      b.innerHTML = '&#9654; Expand';
+  }
+}
+
+function checkBrainstormLock() {
+    const ab = document.getElementById('answer-box');
+    const skipBtn = document.getElementById('btn-skip');
+    const status = document.getElementById('brainstorm-status');
+
+    if (manualMode) {
+        skipBtn.disabled = false;
+        skipBtn.classList.remove('pulse');
+        if (status) status.innerHTML = '<span style="color:var(--text3);">Review Mode</span> <span style="color:var(--green);font-size:10px;">(Unlocked)</span>';
+        if (brainstormInterval) clearInterval(brainstormInterval);
+        return;
+    }
+
+    // Check word count
+    const words = ab.value.trim().split(/\s+/).filter(w => w.length > 0).length;
+    const isUnlocked = words >= brainstormWordsReq || brainstormTimeLeft <= 0;
+
+    if (isUnlocked) {
+        skipBtn.disabled = false;
+        skipBtn.classList.add('pulse');
+        if (status) status.innerHTML = '<span style="color:var(--text3);">Active Recall</span> <span style="color:var(--green);font-size:10px;">(Unlocked)</span>';
+        if(brainstormInterval) clearInterval(brainstormInterval);
+    } else {
+        skipBtn.disabled = true;
+        skipBtn.classList.remove('pulse');
+        if (status) status.innerHTML = `Active Recall Lock: <span style="color:var(--accent);">Type ${Math.max(0, brainstormWordsReq - words)} more words</span> or <span style="color:var(--text3);">wait ${brainstormTimeLeft}s</span>`;
+    }
+}
+
+function exitTool() {
+  if (confirm("Close the Revision Tool? Progress is saved locally.")) {
+    window.close();
+    setTimeout(() => {
+       window.location.href = "about:blank";
+    }, 500);
+  }
+}
+
+function toggleFullScreen(e) {
+    if (e) { e.preventDefault(); e.stopPropagation(); }
+    if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(err => {
+            // Silencing browser-specific FS errors
+        });
+    } else {
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        }
+    }
+}
+
+// Optional: Attempt on first interaction
+document.addEventListener('click', function firstClickScale() {
+    // Only if not already in fs and it's a fresh load
+    // But we don't want to annoy the user, so we'll just keep the button for now 
+    // or use a prompt.
+}, { once: true });
+
+async function exportCurrentQuestionDoc() {
+  const k = getActiveKeys();
+  const ak = k.ak, qk = k.qk, sk = k.sk;
+  if (!ak || !qk || !SITTINGS[ak]) {
+      alert("Please select a question first.");
+      return;
+  }
+  const sit = SITTINGS[ak];
+  const q = sit.questions[qk];
+  const item = sk ? q.parts[sk] : q;
+
+  let html = `<html><head><meta charset="utf-8"><style>
+    body { font-family: 'Segoe UI', Arial, sans-serif; line-height: 1.6; color: #000; max-width: 800px; margin: 40px auto; }
+    h1 { color: #000; border-bottom: 2px solid #000; padding-bottom: 10px; }
+    h2 { color: #000; margin-top: 30px; background: #eee; padding: 5px 10px; font-size: 16px; }
+    .q-block { margin-bottom: 40px; border: 1px solid #ccc; padding: 20px; border-radius: 4px; }
+    .label { font-weight: bold; color: #000; text-transform: uppercase; font-size: 11px; margin-top: 15px; border-bottom: 1px solid #ddd; }
+    .text { background: #fff; padding: 10px; border-left: 3px solid #ccc; margin: 5px 0; white-space: pre-wrap; }
+    .ans { background: #fff; border: 1px solid #000; border-left: 5px solid #000; padding: 10px; margin: 5px 0; white-space: pre-wrap; }
+    .sol { background: #fff; border-left: 3px solid #333; padding: 10px; margin: 5px 0; }
+    .timing { font-family: monospace; color: #444; font-size: 12px; }
+    .notes { font-style: italic; color: #000; background: #f9f9f9; padding: 10px; border-left: 3px solid #666; }
+  </style></head><body>`;
+
+  html += `<h1>${currentSource.toUpperCase()} Revision Note: ${q.label}${sk ? ' (Part '+sk+')' : ''}</h1>`;
+  const totalM = item.marks ? ` [Marks: ${item.marks}]` : "";
+  html += `<p class="timing">Sitting: ${sit.label}${totalM} | Exported: ${new Date().toLocaleString()}</p>`;
+
+  if (q.scenario) {
+    html += `<div class="label">Scenario</div><div class="text" style="background:#fefefe; border-left:3px solid #666;">${q.scenario.replace(/\n/g, '<br>')}</div>`;
+  }
+
+  const processItem = (it, pk) => {
+    let content = "";
+    content += `<div class="label">Question Text</div><div class="text">${String(it.question || it.label).replace(/\n/g, '<br>')}</div>`;
+
+    let ans = localStorage.getItem(ansKey(ak, qk, pk)) || "<i>No answer recorded</i>";
+    ans = ans.replace(/\n/g, '<br>');
+    let notes = localStorage.getItem(notesKey(ak, qk, pk)) || "";
+    notes = notes.replace(/\n/g, '<br>');
+    const time = localStorage.getItem(elapsedKey(ak, qk, pk)) || 0;
+    const tm = Math.floor(time/60), ts = time%60;
+
+    content += `<div class="label">Your Answer <span class="timing">(${tm}:${pad(ts)} mins)</span></div><div class="ans">${ans}</div>`;
+    if(notes) content += `<div class="label">Revision Notes</div><div class="notes">${notes}</div>`;
+
+    const savedGroups = JSON.parse(localStorage.getItem(groupKey(ak, qk, pk)) || '{}');
+    content += `<div class="label">Examiner Solution</div><div class="sol">`;
+    if(it.sections) {
+      let idx = 0;
+      let pList = [];
+      Object.keys(it.sections).forEach(head => {
+        idx++; // head index
+        it.sections[head].forEach(p => {
+           const g = (savedGroups[idx-1] && savedGroups[idx-1].trim() !== "") ? savedGroups[idx-1].trim() : "Uncategorized";
+           pList.push({ text: p, group: g, origHead: head });
+           idx++;
+        });
+      });
+
+      const customGroups = [...new Set(pList.filter(x => x.group !== 'Uncategorized').map(x => x.group))];
+      if (customGroups.length > 0) {
+          customGroups.forEach(g => {
+              content += `<strong>${g}</strong><ul>`;
+              pList.filter(x => x.group === g).forEach(p => {
+                  content += `<li>${highlightKeywords(p.text, true)} <em style="color:#888;font-size:11px;">(${p.origHead})</em></li>`;
+              });
+              content += `</ul>`;
+          });
+          content += `<strong>Uncategorized</strong><ul>`;
+          pList.filter(x => x.group === 'Uncategorized').forEach(p => {
+              content += `<li>${highlightKeywords(p.text, true)} <em style="color:#888;font-size:11px;">(${p.origHead})</em></li>`;
+          });
+          content += `</ul>`;
+      } else {
+          Object.keys(it.sections).forEach(head => {
+            content += `<strong>${head}</strong><ul>`;
+            it.sections[head].forEach(p => content += `<li>${highlightKeywords(p, true)}</li>`);
+            content += `</ul>`;
+          });
+      }
+    }
+    content += `</div>`;
+    return content;
+  };
+
+  html += `<div class="q-block">${processItem(item, sk)}</div>`;
+  html += `</body></html>`;
+
+  const blob = new Blob(['\ufeff', html], { type: 'application/msword;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = `SA1_Revision_${ak}_${qk}${sk?'_'+sk:''}.doc`;
+  document.body.appendChild(a); a.click();
+  document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(url), 5000);
+}
+
+async function exportSittingSummary() {
+  const k = getActiveKeys();
+  const ak = k.ak;
+  if (!ak || !SITTINGS[ak]) {
+      alert("Please select a sitting first.");
+      return;
+  }
+  const sit = SITTINGS[ak];
+
+  let html = `<html><head><meta charset="utf-8"><style>
+    body { font-family: 'Segoe UI', Arial, sans-serif; line-height: 1.6; color: #000; max-width: 800px; margin: 40px auto; }
+    h1 { color: #000; border-bottom: 2px solid #000; padding-bottom: 10px; }
+    h2 { color: #000; margin-top: 30px; background: #eee; padding: 5px 10px; font-size: 16px; }
+    .q-block { margin-bottom: 40px; border: 1px solid #ccc; padding: 20px; border-radius: 4px; }
+    .label { font-weight: bold; color: #000; text-transform: uppercase; font-size: 11px; margin-top: 15px; border-bottom: 1px solid #ddd; }
+    .text { background: #fff; padding: 10px; border-left: 3px solid #ccc; margin: 5px 0; white-space: pre-wrap; }
+    .ans { background: #fff; border: 1px solid #000; border-left: 5px solid #000; padding: 10px; margin: 5px 0; white-space: pre-wrap; }
+    .sol { background: #fff; border-left: 3px solid #333; padding: 10px; margin: 5px 0; }
+    .timing { font-family: monospace; color: #444; font-size: 12px; }
+    .notes { font-style: italic; color: #000; background: #f9f9f9; padding: 10px; border-left: 3px solid #666; }
+  </style></head><body>`;
+
+  const sourceLabel = currentSource === 'ifoa' ? 'IFoA SA1' : (currentSource === 'sp1' ? 'IFoA SP1' : currentSource.toUpperCase());
+  html += `<h1>${sourceLabel} Revision Summary: ${sit.label}</h1>`;
+  html += `<p class="timing">Generated on ${new Date().toLocaleString()}</p>`;
+
+  for (const qk of Object.keys(sit.questions)) {
+    const q = sit.questions[qk];
+    html += `<div class="q-block"><h2>${q.label}</h2>`;
+    if (q.scenario) {
+       html += `<div class="label">Scenario</div><div class="text" style="background:#fefefe; border-left:3px solid #666;">${q.scenario.replace(/\n/g, '<br>')}</div>`;
+    }
+
+    const processItem = (item, pk) => {
+      let content = "";
+      const label = pk ? `Part ${pk}` : q.label;
+      const mks = item.marks ? ` (${item.marks} marks)` : "";
+      content += `<div class="label">${label}${mks}</div><div class="text">${String(item.question || item.label).replace(/\n/g, '<br>')}</div>`;
+
+      let ans = localStorage.getItem(ansKey(ak, qk, pk)) || "<i>No answer recorded</i>";
+      ans = ans.replace(/\n/g, '<br>');
+      let notes = localStorage.getItem(notesKey(ak, qk, pk)) || "";
+      notes = notes.replace(/\n/g, '<br>');
+      const time = localStorage.getItem(elapsedKey(ak, qk, pk)) || 0;
+      const tm = Math.floor(time/60), ts = time%60;
+
+      content += `<div class="label">Your Answer <span class="timing">(${tm}:${pad(ts)} mins)</span></div><div class="ans">${ans}</div>`;
+      if(notes) content += `<div class="label">Revision Notes</div><div class="notes">${notes}</div>`;
+
+      const savedGroups = JSON.parse(localStorage.getItem(groupKey(ak, qk, pk)) || '{}');
+      content += `<div class="label">Examiner Solution</div><div class="sol">`;
+      if(item.sections) {
+        let idx = 0;
+        let pList = [];
+        Object.keys(item.sections).forEach(head => {
+          idx++; // head index
+          item.sections[head].forEach(p => {
+             const g = (savedGroups[idx-1] && savedGroups[idx-1].trim() !== "") ? savedGroups[idx-1].trim() : "Uncategorized";
+             pList.push({ text: p, group: g, origHead: head });
+             idx++;
+          });
+        });
+
+        const customGroups = [...new Set(pList.filter(x => x.group !== 'Uncategorized').map(x => x.group))];
+        if (customGroups.length > 0) {
+            customGroups.forEach(g => {
+                content += `<strong>${g}</strong><ul>`;
+                pList.filter(x => x.group === g).forEach(p => {
+                    content += `<li>${highlightKeywords(p.text, true)} <em style="color:#888;font-size:11px;">(${p.origHead})</em></li>`;
+                });
+                content += `</ul>`;
+            });
+            content += `<strong>Uncategorized</strong><ul>`;
+            pList.filter(x => x.group === 'Uncategorized').forEach(p => {
+                content += `<li>${highlightKeywords(p.text, true)} <em style="color:#888;font-size:11px;">(${p.origHead})</em></li>`;
+            });
+            content += `</ul>`;
+        } else {
+            Object.keys(item.sections).forEach(head => {
+              content += `<strong>${head}</strong><ul>`;
+              item.sections[head].forEach(p => content += `<li>${highlightKeywords(p, true)}</li>`);
+              content += `</ul>`;
+            });
+        }
+      }
+      content += `</div>`;
+      return content;
+    };
+
+    if (q.parts) {
+      for (const pk of Object.keys(q.parts)) {
+        html += `<div style="margin-top:20px; border-top:1px dashed #ccc; padding-top:10px;">`;
+        html += processItem(q.parts[pk], pk);
+        html += `</div>`;
+      }
+    } else {
+      html += processItem(q, null);
+    }
+    html += `</div>`;
+  }
+
+  html += `</body></html>`;
+
+  const blob = new Blob(['\ufeff', html], { type: 'application/msword;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = `SA1_Revision_Sitting_${ak}.doc`;
+  document.body.appendChild(a); a.click();
+  document.body.removeChild(a);
+  setTimeout(() => URL.revokeObjectURL(url), 5000);
+}
+
+// TIMER
+function startTimerIfNeeded() { if (!timer && !isPaused) startTimer(); }
+function startTimer() {
+  if (timer) return;
+  startAssignTimer();
+  timer = setInterval(() => {
+    seconds++;
+    updateTimerDisplay();
+    const k = getActiveKeys();
+    saveElapsed(k.ak, k.qk, k.sk, seconds);
+  }, 1000);
+  document.getElementById('btn-pause').disabled = false;
+  document.getElementById('btn-pause').textContent = 'Pause';
+  document.getElementById('timer-status').textContent = 'Timer running...';
+}
+function stopTimer() { clearInterval(timer); timer = null; }
+function togglePause() {
+  if (isPaused) { isPaused = false; startTimer(); }
+  else { isPaused = true; stopTimer(); document.getElementById('btn-pause').textContent = 'Resume'; document.getElementById('timer-status').textContent = 'Timer paused'; }
+}
+function updateTimerDisplay() {
+  const m = Math.floor(seconds / 60), s = seconds % 60;
+  document.getElementById('timer-display').textContent = m + ':' + pad(s);
+  document.getElementById('countdown-input').textContent = Math.ceil(limitSecs / 60);
+  const fill = document.getElementById('timer-bar-fill');
+  const pc = Math.min(100, (seconds / limitSecs) * 100);
+  fill.style.width = pc + '%';
+  fill.className = 'timer-bar-fill' + (pc > 100 ? ' red' : pc > 80 ? ' amber' : '');
+  const td = document.getElementById('timer-display');
+  td.className = 'timer-display' + (pc > 100 ? ' red' : pc > 80 ? ' amber' : '');
+  if (pc > 100) document.getElementById('timer-status').textContent = 'Time limit exceeded!';
+}
+
+function startAssignTimer() {
+  if (assignTimer) return;
+  assignTimer = setInterval(() => {
+    assignSeconds++;
+    const h = Math.floor(assignSeconds / 3600), m = Math.floor((assignSeconds % 3600) / 60), s = assignSeconds % 60;
+    const stEl = document.getElementById('assign-timer');
+    if(stEl) stEl.textContent = pad(h) + ':' + pad(m) + ':' + pad(s);
+  }, 1000);
+}
+function resetAssignTimer() {
+  clearInterval(assignTimer); assignTimer = null; assignSeconds = 0;
+  const e = document.getElementById('assign-timer'); if(e) e.textContent = '00:00:00';
+  const btnStart = document.getElementById('btn-start-sitting');
+  const btnStop = document.getElementById('btn-stop-sitting');
+  if (btnStart) btnStart.style.display = 'none';
+  if (btnStop) btnStop.style.display = 'none';
+  const stWrap = document.getElementById('sitting-timer-wrap');
+  if (stWrap) stWrap.style.display = 'none';
+}
+function startSittingExplicitly() {
+  startAssignTimer();
+  document.getElementById('btn-start-sitting').style.display = 'none';
+  document.getElementById('btn-stop-sitting').style.display = 'inline-block';
+  document.getElementById('sitting-timer-wrap').style.display = 'flex';
+}
+function stopSittingExplicitly() {
+  if (!confirm('Stop the sitting timer? The timer will reset.')) return;
+  resetAssignTimer();
+  // Show Start button again so user can restart
+  const ass = document.getElementById('sel-assign').value;
+  if (ass) {
+    const btnStart = document.getElementById('btn-start-sitting');
+    if (btnStart) btnStart.style.display = 'inline-block';
+  }
+}
+
+let pillarChallengePendingTarget = null;
+
+function showPillarChallenge(themes, skipCallback) {
+  const pb = document.getElementById('pillar-body');
+  let html = '<p style="font-size:15px; margin-bottom:20px; color:var(--text); line-height:1.5;">Test your mental framework. Can you recall the <strong>Armoury hooks</strong> for these pillars as they relate to the answer?</p>';
+  
+  let relevantPillars = new Set();
+  if (PILLARS_HOOKS && PILLARS_HOOKS.themeMapping) {
+    themes.forEach(t => {
+       if (PILLARS_HOOKS.themeMapping[t]) {
+           PILLARS_HOOKS.themeMapping[t].forEach(p => relevantPillars.add(p));
+       }
+    });
+  }
+
+  if (relevantPillars.size === 0) {
+      themes.forEach(t => {
+         html += '<div style="margin: 15px 0; padding: 15px; background: var(--surface3); border: 1px solid var(--border2); border-left: 5px solid var(--accent); border-radius: var(--radius); text-align:left;">';
+         html += '<div style="font-size: 18px; font-weight: 700; color: #ffffff;">' + t + '</div>';
+         if (typeof MASTER_TAXONOMY !== 'undefined' && MASTER_TAXONOMY[t]) {
+            html += '<div style="font-size: 14px; font-weight: 500; color: var(--text2); margin-top: 8px; line-height: 1.5;"><span style="color:var(--text3); font-size:12px; text-transform:uppercase; letter-spacing:1px; margin-right:4px;">Hints:</span> ' + MASTER_TAXONOMY[t].join(' • ') + '</div>';
+         }
+         html += '</div>';
+      });
+  } else {
+      Array.from(relevantPillars).sort().forEach(pId => {
+          let pDef = PILLARS_HOOKS.pillars.find(p => p.id === pId);
+          if (!pDef) return;
+          
+          html += '<div style="margin: 15px 0; border: 1px solid var(--border2); border-left: 6px solid '+pDef.color+'; border-radius: var(--radius); overflow: hidden; background:var(--surface2);">';
+          html += '<div style="padding: 10px 15px; border-bottom: 2px solid var(--border); display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.03);">';
+          html += '<span style="font-size: 16px; font-weight: 800; color: #fff; letter-spacing:0.02em;">' + pDef.name + '</span>';
+          html += '<span style="font-size: 11px; font-weight: bold; color: '+pDef.color+'; background: rgba(0,0,0,0.3); padding: 2px 10px; border-radius: 12px; border:1px solid '+pDef.color+'33;">' + pDef.weight + '</span>';
+          html += '</div>';
+          html += '<div style="padding: 15px; background: var(--surface); text-align:left;">';
+          
+          // A. Static High-Level Hooks
+          let pCards = PILLARS_HOOKS.hooks.filter(h => h.pillar === pId);
+          if (pCards.length > 0) {
+              html += '<div style="font-size:10px; font-weight:700; color:var(--text3); text-transform:uppercase; margin-bottom:8px; opacity:0.8;">Core Strategic Hooks:</div>';
+              html += '<ul style="margin:0 0 15px 18px; padding:0; color:var(--text2); font-size: 13px; line-height:1.5;">';
+              pCards.slice(0, 3).forEach(card => {
+                  html += `<li style="margin-bottom:4px;"><strong style="color:var(--text);">${card.title}</strong></li>`;
+              });
+              html += '</ul>';
+          }
+
+          // B. Dynamic Armoury Injection (Question-specific)
+          let armouryThemes = themes.filter(t => PILLARS_HOOKS.themeMapping[t] && PILLARS_HOOKS.themeMapping[t].includes(pId));
+          if (armouryThemes.length > 0) {
+              html += `<div style="margin-top:12px; border-top:1px dashed var(--border); padding-top:12px;">`;
+              html += `<div style="font-size:10px; font-weight:700; color:var(--accent); text-transform:uppercase; margin-bottom:8px;">Question-Specific Armoury (Recall these!):</div>`;
+              armouryThemes.forEach(at => {
+                  if (TOPIC_FRAMEWORKS[at]) {
+                      html += `<div style="font-size:14px; font-weight:700; color:var(--text); margin-bottom:6px; display:flex; align-items:center; gap:6px;">
+                                  <span style="width:6px; height:6px; border-radius:50%; background:var(--accent);"></span>
+                                  ${at}
+                               </div>`;
+                      // Show the first 5 bullet points from the Armoury theme
+                      const _atEntry = TOPIC_FRAMEWORKS[at];
+                      const _atLines = (_atEntry && _atEntry.bullets) ? _atEntry.bullets : (Array.isArray(_atEntry) ? _atEntry : []);
+                      let bullets = _atLines.filter(line => line.startsWith('- ')).slice(0, 5);
+                      if (bullets.length > 0) {
+                          html += `<ul style="margin:0 0 12px 20px; padding:0; list-style:none; font-size:13px; color:var(--text2); line-height:1.4;">`;
+                          bullets.forEach(b => {
+                              html += `<li style="margin-bottom:5px; position:relative; padding-left:12px;">
+                                          <span style="position:absolute; left:0; color:var(--accent);">•</span>
+                                          ${b.replace(/^- /, '').split(':')[0]}<span style="color:var(--text3); font-size:12px;">: ${b.split(':')[1] || ''}</span>
+                                       </li>`;
+                          });
+                          html += `</ul>`;
+                      }
+                  }
+              });
+              html += `</div>`;
+          }
+           
+          html += '</div></div>';
+      });
+  }
+  
+  pb.innerHTML = html;
+  document.getElementById('pillar-modal').style.display = 'block';
+  pillarChallengePendingTarget = skipCallback;
+}
+
+function closePillarModal() {
+  document.getElementById('pillar-modal').style.display = 'none';
+  if (pillarChallengePendingTarget) {
+     pillarChallengePendingTarget = null;
+  }
+}
+
+function completePillarChallenge() {
+  document.getElementById('pillar-modal').style.display = 'none';
+  if (pillarChallengePendingTarget) {
+     let cb = pillarChallengePendingTarget;
+     pillarChallengePendingTarget = null;
+     cb(); 
+  }
+}
+
+function performGapAnalysis(target, answerText) {
+  if (!target || !target.themes || target.themes.length === 0) return '';
+  const text = answerText.toLowerCase();
+  
+  let html = '<div style="margin-bottom: 20px; padding: 15px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface2);">';
+  html += '<div style="font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 15px;">Topic Gap Analysis (AI Estimate)</div>';
+  html += '<div style="display:flex; flex-direction:column; gap:8px;">';
+
+  target.themes.forEach(theme => {
+    let hooks = MASTER_TAXONOMY[theme] || [];
+    let keywords = [theme, ...hooks].map(k => k.toLowerCase());
+    
+    // Check if any keyword matches
+    let hitKeyword = keywords.find(kw => text.includes(kw) || text.includes(kw.replace(/s$/, '')));
+    
+    if (hitKeyword) {
+      html += '<div style="padding: 10px; background: var(--greenbg); border-left: 3px solid var(--green); border-radius: 4px; font-size: 13px;">';
+      html += '<strong>✅ Mastered: ' + theme + '</strong><br><span style="color:var(--text3); font-size:12px;">You touched on concepts related to "' + hitKeyword + '".</span>';
+      html += '</div>';
+    } else {
+      html += '<div style="padding: 10px; background: var(--amberbg); border-left: 3px solid var(--amber); border-radius: 4px; font-size: 13px;">';
+      html += '<strong>⚠️ Missed: ' + theme + '</strong><br><span style="color:var(--text3); font-size:12px;">Keep these in mind: ' + hooks.join(', ') + '.</span>';
+      html += '</div>';
+    }
+  });
+
+  html += '</div></div>';
+  return html;
+}
+
+// REVIEW ENGINE
+function startReview() {
+  // Aliasing AI Review to Reveal for now, but both will show the Memory Aid/Notes
+  skipToReveal();
+}
+
+function skipToReveal(bypassPillar = false) {
+  const target = currentSub || currentQ;
+  const themes = (target && target.themes && target.themes.length > 0) ? target.themes : (currentQ && currentQ.themes ? currentQ.themes : []);
+  
+  // PILLAR CHALLENGE INTERCEPT
+  if (!bypassPillar && themes.length > 0) {
+      const k = getActiveKeys();
+      const pKey = "pillar_" + k.ak + "_" + k.qk + (k.sk ? "_" + k.sk : "");
+      if (!localStorage.getItem(pKey)) {
+          showPillarChallenge(themes, () => {
+              localStorage.setItem(pKey, '1');
+              
+              const synEl = document.getElementById('synopsis-text');
+              const synWrap = document.getElementById('synopsis-wrap');
+              if (synEl && synWrap) {
+                  let synHtml = '<strong style="color:var(--accent)">🧠 Pillars & Hooks Memory Aid:</strong><br>';
+                  target.themes.forEach(t => {
+                      synHtml += `<span style="color:var(--text);font-weight:600">${t}</span>`;
+                      if (MASTER_TAXONOMY[t]) synHtml += ': <span style="color:var(--text2)">' + MASTER_TAXONOMY[t].join(' · ') + '</span>';
+                      synHtml += '<br>';
+                  });
+                  synEl.innerHTML = synHtml;
+                  synWrap.style.display = 'flex';
+              }
+              const nw = document.getElementById('notes-wrap');
+              if (nw) nw.classList.add('visible');
+              
+              skipToReveal(true);
+          });
+          return; // Stop execution until challenge is completed
+      }
+  }
+
+  manualMode = true; stopTimer();
+  document.getElementById('answer-box').readOnly = true;
+  document.getElementById('notes-wrap').classList.add('expanded');
+
+  // Save revealed state
+  const rk = getActiveKeys();
+  if (rk.ak) localStorage.setItem(revealKey(rk.ak, rk.qk, rk.sk), '1');
+
+  // Collapse the Answer Box to make room for Notes - ONLY on first manual reveal
+  document.getElementById('ans-collapse').style.display = 'block';
+  const ab = document.getElementById('answer-box');
+  if (!bypassPillar && ab.style.display !== 'none') toggleAnswer();
+
+  if(brainstormInterval) clearInterval(brainstormInterval);
+
+  const k = getActiveKeys();
+  const savedRevCount = parseInt(localStorage.getItem(revCountKey(k.ak, k.qk, k.sk)) || "0");
+
+  const nw = document.getElementById('notes-wrap');
+  if (target && target.synopsis) {
+    nw.classList.add('visible');
+    document.getElementById('synopsis-wrap').style.display = 'flex';
+    document.getElementById('synopsis-text').innerHTML = formatBlueprint(target.synopsis);
+
+    // Refresh datalist just in case (e.g. if skipToReveal is called directly)
+    const dlist = document.getElementById('synopsis-list');
+    dlist.innerHTML = '';
+    target.synopsis.split(',').forEach(s => {
+        const opt = document.createElement('option');
+        opt.value = s.trim();
+        dlist.appendChild(opt);
+    });
+  } else {
+    document.getElementById('synopsis-wrap').style.display = 'none';
+  }
+
+  document.getElementById('btn-skip').disabled = true;
+  document.getElementById('btn-retake').style.display = 'inline-block';
+
+  document.getElementById('empty-pane').style.display = 'none';
+  document.getElementById('review-header').style.display = 'flex';
+  document.getElementById('points-outer').style.display = 'flex';
+  document.getElementById('review-controls').style.display = 'flex';
+  document.getElementById('btn-compile').style.display = 'inline-block';
+  document.getElementById('btn-next').disabled = false;
+
+  currentPoints = [];
+  if (target && target.sections) {
+      Object.keys(target.sections).forEach(head => {
+        currentPoints.push({ type: 'head', text: head });
+        target.sections[head].forEach(p => currentPoints.push({ type: 'point', text: p }));
+      });
+  }
+  document.getElementById('ptotal').textContent = currentPoints.filter(p => p.type === 'point').length;
+  revealed = 0;
+  
+  // Restore all points that were previously revealed
+  const toReveal = Math.max(1, savedRevCount); 
+  for (let i = 0; i < toReveal; i++) {
+    next(true); // pass true to suppress scroll for large restorations
+  }
+}
+
+function next(suppressScroll = false) {
+  if (revealed >= currentPoints.length) return;
+  const p = currentPoints[revealed];
+  const outer = document.getElementById('points-outer');
+  const div = document.createElement('div');
+  const k = getActiveKeys();
+
+  if (p.type === 'gap_analysis') {
+      div.className = 'review-item gap-analysis-item';
+      div.innerHTML = p.html;
+  } else {
+      div.className = 'review-item' + (p.type === 'head' ? ' head' : '');
+      div.innerHTML = formatBlueprint(p.text);
+      
+      if (p.type === 'point') {
+         const idx = revealed;
+         const row = document.createElement('div');
+         
+         const savedGroups = JSON.parse(localStorage.getItem(groupKey(k.ak, k.qk, k.sk)) || '{}');
+         const savedNote = savedGroups[idx] || '';
+         const isChecked = localStorage.getItem(checkedKey(k.ak, k.qk, k.sk, idx)) === '1';
+
+         row.className = isChecked ? 'self-row checked' : 'self-row unchecked';
+         row.id = 'srow_' + idx;
+         
+         row.innerHTML = `
+            <input type="checkbox" class="self-cb" id="cb_${idx}" ${isChecked ? 'checked' : ''}>
+            <label for="cb_${idx}" class="self-label">I covered this</label>
+            <input type="text" class="self-note ${(savedNote || isChecked) ? 'visible' : ''}" id="note_${idx}" placeholder="Tag/Category..." value="${savedNote}" oninput="saveGroupNotes()">
+         `;
+         
+         const cb = row.querySelector('#cb_' + idx);
+         cb.addEventListener('change', (e) => {
+             row.className = e.target.checked ? 'self-row checked' : 'self-row unchecked';
+             const note = row.querySelector('#note_' + idx);
+             if (e.target.checked) {
+                 note.classList.add('visible');
+                 localStorage.setItem(checkedKey(k.ak, k.qk, k.sk, idx), '1');
+             } else {
+                 if (!note.value) note.classList.remove('visible');
+                 localStorage.removeItem(checkedKey(k.ak, k.qk, k.sk, idx));
+             }
+         });
+         
+         div.appendChild(row);
+      }
+  }
+  
+  outer.appendChild(div);
+  if (!suppressScroll) div.scrollIntoView({ behavior: 'smooth', block: 'end' });
+
+  revealed++;
+  localStorage.setItem(revCountKey(k.ak, k.qk, k.sk), String(revealed));
+  const revealedPoints = currentPoints.slice(0, revealed).filter(x => x.type === 'point').length;
+  const totalPoints = currentPoints.filter(p => p.type === 'point').length;
+  const pc = document.getElementById('pcnt');
+  if(pc) pc.textContent = revealedPoints;
+  const pb = document.getElementById('pbar');
+  if(pb) pb.style.width = totalPoints > 0 ? (revealedPoints / totalPoints * 100) + '%' : '0%';
+
+  if (revealed >= currentPoints.length) {
+    document.getElementById('btn-next').disabled = true;
+    document.getElementById('btn-compile').style.display = 'inline-block';
+  }
+}
+
+function prev() {
+  if (revealed <= 1) return;
+  const outer = document.getElementById('points-outer');
+  if (outer.lastChild) outer.removeChild(outer.lastChild);
+  revealed--;
+  const k = getActiveKeys();
+  localStorage.setItem(revCountKey(k.ak, k.qk, k.sk), String(revealed));
+  
+  const revealedPoints = currentPoints.slice(0, revealed).filter(x => x.type === 'point').length;
+  const totalPoints = currentPoints.filter(p => p.type === 'point').length;
+  const pc = document.getElementById('pcnt');
+  if(pc) pc.textContent = revealedPoints;
+  const pb = document.getElementById('pbar');
+  if(pb) pb.style.width = totalPoints > 0 ? (revealedPoints / totalPoints * 100) + '%' : '0%';
+  
+  document.getElementById('btn-next').disabled = false;
+}
+
+function compileSelfAssess() {
+  let hit = 0, miss = 0;
+  currentPoints.forEach((p, i) => {
+    if (p.type === 'point') {
+      const cb = document.getElementById('cb_' + i);
+      if (cb && cb.checked) hit++; else miss++;
+    }
+  });
+
+  document.getElementById('s-hit').textContent = hit;
+  document.getElementById('s-miss').textContent = miss;
+  document.getElementById('s-extra').textContent = 0;
+  document.getElementById('summary').classList.add('show');
+
+  document.getElementById('review-controls').style.display = 'flex';
+  document.getElementById('btn-next').disabled = true;
+    // No longer hiding the compile button - user wants it persistent
+    // document.getElementById('btn-compile').style.display = 'none';
+
+  document.getElementById('btn-save-sm').style.display = 'inline-block';
+  const tb = document.getElementById('time-badge');
+  tb.style.display = 'inline-block';
+  tb.textContent = 'Time: ' + Math.floor(seconds/60) + ':' + pad(seconds%60) + ' / ' + Math.ceil(limitSecs/60) + ' min';
+  tb.className = 'time-badge' + (seconds > limitSecs ? ' red' : '');
+
+  // Auto-show Result Popup
+  setTimeout(showResultPopup, 600);
+}
+
+function showResultPopup() {
+  const k = getActiveKeys();
+  const ak = k.ak, qk = k.qk, sk = k.sk;
+  if (!ak || !qk || !SITTINGS[ak]) return;
+  const sit = SITTINGS[ak];
+  const q = sit.questions[qk];
+  const item = sk ? q.parts[sk] : q;
+
+  const sourceLabel = currentSource === 'ifoa' ? 'IFoA SA1' : (currentSource === 'sp1' ? 'IFoA SP1' : currentSource.toUpperCase());
+  document.getElementById('modal-title').textContent = `${sourceLabel} Revision Note: ${q.label}${sk ? ' (Part '+sk+')' : ''}`;
+  const totalM = item.marks ? ` [Marks: ${item.marks}]` : "";
+  let html = `<div style="font-size:12px;color:#666;margin-bottom:20px;">Sitting: ${sit.label}${totalM} | Completed: ${new Date().toLocaleString()}</div>`;
+  
+  if (q.scenario) {
+    html += `<span class="pop-label">Scenario</span><div class="pop-text" style="background:#fff;border-color:#ccc;">${q.scenario}</div>`;
+  }
+  
+  const qLabel = sk ? `${q.label} (Part ${sk})` : q.label;
+  html += `<span class="pop-label">${qLabel}</span><div class="pop-text">${item.question || item.label}</div>`;
+  
+  let ans = localStorage.getItem(ansKey(ak, qk, sk)) || "(No answer recorded)";
+  const time = localStorage.getItem(elapsedKey(ak, qk, sk)) || 0;
+  const tm = Math.floor(time/60), ts = time%60;
+  
+  html += `<span class="pop-label">Your Answer (${tm}:${pad(ts)})</span><div class="pop-ans">${ans}</div>`;
+  
+  let notes = (localStorage.getItem(notesKey(ak, qk, sk)) || "").replace(/\n/g, '<br>');
+  if(notes) html += `<span class="pop-label">Revision Notes</span><div class="pop-notes">${notes}</div>`;
+  
+  const savedGroups = JSON.parse(localStorage.getItem(groupKey(ak, qk, sk)) || '{}');
+  html += `<span class="pop-label">Categorized Solutions</span><div class="pop-sol">`;
+  
+  if(item.sections) {
+    let idx = 0;
+    let pList = [];
+    Object.keys(item.sections).forEach(head => {
+      idx++; 
+      item.sections[head].forEach(p => {
+         const g = (savedGroups[idx-1] && savedGroups[idx-1].trim() !== "") ? savedGroups[idx-1].trim() : "Uncategorized";
+         pList.push({ text: p, group: g, origHead: head });
+         idx++;
+      });
+    });
+    
+    const customGroups = [...new Set(pList.filter(x => x.group !== 'Uncategorized').map(x => x.group))];
+    if (customGroups.length > 0) {
+        customGroups.forEach(g => {
+            html += `<strong>${g}</strong><ul>`;
+            pList.filter(x => x.group === g).forEach(p => {
+                html += `<li>${highlightKeywords(p.text, true)} <em style="color:#888;font-size:11px;">(${p.origHead})</em></li>`;
+            });
+            html += `</ul>`;
+        });
+        html += `<strong>Uncategorized</strong><ul>`;
+        pList.filter(x => x.group === 'Uncategorized').forEach(p => {
+            html += `<li>${highlightKeywords(p.text, true)} <em style="color:#888;font-size:11px;">(${p.origHead})</em></li>`;
+        });
+        html += `</ul>`;
+    } else {
+        Object.keys(item.sections).forEach(head => {
+          html += `<strong>${head}</strong><ul>`;
+          item.sections[head].forEach(p => html += `<li>${highlightKeywords(p, true)}</li>`);
+          html += `</ul>`;
+        });
+    }
+  }
+  html += `</div>`;
+  
+  document.getElementById('modal-body').innerHTML = html;
+  document.getElementById('result-modal').style.display = 'block';
+}
+
+function closeModal() {
+  document.getElementById('result-modal').style.display = 'none';
+}
+
+function clearReviewPane() {
+  const list = document.getElementById('points-outer');
+  if (list) list.innerHTML = '';
+  const summary = document.getElementById('summary');
+  if (summary) summary.classList.remove('show');
+  
+  const pc = document.getElementById('pcnt');
+  const pt = document.getElementById('ptotal');
+  if (pc) pc.textContent = '0';
+  if (pt) pt.textContent = '0';
+  const pb = document.getElementById('pbar');
+  if (pb) pb.style.width = '0%';
+
+  document.getElementById('points-outer').style.display = 'none';
+  document.getElementById('review-controls').style.display = 'none';
+  document.getElementById('review-header').style.display = 'none';
+  document.getElementById('empty-pane').style.display = 'block';
+}
+
+function resetAll() {
+  console.log("resetAll: Aggressive UI reset triggered");
+  stopTimer();
+  clearReviewPane();
+  currentQ = null;
+  currentSub = null;
+  currentQk = null;
+  currentPk = null;
+
+  setupQuestion(null);
+
+  const statusMsg = document.getElementById('status-msg');
+  if (statusMsg) statusMsg.textContent = "";
+
+  const sb = document.getElementById('scenario-body');
+  if (sb) { sb.innerHTML = ""; sb.classList.remove('open'); }
+
+  const sw = document.getElementById('scenario-wrap');
+  if (sw) sw.style.display = "none";
+
+  const ab = document.getElementById('answer-box');
+  if (ab) ab.value = "";
+
+  const nb = document.getElementById('notes-box');
+  if (nb) nb.value = "";
+
+  const synEl = document.getElementById('synopsis-text');
+  if (synEl) synEl.innerHTML = "";
+  const synWrap = document.getElementById('synopsis-wrap');
+  if (synWrap) synWrap.style.display = "none";
+
+  if(brainstormInterval) clearInterval(brainstormInterval);
+
+  document.getElementById('timer-zone').style.display = 'none';
+}
+
+function updateMetricsUI(activeQ = null) {
+    const tzone = document.getElementById('timer-zone');
+    const swrap = document.getElementById('sitting-timer-wrap');
+
+    // Get current Sitting Key
+    let ak = "";
+    if (appMode === 'chrono') {
+        ak = document.getElementById('sel-assign').value;
+    } else {
+        const msel = document.getElementById('sel-match');
+        if (msel && msel.selectedIndex > 0 && msel.selectedOptions[0].dataset.json) {
+            ak = JSON.parse(msel.selectedOptions[0].dataset.json).sitting;
+        }
+    }
+    const sitting = ak ? SITTINGS[ak] : null;
+
+    if (!sitting) {
+        if (tzone) tzone.style.display = 'none';
+        if (swrap) swrap.style.display = 'none';
+        document.querySelectorAll('.marks-pill').forEach(p => p.style.display = 'none');
+        return;
+    }
+
+    // Timer visibility: Only show if a sub-question is selected (if parts exist) 
+    // OR if a question is selected and it has no parts.
+    const hasParts = !!(currentQ && currentQ.parts);
+    const subSelected = !!currentSub;
+    const qSelectedNoParts = !!(currentQ && !currentQ.parts);
+
+    if (tzone) {
+        tzone.style.display = (subSelected || qSelectedNoParts) ? 'flex' : 'none';
+    }
+    if (swrap) {
+        // Only show sitting-timer-wrap if the timer is explicitly running
+        swrap.style.display = assignTimer ? 'flex' : 'none';
+    }
+
+    // Update Pills
+    let sTotal = 0;
+    if (sitting.questions) Object.values(sitting.questions).forEach(sq => sTotal += (sq.marks || 0));
+    document.querySelectorAll('.pill-sitting').forEach(p => {
+        p.textContent = `Marks: ${sTotal}`;
+        p.style.display = (sTotal > 0) ? 'inline-flex' : 'none';
+    });
+
+    document.querySelectorAll('.pill-q').forEach(p => {
+        const qData = currentQ || activeQ;
+        if (qData) {
+            p.textContent = `Marks: ${qData.marks || 0}`;
+            p.style.display = 'inline-flex';
+        } else {
+            p.style.display = 'none';
+        }
+    });
+
+    document.querySelectorAll('.pill-sub').forEach(p => {
+        if (currentSub) {
+            p.textContent = `Marks: ${currentSub.marks || 0}`;
+            p.style.display = 'inline-flex';
+        } else {
+            p.style.display = 'none';
+        }
+    });
+}
+
+function confirmChange() {
+  if (currentQ) {
+    return confirm("A sitting is in progress and it will be reset. Do you want to continue?");
+  }
+  return true;
+}
+
+function confirmRefresh() {
+  if (confirmChange()) {
+    location.reload();
+  }
+}
+
+// Global beforeunload warning if in progress
+window.addEventListener('beforeunload', (e) => {
+  if (currentQ) {
+    e.preventDefault();
+    e.returnValue = '';
+  }
+});
+
+// HELPERS
+function pad(n) { return n < 10 ? '0' + n : '' + n; }
+function ansKey(ak, qk, sk) { return `sa1_e_ans_${ak}_${qk}_${sk}`; }
+function elapsedKey(ak, qk, sk) { return `sa1_e_elapsed_${ak}_${qk}_${sk}`; }
+function notesKey(ak, qk, sk) { return `sa1_e_notes_${ak}_${qk}_${sk}`; }
+function groupKey(ak, qk, sk) { return `sa1_e_groups_${ak}_${qk}_${sk}`; }
+function revealKey(ak, qk, sk) { return `sa1_e_revealed_${ak}_${qk}_${sk}`; }
+function revCountKey(ak, qk, sk) { return `sa1_e_rev_cnt_${ak}_${qk}_${sk}`; }
+function checkedKey(ak, qk, sk, idx) { return `sa1_e_chk_${ak}_${qk}_${sk}_${idx}`; }
+
+function highlightKeywords(text, isExport = false) {
+  if(!text) return text;
+  let html = text;
+  SA1_KEYWORDS.forEach(kw => {
+    const regex = new RegExp(`\\b(${kw})(s|es)?\\b`, 'gi');
+    html = html.replace(regex, `<span style="font-weight:600;">$1$2</span>`);
+  });
+  return html;
+}
+
+function getActiveKeys() {
+    let ak=null, qk=null, sk=null;
+    if(appMode==='chrono'){
+        ak = document.getElementById('sel-assign').value;
+        qk = currentQk;
+        sk = currentPk;
+    } else {
+        const mopt = document.getElementById('sel-match').selectedOptions[0];
+        if(mopt && mopt.dataset.json){ const mj = JSON.parse(mopt.dataset.json); ak=mj.sitting; qk=mj.qk; sk=mj.pk; }
+    }
+    return {ak,qk,sk};
+}
+
+function saveAnswer() {
+  const k = getActiveKeys();
+  if(!k.ak) return;
+  try { 
+    localStorage.setItem(ansKey(k.ak, k.qk, k.sk), document.getElementById('answer-box').value); 
+  } catch(e) {}
+}
+function saveNotes() {
+  const k = getActiveKeys();
+  if(!k.ak) return;
+  try { localStorage.setItem(notesKey(k.ak, k.qk, k.sk), document.getElementById('notes-box').value); } catch(e) {}
+}
+function saveGroupNotes() {
+  const k = getActiveKeys();
+  if(!k.ak) return;
+  try {
+    const groups = {};
+    currentPoints.forEach((p, idx) => {
+      const noteEl = document.getElementById('note_' + idx);
+      if(noteEl && noteEl.value.trim()) groups[idx] = noteEl.value.trim();
+    });
+    localStorage.setItem(groupKey(k.ak, k.qk, k.sk), JSON.stringify(groups));
+  } catch(e) {}
+}
+function saveElapsed(ak, qk, sk, secs) { if(!ak)return; try { localStorage.setItem(elapsedKey(ak, qk, sk), String(secs)); } catch(e) {} }
+
+function handleAnswerTab(e) {
+  if (e.key === 'Tab') {
+    const nextBtn = document.getElementById('btn-next');
+    if (nextBtn && !nextBtn.disabled && document.getElementById('review-controls').style.display !== 'none') {
+      e.preventDefault(); next();
+      setTimeout(() => { const n = document.getElementById('note_' + (revealed - 1)); if (n && manualMode) n.focus(); }, 50);
+    }
+  }
+}
+
+// Event Listeners (Keyboard)
+// MODULAR KEYBOARD MANAGER
+const KeyboardHandler = {
+  isTyping: function() {
+    const active = document.activeElement;
+    return active && (active.tagName === 'TEXTAREA' || active.tagName === 'INPUT');
+  },
+  onKeyDown: function(e) {
+    if (this.isTyping()) return;
+
+    // 1. Question Navigation (Always ArrowUp/Down - Only if NOT Reviewing)
+    if (!manualMode) {
+      if (e.key === 'ArrowUp') { e.preventDefault(); navQuestion(-1); return; }
+      if (e.key === 'ArrowDown') { e.preventDefault(); navQuestion(1); return; }
+    }
+
+    // 2. Sub-Question Navigation (ArrowLeft/Right - Only if NOT Reviewing)
+    if (!manualMode) {
+      if (e.key === 'ArrowLeft') { e.preventDefault(); navSub(-1); return; }
+      if (e.key === 'ArrowRight') { e.preventDefault(); navSub(1); return; }
+    }
+
+    // 3. Review Navigation (Only if Reviewing)
+    if (manualMode) {
+      if (e.key === 'ArrowLeft' || e.code === 'Backspace') { e.preventDefault(); prev(); return; }
+      if (e.key === 'ArrowRight' || e.code === 'Space' || e.code === 'Enter') { e.preventDefault(); next(); return; }
+      if (e.key === '1' || e.key === '0') {
+        const cb = document.getElementById('cb_' + (revealed - 1));
+        if (cb) { cb.checked = (e.key === '1'); cb.dispatchEvent(new Event('change')); }
+        return;
+      }
+    }
+
+    // 4. Shared Utilities (Tab for Notes)
+    if (e.key === 'Tab') {
+      const nextBtn = document.getElementById('btn-next');
+      if (nextBtn && !nextBtn.disabled && document.getElementById('review-controls').style.display !== 'none') {
+        e.preventDefault(); next();
+        setTimeout(() => { const n = document.getElementById('note_' + (revealed-1)); if(n) n.focus(); }, 50);
+      } else if (nextBtn && nextBtn.disabled && document.getElementById('btn-compile').style.display !== 'none') {
+        e.preventDefault(); document.getElementById('btn-compile').focus();
+      }
+    }
+  }
+};
+
+document.addEventListener('keydown', (e) => KeyboardHandler.onKeyDown(e));
+
+function saveQuestionOnlyDoc() { exportCurrentQuestionDoc(); }
+
+function retakeQuestion() {
+  if (!confirm('Clear your answer and restart this question?')) return;
+  const k = getActiveKeys();
+  if (k.ak) {
+    localStorage.removeItem(ansKey(k.ak, k.qk, k.sk));
+    localStorage.removeItem(elapsedKey(k.ak, k.qk, k.sk));
+    localStorage.removeItem(revealKey(k.ak, k.qk, k.sk));
+    localStorage.removeItem(revCountKey(k.ak, k.qk, k.sk));
+    localStorage.removeItem("pillar_" + k.ak + "_" + k.qk + (k.sk ? "_" + k.sk : ""));
+    // Clear all checked states
+    for(let i=0; i<300; i++) localStorage.removeItem(checkedKey(k.ak, k.qk, k.sk, i));
+  }
+  const target = currentSub || currentQ;
+  setupQuestion(target);
+}
+
+// --- AUTOMATED HEALTH CHECK (FOR AGENT VERIFICATION) ---
+async function runHealthCheck() {
+  console.log("%c--- STARTING SA1 TOOL HEALTH CHECK ---", "color:purple; font-weight:bold; font-size:14px;");
+  const results = [];
+  const logObj = (name, pass, msg) => {
+    results.push({ name, pass, msg });
+    console.log(`${pass ? '✅' : '❌'} ${name}: ${msg}`);
+  };
+
+  try {
+    localStorage.clear();
+    logObj("LS Clear", true, "Storage reset");
+
+    const asel = document.getElementById('sel-assign');
+    if (asel.options.length < 2) { logObj("Data Load", false, "No sittings found"); return; }
+    asel.selectedIndex = 1;
+    onAssignChange();
+    logObj("Sitting Select", true, `Selected ${asel.value}`);
+
+    await new Promise(r => setTimeout(r, 1200));
+    const stval = document.getElementById('assign-timer').textContent;
+    logObj("Sitting Timer", stval !== "00:00:00", `Clock at ${stval}`);
+
+    // Q dot bar check
+    const qDots = document.querySelectorAll('#q-dot-items .nav-dot').length;
+    logObj("Q Dot Bar", qDots > 0, `${qDots} Q-dots rendered`);
+
+    logObj("Active Q", !!currentQk, `currentQk = ${currentQk}`);
+
+    const subDots = document.querySelectorAll('#sub-dot-items .nav-sub-dot').length;
+    logObj("Sub Dot Bar", subDots >= 0, `${subDots} sub-dots rendered`);
+
+    const ab = document.getElementById('answer-box');
+    const skipBtn = document.getElementById('btn-skip');
+    logObj("Reveal Lock", skipBtn.disabled === true, "Button locked initially");
+
+    ab.value = "This is a test answer for active recall verification and the brainstorm lock should release now.";
+    ab.dispatchEvent(new Event('input'));
+    checkBrainstormLock();
+    logObj("Reveal Unlock", skipBtn.disabled === false, "Button unlocked after typing");
+
+    // NEW: Verify btn-pause exists
+    const btnPause = document.getElementById('btn-pause');
+    logObj("Pause Button", !!btnPause, btnPause ? "Element found, disabled=" + btnPause.disabled : "MISSING");
+
+    // NEW: Verify answer box is NOT collapsed
+    const abDisplay = ab.style.display;
+    const awCollapsed = document.getElementById('answer-wrap').classList.contains('collapsed');
+    logObj("Answer Expanded", abDisplay !== 'none' && !awCollapsed, `display=${abDisplay}, collapsed=${awCollapsed}`);
+
+    // NEW: Verify notes-wrap is NOT visible pre-reveal
+    const nwPre = document.getElementById('notes-wrap');
+    const notesHidden = !nwPre.classList.contains('visible') && !nwPre.classList.contains('expanded');
+    logObj("Notes Hidden Pre-Reveal", notesHidden, `visible=${nwPre.classList.contains('visible')}, expanded=${nwPre.classList.contains('expanded')}`);
+
+    // NEW: Verify countdown-input shows a value
+    const cdVal = document.getElementById('countdown-input').textContent;
+    logObj("Countdown Display", cdVal && cdVal !== '', `Shows: ${cdVal} min`);
+
+    // NEW: Verify saveQuestionOnlyDoc exists
+    logObj("Print Function", typeof saveQuestionOnlyDoc === 'function', "saveQuestionOnlyDoc defined");
+
+    skipToReveal();
+    await new Promise(r => setTimeout(r, 200));
+    logObj("Reveal Action", manualMode && currentPoints.length > 0, `ManualMode: ${manualMode}, Points: ${currentPoints.length}`);
+
+    // NEW: After Reveal, switch Q and verify answer box resets
+    const qDots2 = document.querySelectorAll('#q-dot-items .nav-dot');
+    if (qDots2.length > 1) {
+        qDots2[1].click(); // Click Q2
+        await new Promise(r => setTimeout(r, 300));
+        const abAfter = document.getElementById('answer-box').style.display;
+        const awAfter = document.getElementById('answer-wrap').classList.contains('collapsed');
+        const nwAfter = document.getElementById('notes-wrap');
+        logObj("Post-Reveal Q Switch: Answer", abAfter !== 'none' && !awAfter, `display=${abAfter}, collapsed=${awAfter}`);
+        logObj("Post-Reveal Q Switch: Notes", !nwAfter.classList.contains('visible'), `visible=${nwAfter.classList.contains('visible')}`);
+    }
+
+    logObj("FINAL STATUS", results.every(r => r.pass), results.every(r => r.pass) ? "ALL PASS" : "FAILURES DETECTED");
+    return results;
+  } catch(e) {
+    console.error("Health Check CRASHED:", e);
+    return null;
+  }
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Product Cycle · SA1ity Check</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap');
+
+:root {
+  --bg: #0d0f14;
+  --surface: #151923;
+  --surface2: #1c2230;
+  --surface3: #242b3d;
+  --border: #2a324b;
+  --border2: #363f5f;
+  --text: #e2e4ed;
+  --text2: #949ebf;
+  --text3: #565f80;
+  --accent: #8b5cf6;
+  --accentbg: #221a3a;
+  --radius: 6px;
+  --radius2: 10px;
+  --mono: 'IBM Plex Mono', monospace;
+  --sans: 'IBM Plex Sans', sans-serif;
+
+  /* Stage colours — 8 stages around the cycle */
+  --c1: #a78bfa; --c1bg: #1e1a2e; --c1b: #3b2f6e;   /* Product Design   — violet   */
+  --c2: #60a5fa; --c2bg: #1a222e; --c2b: #2a3a5a;   /* Pricing          — blue     */
+  --c3: #34d399; --c3bg: #1a2a22; --c3b: #2a4a3a;   /* Marketing        — emerald  */
+  --c4: #f87171; --c4bg: #2a1a1a; --c4b: #5a2a2a;   /* Sales            — red      */
+  --c5: #fbbf24; --c5bg: #2a240a; --c5b: #5a460a;   /* Underwriting     — amber    */
+  --c6: #f472b6; --c6bg: #2a1a24; --c6b: #5a2a4a;   /* Claims Mgmt      — pink     */
+  --c7: #38bdf8; --c7bg: #1a242e; --c7b: #2a3a5a;   /* Exp Monitoring   — sky      */
+  --c8: #fb923c; --c8bg: #2a1e0a; --c8b: #5a3a1a;   /* Valuation        — orange   */
+}
+
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;}
+
+/* ── TOPBAR ── */
+.topbar{background:var(--surface);border-bottom:1px solid var(--border);padding:10px 20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;flex-shrink:0;}
+.logo{font-family:var(--mono);font-weight:600;font-size:15px;color:var(--accent);letter-spacing:.05em;}
+.logo span{color:var(--text3);}
+.tagline{font-size:12px;color:var(--text3);font-family:var(--mono);}
+.topbar-right{margin-left:auto;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+.top-btn{font-family:var(--mono);font-size:11px;font-weight:600;padding:4px 10px;border-radius:4px;cursor:pointer;background:var(--surface2);border:1px solid var(--border);color:var(--text2);transition:all .2s;text-decoration:none;display:inline-block;}
+.top-btn:hover{background:var(--surface3);color:var(--text);}
+#recall-btn.on{background:var(--accent);border-color:var(--accent);color:#fff;}
+#clock{font-family:var(--mono);font-size:11px;color:var(--text3);}
+
+/* ── CYCLE WHEEL STRIP ── */
+.cycle-strip{background:var(--surface);border-bottom:1px solid var(--border);padding:12px 20px;display:flex;align-items:center;justify-content:center;gap:0;overflow-x:auto;flex-shrink:0;flex-wrap:nowrap;}
+.cycle-node{display:flex;align-items:center;gap:0;flex-shrink:0;}
+.stage-pill{padding:5px 12px;border-radius:20px;font-size:10px;font-weight:700;font-family:var(--mono);letter-spacing:.04em;cursor:pointer;border:2px solid transparent;transition:all .25s;text-transform:uppercase;white-space:nowrap;}
+.stage-pill:hover{filter:brightness(1.3);transform:translateY(-2px);}
+.stage-pill.active{filter:brightness(1.35);box-shadow:0 0 14px rgba(139,92,246,0.3);transform:translateY(-2px);}
+.arrow{color:var(--text3);font-size:13px;padding:0 4px;flex-shrink:0;}
+.cycle-return{color:var(--text3);font-size:9px;font-family:var(--mono);padding:0 6px;opacity:.5;flex-shrink:0;}
+
+/* Stage pill colours */
+.sp1{color:var(--c1);background:var(--c1bg);border-color:var(--c1b);}
+.sp2{color:var(--c2);background:var(--c2bg);border-color:var(--c2b);}
+.sp3{color:var(--c3);background:var(--c3bg);border-color:var(--c3b);}
+.sp4{color:var(--c4);background:var(--c4bg);border-color:var(--c4b);}
+.sp5{color:var(--c5);background:var(--c5bg);border-color:var(--c5b);}
+.sp6{color:var(--c6);background:var(--c6bg);border-color:var(--c6b);}
+.sp7{color:var(--c7);background:var(--c7bg);border-color:var(--c7b);}
+.sp8{color:var(--c8);background:var(--c8bg);border-color:var(--c8b);}
+
+/* ── MAIN ── */
+.main{flex:1;overflow-y:auto;padding:24px 20px;max-width:960px;margin:0 auto;width:100%;}
+
+/* ── SEARCH ── */
+.search-bar{display:flex;align-items:center;gap:10px;margin-bottom:20px;}
+.search-input{flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:8px 14px;color:var(--text);font-family:var(--sans);font-size:13px;}
+.search-input:focus{outline:none;border-color:var(--accent);}
+.search-input::placeholder{color:var(--text3);}
+.clear-btn{font-family:var(--mono);font-size:11px;font-weight:600;padding:6px 12px;border-radius:4px;cursor:pointer;background:var(--surface2);border:1px solid var(--border);color:var(--text2);transition:all .2s;}
+.clear-btn:hover{background:var(--surface3);color:var(--text);}
+
+/* ── STAGE ACCORDION ── */
+.stage-block{margin-bottom:12px;border-radius:var(--radius2);overflow:hidden;border:1px solid var(--border);}
+
+.stage-header{padding:14px 18px;cursor:pointer;display:flex;align-items:center;gap:12px;transition:background .2s;user-select:none;}
+.stage-header:hover{filter:brightness(1.08);}
+.stage-header.sp1{background:var(--c1bg);border-bottom:1px solid var(--c1b);}
+.stage-header.sp2{background:var(--c2bg);border-bottom:1px solid var(--c2b);}
+.stage-header.sp3{background:var(--c3bg);border-bottom:1px solid var(--c3b);}
+.stage-header.sp4{background:var(--c4bg);border-bottom:1px solid var(--c4b);}
+.stage-header.sp5{background:var(--c5bg);border-bottom:1px solid var(--c5b);}
+.stage-header.sp6{background:var(--c6bg);border-bottom:1px solid var(--c6b);}
+.stage-header.sp7{background:var(--c7bg);border-bottom:1px solid var(--c7b);}
+.stage-header.sp8{background:var(--c8bg);border-bottom:1px solid var(--c8b);}
+
+.stage-num{font-family:var(--mono);font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;flex-shrink:0;color:#0a0a0a;}
+.stage-num.sp1{background:var(--c1);}
+.stage-num.sp2{background:var(--c2);}
+.stage-num.sp3{background:var(--c3);}
+.stage-num.sp4{background:var(--c4);}
+.stage-num.sp5{background:var(--c5);}
+.stage-num.sp6{background:var(--c6);}
+.stage-num.sp7{background:var(--c7);}
+.stage-num.sp8{background:var(--c8);}
+
+.stage-name{font-size:14px;font-weight:700;flex:1;}
+.stage-name.sp1{color:var(--c1);}
+.stage-name.sp2{color:var(--c2);}
+.stage-name.sp3{color:var(--c3);}
+.stage-name.sp4{color:var(--c4);}
+.stage-name.sp5{color:var(--c5);}
+.stage-name.sp6{color:var(--c6);}
+.stage-name.sp7{color:var(--c7);}
+.stage-name.sp8{color:var(--c8);}
+
+.stage-desc{font-size:11px;color:var(--text3);font-family:var(--mono);flex-shrink:0;max-width:260px;text-align:right;line-height:1.4;}
+.stage-meta{font-size:11px;color:var(--text3);font-family:var(--mono);white-space:nowrap;}
+.stage-chevron{color:var(--text3);font-size:14px;transition:transform .25s;flex-shrink:0;}
+.stage-chevron.open{transform:rotate(90deg);}
+
+.stage-body{background:var(--surface);display:none;}
+.stage-body.open{display:block;}
+
+/* ── TOPIC ITEMS ── */
+.topic-item{border-bottom:1px solid var(--border);}
+.topic-item:last-child{border-bottom:none;}
+.topic-header{padding:11px 18px 11px 36px;cursor:pointer;display:flex;align-items:center;gap:10px;transition:background .15s;}
+.topic-header:hover{background:var(--surface2);}
+.topic-header.open{background:var(--surface2);}
+.topic-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.topic-dot.sp1{background:var(--c1);}
+.topic-dot.sp2{background:var(--c2);}
+.topic-dot.sp3{background:var(--c3);}
+.topic-dot.sp4{background:var(--c4);}
+.topic-dot.sp5{background:var(--c5);}
+.topic-dot.sp6{background:var(--c6);}
+.topic-dot.sp7{background:var(--c7);}
+.topic-dot.sp8{background:var(--c8);}
+.topic-title{font-size:13px;font-weight:600;color:var(--text);flex:1;}
+.topic-chevron{color:var(--text3);font-size:12px;transition:transform .2s;flex-shrink:0;}
+.topic-chevron.open{transform:rotate(90deg);}
+.topic-body{display:none;padding:14px 18px 16px 52px;background:var(--bg);border-top:1px solid var(--border);}
+.topic-body.open{display:block;}
+.topic-heading{font-family:var(--mono);font-size:11px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px;}
+
+/* ── BULLETS ── */
+.bullet-list{display:flex;flex-direction:column;gap:10px;}
+.bullet-item{display:flex;gap:10px;align-items:flex-start;}
+.bullet-marker{width:5px;height:5px;border-radius:50%;background:var(--accent);margin-top:8px;flex-shrink:0;}
+.bullet-content{font-size:13.5px;color:var(--text);line-height:1.7;}
+
+/* ── RECALL MODE ── */
+.recall-cover{background:var(--surface3);border:1px dashed var(--border2);border-radius:var(--radius);padding:14px 18px;color:var(--text3);font-size:13px;font-style:italic;display:flex;align-items:center;justify-content:space-between;gap:12px;}
+.recall-reveal-btn{font-family:var(--mono);font-size:10px;font-weight:700;padding:4px 10px;border-radius:4px;cursor:pointer;background:var(--accentbg);border:1px solid var(--accent);color:var(--accent);transition:all .2s;white-space:nowrap;flex-shrink:0;}
+.recall-reveal-btn:hover{background:var(--accent);color:#fff;}
+
+/* ── SP1 REFERENCE BADGE ── */
+.sp1-ref{display:inline-block;font-family:var(--mono);font-size:9px;font-weight:700;padding:2px 6px;border-radius:3px;background:var(--accentbg);border:1px solid var(--accent);color:var(--accent);margin-left:8px;vertical-align:middle;letter-spacing:.04em;}
+
+/* ── SEARCH HIGHLIGHT ── */
+mark{background:rgba(139,92,246,0.3);color:#fff;border-radius:2px;padding:0 2px;}
+.no-results{text-align:center;padding:40px;color:var(--text3);font-size:13px;font-family:var(--mono);}
+.loading{text-align:center;padding:60px;color:var(--text3);font-family:var(--mono);font-size:13px;}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div>
+    <div class="logo">Product Cycle <span>//</span> SA1ity Check</div>
+    <div class="tagline">SP1 Ch.0 Framework · Topic Frameworks</div>
+  </div>
+  <div class="topbar-right">
+    <span id="clock"></span>
+    <button id="recall-btn" class="top-btn" onclick="toggleRecall()">Recall: OFF</button>
+    <button class="top-btn" onclick="expandAll()">Expand All</button>
+    <button class="top-btn" onclick="collapseAll()">Collapse All</button>
+    <a class="top-btn" href="SA1ity_Check.html">← Back</a>
+  </div>
+</div>
+
+<!-- CYCLE STRIP -->
+<div class="cycle-strip">
+  <div class="cycle-node">
+    <div class="stage-pill sp1" onclick="scrollToStage(0)">1 · Product Design</div>
+    <div class="arrow">→</div>
+  </div>
+  <div class="cycle-node">
+    <div class="stage-pill sp2" onclick="scrollToStage(1)">2 · Pricing</div>
+    <div class="arrow">→</div>
+  </div>
+  <div class="cycle-node">
+    <div class="stage-pill sp3" onclick="scrollToStage(2)">3 · Marketing</div>
+    <div class="arrow">→</div>
+  </div>
+  <div class="cycle-node">
+    <div class="stage-pill sp4" onclick="scrollToStage(3)">4 · Sales</div>
+    <div class="arrow">→</div>
+  </div>
+  <div class="cycle-node">
+    <div class="stage-pill sp5" onclick="scrollToStage(4)">5 · Underwriting</div>
+    <div class="arrow">→</div>
+  </div>
+  <div class="cycle-node">
+    <div class="stage-pill sp6" onclick="scrollToStage(5)">6 · Claims Management</div>
+    <div class="arrow">→</div>
+  </div>
+  <div class="cycle-node">
+    <div class="stage-pill sp7" onclick="scrollToStage(6)">7 · Experience Monitoring</div>
+    <div class="arrow">→</div>
+  </div>
+  <div class="cycle-node">
+    <div class="stage-pill sp8" onclick="scrollToStage(7)">8 · Valuation</div>
+    <div class="cycle-return">↩ cycle</div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+  <div class="search-bar">
+    <input class="search-input" id="search-input" type="text" placeholder="Search topics, keywords, bullet points…" oninput="onSearch()">
+    <button class="clear-btn" onclick="clearSearch()">Clear</button>
+  </div>
+  <div id="pc-container">
+    <div class="loading">Loading frameworks data…</div>
+  </div>
+</div>
+
+<script>
+// ── STAGE DEFINITIONS ──────────────────────────────────────────────────────
+// Mapped from SP1 Chapter 0 Product Cycle diagram + Topic_Frameworks.json
+// PC stage shells — topics populated dynamically from _meta.pc_stage
+const PC_STAGE_DEFS = [
+  { key: 'sp1', num: 'S1', name: 'Product Design',         ref: 'SP1 Chs 1–5',      desc: 'Define the product: contract type, benefits, target market, options & guarantees' },
+  { key: 'sp2', num: 'S2', name: 'Pricing',                ref: 'SP1 Chs 17–20',    desc: 'Set premiums: assumptions, methodology, profitability, rating factors' },
+  { key: 'sp3', num: 'S3', name: 'Marketing',              ref: 'SP1 Ch 6–8',       desc: 'Bring the product to market: positioning, channels, customer needs' },
+  { key: 'sp4', num: 'S4', name: 'Sales',                  ref: 'SP1 Ch 6–8',       desc: 'Distribute and sell: intermediaries, direct, group schemes, commission' },
+  { key: 'sp5', num: 'S5', name: 'Underwriting',           ref: 'SP1 Ch 26',        desc: 'Assess individual risk at point of sale: methods, outcomes, anti-selection' },
+  { key: 'sp6', num: 'S6', name: 'Claims Management',      ref: 'SP1 Ch 25',        desc: 'Assess and settle claims: triage, fraud control, cost containment' },
+  { key: 'sp7', num: 'S7', name: 'Experience Monitoring',  ref: 'SP1 Ch 29',        desc: 'Compare actual vs expected: A/E analysis, surplus, assumption updates' },
+  { key: 'sp8', num: 'S8', name: 'Valuation',              ref: 'SP1 Chs 21–22, 28',desc: 'Reserve, report and protect capital: BEL, SCR, EV, reinsurance, ALM' }
+];
+
+function buildPCStages() {
+  const stageMap = { S1:0, S2:1, S3:2, S4:3, S5:4, S6:5, S7:6, S8:7 };
+  const PC_STAGES = PC_STAGE_DEFS.map(s => ({ ...s, topics: [] }));
+  Object.keys(TOPIC_FRAMEWORKS).forEach(key => {
+    const entry = TOPIC_FRAMEWORKS[key];
+    const pcStage = entry && entry._meta ? entry._meta.pc_stage : null;
+    if (pcStage && stageMap[pcStage] !== undefined) {
+      PC_STAGES[stageMap[pcStage]].topics.push(key);
+    }
+  });
+  return PC_STAGES;
+}
+
+let TOPIC_FRAMEWORKS = {};
+let PC_STAGES = [];
+let recallMode = false;
+
+// ── LOAD DATA ──────────────────────────────────────────────────────────────
+async function loadData() {
+  try {
+    const res = await fetch('data/Topic_Frameworks.json?t=' + Date.now());
+    if (!res.ok) throw new Error();
+    TOPIC_FRAMEWORKS = await res.json();
+  } catch {
+    try {
+      const res2 = await fetch('Topic_Frameworks.json?t=' + Date.now());
+      if (!res2.ok) throw new Error();
+      TOPIC_FRAMEWORKS = await res2.json();
+    } catch {
+      document.getElementById('pc-container').innerHTML =
+        `<div class="no-results">⚠ Could not load Topic_Frameworks.json.<br>Place it in the same folder as this file or in a <code>data/</code> subfolder.</div>`;
+      return;
+    }
+  }
+  PC_STAGES = buildPCStages();
+  renderAll();
+}
+
+// ── RENDER ─────────────────────────────────────────────────────────────────
+function renderAll(query) {
+  const container = document.getElementById('pc-container');
+  container.innerHTML = '';
+  let anyResult = false;
+  // Track which topics we've already rendered to avoid duplication (Marketing/Sales share Administration)
+  const renderedTopics = new Set();
+
+  PC_STAGES.forEach((stage, si) => {
+    const block = buildStageBlock(stage, si, query, renderedTopics);
+    if (block) { container.appendChild(block); anyResult = true; }
+  });
+
+  if (!anyResult) {
+    container.innerHTML = `<div class="no-results">No results for "${query}"</div>`;
+  }
+}
+
+function buildStageBlock(stage, si, query, renderedTopics) {
+  const topicEls = [];
+
+  // Special case: Sales shares Admin with Marketing — show a cross-ref note instead
+  if (stage.key === 'sp4') {
+    if (!query) {
+      const note = document.createElement('div');
+      note.className = 'topic-item';
+      note.innerHTML = `<div class="topic-body open" style="display:block;padding:14px 18px 16px 36px;">
+        <div style="background:var(--surface3);border:1px solid var(--border2);border-radius:var(--radius);padding:14px 18px;color:var(--text2);font-size:13px;line-height:1.6;">
+          <span style="color:var(--c4);font-weight:700;font-family:var(--mono);">SALES</span> — 
+          Sales channels, commission structures, straight-through processing and customer onboarding are covered under 
+          <strong>Administration</strong> in the Marketing stage above, and under 
+          <strong>Product Design</strong> (Constraints: IT/Admin platform, reinsurance treaties, commission-driven distribution).<br><br>
+          Key exam angle: distribution channel affects risk profile, pricing, and anti-selection. 
+          Group schemes involve employer as master policyholder with simplified admin and Free Cover Limits.
+        </div>
+      </div>`;
+      topicEls.push(note);
+    } else {
+      return null; // suppress Sales in search mode — content is in Marketing
+    }
+  } else {
+    const uniqueTopics = [...new Set(stage.topics)];
+    uniqueTopics.forEach(topicKey => {
+      const entry = TOPIC_FRAMEWORKS[topicKey];
+      if (!entry) return;
+      // For Marketing, mark Admin as rendered; skip in later stages
+      if (renderedTopics.has(topicKey)) return;
+      renderedTopics.add(topicKey);
+      const el = buildTopicItem(topicKey, entry, stage.key, query);
+      if (el) topicEls.push(el);
+    });
+  }
+
+  if (topicEls.length === 0 && query) return null;
+
+  const block = document.createElement('div');
+  block.className = 'stage-block';
+  block.id = `stage-${si}`;
+
+  const isOpen = !query ? (si === 0) : true;
+
+  block.innerHTML = `
+    <div class="stage-header ${stage.key} ${isOpen ? 'open' : ''}" onclick="toggleStage(this, ${si})">
+      <span class="stage-num ${stage.key}">${stage.num}</span>
+      <span class="stage-name ${stage.key}">${stage.name}</span>
+      <span class="sp1-ref">${stage.ref}</span>
+      <span class="stage-desc" style="display:none;" id="desc-${si}">${stage.desc}</span>
+      <span class="stage-meta">${topicEls.length} topic${topicEls.length !== 1 ? 's' : ''}</span>
+      <span class="stage-chevron ${isOpen ? 'open' : ''}">&#9654;</span>
+    </div>
+    <div class="stage-body ${isOpen ? 'open' : ''}" id="stage-body-${si}"></div>
+  `;
+
+  const body = block.querySelector(`#stage-body-${si}`);
+  topicEls.forEach(el => body.appendChild(el));
+  return block;
+}
+
+function buildTopicItem(topicKey, data, stageKey, query) {
+  const lines = (data && data.bullets) ? data.bullets : (Array.isArray(data) ? data : []);
+  let heading = '';
+  let bullets = [];
+
+  lines.forEach(line => {
+    if (line.startsWith('###')) {
+      heading = line.replace(/^###\s*/, '').trim();
+    } else if (line.startsWith('- **')) {
+      const match = line.match(/^- \*\*(.*?)\*\*\s*(?::\s*)?(.*)$/);
+      if (match) bullets.push({ title: match[1].trim(), content: match[2].trim() });
+    }
+  });
+
+  if (query) {
+    const q = query.toLowerCase();
+    const titleMatch = topicKey.toLowerCase().includes(q) || heading.toLowerCase().includes(q);
+    const matchingBullets = bullets.filter(b =>
+      b.title.toLowerCase().includes(q) || b.content.toLowerCase().includes(q)
+    );
+    if (!titleMatch && matchingBullets.length === 0) return null;
+    if (!titleMatch) bullets = matchingBullets;
+  }
+
+  const itemId = `topic-${stageKey}-${topicKey.replace(/\W/g, '_')}`;
+  const isOpen = !!query;
+
+  const item = document.createElement('div');
+  item.className = 'topic-item';
+  item.id = itemId;
+
+  item.innerHTML = `
+    <div class="topic-header ${isOpen ? 'open' : ''}" onclick="toggleTopic(this, '${itemId}')">
+      <div class="topic-dot ${stageKey}"></div>
+      <div class="topic-title">${query ? highlight(topicKey, query) : topicKey}</div>
+      <span class="stage-meta" style="font-size:10px;">${bullets.length} pt${bullets.length !== 1 ? 's' : ''}</span>
+      <span class="topic-chevron ${isOpen ? 'open' : ''}">&#9654;</span>
+    </div>
+    <div class="topic-body ${isOpen ? 'open' : ''}" id="body-${itemId}">
+      ${heading ? `<div class="topic-heading">${query ? highlight(heading, query) : heading}</div>` : ''}
+      ${buildBulletsHtml(bullets, stageKey, topicKey, query)}
+    </div>
+  `;
+  return item;
+}
+
+function buildBulletsHtml(bullets, stageKey, topicKey, query) {
+  if (bullets.length === 0) return '<div style="color:var(--text3);font-size:13px;font-style:italic;">No bullet points found.</div>';
+  if (recallMode) {
+    return `<div class="recall-cover">
+      <span>🧠 Recall mode — can you recall the ${bullets.length} key points for <strong>${topicKey}</strong>?</span>
+      <button class="recall-reveal-btn" onclick="revealBullets(this, ${JSON.stringify(bullets).replace(/"/g, '&quot;')}, '${query||''}')">Reveal</button>
+    </div>`;
+  }
+  return renderBullets(bullets, query);
+}
+
+function renderBullets(bullets, query) {
+  let html = '<div class="bullet-list">';
+  bullets.forEach(b => {
+    const contentStr = query ? highlight(b.content, query) : b.content;
+    html += `<div class="bullet-item">
+      <div class="bullet-marker"></div>
+      <div class="bullet-content"><strong>${b.title}</strong>${b.content ? ': ' + contentStr : ''}</div>
+    </div>`;
+  });
+  html += '</div>';
+  return html;
+}
+
+function revealBullets(btn, bullets, query) {
+  const wrap = btn.closest('.recall-cover');
+  const div = document.createElement('div');
+  div.innerHTML = renderBullets(bullets, query);
+  wrap.parentNode.replaceChild(div.firstElementChild, wrap);
+}
+
+function highlight(text, query) {
+  if (!query) return text;
+  const re = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+  return text.replace(re, '<mark>$1</mark>');
+}
+
+// ── TOGGLE ─────────────────────────────────────────────────────────────────
+function toggleStage(header, si) {
+  const body = document.getElementById(`stage-body-${si}`);
+  const chevron = header.querySelector('.stage-chevron');
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  chevron.classList.toggle('open', !isOpen);
+  header.classList.toggle('open', !isOpen);
+}
+
+function toggleTopic(header, itemId) {
+  const body = document.getElementById(`body-${itemId}`);
+  const chevron = header.querySelector('.topic-chevron');
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  chevron.classList.toggle('open', !isOpen);
+  header.classList.toggle('open', !isOpen);
+}
+
+function expandAll() {
+  document.querySelectorAll('.stage-body').forEach(b => b.classList.add('open'));
+  document.querySelectorAll('.stage-chevron').forEach(c => c.classList.add('open'));
+  document.querySelectorAll('.stage-header').forEach(h => h.classList.add('open'));
+  document.querySelectorAll('.topic-body').forEach(b => b.classList.add('open'));
+  document.querySelectorAll('.topic-chevron').forEach(c => c.classList.add('open'));
+  document.querySelectorAll('.topic-header').forEach(h => h.classList.add('open'));
+}
+
+function collapseAll() {
+  document.querySelectorAll('.stage-body').forEach(b => b.classList.remove('open'));
+  document.querySelectorAll('.stage-chevron').forEach(c => c.classList.remove('open'));
+  document.querySelectorAll('.stage-header').forEach(h => h.classList.remove('open'));
+  document.querySelectorAll('.topic-body').forEach(b => b.classList.remove('open'));
+  document.querySelectorAll('.topic-chevron').forEach(c => c.classList.remove('open'));
+  document.querySelectorAll('.topic-header').forEach(h => h.classList.remove('open'));
+}
+
+function scrollToStage(si) {
+  const el = document.getElementById(`stage-${si}`);
+  if (!el) return;
+  const body = document.getElementById(`stage-body-${si}`);
+  const header = el.querySelector('.stage-header');
+  const chevron = el.querySelector('.stage-chevron');
+  body.classList.add('open'); header.classList.add('open'); chevron.classList.add('open');
+  el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ── SEARCH ─────────────────────────────────────────────────────────────────
+let searchTimer;
+function onSearch() {
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(() => {
+    const q = document.getElementById('search-input').value.trim();
+    renderAll(q || undefined);
+  }, 200);
+}
+function clearSearch() {
+  document.getElementById('search-input').value = '';
+  renderAll();
+}
+
+// ── RECALL ─────────────────────────────────────────────────────────────────
+function toggleRecall() {
+  recallMode = !recallMode;
+  const btn = document.getElementById('recall-btn');
+  btn.textContent = recallMode ? 'Recall: ON' : 'Recall: OFF';
+  btn.classList.toggle('on', recallMode);
+  const q = document.getElementById('search-input').value.trim();
+  renderAll(q || undefined);
+}
+
+// ── CLOCK ──────────────────────────────────────────────────────────────────
+function updateClock() {
+  const now = new Date();
+  document.getElementById('clock').textContent =
+    now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+}
+setInterval(updateClock, 1000);
+updateClock();
+
+// ── INIT ───────────────────────────────────────────────────────────────────
+loadData();
+</script>
+</body>
+</html>
