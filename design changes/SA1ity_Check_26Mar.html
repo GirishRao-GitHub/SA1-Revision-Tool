@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>SA1 Exam Revision Tool</title>
+<title>SA1ity Check</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap');
 
@@ -100,8 +100,55 @@ select:focus{outline:none;border-color:var(--accent);}
 .pill-q{background:#334155;color:#f8fafc;border:1px solid #475569;}
 .pill-sitting{background:#1e293b;color:#f8fafc;border:1px solid #334155;box-shadow:0 0 10px rgba(0,0,0,0.2);}
 .marks-row{display:flex;gap:8px;align-items:center;flex-wrap:nowrap;}
-.btn-export{font-family:var(--sans);font-size:11px;font-weight:600;padding:4px 12px;border-radius:4px;cursor:pointer;background:#475569;color:#f8fafc;border:1px solid #64748b;transition:all 0.2s;text-transform:uppercase;letter-spacing:0.02em;}
 .btn-export:hover{background:#64748b;color:#fff;border-color:#94a3b8;}
+
+/* PILLAR TAGS */
+.pillar-tag {
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 700;
+  padding: 1px 4px;
+  border-radius: 3px;
+  margin-left: 6px;
+  background: var(--surface3);
+  color: var(--text3);
+  border: 1px solid var(--border);
+  vertical-align: middle;
+  text-transform: uppercase;
+  display: inline-block;
+}
+.pillar-tag.p1 { color: #f87171; border-color: #f87171; background: #2a1a1a; }
+.pillar-tag.p2 { color: #fbbf24; border-color: #fbbf24; background: #2a241a; }
+.pillar-tag.p3 { color: #34d399; border-color: #34d399; background: #1a2a22; }
+.pillar-tag.p4 { color: #60a5fa; border-color: #60a5fa; background: #1a222a; }
+.pillar-tag.p5 { color: #a78bfa; border-color: #a78bfa; background: #221a2a; }
+.pillar-tag.p6 { color: #f472b6; border-color: #f472b6; background: #2a1a24; }
+
+/* TOPBAR PILLAR BUTTONS */
+.p-filter {
+  min-width: 44px !important;
+  height: 32px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 13px !important;
+  font-weight: 800 !important;
+  border-radius: 6px !important;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  padding: 0 8px !important;
+  text-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+.p-filter:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  background: var(--surface3) !important;
+}
+.p-filter.active {
+  background: var(--accent) !important;
+  color: #fff !important;
+  border-color: var(--accent) !important;
+  box-shadow: 0 0 15px rgba(139, 92, 246, 0.4) !important;
+}
 
 /* MAIN LAYOUT */
 .main{display:grid;grid-template-columns:1fr 1fr;flex:1;min-height:0;height:0;}
@@ -120,6 +167,39 @@ select:focus{outline:none;border-color:var(--accent);}
 .scenario-body::-webkit-scrollbar-thumb{background-color:var(--accent);border-radius:10px;}
 .scenario-body.open{display:block;}
 .question-text{padding:14px 16px;font-size:15px;font-weight:400;color:var(--text);line-height:1.6;border-bottom:1px solid var(--border);max-height:180px;overflow-y:auto;white-space:pre-line;word-break:break-word;overflow-wrap:anywhere;}
+
+/* ATTRACTIVE TOOLTIP */
+.fw-tooltip {
+  position: fixed;
+  z-index: 10000;
+  background: rgba(21, 25, 35, 0.95);
+  backdrop-filter: blur(8px);
+  border: 1px solid var(--border2);
+  border-radius: 8px;
+  padding: 10px 14px;
+  color: var(--text);
+  font-size: 13px;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(5px);
+  transition: opacity 0.2s, transform 0.2s;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.05);
+  max-width: 250px;
+  line-height: 1.4;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.fw-tooltip.visible { opacity: 1; transform: translateY(0); }
+.fw-tooltip-tag {
+  font-family: var(--mono);
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--accent);
+  letter-spacing: 0.05em;
+}
+.fw-tooltip-desc { font-weight: 500; font-family: var(--sans); }
 
 /* TIMER */
 .timer-zone{padding:6px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;flex-wrap:nowrap;background:var(--surface);overflow:hidden;}
@@ -181,7 +261,7 @@ textarea:focus{outline:none;border-color:var(--accent);}
 .btn:disabled{opacity:.3;cursor:default;transform:none;}
 
 /* RIGHT PANE */
-.right-pane{display:flex;flex-direction:column;min-height:0;height:100%;}
+.right-pane{display:flex;flex-direction:column;min-height:0;height:100%;overflow:hidden;}
 .review-header{padding:10px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;flex-shrink:0;}
 .progress-label{font-size:12px;color:var(--text3);}
 .progress-label strong{color:var(--text);font-family:var(--mono);}
@@ -273,6 +353,73 @@ kbd{background:var(--surface2);border:1px solid var(--border2);border-radius:3px
 
 #brainstorm-status { font-family:var(--sans); font-size:12px; font-weight:700; color:var(--amber); margin-right: 12px; letter-spacing:0.02em; }
 
+/* WELCOME SPLASH */
+#welcome-splash {
+  position: absolute;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: var(--bg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+  padding: 40px;
+  animation: fade-in 0.8s ease-out;
+}
+.splash-img {
+  max-width: 500px;
+  width: 100%;
+  border-radius: var(--radius2);
+  box-shadow: 0 0 50px rgba(139, 92, 246, 0.3);
+  margin-bottom: 24px;
+}
+.splash-text {
+  font-family: var(--mono);
+  font-size: 14px;
+  color: var(--text3);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-bottom: 30px;
+}
+.splash-buttons {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.portal-btn {
+  padding: 12px 24px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--text);
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s;
+  min-width: 140px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+.portal-btn:hover {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #fff;
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(139, 92, 246, 0.4);
+}
+.portal-btn.accent {
+  background: var(--amberbg);
+  border-color: var(--amber);
+  color: var(--amber);
+}
+.portal-btn.accent:hover {
+  background: var(--amber);
+  color: #000;
+  box-shadow: 0 8px 20px rgba(251, 191, 36, 0.4);
+}
+@keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+
 /* MODAL */
 .modal{display:none;position:fixed;z-index:2000;left:0;top:0;width:100%;height:100%;background:rgba(0,0,0,0.6);backdrop-filter:blur(4px);padding-top:40px;}
 .modal-content{background:#fff;margin:auto;padding:0;border-radius:var(--radius2);width:85%;max-width:900px;max-height:85vh;overflow:hidden;box-shadow:0 25px 50px -12px rgba(0,0,0,0.5);display:flex;flex-direction:column;border:1px solid #ddd;}
@@ -300,25 +447,37 @@ kbd{background:var(--surface2);border:1px solid var(--border2);border-radius:3px
 <div class="topbar">
   <!-- Source buttons: top-left (grouped) -->
   <div id="src-btn-group" style="display:flex; gap:2px; align-items:center; background:var(--surface2); padding:2px; border-radius:6px; border:1px solid var(--border); flex-shrink:0;">
-    <button id="src-ifoa" class="src-btn active" data-src="ifoa" onclick="if(confirmChange())setSource('ifoa')">IFoA Exam</button>
+    <button id="src-ifoa" class="src-btn" data-src="ifoa" onclick="if(confirmChange())setSource('ifoa')">IFoA Exam</button>
     <button id="src-iai" class="src-btn" data-src="iai" onclick="if(confirmChange())setSource('iai')">IAI Exam</button>
     <button id="src-assignment" class="src-btn" data-src="assignment" onclick="if(confirmChange())setSource('assignment')">Assignment</button>
     <button id="src-sp1" class="src-btn" data-src="sp1" onclick="if(confirmChange())setSource('sp1')">SP1 PQ</button>
     <button id="src-sa1pq" class="src-btn" data-src="sa1pq" onclick="if(confirmChange())setSource('sa1pq')">SA1 PQ</button>
   </div>
+  <!-- Strategic Pillar Buttons: only visible in Frameworks mode -->
+  <div id="pillar-btn-group" style="display:none; gap:2px; align-items:center; background:var(--surface2); padding:2px; border-radius:6px; border:1px solid var(--border); margin-left:12px; flex-shrink:0;">
+    <button class="src-btn p-filter active" onclick="filterPillar('ALL')">ALL</button>
+    <button class="src-btn p-filter" style="color:#f87171;" onclick="filterPillar('P1')" onmouseover="showFwTooltip(this, 'P1', 'Product Design & Distribution')" onmouseout="hideFwTooltip()">P1</button>
+    <button class="src-btn p-filter" style="color:#fbbf24;" onclick="filterPillar('P2')" onmouseover="showFwTooltip(this, 'P2', 'Pricing & Underwriting')" onmouseout="hideFwTooltip()">P2</button>
+    <button class="src-btn p-filter" style="color:#34d399;" onclick="filterPillar('P3')" onmouseover="showFwTooltip(this, 'P3', 'Claims Management')" onmouseout="hideFwTooltip()">P3</button>
+    <button class="src-btn p-filter" style="color:#60a5fa;" onclick="filterPillar('P4')" onmouseover="showFwTooltip(this, 'P4', 'Risk Management & Reinsurance')" onmouseout="hideFwTooltip()">P4</button>
+    <button class="src-btn p-filter" style="color:#a78bfa;" onclick="filterPillar('P5')" onmouseover="showFwTooltip(this, 'P5', 'Valuation & Data')" onmouseout="hideFwTooltip()">P5</button>
+    <button class="src-btn p-filter" style="color:#f472b6;" onclick="filterPillar('P6')" onmouseover="showFwTooltip(this, 'P6', 'Regulation & Ethics')" onmouseout="hideFwTooltip()">P6</button>
+  </div>
   <!-- Centred title -->
   <div style="flex:1; text-align:center;">
-    <span class="logo" id="topbar-title">SA1 Exam Revision Tool</span>
+    <span class="logo" id="topbar-title">SA1ity Check</span>
     <span id="live-clock" class="topbar-clock"></span>
   </div>
   <!-- Right actions -->
   <div class="topbar-actions">
     <div style="width:2px; height:24px; background:var(--border); margin:0 6px;"></div>
     <div class="mode-switcher" style="display:flex; gap:4px; align-items:center; background:var(--surface2); padding:2px; border-radius:6px; border:1px solid var(--border);">
-      <button id="btn-mode-chrono" class="mode-btn active" onclick="if(confirmChange())setMode('chrono')">Chrono</button>
+      <button id="btn-mode-chrono" class="mode-btn" onclick="if(confirmChange())setMode('chrono')">Chrono</button>
       <button id="btn-mode-theme" class="mode-btn" onclick="if(confirmChange())setMode('theme')">Theme</button>
       <button id="btn-mode-frameworks" class="mode-btn" onclick="if(confirmChange())setMode('frameworks')">Frameworks</button>
     </div>
+    <div style="width:2px; height:24px; background:var(--border); margin:0 6px;"></div>
+    <button class="mode-btn" onclick="window.location.href='SA1_Syllabus.html'" title="SA1 Syllabus" style="white-space:nowrap;">SA1 Syllabus</button>
     <div style="width:2px; height:24px; background:var(--border); margin:0 6px;"></div>
     <!-- Utility buttons: icon-only, grouped -->
     <div style="display:flex; gap:2px; align-items:center; background:var(--surface2); padding:2px; border-radius:6px; border:1px solid var(--border);">
@@ -341,13 +500,39 @@ kbd{background:var(--surface2);border:1px solid var(--border2);border-radius:3px
 
 <!-- MAIN -->
 <div class="main">
+  <!-- WELCOME SPLASH -->
+  <div id="welcome-splash">
+    <div style="display:flex; gap:12px; flex-wrap:wrap; justify-content:center; margin-bottom:20px;">
+      <button class="portal-btn accent" onclick="window.location.href='ProductCycle.html'" style="min-width:140px;">Product Cycle</button>
+      <button class="portal-btn accent" onclick="window.location.href='ACC.html'" style="min-width:140px;">Actuarial Control Cycle</button>
+      <button class="portal-btn accent" onclick="window.location.href='Stakeholders.html'" style="min-width:140px;">Stakeholders</button>
+      <button class="portal-btn accent" onclick="window.location.href='Risks.html'" style="min-width:140px;">Risks</button>
+      <button class="portal-btn accent" onclick="setMode('frameworks')" style="min-width:140px;">Topics</button>
+      <button class="portal-btn accent" onclick="window.location.href='SA1_Syllabus.html'" style="min-width:140px;">SA1 Syllabus</button>
+    </div>
+    <img src="sa1ity_check_splash.png" class="splash-img" alt="SA1ity Check">
+    <div class="splash-text">Select your Armoury Entry Path</div>
+    <div class="splash-buttons">
+      <button class="portal-btn" onclick="setSource('ifoa')">IFoA Exam</button>
+      <button class="portal-btn" onclick="setSource('iai')">IAI Exam</button>
+      <button class="portal-btn" onclick="setSource('assignment')">Assignments</button>
+      <button class="portal-btn" onclick="setSource('sp1')">SP1 PQ</button>
+      <button class="portal-btn" onclick="setSource('sa1pq')">SA1 PQ</button>
+    </div>
+  </div>
   <!-- FRAMEWORKS PANE (Hidden) -->
   <div class="left-pane" id="fw-left-pane" style="display:none; background:var(--surface2); border-right:1px solid var(--border); overflow-y:auto; flex: 0 0 250px;">
-    <div class="pane-header"><div class="pane-title" style="color:var(--accent);">Master Themes</div></div>
+    <div class="pane-header" style="display:flex; justify-content:space-between; align-items:center;">
+      <div class="pane-title" style="color:var(--accent);">Master Themes</div>
+      <button id="btn-toggle-subthemes" class="tbtn" onclick="toggleSubThemes()" style="font-size:10px; padding:2px 8px; border-color:var(--border);">Hide Sub-themes</button>
+    </div>
     <div id="fw-topics-list" style="padding:10px; display:flex; flex-direction:column; gap:4px;"></div>
   </div>
   <div class="left-pane" id="fw-mid-pane" style="display:none; background:var(--surface); border-right:1px solid var(--border); overflow-y:auto; flex: 0 0 300px;">
-    <div class="pane-header"><div class="pane-title" style="color:var(--text);"><span id="fw-mid-title">Subtopics</span></div></div>
+    <div class="pane-header" style="display:flex; justify-content:space-between; align-items:center;">
+        <div class="pane-title" style="color:var(--text);"><span id="fw-mid-title">Subtopics</span></div>
+        <button id="btn-fw-recall" class="tbtn" onclick="toggleFrameworkRecall()" style="font-size:10px; padding:2px 8px; border-color:var(--border);">Recall: OFF</button>
+    </div>
     <div id="fw-subtopics-list" style="padding:12px; display:flex; flex-direction:column; gap:6px;">
        <div style="color:var(--text3); font-size:13px; text-align:center; margin-top:40px;">Select a Master Theme first</div>
     </div>
@@ -358,10 +543,10 @@ kbd{background:var(--surface2);border:1px solid var(--border2);border-radius:3px
     </div>
   </div>
 
-  <div class="left-pane" id="left-pane">
+  <div class="left-pane" id="left-pane" style="display:none; border-right:1px solid var(--border);">
 
     <!-- SITTING ROW (Chrono) + DATA STATUS -->
-    <div class="sitting-row" id="chrono-sitting-row">
+    <div class="sitting-row" id="chrono-sitting-row" style="display:none;">
       <span class="sel-label" style="flex-shrink:0;">Sitting</span>
       <select id="sel-assign" onchange="onAssignChange()" disabled style="flex:1;max-width:260px;">
         <option value="">— select —</option>
@@ -370,11 +555,11 @@ kbd{background:var(--surface2);border:1px solid var(--border2);border-radius:3px
       <div id="data-status" style="font-size:11px; color:var(--text3); font-family:var(--mono); flex-shrink:0;">Loading...</div>
       <!-- Explicit Start/Stop sitting timer buttons -->
       <button id="btn-start-sitting" onclick="startSittingExplicitly()" style="display:none;font-family:var(--mono);font-size:11px;font-weight:600;padding:4px 10px;border-radius:4px;border:1px solid var(--green);background:var(--greenbg);color:var(--green);cursor:pointer;white-space:nowrap;flex-shrink:0;">&#9654; Start</button>
-      <button id="btn-stop-sitting" onclick="stopSittingExplicitly()" style="display:none;font-family:var(--mono);font-size:11px;font-weight:600;padding:4px 10px;border-radius:4px;border:1px solid var(--red);background:var(--redbg);color:var(--red);cursor:pointer;white-space:nowrap;flex-shrink:0;">&#9646;&#9646; Stop</button>
+      <button id="btn-stop-sitting" onclick="stopSittingExplicitly()" style="display:none;font-family:var(--mono);font-size:11px;font-weight:600;padding:4px 10px;border-radius:4px;border:1px solid var(--red);background:var(--redbg);color:var(--red);cursor:pointer;white-space:nowrap;flex-shrink:0;">&#9632; Stop</button>
       <div id="sitting-timer-wrap" style="margin-left:auto; display:none; align-items:center; gap:8px;">
         <span style="font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:0.05em;">TIMER</span>
         <span id="assign-timer" style="font-family:var(--mono);font-size:13px;color:var(--text);font-weight:600;">00:00:00</span>
-        <button id="btn-export" class="btn-export" onclick="exportSittingSummary()" title="Export this sitting to a Word doc">&#11015; Export Doc</button>
+        <button id="btn-export" class="tbtn btn-export" onclick="exportSittingSummary()" title="Export this sitting to a Word doc" style="margin-left:4px; border-color:var(--border2);">&#11015; Export Doc</button>
       </div>
     </div>
 
@@ -437,7 +622,7 @@ kbd{background:var(--surface2);border:1px solid var(--border2);border-radius:3px
       <div class="scenario-body" id="scenario-body"></div>
     </div>
 
-    <div class="review-header">
+    <div class="review-header" id="review-header" style="display:none;">
       <div class="pane-title">Examiner Solution</div>
       <div class="progress-label"><strong id="pcnt">0</strong> / <strong id="ptotal">0</strong> points</div>
       <div class="progress-track"><div class="progress-fill" id="pbar" style="width:0%"></div></div>
@@ -481,7 +666,7 @@ kbd{background:var(--surface2);border:1px solid var(--border2);border-radius:3px
     </div>
   </div>
 
-  <div class="right-pane" id="right-pane">
+  <div class="right-pane" id="right-pane" style="display:none;">
     <div id="right-empty-pane" class="right-empty-pane">Select a sitting, then a question to begin.</div>
     <div class="timer-zone" id="timer-zone" style="display:none;">
       <div class="timer-display" id="timer-display">0:00</div>
@@ -500,7 +685,10 @@ kbd{background:var(--surface2);border:1px solid var(--border2);border-radius:3px
     <div class="answer-wrap" id="answer-wrap" style="display:none;">
       <div class="answer-label" style="display:flex; justify-content:space-between; align-items:center;">
         <span id="brainstorm-status">Brainstorm Active Recall</span>
-        <span id="ans-collapse" style="cursor:pointer; color:var(--accent); font-size:11px; text-transform:none; display:none;" onclick="toggleAnswer()">&#9660; Collapse</span>
+        <div style="display:flex; gap:12px; align-items:center;">
+          <button id="btn-pillar-hint" class="tbtn" style="color:var(--accent); display:none;" onclick="showPillarHint()">💡 Pillar Hint</button>
+          <span id="ans-collapse" style="cursor:pointer; color:var(--accent); font-size:11px; text-transform:none; display:none;" onclick="toggleAnswer()">&#9660; Collapse</span>
+        </div>
       </div>
       <textarea id="answer-box" placeholder="Start writing..." oninput="startTimerIfNeeded();saveAnswer();checkBrainstormLock();" onkeydown="handleAnswerTab(event)"></textarea>
       <div class="status-msg" id="status-msg"></div>
@@ -541,18 +729,24 @@ kbd{background:var(--surface2);border:1px solid var(--border2);border-radius:3px
 </div>
 
 <div id="pillar-modal" class="modal">
-  <div class="modal-content" style="max-width:600px;">
+  <div class="modal-content" style="max-width:800px;">
     <div class="modal-header" style="background:var(--accentbg);border-bottom:2px solid var(--accent);">
-      <h2 style="color:var(--accent);margin:0;">Pillar Challenge</h2>
+      <h2 style="color:var(--accent);margin:0;">Strategic Pillar Challenge</h2>
       <button class="modal-close" onclick="closePillarModal()">&#10005;</button>
     </div>
-    <div id="pillar-body" class="modal-body" style="text-align:center; padding: 30px;">
+    <div id="pillar-body" class="modal-body" style="padding: 24px; min-height: 300px;">
       <!-- Dynamic content -->
     </div>
     <div class="modal-footer" style="justify-content:center;">
       <button class="btn btn-primary" onclick="completePillarChallenge()" style="font-size:16px; padding: 10px 24px;">I Have Recalled the Details &amp; Ready to Reveal</button>
     </div>
   </div>
+</div>
+
+<!-- FW TOOLTIP ELEMENT -->
+<div id="fw-tooltip" class="fw-tooltip">
+  <div id="fw-tooltip-tag" class="fw-tooltip-tag"></div>
+  <div id="fw-tooltip-desc" class="fw-tooltip-desc"></div>
 </div>
 
 <datalist id="synopsis-list"></datalist>
@@ -567,15 +761,44 @@ let TOPIC_FRAMEWORKS = {}; // Loaded securely from data/Topic_Frameworks.json
 let PILLARS_HOOKS = null; // Loaded securely from data/Pillars_Hooks.json
 
 // Configuration of all available source files
-const MASTER_TAXONOMY = {
+let MASTER_TAXONOMY = {
   "Pricing": ["Data & Assumptions", "Risk Profile", "Expenses", "Profit Margin", "Cross-subsidy", "Sensitivity Analysis", "Return on Capital", "Equation of Value", "Cashflow Techniques"],
   "Claims Management": ["Definitions", "Rehabilitation", "Fraud & Verification", "Reserving", "Claim Control", "Return to Work", "Assessment of claims"],
   "Regulation": ["Treating Customers Fairly", "Capital Requirements", "Taxation", "State Provision", "IRDAI", "Compliance", "Policyholder Protection Schemes", "Solvency II Framework"],
+  "IRDA Regulations": [
+    "IRDAI (Health Insurance) Regulations 2024",
+    "IRDAI (Insurance Products) Regulations 2024",
+    "IRDAI (Protection of Policyholders' Interests) Regulations 2024",
+    "IRDAI (Expenses of Management including Commission) Regulations 2024",
+    "IRDAI (Actuarial, Finance and Investment Functions) Regulations 2024",
+    "IRDAI (Re-insurance) Regulations 2024",
+    "IRDAI (Registration and Capital Structure) Regulations 2024",
+    "IRDAI (Appointed Actuary) Regulations 2022"
+  ],
   "Underwriting": ["Anti-selection", "Financial Underwriting", "Medical Underwriting", "Free Cover Limits", "Tele-underwriting", "Genetic Testing", "Pre-existing Conditions"],
   "Data": ["Credibility", "Heterogeneity", "Proxies", "AI & Machine Learning", "Data Quality", "Completeness", "Accuracy", "Timeliness"],
   "Models": ["Backtesting", "Sensitivity", "Model Governance", "Stochastic & Deterministic", "Multi-state Models", "Formula", "Equation of Value", "Projection"],
   "Reserving & Valuation": ["IBNR / IBNER", "Bornhuetter-Ferguson", "Run-off Triangles", "Best Estimate Liabilities", "Risk Margin", "Prudence", "Supervisory Reserves", "Market Consistent Valuation"],
   "Risk Management & Capital": ["Economic Capital", "Stress Testing", "Asset Liability Management", "Risk Appetite", "Concentration of Risk", "Pandemics", "Catastrophes", "Options & Guarantees", "Climate Risks"],
+  "Risks": [
+    "Nature of Risk Components",
+    "Policy & Other Data Risks",
+    "Claim Rates (Morbidity/Mortality)",
+    "Claim Amounts (PMI specific)",
+    "Earlier Screening & Diagnosis",
+    "Investment Performance & Assets",
+    "Expenses and Inflation",
+    "Persistency & Selective Withdrawal",
+    "Mix & Volume of New Business",
+    "Guarantees and Options",
+    "Competition & Management Actions",
+    "Counterparties (RI/Distributors/TPAs)",
+    "Legal, Regulatory & Tax",
+    "Reputation & Operational Fraud",
+    "Aggregation, Concentration & Cat",
+    "Non-disclosure & Anti-selection",
+    "Product-specific Risks (IP/CI/LTC/PMI)"
+  ],
   "Reinsurance": ["Risk Transfer", "Capital Relief", "Technical Assistance", "Quota Share", "Excess of Loss", "Catastrophe Cover", "Retention Optimization", "Badging"],
   "Investments": ["Matching", "Liquidity", "Standard Formula", "Internal Models", "Asset Classes", "Yield Curve", "Asset-liability matching strategy"],
   "Product Design": ["Benefits & Conditions", "Target Market", "Options & Guarantees", "Exclusions", "Surrender Values", "Marketability", "Bundling & Unbundling"],
@@ -606,8 +829,8 @@ const SOURCE_FILES = {
     sa1pq: ['sa1_pq_sample.json']
 };
 
-let currentSource = 'ifoa';
-let appMode = 'chrono';
+let currentSource = '';
+let appMode = '';
 let currentQ = null, currentSub = null, currentPoints = [];
 let currentQk = null, currentPk = null; // track active dot keys
 let revealed = 0, hits = null, manualMode = false;
@@ -617,14 +840,82 @@ let assignTimer = null, assignSeconds = 0;
 // Brainstorm Lock globals
 let brainstormWordsReq = 0, brainstormTimeLeft = 0, brainstormInterval = null;
 
+// Framework Filtering
+let currentPillarFilter = 'ALL';
+function filterPillar(p) {
+    if (appMode !== 'frameworks') {
+        setMode('frameworks');
+    }
+    currentPillarFilter = p;
+    document.querySelectorAll('.p-filter').forEach(btn => {
+        const isActive = (p === 'ALL' && btn.textContent === 'ALL') || (btn.textContent === p);
+        btn.classList.toggle('active', isActive);
+        if (isActive) {
+             btn.style.background = 'var(--accent)';
+             btn.style.color = '#fff';
+             btn.style.borderColor = 'var(--accent)';
+        } else {
+             btn.style.background = '';
+             // Restore pillar colors if not active
+             const txt = btn.textContent;
+             if (txt === 'P1') btn.style.color = '#f87171';
+             else if (txt === 'P2') btn.style.color = '#fbbf24';
+             else if (txt === 'P3') btn.style.color = '#34d399';
+             else if (txt === 'P4') btn.style.color = '#60a5fa';
+             else if (txt === 'P5') btn.style.color = '#a78bfa';
+             else if (txt === 'P6') btn.style.color = '#f472b6';
+             else btn.style.color = '';
+             btn.style.borderColor = '';
+        }
+    });
+    renderFrameworkList();
+}
+
 window.onload = async function() {
     let loadedCount = 0;
 
     // Load Topic Frameworks Dictionary First
     try {
         const fwRes = await fetch('data/Topic_Frameworks.json?t=' + new Date().getTime());
-        if (fwRes.ok) TOPIC_FRAMEWORKS = await fwRes.json();
-    } catch(e) { console.warn("Frameworks not loaded", e); }
+        if (!fwRes.ok) throw new Error('data/ path returned ' + fwRes.status);
+        TOPIC_FRAMEWORKS = await fwRes.json();
+    } catch {
+        try {
+            const fwRes2 = await fetch('Topic_Frameworks.json?t=' + new Date().getTime());
+            if (!fwRes2.ok) throw new Error('root path returned ' + fwRes2.status);
+            TOPIC_FRAMEWORKS = await fwRes2.json();
+        } catch(e) { console.warn("Frameworks not loaded", e); }
+    }
+    if (Object.keys(TOPIC_FRAMEWORKS).length > 0) {
+            // Populate MASTER_TAXONOMY sub-themes from framework bullets
+            MASTER_TAXONOMY = {};
+            Object.keys(TOPIC_FRAMEWORKS).forEach(key => {
+                const entry = TOPIC_FRAMEWORKS[key];
+                const lines = (entry && entry.bullets) ? entry.bullets : (Array.isArray(entry) ? entry : []);
+                const subThemes = [];
+                lines.forEach(line => {
+                    if (line.startsWith('- **')) {
+                        const m = line.match(/^- \*\*(.*?)\*\*/);
+                        if (m) subThemes.push(m[1].trim());
+                    }
+                });
+                MASTER_TAXONOMY[key] = subThemes;
+            });
+            
+            // Add Smart Aliases for common shorthand themes found in exam papers
+            const aliases = {
+                "Risks": "Risks (Master List)",
+                "IP": "Income Protection",
+                "CI": "Critical Illness",
+                "LTC": "Long-Term Care (LTC)",
+                "PMI": "Private Medical Insurance (PMI)",
+                "State Healthcare": "State Healthcare & Demographics",
+                "Regulation": "Regulation & Ethics"
+            };
+            Object.entries(aliases).forEach(([short, full]) => {
+                if (TOPIC_FRAMEWORKS[full]) MASTER_TAXONOMY[short] = TOPIC_FRAMEWORKS[full];
+            });
+    }
 
     // Load Pillars & Hooks JSON
     try {
@@ -663,11 +954,10 @@ window.onload = async function() {
 
     updateSourceUI();
     updateHeaderUI();
-    populateThemes(); // Build search indices
-    onAssignChange(); // Ensure first load is clean
-    startLiveClock(); // Start the topbar clock
+    populateThemes(); 
+    // onAssignChange(); // Removed auto-load to allow user selection
+    startLiveClock();
     document.getElementById('data-status').textContent = `${loadedCount} Files`;
-    console.log("window.onload: complete. SITTINGS keys =", Object.keys(SITTINGS));
 };
 
 function startLiveClock() {
@@ -698,15 +988,34 @@ function setSource(src) {
         console.log("Setting source to:", src);
         currentSource = src;
 
+        // Auto-default to Chrono if no mode is selected yet
+        if (appMode === '') {
+            appMode = 'chrono';
+            document.querySelectorAll('.mode-btn').forEach(btn => btn.classList.toggle('active', btn.textContent === 'Chrono'));
+        }
+
         // Update button states in both topbar and source-nav (if any)
         document.querySelectorAll('.src-btn').forEach(btn => {
             btn.classList.toggle('active', btn.dataset.src === src);
         });
 
+        // REVEAL PANES & SITTING ROW
+        const splash = document.getElementById('welcome-splash');
+        if (splash) splash.style.display = 'none';
+
+        const lp = document.getElementById('left-pane');
+        if (lp) lp.style.display = 'flex';
+
+        const rp = document.getElementById('right-pane');
+        if (rp) rp.style.display = 'flex';
+
+        const csr = document.getElementById('chrono-sitting-row');
+        if (csr) csr.style.display = (appMode === 'chrono') ? 'flex' : 'none';
+
         updateSourceUI();
         updateHeaderUI();
         resetAll();
-
+        
         // Reset sitting dropdown
         document.getElementById('sel-assign').value = "";
         renderQDotBar(null);
@@ -714,7 +1023,7 @@ function setSource(src) {
 
         if (appMode === 'chrono') {
             onAssignChange();
-        } else {
+        } else if (appMode === 'theme') {
             onThemeChange();
         }
     } catch(e) { console.error("setSource failed:", e); }
@@ -722,6 +1031,7 @@ function setSource(src) {
 
 function updateHeaderUI() {
     const logos = {
+        '': 'SA1ity Check',
         ifoa: 'IFoA<span> / </span>Exam Revision',
         sp1: 'SP1<span> / </span>Practice Questions',
         assignment: 'SA1<span> / </span>Assignments',
@@ -737,8 +1047,10 @@ function updateHeaderUI() {
     };
     const logoEl = document.querySelector('.logo');
     const tagEl = document.querySelector('.tagline');
-    if (logoEl && logos[currentSource]) logoEl.innerHTML = logos[currentSource];
-    if (tagEl && taglines[currentSource]) tagEl.textContent = taglines[currentSource];
+    const displayLogo = logos[currentSource] || 'SA1ity Check';
+    const displayTag = taglines[currentSource] || 'Strategic Armoury Hub';
+    if (logoEl) logoEl.innerHTML = displayLogo;
+    if (tagEl) tagEl.textContent = displayTag;
 }
 
 function updateSourceUI() {
@@ -849,6 +1161,17 @@ function populateThemes() {
 
 function setMode(mode) {
     appMode = mode;
+
+    // REVEAL PANES & HIDE SPLASH
+    const splash = document.getElementById('welcome-splash');
+    if (splash) splash.style.display = 'none';
+
+    const lp = document.getElementById('left-pane');
+    if (lp) lp.style.display = 'flex';
+
+    const rp = document.getElementById('right-pane');
+    if (rp) rp.style.display = 'block';
+
     document.getElementById('btn-mode-chrono').classList.toggle('active', mode==='chrono');
     document.getElementById('btn-mode-theme').classList.toggle('active', mode==='theme');
     const fbtn = document.getElementById('btn-mode-frameworks');
@@ -867,6 +1190,32 @@ function setMode(mode) {
     // Toggle Panes
     const isFW = (mode === 'frameworks');
     
+    // Show/hide Pillar buttons in topbar
+    const pGrp = document.getElementById('pillar-btn-group');
+    if (pGrp) pGrp.style.display = isFW ? 'flex' : 'none';
+
+    // Initialize Recall button in Frameworks pane
+    if (isFW) {
+        const isON = localStorage.getItem('fw_recall_mode') === 'true';
+        const fwBtn = document.getElementById('btn-fw-recall');
+        if (fwBtn) {
+            fwBtn.textContent = isON ? 'Recall: ON' : 'Recall: OFF';
+            fwBtn.style.background = isON ? 'var(--accent)' : 'var(--surface3)';
+            fwBtn.style.color = isON ? '#fff' : 'var(--text2)';
+            fwBtn.style.borderColor = isON ? 'var(--accent)' : 'var(--border)';
+        }
+
+        const subHidden = localStorage.getItem('fw_sub_hidden') === 'true';
+        const subBtn = document.getElementById('btn-toggle-subthemes');
+        if (subBtn) {
+            subBtn.textContent = subHidden ? 'Show Sub-themes' : 'Hide Sub-themes';
+            subBtn.style.background = subHidden ? 'var(--accent)' : 'var(--surface3)';
+            subBtn.style.color = subHidden ? '#fff' : 'var(--text2)';
+        }
+        const midPane = document.getElementById('fw-mid-pane');
+        if (midPane) midPane.style.display = (isFW && !subHidden) ? 'block' : 'none';
+    }
+
     // Hide source selector buttons since they aren't relevant in Frameworks Mode
     const srcGrp = document.getElementById('src-btn-group');
     if (srcGrp) srcGrp.style.display = isFW ? 'none' : 'flex';
@@ -897,7 +1246,12 @@ function setMode(mode) {
 
     if (isFW) {
         renderFrameworkList();
-        return; // skip resetAll for framework mode so you don't lose timer if you just peeked!
+        return; 
+    }
+
+    if (mode === '') {
+        resetAll();
+        return; 
     }
 
     resetAll();
@@ -912,12 +1266,27 @@ function setMode(mode) {
 function renderFrameworkList() {
     const listEl = document.getElementById('fw-topics-list');
     listEl.innerHTML = '';
-    const themes = Object.keys(TOPIC_FRAMEWORKS).sort();
+    let themes = Object.keys(TOPIC_FRAMEWORKS).sort();
     
+    // Pillar read from _meta.pillar — no hardcoded map needed
+    if (currentPillarFilter !== 'ALL') {
+        themes = themes.filter(t => {
+            const entry = TOPIC_FRAMEWORKS[t];
+            const p = entry && entry._meta ? entry._meta.pillar : null;
+            return p === currentPillarFilter;
+        });
+    }
+
     themes.forEach(t => {
         const btn = document.createElement('div');
-        btn.style.cssText = 'padding:12px; border-radius:6px; cursor:pointer; font-size:13px; font-weight:600; color:var(--text); border:1px solid var(--border); transition:all 0.2s; background:var(--surface);';
-        btn.innerHTML = t;
+        btn.style.cssText = 'padding:10px 12px; border-radius:6px; cursor:pointer; font-size:12px; font-weight:600; color:var(--text); border:1px solid var(--border); transition:all 0.2s; background:var(--surface); display:flex; align-items:center; justify-content:space-between;';
+        
+        const entry = TOPIC_FRAMEWORKS[t];
+        let pillar = (entry && entry._meta) ? (entry._meta.pillar || "") : "";
+        let tagHtml = pillar ? `<span class="pillar-tag ${pillar.toLowerCase()}">${pillar}</span>` : "";
+        
+        btn.innerHTML = `<span>${t}</span>${tagHtml}`;
+        
         btn.onmouseover = () => { if (!btn.classList.contains('active')) btn.style.borderColor = 'var(--accent)'; };
         btn.onmouseout = () => { if (!btn.classList.contains('active')) btn.style.borderColor = 'var(--border)'; };
         btn.onclick = () => {
@@ -941,15 +1310,16 @@ function renderFrameworkMidContent(theme) {
     // Reset right pane
     document.getElementById('fw-content').innerHTML = '<h2 style="color:var(--text3); text-align:center; margin-top:100px;">Select a Subtopic to view details</h2>';
 
-    let data = TOPIC_FRAMEWORKS[theme];
-    if (!data) {
+    const frameEntry = TOPIC_FRAMEWORKS[theme];
+    if (!frameEntry) {
         listEl.innerHTML = `<div style="color:var(--text3); font-size:13px; text-align:center; margin-top:40px;">No framework data available yet.</div>`;
         return;
     }
+    const lines = (frameEntry.bullets) ? frameEntry.bullets : (Array.isArray(frameEntry) ? frameEntry : []);
     
     // Parse data into subtopics
     let subtopics = [];
-    data.forEach(line => {
+    lines.forEach(line => {
         if (line.startsWith('- **')) {
             let match = line.match(/^- \*\*(.*?)\*\*\s*(?::\s*)?(.*)$/);
             if (match) {
@@ -985,12 +1355,29 @@ function renderFrameworkRightContent(idx) {
     if (!currentFrameworkData || !currentFrameworkData[idx]) return;
     
     let st = currentFrameworkData[idx];
+    let isRecallMode = localStorage.getItem('fw_recall_mode') === 'true';
+
+    let html = `<div style="margin-bottom:24px; border-bottom:2px solid var(--border); padding-bottom:12px;">
+                    <h1 style="color:var(--accent); margin:0;">${st.title}</h1>
+                </div>`;
     
-    let html = `<h1 style="color:var(--accent); border-bottom:2px solid var(--border); padding-bottom:12px; margin-bottom:24px;">${st.title}</h1>`;
-    html += `<div style="background:var(--surface2); border-left:4px solid var(--accent); padding:20px; border-radius:var(--radius); box-shadow:0 4px 12px rgba(0,0,0,0.1); font-size:15px; line-height:1.7;">`;
+    html += `<div id="fw-bullets-container" style="position:relative; background:var(--surface2); border-left:4px solid var(--accent); padding:20px; border-radius:var(--radius); box-shadow:0 4px 12px rgba(0,0,0,0.1); font-size:15px; line-height:1.7; transition:all 0.3s; min-height:100px;">`;
     
     let parts = st.content.split(/(?<=[.!?])\s+|(?<=[,;])\s+/).filter(p => p.trim());
-    
+
+    if (isRecallMode) {
+        html += `<div style="position:absolute; top:12px; right:12px; display:flex; align-items:center; gap:8px; background:var(--surface3); padding:4px 8px; border-radius:4px; border:1px solid var(--border); z-index:10;">
+                    <span style="font-size:10px; font-weight:700; color:var(--text3); text-transform:uppercase;">Reveal ${parts.length} Bullets</span>
+                    <input type="checkbox" onchange="document.getElementById('fw-bullets-reveal-box').style.display = this.checked ? 'block' : 'none';" style="width:16px; height:16px; cursor:pointer; accent-color:var(--accent);">
+                 </div>`;
+        html += `<div id="fw-challenge-prompt" style="color:var(--text3); font-style:italic; margin-bottom:15px; font-size:13px; max-width:70%; line-height:1.4;">
+                    Mental Challenge: Can you recall the ${parts.length} key armoury hooks for this subtopic?
+                 </div>`;
+        html += `<div id="fw-bullets-reveal-box" style="display:none; animation: reveal-pulse 0.4s ease-out;">`;
+    } else {
+        html += `<div id="fw-bullets-reveal-box" style="display:block;">`;
+    }
+
     if (parts.length > 1) {
         html += `<ul style="margin:0; padding-left:20px; color:var(--text); display:flex; flex-direction:column; gap:10px;">`;
         parts.forEach(p => {
@@ -1003,8 +1390,106 @@ function renderFrameworkRightContent(idx) {
         html += `<div style="color:var(--text);">${highlightKeywords(st.content, false)}</div>`;
     }
     
+    if (isRecallMode) {
+        html += `</div>`; // end hidden div
+    }
+
     html += `</div>`;
     cEl.innerHTML = html;
+}
+
+function toggleFrameworkRecall() {
+    let current = localStorage.getItem('fw_recall_mode') === 'true';
+    let isON = !current;
+    localStorage.setItem('fw_recall_mode', isON);
+    
+    // Update button in mid-pane
+    const fwBtn = document.getElementById('btn-fw-recall');
+    if (fwBtn) {
+        fwBtn.textContent = isON ? 'Recall: ON' : 'Recall: OFF';
+        fwBtn.style.background = isON ? 'var(--accent)' : 'var(--surface3)';
+        fwBtn.style.color = isON ? '#fff' : 'var(--text2)';
+        fwBtn.style.borderColor = isON ? 'var(--accent)' : 'var(--border)';
+    }
+
+    // Re-render content if a subtopic is selected
+    const activeMid = document.querySelector('#fw-subtopics-list .active');
+    if (activeMid) {
+        const idx = Array.from(activeMid.parentNode.children).indexOf(activeMid);
+        renderFrameworkRightContent(idx);
+    }
+}
+
+function toggleSubThemes() {
+    let current = localStorage.getItem('fw_sub_hidden') === 'true';
+    let subHidden = !current;
+    localStorage.setItem('fw_sub_hidden', subHidden);
+    
+    const subBtn = document.getElementById('btn-toggle-subthemes');
+    if (subBtn) {
+        subBtn.textContent = subHidden ? 'Show Sub-themes' : 'Hide Sub-themes';
+        subBtn.style.background = subHidden ? 'var(--accent)' : 'var(--surface3)';
+        subBtn.style.color = subHidden ? '#fff' : 'var(--text2)';
+    }
+    
+    const midPane = document.getElementById('fw-mid-pane');
+    if (midPane) midPane.style.display = subHidden ? 'none' : 'block';
+}
+
+// Tooltip Logic
+function showFwTooltip(el, tag, desc) {
+    const tt = document.getElementById('fw-tooltip');
+    const tTag = document.getElementById('fw-tooltip-tag');
+    const tDesc = document.getElementById('fw-tooltip-desc');
+    
+    tTag.textContent = tag;
+    tDesc.textContent = desc;
+    
+    // Set tag color based on pillar
+    const colors = { P1:'#f87171', P2:'#fbbf24', P3:'#34d399', P4:'#60a5fa', P5:'#a78bfa', P6:'#f472b6' };
+    tTag.style.color = colors[tag] || 'var(--accent)';
+    
+    // Position
+    const rect = el.getBoundingClientRect();
+    tt.style.left = rect.left + 'px';
+    tt.style.top = (rect.bottom + 8) + 'px';
+    
+    tt.classList.add('visible');
+}
+function hideFwTooltip() {
+    document.getElementById('fw-tooltip').classList.remove('visible');
+}
+
+function showPillarHint() {
+    const q = currentSub || currentQ;
+    const themes = (q && q.themes && q.themes.length > 0) ? q.themes : (currentQ && currentQ.themes ? currentQ.themes : []);
+    
+    if (themes.length === 0 || !PILLARS_HOOKS || !PILLARS_HOOKS.themeMapping) return;
+    
+    let foundPillars = new Set();
+    themes.forEach(t => {
+        const mapping = PILLARS_HOOKS.themeMapping[t];
+        if (mapping) {
+            mapping.forEach(p => foundPillars.add(p));
+        }
+    });
+
+    if (foundPillars.size > 0) {
+        const pList = Array.from(foundPillars).sort().join(" & ");
+        
+        document.getElementById('modal-title').textContent = "Strategic Pillar Hint";
+        document.getElementById('modal-body').innerHTML = `
+            <div style="text-align:center; padding:15px;">
+                <div style="font-size:32px; margin-bottom:12px;">💡</div>
+                <p style="font-size:15px; line-height:1.6; color:var(--text);">This question's themes are governed by:<br>
+                <span style="font-size:24px; font-weight:700; color:var(--accent); margin:10px 0; display:block;">Pillar ${pList}</span>
+                <p style="color:var(--text2); font-size:13px;">Mental Action: Open the ${pList} drawer in your armoury map.</p>
+            </div>
+        `;
+        document.getElementById('result-modal').style.display = 'flex';
+    } else {
+        console.warn("showPillarHint: No pillar mapping found for themes:", q.themes);
+    }
 }
 
 function onThemeChange() {
@@ -1542,6 +2027,13 @@ function setupQuestion(q) {
     // Defer so the DOM is fully set up first, then rebuild the full reveal view
     setTimeout(() => skipToReveal(true), 0);
   }
+
+  // Show Pillar Hint button if question (or parent) has themes
+  const hintBtn = document.getElementById('btn-pillar-hint');
+  if (hintBtn) {
+    const hasThemes = (q && q.themes && q.themes.length > 0) || (currentQ && currentQ.themes && currentQ.themes.length > 0);
+    hintBtn.style.display = hasThemes ? 'inline-block' : 'none';
+  }
 }
 
 function toggleScenario() {
@@ -1910,11 +2402,9 @@ let pillarChallengePendingTarget = null;
 
 function showPillarChallenge(themes, skipCallback) {
   const pb = document.getElementById('pillar-body');
-  let html = '<p style="font-size:16px; margin-bottom:20px; color:var(--text2);">Before diving into the detailed solution, test your mental framework. Can you recall the key points for these high-level pillars?</p>';
+  let html = '<p style="font-size:15px; margin-bottom:20px; color:var(--text); line-height:1.5;">Test your mental framework. Can you recall the <strong>Armoury hooks</strong> for these pillars as they relate to the answer?</p>';
   
-  // 1. Identify relevant pillars from themes
   let relevantPillars = new Set();
-  
   if (PILLARS_HOOKS && PILLARS_HOOKS.themeMapping) {
     themes.forEach(t => {
        if (PILLARS_HOOKS.themeMapping[t]) {
@@ -1923,39 +2413,66 @@ function showPillarChallenge(themes, skipCallback) {
     });
   }
 
-  // 2. Fallback to generic Taxonomy if no pillars mapped
   if (relevantPillars.size === 0) {
       themes.forEach(t => {
          html += '<div style="margin: 15px 0; padding: 15px; background: var(--surface3); border: 1px solid var(--border2); border-left: 5px solid var(--accent); border-radius: var(--radius); text-align:left;">';
          html += '<div style="font-size: 18px; font-weight: 700; color: #ffffff;">' + t + '</div>';
-         if (MASTER_TAXONOMY[t]) {
-            html += '<div style="font-size: 14px; font-weight: 500; color: var(--text2); margin-top: 8px; line-height: 1.5;"><span style="color:var(--text3); font-size:12px; text-transform:uppercase; letter-spacing:1px; margin-right:4px;">Hints:</span> ' + MASTER_TAXONOMY[t].join(' <span style="color:var(--text3)">•</span> ') + '</div>';
+         if (typeof MASTER_TAXONOMY !== 'undefined' && MASTER_TAXONOMY[t]) {
+            html += '<div style="font-size: 14px; font-weight: 500; color: var(--text2); margin-top: 8px; line-height: 1.5;"><span style="color:var(--text3); font-size:12px; text-transform:uppercase; letter-spacing:1px; margin-right:4px;">Hints:</span> ' + MASTER_TAXONOMY[t].join(' • ') + '</div>';
          }
          html += '</div>';
       });
   } else {
-      // 3. Render specific Hook titles for relevant Pillars
       Array.from(relevantPillars).sort().forEach(pId => {
           let pDef = PILLARS_HOOKS.pillars.find(p => p.id === pId);
           if (!pDef) return;
           
-          html += '<div style="margin: 15px 0; border: 1px solid var(--border2); border-left: 5px solid '+pDef.color+'; border-radius: var(--radius); overflow: hidden;">';
-          html += '<div style="padding: 10px 15px; background: var(--surface2); border-bottom: 1px solid var(--border2); display:flex; justify-content:space-between; align-items:center;">';
-          html += '<span style="font-size: 16px; font-weight: 700; color: #fff;">' + pDef.name + '</span>';
-          html += '<span style="font-size: 12px; font-weight: bold; color: var(--text3); background: var(--surface3); padding: 2px 8px; border-radius: 10px;">' + pDef.weight + '</span>';
+          html += '<div style="margin: 15px 0; border: 1px solid var(--border2); border-left: 6px solid '+pDef.color+'; border-radius: var(--radius); overflow: hidden; background:var(--surface2);">';
+          html += '<div style="padding: 10px 15px; border-bottom: 2px solid var(--border); display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.03);">';
+          html += '<span style="font-size: 16px; font-weight: 800; color: #fff; letter-spacing:0.02em;">' + pDef.name + '</span>';
+          html += '<span style="font-size: 11px; font-weight: bold; color: '+pDef.color+'; background: rgba(0,0,0,0.3); padding: 2px 10px; border-radius: 12px; border:1px solid '+pDef.color+'33;">' + pDef.weight + '</span>';
           html += '</div>';
-          html += '<div style="padding: 15px; background: var(--surface3); text-align:left;">';
+          html += '<div style="padding: 15px; background: var(--surface); text-align:left;">';
           
+          // A. Static High-Level Hooks
           let pCards = PILLARS_HOOKS.hooks.filter(h => h.pillar === pId);
           if (pCards.length > 0) {
-              html += '<ul style="margin:0; padding-left:20px; color:var(--text2); font-size: 14px; line-height:1.6;">';
-              pCards.forEach(card => {
-                  let tagColor = card.tag === 'VERY HIGH' ? 'var(--red)' : (card.tag === 'HIGH' ? 'var(--orange)' : 'var(--blue)');
-                  html += '<li style="margin-bottom:6px;"><strong style="color:var(--text);">' + card.title + '</strong> <span style="font-size:11px; color:'+tagColor+'; margin-left:8px; font-weight:bold;">[' + card.tag + ']</span> <span style="font-size:12px; color:var(--text3); margin-left:4px;">(' + card.bullets.length + ' key points)</span></li>';
+              html += '<div style="font-size:10px; font-weight:700; color:var(--text3); text-transform:uppercase; margin-bottom:8px; opacity:0.8;">Core Strategic Hooks:</div>';
+              html += '<ul style="margin:0 0 15px 18px; padding:0; color:var(--text2); font-size: 13px; line-height:1.5;">';
+              pCards.slice(0, 3).forEach(card => {
+                  html += `<li style="margin-bottom:4px;"><strong style="color:var(--text);">${card.title}</strong></li>`;
               });
               html += '</ul>';
-          } else {
-              html += '<div style="color:var(--text3); font-size:13px; font-style:italic;">No specific hooks defined for this pillar.</div>';
+          }
+
+          // B. Dynamic Armoury Injection (Question-specific)
+          let armouryThemes = themes.filter(t => PILLARS_HOOKS.themeMapping[t] && PILLARS_HOOKS.themeMapping[t].includes(pId));
+          if (armouryThemes.length > 0) {
+              html += `<div style="margin-top:12px; border-top:1px dashed var(--border); padding-top:12px;">`;
+              html += `<div style="font-size:10px; font-weight:700; color:var(--accent); text-transform:uppercase; margin-bottom:8px;">Question-Specific Armoury (Recall these!):</div>`;
+              armouryThemes.forEach(at => {
+                  if (TOPIC_FRAMEWORKS[at]) {
+                      html += `<div style="font-size:14px; font-weight:700; color:var(--text); margin-bottom:6px; display:flex; align-items:center; gap:6px;">
+                                  <span style="width:6px; height:6px; border-radius:50%; background:var(--accent);"></span>
+                                  ${at}
+                               </div>`;
+                      // Show the first 5 bullet points from the Armoury theme
+                      const _atEntry = TOPIC_FRAMEWORKS[at];
+                      const _atLines = (_atEntry && _atEntry.bullets) ? _atEntry.bullets : (Array.isArray(_atEntry) ? _atEntry : []);
+                      let bullets = _atLines.filter(line => line.startsWith('- ')).slice(0, 5);
+                      if (bullets.length > 0) {
+                          html += `<ul style="margin:0 0 12px 20px; padding:0; list-style:none; font-size:13px; color:var(--text2); line-height:1.4;">`;
+                          bullets.forEach(b => {
+                              html += `<li style="margin-bottom:5px; position:relative; padding-left:12px;">
+                                          <span style="position:absolute; left:0; color:var(--accent);">•</span>
+                                          ${b.replace(/^- /, '').split(':')[0]}<span style="color:var(--text3); font-size:12px;">: ${b.split(':')[1] || ''}</span>
+                                       </li>`;
+                          });
+                          html += `</ul>`;
+                      }
+                  }
+              });
+              html += `</div>`;
           }
            
           html += '</div></div>';
@@ -2021,13 +2538,14 @@ function startReview() {
 
 function skipToReveal(bypassPillar = false) {
   const target = currentSub || currentQ;
+  const themes = (target && target.themes && target.themes.length > 0) ? target.themes : (currentQ && currentQ.themes ? currentQ.themes : []);
   
   // PILLAR CHALLENGE INTERCEPT
-  if (!bypassPillar && target && target.themes && target.themes.length > 0) {
+  if (!bypassPillar && themes.length > 0) {
       const k = getActiveKeys();
       const pKey = "pillar_" + k.ak + "_" + k.qk + (k.sk ? "_" + k.sk : "");
       if (!localStorage.getItem(pKey)) {
-          showPillarChallenge(target.themes, () => {
+          showPillarChallenge(themes, () => {
               localStorage.setItem(pKey, '1');
               
               const synEl = document.getElementById('synopsis-text');
@@ -2091,6 +2609,7 @@ function skipToReveal(bypassPillar = false) {
   document.getElementById('btn-retake').style.display = 'inline-block';
 
   document.getElementById('empty-pane').style.display = 'none';
+  document.getElementById('review-header').style.display = 'flex';
   document.getElementById('points-outer').style.display = 'flex';
   document.getElementById('review-controls').style.display = 'flex';
   document.getElementById('btn-compile').style.display = 'inline-block';
@@ -2317,6 +2836,7 @@ function clearReviewPane() {
 
   document.getElementById('points-outer').style.display = 'none';
   document.getElementById('review-controls').style.display = 'none';
+  document.getElementById('review-header').style.display = 'none';
   document.getElementById('empty-pane').style.display = 'block';
 }
 

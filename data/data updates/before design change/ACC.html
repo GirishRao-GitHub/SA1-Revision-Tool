@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Actuarial Control Cycle</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap');
+
+:root {
+  --bg: #0d0f14;
+  --surface: #151923;
+  --surface2: #1c2230;
+  --surface3: #242b3d;
+  --border: #2a324b;
+  --border2: #363f5f;
+  --text: #e2e4ed;
+  --text2: #949ebf;
+  --text3: #565f80;
+  --accent: #8b5cf6;
+  --accent2: #7c3aed;
+  --accentbg: #221a3a;
+  --green: #2ecc71;
+  --amber: #f1c40f;
+  --amberbg: #2a240a;
+  --red: #e74c3c;
+  --radius: 6px;
+  --radius2: 10px;
+  --mono: 'IBM Plex Mono', monospace;
+  --sans: 'IBM Plex Sans', sans-serif;
+
+  /* Stage colours */
+  --s1: #60a5fa; --s1bg: #1a222a; --s1border: #2a3a4a;
+  --s2: #f87171; --s2bg: #2a1a1a; --s2border: #4a2a2a;
+  --s3: #34d399; --s3bg: #1a2a22; --s3border: #2a4a3a;
+  --s4: #fbbf24; --s4bg: #2a241a; --s4border: #4a3a2a;
+  --s5: #f472b6; --s5bg: #2a1a24; --s5border: #4a2a3a;
+}
+
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;}
+
+/* TOPBAR */
+.topbar{background:var(--surface);border-bottom:1px solid var(--border);padding:10px 20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;flex-shrink:0;}
+.logo{font-family:var(--mono);font-weight:600;font-size:15px;color:var(--accent);letter-spacing:.05em;}
+.logo span{color:var(--text3);}
+.tagline{font-size:12px;color:var(--text3);font-family:var(--mono);}
+.topbar-right{margin-left:auto;display:flex;align-items:center;gap:10px;}
+.top-btn{font-family:var(--mono);font-size:11px;font-weight:600;padding:4px 10px;border-radius:4px;cursor:pointer;background:var(--surface2);border:1px solid var(--border);color:var(--text2);transition:all .2s;}
+.top-btn:hover{background:var(--surface3);color:var(--text);}
+#recall-btn.on{background:var(--accent);border-color:var(--accent);color:#fff;}
+#clock{font-family:var(--mono);font-size:11px;color:var(--text3);}
+
+/* CYCLE DIAGRAM */
+.cycle-strip{background:var(--surface);border-bottom:1px solid var(--border);padding:14px 20px;display:flex;align-items:center;justify-content:center;gap:0;flex-wrap:nowrap;overflow-x:auto;flex-shrink:0;}
+.cycle-node{display:flex;align-items:center;gap:0;flex-shrink:0;}
+.stage-pill{padding:6px 14px;border-radius:20px;font-size:11px;font-weight:700;font-family:var(--mono);letter-spacing:.04em;cursor:pointer;border:2px solid transparent;transition:all .25s;text-transform:uppercase;white-space:nowrap;}
+.stage-pill.s1{color:var(--s1);background:var(--s1bg);border-color:var(--s1border);}
+.stage-pill.s2{color:var(--s2);background:var(--s2bg);border-color:var(--s2border);}
+.stage-pill.s3{color:var(--s3);background:var(--s3bg);border-color:var(--s3border);}
+.stage-pill.s4{color:var(--s4);background:var(--s4bg);border-color:var(--s4border);}
+.stage-pill.s5{color:var(--s5);background:var(--s5bg);border-color:var(--s5border);}
+.stage-pill:hover{filter:brightness(1.25);transform:translateY(-2px);}
+.stage-pill.active{filter:brightness(1.3);box-shadow:0 0 16px rgba(139,92,246,0.25);transform:translateY(-2px);}
+.arrow{color:var(--text3);font-size:16px;padding:0 6px;flex-shrink:0;}
+.cycle-return{color:var(--text3);font-size:10px;font-family:var(--mono);padding:0 8px;opacity:0.5;flex-shrink:0;}
+
+/* MAIN */
+.main{flex:1;overflow-y:auto;padding:24px 20px;max-width:960px;margin:0 auto;width:100%;}
+
+/* SEARCH */
+.search-bar{display:flex;align-items:center;gap:10px;margin-bottom:20px;}
+.search-input{flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:8px 14px;color:var(--text);font-family:var(--sans);font-size:13px;}
+.search-input:focus{outline:none;border-color:var(--accent);}
+.search-input::placeholder{color:var(--text3);}
+.clear-btn{font-family:var(--mono);font-size:11px;font-weight:600;padding:6px 12px;border-radius:4px;cursor:pointer;background:var(--surface2);border:1px solid var(--border);color:var(--text2);transition:all .2s;}
+.clear-btn:hover{background:var(--surface3);color:var(--text);}
+
+/* STAGE ACCORDION */
+.stage-block{margin-bottom:12px;border-radius:var(--radius2);overflow:hidden;border:1px solid var(--border);}
+.stage-header{padding:14px 18px;cursor:pointer;display:flex;align-items:center;gap:12px;transition:background .2s;user-select:none;}
+.stage-header:hover{filter:brightness(1.1);}
+.stage-header.s1{background:var(--s1bg);border-bottom:1px solid var(--s1border);}
+.stage-header.s2{background:var(--s2bg);border-bottom:1px solid var(--s2border);}
+.stage-header.s3{background:var(--s3bg);border-bottom:1px solid var(--s3border);}
+.stage-header.s4{background:var(--s4bg);border-bottom:1px solid var(--s4border);}
+.stage-header.s5{background:var(--s5bg);border-bottom:1px solid var(--s5border);}
+.stage-header.open.s1{border-bottom-left-radius:0;border-bottom-right-radius:0;}
+.stage-num{font-family:var(--mono);font-size:10px;font-weight:700;padding:2px 7px;border-radius:4px;flex-shrink:0;}
+.stage-num.s1{background:var(--s1);color:#0a1520;}
+.stage-num.s2{background:var(--s2);color:#200a0a;}
+.stage-num.s3{background:var(--s3);color:#0a200a;}
+.stage-num.s4{background:var(--s4);color:#20180a;}
+.stage-num.s5{background:var(--s5);color:#20100a;}
+.stage-name{font-size:14px;font-weight:700;flex:1;}
+.stage-name.s1{color:var(--s1);}
+.stage-name.s2{color:var(--s2);}
+.stage-name.s3{color:var(--s3);}
+.stage-name.s4{color:var(--s4);}
+.stage-name.s5{color:var(--s5);}
+.stage-meta{font-size:11px;color:var(--text3);font-family:var(--mono);}
+.stage-chevron{color:var(--text3);font-size:14px;transition:transform .25s;flex-shrink:0;}
+.stage-chevron.open{transform:rotate(90deg);}
+
+.stage-body{background:var(--surface);display:none;padding:0;}
+.stage-body.open{display:block;}
+
+/* TOPIC ITEMS */
+.topic-item{border-bottom:1px solid var(--border);overflow:hidden;}
+.topic-item:last-child{border-bottom:none;}
+.topic-header{padding:11px 18px 11px 36px;cursor:pointer;display:flex;align-items:center;gap:10px;transition:background .15s;}
+.topic-header:hover{background:var(--surface2);}
+.topic-header.open{background:var(--surface2);}
+.topic-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+.topic-dot.s1{background:var(--s1);}
+.topic-dot.s2{background:var(--s2);}
+.topic-dot.s3{background:var(--s3);}
+.topic-dot.s4{background:var(--s4);}
+.topic-dot.s5{background:var(--s5);}
+.topic-title{font-size:13px;font-weight:600;color:var(--text);flex:1;}
+.topic-chevron{color:var(--text3);font-size:12px;transition:transform .2s;flex-shrink:0;}
+.topic-chevron.open{transform:rotate(90deg);}
+.topic-body{display:none;padding:14px 18px 16px 52px;background:var(--bg);border-top:1px solid var(--border);}
+.topic-body.open{display:block;}
+
+/* HEADING in topic */
+.topic-heading{font-family:var(--mono);font-size:11px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px;}
+
+/* BULLETS */
+.bullet-list{display:flex;flex-direction:column;gap:10px;}
+.bullet-item{display:flex;gap:10px;align-items:flex-start;}
+.bullet-marker{width:5px;height:5px;border-radius:50%;background:var(--accent);margin-top:8px;flex-shrink:0;}
+.bullet-content{font-size:13.5px;color:var(--text);line-height:1.7;}
+.bullet-content strong{color:#fff;font-weight:700;}
+
+/* RECALL MODE */
+.recall-cover{background:var(--surface3);border:1px dashed var(--border2);border-radius:var(--radius);padding:14px 18px;color:var(--text3);font-size:13px;font-style:italic;display:flex;align-items:center;justify-content:space-between;gap:12px;}
+.recall-reveal-btn{font-family:var(--mono);font-size:10px;font-weight:700;padding:4px 10px;border-radius:4px;cursor:pointer;background:var(--accentbg);border:1px solid var(--accent);color:var(--accent);transition:all .2s;white-space:nowrap;flex-shrink:0;}
+.recall-reveal-btn:hover{background:var(--accent);color:#fff;}
+
+/* HIGHLIGHT */
+.hl{font-weight:700;color:#fff;}
+
+/* PROFESSIONALISM cross-cut notice */
+.crosscut-notice{background:var(--s5bg);border:1px solid var(--s5border);border-radius:var(--radius);padding:14px 18px;font-size:13px;color:var(--text2);line-height:1.6;}
+.crosscut-notice strong{color:var(--s5);}
+
+/* EMPTY STATE */
+.empty-state{text-align:center;padding:60px 20px;color:var(--text3);font-size:14px;}
+
+/* SEARCH HIGHLIGHT */
+mark{background:rgba(139,92,246,0.3);color:#fff;border-radius:2px;padding:0 2px;}
+
+/* NO RESULTS */
+.no-results{text-align:center;padding:40px;color:var(--text3);font-size:13px;font-family:var(--mono);}
+
+/* LOADING */
+.loading{text-align:center;padding:60px;color:var(--text3);font-family:var(--mono);font-size:13px;}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<div class="topbar">
+  <div>
+    <div class="logo">ACC <span>//</span> Actuarial Control Cycle</div>
+    <div class="tagline">SA1 · Topic Frameworks</div>
+  </div>
+  <div class="topbar-right">
+    <span id="clock"></span>
+    <button id="recall-btn" class="top-btn" onclick="toggleRecall()">Recall: OFF</button>
+    <button class="top-btn" onclick="expandAll()">Expand All</button>
+    <button class="top-btn" onclick="collapseAll()">Collapse All</button>
+    <a class="top-btn" href="SA1ity_Check.html" style="text-decoration:none;">← Back</a>
+  </div>
+</div>
+
+<!-- CYCLE DIAGRAM STRIP -->
+<div class="cycle-strip">
+  <div class="cycle-node">
+    <div class="stage-pill s1" onclick="scrollToStage(0)" id="pill-0">1 · Environment</div>
+    <div class="arrow">→</div>
+  </div>
+  <div class="cycle-node">
+    <div class="stage-pill s2" onclick="scrollToStage(1)" id="pill-1">2 · Specify Problem</div>
+    <div class="arrow">→</div>
+  </div>
+  <div class="cycle-node">
+    <div class="stage-pill s3" onclick="scrollToStage(2)" id="pill-2">3 · Develop Solution</div>
+    <div class="arrow">→</div>
+  </div>
+  <div class="cycle-node">
+    <div class="stage-pill s4" onclick="scrollToStage(3)" id="pill-3">4 · Monitor Experience</div>
+    <div class="arrow">→</div>
+  </div>
+  <div class="cycle-node">
+    <div class="stage-pill s5" onclick="scrollToStage(4)" id="pill-4">5 · Professionalism</div>
+    <div class="cycle-return">↩ cycle</div>
+  </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="main">
+
+  <!-- SEARCH -->
+  <div class="search-bar">
+    <input class="search-input" id="search-input" type="text" placeholder="Search topics, keywords, bullet points…" oninput="onSearch()">
+    <button class="clear-btn" onclick="clearSearch()">Clear</button>
+  </div>
+
+  <div id="acc-container">
+    <div class="loading">Loading frameworks data…</div>
+  </div>
+
+</div>
+
+<script>
+// ─── DATA ──────────────────────────────────────────────────────────────────
+
+const ACC_STAGES = [
+  {
+    key: 's1',
+    num: 'S1',
+    name: 'General Commercial & Economic Environment',
+    topics: ['The Six Pillar Framework (P1-P6)', 'State Healthcare & Demographics', 'Legislation & Taxation', 'Regulation', 'IRDA Regulations']
+  },
+  {
+    key: 's2',
+    num: 'S2',
+    name: 'Specifying the Problem',
+    topics: ['Risks', 'Risk Management & Capital', 'Data', 'Models', 'Underwriting', 'Group Products', 'Private Medical Insurance (PMI)', 'Critical Illness', 'Income Protection', 'Long-Term Care (LTC)']
+  },
+  {
+    key: 's3',
+    num: 'S3',
+    name: 'Developing the Solution',
+    topics: ['Product Design', 'Product Design (Protection)', 'Pricing', 'Pricing & Rating', 'Reinsurance', 'Investments', 'Administration', 'Capital & Solvency']
+  },
+  {
+    key: 's4',
+    num: 'S4',
+    name: 'Monitoring the Experience',
+    topics: ['Claims Management', 'Reserving & Valuation', 'Monitoring', 'Reporting']
+  },
+  {
+    key: 's5',
+    num: 'S5',
+    name: 'Professionalism',
+    topics: ['Professional Guidance']
+  }
+];
+
+let TOPIC_FRAMEWORKS = {};
+let recallMode = false;
+let revealedTopics = new Set();
+
+// ─── LOAD DATA ─────────────────────────────────────────────────────────────
+
+async function loadData() {
+  try {
+    const res = await fetch('data/Topic_Frameworks.json?t=' + Date.now());
+    if (!res.ok) throw new Error('fetch failed');
+    TOPIC_FRAMEWORKS = await res.json();
+  } catch(e) {
+    // Fallback: try same directory
+    try {
+      const res2 = await fetch('Topic_Frameworks.json?t=' + Date.now());
+      if (!res2.ok) throw new Error('fallback failed');
+      TOPIC_FRAMEWORKS = await res2.json();
+    } catch(e2) {
+      document.getElementById('acc-container').innerHTML =
+        `<div class="no-results">⚠ Could not load Topic_Frameworks.json.<br>Place it in the same folder as this file or in a <code>data/</code> subfolder.</div>`;
+      return;
+    }
+  }
+  renderAll();
+}
+
+// ─── RENDER ────────────────────────────────────────────────────────────────
+
+function renderAll(query) {
+  const container = document.getElementById('acc-container');
+  container.innerHTML = '';
+
+  let anyResult = false;
+
+  ACC_STAGES.forEach((stage, si) => {
+    const block = buildStageBlock(stage, si, query);
+    if (block) { container.appendChild(block); anyResult = true; }
+  });
+
+  if (!anyResult) {
+    container.innerHTML = `<div class="no-results">No results for "${query}"</div>`;
+  }
+}
+
+function buildStageBlock(stage, si, query) {
+  // Gather matching topics
+  const topicEls = [];
+
+  if (stage.key === 's5' && !TOPIC_FRAMEWORKS['Professional Guidance']) {
+    // Professionalism placeholder
+    if (!query) {
+      const notice = document.createElement('div');
+      notice.className = 'topic-item';
+      notice.innerHTML = `<div class="topic-body open" style="display:block; padding: 14px 18px 16px 36px;">
+        <div class="crosscut-notice">
+          <strong>Professionalism cuts across all stages of the Actuarial Control Cycle.</strong><br>
+          Key themes include: following APS/TAS standards, peer review, statutory duties (Appointed Actuary), whistleblowing, managing conflicts of interest, and handling data quality responsibly. 
+          No dedicated JSON entry yet — add a <code>"Professionalism"</code> key to Topic_Frameworks.json to populate this section.
+        </div>
+      </div>`;
+      topicEls.push(notice);
+    }
+  }
+
+  stage.topics.forEach(topicKey => {
+    const data = TOPIC_FRAMEWORKS[topicKey];
+    if (!data) return;
+
+    const el = buildTopicItem(topicKey, data, stage.key, query);
+    if (el) topicEls.push(el);
+  });
+
+  // Also check Professional Guidance if in s5
+  if (stage.key === 's5' && TOPIC_FRAMEWORKS['Professional Guidance']) {
+    // Already included above via topics list
+  }
+
+  if (topicEls.length === 0 && query) return null;
+
+  // Build block
+  const block = document.createElement('div');
+  block.className = 'stage-block';
+  block.id = `stage-${si}`;
+
+  const isOpen = !query ? (si === 0) : true;
+
+  block.innerHTML = `
+    <div class="stage-header ${stage.key} ${isOpen ? 'open' : ''}" onclick="toggleStage(this, ${si})">
+      <span class="stage-num ${stage.key}">${stage.num}</span>
+      <span class="stage-name ${stage.key}">${stage.name}</span>
+      <span class="stage-meta">${topicEls.length} topic${topicEls.length !== 1 ? 's' : ''}</span>
+      <span class="stage-chevron ${isOpen ? 'open' : ''}">&#9654;</span>
+    </div>
+    <div class="stage-body ${isOpen ? 'open' : ''}" id="stage-body-${si}"></div>
+  `;
+
+  const body = block.querySelector(`#stage-body-${si}`);
+  topicEls.forEach(el => body.appendChild(el));
+
+  return block;
+}
+
+function buildTopicItem(topicKey, data, stageKey, query) {
+  // Parse heading and bullets
+  let heading = '';
+  let bullets = [];
+
+  data.forEach(line => {
+    if (line.startsWith('###')) {
+      heading = line.replace(/^###\s*/, '').trim();
+    } else if (line.startsWith('- **')) {
+      const match = line.match(/^- \*\*(.*?)\*\*\s*(?::\s*)?(.*)$/);
+      if (match) bullets.push({ title: match[1].trim(), content: match[2].trim() });
+    }
+  });
+
+  // Filter by query
+  if (query) {
+    const q = query.toLowerCase();
+    const titleMatch = topicKey.toLowerCase().includes(q) || heading.toLowerCase().includes(q);
+    const matchingBullets = bullets.filter(b =>
+      b.title.toLowerCase().includes(q) || b.content.toLowerCase().includes(q)
+    );
+    if (!titleMatch && matchingBullets.length === 0) return null;
+    if (!titleMatch) bullets = matchingBullets;
+  }
+
+  const itemId = `topic-${stageKey}-${topicKey.replace(/\W/g, '_')}`;
+  const isOpen = !!query;
+
+  const item = document.createElement('div');
+  item.className = 'topic-item';
+  item.id = itemId;
+
+  const bulletsHtml = buildBulletsHtml(bullets, stageKey, query);
+
+  item.innerHTML = `
+    <div class="topic-header ${isOpen ? 'open' : ''}" onclick="toggleTopic(this, '${itemId}')">
+      <div class="topic-dot ${stageKey}"></div>
+      <div class="topic-title">${query ? highlight(topicKey, query) : topicKey}</div>
+      <span class="stage-meta" style="font-size:10px;">${bullets.length} pt${bullets.length !== 1 ? 's' : ''}</span>
+      <span class="topic-chevron ${isOpen ? 'open' : ''}">&#9654;</span>
+    </div>
+    <div class="topic-body ${isOpen ? 'open' : ''}" id="body-${itemId}">
+      ${heading ? `<div class="topic-heading">${query ? highlight(heading, query) : heading}</div>` : ''}
+      ${bulletsHtml}
+    </div>
+  `;
+
+  return item;
+}
+
+function buildBulletsHtml(bullets, stageKey, query) {
+  if (bullets.length === 0) return '<div style="color:var(--text3);font-size:13px;font-style:italic;">No bullet points found.</div>';
+
+  if (recallMode) {
+    return `<div class="recall-cover" id="rc-wrap">
+      <span>🧠 Recall mode — can you recall the ${bullets.length} key points for this topic?</span>
+      <button class="recall-reveal-btn" onclick="revealBullets(this, '${stageKey}', ${JSON.stringify(bullets).replace(/"/g, '&quot;')}, '${query || ''}')">Reveal</button>
+    </div>`;
+  }
+
+  return renderBullets(bullets, query);
+}
+
+function renderBullets(bullets, query) {
+  let html = '<div class="bullet-list">';
+  bullets.forEach(b => {
+    const titleStr = query ? highlight(b.title, query) : `<strong>${b.title}</strong>`;
+    const contentStr = query ? highlight(b.content, query) : b.content;
+    html += `<div class="bullet-item">
+      <div class="bullet-marker"></div>
+      <div class="bullet-content"><strong>${b.title}</strong>${b.content ? ': ' + contentStr : ''}</div>
+    </div>`;
+  });
+  html += '</div>';
+  return html;
+}
+
+function revealBullets(btn, stageKey, bullets, query) {
+  const wrap = btn.closest('.recall-cover');
+  const parent = wrap.parentNode;
+  const div = document.createElement('div');
+  div.innerHTML = renderBullets(bullets, query);
+  parent.replaceChild(div.firstElementChild, wrap);
+}
+
+function highlight(text, query) {
+  if (!query) return text;
+  const re = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+  return text.replace(re, '<mark>$1</mark>');
+}
+
+// ─── TOGGLE FUNCTIONS ──────────────────────────────────────────────────────
+
+function toggleStage(header, si) {
+  const body = document.getElementById(`stage-body-${si}`);
+  const chevron = header.querySelector('.stage-chevron');
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  chevron.classList.toggle('open', !isOpen);
+  header.classList.toggle('open', !isOpen);
+}
+
+function toggleTopic(header, itemId) {
+  const body = document.getElementById(`body-${itemId}`);
+  const chevron = header.querySelector('.topic-chevron');
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  chevron.classList.toggle('open', !isOpen);
+  header.classList.toggle('open', !isOpen);
+}
+
+function expandAll() {
+  document.querySelectorAll('.stage-body').forEach(b => b.classList.add('open'));
+  document.querySelectorAll('.stage-chevron').forEach(c => c.classList.add('open'));
+  document.querySelectorAll('.stage-header').forEach(h => h.classList.add('open'));
+  document.querySelectorAll('.topic-body').forEach(b => b.classList.add('open'));
+  document.querySelectorAll('.topic-chevron').forEach(c => c.classList.add('open'));
+  document.querySelectorAll('.topic-header').forEach(h => h.classList.add('open'));
+}
+
+function collapseAll() {
+  document.querySelectorAll('.stage-body').forEach(b => b.classList.remove('open'));
+  document.querySelectorAll('.stage-chevron').forEach(c => c.classList.remove('open'));
+  document.querySelectorAll('.stage-header').forEach(h => h.classList.remove('open'));
+  document.querySelectorAll('.topic-body').forEach(b => b.classList.remove('open'));
+  document.querySelectorAll('.topic-chevron').forEach(c => c.classList.remove('open'));
+  document.querySelectorAll('.topic-header').forEach(h => h.classList.remove('open'));
+}
+
+function scrollToStage(si) {
+  const el = document.getElementById(`stage-${si}`);
+  if (!el) return;
+  // Open the stage
+  const body = document.getElementById(`stage-body-${si}`);
+  const header = el.querySelector('.stage-header');
+  const chevron = el.querySelector('.stage-chevron');
+  body.classList.add('open');
+  header.classList.add('open');
+  chevron.classList.add('open');
+  el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+// ─── SEARCH ────────────────────────────────────────────────────────────────
+
+let searchTimer;
+function onSearch() {
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(() => {
+    const q = document.getElementById('search-input').value.trim();
+    renderAll(q || undefined);
+  }, 200);
+}
+
+function clearSearch() {
+  document.getElementById('search-input').value = '';
+  renderAll();
+}
+
+// ─── RECALL ────────────────────────────────────────────────────────────────
+
+function toggleRecall() {
+  recallMode = !recallMode;
+  const btn = document.getElementById('recall-btn');
+  btn.textContent = recallMode ? 'Recall: ON' : 'Recall: OFF';
+  btn.classList.toggle('on', recallMode);
+  const q = document.getElementById('search-input').value.trim();
+  renderAll(q || undefined);
+}
+
+// ─── CLOCK ─────────────────────────────────────────────────────────────────
+
+function updateClock() {
+  const now = new Date();
+  document.getElementById('clock').textContent =
+    now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+}
+setInterval(updateClock, 1000);
+updateClock();
+
+// ─── INIT ──────────────────────────────────────────────────────────────────
+
+loadData();
+</script>
+</body>
+</html>

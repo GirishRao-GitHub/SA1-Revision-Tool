@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Stakeholders · SA1ity Check</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap');
+
+:root {
+  --bg: #0d0f14;
+  --surface: #151923;
+  --surface2: #1c2230;
+  --surface3: #242b3d;
+  --border: #2a324b;
+  --border2: #363f5f;
+  --text: #e2e4ed;
+  --text2: #949ebf;
+  --text3: #565f80;
+  --accent: #8b5cf6;
+  --accentbg: #221a3a;
+  --amber: #f1c40f;
+  --amberbg: #2a240a;
+  --radius: 6px;
+  --radius2: 10px;
+  --mono: 'IBM Plex Mono', monospace;
+  --sans: 'IBM Plex Sans', sans-serif;
+}
+
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+
+.topbar{position:fixed;top:0;left:0;width:100%;background:var(--surface);border-bottom:1px solid var(--border);padding:10px 20px;display:flex;align-items:center;gap:16px;z-index:100;}
+.logo{font-family:var(--mono);font-weight:600;font-size:15px;color:var(--accent);letter-spacing:.05em;}
+.logo span{color:var(--text3);}
+.tagline{font-size:12px;color:var(--text3);font-family:var(--mono);}
+.back-btn{margin-left:auto;font-family:var(--mono);font-size:11px;font-weight:600;padding:4px 12px;border-radius:4px;cursor:pointer;background:var(--surface2);border:1px solid var(--border);color:var(--text2);transition:all .2s;text-decoration:none;}
+.back-btn:hover{background:var(--surface3);color:var(--text);}
+#clock{font-family:var(--mono);font-size:11px;color:var(--text3);}
+
+.coming-soon{text-align:center;padding:40px;max-width:520px;}
+.cs-icon{font-size:56px;margin-bottom:24px;}
+.cs-title{font-family:var(--mono);font-size:22px;font-weight:700;color:var(--accent);margin-bottom:12px;letter-spacing:.04em;}
+.cs-sub{font-size:14px;color:var(--text2);line-height:1.7;margin-bottom:28px;}
+.cs-tags{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-bottom:32px;}
+.cs-tag{font-family:var(--mono);font-size:11px;font-weight:600;padding:4px 10px;border-radius:4px;background:var(--surface2);border:1px solid var(--border);color:var(--text2);}
+.cs-note{font-family:var(--mono);font-size:11px;color:var(--text3);background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:12px 16px;line-height:1.6;}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div>
+    <div class="logo">Stakeholders <span>//</span> SA1ity Check</div>
+    <div class="tagline">Stakeholder Mapping · Topic Frameworks</div>
+  </div>
+  <span id="clock"></span>
+  <a class="back-btn" href="SA1ity_Check.html">← Back to Main</a>
+</div>
+
+<div class="coming-soon">
+  <div class="cs-icon">🏗️</div>
+  <div class="cs-title">Coming Soon</div>
+  <div class="cs-sub">
+    The <strong style="color:var(--accent)">Stakeholders</strong> view will map SA1 exam topics through the lens of key stakeholder groups — showing what each party cares about, their objectives, and how topics connect to their interests.
+  </div>
+  <div class="cs-tags">
+    <span class="cs-tag">Policyholders</span>
+    <span class="cs-tag">Insurers</span>
+    <span class="cs-tag">Reinsurers</span>
+    <span class="cs-tag">Regulators (IRDAI)</span>
+    <span class="cs-tag">Distributors</span>
+    <span class="cs-tag">TPAs</span>
+    <span class="cs-tag">Government</span>
+    <span class="cs-tag">Appointed Actuary</span>
+    <span class="cs-tag">Shareholders</span>
+    <span class="cs-tag">Healthcare Providers</span>
+  </div>
+  <div class="cs-note">
+    📂 Data source: Topic_Frameworks.json · Reads the same file as the main Frameworks mode.<br>
+    🔧 Page structure: under development — confirm stakeholder groupings to build.
+  </div>
+</div>
+
+<script>
+function updateClock() {
+  const now = new Date();
+  document.getElementById('clock').textContent =
+    now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+}
+setInterval(updateClock, 1000);
+updateClock();
+</script>
+</body>
+</html>

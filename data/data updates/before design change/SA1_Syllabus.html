@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>SA1 Syllabus</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap');
+
+:root {
+  --bg: #0d0f14;
+  --surface: #151923;
+  --surface2: #1c2230;
+  --surface3: #242b3d;
+  --border: #2a324b;
+  --border2: #363f5f;
+  --text: #e2e4ed;
+  --text2: #949ebf;
+  --text3: #565f80;
+  --accent: #8b5cf6;
+  --accent2: #7c3aed;
+  --accentbg: #221a3a;
+  --green: #2ecc71;
+  --greenbg: #0d2a1a;
+  --amber: #f1c40f;
+  --amberbg: #2a240a;
+  --red: #e74c3c;
+  --redbg: #2a0f0f;
+  --radius: 6px;
+  --radius2: 10px;
+  --mono: 'IBM Plex Mono', monospace;
+  --sans: 'IBM Plex Sans', sans-serif;
+
+  /* Syllabus category colours */
+  --c1: #f87171; --c1bg: #2a1a1a;
+  --c2: #fbbf24; --c2bg: #2a241a;
+  --c3: #34d399; --c3bg: #1a2a22;
+  --c4: #60a5fa; --c4bg: #1a222a;
+  --c5: #a78bfa; --c5bg: #221a2a;
+}
+
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;}
+
+/* TOP BAR */
+.topbar{background:var(--surface);border-bottom:1px solid var(--border);padding:10px 20px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;}
+.logo{font-family:var(--mono);font-weight:600;font-size:15px;color:var(--accent);letter-spacing:.05em;white-space:nowrap;}
+.top-btn{font-family:var(--mono);font-size:11px;font-weight:600;padding:4px 10px;border-radius:4px;cursor:pointer;background:var(--surface2);border:1px solid var(--border);color:var(--text2);transition:all .2s;text-decoration:none;display:inline-flex;align-items:center;}
+.top-btn:hover{background:var(--surface3);color:var(--text);}
+.top-btn.back{border-color:var(--accent);color:var(--accent);}
+.top-btn.back:hover{background:var(--accentbg);}
+
+/* LAYOUT */
+.page{display:flex;flex:1;min-height:0;overflow:hidden;}
+.sidebar{width:280px;flex-shrink:0;border-right:1px solid var(--border);background:var(--surface);display:flex;flex-direction:column;overflow-y:auto;}
+.sidebar-header{padding:16px;border-bottom:1px solid var(--border);}
+.sidebar-title{font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px;}
+.sidebar-sub{font-size:12px;color:var(--text3);}
+.cat-list{padding:10px;display:flex;flex-direction:column;gap:4px;}
+
+.cat-btn{padding:12px 14px;border-radius:var(--radius);cursor:pointer;border:1px solid var(--border);background:var(--surface2);transition:all .2s;display:flex;align-items:center;gap:10px;}
+.cat-btn:hover{border-color:var(--border2);background:var(--surface3);}
+.cat-btn.active{background:var(--accentbg);border-color:var(--accent);}
+.cat-num{font-family:var(--mono);font-size:11px;font-weight:700;width:22px;height:22px;border-radius:4px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.cat-info{flex:1;min-width:0;}
+.cat-name{font-size:12px;font-weight:600;color:var(--text);line-height:1.3;}
+.cat-weight{font-family:var(--mono);font-size:10px;margin-top:2px;}
+
+/* MAIN CONTENT */
+.main-content{flex:1;overflow-y:auto;padding:32px 40px;}
+.main-content::-webkit-scrollbar{width:4px;}
+.main-content::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
+
+.welcome-state{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;text-align:center;gap:16px;color:var(--text3);}
+.welcome-icon{font-size:48px;opacity:.3;}
+.welcome-title{font-size:18px;font-weight:600;color:var(--text2);}
+.welcome-sub{font-size:13px;line-height:1.6;max-width:400px;}
+
+.cat-header{margin-bottom:28px;padding-bottom:20px;border-bottom:2px solid var(--border);}
+.cat-header-top{display:flex;align-items:center;gap:12px;margin-bottom:8px;}
+.cat-badge{font-family:var(--mono);font-size:11px;font-weight:700;padding:4px 10px;border-radius:4px;}
+.cat-title{font-size:24px;font-weight:600;color:var(--text);}
+.cat-desc{font-size:13px;color:var(--text2);line-height:1.6;margin-top:6px;}
+.weight-bar-wrap{display:flex;align-items:center;gap:10px;margin-top:12px;}
+.weight-label{font-size:11px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;white-space:nowrap;}
+.weight-track{height:6px;flex:1;background:var(--surface3);border-radius:3px;max-width:200px;}
+.weight-fill{height:6px;border-radius:3px;transition:width .5s ease;}
+.weight-pct{font-family:var(--mono);font-size:13px;font-weight:700;}
+
+/* TOPIC CARDS */
+.topics-grid{display:flex;flex-direction:column;gap:12px;}
+.topic-card{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius2);overflow:hidden;transition:border-color .2s;}
+.topic-card:hover{border-color:var(--border2);}
+.topic-card-header{padding:14px 18px;display:flex;align-items:center;gap:10px;cursor:pointer;user-select:none;}
+.topic-card-header:hover .topic-name{color:var(--accent);}
+.topic-icon{font-size:16px;flex-shrink:0;}
+.topic-name{font-size:14px;font-weight:600;color:var(--text);flex:1;transition:color .2s;}
+.topic-count{font-family:var(--mono);font-size:10px;color:var(--text3);background:var(--surface3);border:1px solid var(--border);border-radius:3px;padding:2px 7px;flex-shrink:0;}
+.topic-chevron{color:var(--text3);font-size:12px;transition:transform .2s;flex-shrink:0;}
+.topic-card.open .topic-chevron{transform:rotate(90deg);}
+.topic-body{display:none;padding:0 18px 16px;border-top:1px solid var(--border);background:#ffffff;}
+.topic-card.open .topic-body{display:block;}
+.topic-bullets{margin-top:12px;display:flex;flex-direction:column;gap:6px;}
+.topic-bullet{display:flex;align-items:flex-start;gap:8px;font-size:15px;color:#1a1a1a;line-height:1.5;}
+.bullet-dot{width:5px;height:5px;border-radius:50%;margin-top:6px;flex-shrink:0;}
+.bullet-title{font-weight:600;color:#000000;}
+.bullet-detail{color:#444444;font-size:13px;}
+
+/* STATS BAR */
+.stats-bar{display:flex;gap:12px;margin-bottom:24px;flex-wrap:wrap;}
+.stat-pill{background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);padding:8px 14px;display:flex;align-items:center;gap:8px;}
+.stat-pill-num{font-family:var(--mono);font-size:18px;font-weight:700;}
+.stat-pill-lbl{font-size:11px;color:var(--text3);line-height:1.3;}
+
+/* LOADING */
+.loading{display:flex;align-items:center;justify-content:center;flex:1;gap:8px;color:var(--text3);font-size:14px;}
+.dots{display:flex;gap:5px;}
+.dot{width:6px;height:6px;border-radius:50%;background:var(--accent);animation:pulse 1.2s ease-in-out infinite;}
+.dot:nth-child(2){animation-delay:.2s;}
+.dot:nth-child(3){animation-delay:.4s;}
+@keyframes pulse{0%,100%{opacity:.2}50%{opacity:1}}
+
+/* SEARCH */
+.search-wrap{margin-bottom:20px;}
+.search-input{width:100%;padding:10px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:var(--radius);color:var(--text);font-size:13px;font-family:var(--sans);}
+.search-input:focus{outline:none;border-color:var(--accent);}
+.search-input::placeholder{color:var(--text3);}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <a class="top-btn back" href="SA1ity_Check.html">&#8592; Back to SA1ity Check</a>
+  <div style="flex:1;text-align:center;">
+    <span class="logo">SA1 Syllabus</span>
+    <span style="font-family:var(--mono);font-size:11px;color:var(--text3);margin-left:12px;">Health and Care · Advanced</span>
+  </div>
+  <span id="live-clock" style="font-family:var(--mono);font-size:11px;color:var(--text3);"></span>
+</div>
+
+<!-- PAGE -->
+<div class="page">
+
+  <!-- SIDEBAR: Category list -->
+  <div class="sidebar">
+    <div class="sidebar-header">
+      <div class="sidebar-title">Syllabus Categories</div>
+      <div class="sidebar-sub">Click a category to explore topics</div>
+    </div>
+    <div class="cat-list" id="cat-list">
+      <!-- Populated by JS -->
+    </div>
+  </div>
+
+  <!-- MAIN CONTENT AREA -->
+  <div class="main-content" id="main-content">
+    <div class="loading" id="loading-state">
+      <div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+      <span>Loading frameworks...</span>
+    </div>
+    <div class="welcome-state" id="welcome-state" style="display:none;">
+      <div class="welcome-icon">📋</div>
+      <div class="welcome-title">SA1 Syllabus Explorer</div>
+      <div class="welcome-sub">Select a syllabus category from the left panel to explore its topics and key frameworks.</div>
+    </div>
+    <div id="cat-content" style="display:none;"></div>
+  </div>
+
+</div>
+
+<script>
+// ── SYLLABUS CATEGORIES ────────────────────────────────────────
+const CATEGORIES = [
+  {
+    id: 1,
+    name: "Health insurance products and general business environment",
+    weight: 30,
+    color: "var(--c1)",
+    colorBg: "var(--c1bg)",
+    icon: "🏥",
+    desc: "Covers the range of health and care products, their design, the market environment, and how they interact with state provision and stakeholders.",
+    topics: [] // will be mapped from Topic_Frameworks
+  },
+  {
+    id: 2,
+    name: "Regulatory, legislative and taxation environment",
+    weight: 10,
+    color: "var(--c2)",
+    colorBg: "var(--c2bg)",
+    icon: "⚖️",
+    desc: "Covers the regulatory framework, legislation, and taxation considerations affecting health and care insurers.",
+    topics: []
+  },
+  {
+    id: 3,
+    name: "Rating, pricing and underwriting",
+    weight: 20,
+    color: "var(--c3)",
+    colorBg: "var(--c3bg)",
+    icon: "📊",
+    desc: "Covers the methodology and practice of rating, pricing, and underwriting health and care products.",
+    topics: []
+  },
+  {
+    id: 4,
+    name: "Valuation, Asset-Liability Management (ALM) and reinsurance",
+    weight: 20,
+    color: "var(--c4)",
+    colorBg: "var(--c4bg)",
+    icon: "📈",
+    desc: "Covers actuarial valuation, reserving, asset-liability management, and reinsurance for health and care business.",
+    topics: []
+  },
+  {
+    id: 5,
+    name: "Monitoring and strategy",
+    weight: 20,
+    color: "var(--c5)",
+    colorBg: "var(--c5bg)",
+    icon: "🎯",
+    desc: "Covers monitoring of experience, management information, and strategic considerations for health and care insurers.",
+    topics: []
+  }
+];
+
+// Mapping: which Topic_Frameworks keys belong to which syllabus category
+const TOPIC_CATEGORY_MAP = {
+  // Category 1: Products & Business Environment
+  "Private Medical Insurance (PMI)": 1,
+  "Critical Illness": 1,
+  "Income Protection": 1,
+  "Long-Term Care (LTC)": 1,
+  "State Healthcare & Demographics": 1,
+  "Product Design": 1,
+  "Product Design (Protection)": 1,
+  "Group Products": 1,
+  "Administration": 1,
+  "The Six Pillar Framework (P1-P6)": 1,
+
+  // Category 2: Regulatory, Legislative & Taxation
+  "Regulation": 2,
+  "IRDA Regulations": 2,
+  "Legislation & Taxation": 2,
+  "Professional Guidance": 2,
+
+  // Category 3: Rating, Pricing & Underwriting
+  "Pricing": 3,
+  "Pricing & Rating": 3,
+  "Underwriting": 3,
+  "Data": 3,
+  "Models": 3,
+  "Claims Management": 3,
+
+  // Category 4: Valuation, ALM & Reinsurance
+  "Reserving & Valuation": 4,
+  "Reinsurance": 4,
+  "Risk Management & Capital": 4,
+  "Capital & Solvency": 4,
+  "Investments": 4,
+  "Risks": 4,
+
+  // Category 5: Monitoring & Strategy
+  "Monitoring": 5,
+  "Reporting": 5,
+};
+
+let TOPIC_FRAMEWORKS = {};
+let activeCatId = null;
+
+// ── LOAD DATA ──────────────────────────────────────────────────
+window.onload = async function() {
+  startLiveClock();
+  try {
+    const res = await fetch('data/Topic_Frameworks.json?t=' + Date.now());
+    if (res.ok) {
+      TOPIC_FRAMEWORKS = await res.json();
+    }
+  } catch(e) {
+    console.warn('Could not load Topic_Frameworks.json from /data, trying local...', e);
+    // Fallback: try same directory
+    try {
+      const res2 = await fetch('Topic_Frameworks.json?t=' + Date.now());
+      if (res2.ok) TOPIC_FRAMEWORKS = await res2.json();
+    } catch(e2) { console.warn('Fallback also failed:', e2); }
+  }
+
+  // Distribute topics into categories
+  Object.keys(TOPIC_FRAMEWORKS).forEach(topicKey => {
+    const catId = TOPIC_CATEGORY_MAP[topicKey];
+    if (catId) {
+      const cat = CATEGORIES.find(c => c.id === catId);
+      if (cat) cat.topics.push(topicKey);
+    }
+  });
+
+  // Sort topics alphabetically within each category
+  CATEGORIES.forEach(cat => cat.topics.sort());
+
+  document.getElementById('loading-state').style.display = 'none';
+  document.getElementById('welcome-state').style.display = 'flex';
+
+  renderSidebar();
+};
+
+// ── SIDEBAR ────────────────────────────────────────────────────
+function renderSidebar() {
+  const list = document.getElementById('cat-list');
+  list.innerHTML = '';
+  CATEGORIES.forEach(cat => {
+    const btn = document.createElement('div');
+    btn.className = 'cat-btn';
+    btn.id = 'cat-btn-' + cat.id;
+    btn.innerHTML = `
+      <div class="cat-num" style="background:${cat.colorBg};color:${cat.color};border:1px solid ${cat.color}33;">${cat.id}</div>
+      <div class="cat-info">
+        <div class="cat-name">${cat.name}</div>
+        <div class="cat-weight" style="color:${cat.color};">${cat.weight}% · ${cat.topics.length} topics</div>
+      </div>
+    `;
+    btn.onclick = () => selectCategory(cat.id);
+    list.appendChild(btn);
+  });
+}
+
+// ── SELECT CATEGORY ────────────────────────────────────────────
+function selectCategory(catId) {
+  activeCatId = catId;
+  const cat = CATEGORIES.find(c => c.id === catId);
+
+  // Update sidebar active state
+  document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+  const activeBtn = document.getElementById('cat-btn-' + catId);
+  if (activeBtn) activeBtn.classList.add('active');
+
+  // Hide welcome
+  document.getElementById('welcome-state').style.display = 'none';
+
+  // Render content
+  const content = document.getElementById('cat-content');
+  content.style.display = 'block';
+
+  const totalBullets = cat.topics.reduce((sum, t) => {
+    const data = TOPIC_FRAMEWORKS[t] || [];
+    return sum + data.filter(l => l.startsWith('- ')).length;
+  }, 0);
+
+  content.innerHTML = `
+    <div class="cat-header">
+      <div class="cat-header-top">
+        <div class="cat-badge" style="background:${cat.colorBg};color:${cat.color};border:1px solid ${cat.color}44;">
+          Category ${cat.id}
+        </div>
+        <div style="font-size:20px;">${cat.icon}</div>
+      </div>
+      <div class="cat-title">${cat.name}</div>
+      <div class="cat-desc">${cat.desc}</div>
+      <div class="weight-bar-wrap">
+        <span class="weight-label">Exam Weight</span>
+        <div class="weight-track">
+          <div class="weight-fill" style="width:${cat.weight}%;background:${cat.color};"></div>
+        </div>
+        <span class="weight-pct" style="color:${cat.color};">${cat.weight}%</span>
+      </div>
+    </div>
+
+    <div class="stats-bar">
+      <div class="stat-pill">
+        <div class="stat-pill-num" style="color:${cat.color};">${cat.topics.length}</div>
+        <div class="stat-pill-lbl">Framework<br>Topics</div>
+      </div>
+      <div class="stat-pill">
+        <div class="stat-pill-num" style="color:${cat.color};">${totalBullets}</div>
+        <div class="stat-pill-lbl">Key<br>Points</div>
+      </div>
+    </div>
+
+    <div class="search-wrap">
+      <input class="search-input" type="text" placeholder="Search topics and points..." oninput="filterTopics(this.value, ${catId})">
+    </div>
+
+    <div class="topics-grid" id="topics-grid-${catId}">
+      ${cat.topics.map((t, i) => renderTopicCard(t, cat, i)).join('')}
+      ${cat.topics.length === 0 ? `<div style="color:var(--text3);font-size:13px;text-align:center;padding:40px;">No topics mapped to this category yet. Topics will be assigned in a future update.</div>` : ''}
+    </div>
+  `;
+}
+
+// ── RENDER TOPIC CARD ──────────────────────────────────────────
+function renderTopicCard(topicKey, cat, index) {
+  const data = TOPIC_FRAMEWORKS[topicKey] || [];
+  const bullets = parseBullets(data);
+  const count = bullets.length;
+
+  const bulletsHtml = bullets.map(b => `
+    <div class="topic-bullet">
+      <div class="bullet-dot" style="background:${cat.color};opacity:0.7;"></div>
+      <div>
+        <span class="bullet-title">${escHtml(b.title)}</span>
+        ${b.detail ? `<span class="bullet-detail"> — ${escHtml(b.detail)}</span>` : ''}
+      </div>
+    </div>
+  `).join('');
+
+  return `
+    <div class="topic-card" id="topic-card-${sanitizeId(topicKey)}" style="border-left:3px solid ${cat.color}33;">
+      <div class="topic-card-header" onclick="toggleCard('${sanitizeId(topicKey)}')">
+        <span class="topic-icon">${topicIcon(topicKey)}</span>
+        <span class="topic-name">${escHtml(topicKey)}</span>
+        <span class="topic-count">${count} points</span>
+        <span class="topic-chevron">&#9654;</span>
+      </div>
+      <div class="topic-body">
+        <div class="topic-bullets" id="bullets-${sanitizeId(topicKey)}">
+          ${count > 0 ? bulletsHtml : '<div style="color:var(--text3);font-size:13px;font-style:italic;">No framework bullets available yet.</div>'}
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// ── TOGGLE CARD ────────────────────────────────────────────────
+function toggleCard(id) {
+  const card = document.getElementById('topic-card-' + id);
+  if (card) card.classList.toggle('open');
+}
+
+// ── SEARCH / FILTER ────────────────────────────────────────────
+function filterTopics(query, catId) {
+  const cat = CATEGORIES.find(c => c.id === catId);
+  if (!cat) return;
+  const q = query.toLowerCase().trim();
+  const grid = document.getElementById('topics-grid-' + catId);
+  if (!grid) return;
+
+  if (!q) {
+    grid.innerHTML = cat.topics.map((t, i) => renderTopicCard(t, cat, i)).join('');
+    return;
+  }
+
+  const filtered = cat.topics.filter(t => {
+    if (t.toLowerCase().includes(q)) return true;
+    const bullets = parseBullets(TOPIC_FRAMEWORKS[t] || []);
+    return bullets.some(b => b.title.toLowerCase().includes(q) || b.detail.toLowerCase().includes(q));
+  });
+
+  if (filtered.length === 0) {
+    grid.innerHTML = `<div style="color:var(--text3);font-size:13px;text-align:center;padding:40px;">No topics match "${escHtml(query)}"</div>`;
+  } else {
+    grid.innerHTML = filtered.map((t, i) => renderTopicCard(t, cat, i)).join('');
+    // Auto-open matching cards
+    filtered.forEach(t => {
+      const card = document.getElementById('topic-card-' + sanitizeId(t));
+      if (card) card.classList.add('open');
+    });
+  }
+}
+
+// ── HELPERS ────────────────────────────────────────────────────
+function parseBullets(data) {
+  const bullets = [];
+  data.forEach(line => {
+    if (line.startsWith('- **')) {
+      const match = line.match(/^- \*\*(.*?)\*\*\s*(?::\s*)?(.*)$/);
+      if (match) {
+        bullets.push({ title: match[1].trim(), detail: match[2].trim() });
+      }
+    } else if (line.startsWith('- ')) {
+      const text = line.replace(/^- /, '').trim();
+      const colonIdx = text.indexOf(':');
+      if (colonIdx > 0 && colonIdx < 60) {
+        bullets.push({ title: text.substring(0, colonIdx).trim(), detail: text.substring(colonIdx + 1).trim() });
+      } else {
+        bullets.push({ title: text, detail: '' });
+      }
+    }
+  });
+  return bullets;
+}
+
+function escHtml(str) {
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function sanitizeId(str) {
+  return str.replace(/[^a-zA-Z0-9]/g, '_');
+}
+
+function topicIcon(name) {
+  const icons = {
+    'Private Medical Insurance (PMI)': '🏥',
+    'Critical Illness': '❤️',
+    'Income Protection': '🛡️',
+    'Long-Term Care (LTC)': '🧓',
+    'State Healthcare & Demographics': '🏛️',
+    'Product Design': '✏️',
+    'Product Design (Protection)': '✏️',
+    'Group Products': '👥',
+    'Administration': '🗂️',
+    'Regulation': '⚖️',
+    'IRDA Regulations': '📜',
+    'Legislation & Taxation': '📋',
+    'Professional Guidance': '🎓',
+    'Pricing': '💰',
+    'Pricing & Rating': '💰',
+    'Underwriting': '🔍',
+    'Data': '📊',
+    'Models': '🔢',
+    'Claims Management': '📝',
+    'Reserving & Valuation': '📈',
+    'Reinsurance': '🔄',
+    'Risk Management & Capital': '⚠️',
+    'Capital & Solvency': '💎',
+    'Investments': '💹',
+    'Risks': '⚠️',
+    'Monitoring': '📡',
+    'Reporting': '📄',
+    'The Six Pillar Framework (P1-P6)': '🏛️',
+  };
+  return icons[name] || '📌';
+}
+
+function startLiveClock() {
+  updateClock();
+  setInterval(updateClock, 1000);
+}
+function updateClock() {
+  const now = new Date();
+  const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const h = String(now.getHours()).padStart(2,'0');
+  const m = String(now.getMinutes()).padStart(2,'0');
+  const s = String(now.getSeconds()).padStart(2,'0');
+  const el = document.getElementById('live-clock');
+  if (el) el.textContent = `${days[now.getDay()]}, ${now.getDate()} ${months[now.getMonth()]} ${h}:${m}:${s}`;
+}
+</script>
+
+</body>
+</html>
