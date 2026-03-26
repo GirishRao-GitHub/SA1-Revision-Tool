@@ -643,6 +643,7 @@ function renderMidContent(theme) {
     btn.onmouseover = () => { if (!btn.classList.contains('active')) { btn.style.borderColor='var(--accent)'; btn.style.transform='translateX(2px)'; } };
     btn.onmouseout  = () => { if (!btn.classList.contains('active')) { btn.style.borderColor='var(--border)'; btn.style.transform='translateX(0)'; } };
     btn.onclick = () => {
+      if (recallLeft) return; // block right pane when left recall is ON
       Array.from(listEl.children).forEach(c => {
         c.classList.remove('active');
         c.style.borderColor = 'var(--border)';
@@ -753,11 +754,25 @@ function toggleRecallLeft() {
   recallLeft = !recallLeft;
   localStorage.setItem('rv_recall_left', recallLeft);
   applyRecallLeftUI();
+
+  // When left recall turns ON, also turn ON mid recall
+  if (recallLeft && !recallMid) {
+    recallMid = true;
+    localStorage.setItem('rv_recall_mid', recallMid);
+    applyRecallMidUI();
+  }
+
+  // Clear right pane when recall turns ON
+  if (recallLeft) {
+    currentSubtopicIdx = null;
+    checkboxState = {};
+    document.getElementById('fw-content').innerHTML =
+      '<h2 style="color:var(--text3);text-align:center;margin-top:100px;">Select a Subtopic to view details</h2>';
+  }
+
   // Re-render mid pane if a topic is already selected
   const activeLeft = document.querySelector('#fw-topics-list .active');
   if (activeLeft) {
-    const activeTopic = activeLeft.querySelector('span:first-child').textContent;
-    // Find the real topic key (strip icon prefix if any)
     const topicKey = Object.keys(TOPIC_FRAMEWORKS).find(t => activeLeft.innerHTML.includes(t));
     if (topicKey) renderMidContent(topicKey);
   }
