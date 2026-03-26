@@ -564,11 +564,53 @@ window.onload = async function() {
     return;
   }
 
+  validateAllEntries();
   renderFrameworkList();
   startLiveClock();
 };
 
 // ── Clock ──────────────────────────────────────────────────────────────────
+// ── Validation ──────────────────────────────────────────────────────────────────────────
+// Runs once on load. Stores { status, reasons } per key in VALIDATION.
+let VALIDATION = {};
+
+function validateAllEntries() {
+  VALIDATION = {};
+  Object.entries(TOPIC_FRAMEWORKS).forEach(function([key, entry]) {
+    const bullets = entry.bullets ? entry.bullets : (Array.isArray(entry) ? entry : []);
+    const reasons = [];
+
+    if (!bullets.length) {
+      reasons.push({ level: 'error', msg: 'No bullets array — entry will render blank.' });
+      VALIDATION[key] = { status: 'error', reasons };
+      return;
+    }
+
+    const { subtopics } = parseFrameworkLines(bullets);
+    const h3lines = bullets.filter(l => /^###(?!#)\s+/.test(l));
+    const h4lines = bullets.filter(l => /^####\s+/.test(l));
+    const content = bullets.filter(l => l.trim() && !/^#{1,}/.test(l));
+
+    // Classic collapse bug: lone ### + content + no ####
+    if (h3lines.length === 1 && h4lines.length === 0 && content.length >= 4 && subtopics.length === 1) {
+      reasons.push({ level: 'error', msg: 'All ' + content.length + ' bullets collapse into 1 subtopic. Add #### subheadings.' });
+    }
+    if (subtopics.length === 0) {
+      reasons.push({ level: 'error', msg: '0 subtopics parsed — mid pane will be empty.' });
+    }
+    subtopics.forEach(function(st) {
+      const filled = (st.bullets || []).filter(l => l.trim() && !/^#{3,}/.test(l));
+      if (filled.length === 0) {
+        reasons.push({ level: 'warn', msg: 'Subtopic "' + st.title + '" has no content.' });
+      }
+    });
+
+    const worst = reasons.some(r => r.level === 'error') ? 'error'
+                : reasons.some(r => r.level === 'warn')  ? 'warn' : 'ok';
+    VALIDATION[key] = { status: worst, reasons };
+  });
+}
+
 function startLiveClock() {
   updateClock(); setInterval(updateClock, 1000);
 }
@@ -669,7 +711,16 @@ function renderFrameworkList() {
     const icon   = (entry && entry._meta && entry._meta.icon)   ? entry._meta.icon   : '';
     const tagHtml = pillar ? `<span class="pillar-tag ${pillar.toLowerCase()}">${pillar}</span>` : '';
 
-    btn.innerHTML = `<span>${icon ? icon + ' ' : ''}${t}</span>${tagHtml}`;
+    const vResult = VALIDATION[t];
+    let vBadge = '';
+    if (vResult && vResult.status !== 'ok') {
+      const vTip   = vResult.reasons.map(r => r.msg).join('&#10;');
+      const vColor = vResult.status === 'error' ? '#f87171' : '#fbbf24';
+      const vBg    = vResult.status === 'error' ? '#3d1a1a' : '#3d330a';
+      const vLabel = vResult.status === 'error' ? '⚠ ERR' : '⚠ WARN';
+      vBadge = '<span title="' + vTip + '" style="font-size:10px;background:' + vBg + ';color:' + vColor + ';border:1px solid ' + vColor + ';border-radius:3px;padding:1px 5px;font-family:var(--mono);font-weight:700;flex-shrink:0;">' + vLabel + '</span>';
+    }
+    btn.innerHTML = `<span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;">${icon ? icon + ' ' : ''}${t}</span>${tagHtml}` + vBadge;
 
     btn.onmouseover = () => { if (!btn.classList.contains('active')) btn.style.borderColor = 'var(--accent)'; };
     btn.onmouseout  = () => { if (!btn.classList.contains('active')) btn.style.borderColor = 'var(--border)';  };
