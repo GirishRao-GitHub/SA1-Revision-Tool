@@ -611,44 +611,48 @@ function renderFrameworkList() {
 
 // ── Parse Framework Lines ──────────────────────────────────────────────────
 function parseFrameworkLines(lines) {
+  // Unified parser — one consistent rule regardless of header mix.
+  // Content before the first header is never silently orphaned.
   let chapterTitle = '';
   const subtopics = [];
 
-  const h3lines = lines.filter(l => /^###\s+/.test(l));
-  if (h3lines.length > 0) chapterTitle = h3lines[0].replace(/^###\s+/, '').trim();
+  const hasH4   = lines.some(l => /^####\s+/.test(l));
+  const hasH3   = lines.some(l => /^###(?!#)\s+/.test(l));
+  const boldOnly = !hasH4 && !hasH3;
 
-  const h4lines = lines.filter(l => /^####\s+/.test(l));
-  const multiH3 = h3lines.length > 1;
+  const h3match = lines.find(l => /^###(?!#)\s+/.test(l));
+  if (h3match) chapterTitle = h3match.replace(/^###\s+/, '').trim();
 
-  if (h4lines.length > 0) {
-    let current = null;
-    lines.forEach(line => {
-      const m = line.match(/^####\s+(.+)$/);
-      if (m) {
-        current = { title: m[1].trim(), bullets: [] };
-        subtopics.push(current);
-      } else if (current && !/^#{3,}/.test(line) && line.trim() !== '') {
-        current.bullets.push(line);
-      }
-    });
-  } else if (multiH3) {
-    let current = null;
-    lines.forEach(line => {
-      const m = line.match(/^###\s+(.+)$/);
-      if (m) {
-        current = { title: m[1].trim(), bullets: [] };
-        subtopics.push(current);
-      } else if (current && line.trim() !== '') {
-        current.bullets.push(line);
-      }
-    });
-  } else {
-    lines.forEach(line => {
+  if (boldOnly) {
+    lines.forEach(function(line) {
       if (line.startsWith('- **')) {
         const m = line.match(/^- \*\*(.*?)\*\*\s*(?::\s*)?(.*)$/);
         if (m) subtopics.push({ title: m[1].trim(), bullets: [line] });
       }
     });
+    return { chapterTitle, subtopics };
+  }
+
+  const headerRe = hasH4 ? /^####\s+(.+)$/ : /^###(?!#)\s+(.+)$/;
+  let current = null;
+  const preHeaderBullets = [];
+  let seenFirstHeader = false;
+
+  lines.forEach(function(line) {
+    const m = line.match(headerRe);
+    if (m) {
+      seenFirstHeader = true;
+      current = { title: m[1].trim(), bullets: [] };
+      subtopics.push(current);
+    } else if (!seenFirstHeader) {
+      if (line.trim() && !/^#{1,}/.test(line)) preHeaderBullets.push(line);
+    } else if (current) {
+      if (!/^#{3,}/.test(line) && line.trim() !== '') current.bullets.push(line);
+    }
+  });
+
+  if (preHeaderBullets.length > 0) {
+    subtopics.unshift({ title: chapterTitle || 'Overview', bullets: preHeaderBullets });
   }
 
   return { chapterTitle, subtopics };
