@@ -2,13 +2,14 @@ import json
 import os
 import re
 
-# Paths (Using escaped backslashes for Windows)
+# Paths
 BASE_DIR = "g:\\Girish\\IAI\\SP1 and SA1 Health and Care\\Practice papers\\Claude Widgets"
 THEMES_PATH = os.path.join(BASE_DIR, "data", "Topic_Frameworks.json")
 STRUCTURE_PATH = os.path.join(BASE_DIR, "data", "Syllabus_Structure.json")
 OUTPUT_PATH = os.path.join(BASE_DIR, "data", "Unified_Syllabus.json")
 
 def load_json(path):
+    if not os.path.exists(path): return {}
     with open(path, 'r', encoding='utf-8') as f:
         return json.load(f)
 
@@ -16,83 +17,118 @@ def save_json(data, path):
     with open(path, 'w', encoding='utf-8') as f:
         json.dump(data, f, indent=2)
 
-def integrate_ch1():
-    # Load Master Data
+def parse_markdown(file_path):
+    with open(file_path, 'r', encoding='utf-8') as f:
+        lines = f.readlines()
+    
+    content = []
+    
+    for line in lines:
+        line = line.strip()
+        if not line: continue
+        
+        # Simple Header Detection (e.g., "1  Private medical insurance", "1.1 Benefits and features")
+        header_match = re.match(r'^(\d+(\.\d+)?)\s+(.+)', line)
+        if header_match:
+            level = header_match.group(2)
+            text = header_match.group(3).strip()
+            num = header_match.group(1)
+            type_tag = "h3" if not level else "h4"
+            content.append({"type": type_tag, "text": f"{num} {text}"})
+            continue
+            
+        # Question / Solution Detection
+        if line.lower() == "question":
+            content.append({"type": "h4", "text": "Question"})
+            continue
+        if line.lower() == "solution":
+            content.append({"type": "h4", "text": "Solution"})
+            continue
+            
+        # Bullet points or normal text
+        if line.startswith("-") or line.startswith("*"):
+            text = re.sub(r'^[-*]\s*', '', line)
+            content.append({"type": "point", "text": text})
+        else:
+            # Check for bold starts
+            bold_match = re.match(r'^\*\*(.*?)\*\*\s*(.*)', line)
+            if bold_match:
+                content.append({"type": "point", "bold": bold_match.group(1), "text": bold_match.group(2)})
+            else:
+                content.append({"type": "point", "text": line})
+                
+    return content
+
+def integrate_chapter(chapter_id, markdown_path, theme_keywords=None):
     themes = load_json(THEMES_PATH)
     structure = load_json(STRUCTURE_PATH)
     
-    # Chapter 1 Core Content (The backbone we just extracted)
-    ch1_content = [
-        {"type": "h3", "text": "0. Introduction"},
-        {"type": "point", "text": "This introductory chapter provides an overview of health and care insurance, linking concepts from SP1 and establishing the control/product cycles."},
-        {"type": "point", "text": "Sections covered: Advice for passing SA1, Links with SP1, Control and product cycles, and Further reading."},
-        
-        {"type": "h3", "text": "1. Advice to help you pass Subject SA1"},
-        {"type": "h4", "text": "1.1 Higher skills"},
-        {"type": "point", "bold": "Analysis", "text": "Identify issues and investigations required in complex/unusual situations. Pore over details carefully."},
-        {"type": "point", "bold": "Synthesis", "text": "Creative activity. Suggest methods/solutions based on analysis. Filter out irrelevant or minor points."},
-        {"type": "point", "bold": "Critical judgement", "text": "Make decisions/recommendations based on quality of supporting arguments rather than just the final result."},
-        {"type": "point", "bold": "Communication", "text": "Use clear logical structure and meet audience needs (e.g., Marketing vs Director)."},
-        
-        {"type": "h4", "text": "1.2 Problem solving"},
-        {"type": "point", "text": "Revisit these skills in Chapter 26 'Solving Complex Issues'."},
-        
-        {"type": "h3", "text": "2. Links with Subject SP1"},
-        {"type": "point", "text": "Subject SA1 builds upon SP1, revisiting topics in greater depth."},
-        {"type": "point", "text": "Knowledge of the entire SP1 course is essential for the SA1 exam."},
-        
-        {"type": "h3", "text": "3. Control and product cycles"},
-        {"type": "h4", "text": "3.1 The actuarial control cycle"},
-        {"type": "mermaid", "text": "flowchart TD\n    SP[Specifying the Problem] --> DS[Developing the Solution]\n    DS --> ME[Monitoring the Experience]\n    ME --> SP\n    ENV((Environment)) -.-> Cycle\n    PROF((Professionalism)) -.-> Cycle"},
-        
-        {"type": "h4", "text": "3.2 The product cycle"},
-        {"type": "mermaid", "text": "flowchart TD\n    PD[\"Product design\"] --> PR[\"Pricing\"]\n    PR --> MS[\"Marketing Sales\"]\n    MS --> UN[\"Underwriting\"]\n    UN --> CM[\"Claims management\"]\n    CM --> EM[\"Experience monitoring\"]\n    EM --> VL[\"Valuation\"]\n    VL --> PD\n    EM -.Expert Feedback.-> PR"}
-    ]
+    chapter_info = structure.get("Chapters", {}).get(chapter_id, {})
+    title = chapter_info.get("title", f"Chapter {chapter_id}")
     
-    # Interweaving Expert Synthesis from Topic_Frameworks.json
-    # Finding "Six Pillar Framework"
-    six_pillars = themes.get("The Six Pillar Framework (P1-P6)", {}).get("content", [])
-            
-    # Injection Logic: Add Six Pillars to "3.1 The actuarial control cycle"
-    if six_pillars:
-        ch1_content.append({"type": "text", "text": "***Expert Synthesis: Six Pillar Framework*** [src:IAI_Master]"})
-        # We take a subset of relevant pillar points for Ch 1 intro
+    # Parse Core Content
+    core_content = parse_markdown(markdown_path)
+    
+    # Interweaving Logic
+    integrated_content = []
+    
+    # Standard: Add Six Pillar Overview at the start
+    pillars = themes.get("The Six Pillar Framework (P1-P6)", {}).get("content", [])
+    if pillars:
+        integrated_content.append({"type": "text", "text": "***Expert Synthesis: Six Pillar Framework*** [src:IAI_Master]"})
         count = 0
-        for node in six_pillars:
+        for node in pillars:
             if node.get("type") in ["point", "sub"]:
-                # Explicitly add source tag for filtering logic
                 new_node = node.copy()
                 new_node["text"] = new_node.get("text", "") + " [src:IAI_Synthesis]"
-                ch1_content.append(new_node)
+                integrated_content.append(new_node)
                 count += 1
-            if count >= 10: break
+            if count >= 3: break # Just a teaser for pillars
 
-    # Pull "Product Cycle" Expert Insights
-    product_cycle_expert = themes.get("Product Cycle", {}).get("content", [])
-    if product_cycle_expert:
-        ch1_content.append({"type": "text", "text": "***Expert Synthesis: Product Cycle Insights*** [src:IFoA_Master]"})
-        count = 0
-        for node in product_cycle_expert:
-            if node.get("type") in ["point", "sub"]:
-                new_node = node.copy()
-                new_node["text"] = new_node.get("text", "") + " [src:IFoA_Synthesis]"
-                ch1_content.append(new_node)
-                count += 1
-            if count >= 5: break
-
-    # Initialize Unified Syllabus if it doesn't exist
-    if not os.path.exists(OUTPUT_PATH):
-        unified = {"Chapters": {}}
-    else:
-        unified = load_json(OUTPUT_PATH)
+    # Interleave based on keywords
+    for node in core_content:
+        integrated_content.append(node)
         
-    unified["Chapters"]["Ch1"] = {
-        "title": "Introduction",
-        "content": ch1_content
+        # If node is a header, check for related theme content
+        if node["type"] in ["h3", "h4"] and theme_keywords:
+            text = node["text"].lower()
+            for keyword, theme_name in theme_keywords.items():
+                if keyword.lower() in text:
+                    theme_content = themes.get(theme_name, {}).get("content", [])
+                    if theme_content:
+                        integrated_content.append({"type": "text", "text": f"***Expert Insights: {theme_name}*** [src:IFoA_Link]"})
+                        count = 0
+                        for t_node in theme_content:
+                            if t_node.get("type") in ["point", "sub"]:
+                                # Check if t_node text contains specific keyword to keep it relevant
+                                if keyword.lower() in t_node.get("text", "").lower() or keyword.lower() in t_node.get("bold", "").lower():
+                                    new_node = t_node.copy()
+                                    new_node["text"] = new_node.get("text", "") + f" [src:Synthesis_{theme_name}]"
+                                    integrated_content.append(new_node)
+                                    count += 1
+                            if count >= 5: break
+
+    # Save to Unified Syllabus
+    unified = load_json(OUTPUT_PATH)
+    if "Chapters" not in unified: unified["Chapters"] = {}
+    
+    unified["Chapters"][chapter_id] = {
+        "title": title,
+        "content": integrated_content
     }
     
     save_json(unified, OUTPUT_PATH)
-    print("Chapter 1 Integrated Successfully.")
+    print(f"Chapter {chapter_id} Integrated Successfully.")
 
 if __name__ == "__main__":
-    integrate_ch1()
+    # Integration for Chapter 3
+    CH3_MD = "g:\\Girish\\IAI\\SP1 and SA1 Health and Care\\SA1 Health and Care Advanced\\SA1 Course Material\\SA1 Ch3\\SA1 Ch3.md"
+    KEYWORDS = {
+        "Private medical insurance": "Pricing",
+        "Health cash plans": "Pricing",
+        "Major medical expense": "Pricing",
+        "Claims": "Claims Management",
+        "Underwriting": "Pricing",
+        "Regulation": "Regulation"
+    }
+    integrate_chapter("Ch3", CH3_MD, theme_keywords=KEYWORDS)
