@@ -55,23 +55,28 @@ def integrate_ch1():
             
     # Injection Logic: Add Six Pillars to "3.1 The actuarial control cycle"
     if six_pillars:
-        ch1_content.append({"type": "text", "text": "***Expert Synthesis: Six Pillar Framework***"})
+        ch1_content.append({"type": "text", "text": "***Expert Synthesis: Six Pillar Framework*** [src:IAI_Master]"})
         # We take a subset of relevant pillar points for Ch 1 intro
         count = 0
         for node in six_pillars:
             if node.get("type") in ["point", "sub"]:
-                ch1_content.append(node)
+                # Explicitly add source tag for filtering logic
+                new_node = node.copy()
+                new_node["text"] = new_node.get("text", "") + " [src:IAI_Synthesis]"
+                ch1_content.append(new_node)
                 count += 1
             if count >= 10: break
 
     # Pull "Product Cycle" Expert Insights
     product_cycle_expert = themes.get("Product Cycle", {}).get("content", [])
     if product_cycle_expert:
-        ch1_content.append({"type": "text", "text": "***Expert Synthesis: Product Cycle Insights***"})
+        ch1_content.append({"type": "text", "text": "***Expert Synthesis: Product Cycle Insights*** [src:IFoA_Master]"})
         count = 0
         for node in product_cycle_expert:
             if node.get("type") in ["point", "sub"]:
-                ch1_content.append(node)
+                new_node = node.copy()
+                new_node["text"] = new_node.get("text", "") + " [src:IFoA_Synthesis]"
+                ch1_content.append(new_node)
                 count += 1
             if count >= 5: break
 
