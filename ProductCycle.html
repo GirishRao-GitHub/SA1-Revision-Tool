@@ -264,12 +264,12 @@ let recallMode = false;
 // ── LOAD DATA ──────────────────────────────────────────────────────────────
 async function loadData() {
   try {
-    const res = await fetch('data/Topic_Frameworks_New.json?t=' + Date.now());
+    const res = await fetch('data/Topic_Frameworks.json?t=' + Date.now());
     if (!res.ok) throw new Error();
     TOPIC_FRAMEWORKS = await res.json();
   } catch {
     try {
-      const res2 = await fetch('Topic_Frameworks_New.json?t=' + Date.now());
+      const res2 = await fetch('Topic_Frameworks.json?t=' + Date.now());
       if (!res2.ok) throw new Error();
       TOPIC_FRAMEWORKS = await res2.json();
     } catch {
