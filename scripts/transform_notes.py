@@ -66,14 +66,16 @@ def parse_markdown(file_path):
             
         nodes.append({"type": "point", "text": line})
                 
-    return nodes
+    return nodes, len(lines)
 
 def transform_chapter(chapter_id, md_path, notes_json_path):
     """Stage 1: Clean raw notes and save to intermediate JSON."""
-    print(f"Stage 1: Transforming {chapter_id} from {md_path}...")
+    print(f"\n--- STAGE 1: TRANSFORMATION [{chapter_id}] ---")
+    print(f"Reading from: {md_path}")
     
-    nodes = parse_markdown(md_path)
+    nodes, raw_line_count = parse_markdown(md_path)
     if not nodes:
+        print("Error: No nodes extracted.")
         return
         
     if os.path.exists(notes_json_path):
@@ -91,7 +93,12 @@ def transform_chapter(chapter_id, md_path, notes_json_path):
     
     with open(notes_json_path, 'w', encoding='utf-8') as f:
         json.dump(notes_data, f, indent=2)
-    print(f"  --> Saved {chapter_id} to {notes_json_path}")
+    
+    # RECONCILIATION
+    print(f"RECONCILIATION [Stage 1]:")
+    print(f"  - Raw Lines Filtered: {raw_line_count}")
+    print(f"  - Nodes Extracted:    {len(nodes)}")
+    print(f"  - Result Saved To:   {notes_json_path}")
 
 if __name__ == "__main__":
     B = r"g:\Girish\IAI\SP1 and SA1 Health and Care"

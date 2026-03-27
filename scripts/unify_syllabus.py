@@ -33,6 +33,8 @@ def unify_syllabus(chapter_id, notes_json_path, topics_path, unified_path):
     
     final_nodes = []
     nodes = chapter_data["content"]
+    initial_node_count = len(nodes)
+    synthesis_nodes_added = 0
     
     # Interweave
     added_in_section = set()
@@ -66,6 +68,7 @@ def unify_syllabus(chapter_id, notes_json_path, topics_path, unified_path):
                             teaser["text"] = teaser_text + f" [src:{source_tag}]"
                             final_nodes.append(teaser)
                             added_in_section.add(theme_name)
+                            synthesis_nodes_added += 1
                             break
     
     if os.path.exists(unified_path):
@@ -83,7 +86,13 @@ def unify_syllabus(chapter_id, notes_json_path, topics_path, unified_path):
     
     with open(unified_path, 'w', encoding='utf-8') as f:
         json.dump(full_data, f, indent=2)
-    print(f"  --> Unified {chapter_id} saved to {unified_path}")
+    
+    # RECONCILIATION
+    print(f"RECONCILIATION [Stage 3]:")
+    print(f"  - Initial Nodes:      {initial_node_count}")
+    print(f"  - Synthesis Added:    {synthesis_nodes_added}")
+    print(f"  - Final Node Count:   {len(final_nodes)}")
+    print(f"  - Result Saved To:   {unified_path}")
 
 if __name__ == "__main__":
     B = r"g:\Girish\IAI\SP1 and SA1 Health and Care"
