@@ -68,16 +68,50 @@ def parse_markdown(file_path):
                 
     return nodes
 
-def integrate_chapter(chapter_id, md_path, topics_path, output_path):
-    print(f"Integrating {chapter_id}...")
+def transform_chapter(chapter_id, md_path, notes_json_path):
+    """Stage 1: Clean raw notes and save to intermediate JSON."""
+    print(f"Stage 1: Transforming {chapter_id} from {md_path}...")
     
-    with open(topics_path, 'r', encoding='utf-8') as f:
-        topics_data = json.load(f)
-        
     nodes = parse_markdown(md_path)
     if not nodes:
         return
+        
+    if os.path.exists(notes_json_path):
+        with open(notes_json_path, 'r', encoding='utf-8') as f:
+            notes_data = json.load(f)
+    else:
+        notes_data = {"Chapters": {}}
+        
+    if "Chapters" not in notes_data: notes_data["Chapters"] = {}
     
+    notes_data["Chapters"][chapter_id] = {
+        "title": nodes[0]["text"] if nodes and "text" in nodes[0] else chapter_id,
+        "content": nodes
+    }
+    
+    with open(notes_json_path, 'w', encoding='utf-8') as f:
+        json.dump(notes_data, f, indent=2)
+    print(f"  --> Saved to {notes_json_path}")
+
+def unify_syllabus(chapter_id, notes_json_path, topics_path, unified_path):
+    """Stage 2: Merge cleaned notes with synthesis and save to final JSON."""
+    print(f"Stage 2: Unifying {chapter_id} with synthesis...")
+    
+    if not os.path.exists(notes_json_path):
+        print(f"Error: {notes_json_path} not found. Run Stage 1 first.")
+        return
+        
+    with open(notes_json_path, 'r', encoding='utf-8') as f:
+        notes_data = json.load(f)
+        
+    chapter_data = notes_data.get("Chapters", {}).get(chapter_id)
+    if not chapter_data:
+        print(f"Error: Chapter {chapter_id} not found in {notes_json_path}")
+        return
+        
+    with open(topics_path, 'r', encoding='utf-8') as f:
+        topics_data = json.load(f)
+        
     KEYWORDS = {
         "Private medical insurance": ["Pricing", "Product Design"],
         "Health cash plans": ["Pricing"],
@@ -89,8 +123,9 @@ def integrate_chapter(chapter_id, md_path, topics_path, output_path):
     }
     
     final_nodes = []
+    nodes = chapter_data["content"]
     
-    # 2. Interweave
+    # Interweave
     added_in_section = set()
     for node in nodes:
         if node["type"] in ["h3", "h4"]:
@@ -105,8 +140,7 @@ def integrate_chapter(chapter_id, md_path, topics_path, output_path):
         for key, themes in KEYWORDS.items():
             if key.lower() in node_text:
                 for theme_name in themes:
-                    if theme_name in added_in_section:
-                        continue
+                    if theme_name in added_in_section: continue
                         
                     theme_data = topics_data.get(theme_name, {})
                     if theme_data:
@@ -125,8 +159,8 @@ def integrate_chapter(chapter_id, md_path, topics_path, output_path):
                             added_in_section.add(theme_name)
                             break
     
-    if os.path.exists(output_path):
-        with open(output_path, 'r', encoding='utf-8') as f:
+    if os.path.exists(unified_path):
+        with open(unified_path, 'r', encoding='utf-8') as f:
             full_data = json.load(f)
     else:
         full_data = {"Chapters": {}}
@@ -134,19 +168,25 @@ def integrate_chapter(chapter_id, md_path, topics_path, output_path):
     if "Chapters" not in full_data: full_data["Chapters"] = {}
         
     full_data["Chapters"][chapter_id] = {
-        "title": nodes[0]["text"] if nodes and "text" in nodes[0] else chapter_id,
+        "title": chapter_data["title"],
         "content": final_nodes
     }
     
-    with open(output_path, 'w', encoding='utf-8') as f:
+    with open(unified_path, 'w', encoding='utf-8') as f:
         json.dump(full_data, f, indent=2)
-    
-    print(f"Successfully integrated {chapter_id}")
+    print(f"  --> Saved to {unified_path}")
 
 if __name__ == "__main__":
     B = r"g:\Girish\IAI\SP1 and SA1 Health and Care"
     W = os.path.join(B, "Practice papers", "Claude Widgets")
-    M = os.path.join(B, "SA1 Health and Care Advanced", "SA1 Course Material", "SA1 Ch3", "SA1 Ch3.md")
-    T = os.path.join(W, "data", "Topic_Frameworks.json")
-    O = os.path.join(W, "data", "Unified_Syllabus.json")
-    integrate_chapter("Ch3", M, T, O)
+    
+    CH3_MD = os.path.join(B, "SA1 Health and Care Advanced", "SA1 Course Material", "SA1 Ch3", "SA1 Ch3.md")
+    NOTES_JSON = os.path.join(W, "data", "SA1_Revision_Notes.json")
+    TOPICS_JSON = os.path.join(W, "data", "Topic_Frameworks.json")
+    UNIFIED_JSON = os.path.join(W, "data", "Unified_Syllabus.json")
+    
+    # Step 1: Transform
+    transform_chapter("Ch3", CH3_MD, NOTES_JSON)
+    
+    # Step 2: Unify
+    unify_syllabus("Ch3", NOTES_JSON, TOPICS_JSON, UNIFIED_JSON)
