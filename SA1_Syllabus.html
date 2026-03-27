@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SA1 · Ch3 Revision</title>
+<title>SA1 · Revision Notes</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
@@ -47,14 +47,41 @@
   header {
     display: flex;
     align-items: center;
-    gap: 16px;
-    padding: 0 20px;
+    gap: 12px;
+    padding: 0 16px;
     height: 52px;
     border-bottom: 1px solid var(--border);
     background: var(--surface);
     flex-shrink: 0;
     z-index: 10;
   }
+
+  /* ── BACK BUTTON ── */
+  .back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-dim);
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 4px 10px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all .15s;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .back-btn:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+    background: var(--accent-lo);
+  }
+  .back-btn svg { width: 12px; height: 12px; }
+
   .logo {
     font-family: var(--mono);
     font-size: 13px;
@@ -64,17 +91,18 @@
     white-space: nowrap;
   }
   .logo span { color: var(--text-dim); font-weight: 400; }
-  .header-sep { width: 1px; height: 20px; background: var(--border); }
+  .header-sep { width: 1px; height: 20px; background: var(--border); flex-shrink: 0; }
   .chapter-title {
     font-family: var(--serif);
-    font-size: 15px;
+    font-size: 14px;
     color: var(--text-hi);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     flex: 1;
+    min-width: 0;
   }
-  .view-tabs { display: flex; gap: 4px; margin-left: auto; }
+  .view-tabs { display: flex; gap: 4px; margin-left: auto; flex-shrink: 0; }
   .view-tab {
     font-family: var(--mono);
     font-size: 11px;
@@ -95,8 +123,8 @@
 
   /* ── SIDEBAR ── */
   .sidebar {
-    width: 240px;
-    min-width: 240px;
+    width: 260px;
+    min-width: 260px;
     border-right: 1px solid var(--border);
     background: var(--surface);
     display: flex;
@@ -104,7 +132,7 @@
     overflow: hidden;
   }
   .sidebar-search {
-    padding: 12px 14px;
+    padding: 10px 12px;
     border-bottom: 1px solid var(--border);
   }
   .sidebar-search input {
@@ -121,61 +149,101 @@
   }
   .sidebar-search input:focus { border-color: var(--accent); }
   .sidebar-search input::placeholder { color: var(--text-dim); }
-  .nav-tree { overflow-y: auto; flex: 1; padding: 8px 0; }
+
+  .nav-tree { overflow-y: auto; flex: 1; padding: 6px 0; }
   .nav-tree::-webkit-scrollbar { width: 4px; }
   .nav-tree::-webkit-scrollbar-track { background: transparent; }
   .nav-tree::-webkit-scrollbar-thumb { background: var(--border-hi); border-radius: 2px; }
 
-  .nav-section {
-    margin-bottom: 2px;
-  }
-  .nav-section-header {
+  /* Part group label */
+  .nav-part-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    padding: 12px 14px 4px;
     display: flex;
     align-items: center;
     gap: 8px;
-    padding: 7px 14px;
+  }
+  .nav-part-label::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  /* Chapter row (top level) */
+  .nav-chapter {
+    margin-bottom: 1px;
+  }
+  .nav-chapter-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 12px;
     cursor: pointer;
     color: var(--text);
-    font-size: 12px;
+    font-size: 11.5px;
     font-weight: 500;
     user-select: none;
     transition: background .12s;
-    border-radius: 0;
   }
-  .nav-section-header:hover { background: var(--bg); }
-  .nav-section-header.active { color: var(--accent); }
-  .nav-num {
+  .nav-chapter-header:hover { background: var(--bg); }
+  .nav-chapter-header.active { color: var(--accent); }
+  .nav-ch-num {
     font-family: var(--mono);
-    font-size: 10px;
+    font-size: 9px;
     color: var(--accent);
     background: var(--accent-lo);
     padding: 1px 5px;
     border-radius: 3px;
-    min-width: 22px;
+    min-width: 28px;
     text-align: center;
+    flex-shrink: 0;
+  }
+  .nav-ch-num.no-data {
+    color: var(--text-dim);
+    background: var(--border);
+  }
+  .nav-ch-title {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
   .nav-chevron {
     margin-left: auto;
-    width: 12px;
-    height: 12px;
+    width: 11px;
+    height: 11px;
     color: var(--text-dim);
     transition: transform .2s;
     flex-shrink: 0;
   }
-  .nav-section.open .nav-chevron { transform: rotate(90deg); }
+  .nav-chapter.open .nav-chevron { transform: rotate(90deg); }
   .nav-subsections { display: none; }
-  .nav-section.open .nav-subsections { display: block; }
+  .nav-chapter.open .nav-subsections { display: block; }
+
+  /* Subsection rows */
   .nav-sub {
-    padding: 5px 14px 5px 38px;
-    font-size: 11.5px;
+    padding: 4px 12px 4px 44px;
+    font-size: 11px;
     color: var(--text-dim);
     cursor: pointer;
     transition: all .12s;
     border-left: 2px solid transparent;
-    margin-left: 14px;
+    margin-left: 12px;
+    line-height: 1.4;
   }
   .nav-sub:hover { color: var(--text); background: var(--bg); }
   .nav-sub.active { color: var(--accent); border-left-color: var(--accent); background: var(--accent-lo); }
+
+  /* Upload hint row */
+  .nav-upload-hint {
+    padding: 6px 12px 6px 44px;
+    font-size: 10.5px;
+    color: var(--text-dim);
+    font-style: italic;
+    margin-left: 12px;
+    opacity: .7;
+  }
 
   /* ── CANVAS ── */
   .canvas {
@@ -192,7 +260,7 @@
   .progress-bar {
     position: fixed;
     top: 52px;
-    left: 240px;
+    left: 260px;
     right: 0;
     height: 2px;
     background: var(--border);
@@ -218,7 +286,52 @@
   }
   .content-empty .icon { font-size: 48px; }
   .content-empty h2 { font-family: var(--serif); font-size: 22px; color: var(--text); }
-  .content-empty p { font-size: 13px; max-width: 280px; }
+  .content-empty p { font-size: 13px; max-width: 300px; line-height: 1.6; }
+
+  /* Welcome state — chapter index cards */
+  .welcome-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 10px;
+    margin-top: 24px;
+  }
+  .welcome-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 12px 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    transition: border-color .15s, background .15s;
+  }
+  .welcome-card:hover { border-color: var(--accent); background: var(--accent-lo); }
+  .welcome-card.no-data { opacity: .45; cursor: default; }
+  .welcome-card.no-data:hover { border-color: var(--border); background: var(--surface); }
+  .wc-num {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--accent);
+    background: var(--accent-lo);
+    border-radius: 4px;
+    padding: 2px 6px;
+    min-width: 30px;
+    text-align: center;
+    flex-shrink: 0;
+  }
+  .wc-num.no-data { color: var(--text-dim); background: var(--border); }
+  .wc-title { font-size: 12px; color: var(--text); line-height: 1.4; }
+  .wc-badge {
+    margin-left: auto;
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--green);
+    background: var(--green-lo);
+    border-radius: 3px;
+    padding: 1px 5px;
+    flex-shrink: 0;
+  }
 
   .section-hero {
     margin-bottom: 36px;
@@ -251,12 +364,17 @@
   }
   .tag-syllabus { border-color: var(--blue); color: var(--blue); background: var(--blue-lo); }
   .tag-product  { border-color: var(--accent); color: var(--accent); background: var(--accent-lo); }
+  .tag-pages    { border-color: var(--border-hi); color: var(--text-dim); background: transparent; }
 
   /* subsection block */
   .subsection-block {
     margin-bottom: 32px;
     scroll-margin-top: 20px;
+    animation: fadeUp .25s ease both;
   }
+  .subsection-block:nth-child(2) { animation-delay: .05s; }
+  .subsection-block:nth-child(3) { animation-delay: .1s; }
+
   .subsection-header {
     display: flex;
     align-items: center;
@@ -355,6 +473,7 @@
     flex-shrink: 0;
     margin-top: 2px;
   }
+  .qa-toggle::after { content: '▼'; }
   .qa-answer {
     display: none;
     padding: 10px 14px 12px;
@@ -366,7 +485,6 @@
   }
   .qa-block.open .qa-answer { display: block; }
   .qa-block.open .qa-toggle::after { content: '▲'; }
-  .qa-toggle::after { content: '▼'; }
 
   /* section label rows */
   .row-label {
@@ -450,16 +568,11 @@
   }
   .glossary-def { font-size: 13px; color: var(--text); line-height: 1.5; }
 
-  /* scroll fade-in */
   @keyframes fadeUp {
     from { opacity: 0; transform: translateY(8px); }
     to   { opacity: 1; transform: translateY(0); }
   }
-  .subsection-block { animation: fadeUp .25s ease both; }
-  .subsection-block:nth-child(2) { animation-delay: .05s; }
-  .subsection-block:nth-child(3) { animation-delay: .1s; }
 
-  /* utility */
   .hidden { display: none !important; }
   strong { color: var(--text-hi); font-weight: 500; }
 </style>
@@ -467,9 +580,16 @@
 <body>
 
 <header>
-  <div class="logo">SA1 <span>·</span> REVISION</div>
+  <a class="back-btn" href="SA1ity_Check.html" title="Back to SA1ity Check">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+      <path d="M15 18l-6-6 6-6"/>
+    </svg>
+    SA1ity Check
+  </a>
   <div class="header-sep"></div>
-  <div class="chapter-title" id="header-chapter-title">Loading…</div>
+  <div class="logo">SA1 <span>·</span> REVISION NOTES</div>
+  <div class="header-sep"></div>
+  <div class="chapter-title" id="header-chapter-title">Health and Care · All Chapters</div>
   <div class="view-tabs">
     <button class="view-tab active" onclick="setView('notes')" id="tab-notes">Notes</button>
     <button class="view-tab" onclick="setView('flashcards')" id="tab-flashcards">Flashcards</button>
@@ -482,277 +602,327 @@
 <div class="workspace">
   <aside class="sidebar">
     <div class="sidebar-search">
-      <input type="text" placeholder="Search…" id="search-input" oninput="handleSearch()">
+      <input type="text" placeholder="Search chapters & topics…" id="search-input" oninput="handleSearch()">
     </div>
     <nav class="nav-tree" id="nav-tree"></nav>
   </aside>
 
   <main class="canvas" id="canvas" onscroll="handleScroll()">
-    <div id="content-area">
-      <div class="content-empty">
-        <div class="icon">📖</div>
-        <h2>Select a section</h2>
-        <p>Choose a product section from the sidebar to begin revising.</p>
-      </div>
-    </div>
+    <div id="content-area"></div>
   </main>
 </div>
 
 <script>
-// ── DATA ────────────────────────────────────────────────
-const DATA = {
-  "exam": "SA1",
-  "chapter": "Ch3",
-  "title": "Short-term Health & Care Insurance Products",
-  "syllabus_refs": ["1.1.1", "1.1.2"],
-  "products_covered": ["Private Medical Insurance", "Health Cash Plans", "Major Medical Expense Insurance"],
-  "sections": [
-    {
-      "id": "1",
-      "title": "Private Medical Insurance (PMI)",
-      "subsections": [
-        {
-          "id": "1.1",
-          "title": "Benefits and Features",
-          "bullets": [
-            "PMI reimburses policyholders for medical treatment costs; level of cover depends on what the State provides.",
-            "In countries without State healthcare, PMI replaced the fee-for-service model and reduced individuals' financial risk. Cover may or may not be compulsory.",
-            "Where a comprehensive State system (e.g. NHS) exists, PMI provides choice over how, where, and when care is delivered — typically for acute/treatable conditions, not chronic or A&E.",
-            "PMI can be seen as complementary to (or competing with) State healthcare.",
-            "Typical exclusions: drug abuse, self-inflicted injuries, out-patient drugs/dressings, normal pregnancy, cosmetic surgery, gender reassignment, preventative treatment, dialysis, mobility aids, experimental treatments/drugs, organ treatment, war risks, hazardous hobbies.",
-            "Exclusions are more common when PMI supplements a State system; harder to enforce where no State system exists (though cosmetic/weight-loss may still be excluded).",
-            "Proving an exclusion applies can be difficult (e.g. injury from a listed hobby vs. a domestic accident).",
-            "Claims may be paid to the care provider directly, or reimbursed to the insured.",
-            "PMI cover scope varies: where no State healthcare exists, may cover only medical care; where a comprehensive State system exists, may also cover accommodation costs (possibly up to a limit).",
-            "PMI is generally annually renewable. Premiums can be rated by age, gender, and prior medical history — subject to local regulation.",
-            "Where compulsory, rating factors may be restricted to prevent individuals becoming uninsurable (e.g. Switzerland: no age or medical condition rating permitted)."
-          ],
-          "key_terms": [
-            { "term": "PMI", "definition": "Private Medical Insurance — indemnity-based cover for medical treatment costs." },
-            { "term": "Fee-for-service", "definition": "Pre-PMI model where individuals paid all medical costs out of pocket." },
-            { "term": "Hazardous pursuits", "definition": "Dangerous hobbies typically excluded from PMI cover." },
-            { "term": "Annual renewable", "definition": "Policy reviewed and repriced each year." }
-          ],
-          "exam_qa": [
-            {
-              "q": "In what ways does PMI compete with a State healthcare system?",
-              "a": "Competes for the same pool of doctors, nurses, hospital beds, and diagnostic services. Private care uses the same professionals as the State system, so more time spent on private patients reduces availability for State patients."
-            }
-          ]
-        },
-        {
-          "id": "1.2",
-          "title": "Insurer's Perspective",
-          "bullets": [
-            "Indemnity basis → risk of very large claims. Imposing policy limits controls this but breaks the true indemnity principle.",
-            "Rising claims costs can be managed via HMO/PPO arrangements, though this restricts policyholder choice.",
-            "HMO: network of care providers — cover restricted to within the network.",
-            "PPO: preferred list of providers — insurer has negotiated preferential rates, reducing costs for both parties.",
-            "High/unexpected claim rates managed by: excluding pre-existing conditions, underwriting, GP referrals as gatekeepers.",
-            "Where underwriting/pre-existing exclusions are prohibited (e.g. compulsory PMI), insurer must ensure covered lives mix matches pricing assumptions.",
-            "Excesses, coinsurance, and no-claims discounts reduce small claim frequency and drive down premiums.",
-            "ACA (USA): individual mandate ensured younger/healthier lives entered the risk pool; also capped annual out-of-pocket expenses.",
-            "Wellness incentives (activity tracking, dietary monitoring) can reduce claims — rewards paid as cash, discounts, or reduced future premiums.",
-            "Claim patterns evolve over time (e.g. new diagnostics may become expected covered benefits).",
-            "Underwriting level depends on local legislation. Application forms must balance comprehensiveness (reducing non-disclosure) against deterring sales."
-          ],
-          "key_terms": [
-            { "term": "HMO", "definition": "Health Maintenance Organisation — care only provided within the network." },
-            { "term": "PPO", "definition": "Preferred Provider Organisation — insurer-approved list with negotiated rates." },
-            { "term": "Anti-selection", "definition": "Higher-risk individuals being more likely to take out or retain cover." },
-            { "term": "Individual mandate", "definition": "US ACA requirement to hold health insurance, with a financial penalty for non-compliance." },
-            { "term": "Coinsurance", "definition": "Insured retains a fixed percentage of claim costs (e.g. insured pays 20%, insurer 80%)." }
-          ],
-          "exam_qa": []
-        },
-        {
-          "id": "1.3",
-          "title": "Meeting Customer Needs",
-          "bullets": [
-            "Where State cover exists, PMI enables faster access, choice of hospital/consultant, and better comfort (e.g. private room).",
-            "UK NHS focuses on chronic/life-threatening conditions; non-emergency procedures can involve very long waits — PMI addresses this.",
-            "PMI may be perceived as offering cleaner facilities and lower risk of hospital-acquired infections.",
-            "6-week waiting list plans: PMI only activates if NHS wait exceeds 6 weeks — cheaper than comprehensive PMI.",
-            "Hospital choice under PMI often restricted to certain price bands (best choice at highest premiums).",
-            "Where State provides no cover, PMI may be compulsory to avoid personal debt or to access treatment at all.",
-            "Employers may offer PMI as a benefit to key staff to minimise business disruption from illness.",
-            "Products evolve to meet specific customer needs (e.g. waiting list plans as a targeted PMI evolution)."
-          ],
-          "key_terms": [
-            { "term": "6-week plan", "definition": "PMI that only covers treatment when NHS waiting time exceeds 6 weeks; lower premium than full PMI." }
-          ],
-          "exam_qa": [
-            {
-              "q": "Why might someone pay to see a consultant privately if they could see the same person on the NHS?",
-              "a": "To avoid long waiting lists (speed matters clinically and for peace of mind). May wish to bypass GP referral. More choice of consultant. Private consultants typically spend more time per patient and may offer higher perceived quality of diagnosis."
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "id": "2",
-      "title": "Health Cash Plans",
-      "subsections": [
-        {
-          "id": "2.1",
-          "title": "Benefits and Features",
-          "bullets": [
-            "Annually renewable, defined benefit products — primarily UK market.",
-            "Benefits paid as cash directly to the policyholder (not reimbursement to providers).",
-            "Covered events: dental, optical, physiotherapy, maternity, hospitalisation, recuperation, hearing aids, consultations.",
-            "Cover purchased in 'units' — more units = higher premium.",
-            "Waiting periods typically apply before claims can be made (accidents usually excluded from waiting period). Maternity benefit typically requires 12-month wait.",
-            "Premiums are community-rated and generally low (fixed benefit product)."
-          ],
-          "key_terms": [
-            { "term": "Defined benefit", "definition": "Fixed cash payment per event — not linked to actual cost incurred." },
-            { "term": "Community rating", "definition": "Same premium charged to all policyholders regardless of individual risk factors." },
-            { "term": "Waiting period", "definition": "Period after policy start during which no claims can be made." }
-          ],
-          "exam_qa": []
-        },
-        {
-          "id": "2.2",
-          "title": "Insurer's Perspective",
-          "bullets": [
-            "Fixed benefits reduce risk of very large claims (unlike indemnity products).",
-            "More-than-expected claims managed by: waiting periods, pre-existing condition exclusions, no-claims discounts, treatment frequency limits.",
-            "Where no GP referral required, treatment frequency limits are especially important.",
-            "Potential for over-recovery (claim exceeds actual cost) — mitigated by capping benefit (e.g. 50% of medical bill) or applying coinsurance.",
-            "Low premiums mean insurer depends heavily on renewals to recover acquisition costs and generate profit.",
-            "Admin/underwriting costs are significantly lower than PMI."
-          ],
-          "key_terms": [
-            { "term": "Over-recovery", "definition": "When the defined benefit paid exceeds the actual cost incurred by the policyholder." }
-          ],
-          "exam_qa": []
-        },
-        {
-          "id": "2.3",
-          "title": "Meeting Customer Needs",
-          "bullets": [
-            "Suitable where full PMI is unaffordable — provides access to specific treatments (dental, optical, physio) without full cost.",
-            "Not designed for major procedures or operations.",
-            "Generally preferred by lower-income individuals.",
-            "Complements PMI: PMI typically excludes dental and optical; a cash plan fills this gap.",
-            "Fixed hospitalisation cash payment (private or State) can cover incidental costs: transport, childcare, etc.",
-            "Some PMI products now include an overnight hospitalisation cash payment as a standard feature."
-          ],
-          "key_terms": [],
-          "exam_qa": []
-        }
-      ]
-    },
-    {
-      "id": "3",
-      "title": "Major Medical Expense Insurance",
-      "subsections": [
-        {
-          "id": "3.1",
-          "title": "Benefits and Features",
-          "bullets": [
-            "USA-specific product (note: UK Glossary defines a different variant).",
-            "Comprehensive PMI-type product covering primary, secondary, and tertiary care — focus is on capping exposure to large costs, not full indemnity.",
-            "Introduced in the USA in the 1950s as medical costs rose significantly.",
-            "Key innovation: first US product to combine hospital, doctor, and ancillary costs under one policy.",
-            "Covered services defined in policy; in some US States, regulators require a minimum combination to use the 'major medical insurance' label.",
-            "Coinsurance: insured retains a share of costs — key difference from PMI. Creates a financial incentive for the insured to manage usage.",
-            "Example: 10% coinsurance on a $100,000 claim saves the policyholder $90,000.",
-            "Deductible (excess): insured pays the first tranche of costs; insurer only pays above this. Often a % of costs above deductible is also retained by insured.",
-            "Maximum benefit limits may apply per year, per lifetime, or per benefit category (e.g. mental health).",
-            "Family policies may apply the deductible at household level.",
-            "Comprehensive MME: variant covering smaller expenses too (closer to full PMI) — may still use coinsurance.",
-            "High-deductible MME: protects against rare, very large expenses only."
-          ],
-          "key_terms": [
-            { "term": "Coinsurance (MME)", "definition": "Policyholder retains a fixed % of all claim costs (e.g. 10% after deductible)." },
-            { "term": "Deductible", "definition": "Amount the policyholder must pay before any insurance benefit is paid (also called excess)." },
-            { "term": "Covered services", "definition": "Defined list of treatments/procedures that the policy will pay for." },
-            { "term": "Cost sharing", "definition": "General term for the portion of claim costs retained by the insured." },
-            { "term": "Comprehensive MME", "definition": "MME variant that also covers smaller costs, not just large/catastrophic expenses." }
-          ],
-          "exam_qa": []
-        },
-        {
-          "id": "3.2",
-          "title": "Insurer's Perspective",
-          "bullets": [
-            "Not a true indemnity product — insured always retains a share above the deductible.",
-            "Very large claims still possible → policy limits and/or reinsurance may be appropriate.",
-            "Deductible reduces frequency of small claims reaching the insurer.",
-            "Regulation can influence product design (minimum covered services, coinsurance requirements) — partially standardises products.",
-            "Regulatory/political changes create uncertainty: experience takes time to emerge; consumer behaviour post-change is hard to predict.",
-            "Flexible product design (varying deductibles, coinsurance, benefit types) can attract consumers and improve affordability.",
-            "Greater flexibility → more anti-selection (customers self-select coverage they expect to use) and more complex designs are harder to price.",
-            "US market issue: some customers buy MME for only a short period → high short-term lapses reduce profitability."
-          ],
-          "key_terms": [
-            { "term": "Anti-selection (MME)", "definition": "With flexible designs, customers choose coverage most relevant to them, skewing the risk pool." },
-            { "term": "Short-term lapse", "definition": "Policyholder cancels after a brief period, before the insurer recovers acquisition costs." }
-          ],
-          "exam_qa": []
-        },
-        {
-          "id": "3.3",
-          "title": "Meeting Customer Needs",
-          "bullets": [
-            "Attractive in markets with high medical costs and limited/no State cover or employer plans.",
-            "Allows small regular premiums to protect against large unexpected costs.",
-            "Especially valuable for families (single family-level deductible).",
-            "Limitation: policyholder still faces the deductible (potentially thousands of dollars) and a coinsurance share above it — not full indemnity.",
-            "Even comprehensive MME has maximum limits → policyholder remains exposed to very large costs above the cap.",
-            "Minimum coverage requirements (where regulated) protect consumers from misleading products and unexpected coverage gaps."
-          ],
-          "key_terms": [],
-          "exam_qa": []
-        }
-      ]
-    }
-  ]
+// ── CHAPTER MANIFEST ─────────────────────────────────────
+// Full SA1 syllabus — 27 chapters across 4 parts
+// Data for chapters is loaded from CHAPTER_DATA below.
+// Chapters with no data yet show an "upload pending" state.
+
+const CHAPTERS = [
+  { num: 0,  part: null, title: "Introduction",                                    pages: 12  },
+  { num: 1,  part: 1,    title: "Long-term health and care insurance products",     pages: 36, assignment: "X1" },
+  { num: 2,  part: 1,    title: "Short-term health and care insurance products",    pages: 20  },
+  { num: 3,  part: 1,    title: "Product analysis",                                 pages: 36  },
+  { num: 4,  part: 1,    title: "General business environment (1)",                 pages: 51  },
+  { num: 5,  part: 1,    title: "General business environment (2)",                 pages: 55  },
+  { num: 6,  part: 2,    title: "Product design and pricing (1)",                   pages: 45, assignment: "X2" },
+  { num: 7,  part: 2,    title: "Product design and pricing (2)",                   pages: 49  },
+  { num: 8,  part: 2,    title: "Taxation environment",                             pages: 25  },
+  { num: 9,  part: 3,    title: "Approaches to regulation",                         pages: 35, assignment: "X3" },
+  { num: 10, part: 3,    title: "Solvency II (1)",                                  pages: 16  },
+  { num: 11, part: 3,    title: "Solvency II (2)",                                  pages: 42  },
+  { num: 12, part: 3,    title: "Other approaches to solvency regulation",          pages: 24  },
+  { num: 13, part: 3,    title: "Profit and value reporting",                       pages: 32  },
+  { num: 14, part: 3,    title: "Professional standards and guidance",              pages: 21  },
+  { num: 15, part: 3,    title: "Capital management",                               pages: 23, assignment: "X4" },
+  { num: 16, part: 4,    title: "Reinsurance",                                      pages: 31  },
+  { num: 17, part: 4,    title: "Asset-liability management",                       pages: 33  },
+  { num: 18, part: 4,    title: "Analysis of experience",                           pages: 51  },
+  { num: 19, part: 4,    title: "Analysis of surplus, embedded value and profit",   pages: 37, assignment: "X5" },
+  { num: 20, part: 4,    title: "Assessing strategies",                             pages: 47  },
+  { num: 21, part: 4,    title: "Recommending strategies",                          pages: 47, assignment: "X6" },
+  { num: 22, part: 4,    title: "Implications of strategies",                       pages: 28  },
+  { num: 23, part: 4,    title: "National healthcare systems",                      pages: 42  },
+  { num: 24, part: 4,    title: "Best practice",                                    pages: 24  },
+  { num: 25, part: 4,    title: "Solving complex issues",                           pages: 33  },
+  { num: 26, part: null, title: "Glossary",                                         pages: 30  },
+];
+
+const PART_LABELS = {
+  1: "Part 1 · Products & Business Environment",
+  2: "Part 2 · Pricing & Taxation",
+  3: "Part 3 · Regulation, Solvency & Capital",
+  4: "Part 4 · ALM, Strategy & Practice",
 };
 
+// ── CHAPTER DATA ─────────────────────────────────────────
+// Each uploaded chapter JSON is registered here.
+// Key = chapter number (as string). Value = the chapter data object.
+// To add a chapter: CHAPTER_DATA["1"] = { ...json... };
+// Ch3 is pre-loaded as the example chapter.
+
+const CHAPTER_DATA = {
+  "2": {
+    "exam": "SA1",
+    "chapter": "Ch2",
+    "title": "Short-term Health & Care Insurance Products",
+    "syllabus_refs": ["1.1.1", "1.1.2"],
+    "products_covered": ["Private Medical Insurance", "Health Cash Plans", "Major Medical Expense Insurance"],
+    "sections": [
+      {
+        "id": "1",
+        "title": "Private Medical Insurance (PMI)",
+        "subsections": [
+          {
+            "id": "1.1",
+            "title": "Benefits and Features",
+            "bullets": [
+              "PMI reimburses policyholders for medical treatment costs; level of cover depends on what the State provides.",
+              "In countries without State healthcare, PMI replaced the fee-for-service model and reduced individuals' financial risk. Cover may or may not be compulsory.",
+              "Where a comprehensive State system (e.g. NHS) exists, PMI provides choice over how, where, and when care is delivered — typically for acute/treatable conditions, not chronic or A&E.",
+              "PMI can be seen as complementary to (or competing with) State healthcare.",
+              "Typical exclusions: drug abuse, self-inflicted injuries, out-patient drugs/dressings, normal pregnancy, cosmetic surgery, gender reassignment, preventative treatment, dialysis, mobility aids, experimental treatments/drugs, organ treatment, war risks, hazardous hobbies.",
+              "Exclusions are more common when PMI supplements a State system; harder to enforce where no State system exists (though cosmetic/weight-loss may still be excluded).",
+              "Claims may be paid to the care provider directly, or reimbursed to the insured.",
+              "PMI is generally annually renewable. Premiums can be rated by age, gender, and prior medical history — subject to local regulation.",
+              "Where compulsory, rating factors may be restricted to prevent individuals becoming uninsurable (e.g. Switzerland: no age or medical condition rating permitted)."
+            ],
+            "key_terms": [
+              { "term": "PMI", "definition": "Private Medical Insurance — indemnity-based cover for medical treatment costs." },
+              { "term": "Fee-for-service", "definition": "Pre-PMI model where individuals paid all medical costs out of pocket." },
+              { "term": "Hazardous pursuits", "definition": "Dangerous hobbies typically excluded from PMI cover." },
+              { "term": "Annual renewable", "definition": "Policy reviewed and repriced each year." }
+            ],
+            "exam_qa": [
+              {
+                "q": "In what ways does PMI compete with a State healthcare system?",
+                "a": "Competes for the same pool of doctors, nurses, hospital beds, and diagnostic services. Private care uses the same professionals as the State system, so more time spent on private patients reduces availability for State patients."
+              }
+            ]
+          },
+          {
+            "id": "1.2",
+            "title": "Insurer's Perspective",
+            "bullets": [
+              "Indemnity basis → risk of very large claims. Imposing policy limits controls this but breaks the true indemnity principle.",
+              "Rising claims costs can be managed via HMO/PPO arrangements, though this restricts policyholder choice.",
+              "HMO: network of care providers — cover restricted to within the network.",
+              "PPO: preferred list of providers — insurer has negotiated preferential rates, reducing costs for both parties.",
+              "High/unexpected claim rates managed by: excluding pre-existing conditions, underwriting, GP referrals as gatekeepers.",
+              "Excesses, coinsurance, and no-claims discounts reduce small claim frequency and drive down premiums.",
+              "ACA (USA): individual mandate ensured younger/healthier lives entered the risk pool; also capped annual out-of-pocket expenses.",
+              "Wellness incentives (activity tracking, dietary monitoring) can reduce claims."
+            ],
+            "key_terms": [
+              { "term": "HMO", "definition": "Health Maintenance Organisation — care only provided within the network." },
+              { "term": "PPO", "definition": "Preferred Provider Organisation — insurer-approved list with negotiated rates." },
+              { "term": "Anti-selection", "definition": "Higher-risk individuals being more likely to take out or retain cover." },
+              { "term": "Individual mandate", "definition": "US ACA requirement to hold health insurance, with a financial penalty for non-compliance." },
+              { "term": "Coinsurance", "definition": "Insured retains a fixed percentage of claim costs (e.g. insured pays 20%, insurer 80%)." }
+            ],
+            "exam_qa": []
+          },
+          {
+            "id": "1.3",
+            "title": "Meeting Customer Needs",
+            "bullets": [
+              "Where State cover exists, PMI enables faster access, choice of hospital/consultant, and better comfort (e.g. private room).",
+              "UK NHS focuses on chronic/life-threatening conditions; non-emergency procedures can involve very long waits — PMI addresses this.",
+              "6-week waiting list plans: PMI only activates if NHS wait exceeds 6 weeks — cheaper than comprehensive PMI.",
+              "Employers may offer PMI as a benefit to key staff to minimise business disruption from illness."
+            ],
+            "key_terms": [
+              { "term": "6-week plan", "definition": "PMI that only covers treatment when NHS waiting time exceeds 6 weeks; lower premium than full PMI." }
+            ],
+            "exam_qa": [
+              {
+                "q": "Why might someone pay to see a consultant privately if they could see the same person on the NHS?",
+                "a": "To avoid long waiting lists (speed matters clinically and for peace of mind). May wish to bypass GP referral. More choice of consultant. Private consultants typically spend more time per patient and may offer higher perceived quality of diagnosis."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "2",
+        "title": "Health Cash Plans",
+        "subsections": [
+          {
+            "id": "2.1",
+            "title": "Benefits and Features",
+            "bullets": [
+              "Annually renewable, defined benefit products — primarily UK market.",
+              "Benefits paid as cash directly to the policyholder (not reimbursement to providers).",
+              "Covered events: dental, optical, physiotherapy, maternity, hospitalisation, recuperation, hearing aids, consultations.",
+              "Premiums are community-rated and generally low (fixed benefit product)."
+            ],
+            "key_terms": [
+              { "term": "Defined benefit", "definition": "Fixed cash payment per event — not linked to actual cost incurred." },
+              { "term": "Community rating", "definition": "Same premium charged to all policyholders regardless of individual risk factors." },
+              { "term": "Waiting period", "definition": "Period after policy start during which no claims can be made." }
+            ],
+            "exam_qa": []
+          },
+          {
+            "id": "2.2",
+            "title": "Insurer's Perspective",
+            "bullets": [
+              "Fixed benefits reduce risk of very large claims (unlike indemnity products).",
+              "More-than-expected claims managed by: waiting periods, pre-existing condition exclusions, no-claims discounts, treatment frequency limits.",
+              "Potential for over-recovery (claim exceeds actual cost) — mitigated by capping benefit or applying coinsurance.",
+              "Low premiums mean insurer depends heavily on renewals to recover acquisition costs."
+            ],
+            "key_terms": [
+              { "term": "Over-recovery", "definition": "When the defined benefit paid exceeds the actual cost incurred by the policyholder." }
+            ],
+            "exam_qa": []
+          },
+          {
+            "id": "2.3",
+            "title": "Meeting Customer Needs",
+            "bullets": [
+              "Suitable where full PMI is unaffordable — provides access to specific treatments (dental, optical, physio) without full cost.",
+              "Not designed for major procedures or operations.",
+              "Complements PMI: PMI typically excludes dental and optical; a cash plan fills this gap.",
+              "Fixed hospitalisation cash payment can cover incidental costs: transport, childcare, etc."
+            ],
+            "key_terms": [],
+            "exam_qa": []
+          }
+        ]
+      },
+      {
+        "id": "3",
+        "title": "Major Medical Expense Insurance",
+        "subsections": [
+          {
+            "id": "3.1",
+            "title": "Benefits and Features",
+            "bullets": [
+              "USA-specific product (note: UK Glossary defines a different variant).",
+              "Comprehensive PMI-type product covering primary, secondary, and tertiary care — focus is on capping exposure to large costs, not full indemnity.",
+              "Introduced in the USA in the 1950s as medical costs rose significantly.",
+              "Coinsurance: insured retains a share of costs — key difference from PMI.",
+              "Deductible (excess): insured pays the first tranche of costs; insurer only pays above this.",
+              "Maximum benefit limits may apply per year, per lifetime, or per benefit category."
+            ],
+            "key_terms": [
+              { "term": "Coinsurance (MME)", "definition": "Policyholder retains a fixed % of all claim costs (e.g. 10% after deductible)." },
+              { "term": "Deductible", "definition": "Amount the policyholder must pay before any insurance benefit is paid (also called excess)." },
+              { "term": "Covered services", "definition": "Defined list of treatments/procedures that the policy will pay for." },
+              { "term": "Cost sharing", "definition": "General term for the portion of claim costs retained by the insured." },
+              { "term": "Comprehensive MME", "definition": "MME variant that also covers smaller costs, not just large/catastrophic expenses." }
+            ],
+            "exam_qa": []
+          },
+          {
+            "id": "3.2",
+            "title": "Insurer's Perspective",
+            "bullets": [
+              "Not a true indemnity product — insured always retains a share above the deductible.",
+              "Very large claims still possible → policy limits and/or reinsurance may be appropriate.",
+              "Greater flexibility → more anti-selection and more complex pricing."
+            ],
+            "key_terms": [
+              { "term": "Anti-selection (MME)", "definition": "With flexible designs, customers choose coverage most relevant to them, skewing the risk pool." },
+              { "term": "Short-term lapse", "definition": "Policyholder cancels after a brief period, before the insurer recovers acquisition costs." }
+            ],
+            "exam_qa": []
+          },
+          {
+            "id": "3.3",
+            "title": "Meeting Customer Needs",
+            "bullets": [
+              "Attractive in markets with high medical costs and limited/no State cover or employer plans.",
+              "Allows small regular premiums to protect against large unexpected costs.",
+              "Especially valuable for families (single family-level deductible).",
+              "Even comprehensive MME has maximum limits → policyholder remains exposed to very large costs above the cap."
+            ],
+            "key_terms": [],
+            "exam_qa": []
+          }
+        ]
+      }
+    ]
+  }
+};
+
+// ── HOW TO ADD A NEW CHAPTER ──────────────────────────────
+// 1. Prepare a JSON file in the same format as above (exam, chapter, title,
+//    syllabus_refs, products_covered, sections[{id, title, subsections[
+//    {id, title, bullets[], key_terms[], exam_qa[]}]}])
+// 2. In this <script> block, add:
+//    CHAPTER_DATA["N"] = <paste JSON object here>;
+//    where N is the chapter number (e.g. "1", "3", "4" …)
+// ─────────────────────────────────────────────────────────
+
 // ── STATE ────────────────────────────────────────────────
-let activeView = 'notes';
-let activeSectionId = null;
-let activeSubsectionId = null;
-let searchQuery = '';
+let activeView      = 'notes';
+let activeChapterNum = null;  // number
+let activeSectionId  = null;
+let activeSubId      = null;
+let searchQuery      = '';
 
 // ── INIT ─────────────────────────────────────────────────
-document.getElementById('header-chapter-title').textContent =
-  `Ch${DATA.chapter.replace('Ch','')} · ${DATA.title}`;
-
 renderNav();
+showWelcome();
 
+// ── NAV RENDERING ────────────────────────────────────────
 function renderNav() {
   const tree = document.getElementById('nav-tree');
   const q = searchQuery.toLowerCase();
   let html = '';
+  let lastPart = 'NONE';
 
-  DATA.sections.forEach(sec => {
-    const subs = sec.subsections.filter(sub =>
-      !q || sub.title.toLowerCase().includes(q) || sec.title.toLowerCase().includes(q)
-    );
-    if (q && subs.length === 0) return;
+  CHAPTERS.forEach(ch => {
+    const data = CHAPTER_DATA[String(ch.num)];
+    const chLabel = ch.num === 0 ? 'Ch 0' : `Ch ${ch.num}`;
 
-    const isOpen = activeSectionId === sec.id || (q && subs.length > 0);
-    const isActive = activeSectionId === sec.id;
+    // Part separator
+    const partKey = ch.part === null ? (ch.num === 26 ? 'GLOSS' : 'INTRO') : ch.part;
+    if (partKey !== lastPart) {
+      if (ch.part !== null) {
+        html += `<div class="nav-part-label">${PART_LABELS[ch.part]}</div>`;
+      } else if (ch.num === 26) {
+        html += `<div class="nav-part-label">Reference</div>`;
+      }
+      lastPart = partKey;
+    }
 
-    html += `<div class="nav-section ${isOpen ? 'open' : ''}" id="nav-sec-${sec.id}">
-      <div class="nav-section-header ${isActive ? 'active' : ''}" onclick="toggleNavSection('${sec.id}')">
-        <span class="nav-num">${sec.id}</span>
-        <span>${sec.title}</span>
-        <svg class="nav-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M9 18l6-6-6-6"/>
-        </svg>
+    // Filter by search
+    if (q) {
+      const titleMatch = ch.title.toLowerCase().includes(q);
+      const sectionMatch = data && data.sections && data.sections.some(s =>
+        s.title.toLowerCase().includes(q) ||
+        (s.subsections && s.subsections.some(sub => sub.title.toLowerCase().includes(q)))
+      );
+      if (!titleMatch && !sectionMatch) return;
+    }
+
+    const isOpen   = activeChapterNum === ch.num || (q && data);
+    const isActive = activeChapterNum === ch.num;
+    const hasData  = !!data;
+
+    html += `<div class="nav-chapter ${isOpen ? 'open' : ''}" id="nav-ch-${ch.num}">
+      <div class="nav-chapter-header ${isActive ? 'active' : ''}" onclick="toggleChapter(${ch.num})">
+        <span class="nav-ch-num ${!hasData ? 'no-data' : ''}">${chLabel}</span>
+        <span class="nav-ch-title">${ch.title}</span>
+        ${hasData ? `<svg class="nav-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>` : ''}
       </div>
       <div class="nav-subsections">`;
 
-    sec.subsections.forEach(sub => {
-      if (q && !sub.title.toLowerCase().includes(q) && !sec.title.toLowerCase().includes(q)) return;
-      const isSubActive = activeSubsectionId === sub.id;
-      html += `<div class="nav-sub ${isSubActive ? 'active' : ''}" onclick="selectSubsection('${sec.id}', '${sub.id}')">${sub.id} · ${sub.title}</div>`;
-    });
+    if (hasData) {
+      data.sections.forEach(sec => {
+        const secMatch = !q || sec.title.toLowerCase().includes(q);
+        sec.subsections.forEach(sub => {
+          if (q && !secMatch && !sub.title.toLowerCase().includes(q)) return;
+          const isSubActive = activeChapterNum === ch.num && activeSubId === sub.id;
+          html += `<div class="nav-sub ${isSubActive ? 'active' : ''}" onclick="selectSub(${ch.num}, '${sec.id}', '${sub.id}')">${sub.id} · ${sub.title}</div>`;
+        });
+      });
+    } else {
+      html += `<div class="nav-upload-hint">Notes not yet uploaded</div>`;
+    }
 
     html += `</div></div>`;
   });
@@ -760,19 +930,39 @@ function renderNav() {
   tree.innerHTML = html;
 }
 
-function toggleNavSection(id) {
-  activeSectionId = activeSectionId === id ? null : id;
-  activeSubsectionId = null;
+function toggleChapter(num) {
+  if (activeChapterNum === num) {
+    activeChapterNum = null;
+    activeSectionId  = null;
+    activeSubId      = null;
+    renderNav();
+    showWelcome();
+    document.getElementById('header-chapter-title').textContent = 'Health and Care · All Chapters';
+    return;
+  }
+  activeChapterNum = num;
+  activeSectionId  = null;
+  activeSubId      = null;
   renderNav();
-  if (activeSectionId) renderSection(activeSectionId);
-  else showEmpty();
+
+  const data = CHAPTER_DATA[String(num)];
+  const ch   = CHAPTERS.find(c => c.num === num);
+  if (data) {
+    document.getElementById('header-chapter-title').textContent = `Ch ${num} · ${data.title}`;
+    renderChapterOverview(num);
+  } else {
+    document.getElementById('header-chapter-title').textContent = `Ch ${num} · ${ch.title}`;
+    showNoData(ch);
+  }
 }
 
-function selectSubsection(secId, subId) {
-  activeSectionId = secId;
-  activeSubsectionId = subId;
+function selectSub(chNum, secId, subId) {
+  activeChapterNum = chNum;
+  activeSectionId  = secId;
+  activeSubId      = subId;
   renderNav();
-  renderSection(secId, subId);
+  const data = CHAPTER_DATA[String(chNum)];
+  if (data) renderSection(data, secId, subId);
 }
 
 function handleSearch() {
@@ -782,8 +972,8 @@ function handleSearch() {
 
 function handleScroll() {
   const canvas = document.getElementById('canvas');
-  const fill = document.getElementById('progress-fill');
-  const total = canvas.scrollHeight - canvas.clientHeight;
+  const fill   = document.getElementById('progress-fill');
+  const total  = canvas.scrollHeight - canvas.clientHeight;
   fill.style.width = total > 0 ? (canvas.scrollTop / total * 100) + '%' : '0%';
 }
 
@@ -793,37 +983,140 @@ function setView(v) {
   ['notes','flashcards','glossary'].forEach(id => {
     document.getElementById('tab-' + id).classList.toggle('active', id === v);
   });
-  if (activeSectionId) renderSection(activeSectionId, activeSubsectionId);
-  else if (v !== 'notes') renderGlobalView(v);
-  else showEmpty();
+  if (activeChapterNum !== null) {
+    const data = CHAPTER_DATA[String(activeChapterNum)];
+    if (data) {
+      if (activeSectionId) {
+        renderSection(data, activeSectionId, activeSubId);
+      } else {
+        if (v === 'notes') renderChapterOverview(activeChapterNum);
+        else renderGlobalView(v, data);
+      }
+    }
+  } else {
+    showWelcome();
+  }
 }
 
-function showEmpty() {
+// ── WELCOME / CHAPTER INDEX ───────────────────────────────
+function showWelcome() {
+  const loadedNums = Object.keys(CHAPTER_DATA).map(Number);
+  let html = `
+    <div style="max-width:800px;margin:0 auto;">
+      <div class="section-hero">
+        <div class="section-eyebrow">SA1 · Health and Care · Advanced</div>
+        <div class="section-name">Revision Notes</div>
+        <p style="font-size:13px;color:var(--text-dim);line-height:1.7;margin-top:8px;">
+          All 27 chapters of the SA1 course. Chapters with notes loaded are highlighted —
+          select any chapter to begin revising. Upload additional chapter JSON files to expand your notes.
+        </p>
+      </div>`;
+
+  // Stats row
+  const totalPages = CHAPTERS.reduce((s, c) => s + c.pages, 0);
+  html += `<div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:28px;">
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:10px 16px;display:flex;align-items:center;gap:10px;">
+      <span style="font-family:var(--mono);font-size:20px;font-weight:700;color:var(--accent);">${CHAPTERS.length}</span>
+      <span style="font-size:11px;color:var(--text-dim);">Chapters</span>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:10px 16px;display:flex;align-items:center;gap:10px;">
+      <span style="font-family:var(--mono);font-size:20px;font-weight:700;color:var(--green);">${loadedNums.length}</span>
+      <span style="font-size:11px;color:var(--text-dim);">Loaded</span>
+    </div>
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:10px 16px;display:flex;align-items:center;gap:10px;">
+      <span style="font-family:var(--mono);font-size:20px;font-weight:700;color:var(--blue);">${totalPages}</span>
+      <span style="font-size:11px;color:var(--text-dim);">Total pages</span>
+    </div>
+  </div>`;
+
+  // Chapter grid by part
+  let lastPart = 'NONE';
+  html += `<div class="welcome-grid">`;
+
+  CHAPTERS.forEach(ch => {
+    const hasData = !!CHAPTER_DATA[String(ch.num)];
+    const chLabel = ch.num === 0 ? 'Ch 0' : `Ch ${ch.num}`;
+    html += `<div class="welcome-card ${!hasData ? 'no-data' : ''}" onclick="${hasData ? `toggleChapter(${ch.num})` : ''}">
+      <span class="wc-num ${!hasData ? 'no-data' : ''}">${chLabel}</span>
+      <span class="wc-title">${ch.title}</span>
+      ${hasData ? `<span class="wc-badge">✓ loaded</span>` : `<span style="font-family:var(--mono);font-size:9px;color:var(--border-hi);margin-left:auto;flex-shrink:0;">${ch.pages}pp</span>`}
+    </div>`;
+  });
+
+  html += `</div></div>`;
+  document.getElementById('content-area').innerHTML = html;
+  document.getElementById('canvas').scrollTop = 0;
+}
+
+function showNoData(ch) {
   document.getElementById('content-area').innerHTML = `
     <div class="content-empty">
-      <div class="icon">📖</div>
-      <h2>Select a section</h2>
-      <p>Choose a product section from the sidebar to begin revising.</p>
+      <div class="icon">📂</div>
+      <h2>Ch ${ch.num} · ${ch.title}</h2>
+      <p>Notes for this chapter haven't been uploaded yet.<br>
+      Add the chapter JSON to <code style="font-family:var(--mono);font-size:11px;color:var(--accent);">CHAPTER_DATA["${ch.num}"]</code> in the script to enable it.<br><br>
+      <span style="color:var(--text-dim);">${ch.pages} pages · ${ch.part ? `Part ${ch.part}` : 'Reference'}</span></p>
     </div>`;
+}
+
+// ── CHAPTER OVERVIEW (notes view, no sub selected) ────────
+function renderChapterOverview(chNum) {
+  const data = CHAPTER_DATA[String(chNum)];
+  if (!data) return;
+  const ch = CHAPTERS.find(c => c.num === chNum);
+
+  if (activeView === 'flashcards') { renderGlobalView('flashcards', data); return; }
+  if (activeView === 'glossary')   { renderGlobalView('glossary', data);   return; }
+
+  let html = `<div class="section-hero">
+    <div class="section-eyebrow">SA1 · Chapter ${chNum}${ch && ch.part ? ` · Part ${ch.part}` : ''}</div>
+    <div class="section-name">${data.title}</div>
+    <div class="syllabus-tags">
+      ${(data.syllabus_refs || []).map(r => `<span class="tag tag-syllabus">${r}</span>`).join('')}
+      ${ch ? `<span class="tag tag-pages">${ch.pages} pages</span>` : ''}
+      ${(data.products_covered || []).map(p => `<span class="tag tag-product">${p}</span>`).join('')}
+    </div>
+  </div>`;
+
+  // Section overview cards
+  html += `<div style="display:flex;flex-direction:column;gap:8px;">`;
+  data.sections.forEach(sec => {
+    html += `<div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);padding:14px 18px;cursor:pointer;transition:border-color .15s;" onmouseover="this.style.borderColor='var(--border-hi)'" onmouseout="this.style.borderColor='var(--border)'" onclick="selectSub(${chNum}, '${sec.id}', '${sec.subsections[0].id}')">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
+        <span style="font-family:var(--mono);font-size:10px;color:var(--accent);background:var(--accent-lo);padding:1px 6px;border-radius:3px;">${sec.id}</span>
+        <span style="font-family:var(--serif);font-size:16px;color:var(--text-hi);">${sec.title}</span>
+      </div>
+      <div style="display:flex;gap:12px;font-size:11px;color:var(--text-dim);">
+        <span>${sec.subsections.length} subsections</span>
+        <span>·</span>
+        <span>${sec.subsections.reduce((s,sub) => s + sub.bullets.length, 0)} key points</span>
+        <span>·</span>
+        <span>${sec.subsections.reduce((s,sub) => s + (sub.key_terms||[]).length, 0)} terms</span>
+      </div>
+    </div>`;
+  });
+  html += `</div>`;
+
+  document.getElementById('content-area').innerHTML = html;
+  document.getElementById('canvas').scrollTop = 0;
 }
 
 // ── RENDER SECTION ────────────────────────────────────────
-function renderSection(secId, scrollToSubId) {
-  const sec = DATA.sections.find(s => s.id === secId);
+function renderSection(data, secId, scrollToSubId) {
+  const sec = data.sections.find(s => s.id === secId);
   if (!sec) return;
 
-  if (activeView === 'flashcards') { renderFlashcards(sec); return; }
-  if (activeView === 'glossary')   { renderGlossary(sec);    return; }
+  if (activeView === 'flashcards') { renderFlashcards(sec, data.chapter); return; }
+  if (activeView === 'glossary')   { renderGlossary(sec, data.chapter);   return; }
 
-  let html = `
-    <div class="section-hero">
-      <div class="section-eyebrow">SA1 · Chapter 3 · Section ${sec.id}</div>
-      <div class="section-name">${sec.title}</div>
-      <div class="syllabus-tags">
-        ${DATA.syllabus_refs.map(r => `<span class="tag tag-syllabus">${r}</span>`).join('')}
-        <span class="tag tag-product">${sec.title.replace(' (PMI)', '')}</span>
-      </div>
-    </div>`;
+  let html = `<div class="section-hero">
+    <div class="section-eyebrow">${data.chapter} · Section ${sec.id}</div>
+    <div class="section-name">${sec.title}</div>
+    <div class="syllabus-tags">
+      ${(data.syllabus_refs || []).map(r => `<span class="tag tag-syllabus">${r}</span>`).join('')}
+      <span class="tag tag-product">${sec.title}</span>
+    </div>
+  </div>`;
 
   sec.subsections.forEach(sub => {
     const allTerms = sub.key_terms || [];
@@ -835,7 +1128,6 @@ function renderSection(secId, scrollToSubId) {
         <span class="sub-title">${sub.title}</span>
       </div>`;
 
-    // bullets
     html += `<div class="row-label">Key Points</div>
       <div class="bullets-list">
         ${sub.bullets.map(b => `
@@ -845,7 +1137,6 @@ function renderSection(secId, scrollToSubId) {
           </div>`).join('')}
       </div>`;
 
-    // terms
     if (allTerms.length) {
       html += `<div class="row-label">Key Terms</div>
         <div class="terms-grid">
@@ -857,7 +1148,6 @@ function renderSection(secId, scrollToSubId) {
         </div>`;
     }
 
-    // Q&A
     if (allQA.length) {
       html += `<div class="row-label">Exam Q&amp;A</div>
         ${allQA.map((qa, i) => `
@@ -889,29 +1179,25 @@ function toggleQA(id) {
 }
 
 // ── FLASHCARDS ────────────────────────────────────────────
-function renderFlashcards(sec) {
+function renderFlashcards(sec, chapterLabel) {
   const cards = [];
-
   sec.subsections.forEach(sub => {
-    // terms as cards
     (sub.key_terms || []).forEach(t => {
-      cards.push({ type: 'term', src: sub.id + ' · ' + sub.title, q: t.term, a: t.definition });
+      cards.push({ src: sub.id + ' · ' + sub.title, q: t.term, a: t.definition });
     });
-    // Q&A cards
     (sub.exam_qa || []).forEach(qa => {
-      cards.push({ type: 'qa', src: sub.id + ' · ' + sub.title, q: qa.q, a: qa.a });
+      cards.push({ src: sub.id + ' · ' + sub.title, q: qa.q, a: qa.a });
     });
-    // random bullet cards (every 3rd bullet)
     sub.bullets.filter((_, i) => i % 3 === 0).forEach(b => {
       const parts = b.split('—');
       if (parts.length > 1) {
-        cards.push({ type: 'point', src: sub.id + ' · ' + sub.title, q: parts[0].trim() + ' — ?', a: parts[1].trim() });
+        cards.push({ src: sub.id + ' · ' + sub.title, q: parts[0].trim() + ' — ?', a: parts[1].trim() });
       }
     });
   });
 
   if (cards.length === 0) {
-    document.getElementById('content-area').innerHTML = `<div class="content-empty"><div class="icon">🃏</div><h2>No flashcards yet</h2><p>Add key terms or Q&A to this section.</p></div>`;
+    document.getElementById('content-area').innerHTML = `<div class="content-empty"><div class="icon">🃏</div><h2>No flashcards yet</h2><p>Add key terms or exam Q&A to this section to generate cards.</p></div>`;
     return;
   }
 
@@ -944,7 +1230,7 @@ function flipCard(id) {
 }
 
 // ── GLOSSARY ──────────────────────────────────────────────
-function renderGlossary(sec) {
+function renderGlossary(sec, chapterLabel) {
   const terms = sec.subsections.flatMap(sub => sub.key_terms || []);
 
   if (!terms.length) {
@@ -966,14 +1252,10 @@ function renderGlossary(sec) {
     </div>`;
 }
 
-function renderGlobalView(v) {
-  if (v === 'flashcards') {
-    const fakeAll = { title: 'All Sections', subsections: DATA.sections.flatMap(s => s.subsections) };
-    renderFlashcards(fakeAll);
-  } else {
-    const fakeAll = { title: 'All Sections', subsections: DATA.sections.flatMap(s => s.subsections) };
-    renderGlossary(fakeAll);
-  }
+function renderGlobalView(v, data) {
+  const fakeAll = { title: 'All Sections', subsections: data.sections.flatMap(s => s.subsections) };
+  if (v === 'flashcards') renderFlashcards(fakeAll, data.chapter);
+  else                    renderGlossary(fakeAll, data.chapter);
 }
 </script>
 </body>
