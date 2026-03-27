@@ -11,6 +11,7 @@
 
         :root {
             --bg: #0a0c10;
+            --header-bg: #11141b;
             --pane1-bg: #11141b;
             --pane2-bg: #161a23;
             --canvas-bg: #0f1117;
@@ -35,26 +36,40 @@
             display: flex;
             align-items: center;
             padding: 0 24px;
-            background: var(--pane1-bg);
+            background: var(--header-bg);
             z-index: 1000;
+            gap: 40px;
         }
-        .logo { font-weight: 700; font-size: 18px; color: var(--accent); letter-spacing: -0.02em; }
-        .top-nav-btn {
-            margin-left: auto;
-            padding: 8px 16px;
-            border-radius: 8px;
-            background: var(--surface);
-            border: 1px solid var(--border);
-            color: var(--text);
-            font-size: 12px;
-            text-decoration: none;
+        .logo { font-weight: 700; font-size: 16px; color: var(--accent); white-space: nowrap; }
+
+        /* Topic Selectors (Top Bar) */
+        .topic-selectors {
+            display: flex;
+            gap: 4px;
+            overflow-x: auto;
+            flex: 1;
+            padding: 4px;
+        }
+        .topic-btn {
+            padding: 6px 14px;
+            border-radius: 6px;
+            background: transparent;
+            border: 1px solid transparent;
+            color: var(--text-dim);
+            font-size: 11px;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
             transition: all 0.2s;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
         }
-        .top-nav-btn:hover { background: var(--surface-hover); border-color: var(--accent); }
+        .topic-btn:hover { color: var(--text); background: var(--surface); }
+        .topic-btn.active { color: var(--accent); background: var(--accent-glow); border-color: var(--accent); }
 
         .workspace { display: flex; flex: 1; overflow: hidden; }
 
-        /* Pane 1: Sequential Hierarchy (Accordion) */
+        /* Pane 1: Hierarchy */
         .hierarchy-pane {
             width: 320px;
             background: var(--pane1-bg);
@@ -70,120 +85,92 @@
             text-transform: uppercase;
             letter-spacing: 0.15em;
             padding: 24px 20px 12px;
+            background: var(--pane1-bg);
             position: sticky;
             top: 0;
-            background: var(--pane1-bg);
             z-index: 100;
         }
         
         .chapter-node { border-bottom: 1px solid rgba(255,255,255,0.03); }
-        .chapter-header {
-            padding: 14px 20px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            transition: background 0.2s;
-        }
+        .chapter-header { padding: 14px 20px; cursor: pointer; display: flex; align-items: center; justify-content: space-between; transition: 0.2s; }
         .chapter-header:hover { background: var(--surface); }
         .chapter-header.active { background: var(--accent-glow); border-left: 3px solid var(--accent); }
-        .ch-info { display: flex; flex-direction: column; }
         .ch-id { font-family: var(--mono); font-size: 10px; color: var(--accent); font-weight: 600; margin-bottom: 2px; }
-        .ch-title { font-size: 14px; font-weight: 600; }
-        .ch-chevron { font-size: 14px; color: var(--text-dim); transition: transform 0.3s; }
+        .ch-title { font-size: 13px; font-weight: 600; }
+        .ch-chevron { font-size: 12px; color: var(--text-dim); transition: transform 0.3s; }
         .chapter-node.open .ch-chevron { transform: rotate(90deg); }
 
         .sections-list { display: none; background: rgba(0,0,0,0.2); padding: 4px 0; }
         .chapter-node.open .sections-list { display: block; }
-        .section-node {
-            padding: 8px 20px 8px 40px;
-            cursor: pointer;
-            font-size: 13px;
-            color: var(--text-dim);
-            transition: all 0.2s;
-            border-left: 2px solid transparent;
-        }
-        .section-node:hover { color: var(--text); background: rgba(255,255,255,0.03); }
-        .section-node.active { color: var(--accent); border-left-color: var(--accent); font-weight: 500; }
+        .section-node { padding: 8px 20px 8px 40px; cursor: pointer; font-size: 12px; color: var(--text-dim); border-left: 2px solid transparent; }
+        .section-node:hover { color: #fff; background: rgba(255,255,255,0.03); }
+        .section-node.active { color: var(--accent); border-left-color: var(--accent); font-weight: 600; }
 
-        /* Pane 2: Synthesis Sidebar (Middle) */
-        .synthesis-pane {
-            width: 340px;
-            background: var(--pane2-bg);
-            border-right: 1px solid var(--border);
-            display: flex;
-            flex-direction: column;
-            overflow-y: auto;
-            padding: 20px;
-        }
-        .syn-card {
-            background: var(--surface);
-            border-radius: 12px;
-            border: 1px solid var(--border);
-            padding: 16px;
-            margin-bottom: 16px;
-        }
-        .syn-tag { font-size: 9px; font-weight: 700; text-transform: uppercase; color: var(--accent); border: 1px solid var(--accent); padding: 2px 6px; border-radius: 4px; display: inline-block; margin-bottom: 10px; }
-        .syn-title { font-size: 15px; font-weight: 700; margin-bottom: 8px; }
-        .syn-desc { font-size: 13px; color: var(--text-dim); line-height: 1.5; }
+        /* Pane 2: Synthesis */
+        .synthesis-pane { width: 340px; background: var(--pane2-bg); border-right: 1px solid var(--border); overflow-y: auto; padding: 20px; }
+        .syn-card { background: var(--surface); border-radius: 10px; border: 1px solid var(--border); padding: 14px; margin-bottom: 12px; }
+        .syn-tag { font-size: 9px; font-weight: 700; text-transform: uppercase; color: var(--accent); border: 1px solid var(--accent); padding: 1px 5px; border-radius: 3px; display: inline-block; margin-bottom: 8px; }
+        .syn-title { font-size: 14px; font-weight: 700; margin-bottom: 6px; }
+        .syn-desc { font-size: 12px; color: var(--text-dim); line-height: 1.5; }
 
-        /* Pane 3: Content Canvas (Right) */
-        .canvas {
-            flex: 1;
-            background: var(--canvas-bg);
-            overflow-y: auto;
-            padding: 60px 8%;
-            scroll-behavior: smooth;
-        }
-        .canvas-header { margin-bottom: 48px; border-bottom: 1px solid var(--border); padding-bottom: 32px; }
-        .canvas-title { font-size: 40px; font-weight: 800; letter-spacing: -0.03em; }
+        /* Pane 3: Canvas */
+        .canvas { flex: 1; background: var(--canvas-bg); overflow-y: auto; padding: 60px 8%; scroll-behavior: smooth; }
+        .canvas-header { margin-bottom: 40px; border-bottom: 1px solid var(--border); padding-bottom: 24px; }
+        .canvas-title { font-size: 32px; font-weight: 800; letter-spacing: -0.02em; }
 
-        /* Node Styling */
-        .node-h3 { font-size: 24px; font-weight: 700; color: #fff; margin-top: 60px; margin-bottom: 30px; }
-        .node-h4 { font-size: 18px; font-weight: 600; color: var(--accent); margin-top: 40px; margin-bottom: 16px; }
-        .node-point { display: flex; gap: 14px; margin-bottom: 12px; line-height: 1.6; color: #cbd5e1; font-size: 16px; }
-        .node-point::before { content: "•"; color: var(--accent); font-size: 20px; flex-shrink: 0; margin-top: -2px; }
+        .node-h3 { font-size: 22px; font-weight: 700; color: #fff; margin-top: 50px; margin-bottom: 20px; border-bottom: 1px solid var(--border); padding-bottom: 8px; }
+        .node-h4 { font-size: 17px; font-weight: 600; color: var(--accent); margin-top: 32px; margin-bottom: 16px; }
+        .node-point { display: flex; gap: 12px; margin-bottom: 10px; line-height: 1.6; color: #cbd5e1; font-size: 15px; }
+        .node-point::before { content: "•"; color: var(--accent); font-size: 18px; flex-shrink: 0; }
         .node-bold { font-weight: 700; color: #fff; margin-right: 4px; }
         
-        .empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; color: var(--text-dim); opacity: 0.4; }
+        .empty-state { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; color: var(--text-dim); opacity: 0.3; text-align: center; }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="logo">SA1 SYLLABUS MASTER</div>
-        <a href="SA1ity_Check.html" class="top-nav-btn">Assessment Mode</a>
+        <div class="logo">SA1 SYLLABUS</div>
+        <div class="topic-selectors" id="topic-bar">
+            <!-- Part 1 to 6 buttons -->
+        </div>
+        <a href="SA1ity_Check.html" class="top-nav-btn">Tracker</a>
     </header>
 
     <div class="workspace">
-        <!-- Pane 1: Sequential Hierarchy -->
         <div class="hierarchy-pane">
-            <div class="pane-title">Course Hierarchy</div>
-            <div id="tree-container">
-                <!-- Chapters & Sections populate here -->
-            </div>
+            <div class="pane-title" id="chapter-pane-title">All Chapters</div>
+            <div id="tree-container"></div>
         </div>
 
-        <!-- Pane 2: Synthesis & Meta-Sidebar -->
         <div class="synthesis-pane" id="syn-pane">
-            <div class="pane-title">Expert Overlays</div>
+            <div class="pane-title">Expert Synthesis</div>
             <div id="syn-container">
-                <div class="empty-state" style="margin-top:40px;">Select a section to view<br/>Related Expert Synthesis</div>
+                <div class="empty-state">Select content to view synthesis</div>
             </div>
         </div>
 
-        <!-- Pane 3: Reading Canvas -->
         <div class="canvas" id="canvas">
             <div id="canvas-content" style="display:none;"></div>
             <div id="canvas-placeholder" class="empty-state">
-                <div style="font-size:48px;">📑</div>
-                <div style="font-size:16px;">Select a chapter or section<br/>to begin your study stream</div>
+                <div style="font-size:40px;">📂</div>
+                <div style="font-size:14px;">Select a chapter to begin</div>
             </div>
         </div>
     </div>
 
     <script>
+        const PARTS = [
+            { id: 1, name: "Products & Environment" },
+            { id: 2, name: "Regulation & Taxation" },
+            { id: 3, name: "Valuation & Solvency" },
+            { id: 4, name: "Standards & ALM" },
+            { id: 5, name: "Monitoring & Surplus" },
+            { id: 6, name: "Strategies & Management" }
+        ];
+
         let unifiedData = null;
+        let activePart = null;
         let activeChapter = null;
         let activeSectionIdx = null;
 
@@ -191,9 +178,27 @@
             try {
                 const res = await fetch('data/Unified_Syllabus.json?t=' + Date.now());
                 unifiedData = await res.json();
+                renderTopicBar();
                 renderHierarchy();
                 mermaid.initialize({ startOnLoad: false, theme: 'dark' });
             } catch (e) { console.error(e); }
+        }
+
+        function renderTopicBar() {
+            const bar = document.getElementById('topic-bar');
+            bar.innerHTML = PARTS.map(pt => `
+                <button class="topic-btn ${activePart === pt.id ? 'active' : ''}" 
+                        onclick="filterByPart(${pt.id})">
+                    ${pt.id}. ${pt.name}
+                </button>
+            `).join('') + `<button class="topic-btn ${!activePart ? 'active' : ''}" onclick="filterByPart(null)">All</button>`;
+        }
+
+        function filterByPart(id) {
+            activePart = id;
+            renderTopicBar();
+            renderHierarchy();
+            document.getElementById('chapter-pane-title').textContent = id ? PARTS.find(p => p.id === id).name : "All Chapters";
         }
 
         function renderHierarchy() {
@@ -203,6 +208,13 @@
             for(let i=1; i<=27; i++) {
                 const id = "Ch" + i;
                 const data = unifiedData.Chapters[id];
+                const meta = data ? data.meta : { part: Math.ceil(i/4.5) }; // Fallback part mapping if missing
+
+                // Filtering Logic: Match simple part range logic if meta is missing
+                const actualPart = meta ? meta.part : (i <= 6 ? 1 : i <= 10 ? 2 : i <= 14 ? 3 : i <= 18 ? 4 : i <= 20 ? 5 : 6);
+                
+                if (activePart && actualPart !== activePart) continue;
+
                 const isLocked = !data;
                 const isOpen = activeChapter === id;
 
@@ -235,9 +247,7 @@
         function toggleChapter(id) {
             if (!unifiedData.Chapters[id]) return;
             activeChapter = (activeChapter === id) ? null : id;
-            if (activeChapter) {
-                renderCanvas(unifiedData.Chapters[id]);
-            }
+            if (activeChapter) renderCanvas(unifiedData.Chapters[id]);
             renderHierarchy();
         }
 
@@ -245,12 +255,9 @@
             activeChapter = chId;
             activeSectionIdx = idx;
             renderHierarchy();
-            
-            // Scroll Canvas
             const safeId = "sec-" + text.replace(/\s+/g, '_');
             const el = document.getElementById(safeId);
             if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-
             renderSynthesis(chId, idx);
         }
 
@@ -259,29 +266,19 @@
             const container = document.getElementById('canvas-content');
             container.style.display = 'block';
 
-            let html = `
-                <div class="canvas-header">
-                    <div class="ch-id">${activeChapter.toUpperCase()} MASTER STREAM</div>
-                    <div class="canvas-title">${data.title}</div>
-                </div>
-                <div class="content-body">
-            `;
-
+            let html = `<div class="canvas-header"><div class="ch-id">${activeChapter.toUpperCase()}</div><div class="canvas-title">${data.title}</div></div><div class="content-body">`;
             data.content.forEach(node => {
                 const type = node.type;
                 const text = node.text || "";
                 const bold = node.bold || "";
-
                 if (type === "h3" || type === "h4") {
-                    const id = "sec-" + text.replace(/\s+/g, '_');
-                    html += `<div class="node-${type}" id="${id}">${text}</div>`;
+                    html += `<div class="node-${type}" id="sec-${text.replace(/\s+/g, '_')}">${text}</div>`;
                 } else if (type === "point") {
                     html += `<div class="node-point"><span>${bold ? `<span class="node-bold">${bold}:</span>` : ''}${text}</span></div>`;
                 } else if (type === "mermaid") {
                     html += `<div class="mermaid">${text}</div>`;
                 }
             });
-
             html += `</div>`;
             container.innerHTML = html;
             setTimeout(() => mermaid.run(), 50);
@@ -290,33 +287,16 @@
         function renderSynthesis(chId, secIdx) {
             const container = document.getElementById('syn-container');
             const data = unifiedData.Chapters[chId];
-            
-            // Logic: Find the "Expert Synthesis" text node closest to this section
             let relatedNodes = [];
             let foundExpert = false;
             for(let i = secIdx; i < data.content.length; i++) {
                 const node = data.content[i];
-                if (node.type === "text" && node.text.includes("Expert Synthesis")) {
-                    foundExpert = true;
-                }
-                if (foundExpert && node.type === "point" && (node.bold.includes("P") || node.bold.includes("Pillar"))) {
-                    relatedNodes.push(node);
-                }
+                if (node.type === "text" && node.text.includes("Expert Synthesis")) foundExpert = true;
+                if (foundExpert && node.type === "point" && (node.bold.includes("P") || node.bold.includes("Pillar"))) relatedNodes.push(node);
                 if (foundExpert && (node.type === "h3" || node.type === "h4") && i > secIdx) break;
             }
-
-            if (relatedNodes.length === 0) {
-                container.innerHTML = `<div class="empty-state" style="margin-top:40px;">No specific synthesis points<br/>for this section yet.</div>`;
-                return;
-            }
-
-            container.innerHTML = relatedNodes.map(n => `
-                <div class="syn-card">
-                    <span class="syn-tag">Pillar Framework</span>
-                    <div class="syn-title">${n.bold}</div>
-                    <div class="syn-desc">${n.text}</div>
-                </div>
-            `).join('');
+            if (relatedNodes.length === 0) { container.innerHTML = `<div class="empty-state">No specific synthesis points</div>`; return; }
+            container.innerHTML = relatedNodes.map(n => `<div class="syn-card"><span class="syn-tag">Expert Detail</span><div class="syn-title">${n.bold}</div><div class="syn-desc">${n.text}</div></div>`).join('');
         }
 
         window.onload = init;
