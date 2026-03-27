@@ -761,26 +761,11 @@ function renderMidContent(theme) {
     return;
   }
 
-  // Structured Logic: Group content by headers
+  // Group content into subtopics — FrameworkParser auto-detects whether h3 or h4
+  // is the section divider (handles standard h4-pattern AND h3-dominant topics like Reinsurance).
   const content = entry.content || [];
-  let chapterTitle = '';
-  const subtopics = [];
-  let currentST = null;
-
-  content.forEach(node => {
-    if (node.type === 'h3') {
-      chapterTitle = node.text;
-    } else if (node.type === 'h4') {
-      currentST = { title: node.text, nodes: [] };
-      subtopics.push(currentST);
-    } else {
-      if (!currentST) {
-        currentST = { title: 'Overview', nodes: [] };
-        subtopics.push(currentST);
-      }
-      currentST.nodes.push(node);
-    }
-  });
+  const subtopics = FrameworkParser.groupIntoSubtopics(content);
+  const chapterTitle = FrameworkParser.extractHeading(content);
 
   currentFrameworkData = subtopics;
   listEl.innerHTML = '';

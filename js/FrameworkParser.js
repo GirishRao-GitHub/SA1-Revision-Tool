@@ -128,6 +128,103 @@ const FrameworkParser = {
     countPoints(content) {
         if (!content || !Array.isArray(content)) return 0;
         return content.filter(n => ['point', 'sub', 'numbered'].includes(n.type)).length;
+    },
+
+    /**
+     * Detects whether h3 or h4 is the primary section divider for a content array.
+     *
+     * Rule: if more than one h3 node exists AND h4 count is 0 or 1,
+     * the author used h3 as the section divider (e.g. Reinsurance).
+     * Otherwise the normal pattern applies: single decorative h3 + multiple h4 dividers.
+     *
+     * @param {Array} content
+     * @returns {'h3'|'h4'}
+     */
+    detectDividerType(content) {
+        if (!content || !Array.isArray(content)) return 'h4';
+        const h3Count = content.filter(n => n.type === 'h3').length;
+        const h4Count = content.filter(n => n.type === 'h4').length;
+        return (h3Count > 1 && h4Count <= 1) ? 'h3' : 'h4';
+    },
+
+    /**
+     * Groups a flat content array into subtopic objects suitable for mid-pane rendering.
+     * Automatically detects whether h3 or h4 is the section divider.
+     *
+     * When divider = 'h4' (standard pattern):
+     *   - Single h3 node is skipped here (use extractHeading() separately).
+     *   - Each h4 starts a new subtopic.
+     *   - Nodes before the first h4 fall into an implicit 'Overview' subtopic.
+     *
+     * When divider = 'h3' (Reinsurance-pattern):
+     *   - Each h3 starts a new subtopic.
+     *   - h4 nodes are kept as inline nodes within their containing subtopic.
+     *   - No separate heading is extracted.
+     *
+     * @param {Array} content
+     * @returns {Array<{title: string, nodes: Array}>}
+     */
+    groupIntoSubtopics(content) {
+        if (!content || !Array.isArray(content)) return [];
+        const divider = this.detectDividerType(content);
+        const subtopics = [];
+        let current = null;
+
+        content.forEach(node => {
+            if (node.type === divider) {
+                // This node IS the section header → start a new subtopic
+                current = { title: node.text || '', nodes: [] };
+                subtopics.push(current);
+            } else if (node.type === 'h3' && divider === 'h4') {
+                // Decorative chapter heading — skip here, surfaced via extractHeading()
+            } else if (node.type === 'h4' && divider === 'h3') {
+                // h4 is secondary within an h3-dominant topic → keep inline
+                if (!current) { current = { title: 'Overview', nodes: [] }; subtopics.push(current); }
+                current.nodes.push(node);
+            } else {
+                // Regular content node
+                if (!current) { current = { title: 'Overview', nodes: [] }; subtopics.push(current); }
+                current.nodes.push(node);
+            }
+        });
+
+        return subtopics;
+    },
+
+    /**
+     * Returns the decorative chapter heading for mid-pane display.
+     * Only meaningful when divider = 'h4' (standard pattern), where a single h3
+     * acts as the overall topic label. Returns '' when h3 nodes are the dividers
+     * (in that case the subtopic titles themselves carry the section names).
+     *
+     * @param {Array} content
+     * @returns {string}
+     */
+    extractHeading(content) {
+        if (!content || !Array.isArray(content)) return '';
+        if (this.detectDividerType(content) === 'h3') return '';
+        const h3node = content.find(n => n.type === 'h3');
+        return h3node ? (h3node.text || '') : '';
+    },
+
+    /**
+     * Returns an array of sub-theme label strings for a topic.
+     * Used by consumers such as MASTER_TAXONOMY in SA1ity_Check to populate
+     * hint text and gap-analysis keyword matching.
+     *
+     * Automatically picks the correct divider type so that h3-dominant topics
+     * (e.g. Reinsurance) return all 7 section titles rather than just the single h4.
+     *
+     * @param {Array} content
+     * @returns {string[]}
+     */
+    extractSubThemes(content) {
+        if (!content || !Array.isArray(content)) return [];
+        const divider = this.detectDividerType(content);
+        return content
+            .filter(n => n.type === divider)
+            .map(n => (n.text || '').trim())
+            .filter(Boolean);
     }
 };
 

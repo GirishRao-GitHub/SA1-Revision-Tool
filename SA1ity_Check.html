@@ -891,18 +891,14 @@ window.onload = async function() {
         } catch(e) { console.warn("Frameworks not loaded", e); }
     }
     if (Object.keys(TOPIC_FRAMEWORKS).length > 0) {
-            // Populate MASTER_TAXONOMY sub-themes from framework content
+            // Populate MASTER_TAXONOMY sub-themes from framework content.
+            // extractSubThemes() auto-detects whether h3 or h4 is the section divider,
+            // so h3-dominant topics like Reinsurance return all their section titles.
             MASTER_TAXONOMY = {};
             Object.keys(TOPIC_FRAMEWORKS).forEach(key => {
                 const entry = TOPIC_FRAMEWORKS[key];
                 const content = entry.content || [];
-                const subThemes = [];
-                content.forEach(node => {
-                    if (node.type === 'h4') {
-                        subThemes.push(node.text.trim());
-                    }
-                });
-                MASTER_TAXONOMY[key] = subThemes;
+                MASTER_TAXONOMY[key] = FrameworkParser.extractSubThemes(content);
             });
             
             // Add Smart Aliases for common shorthand themes found in exam papers
@@ -1344,26 +1340,11 @@ function renderFrameworkMidContent(theme) {
         return;
     }
 
-    // Structured Logic: Group content by headers
+    // Group content into subtopics — FrameworkParser auto-detects whether h3 or h4
+    // is the section divider (handles standard h4-pattern AND h3-dominant topics like Reinsurance).
     const content = entry.content || [];
-    let chapterTitle = '';
-    const subtopics = [];
-    let currentST = null;
-
-    content.forEach(node => {
-        if (node.type === 'h3') {
-            chapterTitle = node.text;
-        } else if (node.type === 'h4') {
-            currentST = { title: node.text, nodes: [] };
-            subtopics.push(currentST);
-        } else {
-            if (!currentST) {
-                currentST = { title: 'Overview', nodes: [] };
-                subtopics.push(currentST);
-            }
-            currentST.nodes.push(node);
-        }
-    });
+    const subtopics = FrameworkParser.groupIntoSubtopics(content);
+    const chapterTitle = FrameworkParser.extractHeading(content);
 
     currentFrameworkData = subtopics;
     listEl.innerHTML = '';
