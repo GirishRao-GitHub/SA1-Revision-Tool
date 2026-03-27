@@ -2986,22 +2986,308 @@
     "content": [
       {
         "type": "h3",
-        "text": "Modeling Framework"
+        "text": "Modelling Framework (SP1 Chapter 11)"
+      },
+      {
+        "type": "h4",
+        "text": "1. Uses of Models"
       },
       {
         "type": "point",
-        "bold": "Model Choice",
-        "text": "Multi-state (Markov) vs. Formula/Equation of Value. Deterministic vs Stochastic."
+        "bold": "Core purpose",
+        "text": "Enable the actuary to give appropriate advice so the insurer can be run in a sound financial way. Almost all actuarial work involves a model of some sort."
       },
       {
         "type": "point",
-        "bold": "Governance",
-        "text": "Peer review, backtesting against actual experience, sensitivity testing."
+        "bold": "Key uses",
+        "text": "Pricing and product design; setting statutory and management account reserves; costing and reserving for options and guarantees; assessing profitability of new and existing business; analysis of surplus; embedded value calculations; determining capital requirements; assessing return on capital; assessing reinsurance needs; setting investment strategy (ALM); ongoing financial projections (revenue account, balance sheet, solvency); expense budgeting; valuing the business for merger/acquisition."
       },
       {
         "type": "point",
-        "bold": "Parameters",
-        "text": "Best estimate vs. Prudent, allowance for medical inflation and longevity."
+        "bold": "Modelling investigations",
+        "text": "Usually a variation on a common theme: projection of the company's balance sheet and revenue account (income statement / profit and loss account)."
+      },
+      {
+        "type": "h4",
+        "text": "2. Types of Model (by business scope)"
+      },
+      {
+        "type": "point",
+        "bold": "Single policy profit test model",
+        "text": "Projects expected cash and profit flows from a single policy from date of issue. Used for: pricing and product design."
+      },
+      {
+        "type": "point",
+        "bold": "New business model",
+        "text": "Projects all expected cash and profit flows arising from future sales of new business. Used for: assessing future capital requirements and overall return on capital; calculation of goodwill (appraisal value)."
+      },
+      {
+        "type": "point",
+        "bold": "Existing business model",
+        "text": "Projects all expected cash and profit flows from existing business at a particular time. Used for: assessing embedded value; testing solvency of existing business; analysing surplus."
+      },
+      {
+        "type": "point",
+        "bold": "Full model office",
+        "text": "Sum of new business model and existing business model. Used for: assessing impact of future management decisions on financial development; new business projections; embedded values; solvency; takeovers."
+      },
+      {
+        "type": "h4",
+        "text": "3. Objectives & Basic Features of a Health Insurance Model"
+      },
+      {
+        "type": "point",
+        "bold": "Model points",
+        "text": "A model point is a data record representing either a single policy or a group of policies, containing data on the most important policy characteristics. The number of model points is influenced by: computing power available; variability and complexity of contracts; age of the company; whether stochastic or deterministic; purpose/importance of investigation; time available; sensitivity of results to more/fewer points."
+      },
+      {
+        "type": "point",
+        "bold": "Operational requirements",
+        "text": "Model must be: adequately documented; easy to appreciate, communicate and display clearly; capable of independent verification for reasonableness; not overly complex (results must be interpretable and model must be cost-effective to run); capable of development and refinement; supported by a range of implementation methods for testing and parameterisation."
+      },
+      {
+        "type": "point",
+        "bold": "Health insurance specific: cashflows",
+        "text": "Must allow for all cashflows that may arise — premiums, benefits (including discretionary benefits such as options to convert, extend or increase cover without evidence of health), expenses, commission, tax."
+      },
+      {
+        "type": "point",
+        "bold": "Health insurance specific: reserves & solvency",
+        "text": "Must also allow for cashflows arising from any supervisory requirement to hold reserves (notional cashflows — no physical exchange of money) and to maintain an adequate margin of solvency capital."
+      },
+      {
+        "type": "point",
+        "bold": "Health insurance specific: states",
+        "text": "Must project cashflows separately from different states and reflect transitions between them (e.g. under IP: healthy lives paying premiums vs. disabled lives receiving benefit). Further subdivisions may be needed (e.g. different benefit levels under LTCI)."
+      },
+      {
+        "type": "point",
+        "bold": "Health insurance specific: interactions & dynamic links",
+        "text": "Cashflows must allow for interactions between assets and liabilities. The model should be dynamic — asset and liability parts programmed to interact as they do in reality (e.g. switching to matching assets if solvency deteriorates). Dynamic links are especially vital in stochastic models."
+      },
+      {
+        "type": "point",
+        "bold": "Health insurance specific: stochastic capability",
+        "text": "Ability to use stochastic models and simulation must be allowed for where appropriate (e.g. to simulate distribution of claims outgo or cost of guarantees). Stochastic modelling may be more important in health and care than pure life insurance, because future incidence experience is far less predictable (benefit amounts may vary with policy-specified inflation, medical inflation, or changes in accepted medical protocols)."
+      },
+      {
+        "type": "h4",
+        "text": "4. Deterministic vs Stochastic Models"
+      },
+      {
+        "type": "point",
+        "bold": "Deterministic — key features",
+        "text": "Each parameter has a fixed value. Model produces a point estimate. Sensitivity testing done by re-running with different parameter values. Essentially a 'one-question-one-answer' model."
+      },
+      {
+        "type": "point",
+        "bold": "Stochastic — key features",
+        "text": "Some parameters are allowed to vary with their own distribution functions. Model must be run many times using random samples. Produces results in the form of a probability distribution. Essentially a 'distribution-in-distribution-out' model."
+      },
+      {
+        "type": "point",
+        "bold": "When stochastic is invaluable",
+        "text": "(1) Assessing impact of guarantees; (2) When the variable of interest has a reasonably stable and predictable probability distribution (e.g. investment returns in a stable economy); (3) Indicating effect of year-on-year volatility (random fluctuations) on risk; (4) Identifying potentially high-risk future scenarios by tracing events leading to worst simulated outcomes."
+      },
+      {
+        "type": "point",
+        "bold": "Disadvantages of stochastic",
+        "text": "(1) Time and computing constraints — may require a simplified version of the model; (2) Sensitivity of results to the deterministically-chosen parameter values (e.g. assumed mean and variance if normal distribution used) — can lead to spurious accuracy: rubbish in = rubbish out."
+      },
+      {
+        "type": "point",
+        "bold": "Calibration — Risk Neutral (Market-Consistent)",
+        "text": "Typically used for valuation purposes, especially where there are options and guarantees. Focus: replicate market prices of actual financial instruments using a risk-neutral probability measure. Parameters chosen so average PV of modelled cashflows closely matches known market prices. If the model can reproduce prices of quoted assets, it should also give market-consistent values for unquoted cashflows."
+      },
+      {
+        "type": "point",
+        "bold": "Calibration — Real World",
+        "text": "Typically used for projecting into the future (e.g. calculating capital to hold under extreme adverse scenarios at a given confidence level). Focus: assumptions reflect realistic long-term expectations and observable real-world probabilities and outcomes. Parameters determined using expectations of the future; assets and liabilities projected under each stochastic scenario. Key difference: under real-world calibration equities would be expected to outperform bonds on average; under risk-neutral calibration, both have the same average present value."
+      },
+      {
+        "type": "h4",
+        "text": "5. Sensitivity Analysis"
+      },
+      {
+        "type": "point",
+        "bold": "Model point sensitivity",
+        "text": "If an adequate set of model points has been chosen, model-point error testing is usually unnecessary. However, where a reduced number of model points is used (e.g. for efficiency), the effect of a different choice of model points should be assessed."
+      },
+      {
+        "type": "point",
+        "bold": "Parameter sensitivity",
+        "text": "Effect of mis-estimation of parameter values investigated by varying each parameter value and observing the impact on model output. Any correlation between parameters must be allowed for."
+      },
+      {
+        "type": "point",
+        "bold": "Scenario testing",
+        "text": "Sensitivity testing where several correlated parameters are changed together in a consistent way (e.g. in a low-investment-return scenario, expense inflation assumption would also be reduced)."
+      },
+      {
+        "type": "point",
+        "bold": "Parameters to sensitivity test (return on capital / profitability)",
+        "text": "Claim inception rates; claim recovery rates; rates of transfer between claim states; mortality rates; lapse and non-renewal rates; average claim size (PMI); future expense levels; future expense inflation; future benefit/claims inflation; investment yield; volumes and mix of new business; taxation basis."
+      },
+      {
+        "type": "point",
+        "bold": "Sensitivity testing when pricing",
+        "text": "Helps determine what margins need to be incorporated into parameter values. If profitability is overly sensitive to a factor (e.g. withdrawal rates), product redesign or other measures may be needed (e.g. revise commission scales, revise reinsurance programme). Sensitivity tests should be performed at all stages of the pricing process."
+      },
+      {
+        "type": "point",
+        "bold": "Sensitivity testing — return on capital",
+        "text": "Enables the actuary to quantify the effect of departures from chosen parameter values when reporting to the company. Where a probability distribution can be assigned to a parameter, the variance of profit or return on capital may be derived analytically or via Monte Carlo simulation."
+      },
+      {
+        "type": "point",
+        "bold": "Stochastic modelling obligations",
+        "text": "Stochastic modelling may be obligatory for supervisory reserve calculations in some territories. Sensitivity analysis can also help determine appropriate risk margins, global reserves or capital requirements."
+      },
+      {
+        "type": "h4",
+        "text": "6. Equation of Value / Formula Approach"
+      },
+      {
+        "type": "point",
+        "bold": "Principle",
+        "text": "Based on the equivalence principle: income must equal outgo (or exceed it, with surplus going to capital providers). Premium is derived by equating discounted income (premiums + investment income) against discounted outgo (claims, expenses, commission, tax). An explicit profit allowance may also be included."
+      },
+      {
+        "type": "point",
+        "bold": "Discount rate",
+        "text": "Equivalent to the return achievable by investing policy proceeds as they arise. May vary between optimistic (higher rate → cheaper premium) and conservative depending on whether result needs to be competitive. Tax and other outgo can be allowed for by adjusting the discount rate."
+      },
+      {
+        "type": "point",
+        "bold": "Components valued",
+        "text": "Value of claims (discounted future claims outgo, including claims handling expenses and inflation); Value of premiums (discounted income net of initial/renewal commission, allowing for escalation, persistency, premium waiver); Value of expenses (non-premium-related expenses, discounted with inflation); Value of investment income (timing differences between receipts and outgo within the year)."
+      },
+      {
+        "type": "point",
+        "bold": "Drawbacks of formula approach",
+        "text": "(1) Does not allow for proper timing of events; (2) Reserves are ignored completely; (3) Capital needs cannot be reflected (desired shareholder return cannot be incorporated); (4) Net negative cashflows in any period are implicitly assumed to be borrowable at the discount rate; (5) Cannot separately inspect premium-related or claim-related cashflows by year; (6) Cannot easily vary assumptions over time (one fixed discount rate used); (7) Cannot easily measure sensitivity of profit to changes in assumptions; (8) Cannot handle more complex product structures (e.g. unit-linked)."
+      },
+      {
+        "type": "point",
+        "bold": "When formula approach is appropriate",
+        "text": "Most drawbacks are only significant for long-term contracts. Formula approach is useful and commonly used for pricing short-term (annually renewable) contracts (e.g. PMI), where investment income is relatively insignificant and reserving issues are minor."
+      },
+      {
+        "type": "h4",
+        "text": "7. Cashflow Approach"
+      },
+      {
+        "type": "point",
+        "bold": "Overview",
+        "text": "Developed to overcome the drawbacks of the formula approach. All health and care insurance models include some element of cashflow and profit projection. Can be deterministic or stochastic. For products with complex features (e.g. options), stochastic cashflow modelling may be required. Each significant item of cashflow is projected allowing for interactions."
+      },
+      {
+        "type": "point",
+        "bold": "Cashflow approach — pricing process",
+        "text": "Model points chosen to represent expected new business. For each model point, cashflows are projected (including reserving and solvency capital requirements) using base parameter values, then discounted at the risk discount rate to calculate net present value of future profits. Premiums/charges are set to meet the company's profit criterion — either for each model point individually, or in aggregate across model points (accepting some cross-subsidy). Once acceptable premiums are determined for model points, rates for all contract variations are derived (e.g. by interpolation)."
+      },
+      {
+        "type": "point",
+        "bold": "Typical cashflow elements — conventional without-profits",
+        "text": "Premiums; expenses (initial, renewal, claim); commission; claims; contribution to reserves; contribution to capital requirements; interest on cashflows and reserves; tax."
+      },
+      {
+        "type": "point",
+        "bold": "Additional cashflow elements — unit-linked business",
+        "text": "Cost of unit allocations; bid-offer spread; cost of paying claims in excess of unit fund value; risk charges (morbidity/mortality); unit charges (initial charges, policy fees); fund management charges; unit fund growth; unit funds paid out on claim or surrender."
+      },
+      {
+        "type": "point",
+        "bold": "Risk discount rate",
+        "text": "Net projected cashflows are discounted at the risk discount rate, which takes into account: the return required by the company; the level of statistical risk attaching to the cashflows. A separate rate should theoretically apply to each cashflow component, but in practice a single rate is used for simplicity. The rate used for existing business assessment is typically lower than for pricing new business (some risks, e.g. new business volume/mix, are reduced)."
+      },
+      {
+        "type": "point",
+        "bold": "Cashflow approach — assessing profitability of existing business",
+        "text": "Full policy data set or representative model points may be used. Present value of projected cashflows calculated for each policy/model point. Results scaled up and totalled to give expected present value of future profits from existing business (the 'value of in-force business'). Main use: determining the insurer's embedded value. Alternative uses: assessing relative profitability by product/distribution channel; identifying products needing repricing."
+      },
+      {
+        "type": "point",
+        "bold": "Embedded value",
+        "text": "Defined as the value of the future profit stream from existing business together with the value of any net assets separately attributable to shareholders. Regarded as the best measure of an insurer's real worth. For sale purposes, goodwill (value of future new business) is added to give the appraisal value."
+      },
+      {
+        "type": "point",
+        "bold": "Cashflow approach — return on capital",
+        "text": "Net cashflows for model points are grossed up for expected new business to assess the capital required to write the product (on regulatory or economic capital basis). One-off development costs can be added. Total capital requirement compared with expected profits to determine expected return on capital."
+      },
+      {
+        "type": "point",
+        "bold": "Cashflow approach — determining capital requirements",
+        "text": "Full model office used to determine capital required to write new business. Net cashflows from new business model points (scaled up for expected new business) incorporated into a model of the whole company. Actuary assesses timing and amount of capital requirement; may lead to product redesign to reduce financing needs."
+      },
+      {
+        "type": "point",
+        "bold": "Cashflow approach — when used",
+        "text": "Now the most widely used approach for long-term insurance pricing. Not widely used for PMI (one-year term) as the formula approach is sufficient. For short-term products, cashflow techniques may still be used to: spread high initial expenses over expected renewals; assess adequacy of premiums over a longer time horizon (e.g. 10-year projection with assumptions for renewal rates and premium increases)."
+      },
+      {
+        "type": "h4",
+        "text": "8. Multi-State Modelling"
+      },
+      {
+        "type": "point",
+        "bold": "When used",
+        "text": "Used where policyholders can exist in different states, each associated with different cashflows. Particularly relevant for IP insurance and LTCI where a claim does not terminate the policy (at minimum: claiming and not claiming states exist)."
+      },
+      {
+        "type": "point",
+        "bold": "States for IP contract (full model)",
+        "text": "Healthy; Sick but not yet claiming (within deferred period); Sick and claiming; Lapsed; Dead. In practice, the 'sick but not claiming' state is often omitted and the deferred period handled by explicit adjustments, leaving: Healthy; Sick (claiming); Lapsed; Dead."
+      },
+      {
+        "type": "point",
+        "bold": "Transition intensities",
+        "text": "Written as μ_x^{ij} = transition intensity at exact age x from state i to state j (i ≠ j). Represent the annual rate at which lives are moving between states. Applied to each status each month to determine numbers in each state for the next period."
+      },
+      {
+        "type": "point",
+        "bold": "Multi-state modelling — pricing",
+        "text": "Requires determination of the proportion of lives in each status using duration-based transition intensities. Value of claims outgo = number of lives in benefit-receiving sub-cohorts × relevant average sum insured. Balanced against: premiums from premium-paying state + investment income − expenses and other outgoings. Premium calculated by equating EPV of claims and EPV of premiums."
+      },
+      {
+        "type": "point",
+        "bold": "Multi-state modelling — reserving / reporting",
+        "text": "Similar tools apply for reserving and reporting. Assumptions underpinning transition intensities must be adjusted according to the purpose (e.g. statutory reserving assumptions may differ from those used in a company sale valuation)."
+      },
+      {
+        "type": "point",
+        "bold": "Complexity vs. accuracy trade-off",
+        "text": "Model accuracy improves with finer sub-cohort divisions (e.g. by gender, sickness duration, claims history). However, this quickly leads to large numbers of sub-cohorts and data requirements that cannot be met reliably — risk of spurious accuracy. In practice: sub-cohorts are combined and fewer but more credible transition intensities are used. The goal is to avoid results being heavily dependent on parameters with very little credibility."
+      },
+      {
+        "type": "point",
+        "bold": "Data considerations",
+        "text": "Amount of credible data is a key factor in deciding whether to use multi-state modelling. Example: a health and care insurer might use multi-state modelling for individual IP (reasonable data) but the inception/disabled annuity approach for group IP (insufficient data for multi-state). The value of sensitivity testing as a tool should never be underestimated — even without confidence in a single projected outcome, the effect of varying parameter assumptions is extremely illuminating."
+      },
+      {
+        "type": "h4",
+        "text": "9. Main Components of Common Models (Appendix)"
+      },
+      {
+        "type": "point",
+        "bold": "Policy liability model",
+        "text": "Takes model points (or full policy data) and parameter values as input. Two key functions: (1) Projects forward the in-force portfolio to end of each future projection year (function of: existing in-force portfolio; projected new business; future state transitions; future mortality, lapse and non-renewal rates; policy expiries) — needed for supervisory reserves and solvency capital calculation; (2) Projects total policy cashflows each year — used with asset model to calculate projected year-end assets and annual profit."
+      },
+      {
+        "type": "point",
+        "bold": "Expense model",
+        "text": "Full model office: calculates total expected expenses of the insurance company. Single policy/new/existing business models: restricted to expenses related to those parts of the business modelled. Fixed overhead expenses are difficult to model for profit test and new business models; for the full model office they should be modelled globally."
+      },
+      {
+        "type": "point",
+        "bold": "Asset model",
+        "text": "Complexity varies with model type and purpose. Profit test (simplest): future total annual expected investment return only. Full model office assessing investment strategy (most complex): stochastic asset model producing a distribution of returns for each asset class, projecting income and gains separately, reflecting the changing asset mix. Asset and liability models must interact consistently (e.g. inflation-linked benefits and inflation-linked investment returns must be handled on a consistent basis)."
+      },
+      {
+        "type": "point",
+        "bold": "Consolidation",
+        "text": "Outputs of the policy liability model, expense model and asset model are consolidated (added up) at a higher level. Allows for factors not in the detailed model (e.g. adjustments for un-modelled business, tax, or separately determined contingency reserves). Results verified by comparison with: supervisory valuation; previous model results; and highly simplified model results."
       }
     ]
   },
