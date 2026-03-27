@@ -215,7 +215,17 @@ header {
 
 .ch-info { display: flex; flex-direction: column; gap: 4px; }
 .ch-id { font-family: var(--mono); font-size: 10px; color: var(--accent); font-weight: 600; letter-spacing: 0.1em; }
-.ch-title { font-size: 14px; font-weight: 600; color: var(--text-bright); line-height: 1.4; }
+.ch-title { 
+    font-size: 13.5px; 
+    font-weight: 600; 
+    color: var(--text-bright); 
+    line-height: 1.4; 
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
 
 .ch-icon {
     width: 20px;
@@ -286,20 +296,20 @@ header {
 
 .canvas-header .ch-id { font-size: 13px; letter-spacing: 0.25em; margin-bottom: 16px; }
 .canvas-title { 
-    font-size: 48px; 
+    font-size: 32px; 
     font-weight: 800; 
     color: var(--text-bright); 
-    letter-spacing: -0.03em; 
-    line-height: 1.05; 
+    letter-spacing: -0.02em; 
+    line-height: 1.1; 
 }
 
 /* Node Styling */
 .node-h3 { 
-    font-size: 32px; 
+    font-size: 24px; 
     font-weight: 700; 
     color: var(--text-bright); 
-    margin-top: 80px; 
-    margin-bottom: 32px; 
+    margin-top: 60px; 
+    margin-bottom: 24px; 
     display: flex;
     align-items: center;
     gap: 16px;
@@ -307,28 +317,28 @@ header {
 .node-h3::before {
     content: "";
     width: 6px;
-    height: 32px;
+    height: 24px;
     background: var(--accent);
     border-radius: 4px;
 }
 
 .node-h4 { 
-    font-size: 22px; 
+    font-size: 18px; 
     font-weight: 600; 
     color: var(--accent); 
-    margin-top: 56px; 
-    margin-bottom: 24px; 
-    padding-bottom: 12px;
+    margin-top: 40px; 
+    margin-bottom: 20px; 
+    padding-bottom: 8px;
     border-bottom: 1px solid var(--border);
 }
 
 .node-point { 
     display: flex; 
-    gap: 18px; 
-    margin-bottom: 20px; 
-    line-height: 1.8; 
+    gap: 14px; 
+    margin-bottom: 16px; 
+    line-height: 1.6; 
     color: var(--text); 
-    font-size: 17px; 
+    font-size: 15px; 
 }
 
 .node-point::before { 

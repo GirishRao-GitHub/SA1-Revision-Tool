@@ -119,12 +119,25 @@ def transform_chapter(chapter_id, md_path, notes_json_path):
         
     if os.path.exists(notes_json_path):
         with open(notes_json_path, 'r', encoding='utf-8') as f:
-            notes_data = json.load(f)
+            try:
+                notes_data = json.load(f)
+            except json.JSONDecodeError:
+                notes_data = {"Chapters": {}}
     else:
         notes_data = {"Chapters": {}}
-        
+
+    # 5. TITLE EXTRACTION (Take shorter first point if possible)
+    extracted_title = chapter_id
+    if nodes and "text" in nodes[0]:
+        first_text = nodes[0]["text"]
+        # Split by common title separators or limit length
+        clean_title = first_text.split("Syllabus objectives")[0].split("\n")[0].strip()
+        if len(clean_title) > 60:
+            clean_title = clean_title[:57] + "..."
+        extracted_title = clean_title if clean_title else chapter_id
+
     notes_data["Chapters"][chapter_id] = {
-        "title": nodes[0]["text"] if nodes and "text" in nodes[0] else chapter_id,
+        "title": extracted_title,
         "content": nodes
     }
     
