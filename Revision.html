@@ -578,33 +578,29 @@ let VALIDATION = {};
 function validateAllEntries() {
   VALIDATION = {};
   Object.entries(TOPIC_FRAMEWORKS).forEach(function([key, entry]) {
-    const bullets = entry.bullets ? entry.bullets : (Array.isArray(entry) ? entry : []);
+    const content = entry.content || [];
     const reasons = [];
 
-    if (!bullets.length) {
-      reasons.push({ level: 'error', msg: 'No bullets array — entry will render blank.' });
+    if (!content.length) {
+      reasons.push({ level: 'error', msg: 'No content array — entry will render blank.' });
       VALIDATION[key] = { status: 'error', reasons };
       return;
     }
 
-    const { subtopics } = parseFrameworkLines(bullets);
-    const h3lines = bullets.filter(l => /^###(?!#)\s+/.test(l));
-    const h4lines = bullets.filter(l => /^####\s+/.test(l));
-    const content = bullets.filter(l => l.trim() && !/^#{1,}/.test(l));
+    // Node-based validation logic
+    const h3nodes = content.filter(n => n.type === 'h3');
+    const h4nodes = content.filter(n => n.type === 'h4');
+    const pointNodes = content.filter(n => ['point', 'sub', 'numbered', 'text'].includes(n.type));
 
-    // Classic collapse bug: lone ### + content + no ####
-    if (h3lines.length === 1 && h4lines.length === 0 && content.length >= 4 && subtopics.length === 1) {
-      reasons.push({ level: 'error', msg: 'All ' + content.length + ' bullets collapse into 1 subtopic. Add #### subheadings.' });
+    // Detect missing subtopics (h4)
+    if (h3nodes.length >= 1 && h4nodes.length === 0 && pointNodes.length >= 4) {
+      reasons.push({ level: 'error', msg: 'All points collapse into 1 subtopic. Add h4 subheadings.' });
     }
-    if (subtopics.length === 0) {
-      reasons.push({ level: 'error', msg: '0 subtopics parsed — mid pane will be empty.' });
+
+    if (h4nodes.length === 0 && pointNodes.length > 0) {
+        // Technically it will show up as "Overview" but usually we want structured h4s
+        reasons.push({ level: 'warn', msg: 'No h4 subtopics found; content will default to Overview.' });
     }
-    subtopics.forEach(function(st) {
-      const filled = (st.bullets || []).filter(l => l.trim() && !/^#{3,}/.test(l));
-      if (filled.length === 0) {
-        reasons.push({ level: 'warn', msg: 'Subtopic "' + st.title + '" has no content.' });
-      }
-    });
 
     const worst = reasons.some(r => r.level === 'error') ? 'error'
                 : reasons.some(r => r.level === 'warn')  ? 'warn' : 'ok';
@@ -693,8 +689,11 @@ function renderFrameworkList() {
   if (currentSrcFilter !== 'ALL') {
     themes = themes.filter(t => {
       const entry = TOPIC_FRAMEWORKS[t];
-      const lines = entry && entry.bullets ? entry.bullets : (Array.isArray(entry) ? entry : []);
-      return lines.some(l => bulletMatchesSrc(l, currentSrcFilter));
+      const content = entry && entry.content ? entry.content : [];
+      return content.some(n => {
+          const text = (n.text || '') + (n.bold || '');
+          return bulletMatchesSrc(text, currentSrcFilter);
+      });
     });
   }
 
@@ -743,37 +742,7 @@ function renderFrameworkList() {
 }
 
 // ── Parse Framework Lines ──────────────────────────────────────────────────
-function parseFrameworkLines(lines) {
-  // Unified parser — one consistent rule regardless of header mix.
-  // Content before the first header is never silently orphaned.
-  let chapterTitle = '';
-  const subtopics = [];
-
-  const hasH4   = lines.some(l => /^####\s+/.test(l));
-  const hasH3   = lines.some(l => /^###(?!#)\s+/.test(l));
-  const boldOnly = !hasH4 && !hasH3;
-
-  const h3match = lines.find(l => /^###(?!#)\s+/.test(l));
-  if (h3match) chapterTitle = h3match.replace(/^###\s+/, '').trim();
-
-  if (boldOnly) {
-    lines.forEach(function(line) {
-      if (line.startsWith('- **')) {
-        const m = line.match(/^- \*\*(.*?)\*\*\s*(?::\s*)?(.*)$/);
-        if (m) subtopics.push({ title: m[1].trim(), bullets: [line] });
-    } else if (!seenFirstHeader) {
-      if (line.trim() && !/^#{1,}/.test(line)) preHeaderBullets.push(line);
-    } else if (current) {
-      if (!/^#{3,}/.test(line) && line.trim() !== '') current.bullets.push(line);
-    }
-  });
-
-  if (preHeaderBullets.length > 0) {
-    subtopics.unshift({ title: chapterTitle || 'Overview', bullets: preHeaderBullets });
-  }
-
-  return { chapterTitle, subtopics };
-}
+// parseFrameworkLines removed as it reached EOL (Redundant with nodes)
 
 // ── Render Mid Pane ────────────────────────────────────────────────────────
 function renderMidContent(theme) {
