@@ -843,7 +843,9 @@ let assignTimer = null, assignSeconds = 0;
 let brainstormWordsReq = 0, brainstormTimeLeft = 0, brainstormInterval = null;
 
 // Framework Filtering
+let currentSrcFilter = 'ALL';
 let currentPillarFilter = 'ALL';
+
 function filterPillar(p) {
     if (appMode !== 'frameworks') {
         setMode('frameworks');
@@ -878,12 +880,12 @@ window.onload = async function() {
 
     // Load Topic Frameworks Dictionary First
     try {
-        const fwRes = await fetch('data/Topic_Frameworks_New.json?t=' + new Date().getTime());
+        const fwRes = await fetch('data/Topic_Frameworks.json?t=' + new Date().getTime());
         if (!fwRes.ok) throw new Error('data/ path returned ' + fwRes.status);
         TOPIC_FRAMEWORKS = await fwRes.json();
     } catch {
         try {
-            const fwRes2 = await fetch('Topic_Frameworks_New.json?t=' + new Date().getTime());
+            const fwRes2 = await fetch('Topic_Frameworks.json?t=' + new Date().getTime());
             if (!fwRes2.ok) throw new Error('root path returned ' + fwRes2.status);
             TOPIC_FRAMEWORKS = await fwRes2.json();
         } catch(e) { console.warn("Frameworks not loaded", e); }
@@ -911,10 +913,21 @@ window.onload = async function() {
                 "LTC": "Long-Term Care (LTC)",
                 "PMI": "Private Medical Insurance (PMI)",
                 "State Healthcare": "State Healthcare & Demographics",
-                "Regulation": "Regulation & Ethics"
+                "Regulation": "Regulation & Ethics",
+                "Pricing & Rating": "Pricing",
+                "IRDA Regulations": "Regulation",
+                "Reserving & Valuation": "Reserving & Valuation", // placeholder
+                "Data & Models": ["Data", "Models"],
+                "Product Design (Protection)": "Product Design",
+                "Capital & Solvency": "Risk Management & Capital"
             };
-            Object.entries(aliases).forEach(([short, full]) => {
-                if (TOPIC_FRAMEWORKS[full]) MASTER_TAXONOMY[short] = TOPIC_FRAMEWORKS[full];
+            Object.keys(aliases).forEach(short => {
+              const full = aliases[short];
+              if (Array.isArray(full)) {
+                full.forEach(f => { if (MASTER_TAXONOMY[f]) MASTER_TAXONOMY[short] = (MASTER_TAXONOMY[short] || []).concat(MASTER_TAXONOMY[f]); });
+              } else {
+                if (MASTER_TAXONOMY[full]) MASTER_TAXONOMY[short] = MASTER_TAXONOMY[full];
+              }
             });
     }
 
@@ -1269,14 +1282,24 @@ function renderFrameworkList() {
     listEl.innerHTML = '';
     let themes = Object.keys(TOPIC_FRAMEWORKS).sort();
     
-    // Pillar read from _meta.pillar — no hardcoded map needed
-    if (currentPillarFilter !== 'ALL') {
-        themes = themes.filter(t => {
-            const entry = TOPIC_FRAMEWORKS[t];
-            const p = entry && entry._meta ? entry._meta.pillar : null;
-            return p === currentPillarFilter;
-        });
-    }
+    // Pillar & Source Filter
+    themes = themes.filter(t => {
+        const entry = TOPIC_FRAMEWORKS[t];
+        if (!entry || !entry._meta) return false;
+        
+        // Pillar filter
+        if (currentPillarFilter !== 'ALL' && entry._meta.pillar !== currentPillarFilter) return false;
+        
+        // Source filter
+        if (currentSrcFilter !== 'ALL') {
+            const content = entry.content || [];
+            return content.some(n => {
+                const text = (n.text || '') + (n.bold || '');
+                return bulletMatchesSrc(text, currentSrcFilter);
+            });
+        }
+        return true;
+    });
 
     themes.forEach(t => {
         const btn = document.createElement('div');
@@ -1431,9 +1454,20 @@ function toggleFrameworkRecall() {
     // Re-render content if a subtopic is selected
     const activeMid = document.querySelector('#fw-subtopics-list .active');
     if (activeMid) {
-        const idx = Array.from(activeMid.parentNode.children).indexOf(activeMid);
-        renderFrameworkRightContent(idx);
+        // Correct index: ignore the chapter badge if it exists
+        const sibs = Array.from(activeMid.parentNode.children);
+        const clickableSibs = sibs.filter(s => s.style.cursor === 'pointer');
+        const idx = clickableSibs.indexOf(activeMid);
+        if (idx !== -1) renderFrameworkRightContent(idx);
     }
+}
+
+// ── Source Filter (IAI / IFoA) ─────────────────────────────────────────────
+function bulletMatchesSrc(line, srcFilter) {
+    if (srcFilter === 'ALL') return true;
+    const m = line.match(/\[src:([^\]]+)\]/);
+    if (!m) return false;
+    return m[1].split(',').some(c => c.trim().toUpperCase().startsWith(srcFilter.toUpperCase() + '_'));
 }
 
 function toggleSubThemes() {
@@ -2261,7 +2295,6 @@ async function exportSittingSummary() {
 
   for (const qk of Object.keys(sit.questions)) {
     const q = sit.questions[qk];
-    html += `<div class="q-block"><h2>${q.label}</h2>`;
     if (q.scenario) {
        html += `<div class="label">Scenario</div><div class="text" style="background:#fefefe; border-left:3px solid #666;">${q.scenario.replace(/\n/g, '<br>')}</div>`;
     }
@@ -2474,14 +2507,19 @@ function showPillarChallenge(themes, skipCallback) {
                                </div>`;
                       // Show the first 5 bullet points from the Armoury theme
                       const _atEntry = TOPIC_FRAMEWORKS[at];
-                      const _atLines = (_atEntry && _atEntry.bullets) ? _atEntry.bullets : (Array.isArray(_atEntry) ? _atEntry : []);
-                      let bullets = _atLines.filter(line => line.startsWith('- ')).slice(0, 5);
-                      if (bullets.length > 0) {
+                      const _atContent = (_atEntry && _atEntry.content) ? _atEntry.content : [];
+                      
+                      // Filter for points/numbered nodes
+                      let points = _atContent.filter(n => ['point', 'numbered'].includes(n.type)).slice(0, 5);
+                      
+                      if (points.length > 0) {
                           html += `<ul style="margin:0 0 12px 20px; padding:0; list-style:none; font-size:13px; color:var(--text2); line-height:1.4;">`;
-                          bullets.forEach(b => {
+                          points.forEach(p => {
+                              const bTitle = p.bold || p.text.split(':')[0] || 'Point';
+                              const bDesc  = p.bold ? (p.text || '') : (p.text.split(':')[1] || '');
                               html += `<li style="margin-bottom:5px; position:relative; padding-left:12px;">
                                           <span style="position:absolute; left:0; color:var(--accent);">•</span>
-                                          ${b.replace(/^- /, '').split(':')[0]}<span style="color:var(--text3); font-size:12px;">: ${b.split(':')[1] || ''}</span>
+                                          <strong>${bTitle}</strong><span style="color:var(--text3); font-size:12px;">: ${bDesc}</span>
                                        </li>`;
                           });
                           html += `</ul>`;
