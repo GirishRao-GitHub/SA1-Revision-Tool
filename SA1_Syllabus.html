@@ -425,32 +425,6 @@ function filterTopics(query, catId) {
 }
 
 // ── HELPERS ────────────────────────────────────────────────────
-function parseBullets(data) {
-  const lines = (data && data.bullets) ? data.bullets : (Array.isArray(data) ? data : []);
-  const bullets = [];
-  lines.forEach(line => {
-    if (line.startsWith('- **')) {
-      const match = line.match(/^- \*\*(.*?)\*\*\s*(?::\s*)?(.*)$/);
-      if (match) {
-        bullets.push({ title: match[1].trim(), detail: match[2].trim() });
-      }
-    } else if (line.startsWith('- ')) {
-      const text = line.replace(/^- /, '').trim();
-      const colonIdx = text.indexOf(':');
-      if (colonIdx > 0 && colonIdx < 60) {
-        bullets.push({ title: text.substring(0, colonIdx).trim(), detail: text.substring(colonIdx + 1).trim() });
-      } else {
-        bullets.push({ title: text, detail: '' });
-      }
-    }
-  });
-  return bullets;
-}
-
-function escHtml(str) {
-  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-
 function sanitizeId(str) {
   return str.replace(/[^a-zA-Z0-9]/g, '_');
 }

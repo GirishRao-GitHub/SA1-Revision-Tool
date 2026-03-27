@@ -373,12 +373,12 @@ function buildTopicItem(topicKey, data, stageKey, query) {
   item.innerHTML = `
     <div class="topic-header ${isOpen ? 'open' : ''}" onclick="toggleTopic(this, '${itemId}')">
       <div class="topic-dot ${stageKey}"></div>
-      <div class="topic-title">${query ? highlight(topicKey, query) : topicKey}</div>
+      <div class="topic-title">${query ? FrameworkParser.highlight(topicKey, query) : topicKey}</div>
       <span class="stage-meta" style="font-size:10px;">${ptCount} pt${ptCount !== 1 ? 's' : ''}</span>
       <span class="topic-chevron ${isOpen ? 'open' : ''}">&#9654;</span>
     </div>
     <div class="topic-body ${isOpen ? 'open' : ''}" id="body-${itemId}">
-      ${heading ? `<div class="topic-heading">${query ? highlight(heading, query) : heading}</div>` : ''}
+      ${heading ? `<div class="topic-heading">${query ? FrameworkParser.highlight(heading, query) : heading}</div>` : ''}
       <div class="fwp-container">
         ${buildBulletsHtml(content, topicKey, query, ptCount)}
       </div>
@@ -401,33 +401,6 @@ function buildBulletsHtml(nodes, topicKey, query, ptCount) {
   return FrameworkParser.render(nodes, { query: query || '' });
 }
 
-function renderBullets(bullets, query) {
-  let html = '<div class="bullet-list">';
-  bullets.forEach(b => {
-    const titleStr = query ? highlight(b.title, query) : `<strong>${b.title}</strong>`;
-    const contentStr = query ? highlight(b.content, query) : b.content;
-    html += `<div class="bullet-item">
-      <div class="bullet-marker"></div>
-      <div class="bullet-content"><strong>${b.title}</strong>${b.content ? ': ' + contentStr : ''}</div>
-    </div>`;
-  });
-  html += '</div>';
-  return html;
-}
-
-function revealBullets(btn, stageKey, bullets, query) {
-  const wrap = btn.closest('.recall-cover');
-  const parent = wrap.parentNode;
-  const div = document.createElement('div');
-  div.innerHTML = renderBullets(bullets, query);
-  parent.replaceChild(div.firstElementChild, wrap);
-}
-
-function highlight(text, query) {
-  if (!query) return text;
-  const re = new RegExp(`(${query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
-  return text.replace(re, '<mark>$1</mark>');
-}
 
 // ─── TOGGLE FUNCTIONS ──────────────────────────────────────────────────────
 

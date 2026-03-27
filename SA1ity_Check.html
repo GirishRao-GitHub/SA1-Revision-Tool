@@ -1304,45 +1304,10 @@ function renderFrameworkList() {
 
 let currentFrameworkData = null;
 
-// ─── UNIFIED PARSING RULE ────────────────────────────────────────────────────
-// Step 1 (always):   first ### line → chapter badge above sidebar list
-// Step 2 (priority): #### lines exist  → each #### = one sidebar card
-//                    >1 ### lines      → each ### = one sidebar card (Type E)
-//                    fallback          → each "- **Bold**" = one sidebar card
-// Step 3 (right pane):
-//   "- **Bold**: text"  → bullet with bold key
-//   "  - indented"      → sub-bullet (indented, circle marker)
-//   "  1. numbered"     → numbered item (indented, accent number)
-//   empty / ### / ####  → skipped
+// ─── UNIFIED RENDER ENGINE ──────────────────────────────────────────────────
+// This version uses structured JSON nodes via FrameworkParser.js
 // ─────────────────────────────────────────────────────────────────────────────
 
-function parseFrameworkLines(lines) {
-    let chapterTitle = '';
-    let subtopics = [];
-
-    // Step 1: extract chapter badge from first ### line
-    const h3lines = lines.filter(l => /^###\s+/.test(l));
-    if (h3lines.length > 0) {
-        chapterTitle = h3lines[0].replace(/^###\s+/, '').trim();
-    }
-
-    // Step 2: determine sidebar card source by priority
-    const h4lines = lines.filter(l => /^####\s+/.test(l));
-    const multiH3 = h3lines.length > 1;
-
-    if (h4lines.length > 0) {
-        // Type B / C / D — group by ####
-        let current = null;
-        lines.forEach(line => {
-            const m = line.match(/^####\s+(.+)$/);
-            if (m) {
-                current = { title: m[1].trim(), bullets: [] };
-                subtopics.push(current);
-            } else if (current && !/^#{3,}/.test(line) && line.trim() !== '') {
-                current.bullets.push(line);
-            }
-        });
-    } else if (multiH3) {
 function renderFrameworkMidContent(theme) {
     const listEl = document.getElementById('fw-subtopics-list');
     document.getElementById('fw-mid-title').textContent = theme;
@@ -1442,11 +1407,7 @@ function renderFrameworkRightContent(idx) {
     } else {
         html += '<div id="fw-bullets-reveal-box" style="display:block;">';
     }
-
-            html += '<li>' + highlightKeywords(text, false) + '</li>';
-        }
-    });
-    html += '</ul>';
+    html += FrameworkParser.render(nodes, { query: '' });
 
     html += '</div>'; // close reveal box
     html += '</div>'; // close bullets-container
