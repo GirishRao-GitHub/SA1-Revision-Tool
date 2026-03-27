@@ -2,20 +2,20 @@ import json
 import re
 import os
 
-def unify_syllabus(chapter_id, notes_json_path, topics_path, unified_path):
-    """Stage 2: Merge cleaned notes with synthesis and save to final JSON."""
-    print(f"Stage 2: Unifying {chapter_id} with synthesis...")
+def unify_syllabus(chapter_id, unified_path, topics_path):
+    """Stage 3: Interweave synthesis into the already staged Unified_Syllabus.json."""
+    print(f"\n--- STAGE 3: UNIFICATION [{chapter_id}] ---")
     
-    if not os.path.exists(notes_json_path):
-        print(f"Error: {notes_json_path} not found. Run transform_notes.py first.")
+    if not os.path.exists(unified_path):
+        print(f"Error: {unified_path} not found. Run stage_unified.py first.")
         return
         
-    with open(notes_json_path, 'r', encoding='utf-8') as f:
-        notes_data = json.load(f)
+    with open(unified_path, 'r', encoding='utf-8') as f:
+        full_data = json.load(f)
         
-    chapter_data = notes_data.get("Chapters", {}).get(chapter_id)
+    chapter_data = full_data.get("Chapters", {}).get(chapter_id)
     if not chapter_data:
-        print(f"Error: Chapter {chapter_id} not found in {notes_json_path}")
+        print(f"Error: Chapter {chapter_id} not found in {unified_path}")
         return
         
     with open(topics_path, 'r', encoding='utf-8') as f:
@@ -71,14 +71,6 @@ def unify_syllabus(chapter_id, notes_json_path, topics_path, unified_path):
                             synthesis_nodes_added += 1
                             break
     
-    if os.path.exists(unified_path):
-        with open(unified_path, 'r', encoding='utf-8') as f:
-            full_data = json.load(f)
-    else:
-        full_data = {"Chapters": {}}
-    
-    if "Chapters" not in full_data: full_data["Chapters"] = {}
-        
     full_data["Chapters"][chapter_id] = {
         "title": chapter_data["title"],
         "content": final_nodes
@@ -98,8 +90,7 @@ if __name__ == "__main__":
     B = r"g:\Girish\IAI\SP1 and SA1 Health and Care"
     W = os.path.join(B, "Practice papers", "Claude Widgets")
     
-    NOTES_JSON = os.path.join(W, "data", "SA1_Revision_Notes.json")
     TOPICS_JSON = os.path.join(W, "data", "Topic_Frameworks.json")
     UNIFIED_JSON = os.path.join(W, "data", "Unified_Syllabus.json")
     
-    unify_syllabus("Ch3", NOTES_JSON, TOPICS_JSON, UNIFIED_JSON)
+    unify_syllabus("Ch3", UNIFIED_JSON, TOPICS_JSON)
