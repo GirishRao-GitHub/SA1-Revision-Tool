@@ -89,20 +89,8 @@ def integrate_chapter(chapter_id, md_path, topics_path, output_path):
     }
     
     final_nodes = []
-    final_nodes.append({"type": "text", "text": "***Expert Synthesis: Six Pillar Framework*** [src:IAI_Master]"})
     
-    pillar_key = "The Six Pillar Framework (P1-P6)"
-    pillar_content = topics_data.get(pillar_key, {}).get("content", [])
-    pillars_to_add = ["P1:", "P2:", "P3:"]
-    added_count = 0
-    for p_node in pillar_content:
-        if p_node.get("type") == "point" and any(p_node.get("bold", "").startswith(p) for p in pillars_to_add):
-            new_node = p_node.copy()
-            new_node["text"] = new_node.get("text", "") + " [src:IAI_Synthesis]"
-            final_nodes.append(new_node)
-            added_count += 1
-            if added_count >= 3: break
-
+    # 2. Interweave
     added_in_section = set()
     for node in nodes:
         if node["type"] in ["h3", "h4"]:
