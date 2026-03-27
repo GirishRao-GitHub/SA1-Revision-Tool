@@ -1,134 +1,163 @@
 import json
-import os
 import re
-
-# Paths
-BASE_DIR = "g:\\Girish\\IAI\\SP1 and SA1 Health and Care\\Practice papers\\Claude Widgets"
-THEMES_PATH = os.path.join(BASE_DIR, "data", "Topic_Frameworks.json")
-STRUCTURE_PATH = os.path.join(BASE_DIR, "data", "Syllabus_Structure.json")
-OUTPUT_PATH = os.path.join(BASE_DIR, "data", "Unified_Syllabus.json")
-
-def load_json(path):
-    if not os.path.exists(path): return {}
-    with open(path, 'r', encoding='utf-8') as f:
-        return json.load(f)
-
-def save_json(data, path):
-    with open(path, 'w', encoding='utf-8') as f:
-        json.dump(data, f, indent=2)
+import os
 
 def parse_markdown(file_path):
+    """Parses raw markdown into a list of structured nodes, filtering out textbook noise."""
+    nodes = []
+    
+    # Aggressive and Targeted noise patterns
+    NOISE_PATTERNS = [
+        r"(?i)^page\s*[\d\=\\_\s]*$", # Page 3, Page \=, Page _ (isolated)
+        r"(?i)^the\s+actuarial\s+education\s+company",
+        r"(?i)^[do]?ife:?\s*\d{4}\s*examinations", 
+        r"(?i)^sa1-\d+",
+        r"(?i)^sat[o]?\s*[\d\s]*", # SATO, SAT 01, SATO Short term...
+        r"^\s*\d+\s*$",  # Isolated numbers
+        r"(?i)actuarial\s+education\s+company",
+        r"(?i)^2024\s+examinations",
+        r"(?i)^nal\s+of\s+men", # OCR error
+        r"(?i)^dife\s+\d+", # OCR error
+        r"^\s*[\*\s\-\.\/\\]+\s*$", # Only punctuation/slashes
+        r"^\s*\(this\s+is\s+only\s+part\s+of\s+syllabus\s+objective.*\)\s*$",
+        r"(?i)^short\s*term\s*health\s*and\s*care\s*insurance\s*products\s*$" # Redundant title
+    ]
+
+    if not os.path.exists(file_path):
+        return []
+
     with open(file_path, 'r', encoding='utf-8') as f:
         lines = f.readlines()
     
-    content = []
-    
     for line in lines:
         line = line.strip()
-        if not line: continue
+        if not line:
+            continue
+            
+        # Clean non-breaking spaces and other weirdness
+        line = line.replace('\u00a0', ' ').replace('\u2013', '-').replace('\u2014', '-')
         
-        # Simple Header Detection (e.g., "1  Private medical insurance", "1.1 Benefits and features")
+        # Skip noise
+        if any(re.search(pattern, line, re.IGNORECASE) for pattern in NOISE_PATTERNS):
+            continue
+            
+        # Clean line
+        line = line.replace('\\-', '-').replace('\\.', '.').replace('\\_', '_').replace('\\', '')
+        line = line.replace('**', '').strip()
+        
+        # Skip weird tiny fragments or single numbers that escaped prefix matching
+        if len(line) < 3 and not line.isdigit():
+            continue
+        if line.isdigit() and len(line) < 3:
+            continue
+
         header_match = re.match(r'^(\d+(\.\d+)?)\s+(.+)', line)
         if header_match:
             level = header_match.group(2)
             text = header_match.group(3).strip()
             num = header_match.group(1)
             type_tag = "h3" if not level else "h4"
-            content.append({"type": type_tag, "text": f"{num} {text}"})
+            nodes.append({"type": type_tag, "text": f"{num} {text}"})
             continue
             
-        # Question / Solution Detection
         if line.lower() == "question":
-            content.append({"type": "h4", "text": "Question"})
+            nodes.append({"type": "h4", "text": "Question"})
             continue
         if line.lower() == "solution":
-            content.append({"type": "h4", "text": "Solution"})
+            nodes.append({"type": "h4", "text": "Solution"})
             continue
             
-        # Bullet points or normal text
-        if line.startswith("-") or line.startswith("*"):
-            text = re.sub(r'^[-*]\s*', '', line)
-            content.append({"type": "point", "text": text})
-        else:
-            # Check for bold starts
-            bold_match = re.match(r'^\*\*(.*?)\*\*\s*(.*)', line)
-            if bold_match:
-                content.append({"type": "point", "bold": bold_match.group(1), "text": bold_match.group(2)})
-            else:
-                content.append({"type": "point", "text": line})
+        nodes.append({"type": "point", "text": line})
                 
-    return content
+    return nodes
 
-def integrate_chapter(chapter_id, markdown_path, theme_keywords=None):
-    themes = load_json(THEMES_PATH)
-    structure = load_json(STRUCTURE_PATH)
+def integrate_chapter(chapter_id, md_path, topics_path, output_path):
+    print(f"Integrating {chapter_id}...")
     
-    chapter_info = structure.get("Chapters", {}).get(chapter_id, {})
-    title = chapter_info.get("title", f"Chapter {chapter_id}")
-    
-    # Parse Core Content
-    core_content = parse_markdown(markdown_path)
-    
-    # Interweaving Logic
-    integrated_content = []
-    
-    # Standard: Add Six Pillar Overview at the start
-    pillars = themes.get("The Six Pillar Framework (P1-P6)", {}).get("content", [])
-    if pillars:
-        integrated_content.append({"type": "text", "text": "***Expert Synthesis: Six Pillar Framework*** [src:IAI_Master]"})
-        count = 0
-        for node in pillars:
-            if node.get("type") in ["point", "sub"]:
-                new_node = node.copy()
-                new_node["text"] = new_node.get("text", "") + " [src:IAI_Synthesis]"
-                integrated_content.append(new_node)
-                count += 1
-            if count >= 3: break # Just a teaser for pillars
-
-    # Interleave based on keywords
-    for node in core_content:
-        integrated_content.append(node)
+    with open(topics_path, 'r', encoding='utf-8') as f:
+        topics_data = json.load(f)
         
-        # If node is a header, check for related theme content
-        if node["type"] in ["h3", "h4"] and theme_keywords:
-            text = node["text"].lower()
-            for keyword, theme_name in theme_keywords.items():
-                if keyword.lower() in text:
-                    theme_content = themes.get(theme_name, {}).get("content", [])
-                    if theme_content:
-                        integrated_content.append({"type": "text", "text": f"***Expert Insights: {theme_name}*** [src:IFoA_Link]"})
-                        count = 0
-                        for t_node in theme_content:
-                            if t_node.get("type") in ["point", "sub"]:
-                                # Check if t_node text contains specific keyword to keep it relevant
-                                if keyword.lower() in t_node.get("text", "").lower() or keyword.lower() in t_node.get("bold", "").lower():
-                                    new_node = t_node.copy()
-                                    new_node["text"] = new_node.get("text", "") + f" [src:Synthesis_{theme_name}]"
-                                    integrated_content.append(new_node)
-                                    count += 1
-                            if count >= 5: break
-
-    # Save to Unified Syllabus
-    unified = load_json(OUTPUT_PATH)
-    if "Chapters" not in unified: unified["Chapters"] = {}
+    nodes = parse_markdown(md_path)
+    if not nodes:
+        return
     
-    unified["Chapters"][chapter_id] = {
-        "title": title,
-        "content": integrated_content
+    KEYWORDS = {
+        "Private medical insurance": ["Pricing", "Product Design"],
+        "Health cash plans": ["Pricing"],
+        "Major medical expense": ["Pricing", "Product Design"],
+        "Claims": ["Claims Management"],
+        "Underwriting": ["Pricing"],
+        "Selection": ["Pricing"],
+        "Regulation": ["Regulation"]
     }
     
-    save_json(unified, OUTPUT_PATH)
-    print(f"Chapter {chapter_id} Integrated Successfully.")
+    final_nodes = []
+    final_nodes.append({"type": "text", "text": "***Expert Synthesis: Six Pillar Framework*** [src:IAI_Master]"})
+    
+    # Add pillars
+    pillar_key = "The Six Pillar Framework (P1-P6)"
+    pillar_content = topics_data.get(pillar_key, {}).get("content", [])
+    pillars_to_add = ["P1:", "P2:", "P3:"]
+    added_count = 0
+    for p_node in pillar_content:
+        if p_node.get("type") == "point" and any(p_node.get("bold", "").startswith(p) for p in pillars_to_add):
+            new_node = p_node.copy()
+            new_node["text"] = new_node.get("text", "") + " [src:IAI_Synthesis]"
+            final_nodes.append(new_node)
+            added_count += 1
+            if added_count >= 3: break
+
+    # Interweave
+    added_in_section = set()
+    for node in nodes:
+        if node["type"] in ["h3", "h4"]:
+            added_in_section = set()
+            
+        final_nodes.append(node)
+        
+        node_text = node.get("text", "").lower()
+        if len(node_text) < 30 and node["type"] == "point":
+            continue
+
+        for key, themes in KEYWORDS.items():
+            if key.lower() in node_text:
+                for theme_name in themes:
+                    if theme_name in added_in_section:
+                        continue
+                        
+                    theme_data = topics_data.get(theme_name, {})
+                    if theme_data:
+                        theme_points = [n for n in theme_data.get("content", []) if n.get("type") == "point"]
+                        if theme_points:
+                            teaser = theme_points[0].copy()
+                            teaser["bold"] = f"Expert Insight: {theme_name}"
+                            teaser["text"] = teaser.get("text", "") + f" [src:IAI_Synthesis]"
+                            final_nodes.append(teaser)
+                            added_in_section.add(theme_name)
+                            break
+    
+    if os.path.exists(output_path):
+        with open(output_path, 'r', encoding='utf-8') as f:
+            full_data = json.load(f)
+    else:
+        full_data = {"Chapters": {}}
+    
+    if "Chapters" not in full_data: full_data["Chapters"] = {}
+        
+    full_data["Chapters"][chapter_id] = {
+        "title": nodes[0]["text"] if nodes and "text" in nodes[0] else chapter_id,
+        "content": final_nodes
+    }
+    
+    with open(output_path, 'w', encoding='utf-8') as f:
+        json.dump(full_data, f, indent=2)
+    
+    print(f"Successfully integrated {chapter_id}")
 
 if __name__ == "__main__":
-    # Integration for Chapter 3
-    CH3_MD = "g:\\Girish\\IAI\\SP1 and SA1 Health and Care\\SA1 Health and Care Advanced\\SA1 Course Material\\SA1 Ch3\\SA1 Ch3.md"
-    KEYWORDS = {
-        "Private medical insurance": "Pricing",
-        "Health cash plans": "Pricing",
-        "Major medical expense": "Pricing",
-        "Claims": "Claims Management",
-        "Underwriting": "Pricing",
-        "Regulation": "Regulation"
-    }
-    integrate_chapter("Ch3", CH3_MD, theme_keywords=KEYWORDS)
+    B = r"g:\Girish\IAI\SP1 and SA1 Health and Care"
+    W = os.path.join(B, "Practice papers", "Claude Widgets")
+    M = os.path.join(B, "SA1 Health and Care Advanced", "SA1 Course Material", "SA1 Ch3", "SA1 Ch3.md")
+    T = os.path.join(W, "data", "Topic_Frameworks.json")
+    O = os.path.join(W, "data", "Unified_Syllabus.json")
+    integrate_chapter("Ch3", M, T, O)
