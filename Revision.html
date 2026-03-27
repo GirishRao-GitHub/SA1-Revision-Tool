@@ -4,6 +4,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Revision — Master Exam Frameworks</title>
+<script src="js/FrameworkParser.js"></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap');
 
@@ -760,22 +761,6 @@ function parseFrameworkLines(lines) {
       if (line.startsWith('- **')) {
         const m = line.match(/^- \*\*(.*?)\*\*\s*(?::\s*)?(.*)$/);
         if (m) subtopics.push({ title: m[1].trim(), bullets: [line] });
-      }
-    });
-    return { chapterTitle, subtopics };
-  }
-
-  const headerRe = hasH4 ? /^####\s+(.+)$/ : /^###(?!#)\s+(.+)$/;
-  let current = null;
-  const preHeaderBullets = [];
-  let seenFirstHeader = false;
-
-  lines.forEach(function(line) {
-    const m = line.match(headerRe);
-    if (m) {
-      seenFirstHeader = true;
-      current = { title: m[1].trim(), bullets: [] };
-      subtopics.push(current);
     } else if (!seenFirstHeader) {
       if (line.trim() && !/^#{1,}/.test(line)) preHeaderBullets.push(line);
     } else if (current) {
@@ -801,16 +786,34 @@ function renderMidContent(theme) {
   checkboxState = {};
   currentSubtopicIdx = null;
 
-  const frameEntry = TOPIC_FRAMEWORKS[theme];
-  if (!frameEntry) {
+  const entry = TOPIC_FRAMEWORKS[theme];
+  if (!entry) {
     listEl.innerHTML = '<div style="color:var(--text3);font-size:13px;text-align:center;margin-top:40px;">No framework data available yet.</div>';
     return;
   }
 
-  const lines = frameEntry.bullets ? frameEntry.bullets : (Array.isArray(frameEntry) ? frameEntry : []);
-  const { chapterTitle, subtopics } = parseFrameworkLines(lines);
-  currentFrameworkData = subtopics;
+  // Structured Logic: Group content by headers
+  const content = entry.content || [];
+  let chapterTitle = '';
+  const subtopics = [];
+  let currentST = null;
 
+  content.forEach(node => {
+    if (node.type === 'h3') {
+      chapterTitle = node.text;
+    } else if (node.type === 'h4') {
+      currentST = { title: node.text, nodes: [] };
+      subtopics.push(currentST);
+    } else {
+      if (!currentST) {
+        currentST = { title: 'Overview', nodes: [] };
+        subtopics.push(currentST);
+      }
+      currentST.nodes.push(node);
+    }
+  });
+
+  currentFrameworkData = subtopics;
   listEl.innerHTML = '';
 
   if (chapterTitle) {
@@ -820,38 +823,35 @@ function renderMidContent(theme) {
     listEl.appendChild(badge);
   }
 
-  if (subtopics.length === 0) {
-    listEl.innerHTML += '<div style="color:var(--text3);font-size:13px;text-align:center;margin-top:30px;">No subtopics found.</div>';
-    return;
-  }
-
-  subtopics.forEach((st, origIdx) => {
-    // Skip subtopics with no matching src bullets when a src filter is active
+  subtopics.forEach((st, idx) => {
+    // Filter by source if needed
     if (currentSrcFilter !== 'ALL') {
-      const hasSrc = (st.bullets || []).some(l => bulletMatchesSrc(l, currentSrcFilter));
+      const hasSrc = st.nodes.some(n => {
+        const fullText = (n.text || '') + (n.bold || '');
+        return bulletMatchesSrc(fullText, currentSrcFilter);
+      });
       if (!hasSrc) return;
     }
 
     const btn = document.createElement('div');
+    btn.className = 'subtopic-btn';
     btn.style.cssText = 'padding:12px 14px; border-radius:6px; cursor:pointer; font-size:13px; font-weight:600; color:var(--text); border:1px solid var(--border); transition:all 0.2s; background:var(--surface2); display:flex; align-items:center; justify-content:space-between; margin-bottom:2px; line-height:1.4;';
     btn.innerHTML = '<span>' + (recallLeft ? '—' : st.title) + '</span><span style="font-size:16px;color:var(--text3);">›</span>';
-    btn.onmouseover = () => { if (!btn.classList.contains('active')) { btn.style.borderColor='var(--accent)'; btn.style.transform='translateX(2px)'; } };
-    btn.onmouseout  = () => { if (!btn.classList.contains('active')) { btn.style.borderColor='var(--border)'; btn.style.transform='translateX(0)'; } };
     btn.onclick = () => {
-      if (recallLeft) return; // block right pane when left recall is ON
-      Array.from(listEl.children).forEach(c => {
-        c.classList.remove('active');
-        c.style.borderColor = 'var(--border)';
-        c.style.background  = 'var(--surface2)';
-        c.style.color       = 'var(--text)';
-        c.style.transform   = 'translateX(0)';
+      if (recallLeft) return;
+      document.querySelectorAll('.subtopic-btn').forEach(b => {
+        b.classList.remove('active');
+        b.style.borderColor = 'var(--border)';
+        b.style.background  = 'var(--surface2)';
+        b.style.color       = 'var(--text)';
+        b.style.transform   = 'translateX(0)';
       });
       btn.classList.add('active');
       btn.style.background  = 'var(--accentbg)';
       btn.style.color       = 'var(--accent)';
       btn.style.borderColor = 'var(--accent)';
       btn.style.transform   = 'translateX(2px)';
-      renderRightContent(origIdx);
+      renderRightContent(idx);
     };
     listEl.appendChild(btn);
   });
@@ -873,8 +873,16 @@ function renderRightContent(idx) {
   currentSubtopicIdx = idx;
 
   const st = currentFrameworkData[idx];
-  const bulletLines = (st.bullets || []).filter(l => l.trim() !== '' && !/^#{3,}/.test(l) && bulletMatchesSrc(l, currentSrcFilter));
-  const totalBullets = bulletLines.length;
+  const nodes = st.nodes || [];
+  
+  // Filter nodes by source if needed
+  const filteredNodes = nodes.filter(n => {
+    if (currentSrcFilter === 'ALL') return true;
+    const fullText = (n.text || '') + (n.bold || '');
+    return bulletMatchesSrc(fullText, currentSrcFilter);
+  });
+
+  const ptCount = FrameworkParser.countPoints(filteredNodes);
 
   let html = '<div style="margin-bottom:24px; border-bottom:2px solid var(--border); padding-bottom:12px;">'
            + '<h1 style="color:var(--accent); margin:0; font-family:var(--sans); font-size:22px;">' + st.title + '</h1>'
@@ -884,74 +892,42 @@ function renderRightContent(idx) {
 
   if (recallMid) {
     html += '<div style="position:absolute; top:12px; right:12px; display:flex; align-items:center; gap:8px; background:var(--surface3); padding:4px 8px; border-radius:4px; border:1px solid var(--border); z-index:10;">'
-          + '<span style="font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;">Reveal ' + totalBullets + ' Bullets</span>'
+          + '<span style="font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;">Reveal ' + ptCount + ' Points</span>'
           + '<input type="checkbox" onchange="document.getElementById(\'fw-bullets-reveal-box\').style.display=this.checked?\'block\':\'none\';" style="width:16px;height:16px;cursor:pointer;accent-color:var(--accent);">'
           + '</div>';
     html += '<div style="color:var(--text3);font-style:italic;margin-bottom:15px;font-size:13px;max-width:70%;line-height:1.4;">'
-          + 'Mental Challenge: Can you recall the ' + totalBullets + ' key points for this subtopic?'
+          + 'Mental Challenge: Can you recall the ' + ptCount + ' key points for this subtopic?'
           + '</div>';
     html += '<div id="fw-bullets-reveal-box" style="display:none;animation:reveal-pulse 0.4s ease-out;">';
   } else {
     html += '<div id="fw-bullets-reveal-box" style="display:block;">';
   }
 
-  html += '<ul style="margin:0;padding-left:20px;color:var(--text);display:flex;flex-direction:column;gap:10px;">';
+  // Use Centralized Parser for consistent rendering
+  html += FrameworkParser.render(filteredNodes, { query: '' });
 
-  bulletLines.forEach(function(line, bIdx) {
-    const isNumbered  = /^\s{1,}\d+[.)]\s/.test(line);
-    const isSubBullet = /^\s{2,}-\s/.test(line);
-
-    // Strip markdown prefix first, then extract source tags
-    let rawText = line
-      .replace(/^\s*\d+[.)]\s*/, '')
-      .replace(/^\s*-\s+/, '');
-
-    // Detect and strip ⬡ exam-derived marker
-    const isExamDerived = rawText.startsWith('⬡ ');
-    if (isExamDerived) rawText = rawText.slice(2).trimStart();
-
-    const { cleanText, badgesHtml } = parseSrcTags(rawText);
-
-    let text = cleanText.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-    text = highlightKeywords(text);
-
-    // Prepend tiny ⬡ glyph for exam-derived bullets
-    const examGlyph = isExamDerived
-      ? '<span title="Exam-derived bullet" style="font-size:9px;color:var(--accent);opacity:0.7;flex-shrink:0;margin-right:4px;position:relative;top:-1px;">⬡</span>'
-      : '';
-
-    const cbId = 'cb_' + idx + '_' + bIdx;
-    const cbHtml = '<input type="checkbox" id="' + cbId + '" autocomplete="off" '
-      + 'style="width:11px;height:11px;flex-shrink:0;margin-left:6px;cursor:pointer;accent-color:var(--accent);opacity:0.45;vertical-align:middle;position:relative;top:-1px;" '
-      + 'onchange="this.style.opacity=this.checked?\'1\':\'0.45\';" '
-      + 'title="Tick if recalled">';
-
-    // Layout: [⬡?] [text] [badges?] [checkbox]
-    const liInner = '<span style="display:flex;align-items:baseline;justify-content:space-between;gap:6px;width:100%;">'
-                  + examGlyph
-                  + '<span style="flex:1;">' + text + (badgesHtml ? '&ensp;' + badgesHtml : '') + '</span>'
-                  + cbHtml + '</span>';
-
-    if (isNumbered) {
-      const numMatch = line.match(/^\s*(\d+)[.)]/);
-      const num = numMatch ? numMatch[1] : '';
-      html += '<li style="margin-left:20px;list-style-type:none;position:relative;">'
-            + '<span style="position:absolute;left:-20px;font-weight:700;color:var(--accent);">' + num + '.</span>'
-            + liInner + '</li>';
-    } else if (isSubBullet) {
-      html += '<li style="margin-left:20px;list-style-type:circle;">' + liInner + '</li>';
-    } else {
-      html += '<li>' + liInner + '</li>';
-    }
-  });
-
-  html += '</ul>';
   html += '</div>'; // close reveal box
   html += '</div>'; // close bullets-container
 
   cEl.innerHTML = html;
 
-  // Restore saved checkbox states for this subtopic, or ensure all start unchecked
+  // Add checkboxes to each point manually because Revision.html has its own checkbox logic
+  const pointEls = cEl.querySelectorAll('.fwp-point-content, .fwp-sub-content, .fwp-num-content');
+  pointEls.forEach((pEl, bIdx) => {
+    const cbId = 'cb_' + idx + '_' + bIdx;
+    const cb = document.createElement('input');
+    cb.type = 'checkbox';
+    cb.id = cbId;
+    cb.autocomplete = 'off';
+    cb.style.cssText = 'width:11px;height:11px;flex-shrink:0;margin-left:6px;cursor:pointer;accent-color:var(--accent);opacity:0.45;vertical-align:middle;position:relative;top:-1px;';
+    cb.onchange = () => { cb.style.opacity = cb.checked ? '1' : '0.45'; };
+    cb.title = 'Tick if recalled';
+    
+    // Append to a wrapper
+    pEl.appendChild(cb);
+  });
+
+  // Restore saved checkbox states
   const saved = checkboxState[idx] || {};
   cEl.querySelectorAll('input[type="checkbox"]').forEach((cb, i) => {
     cb.checked = saved[i] || false;

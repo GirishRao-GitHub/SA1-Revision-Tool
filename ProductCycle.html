@@ -4,6 +4,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Product Cycle · SA1ity Check</title>
+<script src="js/FrameworkParser.js"></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap');
 
@@ -263,12 +264,12 @@ let recallMode = false;
 // ── LOAD DATA ──────────────────────────────────────────────────────────────
 async function loadData() {
   try {
-    const res = await fetch('data/Topic_Frameworks.json?t=' + Date.now());
+    const res = await fetch('data/Topic_Frameworks_New.json?t=' + Date.now());
     if (!res.ok) throw new Error();
     TOPIC_FRAMEWORKS = await res.json();
   } catch {
     try {
-      const res2 = await fetch('Topic_Frameworks.json?t=' + Date.now());
+      const res2 = await fetch('Topic_Frameworks_New.json?t=' + Date.now());
       if (!res2.ok) throw new Error();
       TOPIC_FRAMEWORKS = await res2.json();
     } catch {
@@ -409,49 +410,26 @@ function inlineMarkdown(text) {
     .replace(/`(.+?)`/g,       '<code style="font-family:var(--mono);font-size:12px;background:var(--surface3);padding:1px 5px;border-radius:3px;">$1</code>');
 }
 
-// Count only actual content bullets (not subheadings/labels/headings)
-function countPts(nodes) {
-  return nodes.filter(n => n.type === 'bullet' || n.type === 'plain' || n.type === 'sub').length;
-}
-
-// ── TOPIC ITEM BUILDER ─────────────────────────────────────────────────────
 function buildTopicItem(topicKey, data, stageKey, query) {
-  const lines = (data && data.bullets) ? data.bullets : (Array.isArray(data) ? data : []);
-  let allNodes = parseLines(lines);
+  let allNodes = data.content || [];
 
-  // Extract the ### main heading (first heading node) to show above the list
+  // Extract the h3 heading if it exists for extra context
   let heading = '';
-  const headingIdx = allNodes.findIndex(n => n.type === 'heading');
-  if (headingIdx !== -1) {
-    heading = allNodes[headingIdx].text;
-    allNodes = allNodes.filter((_, i) => i !== headingIdx);
-  }
+  const h3node = allNodes.find(n => n.type === 'h3');
+  if (h3node) heading = h3node.text;
 
   // Search filtering
   if (query) {
     const q = query.toLowerCase();
     const titleMatch = topicKey.toLowerCase().includes(q) || heading.toLowerCase().includes(q);
     if (!titleMatch) {
-      // Keep a node if its text content matches; keep subheadings that have matching bullets after them
-      const matched = new Set();
-      allNodes.forEach((n, i) => {
-        const nodeText = (n.title || '') + ' ' + (n.content || '') + ' ' + (n.text || '');
-        if (nodeText.toLowerCase().includes(q)) matched.add(i);
-      });
-      if (matched.size === 0) return null;
-      // Also include the nearest preceding subheading/label for context
-      const keep = new Set(matched);
-      matched.forEach(i => {
-        for (let j = i - 1; j >= 0; j--) {
-          if (allNodes[j].type === 'subheading' || allNodes[j].type === 'label') { keep.add(j); break; }
-          if (allNodes[j].type === 'bullet' || allNodes[j].type === 'plain') break;
-        }
-      });
-      allNodes = allNodes.filter((_, i) => keep.has(i));
+      const matched = allNodes.filter(n => (n.text || '').toLowerCase().includes(q) || (n.bold || '').toLowerCase().includes(q));
+      if (matched.length === 0) return null;
+      allNodes = matched;
     }
   }
 
-  const ptCount = countPts(allNodes);
+  const ptCount = FrameworkParser.countPoints(allNodes);
   const itemId = `topic-${stageKey}-${topicKey.replace(/\W/g, '_')}`;
   const isOpen = !!query;
 
@@ -468,21 +446,23 @@ function buildTopicItem(topicKey, data, stageKey, query) {
     </div>
     <div class="topic-body ${isOpen ? 'open' : ''}" id="body-${itemId}">
       ${heading ? `<div class="topic-heading">${query ? highlight(heading, query) : heading}</div>` : ''}
-      ${buildBulletsHtml(allNodes, stageKey, topicKey, query, ptCount)}
+      <div class="fwp-container">
+        ${buildBulletsHtml(allNodes, stageKey, topicKey, query, ptCount)}
+      </div>
     </div>
   `;
   return item;
 }
 
 function buildBulletsHtml(nodes, stageKey, topicKey, query, ptCount) {
-  if (nodes.length === 0) return '<div style="color:var(--text3);font-size:13px;font-style:italic;">No bullet points found.</div>';
+  if (nodes.length === 0) return '<div style="color:var(--text3);font-size:13px;font-style:italic;">No points found.</div>';
   if (recallMode) {
     return `<div class="recall-cover">
       <span>🧠 Recall mode — can you recall the ${ptCount} key points for <strong>${topicKey}</strong>?</span>
-      <button class="recall-reveal-btn" onclick="revealNodes(this, ${JSON.stringify(nodes).replace(/"/g, '&quot;')}, '${query||''}')">Reveal</button>
+      <button class="recall-reveal-btn" onclick="this.parentNode.parentNode.innerHTML = FrameworkParser.render(${JSON.stringify(nodes).replace(/"/g, '&quot;')}, {query: '${query||''}'})">Reveal</button>
     </div>`;
   }
-  return renderNodes(nodes, query);
+  return FrameworkParser.render(nodes, { query: query || '' });
 }
 
 function renderNodes(nodes, query) {

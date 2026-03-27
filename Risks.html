@@ -4,6 +4,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Risks · SA1ity Check</title>
+<script src="js/FrameworkParser.js"></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap');
 
@@ -264,21 +265,8 @@ function loadRiskData(frameworks) {
     const primaryCat = cats[0];
     const catalog = RISK_CATALOG[primaryCat] || { label: primaryCat, icon: '⚠️', color: 'insurance' };
     const icon = (entry._meta && entry._meta.icon) ? entry._meta.icon : catalog.icon;
-    const lines = entry.bullets || [];
+    const content = entry.content || [];
     
-    // Extract bullet points
-    const bullets = [];
-    lines.forEach(line => {
-      if (line.startsWith('- **')) {
-        const m = line.match(/^- \*\*(.*?)\*\*\s*(?::\s*)?(.*)$/);
-        if (m) {
-          const title = m[1].trim();
-          const detail = m[2].trim();
-          bullets.push(`<strong>${title}:</strong> ${detail}`);
-        }
-      }
-    });
-
     // Category display: show all risk categories for this topic
     const catLabels = cats.map(c => (RISK_CATALOG[c] || { label: c }).label).join(' · ');
 
@@ -290,7 +278,7 @@ function loadRiskData(frameworks) {
       title: topicKey,
       badge: catalog.label,
       source: topicKey,
-      bullets: bullets.length ? bullets : ['No bullet data available — check Topic_Frameworks.json']
+      content: content
     });
   });
 
@@ -324,7 +312,6 @@ function renderCards(data) {
     return;
   }
   data.forEach(card => {
-    const li = card.bullets.map(b => `<li class="bullet-item">${b}</li>`).join("");
     grid.insertAdjacentHTML("beforeend", `
       <div class="risk-card theme-${card.theme}" id="${card.id}" data-cat="${card.theme}">
         <div class="card-header" onclick="toggleCard('${card.id}')">
@@ -337,7 +324,9 @@ function renderCards(data) {
           <div class="toggle-arrow">▼</div>
         </div>
         <div class="card-body">
-          <ul class="bullet-list">${li}</ul>
+          <div class="fwp-container">
+            ${FrameworkParser.render(card.content || [], { query: '' })}
+          </div>
           <div class="source-tag">📂 ${card.source}</div>
         </div>
       </div>
@@ -533,12 +522,12 @@ async function init() {
   try {
     let fw = {};
     try {
-      const res = await fetch('data/Topic_Frameworks.json?t=' + Date.now());
+      const res = await fetch('data/Topic_Frameworks_New.json?t=' + Date.now());
       if (!res.ok) throw new Error('data/ path returned ' + res.status);
       fw = await res.json();
     } catch {
       try {
-        const res2 = await fetch('Topic_Frameworks.json?t=' + Date.now());
+        const res2 = await fetch('Topic_Frameworks_New.json?t=' + Date.now());
         if (!res2.ok) throw new Error('root path returned ' + res2.status);
         fw = await res2.json();
       } catch(e2) { console.warn('Risks: fallback also failed', e2); }

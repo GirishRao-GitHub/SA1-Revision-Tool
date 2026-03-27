@@ -4,6 +4,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Stakeholders · SA1ity Check</title>
+<script src="js/FrameworkParser.js"></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap');
 
@@ -240,12 +241,12 @@ let activeSH = null;
 async function loadData() {
   try {
     try {
-      const res = await fetch('data/Topic_Frameworks.json?t=' + Date.now());
+      const res = await fetch('data/Topic_Frameworks_New.json?t=' + Date.now());
       if (!res.ok) throw new Error('data/ path returned ' + res.status);
       TOPIC_FRAMEWORKS = await res.json();
     } catch {
       try {
-        const res2 = await fetch('Topic_Frameworks.json?t=' + Date.now());
+        const res2 = await fetch('Topic_Frameworks_New.json?t=' + Date.now());
         if (!res2.ok) throw new Error('root path returned ' + res2.status);
         TOPIC_FRAMEWORKS = await res2.json();
       } catch(e2) { console.warn('Stakeholders: fallback also failed', e2); }
@@ -324,38 +325,27 @@ function selectStakeholder(shId) {
 function renderTopicCard(topicKey, sh) {
   const entry = TOPIC_FRAMEWORKS[topicKey];
   const meta = entry ? entry._meta : {};
-  const lines = entry && entry.bullets ? entry.bullets : [];
+  const content = entry && entry.content ? entry.content : [];
   const icon = meta.icon || '📌';
   const pillar = meta.pillar || '';
   const pillarTag = pillar ? `<span class="pillar-tag ${pillar.toLowerCase()}">${pillar}</span>` : '';
 
-  const bullets = [];
-  lines.forEach(line => {
-    if (line.startsWith('- **')) {
-      const m = line.match(/^- \*\*(.*?)\*\*\s*(?::\s*)?(.*)$/);
-      if (m) bullets.push({ title: m[1].trim(), detail: m[2].trim().substring(0, 180) + (m[2].length > 180 ? '…' : '') });
-    }
-  });
-
-  const bulletsHtml = bullets.slice(0, 6).map(b => `
-    <div class="topic-bullet">
-      <div class="bullet-dot" style="background:${sh.dot};opacity:.7;margin-top:6px;width:5px;height:5px;border-radius:50%;flex-shrink:0;"></div>
-      <div><span class="bullet-title">${escHtml(b.title)}</span>${b.detail ? `<span class="bullet-detail"> — ${escHtml(b.detail)}</span>` : ''}</div>
-    </div>
-  `).join('');
-
+  const ptCount = FrameworkParser.countPoints(content);
   const cardId = 'shcard-' + topicKey.replace(/[^a-zA-Z0-9]/g, '_');
+
   return `
     <div class="topic-card" id="${cardId}" style="border-left:3px solid ${sh.color}33;">
       <div class="topic-card-header" onclick="toggleCard('${cardId}')">
         <span class="topic-icon">${icon}</span>
         <span class="topic-name">${escHtml(topicKey)}</span>
         ${pillarTag}
-        <span style="font-family:var(--mono);font-size:10px;color:var(--text3);margin-left:8px;">${bullets.length} pts</span>
+        <span style="font-family:var(--mono);font-size:10px;color:var(--text3);margin-left:8px;">${ptCount} pts</span>
         <span class="topic-chevron">&#9654;</span>
       </div>
       <div class="topic-body">
-        <div class="topic-bullets">${bulletsHtml || '<div style="color:var(--text3);font-size:13px;font-style:italic;">No bullets available.</div>'}</div>
+        <div class="topic-bullets" style="padding-top:10px;">
+          ${FrameworkParser.render(content, { query: '' })}
+        </div>
       </div>
     </div>
   `;

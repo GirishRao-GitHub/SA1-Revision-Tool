@@ -4,6 +4,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>SA1ity Check</title>
+<script src="js/FrameworkParser.js"></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap');
 
@@ -877,27 +878,26 @@ window.onload = async function() {
 
     // Load Topic Frameworks Dictionary First
     try {
-        const fwRes = await fetch('data/Topic_Frameworks.json?t=' + new Date().getTime());
+        const fwRes = await fetch('data/Topic_Frameworks_New.json?t=' + new Date().getTime());
         if (!fwRes.ok) throw new Error('data/ path returned ' + fwRes.status);
         TOPIC_FRAMEWORKS = await fwRes.json();
     } catch {
         try {
-            const fwRes2 = await fetch('Topic_Frameworks.json?t=' + new Date().getTime());
+            const fwRes2 = await fetch('Topic_Frameworks_New.json?t=' + new Date().getTime());
             if (!fwRes2.ok) throw new Error('root path returned ' + fwRes2.status);
             TOPIC_FRAMEWORKS = await fwRes2.json();
         } catch(e) { console.warn("Frameworks not loaded", e); }
     }
     if (Object.keys(TOPIC_FRAMEWORKS).length > 0) {
-            // Populate MASTER_TAXONOMY sub-themes from framework bullets
+            // Populate MASTER_TAXONOMY sub-themes from framework content
             MASTER_TAXONOMY = {};
             Object.keys(TOPIC_FRAMEWORKS).forEach(key => {
                 const entry = TOPIC_FRAMEWORKS[key];
-                const lines = (entry && entry.bullets) ? entry.bullets : (Array.isArray(entry) ? entry : []);
+                const content = entry.content || [];
                 const subThemes = [];
-                lines.forEach(line => {
-                    if (line.startsWith('- **')) {
-                        const m = line.match(/^- \*\*(.*?)\*\*/);
-                        if (m) subThemes.push(m[1].trim());
+                content.forEach(node => {
+                    if (node.type === 'h4') {
+                        subThemes.push(node.text.trim());
                     }
                 });
                 MASTER_TAXONOMY[key] = subThemes;
@@ -1343,30 +1343,6 @@ function parseFrameworkLines(lines) {
             }
         });
     } else if (multiH3) {
-        // Type E — group by ### (e.g. Reinsurance)
-        let current = null;
-        lines.forEach(line => {
-            const m = line.match(/^###\s+(.+)$/);
-            if (m) {
-                current = { title: m[1].trim(), bullets: [] };
-                subtopics.push(current);
-            } else if (current && line.trim() !== '') {
-                current.bullets.push(line);
-            }
-        });
-    } else {
-        // Type A — flat: each "- **Bold**" is its own card
-        lines.forEach(line => {
-            if (line.startsWith('- **')) {
-                const m = line.match(/^- \*\*(.*?)\*\*\s*(?::\s*)?(.*)$/);
-                if (m) subtopics.push({ title: m[1].trim(), bullets: [line] });
-            }
-        });
-    }
-
-    return { chapterTitle, subtopics };
-}
-
 function renderFrameworkMidContent(theme) {
     const listEl = document.getElementById('fw-subtopics-list');
     document.getElementById('fw-mid-title').textContent = theme;
@@ -1374,19 +1350,37 @@ function renderFrameworkMidContent(theme) {
     // Reset right pane
     document.getElementById('fw-content').innerHTML = '<h2 style="color:var(--text3); text-align:center; margin-top:100px;">Select a Subtopic to view details</h2>';
 
-    const frameEntry = TOPIC_FRAMEWORKS[theme];
-    if (!frameEntry) {
+    const entry = TOPIC_FRAMEWORKS[theme];
+    if (!entry) {
         listEl.innerHTML = '<div style="color:var(--text3); font-size:13px; text-align:center; margin-top:40px;">No framework data available yet.</div>';
         return;
     }
 
-    const lines = (frameEntry.bullets) ? frameEntry.bullets : (Array.isArray(frameEntry) ? frameEntry : []);
-    const { chapterTitle, subtopics } = parseFrameworkLines(lines);
-    currentFrameworkData = subtopics;
+    // Structured Logic: Group content by headers
+    const content = entry.content || [];
+    let chapterTitle = '';
+    const subtopics = [];
+    let currentST = null;
 
+    content.forEach(node => {
+        if (node.type === 'h3') {
+            chapterTitle = node.text;
+        } else if (node.type === 'h4') {
+            currentST = { title: node.text, nodes: [] };
+            subtopics.push(currentST);
+        } else {
+            if (!currentST) {
+                currentST = { title: 'Overview', nodes: [] };
+                subtopics.push(currentST);
+            }
+            currentST.nodes.push(node);
+        }
+    });
+
+    currentFrameworkData = subtopics;
     listEl.innerHTML = '';
 
-    // Step 1: render chapter badge
+    // Render chapter badge
     if (chapterTitle) {
         const badge = document.createElement('div');
         badge.style.cssText = 'font-size:11px; font-weight:600; color:var(--text3); background:var(--surface3); border:1px solid var(--border); border-radius:4px; padding:3px 8px; margin-bottom:8px; line-height:1.5; text-align:center; letter-spacing:0.03em;';
@@ -1394,13 +1388,14 @@ function renderFrameworkMidContent(theme) {
         listEl.appendChild(badge);
     }
 
-    // Step 2: render sidebar cards
+    // Render sidebar cards
     subtopics.forEach((st, idx) => {
         const btn = document.createElement('div');
         btn.style.cssText = 'padding:12px 14px; border-radius:6px; cursor:pointer; font-size:13px; font-weight:600; color:var(--text); border:1px solid var(--border); transition:all 0.2s; background:var(--surface2); display:flex; align-items:center; justify-content:space-between; margin-bottom:2px; line-height:1.4;';
-        btn.innerHTML = '<span>' + st.title + '</span> <span style="font-size:16px; color:var(--text3);">&#8250;</span>';
-        btn.onmouseover = () => { if (!btn.classList.contains('active')) { btn.style.borderColor = 'var(--accent)'; btn.style.transform = 'translateX(2px)'; } };
-        btn.onmouseout  = () => { if (!btn.classList.contains('active')) { btn.style.borderColor = 'var(--border)';  btn.style.transform = 'translateX(0)'; } };
+        btn.innerHTML = '<span>' + st.title + '</span><span style="font-size:16px;color:var(--text3);">›</span>';
+        
+        btn.onmouseover = () => { if (!btn.classList.contains('active')) { btn.style.borderColor='var(--accent)'; btn.style.transform='translateX(2px)'; } };
+        btn.onmouseout  = () => { if (!btn.classList.contains('active')) { btn.style.borderColor='var(--border)'; btn.style.transform='translateX(0)'; } };
         btn.onclick = () => {
             Array.from(listEl.children).forEach(c => {
                 c.classList.remove('active');
@@ -1426,10 +1421,8 @@ function renderFrameworkRightContent(idx) {
 
     const st = currentFrameworkData[idx];
     const isRecallMode = localStorage.getItem('fw_recall_mode') === 'true';
-
-    // Only count visible content lines for the recall counter
-    const bulletLines = (st.bullets || []).filter(l => l.trim() !== '' && !/^#{3,}/.test(l));
-    const totalBullets = bulletLines.length;
+    const nodes = st.nodes || [];
+    const ptCount = FrameworkParser.countPoints(nodes);
 
     let html = '<div style="margin-bottom:24px; border-bottom:2px solid var(--border); padding-bottom:12px;">'
              + '<h1 style="color:var(--accent); margin:0;">' + st.title + '</h1>'
@@ -1439,38 +1432,17 @@ function renderFrameworkRightContent(idx) {
 
     if (isRecallMode) {
         html += '<div style="position:absolute; top:12px; right:12px; display:flex; align-items:center; gap:8px; background:var(--surface3); padding:4px 8px; border-radius:4px; border:1px solid var(--border); z-index:10;">'
-              + '<span style="font-size:10px; font-weight:700; color:var(--text3); text-transform:uppercase;">Reveal ' + totalBullets + ' Bullets</span>'
+              + '<span style="font-size:10px; font-weight:700; color:var(--text3); text-transform:uppercase;">Reveal ' + ptCount + ' Points</span>'
               + '<input type="checkbox" onchange="document.getElementById(\'fw-bullets-reveal-box\').style.display = this.checked ? \'block\' : \'none\';" style="width:16px; height:16px; cursor:pointer; accent-color:var(--accent);">'
               + '</div>';
         html += '<div id="fw-challenge-prompt" style="color:var(--text3); font-style:italic; margin-bottom:15px; font-size:13px; max-width:70%; line-height:1.4;">'
-              + 'Mental Challenge: Can you recall the ' + totalBullets + ' key points for this subtopic?'
+              + 'Mental Challenge: Can you recall the ' + ptCount + ' key points for this subtopic?'
               + '</div>';
         html += '<div id="fw-bullets-reveal-box" style="display:none; animation: reveal-pulse 0.4s ease-out;">';
     } else {
         html += '<div id="fw-bullets-reveal-box" style="display:block;">';
     }
 
-    // Step 3: render each line by type
-    html += '<ul style="margin:0; padding-left:20px; color:var(--text); display:flex; flex-direction:column; gap:10px;">';
-    bulletLines.forEach(function(line) {
-        const isNumbered  = /^\s{1,}\d+[.)]\s/.test(line);
-        const isSubBullet = /^\s{2,}-\s/.test(line);
-
-        let text = line
-            .replace(/^\s*\d+[.)]\s*/, '')
-            .replace(/^\s*-\s+/, '')
-            .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
-
-        if (isNumbered) {
-            const numMatch = line.match(/^\s*(\d+)[.)]/);
-            const num = numMatch ? numMatch[1] : '';
-            html += '<li style="margin-left:20px; list-style-type:none; position:relative;">'
-                  + '<span style="position:absolute; left:-20px; font-weight:700; color:var(--accent);">' + num + '.</span>'
-                  + highlightKeywords(text, false)
-                  + '</li>';
-        } else if (isSubBullet) {
-            html += '<li style="margin-left:20px; list-style-type:circle;">' + highlightKeywords(text, false) + '</li>';
-        } else {
             html += '<li>' + highlightKeywords(text, false) + '</li>';
         }
     });

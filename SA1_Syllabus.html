@@ -4,6 +4,7 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>SA1 Syllabus</title>
+<script src="js/FrameworkParser.js"></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap');
 
@@ -244,12 +245,12 @@ let activeCatId = null;
 async function loadData() {
   try {
     try {
-      const res = await fetch('data/Topic_Frameworks.json?t=' + Date.now());
+      const res = await fetch('data/Topic_Frameworks_New.json?t=' + Date.now());
       if (!res.ok) throw new Error('data/ path returned ' + res.status);
       TOPIC_FRAMEWORKS = await res.json();
     } catch {
       try {
-        const res2 = await fetch('Topic_Frameworks.json?t=' + Date.now());
+        const res2 = await fetch('Topic_Frameworks_New.json?t=' + Date.now());
         if (!res2.ok) throw new Error('root path returned ' + res2.status);
         TOPIC_FRAMEWORKS = await res2.json();
       } catch(e2) { console.warn('SA1_Syllabus: fallback fetch also failed', e2); }
@@ -318,7 +319,8 @@ function selectCategory(catId) {
   content.style.display = 'block';
 
   const totalBullets = cat.topics.reduce((sum, t) => {
-    return sum + parseBullets(TOPIC_FRAMEWORKS[t] || {}).length;
+    const entry = TOPIC_FRAMEWORKS[t] || {};
+    return sum + FrameworkParser.countPoints(entry.content || []);
   }, 0);
 
   content.innerHTML = `
@@ -364,31 +366,21 @@ function selectCategory(catId) {
 
 // ── RENDER TOPIC CARD ──────────────────────────────────────────
 function renderTopicCard(topicKey, cat, index) {
-  const data = TOPIC_FRAMEWORKS[topicKey] || [];
-  const bullets = parseBullets(data);
-  const count = bullets.length;
-
-  const bulletsHtml = bullets.map(b => `
-    <div class="topic-bullet">
-      <div class="bullet-dot" style="background:${cat.color};opacity:0.7;"></div>
-      <div>
-        <span class="bullet-title">${escHtml(b.title)}</span>
-        ${b.detail ? `<span class="bullet-detail"> — ${escHtml(b.detail)}</span>` : ''}
-      </div>
-    </div>
-  `).join('');
+  const data = TOPIC_FRAMEWORKS[topicKey] || {};
+  const content = data.content || [];
+  const ptCount = FrameworkParser.countPoints(content);
 
   return `
     <div class="topic-card" id="topic-card-${sanitizeId(topicKey)}" style="border-left:3px solid ${cat.color}33;">
       <div class="topic-card-header" onclick="toggleCard('${sanitizeId(topicKey)}')">
         <span class="topic-icon">${topicIcon(topicKey)}</span>
         <span class="topic-name">${escHtml(topicKey)}</span>
-        <span class="topic-count">${count} points</span>
+        <span class="topic-count">${ptCount} points</span>
         <span class="topic-chevron">&#9654;</span>
       </div>
       <div class="topic-body">
-        <div class="topic-bullets" id="bullets-${sanitizeId(topicKey)}">
-          ${count > 0 ? bulletsHtml : '<div style="color:var(--text3);font-size:13px;font-style:italic;">No framework bullets available yet.</div>'}
+        <div class="topic-bullets" id="bullets-${sanitizeId(topicKey)}" style="padding-top:12px;">
+          ${FrameworkParser.render(content, { query: '' })}
         </div>
       </div>
     </div>
@@ -416,8 +408,8 @@ function filterTopics(query, catId) {
 
   const filtered = cat.topics.filter(t => {
     if (t.toLowerCase().includes(q)) return true;
-    const bullets = parseBullets(TOPIC_FRAMEWORKS[t] || []);
-    return bullets.some(b => b.title.toLowerCase().includes(q) || b.detail.toLowerCase().includes(q));
+    const content = (TOPIC_FRAMEWORKS[t] || {}).content || [];
+    return content.some(n => (n.text || '').toLowerCase().includes(q) || (n.bold || '').toLowerCase().includes(q));
   });
 
   if (filtered.length === 0) {
