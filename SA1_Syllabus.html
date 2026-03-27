@@ -104,7 +104,9 @@
 
         .sections-list { display: none; background: rgba(0,0,0,0.15); }
         .chapter-node.open .sections-list { display: block; }
-        .section-node { padding: 10px 20px 10px 44px; cursor: pointer; font-size: 12px; color: var(--text-dim); border-left: 2px solid transparent; }
+        .section-node { padding: 8px 20px 8px 30px; cursor: pointer; font-size: 12px; color: var(--text-dim); border-left: 2px solid transparent; }
+        .section-node.type-h3 { padding-left: 36px; font-weight: 500; color: #fff; }
+        .section-node.type-h4 { padding-left: 52px; font-size: 11px; }
         .section-node:hover { color: #fff; background: rgba(255,255,255,0.03); }
         .section-node.active { color: var(--accent); border-left-color: var(--accent); background: rgba(139, 92, 246, 0.05); }
 
@@ -228,7 +230,8 @@
                         <div class="sections-list">
                             ${data ? data.content.map((node, idx) => {
                                 if (node.type === "h3" || node.type === "h4") {
-                                    return `<div class="section-node ${activeSectionIdx === idx ? 'active' : ''}" 
+                                    const typeClass = node.type === "h3" ? "type-h3" : "type-h4";
+                                    return `<div class="section-node ${typeClass} ${activeSectionIdx === idx ? 'active' : ''}" 
                                                  onclick="selectSection('${id}', ${idx}, '${node.text}')">${node.text}</div>`;
                                 }
                                 return '';
