@@ -20,6 +20,7 @@
             --accent-glow: rgba(88, 166, 255, 0.15);
             --synthesis-iai: #ff7b72;
             --synthesis-ifoa: #d2a8ff;
+            --synthesis-notes: #7ee787;
             --text: #c9d1d9;
             --text-dim: #8b949e;
             --text-bright: #f0f6fc;
@@ -78,8 +79,9 @@
             letter-spacing: 0.05em;
         }
         .src-btn.active { border-color: var(--accent); color: var(--text-bright); background: rgba(88, 166, 255, 0.1); }
-        .src-btn.active[data-src="iai"] { border-color: var(--synthesis_iai); color: var(--synthesis-iai); }
+        .src-btn.active[data-src="iai"] { border-color: var(--synthesis-iai); color: var(--synthesis-iai); }
         .src-btn.active[data-src="ifoa"] { border-color: var(--synthesis-ifoa); color: var(--synthesis-ifoa); }
+        .src-btn.active[data-src="notes"] { border-color: var(--synthesis-notes); color: var(--synthesis-notes); }
 
         .workspace { display: flex; flex: 1; overflow: hidden; }
 
@@ -150,6 +152,8 @@
         .synthesis-callout[data-src="iai"]::before { background: var(--synthesis-iai); }
         .synthesis-callout[data-src="ifoa"] { border-color: rgba(210, 168, 255, 0.2); }
         .synthesis-callout[data-src="ifoa"]::before { background: var(--synthesis-ifoa); }
+        .synthesis-callout[data-src="notes"] { border-color: rgba(126, 231, 135, 0.2); }
+        .synthesis-callout[data-src="notes"]::before { background: var(--synthesis-notes); }
 
         .synthesis-header {
             display: flex; align-items: center; gap: 10px; margin-bottom: 16px;
@@ -157,6 +161,7 @@
         }
         .synthesis-header[data-src="iai"] { color: var(--synthesis-iai); }
         .synthesis-header[data-src="ifoa"] { color: var(--synthesis-ifoa); }
+        .synthesis-header[data-src="notes"] { color: var(--synthesis-notes); }
         
         .mermaid { background: rgba(255,255,255,0.02); padding: 20px; border-radius: 8px; border: 1px solid var(--border); margin: 30px 0; }
 
@@ -183,6 +188,7 @@
             <button class="src-btn active" data-src="acted" onclick="toggleSource('acted')">ActEd</button>
             <button class="src-btn active" data-src="iai" onclick="toggleSource('iai')">IAI Synthesis</button>
             <button class="src-btn active" data-src="ifoa" onclick="toggleSource('ifoa')">IFoA Synthesis</button>
+            <button class="src-btn active" data-src="notes" onclick="toggleSource('notes')">Notes</button>
         </div>
     </header>
 
@@ -215,7 +221,7 @@
         let activePart = null;
         let activeChapter = null;
         let activeSectionIdx = null;
-        let activeSources = { acted: true, iai: true, ifoa: true };
+        let activeSources = { acted: true, iai: true, ifoa: true, notes: true };
 
         async function init() {
             try {
@@ -322,13 +328,17 @@
                 let srcTag = 'acted';
                 if (text.includes('[src:IAI') || bold.includes('[src:IAI')) srcTag = 'iai';
                 else if (text.includes('[src:IFoA') || bold.includes('[src:IFoA')) srcTag = 'ifoa';
+                else if (text.includes('[src:Notes') || bold.includes('[src:Notes')) srcTag = 'notes';
                 
                 // Synthesis Callout Logic: If it starts with ***, start or end a callout
                 if (type === "text" && text.startsWith("***")) {
                     if (inCallout) html += `</div>`; // Close previous
                     
                     inCallout = true;
-                    calloutSrc = text.toLowerCase().includes("iai") ? "iai" : "ifoa";
+                    if (text.toLowerCase().includes("iai")) calloutSrc = "iai";
+                    else if (text.toLowerCase().includes("ifoa")) calloutSrc = "ifoa";
+                    else calloutSrc = "notes";
+                    
                     const label = text.split("***")[1].split("[")[0].trim();
                     
                     html += `<div class="synthesis-callout" data-src="${calloutSrc}">

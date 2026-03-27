@@ -8,19 +8,19 @@ def parse_markdown(file_path):
     
     # Aggressive and Targeted noise patterns
     NOISE_PATTERNS = [
-        r"(?i)^page\s*[\d\=\\_\s]*$", # Page 3, Page \=, Page _ (isolated)
+        r"(?i)page\s+[\d\=\\_\s]+.*$",
         r"(?i)^the\s+actuarial\s+education\s+company",
         r"(?i)^[do]?ife:?\s*\d{4}\s*examinations", 
         r"(?i)^sa1-\d+",
-        r"(?i)^sat[o]?\s*[\d\s]*", # SATO, SAT 01, SATO Short term...
-        r"^\s*\d+\s*$",  # Isolated numbers
+        r"(?i)^sat[o]?\s*[\d\s]*",
+        r"^\s*\d+\s*$",
         r"(?i)actuarial\s+education\s+company",
         r"(?i)^2024\s+examinations",
-        r"(?i)^nal\s+of\s+men", # OCR error
-        r"(?i)^dife\s+\d+", # OCR error
-        r"^\s*[\*\s\-\.\/\\]+\s*$", # Only punctuation/slashes
+        r"(?i)^nal\s+of\s+men",
+        r"(?i)^dife\s+\d+",
+        r"^\s*[\*\s\-\.\/\\]+\s*$",
         r"^\s*\(this\s+is\s+only\s+part\s+of\s+syllabus\s+objective.*\)\s*$",
-        r"(?i)^short\s*term\s*health\s*and\s*care\s*insurance\s*products\s*$" # Redundant title
+        r"(?i)^short\s*term\s*health\s*and\s*care\s*insurance\s*products\s*$"
     ]
 
     if not os.path.exists(file_path):
@@ -31,21 +31,18 @@ def parse_markdown(file_path):
     
     for line in lines:
         line = line.strip()
-        if not line:
-            continue
+        if not line: continue
             
-        # Clean non-breaking spaces and other weirdness
+        # 1. PRE-CLEAN for matching
         line = line.replace('\u00a0', ' ').replace('\u2013', '-').replace('\u2014', '-')
+        line = line.replace('**', '').replace('\\-', '-').replace('\\.', '.').replace('\\_', '_').replace('\\', '')
+        line = line.strip()
         
-        # Skip noise
+        # 2. MATCH NOISE
         if any(re.search(pattern, line, re.IGNORECASE) for pattern in NOISE_PATTERNS):
             continue
             
-        # Clean line
-        line = line.replace('\\-', '-').replace('\\.', '.').replace('\\_', '_').replace('\\', '')
-        line = line.replace('**', '').strip()
-        
-        # Skip weird tiny fragments or single numbers that escaped prefix matching
+        # 3. EXTRA CLEAN
         if len(line) < 3 and not line.isdigit():
             continue
         if line.isdigit() and len(line) < 3:
@@ -94,7 +91,6 @@ def integrate_chapter(chapter_id, md_path, topics_path, output_path):
     final_nodes = []
     final_nodes.append({"type": "text", "text": "***Expert Synthesis: Six Pillar Framework*** [src:IAI_Master]"})
     
-    # Add pillars
     pillar_key = "The Six Pillar Framework (P1-P6)"
     pillar_content = topics_data.get(pillar_key, {}).get("content", [])
     pillars_to_add = ["P1:", "P2:", "P3:"]
@@ -107,7 +103,6 @@ def integrate_chapter(chapter_id, md_path, topics_path, output_path):
             added_count += 1
             if added_count >= 3: break
 
-    # Interweave
     added_in_section = set()
     for node in nodes:
         if node["type"] in ["h3", "h4"]:
@@ -130,8 +125,14 @@ def integrate_chapter(chapter_id, md_path, topics_path, output_path):
                         theme_points = [n for n in theme_data.get("content", []) if n.get("type") == "point"]
                         if theme_points:
                             teaser = theme_points[0].copy()
+                            teaser_text = teaser.get("text", "")
+                            
+                            if "IAI" in teaser_text: source_tag = "IAI_Synthesis"
+                            elif "IFoA" in teaser_text: source_tag = "IFoA_Synthesis"
+                            else: source_tag = "Notes"
+                                
                             teaser["bold"] = f"Expert Insight: {theme_name}"
-                            teaser["text"] = teaser.get("text", "") + f" [src:IAI_Synthesis]"
+                            teaser["text"] = teaser_text + f" [src:{source_tag}]"
                             final_nodes.append(teaser)
                             added_in_section.add(theme_name)
                             break
