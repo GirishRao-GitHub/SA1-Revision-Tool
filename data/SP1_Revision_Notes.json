@@ -2761,122 +2761,274 @@
     "sections": [
       {
         "id": "1",
-        "title": "General Principles of Setting Assumptions",
+        "title": "General Considerations",
         "subsections": [
           {
             "id": "1.1",
-            "title": "Key Principles",
+            "title": "Principles When Setting Assumptions",
             "bullets": [
-              "When setting assumptions it is important to: consider the use to which they will be put; take particular care over financially significant assumptions; achieve consistency between assumptions; consider legislative/regulatory constraints; consider the needs of the client; ensure parameters are produced accurately from the data; ensure data are relevant to the insured lives; and ensure bases are flexible to reflect changing risk circumstances.",
-              "The general process: (1) investigate historical experience and make best estimates; (2) consider future conditions; (3) determine best estimates for the future period; (4) adjust for margins where required.",
-              "Consistency is a guiding principle — assumptions must be considered in totality, not in isolation. Key correlated pairs: morbidity and lapse rates; morbidity and claims expenses; morbidity and investment return; new business volumes and fixed expenses; lapse rates and investment return; investment return and inflation."
+              "Consider the use to which assumptions will be put: pricing fixes premium rates that will apply until the next review or for the policy term; reserving requires prudent estimates to demonstrate solvency; EV calculation requires realistic assumptions to measure company value. Choosing the wrong type of assumption for the wrong purpose risks pricing error, under-reserving, or misleading profitability signals.",
+              "Take particular care over assumptions with the most financial significance — a small change in morbidity incidence rates or the investment return assumption can have a disproportionately large impact on profit relative to minor assumptions such as termination expenses.",
+              "Achieve consistency between assumptions: correlations between parameters (eg morbidity and investment return are both influenced by the economic climate; lapse rates and morbidity are linked via selective lapsing) mean they cannot be set in isolation. The relationship between two correlated parameters can matter more than their individual absolute values.",
+              "Consider any legislative or regulatory constraints: in some countries valuation assumptions are prescribed by the regulator; in others, the actuary must demonstrate the overall reserves are at least as prudent as a prescribed regulatory minimum.",
+              "Ensure the data used to derive assumptions are relevant to the insured lives — own data reflecting the insurer's specific underwriting, claims management, distribution channel, and target market is most relevant; external data must be adjusted for differences in these factors.",
+              "Ensure bases used for periodic valuations are flexible enough to reflect changing risk circumstances — assumptions must respond to changes in the circumstances of in-force policyholders that might affect future experience (eg a deteriorating economy increasing IP claim rates or reducing PMI renewal rates).",
+              "Failure to adhere to these principles increases downside risk: under-pricing may result in selling high volumes of loss-making business before the error is detected; under-reserving risks supervisory insolvency; over-reserving consumes capital unnecessarily and depresses reported profitability."
             ],
             "key_terms": [
               {
                 "term": "Basis",
-                "definition": "The complete set of assumptions used for a particular modelling application (eg pricing basis, reserving basis). Includes all demographic, financial, and other assumptions."
+                "definition": "The complete set of assumptions (morbidity rates, mortality rates, expenses, investment return, lapses, etc.) used for a specific modelling purpose — pricing, reserving, embedded value calculation, or profitability analysis."
               },
               {
-                "term": "Best estimate",
-                "definition": "An assumption that reflects the actuary's best estimate of future realistic experience, without any margins for prudence."
-              },
-              {
-                "term": "Margin",
-                "definition": "An adjustment to a best estimate assumption to provide a buffer against adverse experience. The direction (higher or lower than best estimate) depends on which direction is adverse for the purpose."
+                "term": "Prudential margin",
+                "definition": "An addition to (or subtraction from) a best estimate assumption to reflect the risk of adverse experience — the direction of the margin depends on whether adverse experience would increase or decrease costs (eg incidence rates are loaded upward; interest rates are loaded downward for reserving)."
               }
             ],
-            "exam_qa": []
+            "exam_qa": [
+              {
+                "q": "List the demographic, financial, and other assumptions that might need to be set for a health and care insurer.",
+                "a": "Demographic: IP claim inception and recovery rates; CI claim incidence rates by illness; LTCI claim inception and transition rates between care levels; PMI claim incidence rates by benefit category; mortality rates for both healthy and claiming lives; lapse/non-renewal rates. Financial: benefit amount and benefit inflation; expenses and expense inflation; commission and clawback; investment return; taxes. Other: new business volume and mix; supervisory reserving and capital requirements; risk discount rate; profit criteria."
+              }
+            ]
+          },
+          {
+            "id": "1.2",
+            "title": "General Process for Setting Assumptions",
+            "bullets": [
+              "Standard four-step framework: (1) Investigate historical experience and derive best estimates of parameters. (2) Assess future conditions — the commercial, economic, and regulatory environment over the period the assumptions will apply. (3) Determine best estimates given expected future conditions. (4) Apply margins for prudence if required by the purpose — supervisory reserves typically require larger margins than pricing, which in turn requires larger margins than EV calculations.",
+              "Project to the mid-point of insurance usage: since the pricing database is historic, all assumptions must be projected forward to the average time over which the pricing basis will be used and applied to in-force business — this requires adjustments for both calendar-year trends and age-related changes in experience.",
+              "The purpose drives the degree of prudence required: pricing margins must balance risk coverage against competitive premium levels; supervisory reserve margins must meet regulatory standards regardless of competitive considerations; EV projections are typically best estimate."
+            ],
+            "key_terms": [
+              {
+                "term": "Best estimate",
+                "definition": "The assumption that represents the actuary's best expectation of future experience, without any additional margin for prudence — the starting point for all basis construction before margins are applied."
+              }
+            ],
+            "exam_qa": [
+              {
+                "q": "Which pairs of assumptions are likely to be correlated and why does this matter for basis construction?",
+                "a": "Correlated pairs include: (1) Morbidity and lapse rates — higher lapses increase selective lapsing, where better risks leave, worsening the remaining portfolio's morbidity. (2) Morbidity and claims expenses — claims expense volumes must be consistent with assumed claim frequency. (3) Morbidity and investment return — both are sensitive to the economic climate. (4) New business volume and fixed expense loading — the per-policy fixed expense contribution depends critically on assumed volumes. (5) Lapse rates and investment return — economic climate drives both. (6) Investment return and expense/benefit inflation — the long-term relationship between asset yields and inflation must be internally consistent. Failing to respect these correlations creates internal inconsistency in the basis and can produce systematically optimistic or pessimistic results."
+              }
+            ]
+          },
+          {
+            "id": "1.3",
+            "title": "Consistency Between Assumptions and Across Products",
+            "bullets": [
+              "Consistency is a guiding principle: assumptions must be considered in totality, not in isolation. Where correlations exist between variables, realistic allowance must be made for how they behave together — the correlation can be more important than the individual absolute values.",
+              "Cross-product consistency: the basis for a closely related product should form the starting point for a new product's basis. For example, the basis for a new stand-alone CI product should take as its starting point the insurer's existing accelerated CI product basis — using different assumptions for two similar products without justification is inconsistent.",
+              "Inconsistency between related products creates commercial risk: if two similar products are priced on different bases, one will be cheaper than the other. Policyholders holding the expensive product may lapse and take out the cheaper one, causing additional commission costs, new underwriting costs, and potentially generating overall losses. The insurer's profits become more sensitive to the mix of new business sold."
+            ],
+            "key_terms": [],
+            "exam_qa": [
+              {
+                "q": "What might happen if an insurer uses an inconsistent basis between two closely related products?",
+                "a": "The insurer ends up selling two similar products at the same time, one of which is cheaper relative to the other due to the inconsistency. Consequences: (1) Holders of the more expensive product may lapse and take out the cheaper one — the insurer incurs fresh underwriting and commission costs and makes a loss on the lapse. (2) A greater proportion of the cheaper product is sold, distorting the business mix. (3) Policyholders who discover the pricing inequity generate adverse publicity. (4) Profits become more sensitive to the mix of new business sold, increasing business risk."
+              }
+            ]
           }
         ]
       },
       {
         "id": "2",
-        "title": "Assumptions for Pricing",
+        "title": "Assumptions for Pricing Purposes",
         "subsections": [
           {
             "id": "2.1",
-            "title": "Pricing Basis and Margins",
+            "title": "Basis for Pricing — Best Estimate Plus Margins",
             "bullets": [
-              "The starting point for pricing is a best estimate basis, but margins must be added to guard against adverse experience — the 'funnel of doubt' is wider for health and care than for pure life insurance.",
-              "Risk from adverse future experience in a cashflow model may be allowed for through: (1) margins applied to expected parameter values; (2) a stochastic approach; or (3) a risk element in the risk discount rate.",
-              "The size of margins depends on: the degree of risk associated with each parameter; and the financial significance of the risk from each parameter.",
-              "The margins and price ultimately charged depend on: competitiveness of the market; the company's USP; the company's attitude to risk; the credibility, accuracy, and relevance of the data; and the size of free assets or parental guarantee.",
-              "Under-estimating morbidity (leading to under-pricing) is more dangerous than over-estimating (leading to under-selling) — it is better to sell little profitable business than much loss-making business."
+              "Pricing focuses on book-rated business (premiums set from standard rate tables, not dependent on individual past experience) for initial derivation of rates. Experience-rated approaches — used mainly for group business and no-claims discounts on PMI — come later as own experience emerges and market information reveals relevant trends.",
+              "The starting point is a best estimate of future experience, but margins are necessary to guard against adverse outcomes. The pricing basis inclusive of margins fixes the level of risk the insurer accepts once the product is issued at that price — once policies are sold at a guaranteed premium, the risk cannot be undone.",
+              "Time horizon determines required margin size: a fully guaranteed IP policy ceasing at retirement requires long-term judgements about all parameters with corresponding large margins; a reviewable CI or annual PMI product only needs assessment over 1–5 years, after which premiums can be revised — shorter horizons where adverse experience can be corrected via renewal or review permit smaller margins."
             ],
             "key_terms": [
               {
-                "term": "Book rates",
-                "definition": "Standard premium rates applied to all policyholders without reference to their individual past claims experience. Contrasts with experience rating, typically used for group business."
+                "term": "Book rate",
+                "definition": "A standard premium rate applied uniformly to all lives in a risk group, set from the insurer's standard rate tables without reference to the individual policyholder's past claims experience — the default for new individual business."
               },
               {
-                "term": "USP (Unique Selling Proposition)",
-                "definition": "The degree to which a company's product is differentiated from competitors. A high USP allows greater pricing margins."
+                "term": "Experience rating",
+                "definition": "An approach where premiums are based wholly or partially on the past claims experience of the specific policyholder or group — used mainly for group insurance where the scheme's own past record is available and credible."
               }
             ],
-            "exam_qa": []
+            "exam_qa": [
+              {
+                "q": "For what sort of health and care business is experience rating most likely to be used?",
+                "a": "Experience rating is most used for group insurance — the past experience of the specific scheme plays a key part in determining the following year's premium. For individual business, no-claims discounts (a specific form of experience rating) may be used for PMI and possibly IP. Long-term individual products are almost always book-rated since there is insufficient individual history to rely on at the point of pricing."
+              }
+            ]
+          },
+          {
+            "id": "2.2",
+            "title": "Margins — Why They Are Needed and How Large",
+            "bullets": [
+              "Health and care insurance has a wider 'funnel of doubt' than pure life insurance: fewer credible statistics; claims outcomes are more subjective (medical claim definitions involve interpretation); outcomes are more influenced by factors outside the insurer's control (economic conditions, State provision changes, social attitudes to sickness). All sources of risk must be considered when sizing margins.",
+              "Two determinants of margin size: (a) the degree of risk/uncertainty associated with each parameter — driven by data credibility, subjectivity of claim definitions, and the predictability of the variable; (b) the financial significance of adverse experience from each parameter — high uncertainty on a financially immaterial assumption (eg PMI investment return) requires less margin than low uncertainty on a key driver (eg CI incidence rates on a 20-year guaranteed product).",
+              "Three mechanisms for allowing for risk in a cashflow pricing model: (i) Apply margins directly to individual parameter assumptions — increase incidence rates above best estimate, reduce interest rate below best estimate. (ii) Use a stochastic approach — model parameter probability distributions and simulate the range of outcomes; margin = premium loading needed to achieve the target profit level across the simulated distribution. (iii) Include the risk premium in the risk discount rate — use best estimate parameters but increase the RDR to compensate shareholders for risk. All three can produce the same net premium but express the risk differently.",
+              "At one extreme, all prudence can be built into individual assumptions with a risk-free discount rate; at the other, best estimates are used everywhere with an elevated RDR. For pure formula models (no cashflow projection), only parameter margins are available — stochastic modelling and elevated RDR are not directly applicable.",
+              "It is worse to under-estimate morbidity than to over-estimate it: selling high volumes of under-priced business creates large losses before the error is identified (the insurer sells a lot before realising); over-priced business will quickly be revealed by low sales volumes and competitor rate comparisons, allowing fast corrective action."
+            ],
+            "key_terms": [
+              {
+                "term": "Funnel of doubt",
+                "definition": "The range of uncertainty around a best estimate assumption — wider for health and care than for life insurance because of greater subjectivity in claim definitions and stronger sensitivity to social, economic, and political factors outside the insurer's control."
+              },
+              {
+                "term": "Risk discount rate (RDR)",
+                "definition": "The rate used to discount projected future profits in a profit test, incorporating a risk premium above the risk-free rate to compensate shareholders for the variability and uncertainty of those profits."
+              }
+            ],
+            "exam_qa": [
+              {
+                "q": "Discuss the extent to which margins are required when pricing a 20-year CI product, and where in the basis those margins should be applied.",
+                "a": "Substantial margins are needed because: (1) 20-year term creates high parameter uncertainty — CI incidence rates are sensitive to medical advances (new diagnostic techniques accelerating claim rates, or new treatments reducing them), disease prevalence trends, and loose policy wording interpretation — all highly uncertain over 20 years. (2) If premiums are guaranteed and non-reviewable, the insurer cannot adjust for adverse experience, making the financial significance of any error very large. (3) CI data is less voluminous and credible than life mortality data, increasing estimation risk. Where to apply margins: primary margin is an upward loading to CI incidence rates. Expense assumptions should also be loaded upward for inflation uncertainty. An interest rate margin matters less (reserves for regular premium CI are relatively small so investment return has limited impact). If premiums are reviewable, smaller margins suffice because adverse experience can trigger a review, limiting the financial exposure."
+              }
+            ]
+          },
+          {
+            "id": "2.3",
+            "title": "Competitive Constraints on Margins — Five Factors",
+            "bullets": [
+              "Five factors determine the final pricing margins: (1) Competitiveness of the market — more competitive markets compress margins to retain volume; (2) Company's USP — a distinctive product with no close substitute can sustain higher margins without losing sales; (3) Company's risk appetite — more risk-averse shareholders require larger margins to compensate for the uncertainty; (4) Credibility, accuracy, and relevance of data — better data reduces uncertainty and thus the required margin; (5) Size of free assets or parental guarantee — more capital buffer means the company can absorb adverse experience without immediate solvency risk, allowing lower margins.",
+              "Direction of effects: increasing competitiveness → reduce margins; increasing USP → can increase margins; increasing risk aversion → increase margins; improving data quality → reduce margins; increasing free assets or capital backing → reduce margins.",
+              "Trade-off between under- and over-pricing: too high a margin prices the product out of the market; too low a margin exposes the insurer to losses. The price charged and the margins incorporated are a satisfactory compromise between the need to reduce risk on one hand and the need to maintain sufficient business volume on the other."
+            ],
+            "key_terms": [
+              {
+                "term": "USP (unique selling proposition)",
+                "definition": "The distinctive feature(s) of a product that differentiate it from competitors — a company with a high USP can charge a higher premium without losing sales because policyholders cannot easily find an equivalent alternative."
+              }
+            ],
+            "exam_qa": [
+              {
+                "q": "Discuss the extent to which margins against adverse contingencies are required when pricing an immediate needs long-term care annuity.",
+                "a": "Significant margins are required because: (1) Mortality uncertainty — the policyholder is already claiming; how long they will live is highly uncertain and mortality rates for sick/elderly lives are less predictable than for healthy lives. Assumed mortality rates must be reduced (ie assume longer survival). (2) Transition to higher care categories — if higher benefit levels are triggered by deterioration in care needs, the transition rates and their timing are highly uncertain; transition rates should be increased. (3) Benefit inflation — if benefits are linked to long-term care cost indices (nursing/residential home fees), and care cost inflation may significantly exceed general price inflation due to staffing costs and demand for care. Assume a higher benefit inflation rate. (4) Investment return — cashflows are long-term and uncertain in duration, creating asset-liability mismatch risk; a reduced investment return should be assumed. (5) Expenses — administering claims for variable care levels and monitoring ongoing eligibility is expensive; assume higher expenses and expense inflation."
+              }
+            ]
           }
         ]
       },
       {
         "id": "3",
-        "title": "Assumptions for Reserving",
+        "title": "Assumptions for Reserving Purposes",
         "subsections": [
           {
             "id": "3.1",
-            "title": "Reserving Basis Principles",
+            "title": "General Principles — Types of Reserve Basis",
             "bullets": [
-              "The starting point is again best estimate assumptions; margins are then added depending on the purpose of the valuation.",
-              "Published accounts: must comply with local legislation and accounting principles; consider going-concern vs break-up basis, true-and-fair view, and required level of prudence.",
-              "Solvency accounts: may have specific regulatory constraints on assumptions (eg minimum valuation interest rate = pricing interest rate) or more general constraints (eg result must not be lower than a prescribed basis).",
-              "Some regimes (including EU/Solvency II) use best estimate base reserves with a separate risk margin — not embedding margins in assumptions.",
-              "Two approaches to statutory reserves: (1) prudent assumptions embedded throughout; (2) best estimate assumptions with a separate risk margin and minimum solvency capital requirement.",
-              "Best estimate reserves are used for: internal management accounts; sale of business; assessment of reinsurance; investment strategy. For these, there is no elimination of negative reserves.",
-              "Statutory reserving vs pricing: where pricing uses realistic assumptions (risk allowed for via risk discount rate), the same basis cannot be used for prudent statutory reserves — a separate, more cautious reserving basis is needed."
+              "The starting point for reserving assumptions is always expected future experience (best estimate). Margins are then applied so that the probability of reserves being inadequate falls below an acceptably low level — what is 'acceptably low' depends on the purpose of the valuation.",
+              "Published accounts: assumptions must be consistent with accounting legislation and principles; key questions are whether accounts are on a going concern or break-up basis, whether a true and fair view is required, and whether reserves must be best estimate or prudent.",
+              "Solvency accounts: may have specific constraints (eg the valuation interest rate must equal the pricing basis rate) or general constraints (reserves must not be lower than a prescribed regulatory floor). Two broad approaches: (a) assumptions incorporate margins for prudence directly; (b) base reserves are calculated on a best estimate basis with a separate risk margin and/or minimum solvency capital requirement added.",
+              "Going concern vs break-up vs run-off: going concern assumes continued normal operation and new business writing; break-up assumes the insurer is wound up and unexpired cover cancelled; run-off assumes no new business but full servicing of in-force policies to expiry. The appropriate liability framework and expense loadings differ materially across these three bases.",
+              "Decreasing the discount rate increases prudence for a positive reserve (higher present value of future outgo); increasing the discount rate would paradoxically increase prudence for a negative reserve, where these are permitted."
             ],
             "key_terms": [
               {
-                "term": "Going-concern basis",
-                "definition": "An assumption that the insurance company will continue to operate, servicing existing and new business."
-              },
-              {
-                "term": "Run-off basis",
-                "definition": "An assumption that the insurer continues to service in-force business but writes no new business."
+                "term": "Going concern basis",
+                "definition": "A valuation basis that assumes the insurer continues to operate normally, writing new business and servicing existing policies — the standard basis for most published accounts."
               },
               {
                 "term": "Break-up basis",
-                "definition": "An assumption that the insurer is wound up; existing policies with unexpired cover are cancelled (possibly with return of part of the premium)."
+                "definition": "A valuation basis that assumes the insurer is wound up — unexpired cover is cancelled, typically with a return of the unexpired pro-rata premium to the policyholder."
+              },
+              {
+                "term": "Run-off basis",
+                "definition": "A valuation basis that assumes the insurer closes to new business but continues to service all existing in-force policies to expiry — an intermediate position between going concern and break-up."
               }
             ],
             "exam_qa": []
+          },
+          {
+            "id": "3.2",
+            "title": "Best Estimate Reserving and When It Is Used",
+            "bullets": [
+              "Best estimate reserves use a cashflow method: project expected future claims, expenses, and tax outgo against expected future premium and investment income; the present value of any shortfall = reserve required. All experience items (morbidity, mortality, expenses, persistency, investment return) are allowed for explicitly on a realistic basis.",
+              "Under best estimate reserving there is no elimination of negative reserves — eliminating negative reserves is a prudent adjustment, but the purpose here is a realistic picture of financial performance. Negative reserves arise when future expected premium income exceeds future expected claims and expenses on a specific policy.",
+              "Uses for best estimate reserves: internal management accounts (monitoring profitability, investment strategy, reinsurance assessment, capital management); mergers and acquisitions (realistic sale/purchase price); incentive compensation (management bonuses linked to realistic company value); regulatory regimes requiring best estimate foundations (eg Solvency II gross best estimate liabilities)."
+            ],
+            "key_terms": [
+              {
+                "term": "Negative reserve",
+                "definition": "A reserve that is negative because future expected premium income on a policy exceeds future expected claims and expenses — common in early policy years for long-term products. Elimination of negatives (setting them to zero) is prudent but not appropriate for best estimate calculations."
+              }
+            ],
+            "exam_qa": [
+              {
+                "q": "Why would there be no elimination of negative reserve values when setting best estimate reserves?",
+                "a": "Eliminating negative reserves increases the total reserve held above the true best estimate — it is a prudent adjustment that distorts the picture. When the purpose is to obtain a realistic view of financial performance (management accounts, M&A pricing, bonus schemes, or Solvency II gross best estimate liabilities), management needs unbiased reserves. Setting negative reserves to zero would overstate the true liability and give a misleadingly conservative view of company value and profitability."
+              }
+            ]
+          },
+          {
+            "id": "3.3",
+            "title": "Pricing vs Reserving Assumptions — When They Diverge",
+            "bullets": [
+              "In some countries, premiums are priced using prudent assumptions and the same basis is used for supervisory reserves — these are consistent because the pricing margins are already adequate for reserving. In other countries, pricing uses realistic best estimates (risk loaded into the RDR); here the supervisory reserving basis must add explicit prudential margins beyond the pricing assumptions since the pricing basis alone is not sufficiently conservative.",
+              "Under Solvency II-style regimes, base reserves are required to be on a best estimate basis; the total supervisory balance sheet = best estimate liabilities + risk margin + solvency capital requirement (SCR). Here pricing and reserving can share the same underlying best estimate, but the supervisory reserve is augmented by the separately calculated risk margin."
+            ],
+            "key_terms": [],
+            "exam_qa": [
+              {
+                "q": "A proprietary company issues conventional long-term health insurance products. Describe the factors the actuary would consider when determining the extent of margins to incorporate when establishing the level of supervisory reserve.",
+                "a": "The primary factors are: (1) Meeting supervisory regulatory requirements — the assumptions must achieve the necessary degree of prudence mandated by the relevant regime; this overrides commercial considerations that apply to pricing. (2) The necessary level of prudence may be achieved via margins in individual assumptions or via a separate risk margin/solvency capital requirement — regulations specify which approach is required. (3) Commercial considerations (competition, USP, free assets, risk appetite) which influence pricing margins are NOT relevant for reserving — the reserve must be adequate regardless of competitive pressure. (4) Modelling investigations for reserves focus on ensuring that reserves plus solvency capital are sufficient to cover future net outgo with a very high probability (eg 97.5%), using cashflow modelling of in-force business, stochastic analysis, and sensitivity testing."
+              }
+            ]
           }
         ]
       },
       {
         "id": "4",
-        "title": "Assumptions for Profitability (Embedded Value)",
+        "title": "Assumptions for Profitability — Embedded Value",
         "subsections": [
           {
             "id": "4.1",
-            "title": "Embedded Value and Appraisal Value",
+            "title": "Embedded Value — Definition, Components, and Purposes",
             "bullets": [
-              "Embedded value (EV) = shareholders' share of net assets + present value of future shareholder profits. It requires two separate bases: a reserving basis and a projection basis.",
-              "The risk discount rate for EV calculations is typically lower than for pricing, because new business volume/mix uncertainty does not apply to existing business.",
-              "EV for internal management accounts and published accounts: likely to use a realistic/best estimate basis.",
-              "EV for sale (appraisal value): seller uses realistic assumptions; purchaser uses cautious assumptions — the difference reflects bargaining power.",
-              "An allowance for risk must be included in EV — either through a higher risk discount rate (to reflect risky future profits) or through a market-consistent approach (risk-free discount rate with a separate cost-of-capital risk margin).",
-              "A market-consistent EV uses the risk-free rate as the discount rate, assumes investments earn the risk-free rate, and deducts a risk margin for non-investment risks using the cost of capital approach."
+              "Embedded value (EV) = shareholders' share of net assets + present value of future shareholder profits from in-force business, discounted at the RDR. Two separate bases are required: (a) the supervisory reserving basis — used to calculate current net assets and future changes in reserves; (b) the projection basis — used to project future experience to calculate the present value of future shareholder profits.",
+              "EV projection basis is typically a realistic best estimate — the aim is to give a genuine assessment of company value rather than a conservative regulatory picture. However, regulations may require a more prudent EV basis for published accounts.",
+              "EV is measured regularly (eg quarterly) to track how management is increasing company worth. It can be broken down by distribution channel or subsidiary to measure management contributions. Projected EVs are used as a criterion for strategic and financial decisions — eg choosing between two product strategies.",
+              "Appraisal value = EV + present value of future new business profits. Used as a sale/purchase price indicator for mergers and acquisitions. The seller uses realistic assumptions (producing a higher appraisal value); the buyer uses cautious assumptions (producing a lower offer); the final price reflects relative bargaining power.",
+              "EV financing: a reinsurer makes a loan to the insurer, repaid from future profits — the reinsurer uses prudent assumptions to protect itself against the risk that profits do not emerge as projected. The loan amount is limited by the reinsurer's assessment of the discounted future profits using those prudent assumptions."
             ],
             "key_terms": [
               {
                 "term": "Embedded value (EV)",
-                "definition": "The value of the future profit stream from existing business plus the net assets attributable to shareholders. Considered the best measure of an insurer's real worth."
+                "definition": "A measure of the value of an insurer's in-force business = shareholders' net assets (assets minus current supervisory reserves) + present value of future shareholder profits from existing policies, discounted at the risk discount rate."
               },
               {
                 "term": "Appraisal value",
-                "definition": "Embedded value plus the value of expected future new business (goodwill). Used when valuing an insurer for acquisition."
+                "definition": "EV plus the present value of future new business profits — represents the total value of the insurer including the value expected from future sales; used as a sale/purchase price benchmark."
               }
             ],
-            "exam_qa": []
+            "exam_qa": [
+              {
+                "q": "Why is the risk discount rate typically lower when calculating EV of existing business than when pricing a new product?",
+                "a": "For pricing a new product, the RDR must incorporate a premium for the uncertainty of future sales volume and mix — the insurer does not know how many policies will be sold or what the distribution of risks will be. For existing business, volume and mix are already known (the policies are in force), so this source of uncertainty is eliminated. The remaining risks (morbidity, lapses, expenses, investment) still exist, but overall uncertainty is lower, justifying a lower RDR for the EV projection basis."
+              }
+            ]
+          },
+          {
+            "id": "4.2",
+            "title": "Allowing for Risk in EV — RDR, Stochastic, and Market-Consistent Approaches",
+            "bullets": [
+              "Risk allowance in EV: a best estimate EV needs to be reduced to reflect that risky future profits are worth less to shareholders than risk-free cashflows of the same expected amount. Three methods: (a) Elevated RDR — traditional approach; increase the discount rate above the risk-free rate; higher product risk → higher RDR; simple but risk may be difficult to quantify precisely. (b) Stochastic projection — model parameter probability distributions; 1,000+ simulation runs directly measure the variance of future profits; more precise but requires defensible probability distributions. (c) Market-consistent approach — discount at the risk-free rate (swap curve); exclude investment risk from the liability; include an explicit risk margin for non-investment risks (eg using the cost of capital method).",
+              "Market-consistent / Solvency II framework: EV = net assets + gross best estimate liability + risk margin. Risk margin = present value of future SCRs × cost of capital rate (eg 6%). Advantage: directly comparable across companies; disadvantage: may not reflect the insurer's actual cost of capital or its actual investment strategy.",
+              "Even when not used as the primary EV methodology, a market-consistent valuation provides a useful reasonableness check and ensures that risk margins embedded in traditional approaches are appropriate relative to a market benchmark."
+            ],
+            "key_terms": [
+              {
+                "term": "Cost of capital approach",
+                "definition": "A method of calculating the risk margin by projecting the solvency capital requirement (SCR) over future years and discounting the annual cost of holding that capital at the prescribed cost of capital rate (eg 6% under Solvency II) — the total represents the compensation required by a third party to hold the residual non-hedgeable risk."
+              }
+            ],
+            "exam_qa": [
+              {
+                "q": "Describe the factors the actuary would consider when using a cashflow approach to price a long-term health insurance product, including what modelling investigations would be carried out.",
+                "a": "Factors: (1) Parameter uncertainty for each assumption — degree of uncertainty (driven by data credibility and subjectivity of claim definitions) and financial significance of adverse outcomes; (2) Statistical/random fluctuations inherent in future experience — separate from parameter uncertainty; (3) Financial significance of the adverse outcomes — including whether premiums, charges, or policy terms are reviewable, which reduces the financial onerousness of guarantees; (4) Company risk appetite; (5) Proprietors' required return on capital (sets the base RDR); (6) Free assets or parental protection; (7) Competitive nature of the market and company USP — determine the acceptable ceiling on margins. Modelling investigations: (a) Single policy profit test — project profits for a representative model point; perform deterministic sensitivity analysis, varying each parameter through plausible adverse ranges (eg 95th percentile) to calculate revised return on capital; optionally run stochastically to directly model return variance; (b) Model office — incorporate future new business sales into a full company projection model; sensitivity test at the whole-office level to assess the financial impact on solvency and EV; this may change the actuary's view of the financial significance of specific assumptions and lead to different margin choices."
+              }
+            ]
           }
         ]
       }
@@ -2898,29 +3050,33 @@
     "sections": [
       {
         "id": "1",
-        "title": "General Process for Demographic Assumptions",
+        "title": "General Framework for Demographic Assumptions",
         "subsections": [
           {
             "id": "1.1",
-            "title": "Data, Grouping, Calculation and Adjustment",
+            "title": "Four-Step Process: Data, Grouping, Calculating, Adjusting",
             "bullets": [
-              "The process: (1) collect appropriate data for a suitable period (adequate volume without excessive heterogeneity); (2) group into relevant homogeneous risk cells; (3) calculate rates — often as an adjustment to a standard table; (4) adjust for differences between the data and the expected future experience.",
-              "Morbidity investigations are typically based on 3–4 years of data — balancing the desire for large data volumes against the introduction of excessive heterogeneity from different cohorts of lives.",
-              "Rates are commonly derived as an adjustment to a standard table: ix = a·ix(S) + b, where ix(S) is the standard table rate at age x, and a and b are chosen constants. This is simpler, more reliable, and enables ongoing comparison with industry experience.",
-              "The key risk factors (subdivisions) for long-term health and care products: age; gender; smoker status; occupation; size of benefit; class of product; individual vs group; distribution channel; region; duration since policy entry; underwriting status.",
-              "For PMI and some other short-term products: gender and benefit size are less commonly used as rating factors; age (sometimes in bands) is the primary rating factor."
+              "Four-step framework applies to all demographic assumptions: (1) Data selection — choose the most suitable database; data should cover an appropriate period — long enough for credibility but short enough to avoid excessive heterogeneity from generational morbidity differences (typically 3–4 years for morbidity investigations). (2) Grouping — divide into relevant homogeneous risk cells while retaining adequate data volumes in each cell. (3) Calculating rates — usually as a multiplicative/additive adjustment to a standard table (eg UK CMI CI or IP tables), rather than fully independent graduation. (4) Adjustments — modify for differences between the historical data cohort and the expected future policyholders (target market, distribution channel, underwriting standards, calendar-year trends).",
+              "Adjustment formula approach: insurer defines e.g. CI incidence rates as i_x = a·i_x(S) + b, where i_x(S) is the standard table rate at age x and a, b are constants calibrated to own experience. Using standard tables rather than independent graduation: (a) reduces error from scarce own data — standard tables based on much larger pooled datasets give more confidence in the rate shape across all ages; (b) reduces risk of significant error; (c) is simpler to implement; (d) aids monitoring — comparing own actual/expected ratios against a common industry standard makes it easier to identify whether deviations are company-specific or market-wide.",
+              "Projecting to the future: the pricing basis will be used for a period of time, so all derived rates must be projected forward from the investigation period to the mid-point of expected insurance usage, allowing for both age-related trends (eg worsening morbidity with age) and calendar-year trends (eg medical advances improving CI survival).",
+              "If own data is insufficient, external sources are used: reinsurers' data (provided in exchange for accepting a share of the business); industry/market data (eg CMI publications); population data (high volume but lower relevance — requires adjustment for the insured vs population morbidity differential). No universal rule exists for adjusting population data to insured lives — each case requires specific actuarial judgement."
             ],
             "key_terms": [
               {
                 "term": "Risk cell",
-                "definition": "A collection of risks sharing the same attributes across all factors that influence morbidity (eg male, aged 45, smoker, professional occupation)."
+                "definition": "A group of insured lives sharing the same values for all factors deemed to affect morbidity experience — eg male, aged 45, smoker, professional occupation, based in London. Too fine a cell subdivision reduces data credibility; too coarse a cell creates heterogeneity and cross-subsidy."
               },
               {
-                "term": "Exposed to risk",
-                "definition": "The aggregate time during which policyholders were exposed to the risk of an event (eg claim inception). Used as the denominator when estimating transition rates."
+                "term": "Standard table",
+                "definition": "An industry-published set of morbidity or mortality rates based on a large pooled dataset (eg UK CMI IP or CI tables) — used as a benchmark against which individual insurer experience is measured as a ratio or additive adjustment."
               }
             ],
-            "exam_qa": []
+            "exam_qa": [
+              {
+                "q": "Why might an insurer prefer to use a standard table as the basis for its CI claim incidence rates rather than independently graduating its own data?",
+                "a": "(1) Own data is likely to be scarce — independent graduation would be unreliable over large parts of the age range; using a standard table (based on much larger pooled data) gives more confidence in the shape of rates. (2) The risk of significant error is lower when anchored to a standard. (3) It is simpler to implement and explain. (4) When monitoring experience, comparing own actual-to-expected ratios against a common standard makes it straightforward to identify whether deviations are company-specific or indicative of a wider market trend requiring basis change."
+              }
+            ]
           }
         ]
       },
@@ -2930,68 +3086,102 @@
         "subsections": [
           {
             "id": "2.1",
-            "title": "Incidence Rates by Product",
+            "title": "Product-Specific Incidence Approaches",
             "bullets": [
-              "IP: single rates of transition from healthy to claiming, projected allowing for trends.",
-              "CI: separate rates derived for each main illness type (cancer, heart attack, stroke, CABG, TPD, etc), then combined. Individual rates must be projected separately before combining — as trends can differ by illness.",
-              "LTCI: rates of transition from able to claiming, and from lower to higher benefit levels. No return transitions (recovery is generally ignored).",
-              "PMI: incidence rates and average claim costs assessed separately for each benefit/treatment category.",
-              "Social and economic influences on incidence: State welfare generosity (affects PMI and IP demand); economic wellbeing and unemployment (worsens IP claim inception rates and recovery rates); inflation (increases PMI claim costs, may reduce renewal rates).",
-              "Lapse and re-entry risk: when premiums fall (eg due to competition), healthy lives lapse and re-enter at cheaper rates, leaving only unhealthy lives at the original price — lowers overall portfolio profitability."
+              "Product-specific structures: IP and LTCI use single claim incidence rates (transition from healthy to claiming state). PMI derives rates separately for each benefit category (in-patient, out-patient, specialist). CI derives rates separately for each main illness category (cancer, heart attack, stroke, CABG, TPD, and others) — each illness is projected forward independently before combination because different diseases have fundamentally different trend trajectories.",
+              "CI combination of individual illness rates: simple summation may double-count where a claimant could be diagnosed with multiple conditions that would generate a single CI claim — an adjustment must be made for this overlap.",
+              "Key risk factors for subdividing incidence data — long-term products: age; gender (now prohibited for pricing in the EU following ECJ ruling, but retained for internal analysis); smoker status; occupation; benefit size; policy class (stand-alone, accelerated, rider); individual vs group; distribution channel; region. Additional post-entry factors: duration since policy entry; underwriting status (standard vs special terms).",
+              "EU gender ruling implications: although insurers within the EU cannot charge different rates by gender, morbidity risk differs materially between men and women. Internal monitoring must continue to track gender-based experience differentials in order to understand portfolio risk and set accurate unisex rates — if the assumed gender mix deviates from actual, over- or under-recovery of claims costs results.",
+              "Sophisticated models for IP and PMI may allow for higher incidence rates among lives with a prior claims history (previous claims used as an additional risk factor), as past claiming behaviour is a predictor of future claiming propensity."
+            ],
+            "key_terms": [
+              {
+                "term": "Incidence rate",
+                "definition": "The rate at which new claims begin — for IP the transition rate from healthy to claiming; for CI the occurrence rate of each insured condition per year; for PMI the rate of claims per benefit category. Measured as claims commencing per life-year exposed."
+              },
+              {
+                "term": "Exposed to risk",
+                "definition": "The total time (in policy-years or life-years) during which a group of lives was at risk of making a claim — the denominator when calculating raw incidence or recovery rates from experience data."
+              }
+            ],
+            "exam_qa": [
+              {
+                "q": "Why are individual CI illness incidence rates projected forward separately before being combined into a single overall CI rate?",
+                "a": "Different illnesses have fundamentally different future trend trajectories. For example: new cancer screening techniques could increase diagnosis rates for cancer but not for stroke; improvements in cardiac surgery may specifically reduce CABG claim rates; changes in diagnostic criteria affect only specific conditions. Projecting separately preserves these distinct trends and allows age-specific adjustments (where morbidity improvements differ across the age range) to be applied correctly. Combining before projecting would mix these distinct trajectories into a single average, obscuring the specific dynamics of each disease and producing less accurate overall rates."
+              }
+            ]
+          },
+          {
+            "id": "2.2",
+            "title": "Social, Economic, and Regulatory Influences on Incidence",
+            "bullets": [
+              "State welfare provision: more generous State disability support and acute healthcare provision makes it harder to sell and retain private insurance (reducing demand), but may also affect moral hazard (reducing the financial incentive to return to work under IP). Government planning announcements about future welfare changes are a material factor in both pricing assumptions and lapse rate assumptions.",
+              "Economic pessimism and unemployment: encourages employees to use group PMI cover while still employed (higher PMI claim frequency); provides a disincentive for IP claimants to return to work — especially self-employed whose client base has contracted. Economic deterioration also drives higher lapse/non-renewal rates through affordability pressures.",
+              "High inflation: directly increases PMI renewal costs, triggering selective non-renewal — healthier policyholders drop cover, worsening the risk profile of the remaining pool. Long-term products are less affected because cover is guaranteed-renewable and requires active lapsing, but index-linked premiums can also cause some degree of selective lapsing."
             ],
             "key_terms": [],
-            "exam_qa": []
+            "exam_qa": [
+              {
+                "q": "Why are PMI renewal rates more sensitive to inflation than long-term health and care insurance products?",
+                "a": "PMI contracts expire at year-end; policyholders must actively choose to renew and face the new, higher premium each year. A sharp premium increase can cause many policyholders — particularly the healthier ones who value the insurance less — to decline renewal. Long-term products have contractually guaranteed renewal until expiry; policyholders must actively lapse to stop cover (unlike PMI where inaction = non-renewal), and there may be a strong incentive to retain an existing policy if the insurer has increased new business rates for new policies since the existing policy was taken out."
+              }
+            ]
           }
         ]
       },
       {
         "id": "3",
-        "title": "Recovery Rates (IP)",
+        "title": "Recovery Rates",
         "subsections": [
           {
             "id": "3.1",
-            "title": "Recovery Rate Factors",
+            "title": "Recovery Rates — Importance, Drivers, and Adjustments",
             "bullets": [
-              "Recovery rates are crucial for IP insurance (and relevant to LTCI, though recovery is rarely assumed there).",
-              "Recovery rates typically decrease with increasing duration since sickness onset — the majority of claims are short (<6 months); those still claiming after 6 months often remain claiming for long periods.",
-              "Recovery rates also decrease with increasing duration since start of claim payments, for similar reasons.",
-              "Longer deferred periods are associated with lower recovery rates after claim inception — only the more seriously ill survive to claim.",
-              "Claims for large benefit amounts tend to continue longer than small claims.",
-              "Medical advances can aid speedier recovery or prolong life in disability — overall effect on claim costs is ambiguous.",
-              "Key factors for recovery: motivation and financial incentive to return to work (replacement ratio); availability of suitable work (economic conditions); claims management and rehabilitation by the insurer."
+              "Recovery rates are critical for IP insurance (annuity benefit paid until recovery, death, or policy expiry) and for LTCI transitions (though recovery from advanced care need is rare and typically ignored in LTCI pricing). For CI (lump sum payment), recovery rates are irrelevant post-claim.",
+              "Recovery rates decrease sharply with claim duration: the majority of sicknesses are short (under 6 months); those still claiming at 6+ months are disproportionately serious/chronic cases with very low recovery probability. Recovery rates must be modelled as a function of age, gender, occupation, cause of claim, benefit size, and duration since both the start of sickness and the start of claim payments.",
+              "Key drivers of recovery: (a) Financial incentive — policy conditions that limit total post-claim income (IP benefit + other income) to below pre-disability salary create a direct incentive to return to work; the insurer must monitor over-insurance ratios (benefit to pre-disability income). (b) Rehabilitation — insurer-provided rehabilitation (physiotherapy, counselling, return-to-work schemes) materially improves recovery rates and must be explicitly reflected in assumptions. (c) Benefit size — large-benefit claims continue significantly longer than small-benefit claims.",
+              "Medical advances have opposing effects: faster recovery from some conditions (better surgical outcomes, new therapies) reduces average claim duration for those conditions; longer survival in disability (eg better management of MS, stroke sequelae) extends IP and LTCI claim duration. The net effect on total claim costs is ambiguous and must be analysed cause-by-cause."
             ],
             "key_terms": [
               {
-                "term": "Replacement ratio",
-                "definition": "The ratio of post-disability net income (benefits + any other income) to pre-disability net income. High replacement ratios reduce the incentive to return to work, worsening recovery rates."
+                "term": "Claim recovery rate",
+                "definition": "The rate at which IP claimants cease claiming — by recovering, dying, or reaching the maximum benefit period — expressed per claiming life-year at each duration and age. Duration-dependent because serious cases are progressively concentrated as short-duration cases resolve."
               }
             ],
-            "exam_qa": []
+            "exam_qa": [
+              {
+                "q": "How do recovery rates vary with (a) duration since the policyholder fell sick; (b) deferred period length; (c) duration since claim payments started?",
+                "a": "(a) Duration since sickness: Recovery rates are highest in the first weeks/months — most short sicknesses resolve early. Beyond 6 months, those still sick represent an increasing proportion of serious/chronic cases; recovery rates drop sharply and remain low. (b) Deferred period: A longer deferred period means those who do claim have already survived the deferred period without recovery — they are therefore more serious cases with lower recovery rates at any given claim duration. The deferred period also affects the type of individual attracted to the product (long deferred period products attract those expecting only long-duration sicknesses). (c) Duration since claim payments: Similarly to (a), recovery rates tend to decline as payment duration increases, reflecting concentration of more serious cases. Spikes in recovery can occur at specific durations if benefit terms change (eg a reduction in benefit after 2 years) or if specific claims management triggers are applied at defined durations."
+              }
+            ]
           }
         ]
       },
       {
         "id": "4",
-        "title": "Mortality Assumptions",
+        "title": "Mortality",
         "subsections": [
           {
             "id": "4.1",
-            "title": "Significance of Mortality",
+            "title": "Mortality in Health and Care Insurance — Varying Significance",
             "bullets": [
-              "Separate mortality rates are needed for: healthy (non-claiming) lives; lives in claim under IP and LTCI; and within the CI survival period.",
-              "For non-claiming lives: mortality is typically based on a standard table with adjustments for future improvements. The assumption is relatively unimportant unless there is a significant death benefit.",
-              "For IP and LTCI claims in payment: the assumption is more important — sick lives have much higher mortality than healthy lives, and the duration of claim payment is directly affected. More research effort is warranted.",
-              "For CI survival period: the effect of mortality post-diagnosis is typically allowed for by an adjustment to the CI claim incidence rate, specific to each illness type.",
-              "For policies without a death benefit: it is important not to over-estimate mortality, as death reduces the probability of future health claims — over-estimating mortality would understate expected claim costs.",
-              "Medical advances generally reduce mortality — this can increase LTCI and IP claim costs (claims last longer) while having a smaller impact on CI claim incidence."
+              "Mortality of non-claiming lives (IP, LTCI, CI): for products without a significant death benefit, overestimating healthy-life mortality slightly overstates morbidity exposure (eg a 10% reduction in healthy-life mortality increases CI incidence exposure by much less than 1%). Standard insured lives mortality tables with projected improvements are normally adequate; minimal research effort justified.",
+              "Mortality of claiming lives (IP, LTCI): requires much more effort — sick lives have substantially higher and more variable mortality than healthy lives; the assumption has a large financial impact because it determines when the income benefit payment stream terminates. Data should be subdivided similarly to claim recovery rates: by age, gender, occupation, cause of claim, and benefit size.",
+              "CI survivorship requirement: most CI policies require the claimant to survive 28 days after illness diagnosis for the claim to be valid. The effect of mortality during this survivorship period is captured by reducing the gross claim incidence rate. The adjustment is illness-specific — post-diagnosis survival for cancer differs markedly from stroke or heart attack.",
+              "For products without a significant death benefit (eg stand-alone CI, stand-alone IP), neither mortality rate should be over-estimated: for healthy lives, overestimating mortality reduces the exposure to claim risk; for claiming lives, overestimating in-claim mortality reduces the expected claim duration — both would cause under-pricing of the product."
             ],
             "key_terms": [
               {
-                "term": "Survival period (CI)",
-                "definition": "A policy condition requiring a CI claimant to survive for a specified period (eg 28 days) following diagnosis before a claim is payable. Reduces the insurer's exposure to near-immediately terminal illnesses."
+                "term": "Survivorship requirement",
+                "definition": "The condition in a CI policy requiring the claimant to survive a specified period (typically 28 days) following diagnosis — designed to exclude deaths occurring very shortly after diagnosis, which would be classified as life insurance events rather than CI claims."
               }
             ],
-            "exam_qa": []
+            "exam_qa": [
+              {
+                "q": "Why is the mortality assumption more financially significant for claiming lives than for non-claiming lives under IP insurance?",
+                "a": "Two effects: (1) Financial impact — a claiming life who dies after 2 years of payment has a much lower total claim cost than one who continues claiming for 10 years; death simply terminates what could otherwise be a long annuity-style payment stream. For a non-claiming life, death merely reduces the population exposed to risk of future claims by a tiny margin. (2) Mortality level — the mortality rates of sick policyholders are substantially higher than for healthy lives, so a 10% improvement in claiming-life mortality has a much larger absolute impact on expected claim duration and total claim costs than the same improvement applied to healthy lives."
+              }
+            ]
           }
         ]
       },
@@ -3001,27 +3191,46 @@
         "subsections": [
           {
             "id": "5.1",
-            "title": "Lapse Rate Assumptions",
+            "title": "Data Sources, Limitations, and Drivers of Lapses",
             "bullets": [
-              "Lapse rates are based primarily on the insurer's own recent experience, as market data is much less useful — lapse rates are more unpredictable (influenced by human choice), more heterogeneous between insurers, and more sensitive to economic/commercial factors.",
-              "No population data exists for lapses — there is no population equivalent of stopping premium payments.",
-              "Lapse rates matter most when: they occur early in the policy term (financial loss when asset share is negative); a surrender value is payable; lapses are selective (healthier lives lapse, leaving a worse risk pool); or there is a lapse-and-re-entry risk.",
-              "Selective lapsing: for PMI, the lowest claiming members have the highest lapse rates — higher claiming members value the cover more and can less easily obtain it elsewhere.",
-              "Factors influencing lapses: economic (affordability), political (State benefit alternatives), commercial (competitor products), awareness (perceived need).",
-              "For policies without surrender values and with positive asset shares, a lapse benefits the insurer (asset share retained).",
-              "Economic deterioration effect: CI — minimal impact (low premiums, no surrender value); pre-funded LTCI — some increase in withdrawals (higher premiums, possible paid-up options); PMI — significant increase in non-renewals (high premiums, annual decision to renew)."
+              "Primary source is own company data for the specific product or the closest similar product. Unlike morbidity and mortality, population data for lapse rates does not exist — there is no population equivalent of lapsing a policy (members of a population can die or become sick, but cannot 'lapse' from the population).",
+              "Market data is much less useful for lapse rates than for morbidity because: (a) lapse rates are highly unpredictable — driven by policyholder choice influenced by economic, political, and commercial factors as well as general consumer awareness; (b) significant heterogeneity between insurers (distribution channel, product design, target market, after-sales service all produce very different lapse profiles); (c) past data and future experience are both heavily influenced by economic conditions, competition, and customer service quality — all rapidly changing and difficult to predict.",
+              "Lapse data should be split by: distribution type; policy duration; premium payment method (direct debit vs cheque — DD payers have systematically lower lapse rates); premium size; age; gender; smoker status. For CI additionally: policy series/cohort year, policy type (stand-alone vs accelerated vs rider), and sum insured band.",
+              "Four categories of driver of lapse decisions — economic (affordability of premium), political (availability of State alternatives), commercial (availability of a cheaper or better competitor product), and awareness (belief in whether the policy is necessary). All four must be considered when making adjustments to derived lapse rates for the expected future environment."
             ],
             "key_terms": [
               {
-                "term": "Lapse and re-entry",
-                "definition": "Where policyholders lapse existing policies and take out new ones at current lower premium rates. Only healthy lives can benefit, leaving the insurer with deteriorating risk in the original portfolio."
+                "term": "Lapse rate",
+                "definition": "The rate at which policyholders stop paying premiums and terminate their long-term policies (or fail to renew short-term policies) — expressed per in-force policy-year. Distinct from surrender where a cash payment is made on withdrawal."
               },
               {
-                "term": "Selective lapsing",
-                "definition": "The tendency for lower-risk (healthier) lives to lapse at a higher rate than higher-risk lives, leaving a deteriorating risk pool among those remaining."
+                "term": "Lapse and re-entry",
+                "definition": "The practice where healthy policyholders lapse their existing policy and purchase a new policy at cheaper current market rates when premium rates are falling — only viable for healthy lives, worsening the remaining portfolio's risk profile and reducing the insurer's average premium income."
               }
             ],
-            "exam_qa": []
+            "exam_qa": [
+              {
+                "q": "How would you expect an economic deterioration to affect withdrawal rates for (a) stand-alone CI; (b) pre-funded LTCI; (c) PMI?",
+                "a": "(a) Stand-alone CI: premiums are relatively low so few policyholders will be unable to afford them; there is typically no surrender value so no financial incentive to lapse. Economic deterioration is not expected to materially increase CI lapse rates. (b) Pre-funded LTCI: premiums are a substantial portion of income; some policyholders will no longer be able to afford premiums. Some LTCI policies offer paid-up policy benefits on withdrawal. An increase in withdrawal rates is expected. (c) PMI: premiums are expensive relative to discretionary income; policyholders make an active annual renewal decision and no surrender value is payable. Economic deterioration is very likely to increase non-renewal rates materially — and the healthiest policyholders (who value the insurance least) are most likely to lapse, worsening the remaining pool's risk profile."
+              }
+            ]
+          },
+          {
+            "id": "5.2",
+            "title": "Three Effects of Lapses on Insurer Profitability",
+            "bullets": [
+              "Effect 1 — Early lapse (negative asset share): if the accumulated value of premiums received minus initial expenses (including commission) is negative at the date of lapse, the policy generates an overall loss. Initial commission and underwriting costs are the primary driver of early-year strain; this is why high-commission distribution channels increase lapse risk.",
+              "Effect 2 — Late lapse (positive asset share, no surrender value): if a reserve has accumulated and no surrender value is payable, a lapse generates an overall profit for the insurer equal to the asset share at the date of lapse. For lapse and re-entry, however, this profit is offset by fresh commission and underwriting costs for the new policy.",
+              "Effect 3 — Selective lapse (lapse deterioration): healthier policyholders lapse at higher rates than sicker ones, leaving an increasingly adverse morbidity pool among continuing policyholders. For PMI, the lowest-claiming members have substantially higher lapse rates than high-claiming members (the latter cannot easily find equivalent cover elsewhere). Sensitivity modelling is essential to understand how selective lapsing could affect profitability and solvency.",
+              "Lapse and re-entry risk is most acute during periods of falling premium rates (eg UK CI market in the 1990s): only healthy lives can take advantage; unhealthy lives who would like to re-enter on cheaper terms cannot obtain standard rates. The insurer ends up retaining the unhealthy cohort at the original (pre-fall) premium rates while healthy lives pay lower new-business rates — overall profitability of the portfolio declines and can become negative."
+            ],
+            "key_terms": [],
+            "exam_qa": [
+              {
+                "q": "Describe how you would determine claim inception and termination rate assumptions for pricing a new short-term accident and sickness (A&S) product, given that the insurer has existing long-term IP experience.",
+                "a": "Use existing IP data as the primary source — choose a suitable investigation period; split by group/individual, deferred period, and other relevant factors; compare actual rates against expected rates based on a standard IP table. Remove claim termination experience beyond 2 years (not relevant for a short-term product). Adjust the derived rates for: the expected characteristics of the new target market and distribution channel; anticipated changes in underwriting and claims control standards; differences in product design (eg claim definition, benefit structure); gaps in data credibility (eg deferred periods not currently offered); calendar-year trends extrapolated to the mid-point of expected future usage; any known economic conditions that may have distorted historical data. Supplement with: reinsurer data on short-term accident and sickness experience; industry data where own data is thin. Derive average rates weighted by expected mix of business (eg age/gender split). Validate final rates against competitor market premiums as a reasonableness check."
+              }
+            ]
           }
         ]
       }
@@ -3423,33 +3632,20 @@
     "sections": [
       {
         "id": "1",
-        "title": "New Business Volume and Mix",
+        "title": "New Business Volume",
         "subsections": [
           {
             "id": "1.1",
-            "title": "New Business Volume",
+            "title": "Why New Business Volume Matters",
             "bullets": [
-              "New business volume assumptions are needed primarily for pricing (to allocate per-policy contributions to fixed expenses) and to assess the capital required to support new sales (new business strain).",
-              "For reserving and profitability assessment, actual volumes and mix are known — new business volume assumptions are not required."
-            ],
-            "key_terms": [],
-            "exam_qa": []
-          },
-          {
-            "id": "1.2",
-            "title": "New Business Mix",
-            "bullets": [
-              "Mix assumptions are needed when the insurer charges the same premium to heterogeneous groups — if the actual mix differs from assumed, cross-subsidies become losses or gains.",
-              "Anti-selection risk: competitors with more detailed risk subdivisions will attract the lighter risks, leaving the insurer with a higher-risk portfolio than assumed.",
-              "Mix assumptions are needed by: average policy size; product type; distribution channel; territory; gender (where unisex pricing is required); occupation.",
-              "Average policy size affects: the allocation of per-policy expenses; and expected claims experience (larger policies tend to have better claim experience due to stricter underwriting and higher socio-economic profile).",
-              "Mix by distribution channel is crucial where different commission rates apply but the same tariff is charged across channels.",
-              "Mix by territory: important where health and care risk varies materially by region (eg heavy industrial urban vs agricultural rural for IP)."
+              "New business volume assumptions serve two purposes: (a) expense allocation — the per-policy contribution needed to cover fixed overheads depends directly on the assumed volume; fewer policies sold → higher required per-policy loading; (b) capital planning — supervisory reserving requirements create new business strain (capital must be committed upfront to establish reserves) so total capital required scales with volume.",
+              "If actual new business volumes are lower than assumed, the per-policy fixed expense contribution embedded in premiums will be insufficient to cover overhead costs — this is a significant and historically common contributor to insolvency in health and care insurers launching new products.",
+              "Volume assumptions are primarily needed for pricing (where future volumes are unknown). For reserving, EV, and profitability monitoring, actual volumes are known and used directly."
             ],
             "key_terms": [
               {
-                "term": "New business mix",
-                "definition": "The distribution of new policyholders across different risk categories (age, gender, occupation, distribution channel etc). Errors in assumed mix are a key source of pricing risk."
+                "term": "New business strain",
+                "definition": "The upfront capital requirement created by writing new policies — driven by the requirement to establish supervisory reserves (and pay initial expenses and commission) immediately, before sufficient premium income has been collected to fund these costs."
               }
             ],
             "exam_qa": []
@@ -3458,55 +3654,125 @@
       },
       {
         "id": "2",
-        "title": "Risk Discount Rate",
+        "title": "New Business Mix",
         "subsections": [
           {
             "id": "2.1",
-            "title": "Components of the Risk Discount Rate",
+            "title": "Mix of Business Risk and Anti-Selection",
             "bullets": [
-              "The risk discount rate reflects: (1) the return required by shareholders (risk-free rate + risk premium for investing in the insurer); and (2) the level of statistical risk attaching to the cashflows under the specific product.",
-              "Shareholders' required return is often assessed using the Capital Asset Pricing Model (CAPM): E(i) = r + β·(E(m) − r), where r is the risk-free rate, E(m) is the expected market return, and β (beta) measures the riskiness of the company's shares relative to the market.",
-              "Beta > 1 implies the share moves more than the market (higher risk, higher required return). Beta is a measure of systematic (non-diversifiable) risk only.",
-              "The overall required return Ei from CAPM is not used directly — products that are more risky than average require a higher discount rate than Ei; less risky products require a lower one.",
-              "Product-specific (statistical) risk is assessed via: analytical methods (if variance of parameters can be derived); sensitivity analysis; stochastic modelling; or comparison with market data.",
-              "Key features that increase product risk (raising the discount rate): lack of historical data; high guarantees; policyholder options; high overhead costs; complexity of design; untested market.",
-              "Key features that decrease product risk: abundant reliable data; reviewable premiums; no policyholder options; low overheads; simple benefits; well-established market.",
-              "Important principles: the risk discount rate must exceed the risk-free rate; the margin over the risk-free rate must reflect all sources of risk; overall return on company capital must meet the required return (cost of capital)."
+              "In practice, insurers must use 'average' assumptions for heterogeneous groups of policyholders — if premium rates do not perfectly reflect individual risk, some policies cross-subsidise others within each rating group. The insurer only receives the correct total premium if the actual mix of business matches the assumed distribution. Anti-selection mechanism: policyholders always seek best value, so higher-risk lives within a broadly-rated group select into the product in higher-than-expected proportions.",
+              "Competitor granularity risk: a competitor pricing with more detailed risk cells will undercut the insurer for its best risks (low-risk lives within each group) while leaving the high-risk lives behind — progressively worsening the insurer's actual portfolio mix versus the assumed mix. Actuaries must monitor experience by risk cell to detect this deterioration and trigger re-pricing.",
+              "This mix of business risk is described more fully in Chapters 23–25 on the nature of risks."
             ],
             "key_terms": [
               {
-                "term": "Capital Asset Pricing Model (CAPM)",
-                "definition": "E(i) = r + β·(E(m) − r). Used to estimate the expected return investors require for a risky asset relative to the risk-free rate. Beta measures systematic risk."
-              },
-              {
-                "term": "Beta (β)",
-                "definition": "The covariance of a share's return with the market return, divided by the variance of the market return. A measure of an asset's systematic risk relative to the market."
-              },
-              {
-                "term": "Statistical risk",
-                "definition": "The risk arising from the variability of cashflow components in a pricing model. Assessed through sensitivity analysis, stochastic models, or analytical methods."
+                "term": "Mix of business risk",
+                "definition": "The risk that the actual distribution of policyholders by risk category (age, gender, occupation, region, benefit size, etc.) differs from the distribution assumed in the pricing basis — causing the average premium collected to be systematically different from the average cost of claims."
               }
             ],
             "exam_qa": []
           },
           {
             "id": "2.2",
-            "title": "Market-Consistent Approach",
+            "title": "Average Policy Size, Product Split, and Territory",
             "bullets": [
-              "An alternative to the CAPM/statistical approach: use risk-free interest rates as the discount rate (risk-neutral calibration), with margins included in each parameter assumption to reflect the inherent risks in their estimation.",
-              "The risk margin under market-consistent approaches reflects the compensation required by the 'market' for taking on uncertain aspects of the liability cashflows.",
-              "Market-consistent valuations are also useful as a reasonableness check on traditional approaches and for verifying that risk margins are appropriate."
+              "Average policy size matters for: (a) expense allocation — per-policy expenses (not varying with benefit size) create a cross-subsidy from large to small policies when expressed as a rate per unit of benefit; if the average benefit size is over- or under-estimated, expense recovery will be insufficient or excessive; (b) claims experience — larger policies attract higher socio-economic groups with better morbidity and are subject to stricter underwriting, so actual average benefit size affects expected claims costs.",
+              "Product split: the actuary needs volume estimates by product line so that indirect (overhead) expenses can be charged accurately to each contract in the pricing model. Future product volumes and sizes may also be required for allocating solvency capital requirements within pricing calculations.",
+              "Territory split: health and care risk varies substantially between territories and even within a country — IP risk is higher in heavy industrial urban centres than in agricultural rural areas, for example. If territory is not used as a rating factor, average risk must be assumed; cross-subsidies between territories create exposure to geographic mix of business risk."
+            ],
+            "key_terms": [],
+            "exam_qa": []
+          },
+          {
+            "id": "2.3",
+            "title": "Gender and Occupation Splits",
+            "bullets": [
+              "Gender: despite the EU ECJ prohibition on gender-based premium rating, morbidity risk differs materially between men and women. Insurers must forecast the gender mix of expected new business to set an accurate unisex premium — if actual gender mix deviates from assumed (eg more women than expected buy LTCI), the blended premium may be insufficient or excessive for the actual risk.",
+              "Occupation: a major morbidity rating factor for IP and CI. Where broad occupational groupings are used, significant cross-subsidies exist within each class. The insurer must monitor the occupational mix within each class and reprice if the assumed mix shifts — IP risk is particularly concentrated in manual and high-risk occupations, making occupational mix one of the most financially material sources of mix risk."
             ],
             "key_terms": [
               {
-                "term": "Market-consistent valuation",
-                "definition": "A valuation that uses risk-free discount rates (reflecting the risk-neutral measure) and includes explicit risk margins in parameter assumptions. Useful for products with options and guarantees."
+                "term": "Unisex rate",
+                "definition": "A single premium rate that does not differentiate by gender, set to reflect the expected gender mix of the insurer's anticipated new business — a blended rate that cross-subsidises between male and female policyholders according to their assumed proportions."
+              }
+            ],
+            "exam_qa": []
+          }
+        ]
+      },
+      {
+        "id": "3",
+        "title": "Risk Discount Rate",
+        "subsections": [
+          {
+            "id": "3.1",
+            "title": "Introduction and CAPM",
+            "bullets": [
+              "The risk discount rate (RDR) is the rate shareholders require as a return on capital invested in the insurer — equal to the risk-free rate plus a risk premium that compensates shareholders for the possibility of losses. Investing in an insurance company involves non-trivial risk (potential underwriting losses, expense overruns, capital requirements) so the required return exceeds the risk-free rate.",
+              "CAPM framework: expected return on the insurer's equity = r + β(E_m − r), where r = risk-free rate, E_m = expected market return (eg a broad stock market index), β = beta factor = cov(r_i, r_m)/var(r_m). Beta > 1 means the insurer's shares move more than the market (amplifying both gains and losses); beta < 1 means they move less. CAPM identifies only the systematic (non-diversifiable, market-correlated) component of risk — the component that investors cannot eliminate by holding a diversified portfolio.",
+              "Risk-free assets in practice: short-term stable-government deposits, very short-dated government bonds, or long-dated index-linked government bonds. No perfectly risk-free asset exists. The key point is that the market — not the actuary alone — determines what return is appropriate; the actuary makes assumptions, but the market is the final arbiter.",
+              "Two components of the RDR in a pricing context: (1) the return required by shareholders from investing in the insurance company as a whole (assessed using CAPM or similar); (2) a product-specific adjustment reflecting the statistical risk of cashflows under the particular contract being priced — products riskier than the company average require an RDR above the overall company required return."
+            ],
+            "key_terms": [
+              {
+                "term": "Beta (β)",
+                "definition": "A measure of the sensitivity of a company's share returns to overall market movements — β > 1 implies the share amplifies market moves; β < 1 implies it is less volatile than the market. Used in CAPM to calculate the systematic risk premium required by shareholders."
+              },
+              {
+                "term": "Systematic risk",
+                "definition": "The component of investment risk that cannot be eliminated by diversification — it reflects the correlation of an asset's returns with the overall market. CAPM prices only systematic risk; company-specific (idiosyncratic) risk is diversified away in a well-diversified portfolio."
               }
             ],
             "exam_qa": [
               {
-                "q": "What is the risk discount rate, and what two main factors should it reflect?",
-                "a": "The risk discount rate is the rate used to discount net projected cashflows in a profit test, ensuring the expected return meets shareholders' requirements. It should reflect: (1) the return required by shareholders — the risk-free rate plus a risk premium for investing in the insurance company (often quantified via CAPM); and (2) the statistical risk attaching to the cashflows of the specific product — products that are riskier (due to lack of data, high guarantees, complex design, policyholder options, or untested markets) require a higher discount rate."
+                "q": "What features of a critical illness product would lead to a lower risk discount rate relative to the insurer's overall required return?",
+                "a": "A lower RDR is warranted where: (1) extensive reliable data exists for the specific illnesses covered, reducing parameter uncertainty; (2) premiums are reviewable (not guaranteed for the full policy term), reducing the financial significance of adverse experience between reviews; (3) no policyholder options exist — eg no guaranteed insurability option, no guaranteed renewal right — eliminating option-value risks; (4) low overhead cost exposure — product-specific fixed costs are small, reducing sensitivity to volume shortfalls; (5) simple benefit definitions (no tiered benefits, no multi-claim structures) reducing operational and modelling complexity; (6) a well-established, mature market with predictable competitive dynamics and historical data."
+              }
+            ]
+          },
+          {
+            "id": "3.2",
+            "title": "Product-Specific Risk and Methods of Assessment",
+            "bullets": [
+              "Product-specific risk adjustment: CAPM gives the overall required return for the company, but individual products have different risk profiles. Products with more uncertain cashflows than average require an RDR above the company-wide required return; less risky products can use a lower RDR. Features increasing product risk: lack of historical data; high (non-reviewable) guarantees; valuable policyholder options; large fixed overhead exposure (volume-sensitive); design complexity; untested market.",
+              "Three methods for quantifying statistical risk: (1) Analytical — if probability distributions can be assigned to individual parameters, derive the variance of those parameters and map to variance of return on capital. (2) Deterministic sensitivity analysis — vary each parameter through its plausible adverse range (eg the 95th percentile adverse scenario); calculate the revised return on capital; the change in return from the base case gives a crude measure of each parameter's impact on capital return variance. (3) Stochastic simulation — model key parameters by probability distributions; run ~1,000 simulations; directly measure the variance and distribution of return on capital; allows calculation of Value-at-Risk and expected shortfall measures.",
+              "Equivalence principle: including all risk as margins in individual parameter assumptions (with RDR = risk-free rate) is theoretically equivalent to using best estimate parameters with an elevated RDR. In practice, a mix is used — margins in parameters for reserving; elevated RDR for pricing. Whichever approach is used, the total risk allowance must reflect all sources of risk and the RDR must remain above the risk-free rate; changes in market interest rates should cause corresponding changes in the RDR."
+            ],
+            "key_terms": [
+              {
+                "term": "Statistical risk",
+                "definition": "The risk arising from inherent random fluctuations in experience around the best estimate — distinct from parameter risk (uncertainty in the best estimate itself). Quantifiable via variance analysis, sensitivity testing, or stochastic simulation."
+              }
+            ],
+            "exam_qa": [
+              {
+                "q": "State the principal elements of the supervisory valuation basis for a 3-year-old LTCI portfolio with multiple care levels and indexed premiums/benefits, and explain briefly why each is financially significant.",
+                "a": "(1) Transition rates (healthy→various care levels, between care levels, all states→death): total claim costs depend on both incidence rates and the duration/progression of claims across multiple benefit levels — the reserve is highly sensitive to these rates. (2) Investment return: LTCI has long-duration liabilities; cashflows are positive early (premium income exceeds claims) but become increasingly negative at later durations; the reserve is large and sensitive to discounting, particularly for older policyholders. (3) Inflation of care costs (the index to which premiums and benefits are linked): premium and benefit growth are linked to the same index, but older policyholders are increasingly exposed because future benefit growth progressively outpaces premium growth — the reserve becomes more sensitive to inflation assumptions as policyholders age. (4) Expense inflation: LTCI administration (especially multi-level claims underwriting and transitions between care categories) is expensive; per-policy fixed expenses are disproportionately large when volumes are still small (only 3 years of business). (5) Expenses: claims handling and monitoring involve significant ongoing costs; any deterioration in expense assumptions materially affects reserve adequacy."
+              }
+            ]
+          },
+          {
+            "id": "3.3",
+            "title": "Market-Consistent Valuation Approach",
+            "bullets": [
+              "Market-consistent (risk-neutral) valuation: discount all liability cashflows at the risk-free rate (typically a swap rate or government bond yield curve, making discount rates term-dependent rather than a flat rate). Investment return in the model equals the risk-free rate regardless of the actual assets held by the insurer. Non-investment risks (morbidity, expenses, lapses, transition rates) are then reflected through explicit risk margins rather than embedded in the discount rate.",
+              "Risk margin calculation under market-consistent approach — cost of capital method: project the solvency capital requirement (SCR) in each future year as the liabilities run off; multiply each year's SCR by the prescribed cost of capital rate (eg 6% under Solvency II); discount those costs back at the risk-free rate. The sum = the risk margin, representing the compensation a market counterparty would require to take on the residual non-hedgeable risks.",
+              "Even when not the primary pricing methodology, a market-consistent valuation is a useful cross-check: it ensures that the risk margins embedded in the traditional (CAPM + parameter margins) approach are appropriate and justifiable relative to a market benchmark, and it provides consistent comparability across companies and across time."
+            ],
+            "key_terms": [
+              {
+                "term": "Market-consistent valuation",
+                "definition": "A valuation approach in which cashflows are discounted at the risk-free term structure and investment risk is excluded from the liability calculation — residual non-financial (non-hedgeable) risks are covered by a separately calculated risk margin, typically using the cost of capital method."
+              },
+              {
+                "term": "Swap rate",
+                "definition": "The fixed rate in an interest rate swap agreement, used as a proxy for the risk-free term structure of interest rates in market-consistent valuations — provides a term-dependent (by duration) risk-free discount curve rather than a single flat rate."
+              }
+            ],
+            "exam_qa": [
+              {
+                "q": "You are calculating supervisory reserves for an LTCI portfolio. List the data items you would need in order to perform the valuation, including data needed to determine the basis.",
+                "a": "Per in-force policy: benefit amounts at each care level; gender; date of birth (for age); policy anniversary date (for duration); current premium amount; guaranteed surrender values (if any); details of other guarantees or options; deferred period. For claims in payment: current care category (ie the benefit level currently in payment). Asset data: for each asset class — amounts invested, yields/expected returns, duration/maturity profile. Historical experience data for assumption setting: dates of all transitions between states (healthy/claiming/dead) for each policy, subdivided by age and gender; volumes of new business, claim inceptions, transitions between care levels, and terminations; premiums received and benefits paid. Expense analysis data: commission vs other; initial/renewal/claim/investment; direct vs overhead; premium-proportionate vs per-policy. Previous valuation assumptions (maximum 3 annual valuations available). Past values of the relevant care cost index and general inflation indices (wages, prices) for assumption validation."
               }
             ]
           }
