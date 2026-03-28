@@ -1,0 +1,401 @@
+{
+  "17": {
+    "exam": "SP1",
+    "chapter": "Ch17",
+    "title": "Pricing (1) \u2014 Individual Business",
+    "syllabus_refs": [
+      "4.1",
+      "4.2"
+    ],
+    "products_covered": [
+      "Income Protection",
+      "Critical Illness",
+      "Long-term Care Insurance",
+      "Private Medical Insurance",
+      "Accident and Sickness",
+      "Health Cash Plans"
+    ],
+    "sections": [
+      {
+        "id": "1",
+        "title": "Income Protection Insurance",
+        "subsections": [
+          {
+            "id": "1.1",
+            "title": "Inception / Disabled Life Annuity Approach",
+            "bullets": [
+              "The inception / disabled life annuity approach determines the expected cost of benefits from claims incepting in a particular year. It considers two functions: (1) the claim inception rate, and (2) the disabled life annuity.",
+              "It ignores recoveries (or makes no distinction between recoveries and death) and ignores subsequent future sickness \u2014 a simplification of the full multi-state model.",
+              "Claim inception rate (i\u02e3\u1d48): probability that a claim will become payable to an individual aged x to x+1. The individual became sick d weeks/months earlier and remained sick through to benefit commencement.",
+              "Sickness inception rates \u2260 Claim inception rates. Sickness inception = point individual first unable to work. Claim inception = end of deferred period when benefit payments commence.",
+              "Claim inception rates are derived from sickness inception rates by multiplying the sickness inception rate by the probability of remaining sick throughout the deferred period.",
+              "Disabled life annuity: present value at the date of claim inception of expected claim payments until policy expiry, allowing for any escalation of the claim amount, interest, and the probabilities of death and recovery.",
+              "Expected PV of claims incepting in a particular year = (1) survival probability (eligible to claim) \u00d7 (2) claim inception rate \u00d7 (3) disabled life annuity value \u00d7 (4) discount factor \u00d7 (5) annual benefit amount.",
+              "The survival probability excludes policyholders already claiming and those who have died before the year under consideration."
+            ],
+            "key_terms": [
+              {
+                "term": "Claim inception rate",
+                "definition": "Probability that a claim becomes payable in a given year of age, after surviving the deferred period. Not the same as sickness inception rate."
+              },
+              {
+                "term": "Disabled life annuity",
+                "definition": "PV at claim inception of expected benefit payments until policy expiry, allowing for escalation, interest, death and recovery."
+              },
+              {
+                "term": "Survival probability",
+                "definition": "Probability that policyholder is alive, not already claiming, and eligible to claim in the year under consideration."
+              }
+            ],
+            "exam_qa": [
+              {
+                "q": "When are sickness and claim inception rates equal?",
+                "a": "When there is no deferred period, so benefit payments commence immediately as the policyholder falls sick."
+              }
+            ]
+          },
+          {
+            "id": "1.2",
+            "title": "Multi-State Modelling",
+            "bullets": [
+              "Multi-state modelling is the more complex alternative to the inception/annuity approach. Policyholders are separately tracked through: (1) healthy premium payers, (2) lives falling sick within deferred period, (3) lives becoming claimants after deferred period, (4) lives recovering and reverting to premium payers, (5) lives dying.",
+              "Each subclass has its own set of transition probabilities: sickness inception, lapse, mortality, recovery, policy expiry.",
+              "Probabilities may vary by number of previous claims and by duration within a given state \u2014 making the model potentially very complex with hundreds of sub-cohorts.",
+              "In practice, lack of detailed credible data typically requires combining sub-cohorts and/or reducing the number of transition intensities required.",
+              "Transition intensities must be converted into transition probabilities before constructing projections of numbers in each state at future ages."
+            ],
+            "key_terms": [
+              {
+                "term": "Transition intensity",
+                "definition": "The instantaneous rate of moving from one state to another (e.g. healthy to sick). Must be converted to transition probabilities for use in projections."
+              },
+              {
+                "term": "Sub-cohort",
+                "definition": "A group of policyholders sharing a common history of states (e.g. same number of prior claims, same duration in current state)."
+              }
+            ],
+            "exam_qa": []
+          }
+        ]
+      },
+      {
+        "id": "2",
+        "title": "Critical Illness Insurance",
+        "subsections": [
+          {
+            "id": "2.1",
+            "title": "CI Incidence Rates",
+            "bullets": [
+              "CI pricing is much simpler than IP because the benefit is a lump sum rather than an income.",
+              "Overall CI incidence rate: i\u02e3 = i\u02e3\u02b0\u1d48 + i\u02e3\u02e2 + i\u02e3\u1d9c + i\u02e3\u1d52, where hd = heart disease, s = stroke, c = cancers, o = other causes.",
+              "Overlaps: a person may suffer both cancer and heart disease, but only one claim is paid. If claim experience data is used to derive incidence rates, double-counting is automatically avoided by attributing each claim to a single main cause.",
+              "Double-counting risk arises when population medical records (not insurance claims data) are used, as they may record disease incidence by cause without indicating whether other diseases are present simultaneously."
+            ],
+            "key_terms": [
+              {
+                "term": "CI incidence rate",
+                "definition": "Rate at which policyholders are diagnosed with (and claim for) a covered critical illness in a given year of age. Sum of cause-specific rates."
+              },
+              {
+                "term": "Double-counting",
+                "definition": "Overstating combined CI incidence by counting a single claimant under multiple cause-specific rates. Leads to overstatement of claim cost (standalone) or understatement (accelerated)."
+              }
+            ],
+            "exam_qa": []
+          },
+          {
+            "id": "2.2",
+            "title": "Accelerated CI Insurance",
+            "bullets": [
+              "Accelerated CI claim incidence rate: i\u02e3 = i\u02e3 + (1 \u2212 k\u02e3) \u00d7 q\u02e3, where i\u02e3 = CI incidence rate, k\u02e3 = proportion of deaths due to CI, q\u02e3 = mortality rate.",
+              "The term (1 \u2212 k\u02e3) \u00d7 q\u02e3 adjusts the mortality rate to remove deaths already counted as CI claims; equivalently, k\u02e3 \u00d7 q\u02e3 reduces CI incidence to remove those CI events already captured as deaths.",
+              "Double-counting risk (overstating k\u02e3): understates claim cost \u2192 inadequate premiums and reserves \u2014 a solvency risk. This is the more serious error for accelerated CI.",
+              "Expected claim cost = claim incidence rate \u00d7 CI sum insured."
+            ],
+            "key_terms": [
+              {
+                "term": "k\u02e3",
+                "definition": "Proportion of deaths in year of age [x, x+1] that are due to critical illness. Used in accelerated CI incidence rate formula."
+              },
+              {
+                "term": "Accelerated CI",
+                "definition": "CI benefit paid on earlier of death or CI diagnosis. The CI sum insured is an advance of the death benefit; death benefit is reduced by any CI payment made."
+              }
+            ],
+            "exam_qa": [
+              {
+                "q": "How does double-counting of k\u02e3 cause problems for accelerated CI?",
+                "a": "Overstating k\u02e3 understates the net claim incidence rate, which understates the cost of claims, leading to inadequate premiums and reserves \u2014 a solvency risk."
+              }
+            ]
+          },
+          {
+            "id": "2.3",
+            "title": "Standalone CI Insurance",
+            "bullets": [
+              "Standalone CI claim incidence rate = i\u02e3 \u00d7 probability of surviving the survival period.",
+              "Only claimants who survive the defined survival period receive the benefit, so the raw CI incidence rate is multiplied by this survival probability.",
+              "Double-counting for standalone CI leads to overstatement of incidence rates \u2192 uncompetitive premiums (less serious than understating for accelerated CI, as it does not threaten solvency).",
+              "The formula is applied to each CI condition separately and then combined to produce the overall risk premium."
+            ],
+            "key_terms": [
+              {
+                "term": "Survival period",
+                "definition": "Minimum period the claimant must survive after CI diagnosis before the benefit is paid (typically 14\u201328 days). Reduces overlap between CI and death benefits."
+              },
+              {
+                "term": "Standalone CI",
+                "definition": "CI policy that pays only on diagnosis of an insured condition; no death benefit. Priced purely on CI incidence \u00d7 survival probability."
+              }
+            ],
+            "exam_qa": [
+              {
+                "q": "Why is double-counting less serious for standalone than accelerated CI?",
+                "a": "For standalone CI, double-counting overstates incidence rates, leading to uncompetitive premiums but not threatening solvency. For accelerated CI, double-counting understates rates, which can lead to inadequate reserves and premiums \u2014 a solvency risk."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "3",
+        "title": "Long-Term Care Insurance",
+        "subsections": [
+          {
+            "id": "3.1",
+            "title": "Pricing Approach",
+            "bullets": [
+              "LTCI pricing is very similar to IP: either inception / annuity methodology or multi-state modelling can be used.",
+              "Multi-state model tracks transitions between dependency levels, e.g.: State 0 (Healthy) \u2192 State 1 (Benefit level 1) \u2192 State 2 (Benefit level 2) \u2192 State 3 (Benefit level 3) \u2192 State 4 (Dead). Transitions to lower benefit levels may be assumed impossible.",
+              "Forces of transition between all states are required for each arrow in the state diagram. Transition rates may need to vary by duration in current state and by cause of incapacity.",
+              "Using inception/annuity for LTCI: three claim inception rates are needed at each future age (one per benefit level). Each is multiplied by the corresponding disability annuity value and the incremental benefit at that level.",
+              "Incremental benefit pricing: if Level 1 = \u00a320/day, Level 2 = \u00a350/day, Level 3 = \u00a3150/day, then the additional benefit at Level 2 is \u00a330/day (not \u00a350), because Level 1 benefit continues into all higher levels.",
+              "Expected PV of benefits = \u03a3\u209c [p(survive to t+\u00bd) \u00d7 v\u1d57\u207a\u00bd \u00d7 (inception rate level 1 \u00d7 annuity level 1 \u00d7 benefit 1 + inception rate level 2 \u00d7 annuity level 2 \u00d7 incremental benefit 2 + ...)]."
+            ],
+            "key_terms": [
+              {
+                "term": "Incremental benefit (LTCI)",
+                "definition": "The additional daily/weekly benefit payable on transition to a higher care level, not the total benefit at that level. Used in the inception/annuity approach to avoid double-counting lower-level benefits."
+              }
+            ],
+            "exam_qa": [
+              {
+                "q": "How can advances in medical science affect LTCI modelling?",
+                "a": "They can: (1) reduce transition rates to higher benefit levels (better treatments allow people to stay independent longer); (2) increase mortality improvement (prolonging life and thus care duration, increasing claim costs); (3) alter care costs (drugs, mobility aids etc)."
+              },
+              {
+                "q": "What inflation index would you use for LTCI care costs?",
+                "a": "Ideally a long-term care cost index (e.g. residential/nursing home fees index). Failing that, a national earnings index is most suitable as LTC is a people industry. A blend weighted toward earnings with some weight on price inflation would typically be used. Additional inflationary factors specific to LTC must also be considered."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "4",
+        "title": "Private Medical Insurance",
+        "subsections": [
+          {
+            "id": "4.1",
+            "title": "Calculating the Risk Premium",
+            "bullets": [
+              "PMI is a short-term product priced on an incidence \u00d7 average claim cost basis.",
+              "Risk premium (age, gender) = \u03a3\u2096 [i\u2096 \u00d7 AC\u2096], where i\u2096 = claim incidence rate for benefit/procedure class k, and AC\u2096 = expected average claim cost for class k. Summation is over all benefit/procedure classes k.",
+              "i\u2096 and AC\u2096 are specific to each age, gender, and product level (e.g. hospital band). Age bands (5- or 10-year) may be used to ensure sufficient data in each cell.",
+              "Rating factors beyond age and gender \u2014 location, hospital band, smoker status, occupation \u2014 may be used depending on market practice, legislation, and competitive pressure. What competitors do is often the strongest driver toward more risk classification factors.",
+              "Equality legislation in some territories prevents or restricts differential pricing even by age and/or gender.",
+              "Multi-state modelling is used if premiums are guaranteed for longer than one year (similar approach to long-term products).",
+              "Data collection process: (1) Choose base period; (2) Collect and check data; (3) Split into homogeneous groups; (4) Analyse and identify trends; (5) Adjust and project forward to obtain future risk premiums."
+            ],
+            "key_terms": [
+              {
+                "term": "Risk premium (PMI)",
+                "definition": "Element of premium covering expected claims only. No allowance for expenses, profit etc. Calculated as \u03a3 [incidence rate \u00d7 average claim cost] across all benefit/procedure classes."
+              },
+              {
+                "term": "Benefit/procedure class (k)",
+                "definition": "Category of treatment or procedure (e.g. surgical, diagnostic, physiotherapy) for which separate incidence rates and average claim costs are estimated."
+              }
+            ],
+            "exam_qa": []
+          },
+          {
+            "id": "4.2",
+            "title": "Adjustments to the Risk Premium",
+            "bullets": [
+              "Excess: reduces both incidence (only claims above the excess are paid) and average claim cost (claim amounts are reduced by the excess). Three adjustments needed: (1) reduce incidence for proportion of claims below the excess; (2) reduce incidence further for disincentive effect (especially voluntary excess); (3) reduce average claim cost for the excess (not by the full excess amount, as some claims are below it). Claim amount distribution may need to be assumed.",
+              "No Claims Discount (NCD): policyholders with consecutive claim-free years receive a premium discount. A claim reduces or eliminates the discount. NCD acts like an excess by discouraging small claims. Multi-state NCD model required to capture policyholder movement between NCD states.",
+              "Gender-neutral pricing: if required, weight gender-specific risk premiums by expected male:female ratio among new policyholders. Risk: if one gender is materially cheaper, anti-selection results \u2014 disproportionate uptake by the cheaper gender worsens actual claims experience vs assumptions.",
+              "Coinsurance and other product features that impact incidence or average cost must also be reflected."
+            ],
+            "key_terms": [
+              {
+                "term": "No Claims Discount (NCD)",
+                "definition": "Premium reduction for policyholders with consecutive claim-free years. A claim (or multiple claims) reduces or eliminates the discount. Discourages small claims similarly to an excess."
+              },
+              {
+                "term": "NCD multi-state model",
+                "definition": "Model tracking policyholders across multiple NCD states (e.g. 0%, 10%, 25%, 40% discount levels), with transition probabilities based on claim experience."
+              }
+            ],
+            "exam_qa": [
+              {
+                "q": "Suggest how you might allow for an excess in calculating the PMI risk premium.",
+                "a": "Three adjustments: (1) Reduce incidence to allow only for claims expected to exceed the excess \u2014 may require assuming a claim amount distribution; (2) Reduce incidence further for the disincentive effect of the excess (especially if voluntary); (3) Reduce average claim cost to allow for the excess \u2014 the reduction is less than the full excess amount as some claims would have been below it."
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "id": "5",
+        "title": "Accident and Sickness Insurance",
+        "subsections": [
+          {
+            "id": "5.1",
+            "title": "Pricing Approach",
+            "bullets": [
+              "Accident and sickness (ASU) insurance is short-term IP (typically providing benefits for up to 5 years), often used to protect loan repayments.",
+              "Rating method follows the inception / annuity approach, as with standard IP.",
+              "Average rate approach: an average rate per \u00a3 of loan is often agreed for a particular lender or scheme, charging the same premium to all policyholders regardless of age or gender. This simplifies administration but introduces cross-subsidy across the age/gender mix.",
+              "Large ASU schemes are rated using group techniques (experience rating), covered in Chapter 18."
+            ],
+            "key_terms": [
+              {
+                "term": "Average rate (ASU)",
+                "definition": "Single premium rate per \u00a3 of loan applicable to all policyholders in a lender/scheme, regardless of individual risk characteristics. Involves cross-subsidy between age/gender groups."
+              }
+            ],
+            "exam_qa": []
+          }
+        ]
+      },
+      {
+        "id": "6",
+        "title": "Health Cash Plans",
+        "subsections": [
+          {
+            "id": "6.1",
+            "title": "Pricing Approach",
+            "bullets": [
+              "Premiums determined by calculating expected claims for each benefit separately: expected claims per benefit = inception rate \u00d7 average benefit expected to be paid (adjusted for any excess or coinsurance).",
+              "Benefits covered typically include: dental, optical, physiotherapy, maternity, daily hospital cash, nursing care, hearing aids, specialist consultations. Each benefit will have annual payment limits.",
+              "For indemnity-type benefits within cash plans (e.g. 50% of physiotherapy costs up to \u00a3200/year), expected average cost of the benefit is used rather than the defined benefit amount.",
+              "Coinsurance with the policyholder is common to reduce anti-selection and keep premiums affordable. An excess may also apply (e.g. benefit paid only from 4th consecutive day of hospital stay).",
+              "Flat-rate pricing over broad age ranges is common despite age-varying incidence \u2014 approximations are made based on prior claim experience.",
+              "Adjustment for inertia: people's propensity not to claim even when entitled. Two causes: (1) policyholders buy for one specific benefit and forget others; (2) benefit amounts are small in absolute terms, combined with customer apathy. No inertia adjustment needed if already embedded in the company's own claims experience data.",
+              "Inertia level may change if marketing strategy changes or if market awareness of cash plan benefits increases \u2014 monitor and update accordingly."
+            ],
+            "key_terms": [
+              {
+                "term": "Inertia (cash plans)",
+                "definition": "The propensity of policyholders not to claim even when entitled, due to small benefit sizes and low awareness of all covered benefits. Reduces actual claim frequency below theoretical maximum."
+              }
+            ],
+            "exam_qa": []
+          }
+        ]
+      },
+      {
+        "id": "7",
+        "title": "Health and Care Modelling Complexities",
+        "subsections": [
+          {
+            "id": "7.1",
+            "title": "IP Insurance \u2014 Modelling Complexities",
+            "bullets": [
+              "Transition intensities: must separate out first, second, and subsequent inceptions \u2014 prior claimants are more likely to claim again.",
+              "Recovery rates must vary by duration of claim (recovery rates reduce as duration increases) and by cause of incapacity.",
+              "Sales volumes are particularly hard to estimate: depend on economic and political factors; IP markets are typically under-insured; competitive position can dramatically affect sales; claims mishandling can damage reputation.",
+              "Transition intensities (and sales volumes) are influenced by: economic morale (downturn encourages prolonged claims; self-employed less motivated to return to work), government welfare provision (high State benefits reduce IP demand and reduce return-to-work incentive), and tax (premium taxes reduce sales; tax relief increases sales).",
+              "Modelling complications: multi-state movement hierarchy; guaranteed vs reviewable alternatives (guarantees require full allowance and suitable risk margins; reviewable products allow modelling only to next review date but competitive pressures and anti-selective lapses must still be considered).",
+              "Data limitations: published IP claim inception tables have limited credibility; worldwide statistics (especially from USA) are plentiful but may lack relevance due to heterogeneity in target markets, underwriting strategies, policy wordings, and claims management."
+            ],
+            "key_terms": [],
+            "exam_qa": [
+              {
+                "q": "What is the implication of limited credibility of published IP parameters for modelling?",
+                "a": "Cannot rely heavily on standard tables. Must seek alternative data sources: reinsurers, population statistics, own data if sufficient. If data is universally insufficient: (1) assume large margins for risk; (2) issue only reviewable products; (3) ensure product is well protected by reinsurance."
+              }
+            ]
+          },
+          {
+            "id": "7.2",
+            "title": "CI Insurance \u2014 Modelling Complexities",
+            "bullets": [
+              "Must estimate up to 40 different condition distributions separately, including future trends for each \u2014 practical data is unlikely to support this for all but the most common conditions.",
+              "Medical advances affect new and in-force business differently: conditions can be removed from cover on new policies; existing guaranteed policies cannot be changed (unless reviewable).",
+              "Earlier diagnosis increases claim incidence rates \u2014 condition is diagnosed before severe deterioration, meaning more people qualify for the benefit.",
+              "Simpler/more available operations: may increase treatment-based CI claims.",
+              "Modelling should use separate approaches for disease-based vs treatment-based claims, as future trends differ \u2014 medical advances may reduce disease claims (prevention) but increase treatment-based claims (more available procedures).",
+              "Guaranteed vs reviewable: as for IP, guaranteed products require full risk margins; reviewable products allow modelling to next review but must still allow for competitive pressures and anti-selective lapses.",
+              "Data limitations: CI has not been around long enough for credible claims experience except possibly for cancers and heart attacks."
+            ],
+            "key_terms": [],
+            "exam_qa": [
+              {
+                "q": "Why should disease-based and treatment-based CI claims be modelled separately?",
+                "a": "They are subject to different future trends. Medical advances may prevent diseases (reducing disease-type claims) while simultaneously making treatments more available (increasing treatment-based claims). Modelling them together would obscure these diverging trends."
+              }
+            ]
+          },
+          {
+            "id": "7.3",
+            "title": "LTCI \u2014 Modelling Complexities",
+            "bullets": [
+              "Claim frequency: limited experience data on transition rates \u2014 a major difficulty in most territories.",
+              "Claim amount: where policy pays funding-for-care (indemnity) benefits, must estimate a probability distribution of annual/monthly claim payments. Claim amounts depend on economy, inflation, and capacity of care provision (demand likely to grow faster than supply, driving real cost increases above general inflation).",
+              "Portfolio projection demand is very dependent on political commitment: government policy on State LTC funding directly affects new business volumes and mix.",
+              "Data limitations: absence of insurance statistics \u2014 very little pooled industry data for LTCI."
+            ],
+            "key_terms": [],
+            "exam_qa": []
+          },
+          {
+            "id": "7.4",
+            "title": "PMI \u2014 Modelling Complexities",
+            "bullets": [
+              "Claim frequency: difficult to define a discrete claim (one event may involve multiple payments across a chain of care). Must establish a consistent claim definition used for both frequency and amount estimation.",
+              "Claim frequency parameters depend on: duration from inception (longer-duration policyholders more likely to claim as new conditions arise beyond the pre-existing exclusion period), age, gender, time of year, occupation.",
+              "Claim amount: indemnity, often without a ceiling. Distribution depends on hospital capacity (reduced supply increases costs), medical science progress (may increase or decrease costs), insurer/provider deals (reduce costs and variance), inflation (increases costs).",
+              "Macroeconomy: affordability pressure reduces demand; near recession onset, group members may accelerate treatment while still covered.",
+              "Style of government: affects State provision attractiveness and whether tax incentives exist for PMI.",
+              "Level of market competition: more competition \u2192 lower premiums; product differentiation makes direct comparison harder.",
+              "NCD multi-states: must model policyholder movement between NCD levels.",
+              "Reclaim of initial costs: renewal assumptions should be conservative (low) to reduce risk of unrecouped initial expenses if lapses are higher than assumed.",
+              "Claim chain: PMI claims often consist of multiple payments (operation + follow-up physiotherapy etc) \u2014 the full chain of claim events must be modelled. Settlement delay is usually short for PMI but must be allowed for.",
+              "Data limitations: absence of pooled industry statistics in many markets; family cover and group arrangements mean individual risk details may not be known."
+            ],
+            "key_terms": [],
+            "exam_qa": [
+              {
+                "q": "Why is estimating PMI claim frequency difficult?",
+                "a": "The difficulty lies in defining what constitutes a discrete claim. A single treatment event may involve multiple separate payments. A consistent claim definition must be established and used for both frequency estimation and claim amount modelling."
+              },
+              {
+                "q": "Why does PMI claim frequency increase with policy duration?",
+                "a": "Pre-existing conditions are typically excluded at outset (via underwriting or moratorium). As the policy continues, new medical conditions arise and are covered. Longer-duration policyholders have also self-selected for continued cover, suggesting higher expected future claims."
+              }
+            ]
+          },
+          {
+            "id": "7.5",
+            "title": "Other Modelling Issues (All Products)",
+            "bullets": [
+              "Role of genetics: genetic tests can reveal predispositions to certain conditions. In some countries (e.g. UK) this information does not have to be disclosed at underwriting, creating potential for increased anti-selection. Extent of claims impact from this practice is still emerging.",
+              "Trends in anti-selection: people who consider themselves high risk are most likely to apply for cover. Underwriting is the primary tool to combat this.",
+              "Quality of underwriting: good underwriting produces more optimistic pricing assumptions (e.g. lower CI rates) than ununderwritten business. Must be consistently reflected in pricing assumptions."
+            ],
+            "key_terms": [
+              {
+                "term": "Genetics and anti-selection",
+                "definition": "Individuals with known genetic predispositions to certain conditions may preferentially seek cover without disclosing this information, worsening the insured risk pool relative to pricing assumptions."
+              }
+            ],
+            "exam_qa": []
+          }
+        ]
+      }
+    ]
+  }
+}
