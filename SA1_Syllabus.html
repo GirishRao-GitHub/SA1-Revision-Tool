@@ -865,200 +865,46 @@ function findTopicKey(sectionTitle) {
 // To add a chapter: CHAPTER_DATA["1"] = { ...json... };
 // Ch3 is pre-loaded as the example chapter.
 
-const CHAPTER_DATA = {
-  "2": {
-    "exam": "SA1",
-    "chapter": "Ch2",
-    "title": "Short-term Health & Care Insurance Products",
-    "syllabus_refs": ["1.1.1", "1.1.2"],
-    "products_covered": ["Private Medical Insurance", "Health Cash Plans", "Major Medical Expense Insurance"],
-    "sections": [
-      {
-        "id": "1",
-        "title": "Private Medical Insurance (PMI)",
-        "subsections": [
-          {
-            "id": "1.1",
-            "title": "Benefits and Features",
-            "bullets": [
-              "PMI reimburses policyholders for medical treatment costs; level of cover depends on what the State provides.",
-              "In countries without State healthcare, PMI replaced the fee-for-service model and reduced individuals' financial risk. Cover may or may not be compulsory.",
-              "Where a comprehensive State system (e.g. NHS) exists, PMI provides choice over how, where, and when care is delivered — typically for acute/treatable conditions, not chronic or A&E.",
-              "PMI can be seen as complementary to (or competing with) State healthcare.",
-              "Typical exclusions: drug abuse, self-inflicted injuries, out-patient drugs/dressings, normal pregnancy, cosmetic surgery, gender reassignment, preventative treatment, dialysis, mobility aids, experimental treatments/drugs, organ treatment, war risks, hazardous hobbies.",
-              "Exclusions are more common when PMI supplements a State system; harder to enforce where no State system exists (though cosmetic/weight-loss may still be excluded).",
-              "Claims may be paid to the care provider directly, or reimbursed to the insured.",
-              "PMI is generally annually renewable. Premiums can be rated by age, gender, and prior medical history — subject to local regulation.",
-              "Where compulsory, rating factors may be restricted to prevent individuals becoming uninsurable (e.g. Switzerland: no age or medical condition rating permitted)."
-            ],
-            "key_terms": [
-              { "term": "PMI", "definition": "Private Medical Insurance — indemnity-based cover for medical treatment costs." },
-              { "term": "Fee-for-service", "definition": "Pre-PMI model where individuals paid all medical costs out of pocket." },
-              { "term": "Hazardous pursuits", "definition": "Dangerous hobbies typically excluded from PMI cover." },
-              { "term": "Annual renewable", "definition": "Policy reviewed and repriced each year." }
-            ],
-            "exam_qa": [
-              {
-                "q": "In what ways does PMI compete with a State healthcare system?",
-                "a": "Competes for the same pool of doctors, nurses, hospital beds, and diagnostic services. Private care uses the same professionals as the State system, so more time spent on private patients reduces availability for State patients."
-              }
-            ]
-          },
-          {
-            "id": "1.2",
-            "title": "Insurer's Perspective",
-            "bullets": [
-              "Indemnity basis → risk of very large claims. Imposing policy limits controls this but breaks the true indemnity principle.",
-              "Rising claims costs can be managed via HMO/PPO arrangements, though this restricts policyholder choice.",
-              "HMO: network of care providers — cover restricted to within the network.",
-              "PPO: preferred list of providers — insurer has negotiated preferential rates, reducing costs for both parties.",
-              "High/unexpected claim rates managed by: excluding pre-existing conditions, underwriting, GP referrals as gatekeepers.",
-              "Excesses, coinsurance, and no-claims discounts reduce small claim frequency and drive down premiums.",
-              "ACA (USA): individual mandate ensured younger/healthier lives entered the risk pool; also capped annual out-of-pocket expenses.",
-              "Wellness incentives (activity tracking, dietary monitoring) can reduce claims."
-            ],
-            "key_terms": [
-              { "term": "HMO", "definition": "Health Maintenance Organisation — care only provided within the network." },
-              { "term": "PPO", "definition": "Preferred Provider Organisation — insurer-approved list with negotiated rates." },
-              { "term": "Anti-selection", "definition": "Higher-risk individuals being more likely to take out or retain cover." },
-              { "term": "Individual mandate", "definition": "US ACA requirement to hold health insurance, with a financial penalty for non-compliance." },
-              { "term": "Coinsurance", "definition": "Insured retains a fixed percentage of claim costs (e.g. insured pays 20%, insurer 80%)." }
-            ],
-            "exam_qa": []
-          },
-          {
-            "id": "1.3",
-            "title": "Meeting Customer Needs",
-            "bullets": [
-              "Where State cover exists, PMI enables faster access, choice of hospital/consultant, and better comfort (e.g. private room).",
-              "UK NHS focuses on chronic/life-threatening conditions; non-emergency procedures can involve very long waits — PMI addresses this.",
-              "6-week waiting list plans: PMI only activates if NHS wait exceeds 6 weeks — cheaper than comprehensive PMI.",
-              "Employers may offer PMI as a benefit to key staff to minimise business disruption from illness."
-            ],
-            "key_terms": [
-              { "term": "6-week plan", "definition": "PMI that only covers treatment when NHS waiting time exceeds 6 weeks; lower premium than full PMI." }
-            ],
-            "exam_qa": [
-              {
-                "q": "Why might someone pay to see a consultant privately if they could see the same person on the NHS?",
-                "a": "To avoid long waiting lists (speed matters clinically and for peace of mind). May wish to bypass GP referral. More choice of consultant. Private consultants typically spend more time per patient and may offer higher perceived quality of diagnosis."
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "id": "2",
-        "title": "Health Cash Plans",
-        "subsections": [
-          {
-            "id": "2.1",
-            "title": "Benefits and Features",
-            "bullets": [
-              "Annually renewable, defined benefit products — primarily UK market.",
-              "Benefits paid as cash directly to the policyholder (not reimbursement to providers).",
-              "Covered events: dental, optical, physiotherapy, maternity, hospitalisation, recuperation, hearing aids, consultations.",
-              "Premiums are community-rated and generally low (fixed benefit product)."
-            ],
-            "key_terms": [
-              { "term": "Defined benefit", "definition": "Fixed cash payment per event — not linked to actual cost incurred." },
-              { "term": "Community rating", "definition": "Same premium charged to all policyholders regardless of individual risk factors." },
-              { "term": "Waiting period", "definition": "Period after policy start during which no claims can be made." }
-            ],
-            "exam_qa": []
-          },
-          {
-            "id": "2.2",
-            "title": "Insurer's Perspective",
-            "bullets": [
-              "Fixed benefits reduce risk of very large claims (unlike indemnity products).",
-              "More-than-expected claims managed by: waiting periods, pre-existing condition exclusions, no-claims discounts, treatment frequency limits.",
-              "Potential for over-recovery (claim exceeds actual cost) — mitigated by capping benefit or applying coinsurance.",
-              "Low premiums mean insurer depends heavily on renewals to recover acquisition costs."
-            ],
-            "key_terms": [
-              { "term": "Over-recovery", "definition": "When the defined benefit paid exceeds the actual cost incurred by the policyholder." }
-            ],
-            "exam_qa": []
-          },
-          {
-            "id": "2.3",
-            "title": "Meeting Customer Needs",
-            "bullets": [
-              "Suitable where full PMI is unaffordable — provides access to specific treatments (dental, optical, physio) without full cost.",
-              "Not designed for major procedures or operations.",
-              "Complements PMI: PMI typically excludes dental and optical; a cash plan fills this gap.",
-              "Fixed hospitalisation cash payment can cover incidental costs: transport, childcare, etc."
-            ],
-            "key_terms": [],
-            "exam_qa": []
-          }
-        ]
-      },
-      {
-        "id": "3",
-        "title": "Major Medical Expense Insurance",
-        "subsections": [
-          {
-            "id": "3.1",
-            "title": "Benefits and Features",
-            "bullets": [
-              "USA-specific product (note: UK Glossary defines a different variant).",
-              "Comprehensive PMI-type product covering primary, secondary, and tertiary care — focus is on capping exposure to large costs, not full indemnity.",
-              "Introduced in the USA in the 1950s as medical costs rose significantly.",
-              "Coinsurance: insured retains a share of costs — key difference from PMI.",
-              "Deductible (excess): insured pays the first tranche of costs; insurer only pays above this.",
-              "Maximum benefit limits may apply per year, per lifetime, or per benefit category."
-            ],
-            "key_terms": [
-              { "term": "Coinsurance (MME)", "definition": "Policyholder retains a fixed % of all claim costs (e.g. 10% after deductible)." },
-              { "term": "Deductible", "definition": "Amount the policyholder must pay before any insurance benefit is paid (also called excess)." },
-              { "term": "Covered services", "definition": "Defined list of treatments/procedures that the policy will pay for." },
-              { "term": "Cost sharing", "definition": "General term for the portion of claim costs retained by the insured." },
-              { "term": "Comprehensive MME", "definition": "MME variant that also covers smaller costs, not just large/catastrophic expenses." }
-            ],
-            "exam_qa": []
-          },
-          {
-            "id": "3.2",
-            "title": "Insurer's Perspective",
-            "bullets": [
-              "Not a true indemnity product — insured always retains a share above the deductible.",
-              "Very large claims still possible → policy limits and/or reinsurance may be appropriate.",
-              "Greater flexibility → more anti-selection and more complex pricing."
-            ],
-            "key_terms": [
-              { "term": "Anti-selection (MME)", "definition": "With flexible designs, customers choose coverage most relevant to them, skewing the risk pool." },
-              { "term": "Short-term lapse", "definition": "Policyholder cancels after a brief period, before the insurer recovers acquisition costs." }
-            ],
-            "exam_qa": []
-          },
-          {
-            "id": "3.3",
-            "title": "Meeting Customer Needs",
-            "bullets": [
-              "Attractive in markets with high medical costs and limited/no State cover or employer plans.",
-              "Allows small regular premiums to protect against large unexpected costs.",
-              "Especially valuable for families (single family-level deductible).",
-              "Even comprehensive MME has maximum limits → policyholder remains exposed to very large costs above the cap."
-            ],
-            "key_terms": [],
-            "exam_qa": []
-          }
-        ]
-      }
-    ]
-  }
-};
+const CHAPTER_DATA = {};
 
-// ── HOW TO ADD A NEW CHAPTER ──────────────────────────────
-// 1. Prepare a JSON file in the same format as above (exam, chapter, title,
-//    syllabus_refs, products_covered, sections[{id, title, subsections[
-//    {id, title, bullets[], key_terms[], exam_qa[]}]}])
-// 2. In this <script> block, add:
-//    CHAPTER_DATA["N"] = <paste JSON object here>;
-//    where N is the chapter number (e.g. "1", "3", "4" …)
-// ─────────────────────────────────────────────────────────
+// ── DATA LOADING ─────────────────────────────────────────
+// Chapter data is loaded from data/SA1_Revision_Notes.json
+// on page load. The UI is initialised after the fetch
+// resolves so all chapters are available immediately.
+
+function loadChapterData() {
+  const loadingEl = document.getElementById('content-area');
+  loadingEl.innerHTML = `
+    <div class="content-empty">
+      <div class="icon">⏳</div>
+      <h2>Loading notes…</h2>
+      <p>Fetching chapter data from data/SA1_Revision_Notes.json</p>
+    </div>`;
+
+  fetch('data/SA1_Revision_Notes.json')
+    .then(r => {
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      return r.json();
+    })
+    .then(data => {
+      // data is an object keyed by chapter number string
+      Object.assign(CHAPTER_DATA, data);
+      // Re-render nav and welcome now that data is available
+      renderNav();
+      showWelcome();
+    })
+    .catch(err => {
+      loadingEl.innerHTML = `
+        <div class="content-empty">
+          <div class="icon">⚠️</div>
+          <h2>Could not load chapter data</h2>
+          <p style="max-width:360px;">Failed to fetch <code style="font-family:var(--mono);color:var(--accent);">data/SA1_Revision_Notes.json</code>.<br><br>
+          Error: ${err.message}<br><br>
+          Make sure the file exists in the <code style="font-family:var(--mono);color:var(--accent);">data/</code> subfolder relative to this HTML file.</p>
+        </div>`;
+    });
+}
+
 
 // ── STATE ────────────────────────────────────────────────
 let activeView      = 'notes';
@@ -1068,8 +914,8 @@ let activeSubId      = null;
 let searchQuery      = '';
 
 // ── INIT ─────────────────────────────────────────────────
-renderNav();
-showWelcome();
+renderNav();       // Render nav skeleton immediately (no chapter data yet)
+loadChapterData(); // Async: fetch chapter data, then re-render
 
 // ── NAV RENDERING ────────────────────────────────────────
 function renderNav() {
