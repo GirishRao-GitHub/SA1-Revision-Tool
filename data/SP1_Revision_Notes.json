@@ -3032,38 +3032,31 @@
     "chapter": "Ch15",
     "title": "Assumptions (3) – Financial Assumptions",
     "syllabus_refs": [
-      "5.1"
+      "5.1",
+      "5.1.1",
+      "5.1.2",
+      "5.1.3",
+      "5.1.4"
     ],
     "products_covered": [
-      "IP",
-      "CI",
-      "LTCI",
-      "PMI"
+      "Income Protection Insurance",
+      "Critical Illness Insurance",
+      "Long-term Care Insurance",
+      "Private Medical Insurance"
     ],
     "sections": [
       {
         "id": "1",
-        "title": "Benefit Amount and Benefit Inflation",
+        "title": "Introduction",
         "subsections": [
           {
             "id": "1.1",
-            "title": "Benefit Amount",
+            "title": "Overview of Financial Assumptions",
             "bullets": [
-              "Long-term contracts (IP, CI, LTCI): benefit level is fixed in policy terms; premiums are expressed as a rate per unit of sum insured. Only for very large policies would the insurer vary assumptions (due to stricter underwriting and better socio-economic profile of claimants).",
-              "PMI: the actuary must forecast both the number and amount of each claim. Average claim amounts are based on own experience or a similar insurer's data, adjusted for: differences in policy conditions; differences in negotiated hospital contracts; and future trends in provider capacity and charges.",
-              "Alternatively, private hospital treatment price lists can be used as a starting point for PMI claim amounts."
-            ],
-            "key_terms": [],
-            "exam_qa": []
-          },
-          {
-            "id": "1.2",
-            "title": "Benefit Inflation",
-            "bullets": [
-              "Long-term contracts: benefits are often index-linked (eg consumer price index, earnings index, fixed percentage). Even with fixed-rate increases, a model must project the inflated benefit amounts throughout the term.",
-              "Best index for IP: national earnings index (replaces lost employment income). For CI: various options (care costs, debt repayment, earnings — in practice often fixed). For LTCI: nursing and residential care cost index.",
-              "PMI benefit inflation: depends on medical inflation, changes in treatment protocols, hospital charging structures, age profile of portfolio, and provider capacity.",
-              "Many insurers cap benefit inflation (especially LTCI) to contain costs within affordable premiums."
+              "Financial assumptions covered in this chapter: benefit amount, benefit inflation, expenses, expense inflation, commission and clawback, investment return, and taxes.",
+              "New business volumes and mix assumptions are covered in Ch16.",
+              "Material is described primarily in the pricing context but applies equally to reserving and embedded value contexts.",
+              "A key guiding principle across all assumptions is consistency — the implied relationships between assumptions (e.g. investment return and inflation) must be realistic."
             ],
             "key_terms": [],
             "exam_qa": []
@@ -3072,39 +3065,29 @@
       },
       {
         "id": "2",
-        "title": "Expenses and Expense Inflation",
+        "title": "Benefit Amount",
         "subsections": [
           {
             "id": "2.1",
-            "title": "Expense Assumptions",
+            "title": "Long-term Contracts (IP, CI, LTCI)",
             "bullets": [
-              "Expense types: initial acquisition (commission, marketing); initial medical underwriting; initial administration; renewal administration; renewal commission; investment; withdrawal; claim administration; termination.",
-              "PMI has the highest renewal administration costs (full premium review each year with potential change in conditions). Investment and withdrawal expenses are unimportant for PMI (short-term, minimal reserves).",
-              "Health and care insurance generally has higher expenses than life insurance due to: lower non-medical limits (more applications requiring full underwriting); product complexity (more selling effort); higher claims management costs.",
-              "Per-policy expenses do not vary with benefit size. Since premiums are expressed per unit of benefit, smaller policies cross-subsidise larger ones. Solutions: individual premium calculations; policy fee addition; sum insured differential (different rates for different benefit size bands).",
-              "The most common approach is a policy fee addition, sometimes combined with a sum insured differential.",
-              "Expense assumptions based on own expense analysis; if insufficient, use industry or reinsurers' data."
+              "For long-term products, the benefit level is generally fixed in the policy terms — no assumption is needed about the amount itself; the average benefit size is part of the business mix assumption (Ch16).",
+              "Premiums for nearly all long-term H&C products are expressed as a rate per unit of sum insured (e.g. £3 per £100 pa benefit). The same rate applies for any benefit size, with a single premium calculated for the average benefit size.",
+              "Only for very large policy sizes would the insurer alter assumptions — potentially higher expenses due to extra underwriting evidence required.",
+              "Underlying experience does vary significantly by benefit size: larger policies tend to have better (lighter) morbidity experience because policyholders come from higher socio-economic groups and face stricter underwriting."
             ],
-            "key_terms": [
-              {
-                "term": "Non-medical limit",
-                "definition": "The maximum benefit level for which an application can be accepted without automatically requiring a medical examination or private medical attendant's report."
-              },
-              {
-                "term": "Policy fee",
-                "definition": "A flat addition to the premium (or deduction from benefits) used to cover per-policy expenses that do not vary with the sum insured."
-              }
-            ],
+            "key_terms": [],
             "exam_qa": []
           },
           {
             "id": "2.2",
-            "title": "Expense Inflation",
+            "title": "Short-term Contracts (PMI)",
             "bullets": [
-              "Expense inflation must be allowed for, especially for long-term products — expenses are typically a mix of price inflation and salary (earnings) inflation.",
-              "Relevant considerations: current price and earnings inflation rates; expected future rates; differential between nominal and index-linked government bond yields; recent actual company/industry experience.",
-              "Two aspects of expense inflation when pricing: inflation of expenses during the policy term itself; and inflation of all expenses between now and the dates when future policies will be issued.",
-              "An inflation assumption must be made even for reviewable contracts, as the insurer commits to cover being provided and expenses will increase over time."
+              "For PMI, the policy promises largely to indemnify medical expenses — the actuary must forecast both the number of claims and the average claim amount.",
+              "Best starting point for claim size is an analysis of the insurer's own recent experience; if unavailable, data from a similar insurer is used.",
+              "Average claim size from an existing insurer should be adjusted for: differences in policy conditions; differences in negotiated hospital contracts (deals with hospitals to perform specific treatments at agreed standard costs reduce both expected value and volatility of claims); future trends in provider capacity and charges (reduced capacity tends to increase costs).",
+              "Alternatively, treatment price lists for private hospitals can be used as a basis.",
+              "Hospital deals make claim costs more predictable and help keep them under control; their presence or absence affects both expected average claim cost and its volatility, and hence the margins needed in the basis."
             ],
             "key_terms": [],
             "exam_qa": []
@@ -3113,22 +3096,242 @@
       },
       {
         "id": "3",
-        "title": "Commission and Clawback",
+        "title": "Benefit Inflation",
         "subsections": [
           {
             "id": "3.1",
-            "title": "Commission and Clawback Assumptions",
+            "title": "Long-term Contracts (IP, CI, LTCI)",
             "bullets": [
-              "Commission rates reflect current market levels and any legislative requirements. Commission is generally higher for health and care than for life insurance, due to greater product complexity and underwriting effort.",
-              "Commission can be expressed as: a percentage of premium; a percentage of sum insured; or a fixed amount.",
-              "Commission clawback: where initial commission is higher than renewal commission and the policy lapses early, the insurer can clawback unearned commission. Clawback assumptions must allow for the credit risk of the intermediary (possibility of default).",
-              "The actuary must estimate early lapse rates and the proportion of unearned commission that will actually be reclaimed when setting the pricing basis.",
-              "If multiple distributors receive different commission rates for the same product, a weighted average based on expected volumes by channel is required."
+              "For most long-term H&C products, the sum insured needs to be inflated periodically if the policy is to remain in line with its original purpose (replacing lost income, covering care costs, etc.).",
+              "Increasing both premium and benefit at the same rate in line with an index is not wholly appropriate — the risk increases with age, so initial funding is still required (same cashflow projection modelling as for level-premium contracts).",
+              "The per-unit premium rate stays constant throughout the term (as both premium and benefit inflate in the same proportion); the annual increase in expected claim cost due to ageing must be pre-funded through higher-than-needed early premiums.",
+              "No simple index exists for medical costs — consumer price inflation (CPI) is often used as an alternative, but it does not capture salary inflation for medical personnel above CPI or costs of modern medical technology.",
+              "Many companies avoid unknown future indexed increases by escalating premiums and payouts at a fixed annual percentage (often capped at CPI if lower). The cost is fully modelled.",
+              "Most suitable inflation index by product: (1) IP insurance — national earnings index (replacing lost employment income); (2) CI insurance — depends on purpose: care costs index, no inflation (fixed debt repayment), earnings inflation, or price inflation; in practice sum insured is usually fixed; (3) LTCI — index of nursing/residential home costs is most appropriate; insurers often put a ceiling on the rate of benefit inflation to contain costs.",
+              "For index-linked contracts, an explicit inflation rate assumption must be included in the model; for fixed percentage contracts, no inflation assumption is needed but the cost is still modelled.",
+              "Even where benefits and premiums increase at the same rate, an explicit assumption for that rate must be included in the model."
+            ],
+            "key_terms": [],
+            "exam_qa": []
+          },
+          {
+            "id": "3.2",
+            "title": "Short-term Contracts (PMI)",
+            "bullets": [
+              "For indemnity products (PMI and some LTCI), an assumption for medical cost inflation is required.",
+              "PMI benefit inflation is a function not just of medical inflation but of: likely changes in medical treatment protocols (new treatments, different specialist staff requirements); the future charging structure of hospitals and consultants (e.g. time-based vs procedure-based charges); the future age profile of the portfolio (age-specific claim amount assumptions may be needed)."
+            ],
+            "key_terms": [],
+            "exam_qa": []
+          }
+        ]
+      },
+      {
+        "id": "4",
+        "title": "Expenses",
+        "subsections": [
+          {
+            "id": "4.1",
+            "title": "Types of Expenses",
+            "bullets": [
+              "Direct expenses relate specifically to a class of business; indirect expenses (overheads) cannot be allocated directly. The distinction is subjective — e.g. property costs of a 'new business admin' department could be direct or overhead.",
+              "Direct expenses can be fixed (independent of business volume) or variable (depend on number of policies sold or amount of claims paid).",
+              "Expense assumption must cover the incidence of direct expenses from: initial acquisition (initial commission, marketing, sales); initial medical underwriting; initial administration; renewal administration; renewal reward to sales channel (renewal commission); investment; withdrawal expenses; claim administration; termination.",
+              "PMI has higher renewal administration costs than long-term products — at renewal, the insurer must contact each policyholder, assess any changed circumstances, and recalculate the premium; costs are lower than initial but higher than for a long-term policy's annual upkeep.",
+              "Expense types that are not important for PMI: (1) Investment — short-term nature means reserves are small, investment expense/assumption makes little difference; (2) Withdrawal/termination — both are effectively lapses at renewal; their cost is swamped by overall renewal costs.",
+              "In addition to direct expenses, premiums must make an appropriate contribution to indirect (overhead) expenses.",
+              "Per-policy expenses are expenses that do not vary by policy size (e.g. policy administration costs)."
+            ],
+            "key_terms": [
+              {
+                "term": "Direct expenses",
+                "definition": "Expenses that can be allocated directly to a specific class (or classes) of business, e.g. underwriting costs for IP insurance."
+              },
+              {
+                "term": "Indirect expenses (overheads)",
+                "definition": "Expenses that cannot be allocated directly to a class of business, e.g. head office property costs. Each product must contribute a fair share."
+              },
+              {
+                "term": "Non-medical limit",
+                "definition": "The maximum benefit for which an applicant can apply for cover without automatically requiring specified underwriting evidence (e.g. a medical examination or private medical attendant's report). Non-medical limits for H&C products are often lower than for life insurance due to greater morbidity complexity."
+              }
+            ],
+            "exam_qa": []
+          },
+          {
+            "id": "4.2",
+            "title": "Data and Grouping",
+            "bullets": [
+              "Expense assumption values are determined by analysing the company's recent experience for the product type. If insufficient own experience exists, data from a similar line, industry data, or reinsurance company data may be used.",
+              "Result of analysis: expenses divided by function (initial, renewal, claim, termination) and by whether the level varies proportionally with premium/benefit or is expressed as an amount per contract (per-policy).",
+              "Fixed expenses associated with the product and a suitable contribution to overheads should also be identified."
+            ],
+            "key_terms": [],
+            "exam_qa": []
+          },
+          {
+            "id": "4.3",
+            "title": "Loading Expenses into Premiums",
+            "bullets": [
+              "Ideally each policy pays its share of all expenses including a contribution to overheads; in practice a degree of cross-subsidy between policies is unavoidable for practical and competitive reasons.",
+              "Expense loadings are often used as the optional margin to secure competitiveness — but only with careful monitoring and on a short-term basis. Failure to cover expenses is an important contributor to insolvency.",
+              "In price-sensitive broker channels, insurers sometimes set premiums with expense loadings that only marginally exceed variable expense requirements — justified on the grounds that any positive contribution to fixed expenses is better than zero contribution from an uncompetitive product.",
+              "What matters is the total contribution to fixed expenses (and profit) across the whole product, not per individual policy.",
+              "Expenses that vary with premium size: loaded as a percentage of premium (e.g. commission).",
+              "Per-policy expenses: because premiums are quoted per unit of benefit (e.g. £3 per £100 benefit), the per-policy loading is spread in proportion to benefit size. The insurer calculates a premium for the average benefit size and applies the same rate per unit benefit — meaning large policies subsidise small policies unless corrected.",
+              "Three approaches to handle per-policy expense cross-subsidy: (1) Individual calculation of premium for each case using actual benefit level — practical only for large cases; small policies would face unacceptably high expense loadings. (2) Policy fee added to premium (or deducted from income benefit) — most common approach; the fee may need to be reduced below its theoretical level for competitiveness, with the shortfall recovered via a higher percentage-of-premium expense loading, calibrated using a model portfolio. Risk: if more small policies are sold than assumed, the contribution to overheads is insufficient. (3) Sum insured differential — different premium rates by benefit band; requires estimation of expected policy numbers in each band.",
+              "Fixed expenses (e.g. product development costs) must also be recouped. The loading must ensure that, for the anticipated volume over the product's lifetime, total loadings at least cover all direct fixed and variable expenses and a fair share of overheads. A circularity problem can arise: future volume depends on price, which depends on the expense loading, which depends on future volume. Resolution: assume volume is insensitive across bands of price and iterate to a final answer."
+            ],
+            "key_terms": [],
+            "exam_qa": [
+              {
+                "q": "Which of the main H&C products (IP, CI, LTCI, PMI) has the highest renewal administration costs, and why?",
+                "a": "PMI has the highest renewal administration costs. At renewal, the insurer must contact each policyholder, consider any changes in their circumstances and policy conditions, and recalculate the premium. For long-term contracts, annual renewal is simply a matter of updating records, inflating premiums/benefits, and collecting the premium — much lower cost."
+              },
+              {
+                "q": "Why can the loading for per-policy expenses create a cross-subsidy problem for long-term H&C products, and how can it be mitigated?",
+                "a": "Because premiums are quoted per unit of benefit, the per-policy expense loading (which is fixed regardless of policy size) ends up being proportional to benefit size — large policies overpay and small policies underpay relative to the actual per-policy cost. This is mitigated by: (1) individual premium calculation for large cases; (2) adding a policy fee to the premium (most common), reduced from theoretical level if necessary for competitiveness, with the shortfall recovered via a higher percentage-of-premium loading; (3) a sum insured differential structure with different rates per benefit band."
+              }
+            ]
+          },
+          {
+            "id": "4.4",
+            "title": "Comparison with Life Insurance",
+            "bullets": [
+              "More work is generally required to put an H&C product on the books than a life-only product — the main reason is the extra underwriting effort: non-medical limits are often lower, more information is required, and more time is needed to assess morbidity.",
+              "Product development costs are also higher: more effort is needed to derive incidence rates, develop policy literature, and train sales staff — so initial expenses are higher.",
+              "H&C products normally have to be actively sold (consumers do not always see the need), requiring considerable time explaining key features — unlike life insurance which is often purchased as a mortgage condition.",
+              "Claims expenses are more onerous than for life insurance: more time and medical information are needed to establish claim validity; ongoing income claims (IP, LTCI) require continued maintenance. Main items: administering payments; monitoring claim validity; enforcing changes to benefit entitlement (e.g. reducing IP benefits on partial return to work); rehabilitation efforts; assessing claims to higher benefit levels (e.g. LTCI upgrades)."
+            ],
+            "key_terms": [],
+            "exam_qa": []
+          }
+        ]
+      },
+      {
+        "id": "5",
+        "title": "Expense Inflation",
+        "subsections": [
+          {
+            "id": "5.1",
+            "title": "Setting the Expense Inflation Assumption",
+            "bullets": [
+              "Any product offering a level premium against an increasing risk must incorporate an expense inflation assumption, even if premiums are annually reviewable.",
+              "For reviewable contracts: premiums are only changed at review dates if expected future portfolio experience changes. With no change in expectation, premiums are not changed. Since future expense inflation is expected, an allowance is included regardless of reviewability.",
+              "For annually renewable contracts (e.g. PMI): an implicit allowance is made by increasing per-policy expenses to the level expected to apply at the average time those expenses will be incurred.",
+              "Inflation assumption applies to: renewal administration, claim administration, and policy termination expenses.",
+              "Expense inflation is driven partly by price inflation and partly by salary costs (the majority of insurance company costs are staff costs).",
+              "Data and adjustments: analyse recent expense inflation experience of the company (or industry if unavailable) to determine the composition of inflation (e.g. 20% price inflation + 80% earnings inflation historically implies that same weighting for future projections, unless reasons exist for the weightings to change).",
+              "Factors to consider when setting expense inflation: current rates of price and earnings inflation; expected future rates; differential between return on government fixed interest and index-linked securities (proxy for expected inflation, though approximate — affected by any inflation risk premium in fixed interest bond prices); recent actual company/industry experience.",
+              "Two distinct aspects of expense inflation must be modelled when pricing: (1) inflation of expenses during the term of each future policy (from issue to termination); (2) inflation of expenses between 'now' (when premium rates are being set) and the dates at which future policies are actually issued. For example, if initial expenses are £250 now, they might be £260 in year 1, £272 in year 2, etc. — the pricing basis should use an average appropriate for the expected period over which the basis will apply."
+            ],
+            "key_terms": [],
+            "exam_qa": []
+          }
+        ]
+      },
+      {
+        "id": "6",
+        "title": "Commission and Clawback",
+        "subsections": [
+          {
+            "id": "6.1",
+            "title": "Commission",
+            "bullets": [
+              "Commission is often paid at a higher rate on the initial premium than on subsequent premiums, reflecting the additional work involved in the sale.",
+              "Commission assumptions are determined by the amounts the insurer intends to pay the distribution system — influenced by current market levels of sales remuneration and/or legislatively imposed rates.",
+              "Commission can be expressed as a percentage of premium, a percentage of sum insured, or (occasionally) a fixed sum.",
+              "If a single tariff is sold by different distributors with different commission structures, the pricing actuary must forecast the volume mix by distribution channel. This must be monitored against actual experience."
+            ],
+            "key_terms": [],
+            "exam_qa": []
+          },
+          {
+            "id": "6.2",
+            "title": "Clawback",
+            "bullets": [
+              "Where initial commission is higher than renewal commission, there is a risk that the insurer loses out if a policyholder lapses early and the product has a level annual commission loading.",
+              "Commission is not deemed 'earned' for a number of months into the policy term; the salesperson may be required to repay part of the initial commission if the policyholder lapses during this earning period (clawback).",
+              "The insurer takes a 'credit risk' on initial commission paid — the risk that the intermediary defaults on clawback repayment (e.g. due to bankruptcy). The commission loading should not assume full clawback will be obtained in all theoretically due cases.",
+              "The actuary must estimate: early lapse rates by product type and distribution channel; the proportion of unearned commission that will actually be reclaimed.",
+              "Data sources for clawback: company experience by distribution type (early lapses vs exposed to risk at each clawback-eligible duration); industry, reinsurer, and consultant benchmarks. Credibility of in-house data may be an issue.",
+              "Clawback numerical example: initial commission with a two-year earning period, 50% clawback on lapse at end of year 1, 10% lapse rate, 5% of clawback payments not received. Expected clawback = 0.10 × 0.50 × 0.95 = 4.75% of initial commission paid per policy."
             ],
             "key_terms": [
               {
                 "term": "Clawback",
-                "definition": "The recovery by the insurer of part of the initial commission paid to a salesperson when a policy lapses before the commission is deemed 'earned'. The insurer bears a credit risk that the intermediary cannot repay."
+                "definition": "The recovery by the insurer of part of the initial commission paid to a salesperson when a policy lapses within the 'earning period'. Protects the insurer against paying high upfront commission that has not yet been offset by premium income."
+              },
+              {
+                "term": "Credit risk (commission)",
+                "definition": "The risk that an intermediary defaults on repayment of clawable commission, e.g. due to insolvency. The insurer's pricing should not assume full clawback recovery in all theoretically eligible cases."
+              }
+            ],
+            "exam_qa": []
+          },
+          {
+            "id": "6.3",
+            "title": "Comparison with Life Insurance",
+            "bullets": [
+              "Commission levels may be higher for H&C products than for standard life insurance, justified by: the extra effort needed by the salesperson to explain H&C benefits to prospective policyholders; the additional information required for the more complex morbidity underwriting process."
+            ],
+            "key_terms": [],
+            "exam_qa": []
+          }
+        ]
+      },
+      {
+        "id": "7",
+        "title": "Investment Return",
+        "subsections": [
+          {
+            "id": "7.1",
+            "title": "Principles and Significance",
+            "bullets": [
+              "The investment return assumption must be consistent with the inflation assumptions — the implied real rate of return must be realistic.",
+              "Three factors affect the value assigned to the investment return assumption: (1) the significance of the assumption for contract profitability; (2) the intended investment mix; (3) the extent of reinvestment risk and the ability to reduce it through asset choice.",
+              "Significance is driven by: size of reserves relative to cashflows (larger reserves = more profit from investment income = higher sensitivity); duration of the policy (longer term = longer period for reserves to earn returns); extent of investment guarantees (more onerous guarantees require more caution in asset selection, reducing expected return).",
+              "Investment return has little relevance for PMI (one-year policies, small reserves, claims settled quickly) but is critically important for single-premium LTCI (large reserves, very long duration).",
+              "Importance by contract type: (1) Regular premium WP CI — not very important; reserves relatively small. (2) Regular premium WP pre-funded LTCI — important; large reserves, change in assumption significantly affects price. (3) Single premium WP pre-funded LTCI — very important; largest and longest-held reserves; however, matching assets may be available to secure a known yield at outset. (4) PMI — investment return expected to have minimal impact."
+            ],
+            "key_terms": [],
+            "exam_qa": [
+              {
+                "q": "Comment on the importance of the investment return assumption for: (1) regular premium WP CI; (2) regular premium WP pre-funded LTCI; (3) single premium WP pre-funded LTCI; (4) PMI.",
+                "a": "(1) Not very important — reserves are relatively small so profits are insensitive to changes in investment return. (2) Important — large reserves mean a change in the assumption significantly affects the resulting price. (3) Very important — reserves are much larger for much longer; however, matching assets (e.g. index-linked bonds) may be available to partially secure the yield at outset, potentially reducing the required margins. The investment assumption must be set at or below the yield actually securable on the day the single premium is invested. (4) Of minimal importance — one-year policies; claims settled quickly; little investment income."
+              }
+            ]
+          },
+          {
+            "id": "7.2",
+            "title": "Intended Investment Mix",
+            "bullets": [
+              "Process for determining the likely future investment return: (1) identify the likely future asset mix backing the contract; (2) investigate current and past returns on those assets; (3) predict future returns from that mix given expected changes in the economic environment.",
+              "For contracts with fixed monetary benefits: fixed interest bonds/assets are the primary matching asset.",
+              "For contracts with inflation-linked benefits: index-linked bonds are preferred (provided they have good security and are readily available).",
+              "For contracts with real increases in benefit or expense outgo (e.g. LTCI): some equity-based investment may be appropriate, given the long expected investment period and need to mirror care cost increases. However, equities are generally only appropriate if benefits are neither fixed in monetary nor in real terms.",
+              "For unit-linked products: a managed-fund approach is typical; the investment return assumption reflects the expected mix of equities and bonds within the managed fund over the policy duration (gives the unit-fund growth rate). A separate assumption is also needed for investment return on the insurer's non-unit reserves.",
+              "The intended mix is not derived from the contract in isolation — it is also affected by the level of free assets available to the insurer (more free assets = less matching required = potentially higher-returning asset mix possible).",
+              "If a market-consistent approach is used (deterministic or stochastic), the investment return can be set as the risk-free rate regardless of the actual underlying assets (risk-neutral calibration). However, for stochastic approaches, investment return volatility and correlation assumptions remain dependent on the actual asset type(s)."
+            ],
+            "key_terms": [],
+            "exam_qa": []
+          },
+          {
+            "id": "7.3",
+            "title": "Reinvestment Risk",
+            "bullets": [
+              "Reinvestment risk: the uncertainty of the return obtainable from future investment. The best estimate of future investment returns may differ from current yields, and may vary by how far into the future the investment is made.",
+              "The overall best estimate investment assumption reflects the expected balance between current and future investment yields.",
+              "If future net cashflow is positive, the insurer must buy assets — the more future investment is expected, the more the assumption should reflect expected future yields.",
+              "Even with negative future cashflows, asset-liability mismatching by term may still require future buying and selling of assets, making future reinvestment yields relevant.",
+              "At contract inception, all investment is future — returns are more certain in the near term than further out. The expected period before the pricing basis is next revised is therefore important in setting the investment assumption.",
+              "Reinvestment risk by contract type: (1) Regular premium WP CI — limited exposure; investment income is of limited importance anyway. (2) Regular premium WP pre-funded LTCI — high exposure; cannot match most liabilities until late in the term. (3) Single premium WP pre-funded LTCI — lower than (2) but still some reinvestment risk due to uncertainty of when claims start and need to reinvest future income. (4) PMI — of almost no importance."
+            ],
+            "key_terms": [
+              {
+                "term": "Reinvestment risk",
+                "definition": "The uncertainty of the return obtainable from investing future cashflows. Arises because future investment yields may differ from current yields; more significant for long-duration contracts where a larger portion of total investment occurs in the future."
               }
             ],
             "exam_qa": []
@@ -3136,47 +3339,67 @@
         ]
       },
       {
-        "id": "4",
-        "title": "Investment Return and Taxes",
+        "id": "8",
+        "title": "Taxes",
         "subsections": [
           {
-            "id": "4.1",
-            "title": "Investment Return Assumption",
+            "id": "8.1",
+            "title": "General Principles",
             "bullets": [
-              "The investment return assumption must be consistent with inflation assumptions — the implied real return should be realistic.",
-              "The significance of the investment return assumption depends on: the size of reserves relative to cashflows; the duration of the policy; and the extent of any investment guarantees.",
-              "For regular premium CI insurance: not very important (small reserves, profits insensitive to investment return).",
-              "For pre-funded LTCI: very important — especially single premium, where reserves are very large for a long period.",
-              "For PMI: of almost no importance (one-year policies, minimal reserves).",
-              "The intended investment mix matters: for fixed benefits, fixed-interest bonds are most appropriate; for inflation-linked benefits, index-linked bonds; for equity-like benefit growth (LTCI care costs), some equity investment is appropriate.",
-              "Reinvestment risk: the uncertainty of the return from future investment. High for regular premium LTCI (cannot match all liabilities until late in term); low for single premium LTCI (better matching is possible); negligible for PMI.",
-              "Under a market-consistent approach, the risk-free rate is used as the discount rate regardless of actual assets held (risk-neutral calibration)."
+              "The actuary must allow for rates of tax applicable to the healthcare insurance business in the relevant territory.",
+              "Most tax approaches affect the return that shareholders receive for supplying capital, and hence must be considered in the premium basis.",
+              "Data/adjustments: use current known tax rates, adjusted for any future changes that are known in advance."
             ],
-            "key_terms": [
-              {
-                "term": "Reinvestment risk",
-                "definition": "The uncertainty of the return that can be obtained from investing future positive cashflows. More important when the policy term is long and liabilities are difficult to match with existing assets."
-              }
-            ],
+            "key_terms": [],
             "exam_qa": []
           },
           {
-            "id": "4.2",
-            "title": "Tax Assumptions",
+            "id": "8.2",
+            "title": "Types of Tax",
             "bullets": [
-              "Tax rates assumed based on current rates plus known future changes.",
-              "Three main types: (1) taxes on profits — the insurer's profit is taxed; premiums must be set to achieve the required post-tax return; (2) taxes on investment income less expenses (I–E basis) — the insurer includes investment income and expenses net of tax; (3) taxes on premiums — the insurer collects tax from policyholders on the State's behalf; indirect impact on lapse/non-renewal assumptions."
+              "Taxes on profits: the insurer is taxed on profits from in-force and new contracts. No changes to individual basis elements are needed, but the premium basis must target a return sufficient to deliver the required net-of-tax profit. Formula: expected PV of future profits per policy × (1 − tax rate) must meet the target profit level. In many countries the tax calculation uses a specific (often restricted) reserving basis — tax authorities typically restrict the level of prudence permitted in reserve calculations to prevent tax deferral.",
+              "Taxes on investment income less expenses (I-E basis): the insurer is taxed on (investment income − expenses). The actuary includes investment income and expenses net of the relevant tax rate; the resulting amended profit is the shareholder return. In some territories, initial heavy expenses reduced taxable income significantly, prompting rules to stagger expense relief over several years (e.g. 3 or 7 years) — requiring profit-testing techniques to model correctly.",
+              "Taxes on premiums: the insurer is financially neutral as it collects premium tax on behalf of the State; no direct allowance is needed in the pricing model (the tax is simply added to the quoted premium, e.g. +6%). However, changes in premium tax indirectly affect other pricing assumptions — higher premium tax may reduce sales volumes and increase lapse/non-renewal rates, affecting assumptions for new business volumes and persistency."
             ],
             "key_terms": [
               {
-                "term": "I-E basis (tax)",
-                "definition": "A tax method where the insurer is taxed on the excess of investment income over allowable expenses. Each item of investment income and expenses is included net of the relevant tax rate."
+                "term": "I-E basis (investment income less expenses)",
+                "definition": "A taxation methodology where the insurer is taxed on the excess of investment income over expenses incurred. Investment income and expenses are modelled net of the applicable tax rate."
               }
             ],
+            "exam_qa": []
+          }
+        ]
+      },
+      {
+        "id": "9",
+        "title": "Practice Questions & Solutions",
+        "subsections": [
+          {
+            "id": "9.1",
+            "title": "Chapter 15 Practice Questions and Solutions",
+            "bullets": [],
+            "key_terms": [],
             "exam_qa": [
               {
-                "q": "Discuss the importance of the investment return, expense and withdrawal rate assumptions when pricing: (i) without-profits CI insurance; (ii) without-profits immediate needs LTC annuity.",
-                "a": "(i) CI insurance: Investment return — not very important; reserves are small. Expenses — important; initial underwriting and claim administration costs are relatively high for CI; per-policy expenses must be allocated carefully. Withdrawals — important at early durations (when asset share is negative), a financial loss arises. Lapse and re-entry risk is also relevant if the market becomes more competitive. (ii) Immediate needs LTC annuity: Investment return — very important; these are single-premium policies with large, long-duration reserves; matching assets closely to liabilities is critical; reinvestment risk is relatively low since it is a single premium with immediate claim payments. Expenses — important, especially claim administration for LTCI with multiple benefit levels; but lower than for pre-funded LTCI as no initial underwriting. Withdrawals — not applicable; surrender is typically not permitted for immediate needs LTCI annuities."
+                "q": "Q15.1: Suggest two possible problems that might result from using fixed annual percentage increases to IP benefits.",
+                "a": "(1) If actual living cost inflation exceeds the fixed rate, policyholders become under-insured — benefits fail to cover the costs they were designed for, leading to bad public relations, marketing risk (reduced future sales and/or higher lapse rates). (2) If actual living cost inflation is lower than the fixed rate, policyholders may become over-insured; premiums also rise at the fixed rate, potentially making them unaffordable and increasing lapse rates. Over-insurance is particularly problematic for IP policies where benefits may be capped at claim time to stay within the maximum permissible replacement ratio — policyholders caught in this way may be seriously dissatisfied."
+              },
+              {
+                "q": "Q15.2: For PMI, new policies and renewals are charged the same premium. Suggest and explain how you would allow for the relevant expenses when pricing the product.",
+                "a": "Initial and renewal expenses: initial expenses (notably initial medical underwriting) are significantly greater than renewal expenses. An assumption is made about the expected number of years policies will be renewed; the excess of initial over renewal costs is amortised over this period. The amortised annual initial expense is added to the expected renewal cost for the year to give the total per-policy administration expense assumption. Commission is treated similarly — initial commission exceeds renewal commission and is amortised over the expected renewal period, expressed as a percentage of premium. Claims administration expenses are typically allowed for as a percentage increase to the assumed average claim cost for the year."
+              },
+              {
+                "q": "Q15.3: Explain how future developments in medicine might affect claim costs under (a) CI insurance, (b) IP insurance, (c) PMI.",
+                "a": "(a) CI: Medical advances can increase diagnostic rates — causing claims to occur sooner or within the policy term that would previously have occurred after expiry (increases costs, especially the latter). Some illnesses will be newly diagnosed that would never have been recognised (increases costs). Advances may prevent some illnesses altogether (reduces costs). Treatments that are insured events (e.g. heart bypass) may no longer be needed due to medical advances (reduces costs); alternatively, such treatments may become more widely available (increases costs). (b) IP: Effect depends on whether the condition is chronic or temporary. For chronic conditions (unlikely ever to return to work): medical advances prolong life, increasing claim duration and total cost. For temporary conditions: faster recovery hastens return to work, reducing total claim costs; recovery may now occur within the deferred period, eliminating the claim entirely. Advances reducing disease incidence reduce claim costs. (c) PMI: New, more expensive treatments increase costs. Previously expensive treatments may become routine and cheaper (reduces costs). More effective treatments reduce treatment duration and costs (e.g. shorter hospital stays). Some advances may eliminate the need for treatment altogether (reduces costs)."
+              },
+              {
+                "q": "Q15.4: Discuss the importance of investment return, expenses, and withdrawal rate assumptions for: (i) without-profits CI insurance; (ii) without-profits immediate needs LTC annuity; (iii) large unit-linked group IP insurance (monthly charge for claims; % of fund for expenses; employer entitled to residual unit fund on discontinuance).",
+                "a": "(i) WP CI insurance. Investment return: not a key assumption — reserves are relatively small so profits are insensitive; even if wrong, impact is limited. Expenses: second most important assumption after morbidity; competition is price-based with small margins; small typical premiums make expense loadings relatively significant; if too low, volume rises but business is written at a loss; if too high, volume falls and contribution to fixed costs is insufficient. Withdrawal rates: no benefit on withdrawal but lapses still occur; lapses are predominantly among healthier lives, worsening remaining portfolio morbidity; insurer makes a loss if lapse occurs when asset share is negative (early durations); makes a profit if lapse is at positive asset share — so importance differs by duration. (ii) WP immediate needs LTC annuity. Investment return: a critical assumption alongside mortality; the single premium must be invested at outset to fund a guaranteed index-linked income stream; a matched strategy using index-linked bonds of appropriate duration should secure a real yield; the pricing assumption must not exceed this yield (otherwise a guaranteed loss is locked in) and must be reduced for mortality duration uncertainty and any unavailability of matching assets; must be reviewed regularly. Expenses: important because terms are guaranteed; but less so than investment return (relative impact on profit is lower); most expenses occur at outset and amounts are better known. Withdrawal rates: no withdrawal benefit and no further premiums; no incentive to withdraw — assumption of minimal importance (though if a withdrawal benefit existed, its importance could be very high). (iii) Unit-linked group IP insurance. Investment return: investment risk is passed to the employer (no guarantees); however, the insurer's sole expense charge is a % of fund, making unit fund growth critically important to the insurer's revenue; the employer's contribution rate is also linked to the investment assumption — must be transparent about risk and uncertainty. Expenses: importance depends on whether the monthly charge can be varied; if fixed, the assumption is very important; if variable, less so but delay before implementing any change means a continuing loss in the interim. Withdrawal rates: the discontinuance benefit = unit fund value; at early durations, unit fund > asset share (fund starts low and slowly grows; initial expenses are large); the insurer makes a large loss on early discontinuance with no early termination penalty — the withdrawal assumption is therefore very important, particularly for early scheme terminations."
+              },
+              {
+                "q": "Q15.5: Describe how assumptions for the benefit part of the supervisory reserve would be determined for a without-profits single-premium LTCI product (75% of long-term care costs; only good health admitted; no surrender).",
+                "a": "General principles for each assumption: derive a best estimate projection of future experience; include margins for prudence (if regulations require); ensure consistency between assumptions (e.g. investment return and inflation); ensure compliance with regulatory conditions. Transition and mortality rates: analyse own experience data — compare actual vs expected transitions using last year's valuation assumptions or a standard table. Use recent data (several years may be needed for credibility, but beware of heterogeneity over long periods). Calculate exposed to risk for each care state separately. Multiply by expected transition rates (by age, gender etc.) to get expected numbers. Analyse by risk group (gender, smoker) if credible. Identify trends in experience over time to determine a suitable projection formula. Also consult industry and reinsurer data for trends and credibility; note these data are less directly relevant due to different policy conditions. Population data (e.g. nursing home statistics) may be useful. Make judgement-based best estimate projections allowing for trends; in prudent basis, allow only for adverse trends; include substantial margins given high uncertainty. Prudent basis: use lighter-than-best-estimate mortality; higher-than-best-estimate transition rates from healthy to sick states and between sick states. Prior year's assumptions may be retained if experience shows no material change (to avoid creating arbitrary valuation profits/losses). Benefit amounts and benefit inflation: use own claims experience data for a recent period to estimate average annual benefit per claimant. Analyse by claim duration (costs expected to rise as health deteriorates), location (geographical differences in care costs), age, gender, smoker status. Review industry data, adjusting for differences such as coinsurance provisions. Analyse relevant nursing/residential home and domiciliary care data. Adjust historical data for past inflation to bring to current-date levels. Analyse long historical periods to identify correlation of benefit inflation with other indices (price, earnings). Extrapolate into the future considering the general economic outlook. Allow for factors specific to LTCI: ageing population increasing demand; future legislation on care standards. Use reinsurer advice. Include prudence by using higher benefit amounts and higher future inflation rates. Interest rates: identify the asset mix backing in-force policies, differentiated by current state of policyholder (healthy, claiming at each benefit level). Base future return assumption on expected returns on those assets relative to their supervisory values. Combine expected return from current assets with expected reinvestment return on future income for non-claiming lives. For claiming lives in payment: much less reinvestment; mismatch by duration may still require some reinvestment consideration. Include a margin for: mismatching risk (duration, type of index link); reinvestment risk. Reduce interest rate below best estimate for prudence. Alternatively, if a market-consistent approach is used, discount all cashflows at the risk-free rate regardless of actual assets."
               }
             ]
           }
@@ -6648,344 +6871,6 @@
               {
                 "q": "List the ways in which the results of experience analyses can be used to control risks.",
                 "a": "(a) Improve pricing basis — revise assumptions used in premium calculation to reflect updated experience. (b) Establish/revise reserving basis — strengthen or relax assumptions for liability valuation. (c) Change marketing message — address segments or conditions generating unexpectedly high lapse or claim rates. (d) Revise sales procedures — training, distributor selection, literature wording, commission structure and clawback. (e) Ensure adequate staffing levels and competence. (f) Revise underwriting processes — tighten or relax UW where experience shows anti-selection or excessive loadings respectively. (g) Revise claims handling — address sources of claims leakage or fraud. (h) Alter capital allocation methodology — where a product is uncompetitive partly due to excessive capital allocation, a re-assessment may allow competitive repricing. (i) Improve systems and data recording — to support better future monitoring. (j) Revise policy design — remove options rarely exercised, address features creating moral hazard. (k) Improve policy wording — particularly CI condition definitions where claims disputes are arising."
-              }
-            ]
-          }
-        ]
-      }
-    ]
-  },
-  "30": {
-    "exam": "SP1",
-    "chapter": "Ch30",
-    "title": "Problem Solving",
-    "syllabus_refs": [
-      "6.1",
-      "6.1.1",
-      "6.1.2",
-      "6.1.3",
-      "6.1.4"
-    ],
-    "products_covered": [
-      "Income Protection Insurance",
-      "Critical Illness Insurance",
-      "Long-term Care Insurance",
-      "Private Medical Insurance"
-    ],
-    "sections": [
-      {
-        "id": "1",
-        "title": "Introduction",
-        "subsections": [
-          {
-            "id": "1.1",
-            "title": "Purpose and Approach",
-            "bullets": [
-              "The examiners expect candidates to apply SP1 knowledge to produce coherent solutions to problems in financial management of a health and care insurance company.",
-              "Students must combine ideas across chapters and apply them to scenarios — the course introduces topics in isolation but the exam may require combining them.",
-              "Chapter 30 covers: (1) a health and care insurance company income statement and balance sheet; (2) the lifetime of a policy; (3) interested parties in the health and care insurance world; (4) the control cycle.",
-              "This chapter discusses exam technique rather than adding new technical material — it has no summary section.",
-              "Four useful frameworks for generating ideas in exam questions: (1) work through each element of the revenue account/balance sheet; (2) trace the lifetime stages of a policy; (3) consider each stakeholder in turn; (4) apply the stages of the actuarial control cycle."
-            ],
-            "key_terms": [],
-            "exam_qa": []
-          }
-        ]
-      },
-      {
-        "id": "2",
-        "title": "Health and Care Insurance Company Accounts",
-        "subsections": [
-          {
-            "id": "2.1",
-            "title": "The Revenue Account",
-            "bullets": [
-              "A typical health and care insurance company revenue account: Premiums (+), Investment income (+), Increase in reserves (−), Benefit payments (−), Expenses (−), Commission (−), Profit/loss (pre-tax), Tax payable (−), Profit/loss (post-tax), Dividends to shareholders (−), Transfer to balance sheet shareholders' retained profit.",
-              "Components of benefit payments: claims (lump sums), claims (annuity instalments), surrenders, and possibly waivers of premium.",
-              "Revenue account variations to watch for: (a) separate entries for 'increase in reserves' vs 'increase in required solvency capital'; (b) 'reserves b/f' and 'reserves c/f' instead of 'increase in reserves'; (c) commission included within expenses; (d) benefit payments split into components; (e) investment income may or may not include unrealised capital gains; (f) reinsurance may be implicit (net items) or split out; (g) surrenders/lapses may be implicit or split out.",
-              "In any exam question involving a revenue account, always specify whether figures are net or gross of reinsurance, net or gross of discontinuances, for a line of business or whole company, and whether profit is pre- or post-tax.",
-              "Selling a new policy — revenue account impact: premiums increase by the premium amount; investment income changes only marginally (half-year's interest on net inflow); reserves increase (potentially heavily if valuation basis is more prudent than premium basis); expenses increase (underwriting, marketing, administration); commission increases if broker-sold; benefit payments increase slightly (unless one-year contract). Net effect: likely a loss — shareholders' profits reduced by writing the policy.",
-              "Selling a new policy — balance sheet impact (CI example): assets fall (initial expenses and commission exceed small regular premium; negative asset share means any attributed investment income is also negative); reserves/solvency capital rise (prudent basis); hence shareholder capital falls — consistent with revenue account showing a loss."
-            ],
-            "key_terms": [
-              {
-                "term": "Revenue account",
-                "definition": "The account showing all policyholder-related cashflows and profit for a health and care insurer: premiums + investment income − increase in reserves − benefits − expenses − commission = pre-tax profit."
-              },
-              {
-                "term": "New business strain (revenue account perspective)",
-                "definition": "The loss recorded in the revenue account when a new policy is written, arising because initial expenses, commission and reserve establishment exceed the first premium received. The insurer's free assets must fund this loss."
-              }
-            ],
-            "exam_qa": [
-              {
-                "q": "How will the sale of a new policy affect the items in the revenue account?",
-                "a": "Premiums increase by the premium amount. Investment income changes only marginally (approx. half a year's interest on net inflow). Reserves increase — potentially more than proportionally if the valuation basis is more prudent than the pricing basis, creating valuation strain. Expenses increase (underwriting, marketing, administration). Commission increases if the policy was broker-sold. Benefit payments increase slightly (unless the policy is a one-year contract). Net result: very likely a loss. Tax will therefore not be incurred. Shareholders' retained profit falls."
-              },
-              {
-                "q": "What are the components of the benefit payment entry in the revenue account?",
-                "a": "Claims (lump sums), claims (annuity instalments), surrenders. Waivers of premium may also fall into this category."
-              },
-              {
-                "q": "How does the cashflow of the company differ from the revenue account?",
-                "a": "Cashflow = premiums + investment income (excluding unrealised gains/losses) − benefits − actual expenses (excluding depreciation/amortisation) − commission − tax. The key difference from the revenue account is that the increase in reserves is excluded from cashflow, as it is merely a reallocation of money within the company rather than cash leaving or entering. Similarly, unrealised capital gains are excluded, as is depreciation (which is a non-cash charge in the revenue account)."
-              },
-              {
-                "q": "How will the sale of a new CI insurance policy affect the balance sheet at year end?",
-                "a": "Assets fall: the premium inflow is small (regular premium CI policy) and is outweighed by initial expenses (particularly underwriting, which is significant given the large sum at risk) and commission. Any CI claims before year end further reduce assets. The asset share is negative so attributed investment income is also negative. Reserves/solvency capital rise: prudent reserving increases reserves, and/or a solvency capital requirement increases required capital. Result: shareholder capital falls (since total assets = total liabilities, a fall in assets combined with a rise in reserves means shareholders' capital must decrease). Consistent with the revenue account showing a loss on writing new business."
-              }
-            ]
-          },
-          {
-            "id": "2.2",
-            "title": "The Balance Sheet",
-            "bullets": [
-              "Balance sheet structure: total assets = total liabilities (including shareholders' capital and retained profits). Liabilities = reserves + shareholders' capital/retained profit.",
-              "Relationship between revenue account and balance sheet: shareholder capital changes by (post-tax profit − dividends); reserves change by the 'increase in reserves' line; total assets change by the cashflow (premiums + investment income − benefits − expenses − commission − tax − dividends).",
-              "Free assets = total assets − non-shareholder liabilities (reserves) = shareholders' capital and retained profit.",
-              "A typical year's revenue account example (per unit of premium P): premium P, investment income 0.01P, increase in reserves (0.1P), benefits (0.55P), expenses (0.1P), renewal commission (0.06P), surplus 0.2P. After 40% tax: profit net of tax 0.12P. Shareholders make a small profit in a typical renewal year.",
-              "The pricing of the contract should ensure that profits emerging in subsequent years are sufficient to repay the initial new business strain, discounted at the risk discount rate."
-            ],
-            "key_terms": [
-              {
-                "term": "Free assets",
-                "definition": "Total assets less non-shareholder liabilities (i.e. reserves). Equivalent to shareholders' capital and retained profit. Represent the insurer's financial buffer above the amount needed to meet policyholder obligations."
-              }
-            ],
-            "exam_qa": [
-              {
-                "q": "Given an opening balance sheet (total assets £159m = reserves £114m + shareholders' capital £45m) and a revenue account showing premiums £46m, investment income £18m, increase in reserves (£41m), benefits (£8m), expenses (£3m), commission (£6m), pre-tax profit £6m, tax (£2m), post-tax profit £4m, dividends (£1m), retained profit £3m — calculate the closing balance sheet and free assets.",
-                "a": "Closing balance sheet: reserves = 114 + 41 = £155m; shareholders' capital = 45 + 3 = £48m; total assets = 159 + 46 + 18 − 8 − 3 − 6 − 2 − 1 = £203m. Check: 48 + 155 = 203. ✓. Free assets = 203 − 155 = £48m (= shareholders' capital)."
-              }
-            ]
-          },
-          {
-            "id": "2.3",
-            "title": "Solvency Capital Requirement (SCR) in Accounts",
-            "bullets": [
-              "The SCR may be built up via the revenue account in the same way as reserves (necessary in profit testing/model office work), but it is often not visible in the published revenue account.",
-              "Even in the balance sheet, the SCR is often not shown explicitly in published accounts; however, the company must demonstrate to the supervisory authority that shareholders' capital and retained profit cover the SCR.",
-              "The approach depends on the purpose (reporting profit to shareholders vs demonstrating solvency) and the regulations of the country.",
-              "When writing a new policy, if there is an SCR requirement (e.g. 0.05P), the total capital the insurer must find is increased accordingly — e.g. if the revenue account shows a loss of 1.35P, adding an SCR of 0.05P means the insurer must find 1.40P of free assets per unit of premium."
-            ],
-            "key_terms": [
-              {
-                "term": "Solvency Capital Requirement (SCR)",
-                "definition": "The minimum capital an insurer must hold above its technical reserves, as prescribed by supervisory regulations. May or may not appear explicitly in published accounts; must be covered by shareholders' capital in supervisory balance sheets."
-              }
-            ],
-            "exam_qa": []
-          }
-        ]
-      },
-      {
-        "id": "3",
-        "title": "The Life and Times of a Policy",
-        "subsections": [
-          {
-            "id": "3.1",
-            "title": "The Idea and Product Design",
-            "bullets": [
-              "A policy's lifetime starts with its creation, reflecting: (1) a perceived market need; (2) a regulatory and taxation environment that makes it possible and practical; (3) the company's desire to write it.",
-              "Main steps in product design and pricing: (1) formulate the product structure (with marketing); (2) decide on assumptions for expenses, interest, mortality, persistency; (3) profit test to derive premiums meeting a set profitability target; (4) sensitivity test and adjust premiums/design if needed; (5) compare with competition and adjust premium loadings/charges; (6) run a model office with the expected tranche of new business to check for capital, tax or expense problems and assess EV impact."
-            ],
-            "key_terms": [],
-            "exam_qa": []
-          },
-          {
-            "id": "3.2",
-            "title": "The Sale",
-            "bullets": [
-              "The sale process depends on whether the public is approached (direct) or takes the initiative (broker/agent); both channels involve underwriting.",
-              "Broker/agent sales process: (1) customer identifies need (prompted by advertising or a life event such as a mortgage); (2) visits broker; (3) broker assesses requirements and shows marketing literature from suitable companies; (4) broker produces a quote (PC software, web-based quotation system, or rate tables); (5) customer fills in a proposal form.",
-              "Proposal form information required: personal details (name, address); policy details (premium, benefit, options); medical information (own and family history, current illnesses, height, weight); lifestyle information (smoking, drinking, occupation, dangerous hobbies); financial information (income, other CI policies held); bank details for direct debit.",
-              "Additional medical evidence that may be required: report from the applicant's GP; general medical examination; specific medical tests (e.g. ECG).",
-              "If the sum insured is particularly high, the insurer may need to contact its reinsurer to ensure adequate cover.",
-              "If accepted: proposal data entered into policy administration system, policy printed and sent, cover commences on agreed date subject to payment of first premium.",
-              "Direct marketing / telesales process differs: customer responds to advertisement; receives an information pack with product details and possibly a quote; completes a proposal form with underwriting questions; policy issued on receipt of acceptable responses and payment."
-            ],
-            "key_terms": [],
-            "exam_qa": []
-          },
-          {
-            "id": "3.3",
-            "title": "The First Day",
-            "bullets": [
-              "On cover commencing, the policy becomes a liability: the insurer must establish reserves and meet any SCR. If the valuation basis is more prudent than the premium basis, capital strain arises at inception.",
-              "Acquisition costs on day one: commission credited to the broker's account (settled monthly); expenses of setting up the policy on the administration system, administering the proposal, and investing the premium.",
-              "Every policy must cover marginal initial expenses and contribute to company overheads and development costs — the assumed contribution feeds into the 'initial expenses per policy' figure from the expense investigation.",
-              "Revenue account impact on the first day (illustrative, annual premium P): Premium P, increase in reserves 0.95P, expenses 0.60P, commission 0.80P → Profit/loss = −1.35P. The insurer must find 1.35P of free assets to write the policy; adding a 0.05P SCR requirement raises this to 1.40P.",
-              "A single premium policy produces a much smaller loss relative to premium than a regular premium contract.",
-              "Embedded value impact of writing the policy: if profitable on the EV basis, the EV increases — typically via a large increase in the present value of future profits (PVFP) and a small decrease in free assets."
-            ],
-            "key_terms": [],
-            "exam_qa": [
-              {
-                "q": "What is the embedded value impact of writing a new policy?",
-                "a": "If the policy is profitable on the EV basis, the EV will increase. This normally arises from a large increase in the present value of future profits (PVFP) and a small decrease in free assets (reflecting the new business strain). The EV gain at inception effectively front-loads the present value of all expected future profits from the policy."
-              }
-            ]
-          },
-          {
-            "id": "3.4",
-            "title": "A Typical Year",
-            "bullets": [
-              "During a typical renewal year, the policy appears in the balance sheet: investments on the assets side; reserves and shareholders' retained profit on the liabilities side.",
-              "Surplus arises when actual experience is better than the valuation basis assumptions — not the premium basis, because once reserves are set on the valuation basis, future surplus/deficit is measured relative to the valuation basis.",
-              "When the first premium is received and reserves are established on a more prudent basis than the premium basis, the insurer records an immediate loss — this is the capitalisation of expected future losses implied by the valuation basis. Subsequent profits emerge when actual experience beats the valuation basis.",
-              "Illustrative revenue account for a typical renewal year: Premium P, investment income 0.01P, increase in reserves (0.10P), benefits (0.55P), expenses (0.10P), renewal commission (0.06P), surplus 0.20P. After 40% tax: post-tax profit 0.12P.",
-              "EV impact when experience is worse than the EV basis: (1) free assets increase by less than expected (or fall more than expected) — reflecting immediate profit consequences; (2) PVFP may decrease, as 'extra' policies that have lapsed or claimed no longer contribute future profits. Both reduce EV. The free asset effect is usually dominant, except in cases such as high CI lapse rates where PVFP is heavily affected."
-            ],
-            "key_terms": [],
-            "exam_qa": [
-              {
-                "q": "Why is surplus determined relative to the valuation basis rather than the premium basis?",
-                "a": "As soon as a premium is received, the insurer must set up reserves on the valuation basis. If the valuation basis is more prudent than the premium basis, the insurer records an immediate loss — the capitalisation of all future expected losses implied by the valuation assumptions. From that point, the premium basis is irrelevant: the insurer will make no further profit or loss if experience exactly matches the valuation basis. Surplus arises only when actual experience is better than the valuation basis assumptions."
-              },
-              {
-                "q": "If experience is worse than the EV basis, how will EV move over the year?",
-                "a": "Two effects: (1) Free assets will not increase by as much as expected (or will fall more than expected), reflecting the immediate profit consequences of the adverse experience. (2) PVFP may decrease because policies that have lapsed or claimed ahead of schedule no longer contribute future profits to the portfolio. Both reduce EV. The free asset effect is normally dominant, although there are exceptions — for example, if the adverse experience is a high CI lapse rate, the PVFP impact could be larger. Additionally, if the adverse experience prompts a revision to the EV assumption set, the PVFP could be significantly affected."
-              }
-            ]
-          },
-          {
-            "id": "3.5",
-            "title": "The Last Day and After",
-            "bullets": [
-              "On claim: the insurer sends payment of the sum insured; settling the claim involves some expenses; reinsurance recoveries will follow when the reinsurer settles the relevant quarterly account.",
-              "Revenue account impact of a claim: a loss equal to the difference between the amount paid and the policy reserve.",
-              "EV impact of a claim: (1) net asset value takes a loss (net of tax) equal to the revenue account loss; (2) PVFP suffers a small loss because the claimed policy no longer contributes future profits — however, if portfolio experience is as per the EV basis, the overall PVFP for the portfolio is unaffected.",
-              "Subsequent to the last day — possible further effects: (1) insurer retrospectively contests claim and recovers money if fraud is discovered (e.g. faked medical evidence); (2) insurer recovers premiums if false information on proposal form comes to light; (3) insurer attempts to cross-sell appropriate products to the claimant and/or family (e.g. an annuity or single premium savings policy); (4) the claim feeds into the insurer's claims investigation and eventually into the assumption sets used for future modelling."
-            ],
-            "key_terms": [],
-            "exam_qa": []
-          }
-        ]
-      },
-      {
-        "id": "4",
-        "title": "Different Parties in the Insurance World",
-        "subsections": [
-          {
-            "id": "4.1",
-            "title": "Stakeholder Overview",
-            "bullets": [
-              "Relevant parties in a health and care context: policyholders; future policyholders; dependants/relatives of policyholders; employers; the insurer (shareholders, management, underwriters, claims managers, actuaries, marketing, administrators); other insurers; sales channels; reinsurers; providers of health and care services/facilities; the State (government); the regulator; taxation authorities; and others (employees, investment analysts, competing financial institutions)."
-            ],
-            "key_terms": [],
-            "exam_qa": []
-          },
-          {
-            "id": "4.2",
-            "title": "Policyholders, Future Policyholders, and Dependants",
-            "bullets": [
-              "Policyholders want: products meeting their requirements (appropriate deferred period/cover level); products easy to understand; simple smooth processes (guaranteed premiums, fast and simple claims management); products that allow use of tax breaks; affordable premiums and value for money; benefits keeping up with inflation; high security of benefits (financially strong companies). Many of these desires may conflict.",
-              "Future policyholders additionally want: a smooth sales process (easily accessible agents, simple underwriting); a large choice of insurers.",
-              "Dependants and relatives additionally want: provision of advice (e.g. suitable care facilities for LTCI policyholders); flexibility and choice (e.g. over hospitals/care facilities used)."
-            ],
-            "key_terms": [],
-            "exam_qa": []
-          },
-          {
-            "id": "4.3",
-            "title": "Employers",
-            "bullets": [
-              "Employers are essentially policyholders with similar wants, but also specifically want: flexibility to change benefits each year as employee needs or the environment change; straightforward communication between employees and the insurer; premium guarantees from year to year."
-            ],
-            "key_terms": [],
-            "exam_qa": []
-          },
-          {
-            "id": "4.4",
-            "title": "The Health and Care Insurance Company — Internal Stakeholders",
-            "bullets": [
-              "Shareholders want: return on investment of at least the risk discount rate (ideally higher); low risk (low probability of share value plummeting); smooth dividend supply (low volatility of financial results); useful financial information (e.g. EV results as well as traditional accounts).",
-              "Management wants to: maximise long-term profits; ensure legal compliance (supervisory solvency, regulations). In practice may also focus on: maximising short-term profits; maximising new business levels (often short-term objectives).",
-              "Underwriters want: a non-onerous application process; quick and efficient underwriting; risks that meet the company's objectives; relevant and accurate data for reserving and claims management.",
-              "Claims managers want: claims paid that are both genuine and reasonable (not excessive); timely payment; protection of the company's reputation.",
-              "Actuaries want: to conform to statute and professional guidance; to work to a highly professional standard (including concern for policyholder fairness); to work for the company to increase profits without going against policyholders' expectations.",
-              "Marketing department wants: to maximise new business levels."
-            ],
-            "key_terms": [],
-            "exam_qa": []
-          },
-          {
-            "id": "4.5",
-            "title": "External Stakeholders",
-            "bullets": [
-              "Other insurers want to maximise profits and new business by: lower premiums (lower margin or lower expenses/economies of scale); better investment performance; better administration; quicker/simpler underwriting; greater brand awareness; different target markets; specialist/niche products; simpler product designs; greater security of benefits; greater insurer financial strength; greater incentivisation of sales channels (higher commission); more policyholder incentives (free gifts, loyalty bonuses).",
-              "Sales channels (brokers, agents, direct sales) want to: maximise remuneration; provide good service; sell suitable products; build a portfolio of happy customers. The conflict between maximising commission and recommending the most suitable product is mitigated by: desire for long-term business (renewal commissions depend on retention); sincere interest in the customer's welfare.",
-              "Reinsurers want to maximise long-term profits by: charging risk-adequate premiums; helping insurers reduce claim costs (underwriting advice); attracting business via high ceding commissions, pricing/UW advice, and demonstrating financial strength; competitive pricing vs other reinsurers and alternatives to reinsurance; offering expertise for new risks. Reinsurers may themselves reinsure to smooth short-term profits.",
-              "Providers of health and care services/facilities have profit-related objectives (adequate pricing, achieving economies of scale, negotiating supplier deals, efficiency) and service-related objectives (target treatment success rates, meeting patient expectations, treating within specified timeframes).",
-              "The State's objectives in relation to health and care (covered in Ch 10): protecting the nation's health; subsidising the poor; balancing the budget; following social culture and political promises. Additional government aims re insurance companies: ensure legal framework maximises policyholder security; incentivise socially desirable products; possibly assist policyholders of insolvent insurers; encourage fair and competitive marketplace. Government may also act in self-interest (e.g. requiring investment in government bonds; protecting a State insurer monopoly). Government can encourage a fair marketplace through: monopoly restrictions; consistent product presentation rules; equivalent regulation/tax treatment across sectors; cross-border insurance freedom.",
-              "The regulator wants to: ensure insurers comply with law and regulations; ensure insurers remain solvent; ensure policyholders are not mistreated; ensure potential customers are not misled.",
-              "Taxation authorities want to maximise tax income (subject to what tax laws allow).",
-              "Other parties: other employees (interested in company's financial prosperity); investment analysts (interested in share price prospects of proprietary insurers); competing financial institutions (banks, building societies — compete with H&C insurance market)."
-            ],
-            "key_terms": [],
-            "exam_qa": []
-          }
-        ]
-      },
-      {
-        "id": "5",
-        "title": "The Control Cycle Revisited",
-        "subsections": [
-          {
-            "id": "5.1",
-            "title": "Applying the ACC to Problem Solving",
-            "bullets": [
-              "The control cycle is the best framework for how a health and care insurance company should operate: identify aims shaped by the business environment → identify risks impinging on those aims → determine the best approach → monitor experience → assess whether the risk perception and approach were correct and can be improved.",
-              "For any scenario question, the ACC structures the answer across: (a) specifying the problem (risks), (b) developing the solution (risk management actions), (c) monitoring the experience (feedback and repricing).",
-              "Control cycle conclusion checklist: used the ACC to structure the answer; considered the general business environment; used 'specify the problem' to identify risks and how they arise in the specific context; used 'develop the solution' to identify possible solutions and how they apply; used 'monitoring the experience' to think about how to track emerging experience; looked back at risks and solutions to see how experience allows the approach to be modified."
-            ],
-            "key_terms": [],
-            "exam_qa": [
-              {
-                "q": "Using the ACC framework, describe: (a) the risks, (b) possible solutions, and (c) how the approach would be modified with experience, for a new accelerated CI product for house-owners given new tax-favourable legislation in Ruritania.",
-                "a": "(a) Risks — Mortality/morbidity: model risk (e.g. constants when rates vary over time; omitting new cancer types); parameter risk (incorrect estimates from existing CI portfolio or industry data; different socio-economic group; trends in CI incidence not correctly allowed for; anti-selection if rating factors are too crude); random fluctuations (claims varying from expected, especially for smaller portfolios). Expenses: unknown expense base for new product; future expense inflation underestimated; insufficient sales to recover development costs and contribute to overheads; cross-subsidy risk if proportion of small policies is higher than expected. Persistency: house-owners with mortgages may lapse in economic recession at higher rates than general CI policyholders; lapse-and-re-entry risk as existing house-owner CI policyholders may lapse current policies to take advantage of the new tax treatment. (b) Solutions — Mortality/morbidity: study experience from existing CI and accelerated CI contracts; use reinsurer/industry statistics; offer reviewable premium to reduce basis risk; apply at least the same rating factors as competitors; maintain strict underwriting; use quota-share reinsurance for parameter error; use surplus/XL reinsurance or a claim fluctuations reserve for random fluctuations. Persistency: price on a high withdrawal basis (subject to competition); shift commission from initial to renewal to reduce mis-selling risk; offer to reclassify eligible existing policies (with admin fee) or offer a premium/benefit adjustment as an incentive to stay. Expenses: reviewable premium to recover future expense inflation; aggressive marketing to maximise sales volumes; profit-test on a variety of new business mix assumptions; market research on likely mix; set cross-subsidy so all policies at least cover their marginal expenses. (c) Monitoring: track new business composition by age, gender, premium level; mortality/morbidity investigations; persistency investigations; expense experience; EV analysis of movement; analysis of valuation surplus. In light of experience: revise pricing assumptions and reprice if inadequate/too conservative; adjust the balance between fixed and percentage-of-premium expense loadings based on actual mix; investigate poor persistency from any specific group or seller; monitor for lapse-and-re-entry on related contracts and adopt remedies if emerging."
-              }
-            ]
-          }
-        ]
-      },
-      {
-        "id": "6",
-        "title": "Practice Questions & Solutions",
-        "subsections": [
-          {
-            "id": "6.1",
-            "title": "Chapter 30 Practice Questions and Solutions",
-            "bullets": [],
-            "key_terms": [],
-            "exam_qa": [
-              {
-                "q": "Q30.1(i): A company writes immediate-needs LTCI annuities at two benefit levels (Level 1: residential home care; Level 2: full nursing home care, paying 175% of Level 1). A new 'enhanced Level 1' variant is introduced giving Level 1 annuitants the right to upgrade to Level 2 on meeting the stricter ADL criteria, at no extra cost. Explain how, if at all, the mortality assumptions for the existing Level 1 and Level 2 policies may alter if the new product launches.",
-                "a": "Level 2 mortality assumptions should be unchanged. For normal Level 1 policies, applicants will now be more selective — those who expect to progress to Level 2 relatively quickly will prefer the enhanced Level 1 product, leaving normal Level 1 buyers with a longer expected stay at Level 1. Assuming Level 1 annuitants experience lighter mortality than Level 2, lower mortality rates will need to be assumed for the remaining normal Level 1 applicants than previously. [2]"
-              },
-              {
-                "q": "Q30.1(ii): Discuss how the mortality assumptions for pricing the enhanced Level 1 policies are likely to compare with those for the existing products.",
-                "a": "Two separate mortality assumptions are needed for enhanced Level 1: one while the policyholder qualifies for Level 1 benefits, one from when they qualify for Level 2. Under normal Level 1 policies, the mortality assumption was an average of these two bases, weighted by expected proportions in each health class by future policy year. The Level 1 mortality assumption for enhanced policyholders (while receiving Level 1 benefits) will therefore be lighter than previously assumed for that benefit level, since these are the healthier subset. Once transferred to Level 2, it is reasonable to use Level 2 mortality similar to that for normal Level 2 entrants of the same risk class — though it could be argued that enhanced Level 1 annuitants may upgrade to Level 2 as early as possible to maximise benefits, implying slightly lighter mortality at Level 2 for this group. [3]"
-              },
-              {
-                "q": "Q30.1(iii): Discuss how the premiums for the three policy types will compare with each other and with previous premiums for the existing types.",
-                "a": "Enhanced Level 1 vs normal Level 1: enhanced Level 1 will cost more, because an assumed proportion of policyholders transfer to higher benefit levels each future year; combined with the adverse selection effect (those expecting to progress to Level 2 more quickly will buy this product), premiums are further increased. Level 2 vs Level 1: not clear whether Level 2 is higher or lower than Level 1 — higher average annual benefit but shorter expected benefit period (due to higher mortality); which effect dominates depends on how much worse Level 2 mortality is. Comparison with previous premiums: normal Level 1 premiums will rise (lighter mortality assumed). Level 2 premiums expected unchanged, except for possible reduction from lower expense assumptions (higher volumes). All premiums may be partially offset by reduced expense loadings from expected higher overall volumes. Competition will constrain pricing, particularly for the enhanced Level 1 product which must be attractively priced relative to normal Level 1 to justify the higher cost. [5]"
-              },
-              {
-                "q": "Q30.1(iv): Describe the investigations the company might undertake to determine appropriate mortality assumptions for pricing the enhanced Level 1 variant, and explain how the assumptions would be determined.",
-                "a": "Level 2 mortality: investigate mortality experience under existing Level 2 policyholders. Use most recent credible experience, creating cells by age, gender, policy duration, smoker status, health/family history, ADL assessment results, and possibly territory/sales channel. Compare actual deaths to expected under a standard mortality table or current pricing basis. Project future rates allowing for: mortality improvement trends; planned changes to underwriting/risk classification. Extrapolate trends using own longer-term experience and relevant industry/population data. Include a prudential margin. Level 1 (while at Level 1) mortality: analyse existing Level 1 data in the same way, but exposed to risk must include only time spent at Level 1 status — i.e. exclude time after the policyholder would have qualified for Level 2. This is difficult to assess without historical address/care status records (address changes may signal transfer to a nursing home). An approximation: group data by policy duration (the proportion eligible for Level 2 rises with duration) and use only short-duration experience to approximate pure Level 1 mortality. Industry standard tables split by ADL level may be available. Given this uncertainty, assume lighter mortality prudently at the outset. Monitor emerging experience under enhanced Level 1 policyholders closely and update the pricing basis as experience develops. [10]"
-              },
-              {
-                "q": "Q30.2(i): Explain how model error, parameter error and random fluctuations can each lead to losses from morbidity experience, giving a simple example of each.",
-                "a": "Model error: losses due to error in the specification (structure) of the morbidity model. Example: pricing IP contracts using the claim inception and annuity method rather than a more realistic multiple-state model — the approximations cause premiums to be set too low. Parameter error: losses due to incorrect parameter values in the morbidity model. Example: when pricing CI contracts, assuming incidence rates at each age that are lower than actual claim probabilities in the insured population. Random fluctuations: losses arising purely by chance, even with a correctly specified model and correct parameter values. Example: a CI portfolio whose actual parameters equal those in the pricing model still experiences more CI claims than expected in a particular period due to random variation. [3]"
-              },
-              {
-                "q": "Q30.2(ii)(a): How can the actuarial control cycle help the company monitor and manage a morbidity problem?",
-                "a": "Monitor the experience: compare actual morbidity rates with those expected under the premium and/or reserving basis. Perform an analysis of surplus to quantify the loss from morbidity separately from other profit sources. Assess the magnitude and persistence of the losses (trend analysis across multiple years). Develop the solution: feed revised assumptions back into: (1) the pricing basis, leading to premium/charge revision (especially if premiums are reviewable); (2) the reserving basis, preventing over-distribution of profit and protecting solvency; (3) the company's risk management models (e.g. reinsurance decisions based on revised probability of ruin). The iterative nature of the cycle allows ongoing refinement as more experience emerges. [As per ACC framework]"
-              },
-              {
-                "q": "Q30.2(ii)(b): Suggest and briefly describe the various steps the company could take to manage a morbidity problem.",
-                "a": "Underwriting: tighten underwriting strategy to reduce anti-selection; ensure underwriting procedures are consistent with the morbidity rates implied by standard premiums. Claims control: reassess/recertify claimants' sickness status more frequently or more objectively; this may reduce claims duration and cost. Rehabilitation: introduce rehabilitation and counselling services if cost-effective (cost of services < cost of claims saved). Product design (longer term): change policy wording (redefine insured conditions); introduce a partial return-to-work benefit; reduce guarantees and options; introduce a premium/charge review facility; shorten the contractual linked-claims period; switch from without-profits to unit-linked designs. Sales strategy: more focused selling based on financial need — reduces selective withdrawal (lapses by healthier lives) and thereby improves portfolio morbidity. Reinsurance: revise reinsurance strategy — a surplus reinsurance treaty on an original terms or risk premium basis may be appropriate to limit exposure to continued adverse morbidity. [10]"
               }
             ]
           }
