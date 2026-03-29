@@ -167,6 +167,22 @@ html,body{min-height:100%;font-family:var(--sans);background:var(--bg);color:var
 .synth-qa-src{font-family:var(--mono);font-size:11px;color:var(--text3);margin-top:5px;padding-top:5px;border-top:1px solid var(--border);}
 .synth-empty{color:var(--text3);font-style:italic;font-size:13px;font-family:var(--mono);}
 .synth-no-results{padding:24px;text-align:center;color:var(--text3);font-family:var(--mono);font-size:13px;}
+.synth-theme-header{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+.synth-theme-name{font-family:var(--mono);font-size:12px;color:var(--accent);font-weight:600;text-transform:uppercase;letter-spacing:.06em;}
+.synth-theme-count{font-family:var(--mono);font-size:11px;color:var(--text3);}
+.synth-tier-label{font-family:var(--mono);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;padding:2px 7px;border-radius:3px;}
+.synth-tier-core{color:var(--accent);background:var(--accentbg);border:1px solid var(--accent);}
+.synth-tier-once{color:var(--text3);background:var(--surface3);border:1px solid var(--border);}
+.synth-tier-divider{font-family:var(--mono);font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin:8px 0 6px;display:flex;align-items:center;gap:6px;}
+.synth-tier-divider::after{content:'';flex:1;height:1px;background:var(--border);}
+.synth-bullets li.core{color:var(--text);}
+.synth-bullets li.once{opacity:.65;}
+.synth-freq{font-family:var(--mono);font-size:11px;font-weight:600;flex-shrink:0;min-width:28px;text-align:right;}
+.synth-freq.multi{color:var(--accent);}
+.synth-freq.single{color:var(--text3);}
+.copy-ctx-btn{padding:7px 12px;font-size:13px;font-weight:500;border-radius:var(--radius);border:1px solid var(--border);background:var(--surface2);color:var(--text2);cursor:pointer;transition:all .2s;white-space:nowrap;}
+.copy-ctx-btn:hover{background:var(--surface3);color:var(--text);border-color:var(--accent);}
+.copy-ctx-btn.copied{color:var(--green);border-color:var(--green);background:var(--greenbg);}
 </style>
 </head>
 <body>
@@ -243,6 +259,7 @@ html,body{min-height:100%;font-family:var(--sans);background:var(--bg);color:var
           <button class="ask-btn" id="ask-btn" onclick="askClaude()" disabled>Ask Claude</button>
           <button class="sm-btn" onclick="selectAll()">Select all</button>
           <button class="sm-btn" onclick="clearSelection()">Clear</button>
+          <button class="copy-ctx-btn" id="copy-ctx-btn" onclick="copyContext()" title="Copy all selected content to clipboard for use in any AI tool">Copy context</button>
         </div>
         <div class="claude-hint" id="claude-hint">Select results on the left, then ask Claude a question about them.</div>
         <div class="response-wrap" id="response-wrap">
@@ -613,9 +630,14 @@ function renderSynthesis(results) {
   let html = '';
 
   // ── EXAM SOLUTION POINTS ──
+  // Merge section keys case-insensitively so "Definition" and "definition" pool together.
+  // Within each theme, rank bullets by how many distinct sittings mention them.
+  // Split into Core (2+ sittings) and Once tiers.
   if (examItems.length) {
-    const sectionMap = {};  // secKey -> [{text, norm, sources:[]}]
-    const sectionOrder = [];
+    // normKey -> { displayName, bullets: [{text, norm, sources:[]}] }
+    const themeMap = {};
+    const themeOrder = [];
+
     examItems.forEach(item => {
       const q = item.raw.question || {};
       const p = item.raw.partData  || {};
@@ -625,34 +647,85 @@ function renderSynthesis(results) {
       Object.entries(sections).forEach(([secKey, secVal]) => {
         const bullets = Array.isArray(secVal) ? secVal : (typeof secVal === 'string' ? [secVal] : []);
         if (!bullets.length) return;
-        if (!sectionMap[secKey]) { sectionMap[secKey] = []; sectionOrder.push(secKey); }
+        const normKey = secKey.trim().toLowerCase();
+        if (!themeMap[normKey]) {
+          themeMap[normKey] = { displayName: secKey.trim(), bullets: [] };
+          themeOrder.push(normKey);
+        }
+        // Keep the longest/most descriptive display name seen for this theme
+        if (secKey.trim().length > themeMap[normKey].displayName.length)
+          themeMap[normKey].displayName = secKey.trim();
         bullets.forEach(b => {
           const norm = b.trim().toLowerCase().replace(/\s+/g,' ');
-          const existing = sectionMap[secKey].find(e => e.norm === norm);
+          const existing = themeMap[normKey].bullets.find(e => e.norm === norm);
           if (existing) { if (!existing.sources.includes(shortSrc)) existing.sources.push(shortSrc); }
-          else sectionMap[secKey].push({ text: b.trim(), norm, sources: [shortSrc] });
+          else themeMap[normKey].bullets.push({ text: b.trim(), norm, sources: [shortSrc] });
         });
       });
     });
 
-    if (sectionOrder.length) {
-      const totalBullets = sectionOrder.reduce((n,k) => n + sectionMap[k].length, 0);
-      html += `<div><div class="synth-section-title">Examiner Solution Points — ${totalBullets} unique point${totalBullets!==1?'s':''} across ${examItems.length} result${examItems.length!==1?'s':''}</div>`;
-      sectionOrder.forEach(secKey => {
-        const entries = [...sectionMap[secKey]].sort((a,b) => b.sources.length - a.sources.length);
+    if (themeOrder.length) {
+      // Sort themes: most total cross-sitting coverage first
+      const sortedThemes = themeOrder.slice().sort((a, b) => {
+        const scoreA = themeMap[a].bullets.reduce((n, e) => n + e.sources.length, 0);
+        const scoreB = themeMap[b].bullets.reduce((n, e) => n + e.sources.length, 0);
+        return scoreB - scoreA;
+      });
+
+      const totalUnique = sortedThemes.reduce((n, k) => n + themeMap[k].bullets.length, 0);
+      const coreTotal   = sortedThemes.reduce((n, k) => n + themeMap[k].bullets.filter(e => e.sources.length > 1).length, 0);
+
+      html += `<div><div class="synth-section-title">`;
+      html += `${totalUnique} unique point${totalUnique!==1?'s':''} across ${examItems.length} result${examItems.length!==1?'s':''} · `;
+      html += `<span style="color:var(--accent)">${coreTotal} recurring</span> (seen in 2+ sittings)`;
+      html += `</div>`;
+
+      sortedThemes.forEach(normKey => {
+        const theme   = themeMap[normKey];
+        const sorted  = [...theme.bullets].sort((a, b) => b.sources.length - a.sources.length);
+        const core    = sorted.filter(e => e.sources.length > 1);
+        const once    = sorted.filter(e => e.sources.length === 1);
+
         html += `<div class="synth-seg">`;
-        html += `<div class="synth-seg-label">${escHtml(secKey)}<span class="synth-seg-count">${entries.length} point${entries.length!==1?'s':''}</span></div>`;
+        html += `<div class="synth-theme-header">`;
+        html += `<span class="synth-theme-name">${escHtml(theme.displayName)}</span>`;
+        html += `<span class="synth-theme-count">${sorted.length} point${sorted.length!==1?'s':''}</span>`;
+        if (core.length) html += `<span class="synth-tier-label synth-tier-core">★ ${core.length} recurring</span>`;
+        html += `</div>`;
+
         html += `<ul class="synth-bullets">`;
-        entries.forEach(e => {
-          const isMulti = e.sources.length > 1;
-          const shown   = e.sources.slice(0, 4);
-          const extra   = e.sources.length > 4 ? e.sources.length - 4 : 0;
-          const tags    = shown.map(s => `<span class="synth-src-tag${isMulti?' multi':''}">${escHtml(s)}</span>`).join('');
-          const more    = extra ? `<span class="synth-src-tag multi">+${extra}</span>` : '';
-          html += `<li><span class="synth-bullet-text">${escHtml(e.text)}</span><span class="synth-src-tags">${tags}${more}</span></li>`;
+
+        // Core bullets (2+ sittings)
+        core.forEach(e => {
+          const shown = e.sources.slice(0, 4);
+          const extra = e.sources.length > 4 ? e.sources.length - 4 : 0;
+          const tags  = shown.map(s => `<span class="synth-src-tag multi">${escHtml(s)}</span>`).join('');
+          const more  = extra ? `<span class="synth-src-tag multi">+${extra}</span>` : '';
+          html += `<li class="core">`;
+          html += `<span class="synth-freq multi">×${e.sources.length}</span>`;
+          html += `<span class="synth-bullet-text">${escHtml(e.text)}</span>`;
+          html += `<span class="synth-src-tags">${tags}${more}</span>`;
+          html += `</li>`;
         });
+
+        // Divider between tiers
+        if (core.length && once.length) {
+          html += `</ul><div class="synth-tier-divider">seen once</div><ul class="synth-bullets">`;
+        }
+
+        // Once-only bullets
+        once.forEach(e => {
+          const tag = `<span class="synth-src-tag">${escHtml(e.sources[0])}</span>`;
+          html += `<li class="once">`;
+          html += `<span class="synth-freq single">×1</span>`;
+          html += `<span class="synth-bullet-text">${escHtml(e.text)}</span>`;
+          html += `<span class="synth-src-tags">${tag}</span>`;
+          html += `</li>`;
+        });
+
         html += `</ul></div>`;
       });
+
       html += `</div>`;
     } else {
       html += `<div><div class="synth-section-title">Examiner Solution Points</div><div class="synth-empty">No structured solution sections found in matched exam results.</div></div>`;
@@ -684,6 +757,25 @@ function renderSynthesis(results) {
   }
 
   body.innerHTML = html || `<div class="synth-no-results">No structured content found to synthesise in these results.</div>`;
+}
+
+// ─── COPY CONTEXT ──────────────────────────────────────────────────────────
+function buildClaudePayload(items) {
+  return items.map((item, i) =>
+    `--- SOURCE ${i+1}: [${getSrcLabel(item.src)}] ${item.sittingLabel} — ${item.label} ---\n${JSON.stringify(item.raw, null, 2)}`
+  ).join('\n\n');
+}
+
+function copyContext() {
+  if (!selectedItems.length) { alert('Select at least one result first.'); return; }
+  const payload = buildClaudePayload(selectedItems);
+  const text = `KNOWLEDGE MATERIAL (${selectedItems.length} source${selectedItems.length!==1?'s':''}):\n\n${payload}\n\n---\nPaste a question below and ask your AI tool of choice.`;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.getElementById('copy-ctx-btn');
+    btn.textContent = '✓ Copied!';
+    btn.classList.add('copied');
+    setTimeout(() => { btn.textContent = 'Copy context'; btn.classList.remove('copied'); }, 2000);
+  }).catch(() => alert('Copy failed — please use a browser that supports clipboard access.'));
 }
 
 function buildShortSrc(item) {
@@ -754,9 +846,7 @@ async function askClaude() {
   if (!apiKey)              { alert('Please enter your Anthropic API key.'); return; }
   if (!selectedItems.length){ alert('Please select at least one result.'); return; }
 
-  const payload = selectedItems.map((item, i) =>
-    `--- SOURCE ${i+1}: [${getSrcLabel(item.src)}] ${item.sittingLabel} — ${item.label} ---\n${JSON.stringify(item.raw, null, 2)}`
-  ).join('\n\n');
+  const payload = buildClaudePayload(selectedItems);
 
   const system = `You are an expert actuarial study assistant specialising in SA1 (Health & Care) and SP1 examinations for IFoA and IAI.
 
