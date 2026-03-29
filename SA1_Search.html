@@ -69,10 +69,30 @@ html,body{min-height:100%;font-family:var(--sans);background:var(--bg);color:var
 .panel-title{font-size:11px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;}
 .panel-count{font-family:var(--mono);font-size:11px;color:var(--text3);}
 .panel-body{max-height:620px;overflow-y:auto;}
-.result-item{padding:12px 16px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .12s;display:flex;gap:10px;align-items:flex-start;}
+.result-item{border-bottom:1px solid var(--border);cursor:default;display:flex;flex-direction:column;}
 .result-item:last-child{border-bottom:none;}
-.result-item:hover{background:var(--surface2);}
-.result-item.selected{background:var(--accentbg);border-left:3px solid var(--accent);padding-left:13px;}
+.result-top{display:flex;gap:10px;align-items:flex-start;padding:12px 16px;cursor:pointer;transition:background .12s;}
+.result-top:hover{background:var(--surface2);}
+.result-item.selected .result-top{background:var(--accentbg);border-left:3px solid var(--accent);padding-left:13px;}
+.result-meta-row{display:flex;align-items:center;gap:6px;margin-bottom:4px;}
+.expand-toggle{margin-left:auto;background:none;border:1px solid var(--border);border-radius:3px;color:var(--text3);font-size:9px;font-family:var(--mono);font-weight:600;padding:1px 6px;cursor:pointer;transition:all .15s;white-space:nowrap;flex-shrink:0;}
+.expand-toggle:hover{color:var(--accent);border-color:var(--accent);}
+.expand-toggle.open{color:var(--accent);border-color:var(--accent);background:var(--accentbg);}
+.result-expand{display:none;border-top:1px solid var(--border);background:var(--bg);padding:12px 16px 16px 42px;font-size:12px;}
+.result-expand.open{display:block;}
+.exp-block{margin-bottom:14px;}
+.exp-block:last-child{margin-bottom:0;}
+.exp-label{font-family:var(--mono);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.07em;color:var(--accent);margin-bottom:6px;}
+.exp-text{color:var(--text2);font-size:12px;line-height:1.7;}
+.exp-sec-title{font-family:var(--mono);font-size:10px;font-weight:600;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;margin:8px 0 4px;}
+.exp-bullets{list-style:none;padding:0;display:flex;flex-direction:column;gap:3px;}
+.exp-bullets li{padding:2px 0 2px 14px;color:var(--text2);position:relative;line-height:1.6;}
+.exp-bullets li::before{content:'·';position:absolute;left:3px;color:var(--text3);}
+.exp-qa-item{border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:8px;}
+.exp-qa-item:last-child{margin-bottom:0;}
+.exp-qa-q{background:var(--surface2);padding:8px 10px;color:var(--text);font-weight:500;font-size:12px;line-height:1.6;}
+.exp-qa-a{padding:8px 10px;color:var(--text2);border-top:1px solid var(--border);font-size:12px;line-height:1.7;white-space:pre-wrap;}
+.exp-empty{color:var(--text3);font-style:italic;font-size:11px;font-family:var(--mono);}
 .result-cb{margin-top:3px;width:14px;height:14px;accent-color:var(--accent);flex-shrink:0;cursor:pointer;}
 .result-meta{flex:1;min-width:0;}
 .result-source{font-family:var(--mono);font-size:10px;font-weight:600;padding:2px 6px;border-radius:3px;display:inline-block;margin-bottom:4px;border:1px solid transparent;}
@@ -370,20 +390,111 @@ function renderResults(results) {
     div.className = 'result-item' + (selectedItems.includes(item) ? ' selected' : '');
     div.dataset.idx = idx;
     const snippet = item.snippet ? (item.snippet.length > 110 ? item.snippet.slice(0,110)+'…' : item.snippet) : '';
+    const canExpand = hasExpandContent(item);
     div.innerHTML = `
-      <input type="checkbox" class="result-cb" ${selectedItems.includes(item)?'checked':''}>
-      <div class="result-meta">
-        <span class="result-source src-${item.src}">${getSrcLabel(item.src)}</span>
-        <div class="result-sitting">${escHtml(item.sittingLabel)}</div>
-        <div class="result-label" title="${escHtml(item.label)}">${escHtml(item.label)}</div>
-        <div class="result-snippet">${escHtml(snippet)}</div>
-        ${item.marks ? `<div class="result-marks">${item.marks} marks</div>` : ''}
-      </div>`;
-    const cb = div.querySelector('.result-cb');
-    div.addEventListener('click', e => { if(e.target===cb) return; cb.checked=!cb.checked; toggleSelect(idx,cb.checked); });
+      <div class="result-top">
+        <input type="checkbox" class="result-cb" ${selectedItems.includes(item)?'checked':''}>
+        <div class="result-meta">
+          <div class="result-meta-row">
+            <span class="result-source src-${item.src}">${getSrcLabel(item.src)}</span>
+            ${canExpand ? `<button class="expand-toggle" title="View scenario / Q&amp;A">▶ View</button>` : ''}
+          </div>
+          <div class="result-sitting">${escHtml(item.sittingLabel)}</div>
+          <div class="result-label" title="${escHtml(item.label)}">${escHtml(item.label)}</div>
+          <div class="result-snippet">${escHtml(snippet)}</div>
+          ${item.marks ? `<div class="result-marks">${item.marks} marks</div>` : ''}
+        </div>
+      </div>
+      <div class="result-expand"></div>`;
+
+    const top       = div.querySelector('.result-top');
+    const cb        = div.querySelector('.result-cb');
+    const toggleBtn = div.querySelector('.expand-toggle');
+    const expandDiv = div.querySelector('.result-expand');
+
+    top.addEventListener('click', e => {
+      if (e.target === cb || e.target === toggleBtn) return;
+      cb.checked = !cb.checked;
+      toggleSelect(idx, cb.checked);
+    });
     cb.addEventListener('change', e => toggleSelect(idx, e.target.checked));
+
+    if (toggleBtn) {
+      toggleBtn.addEventListener('click', e => {
+        e.stopPropagation();
+        const isOpen = expandDiv.classList.toggle('open');
+        toggleBtn.classList.toggle('open', isOpen);
+        toggleBtn.textContent = isOpen ? '▼ Hide' : '▶ View';
+        if (isOpen && !expandDiv.dataset.built) {
+          expandDiv.innerHTML = buildExpandContent(item);
+          expandDiv.dataset.built = '1';
+        }
+      });
+    }
     body.appendChild(div);
   });
+}
+
+// ─── EXPAND CONTENT ────────────────────────────────────────────────────────
+function hasExpandContent(item) {
+  const r = item.raw;
+  if (r.exam_qa && r.exam_qa.length) return true;
+  const q = r.question; const p = r.partData;
+  return !!(q?.scenario || p?.scenario || q?.question || p?.question || q?.sections || p?.sections);
+}
+
+function buildExpandContent(item) {
+  const r = item.raw;
+  let html = '';
+
+  // ── REVISION NOTES: show exam Q&A pairs ──
+  if (Array.isArray(r.exam_qa)) {
+    if (r.exam_qa.length) {
+      html += `<div class="exp-block"><div class="exp-label">Exam Q&amp;A (${r.exam_qa.length})</div>`;
+      r.exam_qa.forEach(pair => {
+        html += `<div class="exp-qa-item">
+          <div class="exp-qa-q">Q: ${escHtml(pair.q)}</div>
+          <div class="exp-qa-a">${escHtml(pair.a)}</div>
+        </div>`;
+      });
+      html += `</div>`;
+    } else {
+      html += `<div class="exp-empty">No exam Q&amp;A recorded for this subsection.</div>`;
+    }
+    return html;
+  }
+
+  // ── EXAM SITTINGS: scenario + question text + solution sections ──
+  const q = r.question || {};
+  const p = r.partData || {};
+
+  const scenario = q.scenario || p.scenario;
+  if (scenario) {
+    html += `<div class="exp-block"><div class="exp-label">Scenario</div><div class="exp-text">${escHtml(scenario)}</div></div>`;
+  }
+
+  const qText = p.question || q.question;
+  if (qText) {
+    html += `<div class="exp-block"><div class="exp-label">Question</div><div class="exp-text">${escHtml(qText)}</div></div>`;
+  }
+
+  const sections = p.sections || q.sections;
+  if (sections && typeof sections === 'object') {
+    const entries = Object.entries(sections);
+    if (entries.length) {
+      html += `<div class="exp-block"><div class="exp-label">Solution</div>`;
+      entries.forEach(([secKey, secVal]) => {
+        const bullets = Array.isArray(secVal) ? secVal : (typeof secVal === 'string' ? [secVal] : []);
+        if (bullets.length) {
+          html += `<div class="exp-sec-title">${escHtml(secKey)}</div>`;
+          html += `<ul class="exp-bullets">${bullets.map(b => `<li>${escHtml(b)}</li>`).join('')}</ul>`;
+        }
+      });
+      html += `</div>`;
+    }
+  }
+
+  return html || `<div class="exp-empty">No detailed content available for this item.</div>`;
 }
 
 function getSrcLabel(src) {
