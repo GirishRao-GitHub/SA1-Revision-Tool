@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SP1 Theme Injector</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap');
+
+  :root {
+    --bg: #0e0e11;
+    --surface: #16161a;
+    --surface2: #1e1e24;
+    --border: #2a2a35;
+    --accent: #7c6af7;
+    --accent2: #4fc4a0;
+    --warn: #f0a04b;
+    --danger: #f06b6b;
+    --text: #e8e8f0;
+    --text-dim: #7a7a90;
+    --text-muted: #4a4a5e;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'IBM Plex Sans', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  header {
+    padding: 24px 32px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+  }
+
+  header h1 {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: -0.5px;
+    color: var(--accent);
+  }
+
+  header span {
+    font-size: 13px;
+    color: var(--text-dim);
+    font-family: 'IBM Plex Mono', monospace;
+  }
+
+  .main {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 0;
+  }
+
+  .sidebar {
+    border-right: 1px solid var(--border);
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    overflow-y: auto;
+    max-height: calc(100vh - 65px);
+  }
+
+  .section-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 10px;
+  }
+
+  .field-input {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 12px;
+    color: var(--text);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    width: 100%;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .field-input:focus { border-color: var(--accent); }
+
+  .drop-zone {
+    border: 2px dashed var(--border);
+    border-radius: 8px;
+    padding: 28px 16px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: var(--surface);
+  }
+
+  .drop-zone:hover, .drop-zone.drag-over {
+    border-color: var(--accent);
+    background: rgba(124, 106, 247, 0.06);
+  }
+
+  .drop-zone svg { color: var(--text-muted); margin-bottom: 10px; }
+
+  .drop-zone p { font-size: 13px; color: var(--text-dim); line-height: 1.5; }
+  .drop-zone p strong { color: var(--text); }
+
+  #file-input { display: none; }
+
+  .file-list { display: flex; flex-direction: column; gap: 6px; }
+
+  .file-item {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 9px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    font-size: 12px;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+
+  .file-item .fname { color: var(--text); flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .file-item .fstatus { font-size: 11px; padding: 2px 7px; border-radius: 20px; white-space: nowrap; }
+  .fstatus.ready { background: rgba(79,196,160,0.12); color: var(--accent2); }
+  .fstatus.processing { background: rgba(124,106,247,0.12); color: var(--accent); }
+  .fstatus.done { background: rgba(79,196,160,0.2); color: var(--accent2); }
+  .fstatus.error { background: rgba(240,107,107,0.12); color: var(--danger); }
+
+  .file-item .rm-btn {
+    background: none; border: none; cursor: pointer;
+    color: var(--text-muted); font-size: 14px; padding: 0 2px;
+    transition: color 0.15s;
+  }
+  .file-item .rm-btn:hover { color: var(--danger); }
+
+  .btn {
+    padding: 11px 18px;
+    border-radius: 7px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    transition: all 0.15s;
+    width: 100%;
+    letter-spacing: 0.3px;
+  }
+
+  .btn-primary {
+    background: var(--accent);
+    color: #fff;
+  }
+  .btn-primary:hover:not(:disabled) { background: #9082fa; }
+  .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .btn-secondary {
+    background: var(--surface2);
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+  .btn-secondary:hover:not(:disabled) { border-color: var(--accent2); color: var(--accent2); }
+  .btn-secondary:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  /* Main panel */
+  .panel {
+    padding: 24px 32px;
+    overflow-y: auto;
+    max-height: calc(100vh - 65px);
+  }
+
+  .empty-state {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    color: var(--text-muted);
+    text-align: center;
+  }
+
+  .empty-state h2 { font-size: 15px; font-weight: 500; color: var(--text-dim); }
+  .empty-state p { font-size: 13px; line-height: 1.6; max-width: 340px; }
+
+  /* Progress */
+  .progress-bar-wrap {
+    background: var(--border);
+    border-radius: 4px;
+    height: 4px;
+    overflow: hidden;
+    margin: 4px 0 8px;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent), var(--accent2));
+    border-radius: 4px;
+    transition: width 0.4s ease;
+  }
+
+  .log-area {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 16px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    line-height: 1.7;
+    max-height: 320px;
+    overflow-y: auto;
+    color: var(--text-dim);
+  }
+
+  .log-area .log-info { color: var(--text-dim); }
+  .log-area .log-ok { color: var(--accent2); }
+  .log-area .log-err { color: var(--danger); }
+  .log-area .log-warn { color: var(--warn); }
+  .log-area .log-head { color: var(--accent); font-weight: 600; }
+
+  /* Results preview */
+  .results-grid { display: flex; flex-direction: column; gap: 16px; margin-top: 16px; }
+
+  .result-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .result-card-header {
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface2);
+  }
+
+  .result-card-header .rc-name {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent2);
+  }
+
+  .result-card-header .rc-meta { font-size: 12px; color: var(--text-dim); }
+
+  .result-card-body { padding: 12px 16px; }
+
+  .q-row {
+    padding: 8px 0;
+    border-bottom: 1px solid var(--border);
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 12px;
+    align-items: start;
+    font-size: 12px;
+  }
+  .q-row:last-child { border-bottom: none; }
+
+  .q-id {
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 600;
+    color: var(--text-dim);
+    padding-top: 1px;
+  }
+
+  .themes-wrap { display: flex; flex-wrap: wrap; gap: 5px; }
+
+  .theme-tag {
+    background: rgba(124,106,247,0.12);
+    color: var(--accent);
+    border: 1px solid rgba(124,106,247,0.2);
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+
+  .no-themes { color: var(--text-muted); font-style: italic; }
+
+  .row-processing {
+    color: var(--text-muted);
+    font-style: italic;
+    font-size: 12px;
+    animation: pulse 1.2s infinite;
+  }
+
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+
+  .dl-btn {
+    background: rgba(79,196,160,0.1);
+    color: var(--accent2);
+    border: 1px solid rgba(79,196,160,0.25);
+    padding: 6px 12px;
+    border-radius: 5px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 11px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .dl-btn:hover { background: rgba(79,196,160,0.2); }
+
+  .stat-row {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+  }
+
+  .stat {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 10px 16px;
+    flex: 1;
+    text-align: center;
+  }
+
+  .stat .sv { font-family: 'IBM Plex Mono', monospace; font-size: 22px; font-weight: 600; color: var(--accent); }
+  .stat .sl { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+
+  .sep { border: none; border-top: 1px solid var(--border); margin: 4px 0; }
+
+  .info-box {
+    background: rgba(124,106,247,0.07);
+    border: 1px solid rgba(124,106,247,0.2);
+    border-radius: 6px;
+    padding: 10px 12px;
+    font-size: 12px;
+    color: var(--text-dim);
+    line-height: 1.55;
+  }
+  .info-box strong { color: var(--accent); }
+
+  .btn-row { display: flex; gap: 8px; }
+  .btn-row .btn { flex: 1; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>SP1 Theme Injector</h1>
+  <span>// AI-powered batch theme mapping for IAI exam JSON files</span>
+</header>
+
+<div class="main">
+  <!-- Sidebar -->
+  <div class="sidebar">
+
+    <div>
+      <div class="section-label">Field Name</div>
+      <input class="field-input" id="fieldName" value="sp1_themes" placeholder="e.g. sp1_themes" />
+      <div style="margin-top:6px; font-size:11px; color:var(--text-muted); font-family:'IBM Plex Mono',monospace;">
+        Added alongside existing <span style="color:var(--accent)">"themes"</span> key
+      </div>
+    </div>
+
+    <hr class="sep">
+
+    <div>
+      <div class="section-label">Upload JSON Files</div>
+      <div class="drop-zone" id="dropZone">
+        <svg width="28" height="28" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M12 12V4m0 0L8 8m4-4l4 4"/></svg>
+        <p><strong>Drop JSON files here</strong><br>or click to browse</p>
+      </div>
+      <input type="file" id="file-input" accept=".json" multiple>
+    </div>
+
+    <div id="fileListSection" style="display:none">
+      <div class="section-label">Queued Files (<span id="fileCount">0</span>)</div>
+      <div class="file-list" id="fileList"></div>
+    </div>
+
+    <hr class="sep">
+
+    <div class="info-box">
+      <strong>How it works:</strong> Claude reads each question's text & sections, then maps the most relevant SP1 chapter sub-headings. The new field is injected non-destructively — existing keys stay intact.
+    </div>
+
+    <div class="btn-row">
+      <button class="btn btn-primary" id="runBtn" disabled onclick="runAll()">▶ Process All</button>
+    </div>
+
+    <button class="btn btn-secondary" id="dlAllBtn" style="display:none" onclick="downloadAll()">↓ Download All</button>
+
+  </div>
+
+  <!-- Main Panel -->
+  <div class="panel" id="mainPanel">
+    <div class="empty-state" id="emptyState">
+      <svg width="48" height="48" fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 24 24" style="color:var(--text-muted)"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+      <h2>No files loaded yet</h2>
+      <p>Upload one or more IAI exam JSON files from the sidebar. Each question will be matched to relevant SP1 Key Themes using Claude.</p>
+    </div>
+    <div id="resultsSection" style="display:none">
+      <div class="stat-row" id="statRow">
+        <div class="stat"><div class="sv" id="statFiles">0</div><div class="sl">Files</div></div>
+        <div class="stat"><div class="sv" id="statQs">0</div><div class="sl">Questions</div></div>
+        <div class="stat"><div class="sv" id="statDone">0</div><div class="sl">Mapped</div></div>
+      </div>
+      <div>
+        <div class="section-label">Processing Log</div>
+        <div class="log-area" id="logArea"></div>
+      </div>
+      <div class="results-grid" id="resultsGrid"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ─── SP1 Key Themes (from SP1_Key_Themes.docx) ───────────────────────────────
+const SP1_THEMES = {
+  "Chapter 0 – Introduction": [
+    "The product cycle: design, pricing, underwriting, claims management, monitoring, valuation",
+    "Overview of health and care insurance products",
+    "Role of the actuary in health and care insurance"
+  ],
+  "Chapter 1 – Income Protection": [
+    "Policy structure: premiums, benefits, deferred periods, linked claims periods",
+    "Incapacity definitions: own occupation, any occupation, ADLs, ADWs, FATs",
+    "Replacement ratio and prevention of over-insurance",
+    "Guaranteed insurability options (GIOs)",
+    "Waiver of premium; no-claims discounts; reviewable vs guaranteed premiums"
+  ],
+  "Chapter 2 – Critical Illness": [
+    "Accelerated vs stand-alone CI insurance",
+    "Conditions covered and industry-standard definitions",
+    "Tiered / multi-pay benefits",
+    "Children's benefit riders; TPD extensions; terminal illness cover"
+  ],
+  "Chapter 3 – Long-Term Care Insurance": [
+    "Pre-funded vs immediate needs plans",
+    "ADL-based claim triggers; severe mental impairment",
+    "Indemnity vs cash benefits; benefit types and structures",
+    "Unit-linked and pension-linked LTCI solutions",
+    "Surrender benefits; death benefits; deferred periods in LTCI"
+  ],
+  "Chapter 4 – Private Medical Insurance": [
+    "Indemnity basis; acute vs chronic conditions; standard inclusions and exclusions",
+    "Excesses, no-claims discount (NCD) systems, community rating",
+    "Cheaper PMI variants: MME, waiting list plans, preferred provider arrangements",
+    "Health cash plans; dental and optical plans; personal accident insurance"
+  ],
+  "Chapter 5 – Group Health & Care Products": [
+    "Definition of group business; employer as policyholder",
+    "Free cover limits and eligibility rules",
+    "Anti-selection in group schemes; minimum take-up rates",
+    "Flexible / cafeteria benefit schemes",
+    "Group IP, group CI, group PMI – specific features and differences from individual"
+  ],
+  "Chapters 6–7 – Product Design & Stakeholder Interests": [
+    "Customer needs by product type: IP, CI, LTCI, PMI, microinsurance",
+    "Cash vs indemnity benefits; peace of mind value",
+    "Insurer constraints: profitability, return on capital, systems, reinsurance, regulation",
+    "Product-specific control procedures: underwriting criteria, claims handling, policy wording",
+    "Conflicts between stakeholder interests",
+    "Iterative nature of product design and pricing"
+  ],
+  "Chapter 8 – Distribution Channels": [
+    "Channel types: independent brokers, tied agents, own salesforce, direct marketing",
+    "Worksite marketing; internet and price comparison sites",
+    "Commission structures: indemnity commission, renewal commission, level commission",
+    "Clawback on early lapses",
+    "Impact of channel on persistency, claims experience and competitiveness"
+  ],
+  "Chapter 9 – General Business Environment": [
+    "Regulatory regime: restrictions on products, premiums, rating factors, underwriting, solvency",
+    "Taxation regime: company tax, tax treatment of premiums and benefits",
+    "Economic influences: price inflation, medical inflation, wage inflation, interest rates",
+    "Propensity to buy vs need to sell; mis-selling risk; consumer awareness",
+    "Professional guidance from actuarial associations"
+  ],
+  "Chapter 10 – State Healthcare Provision": [
+    "Objectives of State provision: protecting national health, subsidising the poor, budget balance",
+    "Methods: universal vs means-tested; flat-rate vs earnings-related; lump sum vs income benefits",
+    "Funding: pay-as-you-go vs forward funding",
+    "Interaction and complementarity between State provision and private insurance",
+    "Drivers of rising healthcare costs: technology, demographics, public expectations"
+  ],
+  "Chapter 11 – Modelling": [
+    "Uses of models: pricing, reserving, solvency, embedded value, model office projections",
+    "Deterministic vs stochastic models; key features and outputs",
+    "Multi-state modelling for health and care products",
+    "Sensitivity testing and scenario analysis",
+    "Risk-neutral (market-consistent) vs real-world calibration"
+  ],
+  "Chapter 12 – Data": [
+    "Data quality criteria: relevance, credibility, availability, reliability",
+    "Sources: own data, population data, reinsurers' data, market/industry data, overseas data",
+    "Data requirements by product type (IP, CI, LTCI, PMI)",
+    "Claim inception rates, recovery rates, claim amounts – analysis and projection"
+  ],
+  "Chapter 13 – General Assumptions": [
+    "Purpose of assumptions: pricing, reserving, management accounts",
+    "Consistency between assumptions; regulatory and legislative constraints",
+    "Margins against adverse experience: assessment approaches, stochastic methods, risk discount rate",
+    "Pricing basis vs reserving basis vs management accounts basis"
+  ],
+  "Chapter 14 – Demographic Assumptions": [
+    "Process: data collection, grouping, rate calculation, adjustment",
+    "Claim incidence rates: risk factors, trends, social/economic influences",
+    "Claim recovery rates: IP-specific; rehabilitation and claims management effects",
+    "Mortality rates: importance by product type",
+    "Lapse rates: key influences; selective lapses; lapse and re-entry risk"
+  ],
+  "Chapter 15 – Financial Assumptions": [
+    "Benefit amounts and benefit inflation: fixed, index-linked, medical cost inflation",
+    "Expenses: types (initial, renewal, claim, termination); expense investigation",
+    "Expense inflation: wage and price inflation components",
+    "Commission and clawback assumptions: market norms, distribution channel mix"
+  ],
+  "Chapter 16 – Other Assumptions": [
+    "New business volumes and mix: cross-subsidies, per-policy fixed cost allocation",
+    "Risk discount rate: shareholders' required return, CAPM, risk premium",
+    "Market consistency: risk-neutral valuations, risk margins"
+  ],
+  "Chapter 17 – Individual Business Pricing": [
+    "IP pricing: inception/annuity approach; multi-state modelling",
+    "CI pricing: incidence rates by cause; accelerated vs stand-alone formulae",
+    "LTCI pricing: multiple-state or inception/annuity methods",
+    "PMI pricing: risk premium formula by treatment category",
+    "Health cash plans and accident & sickness pricing",
+    "Modelling complexities: claim frequency and amount distributions"
+  ],
+  "Chapter 18 – Group Business Pricing": [
+    "Free cover limits and group-level rating factors",
+    "Book rate calculation: data judgement, risk cells, inflation adjustments",
+    "Experience rating: credibility formula, credibility factor Z",
+    "Burning cost method: calculation and use for monitoring premium adequacy",
+    "Group PMI pricing specifics: NCD, flat rating, self-insurance"
+  ],
+  "Chapter 19 – Other Pricing Considerations": [
+    "Profit criteria: NPV, IRR, discounted payback period",
+    "Marketability and competitiveness; loss-leader strategies",
+    "Cost of holding supervisory reserves and solvency capital in pricing",
+    "Reinsurance impact on pricing",
+    "Regulatory constraints on pricing bases and rating factors",
+    "Premium rate reviews and monitoring"
+  ],
+  "Chapter 20 – Options & Guarantees Pricing": [
+    "Mortality/morbidity options: GIOs, convertibility, indexation options",
+    "Valuing options: cashflow projections; key assumptions (take-up rate, morbidity of exercisers)",
+    "Cost of guarantees: expense, claim and investment guarantees",
+    "Sensitivity testing of guaranteed products; capital cost implications"
+  ],
+  "Chapter 21 – Reserves & Embedded Value": [
+    "Reasons for calculating reserves: accounts, solvency, pricing, M&A, investment strategy",
+    "Types of reserve: long-term (in-force, IBNR, option reserves) and short-term (UPR, URR, IBNER, outstanding claims)",
+    "Methods: case estimates vs statistical methods; use cases for each",
+    "Embedded value and appraisal value; use in M&A"
+  ],
+  "Chapter 22 – Solvency Capital": [
+    "Solvency capital requirements: formula-based vs VaR-based approaches",
+    "Stress testing; aggregation and diversification (correlation matrices, copulas)",
+    "Market-consistent valuation: risk-free rates, risk margins, cost of capital approach",
+    "Active vs passive valuation approaches"
+  ],
+  "Chapter 23 – Risks: Data, Claims, Expenses, Persistency": [
+    "Model risk, parameter risk, random fluctuation risk",
+    "Policy and other data risks; model office accuracy",
+    "Claims risks: new diseases, medical advances, anti-selection, PMI claim cost inflation",
+    "Investment performance risk: model/parameter/random components",
+    "Expense risk; persistency risk; selective lapses"
+  ],
+  "Chapter 24 – Risks: External & Operational": [
+    "Guarantees and options risk",
+    "Competition and management action risks",
+    "Counterparty risks: reinsurers, distributors, medical service providers",
+    "Regulatory and fiscal development risks",
+    "Reputational risks; internal audit failure and fraud; physical risks",
+    "Catastrophe and concentration of risk; non-disclosure and anti-selection",
+    "Product-specific risk profiles: IP, CI, LTCI, PMI"
+  ],
+  "Chapter 25 – Overall Risk Management": [
+    "Aims of management: profit, return on capital, risk profile, public interest",
+    "Problems confronting the actuary: data, design, marketability, pricing, capital, solvency, investment, claims"
+  ],
+  "Chapter 26 – Reinsurance": [
+    "Purposes: risk limitation, large loss protection, smoothing, expertise, capacity, financing, arbitrage",
+    "Treaty vs facultative; fac/fac, fac/ob, ob/ob arrangements",
+    "Proportional reinsurance: quota share and surplus; original terms vs risk premium basis",
+    "Non-proportional reinsurance: risk XL, aggregate XL (stop loss), catastrophe XL",
+    "Financial reinsurance: new business financing, loan-like structures",
+    "Reinsurance commission and rebate structures"
+  ],
+  "Chapter 27 – Other Risk Management Techniques": [
+    "Underwriting: full medical underwriting, moratorium underwriting, MHD",
+    "Claims management and product-specific controls (IP: disability counselling; PMI: pre-authorisation)",
+    "Data quality controls: vetting, spot checks, compulsory fields, staff training",
+    "Product design as a risk control tool: claim definitions, policy wording, guarantees",
+    "Distribution management: monitoring sales message, commission controls, churning",
+    "Treating Customers Fairly (TCF): clear policy conditions, sales process monitoring"
+  ],
+  "Chapter 28 – Investment": [
+    "Asset-liability matching by liability type: monetary, index-linked, indemnity, investment-linked",
+    "Immunisation theory and its limitations for monetary liabilities",
+    "Regulatory constraints on investment (asset types, counterparty limits, currency matching)",
+    "Asset-liability modelling: testing investment strategies, probability of insolvency",
+    "Overall investment strategy: maximising return subject to acceptable risk; free assets",
+    "Asset valuation: market value vs discounted cashflow approaches"
+  ],
+  "Chapter 29 – Monitoring & Experience Analysis": [
+    "Purposes of experience monitoring: updating assumptions, identifying adverse trends, management information",
+    "Experience investigations: new business, mortality/morbidity, claims amounts, persistency, expenses, investment",
+    "New business analysis: strain, mix vs pricing basis, commission adequacy, staffing",
+    "Expense investigations: allocation to initial, renewal, termination and investment costs",
+    "Analysis of surplus (long-term) and claim/expense ratios (short-term)",
+    "Embedded value analysis: reconciliation, management information, regulatory reporting",
+    "Feeding results back into: pricing, reserving, underwriting, distribution, product design, capital allocation"
+  ]
+};
+
+const THEMES_FLAT = Object.entries(SP1_THEMES).map(([chapter, subs]) => ({
+  chapter, subs
+}));
+
+const THEMES_FOR_PROMPT = Object.entries(SP1_THEMES)
+  .map(([ch, subs]) => `${ch}:\n${subs.map(s => `  - ${s}`).join('\n')}`)
+  .join('\n\n');
+
+// ─── State ────────────────────────────────────────────────────────────────────
+let files = []; // { name, data (parsed JSON), status, result }
+let totalQ = 0, doneQ = 0;
+let processing = false;
+
+// ─── File handling ─────────────────────────────────────────────────────────────
+const dropZone = document.getElementById('dropZone');
+const fileInput = document.getElementById('file-input');
+
+dropZone.addEventListener('click', () => fileInput.click());
+dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('drag-over'); });
+dropZone.addEventListener('dragleave', () => dropZone.classList.remove('drag-over'));
+dropZone.addEventListener('drop', e => {
+  e.preventDefault(); dropZone.classList.remove('drag-over');
+  handleFiles(Array.from(e.dataTransfer.files));
+});
+fileInput.addEventListener('change', () => handleFiles(Array.from(fileInput.files)));
+
+function handleFiles(newFiles) {
+  newFiles.forEach(f => {
+    if (!f.name.endsWith('.json')) return;
+    const reader = new FileReader();
+    reader.onload = e => {
+      try {
+        const data = JSON.parse(e.target.result);
+        files.push({ name: f.name, data, status: 'ready', result: null });
+        renderFileList();
+      } catch {
+        log(`<span class="log-err">✗ Parse error: ${f.name}</span>`);
+      }
+    };
+    reader.readAsText(f);
+  });
+}
+
+function removeFile(idx) {
+  files.splice(idx, 1);
+  renderFileList();
+}
+
+function renderFileList() {
+  const list = document.getElementById('fileList');
+  const section = document.getElementById('fileListSection');
+  const count = document.getElementById('fileCount');
+  const runBtn = document.getElementById('runBtn');
+
+  count.textContent = files.length;
+  section.style.display = files.length ? 'block' : 'none';
+  runBtn.disabled = files.length === 0 || processing;
+
+  list.innerHTML = files.map((f, i) => `
+    <div class="file-item">
+      <span class="fname" title="${f.name}">${f.name}</span>
+      <span class="fstatus ${f.status}">${f.status}</span>
+      ${f.status === 'ready' ? `<button class="rm-btn" onclick="removeFile(${i})">✕</button>` : ''}
+    </div>
+  `).join('');
+}
+
+// ─── Logging ──────────────────────────────────────────────────────────────────
+function log(html) {
+  const area = document.getElementById('logArea');
+  area.innerHTML += html + '\n';
+  area.scrollTop = area.scrollHeight;
+}
+
+// ─── Stats ────────────────────────────────────────────────────────────────────
+function updateStats() {
+  document.getElementById('statFiles').textContent = files.length;
+  document.getElementById('statQs').textContent = totalQ;
+  document.getElementById('statDone').textContent = doneQ;
+}
+
+// ─── Results grid ─────────────────────────────────────────────────────────────
+function ensureResultCard(fileIdx) {
+  const grid = document.getElementById('resultsGrid');
+  let card = document.getElementById(`card-${fileIdx}`);
+  if (!card) {
+    card = document.createElement('div');
+    card.className = 'result-card';
+    card.id = `card-${fileIdx}`;
+    const f = files[fileIdx];
+    const qCount = Object.keys(f.data.questions || {}).length;
+    card.innerHTML = `
+      <div class="result-card-header">
+        <span class="rc-name">${f.name}</span>
+        <span class="rc-meta">${qCount} questions</span>
+      </div>
+      <div class="result-card-body" id="card-body-${fileIdx}"></div>
+    `;
+    grid.appendChild(card);
+  }
+  return card;
+}
+
+function setQRow(fileIdx, qId, state, themes) {
+  const body = document.getElementById(`card-body-${fileIdx}`);
+  let row = document.getElementById(`row-${fileIdx}-${qId}`);
+  if (!row) {
+    row = document.createElement('div');
+    row.className = 'q-row';
+    row.id = `row-${fileIdx}-${qId}`;
+    body.appendChild(row);
+  }
+  if (state === 'processing') {
+    row.innerHTML = `<span class="q-id">${qId}</span><span class="row-processing">mapping themes…</span>`;
+  } else if (state === 'done') {
+    const tags = themes.length
+      ? themes.map(t => `<span class="theme-tag">${t}</span>`).join('')
+      : `<span class="no-themes">No matching themes</span>`;
+    row.innerHTML = `<span class="q-id">${qId}</span><div class="themes-wrap">${tags}</div>`;
+  }
+}
+
+// ─── Claude API call ──────────────────────────────────────────────────────────
+async function mapThemesForQuestion(qId, qData) {
+  const questionText = qData.question || '';
+  const scenarioText = (qData.scenario || '').slice(0, 400);
+  const sectionKeys = Object.keys(qData.sections || {}).join('; ');
+
+  const prompt = `You are an expert on the SP1 Health & Care actuarial exam syllabus.
+
+Given the following exam question, identify the most relevant SP1 Key Themes from the list below. Return ONLY a JSON array of strings — each string being the exact sub-heading text from the list. Include 2–6 of the most relevant sub-headings. Do not add any explanation or text outside the JSON array.
+
+QUESTION ID: ${qId}
+QUESTION: ${questionText}
+SCENARIO SUMMARY: ${scenarioText}
+SECTION HEADINGS: ${sectionKeys}
+
+SP1 KEY THEMES:
+${THEMES_FOR_PROMPT}
+
+Respond with ONLY a valid JSON array, for example:
+["theme one", "theme two", "theme three"]`;
+
+  const response = await fetch("https://api.anthropic.com/v1/messages", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      model: "claude-sonnet-4-20250514",
+      max_tokens: 1000,
+      messages: [{ role: "user", content: prompt }]
+    })
+  });
+
+  if (!response.ok) throw new Error(`API ${response.status}`);
+  const data = await response.json();
+  const text = data.content.map(i => i.text || '').join('').trim();
+  const clean = text.replace(/```json|```/g, '').trim();
+  return JSON.parse(clean);
+}
+
+// ─── Main run ─────────────────────────────────────────────────────────────────
+async function runAll() {
+  if (processing || files.length === 0) return;
+  processing = true;
+  document.getElementById('runBtn').disabled = true;
+
+  const fieldName = document.getElementById('fieldName').value.trim() || 'sp1_themes';
+
+  // Show results panel
+  document.getElementById('emptyState').style.display = 'none';
+  document.getElementById('resultsSection').style.display = 'block';
+  document.getElementById('logArea').innerHTML = '';
+
+  totalQ = files.reduce((s, f) => s + Object.keys(f.data.questions || {}).length, 0);
+  doneQ = 0;
+  updateStats();
+
+  log(`<span class="log-head">» Starting batch — ${files.length} file(s), ${totalQ} questions total</span>`);
+  log(`<span class="log-info">  Field name: "${fieldName}"</span>`);
+
+  for (let fi = 0; fi < files.length; fi++) {
+    const f = files[fi];
+    f.status = 'processing';
+    renderFileList();
+
+    ensureResultCard(fi);
+    log(`\n<span class="log-head">▸ ${f.name}</span>`);
+
+    const questions = f.data.questions || {};
+    const resultData = JSON.parse(JSON.stringify(f.data)); // deep clone
+
+    for (const [qId, qData] of Object.entries(questions)) {
+      setQRow(fi, qId, 'processing');
+      log(`<span class="log-info">  ${qId} — mapping…</span>`);
+
+      try {
+        const themes = await mapThemesForQuestion(qId, qData);
+        resultData.questions[qId][fieldName] = themes;
+        doneQ++;
+        updateStats();
+        setQRow(fi, qId, 'done', themes);
+        log(`<span class="log-ok">  ${qId} ✓  ${themes.length} theme(s)</span>`);
+      } catch (err) {
+        resultData.questions[qId][fieldName] = [];
+        doneQ++;
+        updateStats();
+        setQRow(fi, qId, 'done', []);
+        log(`<span class="log-err">  ${qId} ✗  ${err.message}</span>`);
+      }
+
+      // Small delay to be kind to rate limits
+      await new Promise(r => setTimeout(r, 300));
+    }
+
+    f.result = resultData;
+    f.status = 'done';
+    renderFileList();
+    log(`<span class="log-ok">  ✓ Done — ${Object.keys(questions).length} questions processed</span>`);
+
+    // Add download button to card
+    const header = document.querySelector(`#card-${fi} .result-card-header`);
+    const dlBtn = document.createElement('button');
+    dlBtn.className = 'dl-btn';
+    dlBtn.textContent = '↓ Download';
+    dlBtn.onclick = () => downloadFile(fi);
+    header.appendChild(dlBtn);
+  }
+
+  log(`\n<span class="log-head">» All done! ${doneQ}/${totalQ} questions mapped.</span>`);
+  processing = false;
+  document.getElementById('runBtn').disabled = false;
+  document.getElementById('dlAllBtn').style.display = 'block';
+}
+
+// ─── Download ─────────────────────────────────────────────────────────────────
+function downloadFile(fi) {
+  const f = files[fi];
+  if (!f.result) return;
+  const blob = new Blob([JSON.stringify(f.result, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = f.name.replace('.json', '_sp1themed.json');
+  a.click();
+}
+
+function downloadAll() {
+  files.forEach((f, i) => { if (f.result) downloadFile(i); });
+}
+</script>
+</body>
+</html>
