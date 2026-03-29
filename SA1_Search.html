@@ -135,6 +135,38 @@ html,body{min-height:100%;font-family:var(--sans);background:var(--bg);color:var
 ::-webkit-scrollbar{width:5px;height:5px;}
 ::-webkit-scrollbar-track{background:transparent;}
 ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:10px;}
+
+/* SYNTHESIS */
+.status-row{display:flex;align-items:center;gap:10px;}
+.synth-btn{display:none;font-family:var(--mono);font-size:11px;font-weight:600;padding:4px 12px;border-radius:4px;border:1px solid var(--accent);background:var(--accentbg);color:var(--accent);cursor:pointer;transition:all .2s;white-space:nowrap;flex-shrink:0;}
+.synth-btn:hover{background:var(--accent);color:#fff;}
+.synth-panel{display:none;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius2);margin-bottom:16px;overflow:hidden;}
+.synth-panel.open{display:block;}
+.synth-header{padding:10px 16px;border-bottom:1px solid var(--border);background:var(--surface2);display:flex;align-items:center;gap:10px;}
+.synth-title{font-family:var(--mono);font-size:11px;font-weight:600;color:var(--accent);text-transform:uppercase;letter-spacing:.07em;}
+.synth-meta{font-family:var(--mono);font-size:11px;color:var(--text3);}
+.synth-close{margin-left:auto;font-family:var(--mono);font-size:11px;padding:3px 8px;border-radius:3px;border:1px solid var(--border);background:none;color:var(--text3);cursor:pointer;transition:all .2s;}
+.synth-close:hover{color:var(--red);border-color:var(--red);}
+.synth-body{padding:16px;display:flex;flex-direction:column;gap:16px;max-height:460px;overflow-y:auto;}
+.synth-section-title{font-family:var(--mono);font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.08em;color:var(--text2);border-bottom:1px solid var(--border);padding-bottom:6px;margin-bottom:10px;}
+.synth-seg{margin-bottom:14px;}
+.synth-seg:last-child{margin-bottom:0;}
+.synth-seg-label{font-family:var(--mono);font-size:10px;color:var(--accent);font-weight:600;margin-bottom:6px;}
+.synth-seg-count{font-weight:400;color:var(--text3);margin-left:4px;}
+.synth-bullets{list-style:none;padding:0;display:flex;flex-direction:column;gap:5px;}
+.synth-bullets li{display:flex;align-items:baseline;gap:8px;font-size:12px;color:var(--text2);line-height:1.65;}
+.synth-bullets li::before{content:'·';color:var(--text3);flex-shrink:0;}
+.synth-bullet-text{flex:1;}
+.synth-src-tags{display:flex;flex-wrap:wrap;gap:3px;flex-shrink:0;}
+.synth-src-tag{font-family:var(--mono);font-size:9px;padding:1px 4px;border-radius:2px;background:var(--surface3);color:var(--text3);border:1px solid var(--border);white-space:nowrap;}
+.synth-src-tag.multi{background:var(--accentbg);color:var(--accent);border-color:var(--accent);}
+.synth-qa-item{border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:6px;}
+.synth-qa-item:last-child{margin-bottom:0;}
+.synth-qa-q{background:var(--surface2);padding:8px 10px;color:var(--text);font-weight:500;font-size:12px;line-height:1.6;}
+.synth-qa-a{padding:8px 10px;color:var(--text2);border-top:1px solid var(--border);font-size:12px;line-height:1.7;white-space:pre-wrap;}
+.synth-qa-src{font-family:var(--mono);font-size:9px;color:var(--text3);margin-top:5px;padding-top:5px;border-top:1px solid var(--border);}
+.synth-empty{color:var(--text3);font-style:italic;font-size:11px;font-family:var(--mono);}
+.synth-no-results{padding:24px;text-align:center;color:var(--text3);font-family:var(--mono);font-size:11px;}
 </style>
 </head>
 <body>
@@ -175,7 +207,19 @@ html,body{min-height:100%;font-family:var(--sans);background:var(--bg);color:var
     </div>
   </div>
 
-  <div class="status-bar" id="status-bar">Loading data files…</div>
+  <div class="status-row">
+    <div class="status-bar" id="status-bar">Loading data files…</div>
+    <button class="synth-btn" id="synth-btn" onclick="toggleSynthesis()">⚡ Synthesise</button>
+  </div>
+
+  <div class="synth-panel" id="synth-panel">
+    <div class="synth-header">
+      <span class="synth-title">⚡ Synthesis</span>
+      <span class="synth-meta" id="synth-meta"></span>
+      <button class="synth-close" onclick="closeSynthesis()">✕ Close</button>
+    </div>
+    <div class="synth-body" id="synth-body"></div>
+  </div>
 
   <div class="content-grid">
     <div class="panel">
@@ -375,6 +419,9 @@ function doSearch() {
   renderResults(lastResults);
   document.getElementById('status-bar').innerHTML = `Found <b>${lastResults.length}</b> results for "<b>${escHtml(query)}</b>"`;
   document.getElementById('results-count').textContent = `${lastResults.length} results`;
+  // Show synth button only when there are results; reset any open synthesis
+  document.getElementById('synth-btn').style.display = lastResults.length ? 'inline-block' : 'none';
+  closeSynthesis();
 }
 
 // ─── RENDER ────────────────────────────────────────────────────────────────
@@ -500,6 +547,118 @@ function buildExpandContent(item) {
 function getSrcLabel(src) {
   return {ifoa:'IFoA',iai:'IAI',sp1pq:'SP1 PQ',sa1pq:'SA1 PQ',assignment:'Assignment',
           frameworks:'Frameworks',sp1notes:'SP1 Notes',sa1notes:'SA1 Notes'}[src] || src.toUpperCase();
+}
+
+// ─── SYNTHESIS ─────────────────────────────────────────────────────────────
+function toggleSynthesis() {
+  const panel = document.getElementById('synth-panel');
+  const isOpen = panel.classList.toggle('open');
+  document.getElementById('synth-btn').textContent = isOpen ? '✕ Close' : '⚡ Synthesise';
+  if (isOpen) renderSynthesis(lastResults);
+}
+
+function closeSynthesis() {
+  document.getElementById('synth-panel').classList.remove('open');
+  document.getElementById('synth-btn').textContent = '⚡ Synthesise';
+}
+
+function renderSynthesis(results) {
+  const body = document.getElementById('synth-body');
+  const meta = document.getElementById('synth-meta');
+  const EXAM_SRCS = new Set(['ifoa','iai','sp1pq','sa1pq','assignment']);
+  const NOTE_SRCS = new Set(['sp1notes','sa1notes']);
+  const examItems = results.filter(i => EXAM_SRCS.has(i.src));
+  const noteItems = results.filter(i => NOTE_SRCS.has(i.src));
+  meta.textContent = `${examItems.length} exam result${examItems.length!==1?'s':''} · ${noteItems.length} note result${noteItems.length!==1?'s':''}`;
+
+  if (!examItems.length && !noteItems.length) {
+    body.innerHTML = `<div class="synth-no-results">No synthesisable results — search for a topic first.</div>`;
+    return;
+  }
+
+  let html = '';
+
+  // ── EXAM SOLUTION POINTS ──
+  if (examItems.length) {
+    const sectionMap = {};  // secKey -> [{text, norm, sources:[]}]
+    const sectionOrder = [];
+    examItems.forEach(item => {
+      const q = item.raw.question || {};
+      const p = item.raw.partData  || {};
+      const sections = p.sections || q.sections;
+      if (!sections || typeof sections !== 'object') return;
+      const shortSrc = buildShortSrc(item);
+      Object.entries(sections).forEach(([secKey, secVal]) => {
+        const bullets = Array.isArray(secVal) ? secVal : (typeof secVal === 'string' ? [secVal] : []);
+        if (!bullets.length) return;
+        if (!sectionMap[secKey]) { sectionMap[secKey] = []; sectionOrder.push(secKey); }
+        bullets.forEach(b => {
+          const norm = b.trim().toLowerCase().replace(/\s+/g,' ');
+          const existing = sectionMap[secKey].find(e => e.norm === norm);
+          if (existing) { if (!existing.sources.includes(shortSrc)) existing.sources.push(shortSrc); }
+          else sectionMap[secKey].push({ text: b.trim(), norm, sources: [shortSrc] });
+        });
+      });
+    });
+
+    if (sectionOrder.length) {
+      const totalBullets = sectionOrder.reduce((n,k) => n + sectionMap[k].length, 0);
+      html += `<div><div class="synth-section-title">Examiner Solution Points — ${totalBullets} unique point${totalBullets!==1?'s':''} across ${examItems.length} result${examItems.length!==1?'s':''}</div>`;
+      sectionOrder.forEach(secKey => {
+        const entries = [...sectionMap[secKey]].sort((a,b) => b.sources.length - a.sources.length);
+        html += `<div class="synth-seg">`;
+        html += `<div class="synth-seg-label">${escHtml(secKey)}<span class="synth-seg-count">${entries.length} point${entries.length!==1?'s':''}</span></div>`;
+        html += `<ul class="synth-bullets">`;
+        entries.forEach(e => {
+          const isMulti = e.sources.length > 1;
+          const shown   = e.sources.slice(0, 4);
+          const extra   = e.sources.length > 4 ? e.sources.length - 4 : 0;
+          const tags    = shown.map(s => `<span class="synth-src-tag${isMulti?' multi':''}">${escHtml(s)}</span>`).join('');
+          const more    = extra ? `<span class="synth-src-tag multi">+${extra}</span>` : '';
+          html += `<li><span class="synth-bullet-text">${escHtml(e.text)}</span><span class="synth-src-tags">${tags}${more}</span></li>`;
+        });
+        html += `</ul></div>`;
+      });
+      html += `</div>`;
+    } else {
+      html += `<div><div class="synth-section-title">Examiner Solution Points</div><div class="synth-empty">No structured solution sections found in matched exam results.</div></div>`;
+    }
+  }
+
+  // ── EXAM Q&A FROM NOTES ──
+  if (noteItems.length) {
+    const qaList = [];
+    noteItems.forEach(item => {
+      (item.raw.exam_qa || []).forEach(pair => {
+        const norm = pair.q.trim().toLowerCase();
+        if (!qaList.find(e => e.norm === norm))
+          qaList.push({ q: pair.q, a: pair.a, norm, source: item.label });
+      });
+    });
+    if (qaList.length) {
+      html += `<div><div class="synth-section-title">Exam Q&amp;A from Notes — ${qaList.length} pair${qaList.length!==1?'s':''}</div>`;
+      qaList.forEach(pair => {
+        html += `<div class="synth-qa-item">
+          <div class="synth-qa-q">Q: ${escHtml(pair.q)}</div>
+          <div class="synth-qa-a">${escHtml(pair.a)}<div class="synth-qa-src">${escHtml(pair.source)}</div></div>
+        </div>`;
+      });
+      html += `</div>`;
+    } else {
+      html += `<div><div class="synth-section-title">Exam Q&amp;A from Notes</div><div class="synth-empty">No exam Q&amp;A pairs in matched note results.</div></div>`;
+    }
+  }
+
+  body.innerHTML = html || `<div class="synth-no-results">No structured content found to synthesise in these results.</div>`;
+}
+
+function buildShortSrc(item) {
+  const sitting = item.sittingLabel || '';
+  const src = getSrcLabel(item.src);
+  const yearM  = sitting.match(/(\d{4})/);
+  const monthM = sitting.match(/(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)/i);
+  if (yearM && monthM) return `${src} ${monthM[0].slice(0,3)}'${yearM[1].slice(2)}`;
+  return sitting.length <= 14 ? sitting : sitting.slice(-12);
 }
 
 // ─── SELECTION ─────────────────────────────────────────────────────────────
