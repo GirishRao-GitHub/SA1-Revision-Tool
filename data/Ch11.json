@@ -1,0 +1,637 @@
+{
+  "label": "Chapter 11: Modelling",
+  "questions": {
+    "11.1": {
+      "label": "Question 11.1",
+      "scenario": "The profit from an IP product has been shown to be very sensitive to withdrawal rates,\nparticularly at early durations of the policy when the asset share is often negative.",
+      "question": "State whether you would use a stochastic or deterministic model for withdrawal rates if you were\ntrying to assess the future risks to the insurer from this cause, giving brief reasons.",
+      "sections": {
+        "Solution": [
+          "The problem with predicting withdrawal rates is that they are heavily influenced by economic and",
+          "commercial factors."
+        ],
+        "         selling practices.": [
+          "Significant events (eg economic recession) occurring in the past lead to distortions in the past",
+          "experience data, while future occurrences of such events are almost impossible to predict.",
+          "It is therefore difficult (or impossible) to devise a probability distribution for future withdrawal",
+          "rates with any degree of confidence, which makes a stochastic approach doubtful.",
+          "The best approach would probably be a deterministic model for withdrawal rates, testing the",
+          "effect of a whole range of possible outcomes (particularly at early policy durations)."
+        ]
+      }
+    },
+    "11.2": {
+      "label": "Question 11.2",
+      "scenario": "List the elements of physical cashflow that you would expect to see in a profit test (pricing) model\nof the following contracts, identifying clearly which elements are income and which are outgo:",
+      "parts": {
+        "(i)": {
+          "question": "a regular premium conventional stand‐alone CI policy",
+          "sections": {
+            "         tax": [
+              "Note that the interest included here is only the return earned on the investment of the other net",
+              "cashflows during the year: it does not include interest that may be earned on the supervisory",
+              "reserves held."
+            ]
+          }
+        },
+        "(ii)": {
+          "question": "a unit‐linked stand‐alone CI policy.",
+          "sections": {
+            "Income": [
+              "         premiums less bid value of units bought by premiums (ie premiums less cost of allocation)"
+            ],
+            "Outgo": [
+              "         expected cost of paying claims in excess of unit fund value at date of claim"
+            ],
+            "         tax": [
+              "For both types of policy, expenses would be separately identified according to whether they were",
+              "initial, renewal or claim expenses, and commission as to whether it was initial or renewal."
+            ]
+          }
+        }
+      }
+    },
+    "11.3": {
+      "label": "Question 11.3",
+      "question": "List the disadvantages of writing capital intensive business.",
+      "sections": {
+        "         give a lower rate of return": [
+          "         reduce the insurer’s apparent financial strength (by reducing the free assets)",
+          "         increase the opportunity cost of capital, in that the insurer could use the same amount of",
+          "capital to write more business that is less capital intensive",
+          "         be more exposed to the risk of adverse experience, because it would be more diversified",
+          "(and hence less exposed to risk) if it used capital to finance a large number of non‐capital",
+          "intensive policies than if it uses it for a smaller number of more capital intensive policies."
+        ],
+        "         lead directly to a problem with statutory solvency": [
+          "         weaken the insurer’s resilience to falls in the value of assets (even if solvency is not",
+          "immediately threatened), which could reduce investment freedom",
+          "         lead unexpectedly to a problem with statutory solvency if the insurer sells much more of",
+          "the business than anticipated."
+        ]
+      }
+    },
+    "11.4": {
+      "label": "Question 11.4",
+      "marks": 15,
+      "scenario": "A proprietary health and care insurer issues a wide range of conventional and unit‐linked\n   products.",
+      "parts": {
+        "(i)": {
+          "marks": 5,
+          "question": "State the requirements that should be met by an actuarial model, which will be used for\ncalculating the value of the profits from the insurer’s existing business.",
+          "sections": {
+            "Requirements of an actuarial model": [
+              "The model must be valid and sufficiently rigorous for the purposes to which it will be put, and",
+              "adequately documented.                                                                          [½]",
+              "The model points chosen must be such as to reflect adequately the distribution of the business",
+              "being modelled.                                                                                [½]",
+              "Alternatively, the insurer’s actual policy data file could be used, provided the software is able to",
+              "handle the computations effectively.",
+              "The components of the model must allow for all those features in the business being modelled",
+              "that could significantly affect the advice being given.                                      [½]",
+              "The parameter values chosen should be appropriate to the business being modelled …                     [½]",
+              "… and take account of the special features of the insurer and the economic and business",
+              "environment in which it is operating.                                                                  [½]",
+              "The model should exhibit sensible joint behaviour of model variables.                                  [½]",
+              "The workings of the model should be easy to appreciate and communicate. The results should be",
+              "clearly displayed.                                                                         [½]",
+              "The outputs from the model should be capable of independent verification for reasonableness",
+              "…                                                                                           [½]",
+              "… and should be readily communicable to those to whom advice will be given.                            [½]",
+              "The model should not be overly complex so that either the results become difficult to interpret",
+              "and communicate, ...                                                                            [½]",
+              "... or the model takes too long or becomes too expensive to run.                                       [½]",
+              "Any shortcomings of the model should be clearly stated.                                                [½]",
+              "The model should be capable of subsequent development and refinement.                            [½]",
+              "[Maximum 5]"
+            ]
+          }
+        },
+        "(ii)": {
+          "marks": 5,
+          "question": "Describe briefly the main items that would be included in the calculations performed\nwithin the model, and explain how the model would be used to enable you to make a\nreport on the value of the existing business to the insurer.",
+          "sections": {
+            "Main items": [
+              "All future cashflows from the existing business would be projected by the model …                      [½]",
+              "… including cashflows arising from supervisory reserves (and solvency capital) …                       [½]",
+              "… and from discretionary benefits, such as non‐guaranteed surrender values.                            [½]",
+              "Cashflow calculations need to allow for any interactions between assets and liabilities.               [½]",
+              "Cashflows arising from the exercise of policy options would also need to be included.                  [½]"
+            ],
+            "To calculate the value of the profit from the existing business": [
+              "         model points would need to be chosen to represent the existing business                      [½]",
+              "         future cashflows from each model point would be projected, allowing for the impact of",
+              "supervisory reserves in order to assess the profit that can be transferred to shareholders in",
+              "each future year                                                                         [½]",
+              "         the expected profit would be discounted at an appropriate risk discount rate                   [½]",
+              "         the results of each model point would be scaled up and summed over all model points, to",
+              "give the expected present value of the total profit from the existing business     [½]",
+              "         the results would be combined with the current assessment of the free assets attributable",
+              "to shareholders in order to get the total value of the profit.                        [½]",
+              "Sensitivity of the calculation would be assessed by recalculating using different values for all the",
+              "relevant assumptions required by the model (eg interest, mortality rates).                         [½]",
+              "When making these variations, the parameters would be changed in a way that reflects the",
+              "expected relationship between them.                                                                      [½]",
+              "The effect of departures from the base assumptions used in the model can then be described in",
+              "the report to the company.                                                                   [½]",
+              "[Maximum 5]"
+            ]
+          }
+        },
+        "(iii)": {
+          "question": "List the principal assumptions that will be required as inputs to the model.",
+          "sections": {
+            "Solution": [
+              "The underlying difficulty is that the population data does not relate specifically to insured lives.",
+              "The main drawback is likely to be absence of any detailed information regarding the breakdown of",
+              "policyholders by age, gender, smoker status, and so on. Some returns do sometimes provide this",
+              "(at least in some years), in which case the data would be more useful.",
+              "In addition, the claims experience of a different company will be intrinsically different, due to",
+              "different target markets, underwriting, claim definitions etc. This will make even reliable data of",
+              "limited use to a company’s future experience."
+            ],
+            "Principal assumptions": [
+              "         unit growth rates                                                                              [½]",
+              "         investment returns on non‐unit assets                                                          [½]",
+              "         mortality rates                                                                                [½]",
+              "         morbidity rates                                                                                [½]",
+              "         rates of discontinuance (eg of lapse, surrender, paid‐up)                                      [½]",
+              "         future discontinuance terms (eg surrender values), where these are discretionary               [½]",
+              "         rates at which existing policy options are taken up by policyholders                           [½]",
+              "         future expenses (regular, claim) attributable to the existing business, split by policy",
+              "type                                                                               [½]",
+              "         future inflation rate for expenses and for any inflation‐linked benefits                       [½]",
+              "         future supervisory valuation bases                                                             [½]",
+              "         risk discount rate                                                                             [½]",
+              "         future tax rates                                                                          [½]",
+              "[Maximum 5]"
+            ],
+            "Chapters 7 to 11.": [
+              "Part 2. If you don’t have time to do them all, you could save the remainder for use as part",
+              "of your revision."
+            ],
+            "Time to consider …": [
+              "… ‘learning and revision’ products",
+              "Face‐to‐face and Live Online Tutorials – If you haven’t yet booked a tutorial, then maybe now",
+              "is the time to do so. Feedback on ActEd tutorials is extremely positive:",
+              "‘I find the face-to-face tutorials very worthwhile. The tutors are really",
+              "knowledgeable and the sessions are very beneficial.’",
+              "‘The tutors really are excellent at giving you a true feel for the subject",
+              "matter.’",
+              "You can find lots more information in our Tuition Bulletin, which is available on our website at",
+              "www.ActEd.co.uk.",
+              "owned by Institute and Faculty Education Limited, a",
+              "out, lend, give out, sell, store or transmit electronically or",
+              "photocopy any part of the study material.",
+              "is not used or copied by anybody else.",
+              "addition, we may seek to take disciplinary action through",
+              "the profession or through your employer.",
+              "using the course."
+            ],
+            "Syllabus objective": [
+              "4.2       Understand and apply the techniques used in pricing health and care insurance",
+              "products in terms of:",
+              "–         data availability",
+              "–         assumptions used",
+              "–         equation of value / formula approach",
+              "–         cashflow techniques",
+              "–         group risk assessments",
+              "–         options and guarantees",
+              "–         external influences."
+            ],
+            "0   Introduction": [
+              "The previous chapter introduced modelling. Any model will require data, both as an input and as",
+              "a basis on which to set assumptions. This chapter covers data requirements, how data may be",
+              "used in modelling investigations and sources of data.",
+              "The main focus here is data for pricing purposes, however, the considerations are equally relevant",
+              "for other purposes, such as reserving and assessing profitability."
+            ],
+            "         reinsurer’s data": [
+              "         market data (including insured lives data and published returns)",
+              "         other sources (trade magazines, actuarial consultants, overseas data and rate table",
+              "software)."
+            ],
+            "1.1   Data availability and criteria": [
+              "The most important component of the premium that is charged to the customer is generally",
+              "that which covers the pure risk ie the anticipated cost of claims for the future period for",
+              "which the policy is to be in force.",
+              "It is vital, if this estimation of outgo is to be as accurate as possible, that the actuary uses",
+              "the most appropriate statistics available. These should be relevant, credible, available and",
+              "reliable for the purpose intended.",
+              "Relevance implies a similar class of lives and policy conditions to those expected for the product in",
+              "question.",
+              "Credibility implies a sufficiently large volume of data to enable precise estimates to be calculated"
+            ],
+            "(ie with relatively little sampling error).": [
+              "The cost of obtaining and analysing the data, and suitability of its format, may be other",
+              "criteria to consider.",
+              "Actuaries will use their judgement to compile statistics from one or more sources that",
+              "together meet these criteria. Actuaries will then employ skill and judgement in projecting",
+              "the data, in order to estimate the future claims experience and thus the premium that should",
+              "be charged to the policyholder."
+            ],
+            "1.2   Making adjustments for credibility and relevance": [
+              "The chosen body of data may well require adjustment to meet the purposes of the exercise.",
+              "This cannot be a precise methodology and broad-based ratios will be necessary initially.",
+              "This may be referring to the case of a relatively new product, and a market where relevant",
+              "experience data are likely to be scarce. While this may be true of many markets in health and",
+              "care insurance products, it will not always be the case. For example in the US, PMI business",
+              "(known simply as health insurance) is extremely well established and many insurance companies",
+              "will have very adequate own data to work from.",
+              "More accurate allowances can be made when an insurer’s own experience is greater.",
+              "The adjustments needed will be considered in the following sections on the separate sources of",
+              "data."
+            ],
+            "1.3   Projection to midpoint of insurance usage": [
+              "Once the experience assumptions have been determined from the data, it may be necessary to",
+              "project them forwards so that they will be relevant for the appropriate time period. This section",
+              "considers what that time period should be.",
+              "The database for premium estimation is essentially historic. The actuary will need to gather",
+              "all information available from the local market on trends and developments in order to",
+              "project this experience forward for the product’s lifetime. The actuary must incorporate not",
+              "just the policy term but also the length of time for which the current terms are to be offered.",
+              "So, if the assumptions are to be used for pricing, they will have to be relevant for policies issued",
+              "this year, next year, and each subsequent year until the pricing basis is next altered. As each",
+              "cohort of policies issued in any of the above years will continue (paying premiums based on the",
+              "same prices) until they terminate or until a premium review date, then the assumptions must stay",
+              "valid for an average of:",
+              "[expected shelf‐life of proposed premium rates]",
+              "[expected duration of policy to termination or to next review date]",
+              "The adjustment method will be different for different assumptions. Claim incidence rates, claim",
+              "termination rates and average claim size are considered below."
+            ],
+            "Example": [
+              "Suppose claim incidence rates have been estimated that apply, on average, on 1 January 2019 (so",
+              "2019 is the ‘base’ year), for lives aged x. These rates are defined as ix (0) . (Remember that these",
+              "are probabilities of claim incidence, over one year, for lives aged x at the start of the year.)",
+              "Suppose that a product is due to be launched on 1 January 2020, for which the insurer hopes the",
+              "premium rates will not need to be changed for three years. This means it would need to set the",
+              "rates assuming lives started their policies, on average, on 1 July 2021. So for an individual aged x",
+              "at entry, the premium rate would be calculated assuming claim incidence rates of:"
+            ],
+            "(3)  i x 1 (4)    in the second policy year": [
+              "… and so on."
+            ],
+            "Claim termination rates": [
+              "Claim termination rates will also vary by duration from commencement of claim.",
+              "Experience improvement or deterioration over time may be assumed in producing expected",
+              "claim rates, and claim termination rates."
+            ],
+            "Average claim size": [
+              "For private medical insurance, the average claim size will be a function of inflation, current",
+              "protocols and hospital charging structures, as well as the availability of treatments and care",
+              "under any State healthcare system; but here we need only look at a year at a time, because",
+              "premium rates are typically reviewed annually, and policies are renewed once a year.",
+              "If, for example, premium rates are reviewed every six months, and policies are renewed annually,",
+              "the very last claim will occur within 18 months from the date the premium rates were last",
+              "reviewed, so the timescales are much shorter than for long‐term insurances.",
+              "It is important that, where there is considerable uncertainty as to future experience, the",
+              "contract allows for some form of future review. Otherwise, the cost of the reserves required",
+              "could make the premium to be charged too high to sell, in terms of perceived value for",
+              "money.",
+              "The further into the future the rates are projected, the more uncertainty there is about their",
+              "reliability, so the greater margins that will be needed to cover against future losses. A policy that",
+              "has a shorter term, or has more frequent review dates, will require smaller margins in the",
+              "assumptions simply because they do not need to be projected for so long into the future. In the",
+              "long run, this enables premiums (or charges) to be cheaper, and products to be more competitive",
+              "on price. It also enables reserves (or solvency capital) to be smaller."
+            ],
+            "1.4   Group business": [
+              "The focus of this chapter is largely in relation to individual business. Considerations that",
+              "are specific to the pricing of group business (including in respect of data) are covered in"
+            ],
+            "2.1   Introduction": [
+              "Most of the above criteria are met by statistics drawn from in-house experience."
+            ],
+            "2.2   Relevance": [
+              "Relevance is a key consideration. There are many influences affecting the amount to be",
+              "paid out in benefits that are specific to the insurer in question and so may not be reflected",
+              "in numbers taken from external sources, for example:"
+            ],
+            "         target market.": [
+              "A company’s own experience will generally form the best base for prediction."
+            ],
+            "2.3   Credibility": [
+              "In many lines of healthcare insurance business, the volume of business for many insurers",
+              "over the recent past is not sufficient to be deemed credible. This is especially true when the",
+              "projection requires detail down to the level of particular risk cells.",
+              "Where insufficient in-house data exist, the actuary must look elsewhere and must make",
+              "appropriate adjustments to allow for the characteristics of external statistics, which may not",
+              "be fully relevant as estimators of future claims outgo.",
+              "Actuaries should also look to trends arising from market data to recognise their relevance to their",
+              "own company. Any cell‐subdivision that leads to data lacking credibility would be similarly",
+              "weighted by market data, where such detail is published.",
+              "The idea here is that, because the insurer’s own data lacks credibility, it needs to look to more",
+              "credible sources (like market data) to support its estimates.",
+              "Stating an assumption as a simple adjustment to a standard table is one example of this. Simple",
+              "statistical fitting procedures can be used to obtain values of the adjustment parameters that are",
+              "consistent with the insurer’s data. Further adjustments may also be needed to allow for future",
+              "changes.",
+              "The case of a brand new insurer or an insurer launching a new line of healthcare insurance",
+              "product is an extreme case. It could take many years before the insurer’s data can be",
+              "deemed credible for all but very high-level analysis. The actuary here will be totally reliant",
+              "on other sources such as those listed below.",
+              "The key point here is that own data (especially if they relate to the actual product for which an",
+              "assumption is needed) has the great advantage of relevance. On the other hand, credibility of",
+              "own data is a major issue for most lines of health and care insurance and for most individual",
+              "insurance companies. Much greater reliance on the other sources of data is therefore usually",
+              "necessary for determining assumptions for health and care products than for most life insurance",
+              "products."
+            ],
+            "3.1   Introduction": [
+              "In many countries in the world, the national government produces a periodic analysis of",
+              "healthcare experience for the population. The degree of sophistication varies enormously",
+              "and it is only appropriate to deal here with some of the issues arising.",
+              "Population data is a very important source of information to the actuary in healthcare",
+              "insurance premium assessment; indeed for some lines and some risk cells, it is the only",
+              "base from which a first estimate of future costs can be established."
+            ],
+            "However the use of population data has drawbacks": [
+              "         The accuracy and reliability of the national statistics may be questionable, especially",
+              "in healthcare where definitions may be subjective and the scope for double counting",
+              "is significant.",
+              "For example, CI policies cover heart attack and coronary artery bypass surgery as separate",
+              "causes of claim. Policyholders who suffer a heart attack as well as undergoing bypass",
+              "surgery would only incur one insurance claim, but would be represented twice in the",
+              "population records. The overlap would have to be allowed for when trying to infer CI",
+              "claim rates from population data.",
+              "         Data may not always be available electronically or in the appropriate format.",
+              "         The population experience may be somewhat out-of-date before it becomes",
+              "published."
+            ],
+            "There are two further drawbacks that relate to relevance": [
+              "         The national experience may not be particularly relevant to the subset of lives that",
+              "will be accepted for insurance. This position may be improved if the population",
+              "analysis is split into socio-economic groups, regions and age blocks."
+            ],
+            "Question": [
+              "Explain why splitting the data by socio‐economic group and region will improve the relevance of",
+              "population data.",
+              "There is a particular difficulty with population data that causes both of the above problems.",
+              "State what you think is the most likely shortcoming of this approach for pricing purposes."
+            ],
+            "Morbidity amongst health and care insurance policyholders varies significantly according to": [
+              "         occupation, which is often linked to socio‐economic group – by knowing the occupations",
+              "of its policyholders, the insurer can investigate the experience of the right types of people",
+              "(by focusing on the population experience of the socio‐economic group(s) involved)",
+              "         geographical region – provided the regional distribution of the insurer’s target market is",
+              "known, the data can be used to help obtain more relevant estimates of morbidity rates.",
+              "There are two conflicting aspects when considering the relevance of national",
+              "population experience to that of insured lives. The latter should be healthier and",
+              "less prone to claim because they have been underwritten, and the less healthy",
+              "declined or loaded. However, if the policy is deemed non-essential then the people",
+              "choosing to purchase insurance are arguably doing so because they expect to gain",
+              "from the contract.",
+              "For this reason, the improvement in experience from population to insured lives",
+              "might not be so marked. This has been evident in the development of critical illness",
+              "cover in many territories, where anti-selection and moral hazard have been",
+              "identified. Actuaries may choose to offer a small discount on population statistics",
+              "but the validity of this will depend on their company’s approach to sales, marketing,",
+              "underwriting and claims.",
+              "Basically there is no universal rule to apply here. The adjustment to be made to",
+              "population data to make it appropriate to a given insurance purpose will depend on the",
+              "specific details of the case involved.",
+              "         The circumstances of the onset and continuation of a disability are unlikely to",
+              "coincide exactly with the definition of a ‘claim’ under the insurance policy."
+            ],
+            "There are therefore two aspects to the problem": [
+              "         a different class of lives will be involved (even once you have chosen the most suitable",
+              "socio‐economic groups to use etc)",
+              "         the degree of sickness that triggers a claim under an insurance policy will be different from",
+              "the definition of sickness used in the population statistics."
+            ],
+            "3.3   Credibility": [
+              "Population data are readily available (in many territories) and are often free. The numbers",
+              "involved make them credible."
+            ],
+            "4.1   Introduction": [
+              "A reinsurer often provides statistics relevant to the risk to be insured (to assist in pricing",
+              "and reserving) as part of the range of services on offer. Here the reinsurer is keen that the",
+              "statistics proposed are as accurate as possible, since the profits under the treaty will reflect",
+              "the premiums calculated.",
+              "The insurer will use reinsurers’ data to help set its own premiums. It may then purchase",
+              "reinsurance to cover the business written. Depending on the type of reinsurance used, the",
+              "reinsurance premium may be based on the insurance premiums. In this case, it would be essential",
+              "to the reinsurer that the insurance (and hence reinsurance) premiums are as accurate as possible,",
+              "as the profit from the reinsurance treaty will depend on it.",
+              "There may be an explicit charge by the reinsurer for providing data assistance, but it is",
+              "normally provided on the basis of accepting a share of profits from the business written.",
+              "It is almost invariably the case that a reinsurance treaty will be set up for the business in",
+              "question, since this is the usual means by which the insurer will pay the reinsurer for the services",
+              "received.",
+              "The various types of reinsurance that might be involved are discussed in Chapter 26."
+            ],
+            "4.2   Relevance": [
+              "The actuary must assess the divergence of reinsurers’ data from their company’s own likely",
+              "future claims experience and make appropriate adjustments, even if a large share of the risk",
+              "has been ceded initially to the reinsurer.",
+              "In particular, the actuary will adjust for the specifics of their company’s underwriting and",
+              "claims management, which may not be known to the reinsurer, (although if the reinsurer",
+              "intends to take on a proportion of the risk, then it may be very interested in the underwriting",
+              "and claims process, as this directly impacts the risk that it will be taking)."
+            ],
+            "4.3   Credibility": [
+              "Reinsurers will draw information from their involvement with other companies in the market",
+              "and are thus in an excellent position to assist a company with a launch into a new product",
+              "line. For example, reinsurers were largely behind the development of critical illness",
+              "insurance in many territories from the 1980s, where no insured experience existed. Here",
+              "they used statistics from other markets, weighted by local population information.",
+              "Even when products become relatively commonplace, reinsurers can still be used very much as",
+              "data ‘experts’. As the whole industry develops then so too does the experience data of the",
+              "reinsurers, who can then rely more heavily on their own experience (through the reinsurance of",
+              "their clients’ portfolios) for determining their advice. Their breadth of exposure throughout the",
+              "market should enable them to pinpoint the most relevant data for the type of policy and target",
+              "market proposed.",
+              "So, for new products, reinsurers’ data will not be particularly credible. However, the credibility",
+              "will increase as the market for that product grows."
+            ],
+            "5.2   Insured lives data": [
+              "In a well-established insurance market, there may be an agreement between companies to",
+              "pool claims and policy statistics so that overall industry-wide information might be available",
+              "that would be more credible than that which individual companies could access.",
+              "An example of this is the Continuous Mortality Investigation in the UK which collects data",
+              "from nearly all insurers in the income protection and critical illness insurance markets.",
+              "The compiled aggregate information is published for the benefit of all. More information on",
+              "the Continuous Mortality Investigation can be found at:",
+              "https://www.actuaries.org.uk/learn-and-develop/continuous-mortality-investigation/cmi-",
+              "mortality-and-morbidity-tables.",
+              "You will only be examined about the material actually in the SP1 Core Reading.",
+              "It is from this industry source that standard morbidity tables are usually produced, and which can",
+              "be very useful as a base reference for experience monitoring purposes and for setting",
+              "assumptions.",
+              "Standard tables will not be published very often, because they involve a great deal of preparation.",
+              "The pooled experience would normally be expressed in relation to the most recent standard",
+              "available, and a new standard would be considered when it was felt that expected future",
+              "experience could no longer be easily represented as simple adjustments to the existing table."
+            ],
+            "         it represents insured experience": [
+              "         it is generally of sufficient volume to be statistically credible",
+              "         it reflects local companies (reflecting market practices) and has been compiled by",
+              "experts (resolving individual company glitches).",
+              "However, it may take some years before the final published tables are released, thus",
+              "reducing applicability.",
+              "The key drawback of this data source is that it remains only a market average and hence not",
+              "strictly relevant to any one company. The actuary will need to consider the extent to which",
+              "his/her company’s own experience will differ from this market average and make",
+              "adjustments accordingly.",
+              "The strictness of underwriting and claims management might be reflected in similar ratios",
+              "used for life insurance standard tables. But caution should be exercised if this is a launch",
+              "into a new healthcare product; strict underwriting for mortality may not translate directly",
+              "into similar margins when underwriting for morbidity for critical illness or income protection",
+              "business.",
+              "The idea here is that, if the insurer issues life insurance products as well as health and care",
+              "insurance, then the levels of adjustment the insurer currently applies to standard mortality tables",
+              "may be similar to that needed to apply to standard morbidity tables. The rationale for this would",
+              "be that the insurer’s underwriting and claim handling philosophies for the two types of risk should",
+              "be similar.",
+              "Differences in policy conditions from the average may produce more straightforward ratios",
+              "if the cost of risk has been well analysed. Any adjustment to be made for data drawn from",
+              "policies with a measurably higher propensity to claim (based on benefit conditions more",
+              "favourable to the policyholder) can be derived simply from a ratio of the increased risk in",
+              "these policies to that underlying the market norm.",
+              "Of course, the insurer will need the appropriate data in order for it to be able to calculate such",
+              "adjustments, eg it will need to be able to subdivide the data according to the differences in policy",
+              "conditions, and this may not always be possible."
+            ],
+            "The key points are that industry data": [
+              "         have much more credibility than the insurer’s own data, but are less relevant",
+              "         have less credibility than population data, but do relate to policy claim experience, which",
+              "makes them considerably more relevant.",
+              "It should also be noted that while market claim data may be available for long-term",
+              "healthcare classes of business (eg CI and IP insurance), such data for short-term healthcare",
+              "classes (PMI) are often very limited, except at a high level."
+            ],
+            "5.3   Returns to an insurance supervisor": [
+              "Statistics in this form may also be drawn from the published returns to the local regulator.",
+              "In most territories, insurance companies have to submit returns to their national governmental",
+              "supervisors at regular intervals.",
+              "These returns show much that is common to normal company accounts, including information on",
+              "annual revenue and balance sheet items. In addition, they will typically include much more",
+              "detailed information about the policies in force: primarily this is to do with the calculation of the",
+              "supervisory reserves, but it also includes information on the numbers of policies, amounts of",
+              "benefits and premiums, all broken down by policy class. A breakdown of the numbers of policies",
+              "going on and off the books during the year, broken down by cause as well as policy class, is also",
+              "often given.",
+              "While their accuracy is not questioned, the degree of detail that the actuary can extract for",
+              "the estimation of future risk in individual cells must be questionable. The returns are",
+              "produced to assess solvency and certainly not to assist competitors with pricing.",
+              "Nonetheless, the information within these returns can provide a high-level check on",
+              "premiums produced from other sources. This may be useful when launching a new",
+              "healthcare insurance product, whereby the rates of competitors can be considered in the",
+              "context of solvency levels, profitability and market positioning at a high level.",
+              "The information in supervisory returns should allow insurers to produce a broad estimate of the",
+              "claims experience. For example, for PMI policies this could be done by working out the average",
+              "number of policies in force during the year, and the total claim amounts paid out. Taking the ratio",
+              "of these will give a crude estimate of the expected cost of claims per policy in force during the",
+              "year."
+            ],
+            "Market data have a national relevance to the company concerned.": [
+              "However, care must be taken where policy conditions differ, or where it is felt that",
+              "underwriting approaches and claims management procedures are likely to be materially",
+              "different from the market average."
+            ],
+            "5.5   Credibility": [
+              "Industry data should be more credible than a company’s own data, but less credible than",
+              "population data. An individual company’s published returns will (on average) be no more credible",
+              "than a company’s own data."
+            ],
+            "6.2   Overseas data": [
+              "The actuary here may choose to use broad-based population ratios to assess the higher or",
+              "lower likely claims experience locally relative to that inherent in the database available. The",
+              "many potential differences underlying overseas and local healthcare data demand a",
+              "cautious approach to premium derivation by this method.",
+              "For example, an insurer may have some overseas insured lives data for a particular product it",
+              "would like to launch, but no home (local) industry data. However, it does have broadly relevant",
+              "population data from both areas. So it can estimate its home insured lives experience from:"
+            ],
+            "overseas population morbidity rates": [
+              "This, of course, can only be a broad starting point to estimating future claim experience, and",
+              "further adjustments to these estimates will almost certainly be required."
+            ],
+            "Relevance": [
+              "Overseas data are always likely to be less relevant than the equivalent population and insured",
+              "lives data of the home territory.",
+              "Even where this is insured data, the actuary must be careful with differing cultures, differing",
+              "State healthcare provision (which will affect insurance experience), differing market",
+              "practices, differing legislation and differing policy conditions."
+            ],
+            "Credibility": [
+              "A credible volume of information may be available from overseas territories."
+            ],
+            "6.3   Actuarial consultants": [
+              "Consultants, like reinsurers, may have access to data both from national and international",
+              "sources. Many of the points mentioned in Section 4 are also valid here, although the",
+              "likelihood is that the consultant would not share directly in the risk and will require reward",
+              "directly for the assistance in helping to compile premiums (or simply to provide data or",
+              "software).",
+              "In other words, consultants would normally charge a fee for their services."
+            ],
+            "6.4   Rate table software": [
+              "In some territories, for individual business, there may be companies that issue software",
+              "comparing market premium rates for similar products of a given class. This may be useful",
+              "either in gathering initial data, or in checking the reasonableness and competitiveness of",
+              "office premiums once calculated.",
+              "This information is very similar to what might be found in trade magazines, but usually in more",
+              "detail."
+            ],
+            "6.5   Trade magazines": [
+              "Trade magazines, national and global, will often be a source of statistics to assist in the risk",
+              "projection process. These will also lack a detailed breakdown, but they may provide market",
+              "information and a reasonability check.",
+              "These might give information about the types and levels of benefits offered and the premium",
+              "rates that companies charge. They will not, however, normally include any claim statistics."
+            ],
+            "The chapter summary starts on the next page so that you can": [
+              "keep all the chapter summaries together for revision purposes."
+            ],
+            "Data should be": [
+              "           relevant – the data should relate to a similar class of lives and policy conditions to",
+              "those expected",
+              "           credible – there should be a sufficiently large volume of data"
+            ],
+            "           reliable for the purpose intended.": [
+              "The cost of obtaining / analysing the data and the format of the data should also be",
+              "considered."
+            ],
+            "Projecting the rates": [
+              "Total claim inception rates for IP insurance and LTCI should be analysed and projected.",
+              "CI incidence rates should be analysed and projected separately by each cause of claim, then",
+              "combined.",
+              "PMI incidence rates and average claim costs should be analysed and projected for each",
+              "benefit or treatment category separately."
+            ],
+            "Sources of data": [
+              "Own data – this is the most relevant source, but may not be credible, especially if the data is",
+              "broken down into many risk cells. It may be necessary to supplement own data with",
+              "external data. Cost, reliability and format should not cause problems.",
+              "Population data – this will not be fully relevant to insured lives, or to features of the",
+              "insurance product, such as the claim definition. It should, however, be very credible. Other",
+              "possible disadvantages include:"
+            ],
+            "           may be out‐of‐date.": [
+              "Reinsurers’ data – the reinsurer should make the data as relevant as possible, although",
+              "further adjustments may be needed to allow for the insurer’s specific underwriting and",
+              "claims management practices. The credibility will vary, but should it should be more credible",
+              "than own data. The reinsurer is most likely to provide data in return for a share of the",
+              "business"
+            ],
+            "Chapter 12 Summary continued": [
+              "Insured lives data – this should be more relevant than population data as it is based on local",
+              "experience of insured lives. However, it may not be relevant to individual insurers and by the",
+              "time it is published, it may be out‐of‐date. It should be credible.",
+              "Returns to the insurance supervisor – these are likely to be accurate, but it may be hard to",
+              "extract useful information. They are more likely to be used as an overall check of other data",
+              "sources.",
+              "Overseas data – this may not be particularly relevant, however it may be credible.",
+              "Actuarial consultants’ data – this is similar to reinsurers’ data, however the consultants are",
+              "likely to have less of an interest in the risk.",
+              "Rate table software – this may be useful in gathering initial data, or checking final premium",
+              "rates.",
+              "Trade magazines – these may also be useful for checking final results."
+            ]
+          }
+        }
+      }
+    }
+  }
+}

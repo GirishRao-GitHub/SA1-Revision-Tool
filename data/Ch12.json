@@ -1,0 +1,717 @@
+{
+  "label": "Chapter 12: Data",
+  "questions": {
+    "12.1": {
+      "label": "Question 12.1",
+      "scenario": "Suggest suitable formats for the policy data that an insurer would ideally like to have in order to\nestimate the claim rate parameters for each of the following products. (Details of the various\ncategories that might be used for risk classification purposes, such as gender and smoker status,\nare not required.) State how the data would be used to calculate the parameter estimates\nneeded.",
+      "parts": {
+        "(i)": {
+          "question": "income protection insurance",
+          "sections": {
+            "Data required includes": [
+              "           dates of birth, entry, exit, diagnosis, first stopping work through sickness, notification of",
+              "sickness, start of sickness claim, end of sickness claim"
+            ],
+            "           reasons for exit and/or end of sickness payments.": [
+              "The method is to construct central exposures to risk, grouped by age, separately for healthy and",
+              "for claiming policyholders ( E xH , E xC ).",
+              "The numbers of transitions arising from the exposure, also grouped by age, should be counted.",
+              "Note that, for a deferred period of d weeks, this means it will be necessary to have to include all",
+              "new claim inceptions (ie dates of starting to pay claims) that occur up to d weeks following the",
+              "end of the investigation period. Similarly, all claim inceptions beginning in the first d weeks of the",
+              "investigation period must be excluded."
+            ],
+            "E xH                  E xC               E xH              E xC": [
+              "where Ix , Rx , Dx and Mx are the numbers of sickness inceptions, recoveries, deaths from",
+              "healthy and deaths from claiming, and ˆ , ˆ , ˆ and ˆ are the estimates of the corresponding",
+              "transition intensities."
+            ]
+          }
+        },
+        "(ii)": {
+          "question": "stand‐alone critical illness insurance",
+          "sections": {
+            "Data required includes": [
+              "           dates of birth, entry, exit, diagnosis or treatment, notification of sickness, claim payment"
+            ],
+            "           reason for exit, type of disease or procedure involved.": [
+              "The method is to construct central exposures to risk, grouped by age, for healthy policyholders"
+            ],
+            "( E xH ).": [
+              "The number of claims due to each particular disease or procedure arising from the exposure, also",
+              "grouped by age, Ixj (relating to the j’th disease / procedure type) should be counted."
+            ],
+            "The Ixj figure should": [
+              "           exclude all claim payments made during the investigation period that relate to diseases",
+              "diagnosed (or procedures carried out) prior to the start of the period"
+            ],
+            "          include": [
+              "–               all policies showing dates of diagnosis occurring in the investigation period, and",
+              "which ultimately lead to a claim payment (even if the date of claim payment",
+              "occurs after the investigation period)",
+              "–               an allowance for any claims occurring during the investigation period that, at the",
+              "time of performing the investigation, have been reported but have not yet been",
+              "paid out (known as reported but not settled – RBNS)",
+              "–               an allowance for future claims arising from diseases commencing during the",
+              "investigation period, but which have not yet been reported (known as incurred",
+              "but not reported – IBNR)."
+            ]
+          }
+        },
+        "(iii)": {
+          "question": "long‐term care insurance",
+          "sections": {
+            "Long‐term care insurance": [
+              "Essentially the insurer needs the same kind of data as for IP policies, except it will need exposures",
+              "to risk separately for each of the different claim states. This will additionally require dates of",
+              "transition from one benefit level to another, but no return transitions will normally occur."
+            ],
+            "Benefit level": [
+              "Able                             1                        2                             n"
+            ],
+            "Dead": [
+              "For example, it will estimate the transition intensity from benefit level 1 to benefit level 2 using:"
+            ],
+            "½ ": [
+              "x"
+            ],
+            "E 1x": [
+              "where D1:2                                                                  1",
+              "x is the number of transitions between benefit levels 1 and 2, and E x is the central",
+              "exposed to risk (observed waiting time) for benefit level 1."
+            ]
+          }
+        },
+        "(iv)": {
+          "question": "private medical insurance",
+          "sections": {
+            "Assuming all policies are annually renewable, the insurer needs to": [
+              "         count all policies that are taken out or renewed during each year of the investigation,",
+              "subdivided by age ( Nx )",
+              "         count the number of claim incidences arising from each year’s cohort of policies,",
+              "subdivided by age and class of benefit or procedure involved ( Ixk , where k is the benefit",
+              "class)",
+              "         record the total amount of all claims paid from each cohort ( C xk ).",
+              "The estimates of the claim incidence rate and average cost of each claim for benefits of category k",
+              "are:",
+              "k"
+            ],
+            "I                  Ck": [
+              "iˆxk  x            cˆxk  kx"
+            ],
+            "Nx                   Ix": [
+              "As in part (ii), it is important that Ixk and C xk include all relevant IBNR and RBNS claims and exclude",
+              "claims incurred in previous years of the investigation."
+            ]
+          }
+        }
+      }
+    },
+    "12.2": {
+      "label": "Question 12.2",
+      "question": "Outline the reasons why industry data are unlikely to be as relevant as own data, for setting\nassumptions for a long‐term health insurance product.",
+      "sections": {
+        "Solution": [
+          "Industry experience is a ‘market average’, ie it is the average claims experience amongst all the",
+          "policyholders covered by those insurance companies that contribute to the pooled data.",
+          "One of the key problems is the much greater heterogeneity that exists between the experiences",
+          "of different insurers, even where they may be described as relating to the same product type."
+        ],
+        "         approach to underwriting and acceptance": [
+          "         policy conditions (eg different diseases allowed as a CI claim by different companies)",
+          "         claims management (eg different degree of effort made to rehabilitate IP claimants to get",
+          "them back to work)",
+          "         distribution method and channels (leading to different types of lives insured)"
+        ],
+        "         target market.": [
+          "Note that it is policy conditions and claims management that make heterogeneity so much more",
+          "of a problem for morbidity data than for mortality data.",
+          "Furthermore, industry data are likely to be more out of date than own data."
+        ]
+      }
+    },
+    "12.3": {
+      "label": "Question 12.3",
+      "question": "List the reasons why adjustments might be required to overseas data.",
+      "sections": {
+        "Possible reasons are": [
+          "         different subsets of lives (relative to the population) take out insurance policies in the two",
+          "countries, which may be a consequence of different:",
+          "–         selling methods",
+          "–         cultures",
+          "–         State healthcare provision",
+          "         different policy conditions (even if the class of lives is equivalent)",
+          "         the overseas population morbidity data may be compiled differently, using different",
+          "disease criteria or groupings, making comparison inappropriate"
+        ],
+        "         claims management procedures may be different": [
+          "         market practices, eg relating to claims disputes, may be different",
+          "         legislation / regulation, eg on rating and acceptance of policies, may be different"
+        ],
+        "         the data may not relate to the same time periods": [
+          "         the overseas industry data are likely to be very heterogeneous, so it is unlikely that any",
+          "single insurance company’s experience will reflect the industry average."
+        ]
+      }
+    },
+    "12.4": {
+      "label": "Question 12.4",
+      "marks": 9,
+      "scenario": "A health insurance company has written unit‐linked IP insurance contracts in its domestic market\n   for many years, and has a significant share of that market. It now intends to start writing this\nbusiness in an overseas market. In that market, unit‐linked sickness contracts are rare, although\nthere is a substantial amount of without‐profits income protection insurance business written.",
+      "question": "Discuss the problems related to the main sources of data that the insurance company will face in\nentering this market.",
+      "sections": {
+        "Solution": [
+          "Morbidity experience and lapse rates – The higher the level of lapses, the greater the opportunity",
+          "for selective lapsing, where better risks leave, causing the morbidity experience for the business",
+          "as a whole to deteriorate.",
+          "Morbidity experience and claims expenses – Claims expenses need to be consistent with the",
+          "assumptions that determine claim volume.",
+          "Morbidity experience and investment return – Claim inception rates (and termination rates, where",
+          "applicable) will be affected by the general economic climate, which in turn will be related to the",
+          "investment return assumption.",
+          "New business volumes and fixed expenses – The loading for fixed expenses will reflect the",
+          "expected volumes of new business.",
+          "Business volumes and lapse / non‐renewal rates – The lapse and non‐renewal rates will also affect",
+          "volume.",
+          "Lapse / non‐renewal rates and investment return – Lapse / non‐renewal rates can be affected by",
+          "the general economic climate, which will be one of the major factors behind the investment",
+          "return assumption.",
+          "Investment return and inflation – The long‐term relationship between the rate of expense",
+          "inflation, benefit inflation and the rates of return on different types of assets must be consistent.",
+          "In addition to consistency between individual assumptions, the basis should normally be",
+          "consistent between related products. In fact, the basis of some closely related product might",
+          "form the start point for any new product’s basis. For example, the basis for a new stand‐alone CI",
+          "product might take as a start point the insurer’s current accelerated CI product.",
+          "In a health and care context, experience rating is most likely to be used for group insurances. The",
+          "past experience of the scheme in question will play a key part in determining the premium for the",
+          "next year.",
+          "For individual business, no claims discounts (which are a specific type of experience rating) may",
+          "be used for PMI (and possibly also IP insurance).",
+          "         the initial derivation of premiums for a company new to this line of business.",
+          "Rates thereafter will be revised and refined as its own experience emerges and as market",
+          "information indicates relevant trends.",
+          "In some cases (eg fully guaranteed IP policies ceasing at retirement) this process may require the",
+          "actuary to make long‐term judgements about each parameter in the assumption set. In other",
+          "cases (eg reviewable CI contracts and particularly PMI) the assessment is over a much shorter",
+          "period, typically between one and five years.",
+          "The assumptions that should be used for pricing health and care insurance products are",
+          "discussed in the following two chapters.",
+          "If the market became more competitive, margins in the pricing basis would need to be reduced.",
+          "Eliminating negative reserve values is prudent, however, in this case, management wants the",
+          "reserves to be calculated on a best‐estimate basis.",
+          "This method will generally be used when management wishes to have a best estimate of the",
+          "company’s financial performance. This might arise in circumstances where the insurer is to",
+          "be sold or where directors wish to reward key staff for their specific contributions to the",
+          "overall growth of the company. Regulatory reporting might also require base reserves to be",
+          "calculated on a best estimate basis.",
+          "Part of the uncertainty that contributes to the risk margin (risk premium) in the pricing basis is",
+          "due to the uncertainty of future volume and mix of sales. This uncertainty does not exist when",
+          "considering existing business."
+        ],
+        "Sickness data": [
+          "The main risk relates to the setting of claim inception and recovery rates for the overseas market.",
+          "[½]",
+          "There are various sources of data that the insurance company might draw on, but all of these",
+          "have weaknesses. For example, the insurance company’s data from its own in‐force policies could",
+          "be of some use but the overseas market experience may differ because of different:",
+          "         general health of population                                                                        [¼]",
+          "         underwriting levels and approach                                                                    [¼]",
+          "         target market                                                                                       [¼]",
+          "         distribution method and channels                                                                    [¼]",
+          "         provision by the State                                                                              [¼]",
+          "         attitudes towards work and claiming benefits.                                                       [¼]",
+          "The insurance company might be able to use industry data (if available) …                                     [½]",
+          "… or data from the overseas country through reinsurers (or consultancies).                                    [½]",
+          "These would also need careful adjustment because:                                                     [½]",
+          "         these data might be very heterogeneous, reflecting a wide range of different policy",
+          "conditions, underwriting practices and target markets                                       [½]",
+          "         the different contract design (unit‐linked versus without‐profits) may attract a different",
+          "cross‐section of customers.                                                               [½]",
+          "Some use might be made of any national statistics on illness or on sickness absence in the",
+          "overseas country.                                                                                     [½]",
+          "These would have to be treated with great caution as a guide to an insured population.                [½]",
+          "Any of these data might also be of poor quality in themselves, for example there may be missing",
+          "or inaccurate data.                                                                           [½]",
+          "Although the insurance company is a significant player in its own market and so its data ought to",
+          "be good quality.                                                                                [½]",
+          "Some data may be too far out‐of‐date, or there may not be sufficient data for reliable results. [½]"
+        ],
+        "Expense data": [
+          "The company would also usually use its own data as a basis for its expense assumptions.               [½]",
+          "However, these may be entirely unsuitable for the new market …                                        [½]",
+          "… because of different operating practices, regulation, distribution methods and commission",
+          "levels.                                                                                               [½]",
+          "Also, since unit‐linked sickness contracts in the overseas market are rare, there may be additional",
+          "expenses needed to educate sellers / consumers about the design.                                 [½]",
+          "It should be possible to get some information from the new market, but significant judgement will",
+          "be needed in producing assumptions.                                                          [½]"
+        ],
+        "Persistency data": [
+          "A similar problem exists for persistency. Any domestic data may be almost irrelevant to the",
+          "overseas market …                                                                                     [½]",
+          "… where selling practices and customer behaviour may be quite different.                              [½]",
+          "Any information from the overseas market might also be misleading, particularly given that they",
+          "relate to a completely different design of contract.                                          [½]"
+        ],
+        "Overall": [
+          "The main overall problem resulting from all the above is that it is very difficult to price the",
+          "contract with confidence. This means that the insurance company is at risk of making a loss on",
+          "the contract.                                                                                   [½]",
+          "The insurance company may therefore need to price with significant margins, or rely on variable",
+          "charges to correct things if they start to go wrong.                                          [½]",
+          "[Maximum 9]"
+        ],
+        "Assumptions (1) – General": [
+          "considerations"
+        ],
+        "Syllabus objectives": [
+          "4.4       Discuss the determination of supervisory reserves and solvency capital",
+          "requirements for a health and care insurance company.",
+          "4.4.1      Describe the purposes of reserves, solvency capital requirements and",
+          "embedded value, and the methodologies by which they are calculated for a",
+          "health and care insurer, including:"
+        ],
+        "         role of statistical and individual case estimates": [
+          "         setting assumptions, including a comparison with those used in",
+          "pricing"
+        ],
+        "         Value‐at‐Risk (VaR) capital assessment.": [
+          "(The items in bold are covered – or partly covered – in this chapter.)"
+        ],
+        "Syllabus objectives continued": [
+          "5.1     Describe the principles of setting assumptions for health and care insurance business.",
+          "5.1.1     Describe the principles of setting assumptions for pricing health and care",
+          "insurance contracts.",
+          "5.1.2     Describe the principles of setting assumptions for determining liabilities.",
+          "5.1.3     Explain why the assumptions used for supervisory reserves may be different",
+          "from those used in pricing.",
+          "5.1.4     Outline the principles of setting assumptions for determining embedded",
+          "value."
+        ],
+        "0   Introduction": [
+          "These four chapters on assumptions deal with the construction of a basis. By basis, we mean the",
+          "set of assumptions (sickness rates, expenses, interest rates etc) that would be used for a",
+          "particular modelling application, such as pricing, or projecting the future solvency position of the",
+          "insurer.",
+          "This chapter covers some general topics associated with setting assumptions.",
+          "It will start by discussing the considerations when setting assumptions for any purpose, and then",
+          "will go on to highlight the differences when setting assumptions for specific purposes. The Core",
+          "Reading specifically covers three different purposes – pricing, reserving and ongoing profitability",
+          "measurement. However, other modelling purposes demand generally similar approaches to",
+          "assumption setting, and you should aim to be able to describe the principles involved for any of",
+          "these.",
+          "Chapters 14 and 15 cover demographic and financial assumptions respectively. Chapter 16 covers",
+          "some additional assumptions.",
+          "By the end of the final assumptions chapter you should expect to understand how the actuary",
+          "goes about deciding on a suitable assumption for each parameter. The key part of the process is",
+          "the determination of what future experience is expected. A second aspect is what other factors",
+          "may need consideration: for example, the extent to which margins against adverse future",
+          "experience are required. What these other factors are will depend greatly on the purpose of the",
+          "basis."
+        ],
+        "1.1   General considerations when setting assumptions": [
+          "The principles behind setting assumptions are similar to those for any actuarial work;",
+          "specifically, it is important to:",
+          "         consider the use to which the assumptions will be put – for example, is it to price or",
+          "cost a new financial contract or transaction, or to estimate the provisions that need",
+          "to be held to meet future liabilities?",
+          "         take particular care over the choice of the assumptions that will have the most",
+          "financial significance"
+        ],
+        "         consider the needs of the client": [
+          "         ensure that the parameters derived from data are produced as accurately as the",
+          "body of data will permit",
+          "         ensure that the data used to derive these assumptions are relevant to the risks that",
+          "the policies encompass",
+          "         ensure that the parameters are produced accurately from the data",
+          "         ensure that the data used to derive assumptions are relevant to the insured lives",
+          "         ensure that bases used are flexible to reflect changing risk circumstances."
+        ],
+        "By ‘risks’ here, the Core Reading means the insured lives involved.": [
+          "         ensure that bases used for periodic valuations and reserves are flexible to reflect",
+          "changing risk circumstances.",
+          "The assumptions made should be responsive to any changes in the circumstances of the",
+          "in‐force policyholders that might affect the experience of the company.",
+          "Failure to adhere to these principles increases the potential for downside risk to the insurer.",
+          "The need for a credible database that is relevant to the risks to be insured and from which",
+          "assumptions can be drawn, is fundamental to the process, both for pricing and valuation.",
+          "We will see how these considerations affect our choice of assumptions as we go through the",
+          "assumptions chapters."
+        ],
+        "1.2   General process for setting assumptions": [
+          "Deriving assumptions for future experience follows a common framework.",
+          "1.        Investigate the historical experience and make best estimates of the parameters from that",
+          "experience.",
+          "2.        Consider what the conditions (including the commercial and economic environment) will",
+          "be like in the future period for which the assumptions will apply to.",
+          "3.        Determine what the best estimates of the assumptions will be, given the expected future",
+          "conditions.",
+          "4.        The best estimates may need to be adjusted in order to include a margin for prudence.",
+          "The size of any margin incorporated into an assumption will depend on the purpose for",
+          "which the model is required, and the degree of risk associated with the parameter.",
+          "The assumptions used will be discussed under various headings in the next three chapters."
+        ],
+        "Question": [
+          "List the assumptions that might need to be set for a health and care insurer.",
+          "For what sort of business is experience rating most likely to be used?",
+          "If the level of each of the above factors is increased, how would you expect to adjust the margins",
+          "in your pricing basis?",
+          "Why would there be no elimination of negative values when setting best estimate reserves?",
+          "Under what other circumstances might a best estimate of financial performance be appropriate?"
+        ],
+        "         CI claim incidence rates": [
+          "         LTCI claim inception rates and any further transition probabilities"
+        ],
+        "         profit criteria.": [
+          "Sources will be suggested but no attempt will be made to suggest sample figures, which for",
+          "health and care insurance products, will vary substantially around the world.",
+          "For example, you won’t be required to recommend a suitable claim incidence rate basis for CI",
+          "policies in Germany."
+        ],
+        "1.3   Consistency": [
+          "One of the guiding principles in creating a valid basis is the principle of consistency. The",
+          "assumptions need to be considered in their totality, not in isolation.",
+          "Consistency means ensuring that realistic allowance is made for the way that variables behave",
+          "together, where correlations exist between them; indeed, sometimes the relationship between",
+          "two parameters will be more important than the absolute values of those parameters. (This is",
+          "similar to the idea of including dynamic links between variables in models.)"
+        ],
+        "         book-rated (rather than experience-rated) business": [
+          "Experience rating is the practice by which the premium depends wholly or partially on the",
+          "past experience of the policyholder. Where the past experience of the policyholder is not",
+          "taken into account, book rates are used."
+        ],
+        "2.2   Basis": [
+          "The assumptions we will derive in Chapters 14, 15 and 16 will be estimates of the expected",
+          "values for the parameters.",
+          "In other words, the assumptions are best estimates of future experience.",
+          "However, it may be necessary to include a margin (or margins) in the basis in order to allow for",
+          "the risk of adverse experience. The basis actually chosen for pricing, inclusive of margins, will fix",
+          "the level of risk the insurer will be subject to once the product is issued at that price."
+        ],
+        "2.3   Margins needed": [
+          "Where uncertainty is prevalent in future outcomes, the prudent actuary creates margins to",
+          "ensure, as far as possible, that the insurer’s promises are met. This is especially the case",
+          "in health and care insurance. The volume of relevant statistics is not nearly as credible as",
+          "in life insurance; claim outcomes are often more subjective (less clear-cut) and more",
+          "influenced by factors outside the control of the insurer eg social and economic",
+          "circumstances. It is fair to say that the ‘funnel of doubt’ is wider for health and care",
+          "insurance than it is for pure life insurance cover.",
+          "The extent of the margins depends heavily on the purpose of the basis concerned. If the purpose",
+          "is pricing, then the margins will also be influenced by the need to have competitive premiums.",
+          "Nevertheless, the margins must reflect the risks involved, and hence the size of the margins must",
+          "crucially depend on:"
+        ],
+        "         the financial significance of the risk from each parameter.": [
+          "All sources of risk and the extent of these sources of risk should therefore be brought to a",
+          "consideration of the margins required for pricing (or, in general, for other purposes for which a",
+          "basis is required). Chapters 23 to 25 will cover risk.",
+          "Where a cashflow model is being used to price an insurance contract, the risk to the",
+          "company from adverse future experience may be allowed for through the:"
+        ],
+        "Applying margins to the expected values": [
+          "At one extreme, all margins could be incorporated in the assumptions for each individual",
+          "parameter and the risk discount rate would then (in theory) be the risk‐free rate.",
+          "If a formula model, as described in earlier subjects (eg Subject CM1) and in Chapter 11, were",
+          "being used for pricing, the last two approaches above are not available and the risk of",
+          "adverse future experience would be allowed for by taking margins.",
+          "However, such a model does not help actuaries to quantify what these margins might be",
+          "and so they must use judgement based on past experience."
+        ],
+        "Using a stochastic approach": [
+          "Modelling will play a big part in assessing the margins, as the actuary will employ stochastic",
+          "processes to view the likely outcomes of variables with differing distributions.",
+          "There are also useful deterministic modelling exercises that the actuary can do in this direction, as",
+          "will be described in Chapter 16."
+        ],
+        "Assuming a higher discount rate": [
+          "Instead of applying margins to expected values, best estimates for the individual parameters",
+          "might be used, and margins for risk included by assuming a higher risk discount rate.",
+          "These alternatives can lead to the same result (in effect, the same premium), but they are",
+          "different ways of expressing the margin and the resulting risk. In each case, the risk of loss occurs",
+          "once the margin is ‘used up’, whether that be the margin in the individual parameter assumption,",
+          "or the risk premium in the risk discount rate."
+        ],
+        "The risk discount rate will be discussed in detail in Chapter 16.": [
+          "Note that the same principles will apply whether the margins are applied to the risk premium in",
+          "the risk discount rate (which would be the normal approach when pricing), or through adjustment",
+          "to the individual parameter assumptions (which is more likely when reserving)."
+        ],
+        "2.4   The ultimate price for the contract": [
+          "Although the primary worry is that of adverse experience compared with assumptions, it is not",
+          "the only consideration: marketability and competitiveness are also important. For example, when",
+          "determining the incidence rate for pricing a CI insurance contract:",
+          "         if the incidence rate is under‐estimated the insurer is at risk of a substantial loss",
+          "         if the incidence rate is over‐estimated the insurer is at risk of not selling the product.",
+          "However, it is worse to under‐estimate morbidity than to over‐estimate it. It is better to end up",
+          "selling low volumes of very profitable business than it is to sell high volumes of loss‐making",
+          "business.",
+          "If an insurer is selling badly rated business it may sell a lot of it before realising it is loss making,",
+          "whereas if its rates are too high, it will soon realise this (from observation of competitors’ rates)",
+          "and could quickly adjust them.",
+          "(So in this case, you will need margins to guard against the risk that the incidence rate is",
+          "under‐estimated, eg assume incidence rates that are higher than best estimates.)",
+          "The price ultimately charged, and the margins incorporated, will depend on several factors",
+          "such as the:"
+        ],
+        "         company’s USP (unique selling proposition)": [
+          "A company may be said to have a high USP if it is the only company in a market selling a",
+          "particular product. The lower the company’s USP, the more similar its products are to",
+          "others sold in the market."
+        ],
+        "If the company became more risk averse, margins would be increased.": [
+          "If the credibility, accuracy, relevance and ‘up‐to‐date‐ness’ of the data improved, the margins",
+          "could be reduced.",
+          "If the size of the company’s free assets or parental guarantee increased, margins could be",
+          "reduced."
+        ],
+        "3.1   Introduction": [
+          "Reserving is covered in detail in Chapters 21 and 22. It is sufficient here to understand that an",
+          "insurer must carry out a valuation to demonstrate solvency to the regulatory authorities and to",
+          "use in preparing its published financial results. It may also perform an ‘internal’ valuation, which",
+          "will serve to give a more realistic idea of the exact position of the insurer than does the",
+          "supervisory valuation."
+        ],
+        "3.2   General principles": [
+          "The starting point for reserving assumptions will be the expected future experience.",
+          "The principles involved in deriving these assumptions will be equivalent to those used in",
+          "deriving assumptions for pricing purposes – assuming that premiums are costed on a best",
+          "estimate basis.",
+          "Broadly, long-term insurance liabilities can be determined as the present value of future",
+          "claims plus expenses (including commission) plus taxes (if appropriate), less premiums.",
+          "It is then necessary to apply margins to these expected values so that the probability that",
+          "the resulting reserves will prove to be inadequate is below an acceptably low figure. What",
+          "is acceptably low will depend upon the reason for valuing the contracts and any relevant",
+          "legislation.",
+          "The greater the margins that are employed in the assumptions, the more prudent is the",
+          "calculation.",
+          "It should be noted that, all else being equal, decreasing the discount rate increases the",
+          "degree of prudence for a positive reserve (the opposite being the case for a negative",
+          "reserve, where this is permitted).",
+          "The immediate question in building a suitable basis for determining reserves is the purpose of the",
+          "valuation."
+        ],
+        "Published valuations tend to be carried out for two distinct purposes": [
+          "         for reporting company results, ie the ‘published accounts’ (such as would be of interest to",
+          "shareholders)"
+        ],
+        "The published accounts": [
+          "The assumptions used to determine the liabilities to be shown in an insurer’s published",
+          "accounts should be consistent with the legislation and accounting principles governing the",
+          "preparation of those accounts in the territory concerned."
+        ],
+        "The following should be considered": [
+          "         whether the accounts are to be prepared on a going concern basis or a break-up",
+          "basis",
+          "         whether the accounts are required to show a true and fair view",
+          "         whether reserves are required to be assessed as best estimates or on some other",
+          "basis, and precisely how the terms used are to be interpreted."
+        ],
+        "The solvency accounts": [
+          "If separate accounts are required as part of the process of supervision of solvency, the",
+          "rules governing the preparation of those separate accounts may or may not be the same as",
+          "those that apply to the published accounts.",
+          "They may, for example, be required to be prepared on a going concern basis or on a",
+          "break-up basis.",
+          "The accounts could also have to be prepared on a run‐off basis. This means assuming the",
+          "insurance company would continue to service in‐force business but would cease to write any new",
+          "business. This contrasts with a break‐up basis that assumes the insurance company is wound up",
+          "and policies with unexpired periods of cover are cancelled (probably with a proportion of the",
+          "premium returned to the policyholder).",
+          "Reference should be made to those rules and any guidance that may have been issued as to",
+          "their interpretation.",
+          "There will almost certainly be some constraints on the assumption decisions for the purpose of",
+          "preparing the solvency accounts. These constraints might be:",
+          "         specific, eg the valuation interest rate must equal the premium basis interest rate",
+          "         more general, eg the insurer may do the valuation as it wishes, subject to the final result",
+          "not being lower than it would have been under a prescribed regulatory basis.",
+          "In some countries (including those in the European Union), there has been movement",
+          "towards a supervisory regime under which the base reserves are calculated on a best",
+          "estimate or market-consistent basis, with additional risk margins held (see Chapter 22)."
+        ],
+        "So there are two main approaches to setting assumptions for supervisory reserves": [
+          "         assumptions that include a margin for prudence, eg a low valuation interest rate",
+          "         best estimate assumptions with a separate allowance for risk, eg a risk margin or",
+          "minimum solvency capital requirement.",
+          "Whichever of these approaches is used, the actuary should ensure that the overall level of",
+          "reserves and solvency capital is prudent.",
+          "Methods of calculating reserves and solvency capital are discussed in Chapter 22."
+        ],
+        "3.3   Valuing liabilities on a best estimate basis": [
+          "Under different circumstances, the actuary will be called upon to provide ‘best estimates’ of",
+          "the likely future claims outgo.",
+          "Here assumptions will be derived based on the actuary’s best estimate of future realistic",
+          "experience, without the incorporation of any prudential margins. The basis derived will be",
+          "similar to that used for new business pricing.",
+          "A cashflow method would estimate, possibly case-by-case or possibly with some grouping,",
+          "the amounts that need to be held now to meet future claims (including options), expense",
+          "and tax outgo against the expected premium and investment revenue inflow.",
+          "In other words, the cashflow method projects future income and outgo, and the present value of",
+          "any shortfall would be the reserves needed to be held now.",
+          "All experience items will be allowed for explicitly (expenses, persistency, investment return,",
+          "morbidity, mortality).",
+          "There would generally be no elimination of any negative reserves (unless regulations did",
+          "not permit these to be held).",
+          "When setting reserves on a policy‐by‐policy basis, the calculated reserves on some policies might",
+          "be negative, eg if the expected future premiums are more than sufficient to cover expected future",
+          "claims and expenses. If elimination of negative values applies, then these negative reserves",
+          "would be set to zero."
+        ],
+        "The internal management accounts": [
+          "The principles to be followed in preparing internal management accounts are matters to be",
+          "discussed and agreed with the insurer. The aim is likely to be to produce expected values",
+          "of the future experience, based on realistic assumptions.",
+          "The managers will want to see a realistic picture of the financial state of the company that is not",
+          "distorted by including margins in the assumptions. Internal management accounts could be",
+          "prepared for just about any purpose, for example to look at:"
+        ],
+        "3.4   Statutory reserving vs pricing assumptions": [
+          "In some countries it is standard practice to calculate premium rates using prudent",
+          "assumptions and then to use the same assumptions to calculate the reserves for",
+          "supervisory purposes.",
+          "In other countries, it is standard practice to calculate premiums using assumptions that",
+          "broadly reflect expected future experience, with the risks to the company being allowed for",
+          "mainly through the risk discount rate. If the supervisory regime in that country requires",
+          "prudence in reserving assumptions, then it would not be appropriate for the same",
+          "assumptions to be used both for pricing and for reserving.",
+          "So, if the same assumptions are used for reserving as were used in pricing, then the reserves",
+          "would not be prudent enough for supervisory purposes.",
+          "However, as noted above, some regimes have been moving towards the use of best",
+          "estimate assumptions in reserves. In that case, the underlying basis could be the same for",
+          "both pricing and reserving, but additional allowances for risk would be needed for each.",
+          "4     Deriving assumptions for determining the profitability of existing",
+          "business"
+        ],
+        "4.1   Introduction": [
+          "The assumptions required for determining the profitability of existing business are",
+          "considered below.",
+          "The principles involved here are the same as those that apply to deriving assumptions for",
+          "pricing purposes using a cashflow model. However, this does not necessarily mean that",
+          "the values for the parameters will be the same, in respect of a contract, for both purposes."
+        ],
+        "In particular, the allowances made for risk may be different.": [
+          "In addition, the timeframe will be slightly different. For pricing work, the insurer often wants",
+          "assumptions that will be valid as from any start point over a non‐trivial period of time (eg the next",
+          "year or the next three years), so that it can avoid having to reprice every month. However, for",
+          "work on profitability, it can apply the most appropriate values from the start point of now.",
+          "Regarding the allowances made for risk, the risk discount rate will probably be lower than in the",
+          "pricing basis."
+        ],
+        "Measuring profitability": [
+          "The profitability of existing business is often measured by the embedded value of the insurer."
+        ],
+        "The calculation of EV will actually require two different bases": [
+          "         a reserving basis – regardless of the purpose for which the EV is being calculated, the",
+          "supervisory reserving basis would always be used; it is needed in order to calculate:",
+          "–          the net assets (ie the assets less the current reserves)",
+          "–          the change in reserves in the future, which is part of the calculation of the present",
+          "value of future shareholder profits",
+          "         a projection basis – the insurer may wish to use a different projection basis depending on",
+          "the purpose for which the EV is being calculated; it is needed in order to project the",
+          "insurer’s experience into the future (another part of the calculation of the present value",
+          "of future shareholder profits).",
+          "It is the projection basis that is referred to in the remainder of this section.",
+          "The value of the business as a whole, both the existing business and the future new business, is",
+          "given by the appraisal value.",
+          "Both embedded value and appraisal value are discussed in more detail in Chapter 21."
+        ],
+        "4.2   Assumptions": [
+          "The key determinant in deciding on an EV basis is the purpose for which the EV is being",
+          "calculated.",
+          "If an embedded value is being prepared for published accounts or internal management",
+          "accounts, then the principles to be applied in setting the assumptions are as outlined in"
+        ],
+        "Section 3.": [
+          "The calculation of EV for internal management accounts is likely to be carried out on a best",
+          "estimate basis. Given that the purpose of calculating an EV is to give a more realistic value of the",
+          "insurer, then a best estimate basis is likely to be used for published accounts also, although",
+          "regulations may require the use of a more prudent basis.",
+          "EV will be measured regularly (for example, quarterly) to see how the company is progressing,",
+          "ie how the management is increasing the company’s worth to shareholders. If possible, the EV",
+          "will be broken down into distribution channels, or subsidiaries, to measure their progress, and so",
+          "also the extent to which their management is contributing to the company.",
+          "Projected EVs will be used as a criterion in assessing any financial or strategic management",
+          "decisions – for example, the choice between two strategies will be heavily weighted in favour of",
+          "the one that generates the higher projected EV.",
+          "If an appraisal value is being prepared as a sale value, then it is likely to be based on",
+          "realistic assumptions without margins. A purchase value may be based on cautious",
+          "assumptions that include margins.",
+          "As a result, a purchaser is likely to offer a lower price for the company than the seller thinks it is",
+          "worth. The final price agreed for the business will then depend on the relative bargaining power",
+          "of the buyer and seller.",
+          "For embedded value financing, the reinsurer will also perhaps be restrained in deciding the",
+          "amount of future ceding company cashflows that can be factored to a current commission",
+          "payment.",
+          "Embedded value financing involves the reinsurer making a loan to the insurer which is repaid",
+          "from future profits. If the future profits do not emerge as expected then the reinsurer will not be",
+          "paid. So the reinsurer is likely to perform this calculation using prudent assumptions."
+        ],
+        "These types of arrangement are discussed further in Chapter 26.": [
+          "The determination of bonuses for staff and salespeople could warrant a realistic or perhaps",
+          "slightly prudent basis. The actuary will need to be mindful of the greater unpredictability of",
+          "health and care insurance business than of life insurance.",
+          "The insurer will not want to pay bonuses to its staff now for business that turns out to be",
+          "unprofitable in the future. So a degree of prudence might be included in the basis to reduce the",
+          "chance of this happening.",
+          "Some insurers possess a small health and care portfolio in relation to their total business.",
+          "These insurers will align their assumptions to the bulk of their in-force business from the",
+          "other areas of the insurance business in force."
+        ],
+        "4.3   Allowing for risk": [
+          "Embedded value calculations need to include an appropriate risk margin to allow for the",
+          "unpredictability of profit emergence for health and care insurance business.",
+          "The purpose of an EV is to give a more realistic assessment of the value of the insurance company",
+          "to its shareholders. A best estimate of the profit in the tenth year might be 100, but this will not",
+          "be worth as much to the shareholders as a risk‐free cashflow of 100 in the tenth year. So the EV",
+          "needs to be reduced in some way to reflect the risks of the business.",
+          "The rate of interest used to discount the future streams of surplus will traditionally reflect",
+          "the risk inherent in these amounts. It should be noted that, all else being equal, increasing",
+          "the discount rate increases the degree of prudence.",
+          "So, one possible way of allowing for risk is to use a risk discount rate that is higher than the",
+          "risk‐free rate. The more risky the future profits, the higher the risk discount rate should be."
+        ],
+        "A stochastic or market-consistent approach may be adopted.": [
+          "A stochastic projection would highlight the range of possible values that future profits might take.",
+          "Under a market‐consistent approach the discount rate used would be the risk‐free rate. The",
+          "investments would be assumed to earn the risk‐free rate (regardless of whether or not risk‐free",
+          "assets are held). A risk margin would be deducted from the EV to reflect non‐investment risks,",
+          "eg by using the cost of capital approach that is described in Chapter 22.",
+          "Subject to the other considerations noted above, the EV experience assumptions may be",
+          "the same as those used in pricing."
+        ],
+        "The chapter summary starts on the next page so that you can": [
+          "keep all the chapter summaries together for revision purposes."
+        ],
+        "         consider the use to which the assumptions will be put": [
+          "         take particular care over assumptions with the most financial significance"
+        ],
+        "Deriving assumptions for pricing purposes": [
+          "The starting point is a best estimate basis for the assumptions, however, margins will be",
+          "necessary to guard against adverse future experience.",
+          "Where a cashflow model is being used, the risk from adverse future experience may be",
+          "allowed for through the:"
+        ],
+        "         the company’s attitude to risk": [
+          "         the credibility, accuracy, relevance and ‘up‐to‐date‐ness’ of the data",
+          "         the size of the company’s free assets or parental guarantee."
+        ],
+        "Deriving assumptions for reserving purposes": [
+          "Again, the starting point is a best estimate basis for the assumptions.",
+          "For some purposes – including the published accounts and the statutory solvency accounts –",
+          "margins may be incorporated. Consideration will need to be given to whether the accounts",
+          "are being produced on a going concern or break‐up basis, whether they are required to give a",
+          "true and fair view and whether there is any legislation or guidance on the basis or",
+          "assumptions to use.",
+          "For other purposes – including the internal management accounts – margins may not be",
+          "needed.",
+          "It is common in some countries to price prudently and then to define the reserving basis as",
+          "the pricing basis. In other countries, premiums are calculated using a realistic basis, with",
+          "risks to the insurer being allowed for through the risk discount rate assumption."
+        ],
+        "Deriving assumptions for determining profitability": [
+          "The basis used is likely to be fairly realistic, although it will depend on the specific purpose."
+        ]
+      }
+    }
+  }
+}
