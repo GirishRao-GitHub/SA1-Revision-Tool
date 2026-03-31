@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Experience Analysis Matrix – Health &amp; Care</title>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink:        #1a1a1a;
+    --rule:       #c8c0b0;
+    --rule-light: #e8e2d8;
+    --bg:         #faf8f4;
+    --paper:      #ffffff;
+    --accent:     #8b4513;
+    --accent2:    #2c5282;
+    --tag-ip:     #1a4a2e;
+    --tag-ci:     #2c3e6b;
+    --tag-ltci:   #5a2d0c;
+    --tag-pmi:    #3b2060;
+    --tag-ip-bg:  #edf7f0;
+    --tag-ci-bg:  #eef1fb;
+    --tag-ltci-bg:#fdf3ec;
+    --tag-pmi-bg: #f5f0fc;
+    --col-w:      220px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'EB Garamond', Georgia, serif;
+    font-size: 17px;
+    line-height: 1.65;
+    color: #000000;
+    background: var(--bg);
+    padding: 40px 32px 80px;
+  }
+
+  /* ── Header ── */
+  .page-header {
+    max-width: 1400px;
+    margin: 0 auto 36px;
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .page-header h1 {
+    font-size: 26px;
+    font-weight: 600;
+    letter-spacing: -0.3px;
+  }
+  .page-header .sub {
+    font-size: 12px;
+    font-family: 'DM Mono', monospace;
+    color: #666;
+    margin-top: 4px;
+  }
+  .legend {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 11.5px;
+    font-family: 'DM Mono', monospace;
+  }
+  .pill {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 3px;
+    font-size: 10.5px;
+    font-family: 'DM Mono', monospace;
+    font-weight: 500;
+    letter-spacing: 0.4px;
+  }
+  .pill.IP   { background: var(--tag-ip-bg);   color: var(--tag-ip);   border: 1px solid #b6dfc5; }
+  .pill.CI   { background: var(--tag-ci-bg);   color: var(--tag-ci);   border: 1px solid #b8c5ef; }
+  .pill.LTCI { background: var(--tag-ltci-bg); color: var(--tag-ltci); border: 1px solid #f0c9a0; }
+  .pill.PMI  { background: var(--tag-pmi-bg);  color: var(--tag-pmi);  border: 1px solid #cbbfe8; }
+
+  /* ── Filter bar ── */
+  .filter-bar {
+    max-width: 1400px;
+    margin: 0 auto 20px;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+  .filter-bar span {
+    font-size: 11.5px;
+    font-family: 'DM Mono', monospace;
+    color: #666;
+    margin-right: 4px;
+  }
+  .filter-btn {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    padding: 4px 12px;
+    border: 1px solid var(--rule);
+    border-radius: 3px;
+    background: var(--paper);
+    cursor: pointer;
+    transition: all 0.15s;
+    letter-spacing: 0.3px;
+  }
+  .filter-btn:hover, .filter-btn.active {
+    background: var(--ink);
+    color: #fff;
+    border-color: var(--ink);
+  }
+
+  /* ── Table wrapper ── */
+  .table-scroll {
+    max-width: 1400px;
+    margin: 0 auto;
+    overflow-x: auto;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    table-layout: fixed;
+  }
+
+  /* column widths */
+  col.c-aspect  { width: 160px; }
+  col.c-details { width: 200px; }
+  col.c-ip      { width: var(--col-w); }
+  col.c-ci      { width: var(--col-w); }
+  col.c-ltci    { width: var(--col-w); }
+  col.c-pmi     { width: var(--col-w); }
+
+  /* ── Column headers ── */
+  thead th {
+    padding: 12px 14px;
+    text-align: left;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    border-bottom: 2px solid var(--ink);
+    background: var(--paper);
+    position: sticky;
+    top: 0;
+    z-index: 5;
+  }
+  thead th.th-ip   { border-top: 3px solid var(--tag-ip);   color: var(--tag-ip);   }
+  thead th.th-ci   { border-top: 3px solid var(--tag-ci);   color: var(--tag-ci);   }
+  thead th.th-ltci { border-top: 3px solid var(--tag-ltci); color: var(--tag-ltci); }
+  thead th.th-pmi  { border-top: 3px solid var(--tag-pmi);  color: var(--tag-pmi);  }
+
+  /* ── Section rows ── */
+  tr.section-row td {
+    background: var(--ink);
+    color: #fff;
+    font-family: 'DM Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    font-weight: 500;
+  }
+
+  /* ── Data rows ── */
+  tbody tr.data-row {
+    border-bottom: 1px solid var(--rule-light);
+    transition: background 0.1s;
+  }
+  tbody tr.data-row:hover { background: #f5f1ea; }
+
+  td {
+    padding: 12px 14px;
+    vertical-align: top;
+    border-right: 1px solid var(--rule-light);
+  }
+  td:last-child { border-right: none; }
+
+  td.aspect {
+    font-weight: 600;
+    font-size: 15.5px;
+    color: #000000;
+    white-space: normal;
+    border-right: 1px solid var(--rule);
+  }
+  td.details {
+    font-size: 15px;
+    color: #333333;
+    font-style: italic;
+    border-right: 1px solid var(--rule);
+  }
+  td.details em { font-style: normal; color: #888; font-size: 11px; font-family: 'DM Mono', monospace; }
+
+  /* ── Bullet lists inside cells ── */
+  ul.pts {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  ul.pts li {
+    position: relative;
+    padding-left: 12px;
+    margin-bottom: 5px;
+    font-size: 15.5px;
+    line-height: 1.55;
+    color: #000000;
+  }
+  ul.pts li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--rule);
+    font-size: 11px;
+    top: 1px;
+  }
+
+  /* source tag */
+  .src {
+    display: inline-block;
+    margin-top: 6px;
+    font-family: 'DM Mono', monospace;
+    font-size: 9.5px;
+    color: #999;
+    letter-spacing: 0.3px;
+  }
+
+  /* empty cell */
+  .empty { color: #ccc; font-family: 'DM Mono', monospace; font-size: 11px; font-style: italic; }
+
+  /* ── Print ── */
+  @media print {
+    body { padding: 16px; background: #fff; }
+    .filter-bar { display: none; }
+    thead th { position: static; }
+    tr.data-row:hover { background: none; }
+  }
+
+  /* ── Filtered rows ── */
+  tr.filtered { display: none; }
+</style>
+</head>
+<body>
+
+<header class="page-header">
+  <div>
+    <h1>Experience Analysis Matrix</h1>
+    <div class="sub">Health &amp; Care Insurance · IFoA exam evidence 2019–2025</div>
+  </div>
+  <div class="legend">
+    <div class="legend-item"><span class="pill IP">IP</span> Income Protection</div>
+    <div class="legend-item"><span class="pill CI">CI</span> Critical Illness</div>
+    <div class="legend-item"><span class="pill LTCI">LTCI</span> Long-Term Care</div>
+    <div class="legend-item"><span class="pill PMI">PMI</span> Private Medical</div>
+  </div>
+</header>
+
+<div class="filter-bar">
+  <span>Show:</span>
+  <button class="filter-btn active" data-filter="all">All</button>
+  <button class="filter-btn" data-filter="IP">IP only</button>
+  <button class="filter-btn" data-filter="CI">CI only</button>
+  <button class="filter-btn" data-filter="LTCI">LTCI only</button>
+  <button class="filter-btn" data-filter="PMI">PMI only</button>
+</div>
+
+<div class="table-scroll">
+<table>
+<colgroup>
+  <col class="c-aspect">
+  <col class="c-details">
+  <col class="c-ip">
+  <col class="c-ci">
+  <col class="c-ltci">
+  <col class="c-pmi">
+</colgroup>
+<thead>
+  <tr>
+    <th>Aspect</th>
+    <th>Details to consider</th>
+    <th class="th-ip">IP</th>
+    <th class="th-ci">CI</th>
+    <th class="th-ltci">LTCI</th>
+    <th class="th-pmi">PMI</th>
+  </tr>
+</thead>
+<tbody>
+
+<!-- ═══════════════════════════════════════════
+     SECTION 1 – INVESTIGATION DESIGN
+     ═══════════════════════════════════════════ -->
+<tr class="section-row">
+  <td colspan="6">1 · Investigation Design</td>
+</tr>
+
+<!-- Frequency of investigation -->
+<tr class="data-row" data-products="IP CI LTCI PMI">
+  <td class="aspect">Frequency of investigation</td>
+  <td class="details">
+    Class of product; market conditions; pandemic; regulatory triggers; volume of data available
+  </td>
+  <td>
+    <ul class="pts">
+      <li>Conduct lapse experience regularly; monitor loss ratio trend continuously for IP book</li>
+      <li>In recession, increase frequency of monitoring business mix and lapse behaviour</li>
+    </ul>
+    <span class="src">Apr 2022 Q1(i,ii) · Sep 2024 Q3(i)</span>
+  </td>
+  <td>
+    <ul class="pts">
+      <li>Regular monitoring of CI business mix and experience flagged as essential during economic downturn</li>
+      <li>Regulator may trigger a review if consumer outcomes are poor (e.g. low claims payout ratio)</li>
+    </ul>
+    <span class="src">Apr 2022 Q1(ii) · Apr 2025 Q1(ii)</span>
+  </td>
+  <td>
+    <ul class="pts">
+      <li>Pre-funded LTCI: full experience analysis to review premium rates (no prescribed cadence but driven by emerging adverse experience)</li>
+      <li>Frequency constrained by limited data in a small market; may rely on reinsurer/market data between full reviews</li>
+    </ul>
+    <span class="src">Apr 2021 Q3(ii,iii)</span>
+  </td>
+  <td>
+    <ul class="pts">
+      <li>Track claims ratio since product launch; investigate promptly when ratio deviates from expected</li>
+      <li>More frequent review warranted after external shocks (e.g. flooding, pandemic, provider repricing)</li>
+    </ul>
+    <span class="src">Sep 2022 Q3(v) · Sep 2023 Q1(ii)</span>
+  </td>
+</tr>
+
+<!-- Data collection -->
+<tr class="data-row" data-products="IP CI LTCI PMI">
+  <td class="aspect">Data collection</td>
+  <td class="details">
+    Completeness; consistency; credibility; matching exposures to claims; internal vs. external sources
+  </td>
+  <td>
+    <ul class="pts">
+      <li>Collect claim inception date, cause of claim, deferred period, benefit amount, occupation, age, gender, smoker status</li>
+      <li>Investigate early claims and claims by notification date to check for anti-selective behaviour</li>
+      <li>Check for outlier/abnormal claims that distort experience</li>
+      <li>Sick-pay absence data and drug prescription data can improve incidence and recovery estimates</li>
+    </ul>
+    <span class="src">Sep 2024 Q3(i) · Sep 2022 Q2(i–iii)</span>
+  </td>
+  <td>
+    <ul class="pts">
+      <li>Collect claims by condition, underwriting category, distribution channel, policy duration</li>
+      <li>Record declined claims to assess anti-selection and definitional gaps</li>
+      <li>Track claims payout ratio and time-to-pay as leading indicators</li>
+    </ul>
+    <span class="src">Apr 2025 Q1(ii) · Sep 2023 Q3(iv)</span>
+  </td>
+  <td>
+    <ul class="pts">
+      <li>Data needed: morbidity incidence, cost of care, claim duration, recovery/mortality rates, lapse, expenses and investment income</li>
+      <li>Country may be small → limited LTCI data; supplement with reinsurer, market and population sources</li>
+      <li>Divide data into homogeneous groups: age, gender, occupation, smoker, region, care setting</li>
+      <li>Exposed-to-risk data required alongside claims and lapses</li>
+    </ul>
+    <span class="src">Apr 2021 Q3(ii)</span>
+  </td>
+  <td>
+    <ul class="pts">
+      <li>Collect claims by condition, treatment type, provider, region; track claim frequency and average cost separately</li>
+      <li>Record declined claims and complaints; audit claims process for turnaround time and documentation completeness</li>
+      <li>New business mix data: age, gender, location, occupation, group vs. individual</li>
+      <li>Investigate lapse rates, including lapses during waiting period and by policy duration</li>
+    </ul>
+    <span class="src">Sep 2022 Q3(v) · Sep 2019 Q3(ii)</span>
+  </td>
+</tr>
+
+<!-- Data quality and checks -->
+<tr class="data-row" data-products="IP CI LTCI PMI">
+  <td class="aspect">Data quality &amp; checks</td>
+  <td class="details">
+    Accuracy; bias; legacy systems; ethical/regulatory acceptability of data sources
+  </td>
+  <td>
+    <ul class="pts">
+      <li>Public geographic data (sick-pay absence, drug prescriptions) may be biased: excludes self-employed; postcode may be stale on long-term policies</li>
+      <li>Legacy systems may make matching policy, claims and lapse data at policy level difficult</li>
+      <li>Processing time for matching data may be prohibitive on old systems</li>
+      <li>Ensure data science outputs are ethically acceptable; test consumer acceptability</li>
+    </ul>
+    <span class="src">Sep 2022 Q2(ii,iii)</span>
+  </td>
+  <td>
+    <ul class="pts">
+      <li>Errors in data may lead to incorrect assumptions; carry out data checks before any analysis</li>
+      <li>Policy wording may be too loose, generating unexpected claims not captured in historical data</li>
+    </ul>
+    <span class="src">Apr 2022 Q2(i)</span>
+  </td>
+  <td>
+    <ul class="pts">
+      <li>Company may have limited historical data; premiums may have initially been set too low as data matures</li>
+      <li>Adjust external (reinsurer/population) data to ensure relevance to own product/portfolio</li>
+    </ul>
+    <span class="src">Apr 2021 Q3(ii,iii)</span>
+  </td>
+  <td>
+    <ul class="pts">
+      <li>Flooding or catastrophe events can distort trend identification, making past experience poor guide to the future</li>
+      <li>Data security risk when linking public and internal datasets; governance required</li>
+    </ul>
+    <span class="src">Sep 2023 Q1(ii) · Sep 2022 Q2(iii)</span>
+  </td>
+</tr>
+
+<!-- ═══════════════════════════════════════════
+     SECTION 2 – MORTALITY & MORBIDITY
+     ═══════════════════════════════════════════ -->
+<tr class="section-row">
+  <td colspan="6">2 · Mortality &amp; Morbidity Rates</td>
+</tr>
+
+<!-- Mortality -->
+<tr class="data-row" data-products="IP CI LTCI PMI">
+  <td class="aspect">Mortality</td>
+  <td class="details">
+    In-claim vs. pre-claim; impaired lives; improving trends; impact on reserves
+  </td>
+  <td>
+    <ul class="pts">
+      <li>Investigate mortality of claimants in payment (affects claim termination) and pre-claimants (affects exposure)</li>
+      <li>Economic conditions and changes in interest rates may affect value of claims-in-payment reserves</li>
+    </ul>
+    <span class="src">Sep 2024 Q3(i)</span>
+  </td>
+  <td>
+    <ul class="pts">
+      <li>Improving mortality means more lives reaching age of potential CI claim → increased incidence exposure</li>
+      <li>Longer survival post-claim possible as treatment improves; may affect reinsurance cost</li>
+    </ul>
+    <span class="src">Apr 2021 Q3(iii)</span>
+  </td>
+  <td>
+    <ul class="pts">
+      <li>Impaired mortality rates (in-claim) and mortality rates pre-claim both require investigation</li>
+      <li>Improving mortality = more lives reaching care age AND longer claim durations; impaired mortality may also reduce, extending claims</li>
+      <li>Estimation of future mortality trends required (Country B likely has improving mortality)</li>
+      <li>Guaranteed return-of-premiums on death may have been much higher than expected</li>
+    </ul>
+    <span class="src">Apr 2021 Q3(ii,iii)</span>
+  </td>
+  <td>
+    <ul class="pts">
+      <li>Mortality not a primary driver; however, catastrophic events (flooding, pandemic) can cause temporary spikes</li>
+      <li>Severe flooding may worsen existing conditions, indirectly affecting claim frequency</li>
+    </ul>
+    <span class="src">Sep 2023 Q1(ii)</span>
+  </td>
+</tr>
+
+<!-- Morbidity – Inception rates -->
+<tr class="data-row" data-products="IP CI LTCI PMI">
+  <td class="aspect">Morbidity – inception rates</td>
+  <td class="details">
+    Claim triggers; deferred period; incapacity definition; economic cycle effects; anti-selection
+  </td>
+  <td>
+    <ul class="pts">
+      <li>Investigate changes in incapacity definitions and deferred periods as key drivers of inception rate</li>
+      <li>Recession → people more likely to bring forward a claim</li>
+      <li>Changes in cause of claim (e.g. rise in mental health/stress) can increase inception and reduce recovery</li>
+      <li>Investigate early claims / claims by notification date to detect anti-selection</li>
+    </ul>
+    <span class="src">Sep 2024 Q3(i,iii) · Sep 2024 Q1(ii)</span>
+  </td>
+  <td>
+    <ul class="pts">
+      <li>Disease X pandemic may bring forward CI inception (acceleration effect) or cause increased incidence</li>
+      <li>Introduction of new or expanded conditions may alter observed inception rates</li>
+      <li>Only 50–60% of CI claims result in payment; poor definitions = low effective incidence</li>
+      <li>Anti-selection: non-disclosure of smoker status / lifestyle worsens incidence</li>
+    </ul>
+    <span class="src">Apr 2021 Q2(ii) · Apr 2025 Q1(ii)</span>
+  </td>
+  <td>
+    <ul class="pts">
+      <li>Morbidity incidence rates central to investigation; must be analysed by age, gender, condition and care setting</li>
+      <li>Changes in policyholder behaviour and claims eligibility criteria (e.g. ADL definitions) can alter incidence</li>
+      <li>Introduction of screening programmes may bring forward claims</li>
+    </ul>
+    <span class="src">Apr 2021 Q3(ii,iii)</span>
+  </td>
+  <td>
+    <ul class="pts">
+      <li>Increased flooding frequency causes spikes in PMI claim incidence, with strong regional concentration</li>
+      <li>Disruption to state healthcare (longer waiting times) shifts demand to PMI, raising incidence</li>
+      <li>New disease, pandemic or catastrophe can cause unexpected incidence surge</li>
+    </ul>
+    <span class="src">Sep 2023 Q1(ii) · Apr 2022 Q2(i)</span>
+  </td>
+</tr>
+
+<!-- Morbidity – Termination rates -->
+<tr class="data-row" data-products="IP CI LTCI PMI">
+  <td class="aspect">Morbidity – termination / recovery rates</td>
+  <td class="details">
+    Recovery; mortality in-claim; rehabilitation; cause mix; managed care interventions
+  </td>
+  <td>
+    <ul class="pts">
+      <li>Lower recovery rates a key driver of worsening IP loss ratio; investigate cause of claims (mental health → lower recovery)</li>
+      <li>Claims management team intervention can improve return-to-work and reduce duration</li>
+      <li>Partial, proportional and rehabilitation benefits affect effective termination rate</li>
+      <li>Recovery rates may correlate with sick-pay absence data in policyholder's geographic region</li>
+    </ul>
+    <span class="src">Sep 2024 Q3(i,ii,iii) · Sep 2022 Q2(v)</span>
+  </td>
+  <td>
+    <ul class="pts">
+      <li>CI is a lump-sum benefit; no in-payment termination rate as such, but survival post-claim affects any linked benefit</li>
+      <li>Time-to-pay claims increased significantly (14 days → 72 days); operational not biometric, but affects policyholder outcome</li>
+    </ul>
+    <span class="src">Apr 2025 Q1(ii)</span>
+  </td>
+  <td>
+    <ul class="pts">
+      <li>Recovery rates likely immaterial for LTCI (care needs rarely reverse); may not even be recorded</li>
+      <li>Impaired mortality rate in-claim effectively determines termination; investigate trends carefully</li>
+      <li>Cultural shifts (home care → care homes) change average claim cost and duration</li>
+    </ul>
+    <span class="src">Apr 2021 Q3(ii,iii)</span>
+  </td>
+  <td>
+    <ul class="pts">
+      <li>PMI claims are acute episodes; termination is natural end of treatment</li>
+      <li>Claims may take longer to settle during flooding as complexity increases</li>
+      <li>Provider supply disruption (flood-damaged facilities) can extend treatment duration and cost</li>
+    </ul>
+    <span class="src">Sep 2023 Q1(ii)</span>
+  </td>
+</tr>
+
+<!-- ═══════════════════════════════════════════
+     SECTION 3 – CLAIMS AMOUNTS & COSTS
+     ═══════════════════════════════════════════ -->
+<tr class="section-row">
+  <td colspan="6">3 · Claims Amounts &amp; Costs</td>
+</tr>
+
+<!-- Average claim amount -->
+<tr class="data-row" data-products="IP CI LTCI PMI">
+  <td class="aspect">Average claim amount</td>
+  <td class="details">
+    Indemnity vs. fixed benefit; benefit inflation; care cost inflation; medical inflation
+  </td>
+  <td>
+    <ul class="pts">
+      <li>Higher claim amounts driven by claim escalation rates; investigate whether escalation assumptions hold</li>
+      <li>Replacement ratio limits and benefit maximums affect actual amount paid</li>
+      <li>Higher inflation increases salary-linked benefit amounts and long-term liability</li>
+    </ul>
+    <span class="src">Sep 2024 Q3(i) · Sep 2024 Q1(i)</span>
+  </td>
+  <td>
+    <ul class="pts">
+      <li>Fixed lump-sum benefit means short-term claim amount is fixed, but real value erodes with inflation</li>
+      <li>Maximum CI benefits grew at ~1.3% p.a. real over 2005–2024; premium growth has lagged behind</li>
+      <li>Commission increases have pushed up premiums beyond inflation, reducing value to policyholders</li>
+    </ul>
+    <span class="src">Apr 2025 Q1(ii)</span>
+  </td>
+  <td>
+    <ul class="pts">
+      <li>Indemnity-based LTCI: average claim amounts vary with cost of care, which must be investigated separately</li>
+      <li>Cost of care inflation (staff salaries, facility costs) is a key driver</li>
+      <li>Average claim cost also affected by mix of care settings (home vs. residential vs. nursing)</li>
+      <li>Investment income in part funds claim costs; lower-than-expected returns increase net cost</li>
+    </ul>
+    <span class="src">Apr 2021 Q3(ii,iii)</span>
+  </td>
+  <td>
+    <ul class="pts">
+      <li>Medical inflation higher than expected is a primary driver of worsening PMI experience</li>
+      <li>Higher medical salaries, new treatment protocols and new procedures push up cost per claim</li>
+      <li>Fixed fee schedule with providers limits cost variance and inflation risk</li>
+      <li>Aggregation risk: large individual claims (e.g. cancer, evacuation) can distort averages</li>
+    </ul>
+    <span class="src">Apr 2022 Q2(i,ii)</span>
+  </td>
+</tr>
+
+<!-- Claims inflation -->
+<tr class="data-row" data-products="IP CI LTCI PMI">
+  <td class="aspect">Claims inflation</td>
+  <td class="details">
+    Medical vs. general inflation; provider pricing power; regulatory changes; treatment protocols
+  </td>
+  <td>
+    <ul class="pts">
+      <li>Higher general inflation increases salary-linked benefits and expenses; deferred period products more exposed over the long term</li>
+      <li>If risk mitigation (e.g. inflation swaps) has a limited duration, tail exposure remains</li>
+    </ul>
+    <span class="src">Sep 2024 Q1(i)</span>
+  </td>
+  <td>
+    <ul class="pts">
+      <li>Inflation affects premium sustainability; where premiums are guaranteed, insurer bears the full risk</li>
+      <li>High inflation may trigger selective lapses of CI (healthy lives exit; impaired lives stay)</li>
+    </ul>
+    <span class="src">Sep 2024 Q1(i,ii)</span>
+  </td>
+  <td>
+    <ul class="pts">
+      <li>Care cost inflation is distinct from general inflation; must be investigated separately</li>
+      <li>Reduction in state provision or means-testing thresholds increases private care demand and cost</li>
+      <li>Expense inflation also relevant to investigate</li>
+    </ul>
+    <span class="src">Apr 2021 Q3(ii,iii)</span>
+  </td>
+  <td>
+    <ul class="pts">
+      <li>Medical inflation higher than expected is the most common PMI adverse experience driver cited</li>
+      <li>Changes in treatment protocols, introduction of new procedures, reduction in provider competition all feed into medical inflation</li>
+      <li>Renegotiation of preferential hospital tariffs at higher rates is a discrete inflationary shock</li>
+    </ul>
+    <span class="src">Apr 2022 Q2(i) · Sep 2019 Q3(ii)</span>
+  </td>
+</tr>
+
+<!-- ═══════════════════════════════════════════
+     SECTION 4 – LAPSE & PERSISTENCY
+     ═══════════════════════════════════════════ -->
+<tr class="section-row">
+  <td colspan="6">4 · Lapse &amp; Persistency Experience</td>
+</tr>
+
+<!-- Lapse rates -->
+<tr class="data-row" data-products="IP CI LTCI PMI">
+  <td class="aspect">Lapse rates</td>
+  <td class="details">
+    Anti-selective lapsing; duration; premium size; economic cycle; distributor churning; surrender values
+  </td>
+  <td>
+    <ul class="pts">
+      <li>Selective lapses worsen if product no longer competitive; investigate by duration and cause</li>
+      <li>Recession: policyholders may lapse due to affordability; investigate whether healthy or impaired lives are lapsing</li>
+      <li>Lapse correlates with absence/sick-pay data by region (geographic approach)</li>
+    </ul>
+    <span class="src">Sep 2024 Q3(i) · Sep 2022 Q2(v)</span>
+  </td>
+  <td>
+    <ul class="pts">
+      <li>Anti-selection: healthy lives more likely to lapse CI in economic downturn, leaving worse pool</li>
+      <li>Lapse and re-entry: policyholders may lapse to buy cheaper cover, incurring new underwriting</li>
+      <li>Distributor churning increases commission costs and creates lapses irrespective of policyholder need</li>
+      <li>Investigate lapse rates by duration in force, premium size, distribution channel</li>
+    </ul>
+    <span class="src">Apr 2022 Q1(i,ii) · Sep 2024 Q1(i)</span>
+  </td>
+  <td>
+    <ul class="pts">
+      <li>Lapse experience should be investigated by duration in force, premium payment method and premium size</li>
+      <li>Healthier lives lapsing worsens remaining pool; early lapses impair expense recovery</li>
+      <li>Guaranteed return-of-premium requests before eligible claim period have been higher than expected</li>
+    </ul>
+    <span class="src">Apr 2021 Q3(ii,iii)</span>
+  </td>
+  <td>
+    <ul class="pts">
+      <li>Lapse during waiting period and by policy duration are key metrics for a new PMI product</li>
+      <li>Non-renewal behaviour investigated as equivalent to lapse for annually-renewable PMI</li>
+      <li>Underwriting change that attracts different risk mix can interact with lapse behaviour</li>
+    </ul>
+    <span class="src">Sep 2022 Q3(v)</span>
+  </td>
+</tr>
+
+<!-- ═══════════════════════════════════════════
+     SECTION 5 – BUSINESS MIX & UNDERWRITING
+     ═══════════════════════════════════════════ -->
+<tr class="section-row">
+  <td colspan="6">5 · Business Mix &amp; Underwriting</td>
+</tr>
+
+<!-- Business mix -->
+<tr class="data-row" data-products="IP CI LTCI PMI">
+  <td class="aspect">Business mix</td>
+  <td class="details">
+    Age; gender; occupation; socio-economic group; group vs. individual; distribution channel; geographic concentration
+  </td>
+  <td>
+    <ul class="pts">
+      <li>Demographic trends (age, gender, smoker) and occupation mix are key drivers of IP experience</li>
+      <li>Scheme size for group business affects free cover limits and risk concentration</li>
+      <li>Significant decline in new business raises average age and risk of remaining book</li>
+      <li>Loss of large group schemes with favourable experience distorts overall loss ratio</li>
+    </ul>
+    <span class="src">Sep 2024 Q3(i)</span>
+  </td>
+  <td>
+    <ul class="pts">
+      <li>Mix change driven by new distributors, economic conditions or competitor actions can alter expected experience substantially</li>
+      <li>High advisor commission → churning → unstable business mix</li>
+      <li>Inflation may shift new business mix toward more affluent (lower risk) policyholders</li>
+    </ul>
+    <span class="src">Apr 2022 Q2(i) · Apr 2025 Q1(ii) · Sep 2024 Q1(i)</span>
+  </td>
+  <td>
+    <ul class="pts">
+      <li>Profile of new business and volume of new business must be tracked; deviations from expected mix affect pricing adequacy</li>
+      <li>Distribution model change (e.g. shift to lower socio-economic area) worsens expected health outcomes</li>
+      <li>Geographic analysis: cost of care and exposure concentration vary by region</li>
+    </ul>
+    <span class="src">Apr 2021 Q3(ii,iii)</span>
+  </td>
+  <td>
+    <ul class="pts">
+      <li>Older lives, different occupation category, or higher group vs. individual proportion can all worsen experience</li>
+      <li>Selling through new distributors with a different client mix is a frequent cause of adverse PMI claims</li>
+      <li>Higher lapse/non-renewal by better risks leaves a more adverse pool</li>
+      <li>Geographic concentration (e.g. flood-prone regions) creates accumulation exposure</li>
+    </ul>
+    <span class="src">Apr 2022 Q2(i) · Sep 2023 Q1(ii)</span>
+  </td>
+</tr>
+
+<!-- Underwriting experience -->
+<tr class="data-row" data-products="IP CI LTCI PMI">
+  <td class="aspect">Underwriting experience</td>
+  <td class="details">
+    Changes in underwriting standards; cost-benefit analysis; anti-selection; market comparison
+  </td>
+  <td>
+    <ul class="pts">
+      <li>Review underwriting criteria by occupation; tighten health underwriting; reduce free cover limits on groups</li>
+      <li>Review disability definitions; ensure clarity to limit disputes</li>
+      <li>Increase claim underwriting: require additional documentation or second opinions</li>
+      <li>Investigate how underwriting tool is implemented in practice; cost/benefit of changes</li>
+    </ul>
+    <span class="src">Sep 2024 Q3(ii) · Apr 2022 Q3(i,ii)</span>
+  </td>
+  <td>
+    <ul class="pts">
+      <li>Underwriting levels adjusted during the year (e.g. loosened) leads to higher and earlier claims</li>
+      <li>Compare underwriting category against claims experience to assess if current policy is effective</li>
+      <li>Market investigation to ensure underwriting practice is not out of line with competitors</li>
+    </ul>
+    <span class="src">Apr 2022 Q2(i) · Sep 2023 Q3(iv)</span>
+  </td>
+  <td>
+    <ul class="pts">
+      <li>Underwriting policy may have weakened to keep up with competitors, increasing anti-selection risk</li>
+      <li>Genomic testing may allow anti-selection without disclosure; investigate any change in risk profile at inception</li>
+      <li>Medical practitioners and HR professionals useful sources for understanding occupational/medical trends</li>
+    </ul>
+    <span class="src">Apr 2021 Q3(iii) · Sep 2023 Q3(iv)</span>
+  </td>
+  <td>
+    <ul class="pts">
+      <li>Investigate frequency of GP referrals and pre-authorisation requirements; these influence claim acceptance rate</li>
+      <li>Carry out cost/benefit analysis of current underwriting policy; check frequency of tools used (e.g. doctor's reports)</li>
+      <li>Declined claims provide information on where policy is unclear or affecting customer experience</li>
+      <li>Reinsurers or consultants may have market data for comparison</li>
+    </ul>
+    <span class="src">Sep 2023 Q3(iv) · Sep 2019 Q3(ii)</span>
+  </td>
+</tr>
+
+<!-- ═══════════════════════════════════════════
+     SECTION 6 – EXPENSES & INVESTMENT
+     ═══════════════════════════════════════════ -->
+<tr class="section-row">
+  <td colspan="6">6 · Expenses &amp; Investment</td>
+</tr>
+
+<!-- Expenses -->
+<tr class="data-row" data-products="IP CI LTCI PMI">
+  <td class="aspect">Expenses</td>
+  <td class="details">
+    Acquisition; administration; claims management; one-off items; expense inflation
+  </td>
+  <td>
+    <ul class="pts">
+      <li>Setting up a claims management team: estimate staff numbers based on current and future claims; include salaries, bonuses, pension, NI, systems, offices</li>
+      <li>Specialist external opinion costs for complex cases</li>
+      <li>Higher general inflation increases fixed and variable operating expenses</li>
+    </ul>
+    <span class="src">Sep 2024 Q3(iii) · Sep 2024 Q1(i)</span>
+  </td>
+  <td>
+    <ul class="pts">
+      <li>Advisor commission has increased significantly; may drive churning and higher new business expenses</li>
+      <li>Increased lapsing raises admin costs for processing and retention activity</li>
+      <li>Fixed costs spread over fewer policies if book shrinks; economies of scale lost</li>
+    </ul>
+    <span class="src">Apr 2025 Q1(ii) · Apr 2022 Q1(i)</span>
+  </td>
+  <td>
+    <ul class="pts">
+      <li>Divide expenses into: acquisition, pre-claim administration, claim assessment, claims management</li>
+      <li>Consider whether one-off expenses should be excluded from the experience basis</li>
+      <li>Expense inflation must be investigated as a separate assumption</li>
+      <li>Lower new business volume increases per-policy expense loading</li>
+    </ul>
+    <span class="src">Apr 2021 Q3(ii,iii)</span>
+  </td>
+  <td>
+    <ul class="pts">
+      <li>Claims management expenses (pre-authorisation, case management, provider negotiation) are a significant PMI cost</li>
+      <li>Provider tariff renegotiation and managed care programmes affect total cost but also operational overhead</li>
+    </ul>
+    <span class="src">Sep 2019 Q3(ii)</span>
+  </td>
+</tr>
+
+<!-- Investment -->
+<tr class="data-row" data-products="IP CI LTCI PMI">
+  <td class="aspect">Investment income / returns</td>
+  <td class="details">
+    Asset matching; interest rate sensitivity; inflation linkage; reinsurance changes
+  </td>
+  <td>
+    <ul class="pts">
+      <li>Changes in interest rates may affect value of claims-in-payment reserves</li>
+      <li>High inflation may erode investment returns; inflation swaps or matched assets (index-linked bonds) may mitigate</li>
+    </ul>
+    <span class="src">Sep 2024 Q3(i) · Sep 2024 Q1(i)</span>
+  </td>
+  <td>
+    <ul class="pts">
+      <li>Market volatility in recession reduces asset values; may require disinvestment at unfavourable prices to meet surrenders</li>
+      <li>Investment strategy review triggered by reduced premium income from lapsing policyholders</li>
+    </ul>
+    <span class="src">Apr 2022 Q1(viii,ix)</span>
+  </td>
+  <td>
+    <ul class="pts">
+      <li>Investment income partly funds the cost of pre-funded LTCI claims; lower-than-expected returns require higher premiums</li>
+      <li>Recession, changes in investment strategy or economic shocks have been cited as causes of LTCI rate increases</li>
+    </ul>
+    <span class="src">Apr 2021 Q3(ii,iii)</span>
+  </td>
+  <td>
+    <ul class="pts">
+      <li>PMI is typically short-tail so investment income is less material; however, counterparty risk on reinsurance must be monitored</li>
+    </ul>
+    <span class="src">Sep 2024 Q1(i)</span>
+  </td>
+</tr>
+
+<!-- ═══════════════════════════════════════════
+     SECTION 7 – REINSURANCE & EXTERNAL BENCHMARKS
+     ═══════════════════════════════════════════ -->
+<tr class="section-row">
+  <td colspan="6">7 · Reinsurance &amp; External Benchmarks</td>
+</tr>
+
+<!-- Reinsurance -->
+<tr class="data-row" data-products="IP CI LTCI PMI">
+  <td class="aspect">Reinsurance</td>
+  <td class="details">
+    Pricing changes; treaty renegotiation; counterparty risk; data availability from reinsurer
+  </td>
+  <td>
+    <ul class="pts">
+      <li>Reinsurer data and consultants may provide market benchmarks for loss ratios and claim durations</li>
+      <li>Introduce or review reinsurance if claim size or frequency experience is adverse</li>
+      <li>Get advice from reinsurer on claims management best practice</li>
+    </ul>
+    <span class="src">Sep 2024 Q3(ii) · Sep 2023 Q3(iv)</span>
+  </td>
+  <td>
+    <ul class="pts">
+      <li>Reinsurance premiums reduce if book shrinks from lapses, but reinsurer may reprice per policy for selective lapse risk</li>
+      <li>Introduce reinsurance if affordable to cap large CI claim impact</li>
+    </ul>
+    <span class="src">Apr 2022 Q1(i) · Apr 2022 Q2(ii)</span>
+  </td>
+  <td>
+    <ul class="pts">
+      <li>Reinsurer data, market data and population data are key supplementary sources when own LTCI data is limited</li>
+      <li>Reinsurer may adjust rates upward based on emerging LTCI market experience</li>
+    </ul>
+    <span class="src">Apr 2021 Q3(ii,iii)</span>
+  </td>
+  <td>
+    <ul class="pts">
+      <li>Reinsurance can be introduced to cap large or aggregated PMI claims</li>
+      <li>Counterparty risk on reinsurance must be monitored, especially if reinsurer is exposed to same geographic risks</li>
+    </ul>
+    <span class="src">Apr 2022 Q2(ii) · Sep 2024 Q1(i)</span>
+  </td>
+</tr>
+
+<!-- External benchmarks -->
+<tr class="data-row" data-products="IP CI LTCI PMI">
+  <td class="aspect">Comparison to expected &amp; market benchmarks</td>
+  <td class="details">
+    Actual vs. pricing assumptions; industry data; market comparison; identifying reasons for deviation
+  </td>
+  <td>
+    <ul class="pts">
+      <li>For all factors, actual experience should be compared with pricing assumptions and reasons for any difference identified</li>
+      <li>Compare loss ratio against competitor norms; industry claim ratios provide a guide to expected benefit of interventions</li>
+    </ul>
+    <span class="src">Sep 2024 Q3(iii) · Apr 2021 Q3(ii)</span>
+  </td>
+  <td>
+    <ul class="pts">
+      <li>Claims payout ratio (50–60%) far below market expectation; investigate whether definitions or claims management explain the gap</li>
+      <li>Regularly check competitor products to ensure terms and premiums are not out of line with market</li>
+    </ul>
+    <span class="src">Apr 2025 Q1(ii) · Apr 2022 Q1(ii)</span>
+  </td>
+  <td>
+    <ul class="pts">
+      <li>Compare actual morbidity incidence, claim costs and lapse rates to pricing assumptions</li>
+      <li>Use reinsurer, market and population data as external benchmarks where own data is insufficient for credibility</li>
+    </ul>
+    <span class="src">Apr 2021 Q3(ii)</span>
+  </td>
+  <td>
+    <ul class="pts">
+      <li>Claims ratio (claims paid / gross premium) tracked against expected; analyse reasons for deviation across frequency, amount and mix dimensions</li>
+      <li>Experience analysis used to determine whether actions on product design, underwriting or provider management are needed</li>
+    </ul>
+    <span class="src">Sep 2022 Q3(v) · Apr 2022 Q2(i,ii)</span>
+  </td>
+</tr>
+
+<!-- ═══════════════════════════════════════════
+     SECTION 8 – ACTIONS & MANAGEMENT RESPONSE
+     ═══════════════════════════════════════════ -->
+<tr class="section-row">
+  <td colspan="6">8 · Actions Following Experience Review</td>
+</tr>
+
+<!-- Product & pricing actions -->
+<tr class="data-row" data-products="IP CI LTCI PMI">
+  <td class="aspect">Product &amp; pricing actions</td>
+  <td class="details">
+    Rate increases; benefit redesign; deductibles; co-payments; reviewable vs. guaranteed premiums
+  </td>
+  <td>
+    <ul class="pts">
+      <li>Increase premium rates or implement more granular rating</li>
+      <li>Amend terms: reduce maximum replacement ratio; increase waiting/deferred periods; introduce partial or rehabilitation benefits</li>
+      <li>Review and tighten policy wording; improve fraud detection</li>
+      <li>Introduce rehabilitation services to reduce claim duration</li>
+    </ul>
+    <span class="src">Sep 2024 Q3(ii)</span>
+  </td>
+  <td>
+    <ul class="pts">
+      <li>Consider reviewable premiums to allow ongoing pricing response</li>
+      <li>Add in supplementary benefits (cheap to provide, valued by customers) to reduce lapse incentive</li>
+      <li>Reduce or remove surrender benefits to minimise lapse incentives</li>
+      <li>Price in a payment holiday option; offer reduced sum assured to retain policyholders</li>
+    </ul>
+    <span class="src">Apr 2022 Q1(ii)</span>
+  </td>
+  <td>
+    <ul class="pts">
+      <li>Substantial premium rate increase may be required; consider phased approach or amended benefit terms to limit reputational impact</li>
+      <li>Review care cost inflation assumptions; review investment strategy to improve return</li>
+      <li>May need to amend policy terms for existing business (subject to legal review)</li>
+    </ul>
+    <span class="src">Apr 2021 Q3(iv)</span>
+  </td>
+  <td>
+    <ul class="pts">
+      <li>Adjust product design: introduce or increase excesses, co-payments, deductibles</li>
+      <li>Limit number of treatments (e.g. physiotherapy visits); cap indemnity with monetary limits</li>
+      <li>Restrict hospitals covered; exclude high-frequency conditions from standard product</li>
+      <li>Offer a waiting list plan where state services could be used</li>
+    </ul>
+    <span class="src">Sep 2019 Q3(ii) · Apr 2022 Q2(ii)</span>
+  </td>
+</tr>
+
+<!-- Claims management actions -->
+<tr class="data-row" data-products="IP CI LTCI PMI">
+  <td class="aspect">Claims management actions</td>
+  <td class="details">
+    Managed care; provider negotiation; case management; fraud detection; pre-authorisation
+  </td>
+  <td>
+    <ul class="pts">
+      <li>Set up dedicated claim management / rehabilitation team to improve return-to-work rates</li>
+      <li>Estimate costs vs. benefits of team carefully: current claim numbers, mix, duration and cause determine team size and skill mix</li>
+      <li>Long-term benefit: arrest rising loss ratio; once-off benefit from existing large reserves with return-to-work potential</li>
+    </ul>
+    <span class="src">Sep 2024 Q3(iii)</span>
+  </td>
+  <td>
+    <ul class="pts">
+      <li>Review claims processes to reduce time-to-pay (currently 72 days vs. 14 days in 2005)</li>
+      <li>Tighten claim definitions; ensure wording is clear and consistently applied</li>
+    </ul>
+    <span class="src">Apr 2025 Q1(ii)</span>
+  </td>
+  <td>
+    <ul class="pts">
+      <li>Claims management may have weakened (e.g. if outsourced company did not uphold standards)</li>
+      <li>Review provider fee schedules; negotiate tariffs that vary by risk segment</li>
+      <li>Legal challenges may have given rise to unexpected claims; ensure wording is robust</li>
+    </ul>
+    <span class="src">Apr 2021 Q3(iii)</span>
+  </td>
+  <td>
+    <ul class="pts">
+      <li>Improve claims management processes: ensure GP referrals in place; review benefit utilisation</li>
+      <li>Adopt a managed care approach for higher-risk or chronically ill patients</li>
+      <li>Negotiate fixed fee schedule with providers; require pre-authorisation for all treatment</li>
+      <li>Review protocols with providers to ensure procedures are appropriate and medically necessary</li>
+    </ul>
+    <span class="src">Apr 2022 Q2(ii) · Sep 2019 Q3(ii)</span>
+  </td>
+</tr>
+
+</tbody>
+</table>
+</div>
+
+<script>
+  const btns = document.querySelectorAll('.filter-btn');
+  const rows = document.querySelectorAll('tr.data-row');
+
+  btns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      btns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const filter = btn.dataset.filter;
+
+      rows.forEach(row => {
+        if (filter === 'all') {
+          row.classList.remove('filtered');
+        } else {
+          const products = (row.dataset.products || '').split(' ');
+          if (products.includes(filter)) {
+            row.classList.remove('filtered');
+          } else {
+            row.classList.add('filtered');
+          }
+        }
+      });
+    });
+  });
+</script>
+</body>
+</html>
