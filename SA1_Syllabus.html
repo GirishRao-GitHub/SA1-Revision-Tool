@@ -287,12 +287,13 @@
     height: 100%;
     border: none;
     background: #fff;
-    border-radius: 0;
+    display: block;
   }
   .memory-aid-wrapper {
     display: flex;
     flex-direction: column;
     height: 100%;
+    min-height: 0;
   }
   .memory-aid-topbar {
     display: flex;
@@ -1908,35 +1909,66 @@ function selectMemoryAid(url, label) {
   // Update header
   document.getElementById('header-chapter-title').textContent = '🧠 ' + label;
 
-  // Render in right pane — SVGs use <img>, HTML files use <iframe>
-  const isSvg = url.toLowerCase().endsWith('.svg');
-  const contentHtml = isSvg
-    ? `<div style="overflow:auto;height:100%;padding:24px;background:#fff;display:flex;align-items:flex-start;justify-content:center;">
-        <img src="${url}" style="max-width:100%;height:auto;display:block;" alt="${label}">
-       </div>`
-    : `<iframe
-        class="memory-aid-frame"
-        src="${url}"
-        sandbox="allow-scripts allow-same-origin allow-forms"
-        title="${label}">
-       </iframe>`;
+  // Set up canvas
+  const canvas = document.getElementById('canvas');
+  canvas.style.padding = '0';
+  canvas.style.overflow = 'hidden';
 
+  const isSvg = url.toLowerCase().endsWith('.svg');
+
+  // Render the topbar shell immediately
   document.getElementById('content-area').innerHTML = `
     <div class="memory-aid-wrapper">
       <div class="memory-aid-topbar">
         <span class="memory-aid-badge">🧠 Memory Aid</span>
         <span class="memory-aid-title">${label}</span>
-        <a class="memory-aid-open-btn" href="${url}" target="_blank">
-          ↗ Open in new tab
-        </a>
+        <a class="memory-aid-open-btn" href="${url}" target="_blank">↗ Open in new tab</a>
       </div>
-      ${contentHtml}
+      <div id="memory-aid-body" style="flex:1;overflow:hidden;display:flex;align-items:center;justify-content:center;">
+        <div style="color:#686c80;font-family:var(--mono);font-size:12px;">Loading…</div>
+      </div>
     </div>`;
 
-  // Make the canvas fill without its own padding (iframe fills it)
-  const canvas = document.getElementById('canvas');
-  canvas.style.padding = '0';
-  canvas.style.overflow = 'hidden';
+  if (isSvg) {
+    // SVGs: fetch and embed inline so they scale properly
+    fetch(url)
+      .then(r => r.text())
+      .then(svgText => {
+        document.getElementById('memory-aid-body').innerHTML = `
+          <div style="overflow:auto;width:100%;height:100%;padding:24px;background:#fff;box-sizing:border-box;display:flex;align-items:flex-start;justify-content:center;">
+            ${svgText}
+          </div>`;
+        // Make the inline SVG responsive
+        const svg = document.querySelector('#memory-aid-body svg');
+        if (svg) {
+          svg.style.maxWidth = '100%';
+          svg.style.height = 'auto';
+        }
+      })
+      .catch(() => {
+        document.getElementById('memory-aid-body').innerHTML =
+          `<div style="color:#f07070;font-family:var(--mono);font-size:12px;">Could not load SVG.</div>`;
+      });
+  } else {
+    // HTML files: fetch content and render via blob URL to bypass X-Frame-Options
+    fetch(url)
+      .then(r => {
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        return r.text();
+      })
+      .then(html => {
+        const blob    = new Blob([html], { type: 'text/html' });
+        const blobUrl = URL.createObjectURL(blob);
+        document.getElementById('memory-aid-body').innerHTML =
+          `<iframe class="memory-aid-frame" src="${blobUrl}"
+            sandbox="allow-scripts allow-same-origin allow-forms allow-modals"
+            title="${label}"></iframe>`;
+      })
+      .catch(() => {
+        document.getElementById('memory-aid-body').innerHTML =
+          `<div style="color:#f07070;font-family:var(--mono);font-size:12px;padding:20px;">Could not load memory aid.</div>`;
+      });
+  }
 }
 
 // Restore canvas padding when navigating away from a memory aid
