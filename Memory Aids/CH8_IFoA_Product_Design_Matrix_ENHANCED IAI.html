@@ -1,0 +1,1458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>SA1 + IAI — Product Design Theme Matrix (Gap Analysis)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink:       #1a1a2e;
+    --ink-light: #4a4a6a;
+    --rule:      #d0d0e0;
+    --rule-dark: #b0b0c8;
+    --bg:        #f7f7fb;
+    --white:     #ffffff;
+    --pmi:   #1a5c9c;
+    --ci:    #8b1a1a;
+    --ip:    #1a6b3c;
+    --ltc:   #6b3a1a;
+    --state: #3a1a6b;
+    --pmi-bg:   #e8f0f9;
+    --ci-bg:    #f9e8e8;
+    --ip-bg:    #e8f5ee;
+    --ltc-bg:   #f5ede8;
+    --state-bg: #ede8f5;
+    --iai:   #0055aa;
+    --iai-bg: #e6f0ff;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 11.5px; line-height: 1.55;
+    background: var(--bg); color: var(--ink);
+    padding: 28px 24px 48px;
+  }
+  header { border-left: 4px solid var(--ink); padding-left: 14px; margin-bottom: 20px; }
+  header h1 {
+    font-family: 'IBM Plex Mono', monospace; font-size: 15px; font-weight: 600;
+    letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink);
+  }
+  header p { font-size: 10.5px; color: var(--ink-light); font-style: italic; margin-top: 4px; }
+  .legend { display: flex; flex-wrap: wrap; gap: 10px 20px; margin-bottom: 18px;
+    font-size: 10px; font-family: 'IBM Plex Mono', monospace; }
+  .legend-item { display: flex; align-items: center; gap: 6px; }
+  .legend-dot { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+  .iai-legend {
+    display: flex; align-items: center; gap: 8px;
+    background: var(--iai-bg); border: 1.5px solid var(--iai);
+    border-radius: 4px; padding: 6px 12px; margin-bottom: 16px;
+    font-size: 10.5px; font-family: 'IBM Plex Mono', monospace; color: var(--iai);
+  }
+  .iai-legend strong { font-weight: 600; }
+  .scroll-wrap {
+    overflow-x: auto; border: 1px solid var(--rule-dark);
+    border-radius: 4px; box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  }
+  table {
+    border-collapse: collapse; width: 100%; min-width: 1000px;
+    table-layout: fixed; background: var(--white);
+  }
+  col.col-theme { width: 140px; }
+  col.col-pmi, col.col-ci, col.col-ip, col.col-ltc, col.col-state { width: 17%; }
+  th, td { border: 1px solid var(--rule); padding: 8px 10px; vertical-align: top; }
+  thead tr.header-row th {
+    font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 600;
+    letter-spacing: 0.05em; text-transform: uppercase;
+    text-align: center; border-bottom: 2px solid var(--rule-dark);
+  }
+  th.hdr-theme { background: var(--ink); color: var(--white); text-align: left; }
+  th.hdr-pmi   { background: var(--pmi-bg);   color: var(--pmi);   border-top: 3px solid var(--pmi);   }
+  th.hdr-ci    { background: var(--ci-bg);    color: var(--ci);    border-top: 3px solid var(--ci);    }
+  th.hdr-ip    { background: var(--ip-bg);    color: var(--ip);    border-top: 3px solid var(--ip);    }
+  th.hdr-ltc   { background: var(--ltc-bg);   color: var(--ltc);   border-top: 3px solid var(--ltc);   }
+  th.hdr-state { background: var(--state-bg); color: var(--state); border-top: 3px solid var(--state); }
+  thead tr.subhdr th {
+    font-family: 'IBM Plex Mono', monospace; font-size: 9px; font-weight: 400;
+    text-align: center; color: var(--ink-light);
+    border-bottom: 2px solid var(--rule-dark); padding: 3px 6px;
+  }
+  th.subhdr-theme { background: var(--ink); border-bottom: 2px solid #444; }
+  th.subhdr-pmi   { background: var(--pmi-bg); }
+  th.subhdr-ci    { background: var(--ci-bg);  }
+  th.subhdr-ip    { background: var(--ip-bg);  }
+  th.subhdr-ltc   { background: var(--ltc-bg); }
+  th.subhdr-state { background: var(--state-bg); }
+  td.theme-cell {
+    font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 600;
+    background: #f0f0f6; color: var(--ink);
+    border-right: 2px solid var(--rule-dark);
+    vertical-align: middle; line-height: 1.4;
+  }
+  td.theme-cell .theme-num {
+    display: block; font-size: 16px; font-weight: 600;
+    color: var(--rule-dark); line-height: 1; margin-bottom: 4px;
+  }
+  td.cell-pmi   { background: #fafcff; }
+  td.cell-ci    { background: #fffafa; }
+  td.cell-ip    { background: #fafffc; }
+  td.cell-ltc   { background: #fffaf7; }
+  td.cell-state { background: #fafaff; }
+  td ul { margin: 0; padding-left: 0; list-style: none; }
+  td li {
+    margin-bottom: 6px; font-size: 11px; color: var(--ink);
+    line-height: 1.5; padding-left: 14px; position: relative;
+  }
+  td li::before {
+    content: "▸"; position: absolute; left: 0; top: 0;
+    color: var(--rule-dark); font-size: 9px; line-height: 1.8;
+  }
+  td li strong { font-weight: 600; }
+
+  /* ── IAI-specific additions ── */
+  .iai-section-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.08em;
+    color: var(--iai);
+    background: var(--iai-bg);
+    border-top: 2px solid var(--iai);
+    border-bottom: 1px dashed var(--iai);
+    display: block;
+    margin-top: 10px; margin-bottom: 5px;
+    padding: 3px 6px;
+  }
+  td > .iai-section-label:first-child { margin-top: 0; }
+  .iai-ul { margin: 0; padding-left: 0; list-style: none; }
+  .iai-li {
+    margin-bottom: 6px;
+    font-size: 11px;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-style: italic;
+    color: var(--iai) !important;
+    line-height: 1.5;
+    padding-left: 14px;
+    position: relative;
+  }
+  .iai-li::before {
+    content: "◆";
+    position: absolute; left: 0; top: 0;
+    color: var(--iai); font-size: 8px; line-height: 1.9;
+  }
+  .iai-li strong { font-weight: 600; color: var(--iai); }
+  .iai-source {
+    font-size: 8.5px; font-family: 'IBM Plex Mono', monospace;
+    color: #7799cc; font-style: normal;
+    display: inline-block; margin-left: 4px;
+  }
+
+  /* ── Segment labels ── */
+  .seg-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.06em;
+    margin-top: 9px; margin-bottom: 4px;
+    padding-top: 6px; border-top: 1px dashed var(--rule);
+    display: block;
+  }
+  td > .seg-label:first-child { margin-top: 0; padding-top: 0; border-top: none; }
+  tbody tr:nth-child(odd) td.theme-cell { background: #ebebf3; }
+  tbody tr:hover td { background-color: rgba(0,0,0,0.018); }
+  tbody tr:hover td.theme-cell { background: #e4e4ee; }
+</style>
+</head>
+<body>
+<header>
+  <h1>SA1 + IAI — Product Design Theme Matrix (Gap Analysis)</h1>
+  <p>IFoA SA1 content (black ▸) augmented with IAI exam-specific points not covered in the matrix (blue ◆ italic). IAI exams 2015–2025 covering Indian market context: IRDAI regulations, SAHI products, Indian PMI/IP/CI/LTC design issues, wearable-based products, micro-insurance, UHC, COVID-19, dental, overseas top-up and more.</p>
+</header>
+
+<div class="iai-legend">
+  <span style="font-size:11px">◆</span>
+  <span><strong>Blue italic bullets</strong> = IAI exam content NOT covered in the IFoA SA1 matrix — Indian market specific angles, IRDAI regulatory details, product design nuances unique to the IAI curriculum.</span>
+</div>
+
+<div class="legend">
+  <span class="legend-item"><span class="legend-dot" style="background:var(--pmi)"></span>PMI — Private Medical Insurance</span>
+  <span class="legend-item"><span class="legend-dot" style="background:var(--ci)"></span>CI — Critical Illness</span>
+  <span class="legend-item"><span class="legend-dot" style="background:var(--ip)"></span>IP — Income Protection</span>
+  <span class="legend-item"><span class="legend-dot" style="background:var(--ltc)"></span>LTC — Long-Term Care</span>
+  <span class="legend-item"><span class="legend-dot" style="background:var(--state)"></span>State / Social Insurance</span>
+</div>
+
+<div class="scroll-wrap">
+<table>
+<colgroup>
+  <col class="col-theme">
+  <col class="col-pmi"><col class="col-ci"><col class="col-ip">
+  <col class="col-ltc"><col class="col-state">
+</colgroup>
+<thead>
+<tr class="header-row">
+  <th class="hdr-theme">Theme</th>
+  <th class="hdr-pmi">PMI</th>
+  <th class="hdr-ci">Critical Illness</th>
+  <th class="hdr-ip">Income Protection</th>
+  <th class="hdr-ltc">Long-Term Care</th>
+  <th class="hdr-state">State / Social</th>
+</tr>
+<tr class="subhdr">
+  <th class="subhdr-theme"></th>
+  <th class="subhdr-pmi">Private Medical Insurance</th>
+  <th class="subhdr-ci">Critical Illness</th>
+  <th class="subhdr-ip">Income Protection / PHI</th>
+  <th class="subhdr-ltc">Long-Term Care Insurance</th>
+  <th class="subhdr-state">State / Social Insurance</th>
+</tr>
+</thead>
+<tbody>
+
+<!-- ═══════════════════════════════════════════════════════════
+     THEME 01 — BENEFIT STRUCTURE
+     ═══════════════════════════════════════════════════════════ -->
+<tr>
+<td class="theme-cell"><span class="theme-num">01</span>Benefit Structure</td>
+
+<!-- PMI -->
+<td class="cell-pmi"><ul>
+<li>PMI can be structured on an <strong>indemnity basis</strong>, reimbursing the actual cost of eligible treatment, or as a <strong>fixed cash benefit</strong> paying a pre-agreed sum regardless of cost incurred — the choice affects pricing, risk exposure, and policyholder expectations.</li>
+<li>The product must precisely define the <strong>scope of inpatient, outpatient, and day-care cover</strong>, as ambiguity over which care setting applies to a given treatment is a leading cause of disputes at claim stage.</li>
+<li><strong>Sub-limits</strong> (e.g. per-night room rate, per-procedure cap) and <strong>annual monetary limits</strong> are used to control maximum claim exposure and maintain premium affordability, but must be set at a level that still delivers meaningful cover.</li>
+<li><strong>Excesses, co-insurance, and co-payment</strong> mechanisms share cost with the policyholder, reducing claims frequency and severity while also acting as a deterrent to over-utilisation of covered services.</li>
+<li>PMI policies must specify whether policyholders must use <strong>restricted network</strong> providers (giving the insurer cost control) or may access <strong>any licensed provider</strong> (giving the policyholder wider choice at higher cost).</li>
+<li>The <strong>cashless settlement</strong> model (insurer pays provider directly) differs from the <strong>reimbursement model</strong> (policyholder pays upfront and claims back) — cashless is administratively complex but improves policyholder experience.</li>
+<li><strong>Waiting periods</strong> before certain conditions become eligible for cover (e.g. 9 months for maternity, 2 years for chronic conditions) are a key anti-selection and claims control mechanism in both individual and group PMI product design.</li>
+</ul>
+
+<span class="iai-section-label">◆ IAI-specific additions</span>
+<ul class="iai-ul">
+<li class="iai-li"><strong>IRDAI classification</strong> distinguishes health insurance into <em>indemnity-based</em> (compensates actual loss) and <em>benefit-based</em> (pays fixed amount) products — general and health insurers may offer both, but life insurers may only offer benefit-based products; life insurers are also permitted to offer health products on a unit-linked platform. <span class="iai-source">[May 2024 Q3]</span></li>
+<li class="iai-li"><strong>Product types specific to India</strong> include hospital cash / surgical cash benefits, <strong>AYUSH, homeopathy and acupuncture</strong> coverage, and overseas/domestic travel health products (only general/health insurers). <span class="iai-source">[Nov 2024 Q2a; May 2024 Q3]</span></li>
+<li class="iai-li"><strong>No Claim Bonus (NCB) vs premium discount</strong> is a key design distinction in the Indian market: NCB rewards claim-free years by increasing sum insured or reducing premium, whereas a wearable-linked health product offers premium discounts based on tracked health parameters regardless of claim history — these two mechanisms have different policyholder behaviour and anti-selection implications. <span class="iai-source">[Mar 2017 Q1i; Sep 2016 Q2ii]</span></li>
+<li class="iai-li"><strong>Inflation-indexed sum insured</strong> products automatically increase the sum insured in line with a medical inflation index each year (irrespective of claims), addressing the problem of inadequate cover due to rising medical costs — a design feature more prominent in the Indian market context where medical inflation runs well above CPI. <span class="iai-source">[Sep 2016 Q2ii]</span></li>
+<li class="iai-li"><strong>Overseas treatment top-up</strong> is a benefit structure where a basic domestic group PMI plan is supplemented with a rider paying for treatment abroad when domestic options are exhausted — design features include regional geographical tiers (e.g. Asia-only vs worldwide), companion and travel coverage, and cashless access to overseas provider networks. <span class="iai-source">[Nov 2020 Q1v]</span></li>
+<li class="iai-li"><strong>Unit-linked hospital cash / surgical benefit</strong> invests net premiums in unit funds, deducting morbidity charges, policy expenses and taxes from the fund — an unusual hybrid structure in India combining investment and health coverage; the investment risk is borne by the policyholder. <span class="iai-source">[May 2024 Q2ic]</span></li>
+<li class="iai-li"><strong>Prepaid surgical bundle</strong> (hospital-sold fixed-price product): a patient pays a once-off prepaid fee for a specific defined surgical procedure or medical package — removing price uncertainty and out-of-pocket shock; this is not a traditional insurance product and has no recurring premium. <span class="iai-source">[May 2025 Q1a]</span></li>
+<li class="iai-li"><strong>COVID-specific standalone product</strong>: benefit design decisions unique to pandemic products include whether quarantine benefits (home vs institutional) are covered, whether family floater is appropriate given infection transmission risk, accumulation risk across policies, and whether policy term should be less than 12 months. <span class="iai-source">[Nov 2020 Q2ii]</span></li>
+<li class="iai-li"><strong>Dental insurance</strong> product design in India requires deciding between comprehensive vs restrictive cover, free check-up inclusions (cost vs claim reduction benefit), unrestricted renewability clauses, and portability with other insurers — all regulated under IRDAI frameworks. <span class="iai-source">[Mar 2018 Q1i]</span></li>
+</ul>
+</td>
+
+<!-- CI -->
+<td class="cell-ci"><ul>
+<li>Critical illness cover typically pays a <strong>lump sum on diagnosis</strong> of a specified condition; alternatively a <strong>severity-based tiered structure</strong> pays different percentages of the sum assured depending on the clinical stage or severity of the illness at time of claim.</li>
+<li>Because CI pays a <strong>fixed benefit unrelated to actual treatment cost</strong>, the insurer has no exposure to medical inflation or the rising cost of specific procedures — this is a key pricing advantage over indemnity PMI products.</li>
+<li><strong>Children's cancer extensions</strong> and <strong>additional condition riders</strong> (beyond the standard CI list) are optional benefit add-ons that increase the product's appeal to families, though they introduce conditions where claims data may be sparse.</li>
+<li>A <strong>Return of Premium (ROP)</strong> option refunds all or part of premiums paid if no claim arises before a specified trigger event — this reduces lapse incentive and enhances the product's savings appeal, primarily for individual policies.</li>
+<li><strong>Mental health conditions</strong> are increasingly included in CI definitions, but defining measurable severity thresholds (e.g. hospitalisation for a minimum number of days) is essential to maintain claims consistency and control.</li>
+</ul>
+
+<span class="iai-section-label">◆ IAI-specific additions</span>
+<ul class="iai-ul">
+<li class="iai-li"><strong>Multi-pay CI with Indian product context</strong>: when designing a multi-pay CI product for India, incidence rates must be split by first and subsequent occurrences, and the inter-linkages between covered conditions must be modelled — the frequency of claims will be higher than standalone CI but claim severity per event may be lower as early-stage conditions are caught. <span class="iai-source">[Apr 2016 Q2iii_a]</span></li>
+<li class="iai-li"><strong>Capital requirements for CI are higher</strong> than traditional CI when launching multi-pay variants — the availability of sufficient capital to write expected volumes must be confirmed before product launch. <span class="iai-source">[Apr 2016 Q2iii_a]</span></li>
+<li class="iai-li"><strong>Risks of new product launch</strong> specific to IAI curriculum: product substitution risk (new CI variant cannibalises profitable existing product), over-sales capital strain, under-sales expense non-recovery, product design failure (does not meet customer needs), and product costing failure (parameter error in morbidity assumptions). <span class="iai-source">[Apr 2016 Q2ii]</span></li>
+<li class="iai-li"><strong>Gender-targeted marketing without using gender as a rating factor</strong>: in markets where gender is prohibited as a pricing variable (e.g. post EU Gender Directive), CI product differentiation can be achieved through gender-coded advertising (magazines, TV programming breaks), affinity marketing to gender-skewed occupations, highlighting gender-specific conditions covered, and varying sales team communication style. <span class="iai-source">[Nov 2023 Q2iv]</span></li>
+</ul>
+</td>
+
+<!-- IP -->
+<td class="cell-ip"><ul>
+<li>The income protection benefit is typically expressed as a <strong>percentage of pre-disability earnings</strong> (e.g. 60–75%), known as the replacement ratio — this is capped to ensure the policyholder retains a financial incentive to return to work.</li>
+<li>The <strong>deferred (waiting) period</strong> — the gap between onset of incapacity and commencement of benefit — is a key product parameter that determines premium, claim frequency, and coordination with state or employer sick-pay provisions.</li>
+<li>The <strong>maximum benefit period</strong> determines how long benefit is paid (e.g. 2 years, 5 years, to age 65) and is a major driver of premium; <strong>linked claims provisions</strong> define when a new claim period starts for a recurring or related condition.</li>
+<li>A <strong>stepped or proportional benefit</strong> structure pays a reduced benefit when the policyholder is working but earning less than their pre-disability salary, encouraging gradual return to work and reducing the cliff-edge cessation of benefit.</li>
+<li><strong>Rehabilitation benefit and phased return-to-work provisions</strong> are increasingly integral product features, recognising that early intervention reduces total claim duration and cost, benefiting both the insurer and the policyholder.</li>
+<li><strong>Benefit cessation triggers</strong> include recovery to pre-disability capacity, reaching the maximum benefit period, retirement, or death — clearly defining these in the policy wording is critical to avoid claims disputes.</li>
+</ul>
+
+<span class="iai-section-label">◆ IAI-specific additions</span>
+<ul class="iai-ul">
+<li class="iai-li"><strong>Occupation-based definition for group IP</strong>: the IAI curriculum emphasises that in Indian group IP, an <em>own occupation</em> definition is typically adopted initially, potentially switching to a less restrictive definition (e.g. any occupation or ADL-based) after 2 years — the policy must specify this change clearly. <span class="iai-source">[Mar 2021 Q1ii]</span></li>
+<li class="iai-li"><strong>Stepped benefit structure</strong> (e.g. 100% of salary for first 6 months, then 50%) and <strong>benefit indexation</strong> linked to a wages index during claim are specific product design features tested in IAI group IP scenarios — the IFoA matrix mentions proportional benefit but not these specific step-down designs. <span class="iai-source">[Mar 2021 Q1ii]</span></li>
+<li class="iai-li"><strong>Early notification requirement</strong> (e.g. halfway through deferred period): requiring employers to notify the insurer of sickness absence before the deferred period expires enables early rehabilitation intervention — a design feature that reduces claim duration and is prominent in IAI group IP scenarios. <span class="iai-source">[Mar 2021 Q1ii]</span></li>
+<li class="iai-li"><strong>Accident-only IP variant</strong>: a product covering only accidental disability rather than both accident and sickness — advantages include simplified underwriting, more objective claims assessment, reduced epidemic/pandemic risk; risks include the blurring of accident/sickness causation, anti-selection by high-accident-risk occupations, and selective lapsation from full IP into the cheaper accident-only variant. <span class="iai-source">[Dec 2022 Q2iii]</span></li>
+<li class="iai-li"><strong>Key features of individual IP</strong> in the IAI context include: waiver of premium during claim, benefits that escalate differently in and out of claim, activity-of-daily-living (ADL) based definitions as an alternative to occupation-based, and counselling/rehabilitation services — the IAI papers present these as a descriptive feature list for a developing market. <span class="iai-source">[Dec 2022 Q2i]</span></li>
+<li class="iai-li"><strong>Micro-insurance IP</strong> design implications: less stringent definitions of incapacity, simpler claims triggers, policy documentation translated into local languages, monthly premium mode linked to variable incomes (e.g. weather/crop dependent), and collective/community enrolment mechanisms — fundamentally different operational design vs standard urban IP. <span class="iai-source">[Mar 2017 Q2iv]</span></li>
+</ul>
+</td>
+
+<!-- LTC -->
+<td class="cell-ltc"><ul>
+<li>Long-term care benefits can be structured as a <strong>lump sum</strong> (providing flexibility but requiring the policyholder to manage the funds) or as a <strong>regular income</strong> (providing a predictable income stream aligned with ongoing care costs).</li>
+<li>An <strong>indemnity LTC benefit</strong> reimburses actual care costs (subject to a cap), while a <strong>fixed benefit</strong> pays a set amount regardless of actual costs — the indemnity approach better reflects true care costs but exposes the insurer to care cost inflation.</li>
+<li><strong>Fixed-term benefit duration</strong> (e.g. 3 or 5 years) limits the insurer's maximum liability, whereas a <strong>whole-of-life benefit duration</strong> provides more comprehensive cover for the policyholder but creates very long-tail liabilities for the insurer.</li>
+<li>The benefit level is typically linked to the <strong>degree of disability measured by Activities of Daily Living (ADL)</strong> — for example, benefit may be payable when the claimant is unable to perform 2 or more of 6 standard ADLs.</li>
+<li>LTC products must distinguish between <strong>home care</strong> (care provided in the policyholder's own home) and <strong>residential or nursing facility care</strong>, as costs and triggers differ significantly between these settings.</li>
+<li>A <strong>pre-funded LTC product</strong> is purchased in advance (often at age 50–65) with a deferred onset period, while an <strong>immediate-needs annuity</strong> is purchased at the point care is already required — these serve different customer needs and carry different risk profiles.</li>
+</ul>
+
+<span class="iai-section-label">◆ IAI-specific additions</span>
+<ul class="iai-ul">
+<li class="iai-li"><strong>Pre-funded vs Immediate Needs — detailed feature comparison</strong>: IAI papers provide a granular feature list not present in the IFoA matrix: pre-funded policies may be <em>unit-linked or conventional</em>; a paid-up benefit may be available after a minimum premium period; disability benefits are tax-free; immediate-needs annuities may offer a capital guarantee (purchase price less benefits received paid on death); and if qualifying as an 'Immediate Needs Annuity', payments made directly to a registered care provider are not taxable in the hands of the insured. <span class="iai-source">[Nov 2019 Q1ii]</span></li>
+<li class="iai-li"><strong>Policyholder advantages/disadvantages</strong> not in matrix: pre-funded — premiums may be relatively modest if policy taken out young; limited premium payment term (e.g. premiums cease at age 85) helps budgeting; risk of no benefit if lapsed without surrender value. Immediate-needs — insured may struggle to find the large single premium; cost depends on interest rates at time of purchase; insured has no control over timing of need. <span class="iai-source">[Nov 2019 Q1ii]</span></li>
+</ul>
+</td>
+
+<!-- STATE -->
+<td class="cell-state"><ul>
+<li><strong>State and social insurance health products</strong> are designed with <strong>standardised, simplified benefits</strong> to ensure broad population access, avoiding the complexity of commercial PMI which may be inaccessible to lower-income groups.</li>
+<li><strong>Mandatory cover design</strong> (i.e. cover that citizens cannot individually opt out of) is the foundation of community-rated or social insurance health schemes, since voluntary participation leads to adverse selection and unsustainable risk pools.</li>
+<li><strong>Per-person caps and aggregate pool limits</strong> are built into state-backed schemes to control total public liability and ensure the scheme remains fiscally sustainable even under adverse experience.</li>
+<li><strong>Microinsurance products</strong> are designed specifically for low-income populations in emerging markets, characterised by simple, low sum-assured benefits and affordable premiums where commercial health insurance is unaffordable.</li>
+<li><strong>Co-insurance and co-payment provisions</strong> require the beneficiary to share part of the treatment cost, reducing moral hazard (over-use of free services) and limiting the total fiscal burden on the state.</li>
+<li>A <strong>fixed cash sum for hospitalisation</strong> (regardless of actual cost) is a common feature of state and microinsurance products, providing a simple, verifiable trigger that is easy for claimants to understand and for administrators to process.</li>
+</ul>
+
+<span class="iai-section-label">◆ IAI-specific additions</span>
+<ul class="iai-ul">
+<li class="iai-li"><strong>India's Universal Health Coverage (UHC) programme</strong>: when the government introduces a UHC scheme covering ~50% of the population (means-tested), private health insurers are impacted through: increased general health awareness driving demand for top-up products; pressure on supply-side capacity in the short term pushing up medical costs; need to revise underwriting restrictions and benefit design as baseline coverage shifts; and potentially relaxed exclusions/waiting periods to complement state cover. <span class="iai-source">[Mar 2018 Q2iii]</span></li>
+<li class="iai-li"><strong>Government treatment cost controls</strong>: governments implementing UHC may introduce standard treatment protocols and caps on cost of procedures/equipment — this constrains medical inflation but may also restrict access to advanced treatments. <span class="iai-source">[Mar 2018 Q2iii]</span></li>
+</ul>
+</td>
+</tr>
+
+<!-- ═══════════════════════════════════════════════════════════
+     THEME 02 — COVER & CLAIM DEFINITIONS
+     ═══════════════════════════════════════════════════════════ -->
+<tr>
+<td class="theme-cell"><span class="theme-num">02</span>Cover &amp; Claim Definitions</td>
+
+<!-- PMI -->
+<td class="cell-pmi"><ul>
+<li>A clear and precise <strong>boundary between inpatient, outpatient, and day-care treatment</strong> must be established in the policy wording, since ambiguity over which category applies to a given procedure is a primary source of claim disputes.</li>
+<li>The policy must define <strong>which treatments and procedures are eligible</strong> for cover — generally based on medical necessity, excluding experimental or unproven treatments and cosmetic procedures.</li>
+<li>A comprehensive <strong>exclusion list</strong> — covering standard exclusions (e.g. self-inflicted injuries), special exclusions (applied at underwriting for known conditions), and condition-specific exclusions — is essential to control adverse claim experience.</li>
+<li>The <strong>pre-existing condition definition</strong> determines which conditions known to the policyholder at inception are excluded; the exclusion period (e.g. 2 years under moratorium) must be clearly stated to avoid disputes at claim stage.</li>
+<li>The <strong>territorial scope of cover</strong> specifies whether treatment is covered only domestically, within a region, or worldwide — international cover significantly increases the insurer's exposure to high-cost healthcare systems.</li>
+<li>The policy must define <strong>eligible providers</strong> (e.g. registered hospitals, licensed specialists) to prevent claims under cover for non-medical settings and to maintain quality standards within the network.</li>
+<li><strong>Maternity cover</strong>, <strong>congenital conditions</strong>, and <strong>chronic disease management</strong> each require specific definitional treatment as they raise particular adverse selection, ongoing utilisation, and claims control challenges.</li>
+</ul>
+
+<span class="iai-section-label">◆ IAI-specific additions</span>
+<ul class="iai-ul">
+<li class="iai-li"><strong>IRDAI pre-existing disease waiting period rules</strong>: under IRDAI (Insurance Products) Regulations 2024, waiting period for pre-existing diseases disclosed at proposal is capped at a maximum of <em>36 months</em> of continuous coverage (reduced from the earlier 48-month norm in many products) — insurers are encouraged to offer lesser waiting periods. <span class="iai-source">[May 2024 Q3]</span></li>
+<li class="iai-li"><strong>Moratorium post-60-month rule (IRDAI)</strong>: after 60 continuous months of coverage (including portability and migration), no policy or claim may be contested by the insurer on grounds of non-disclosure or misrepresentation — this is a moratorium provision specific to the Indian regulatory framework (previously 8 years, now reduced to 5 years). <span class="iai-source">[May 2024 Q3]</span></li>
+<li class="iai-li"><strong>Mental illness — mandatory coverage (India)</strong>: the Indian regulator mandated that insurers cover mental illness under indemnity health policies — the IAI papers specifically analyse the challenge of defining covered conditions, the difficulty of establishing whether mental illness pre-existed at inception (no prior proposal questions), the need to reach agreements with specialist providers for cashless settlement, and the requirement to update claims and underwriting manuals. <span class="iai-source">[Jun 2019 Q2vi]</span></li>
+<li class="iai-li"><strong>Portability of cover definitions</strong>: under Indian regulation, 'portability' means the right to transfer credit for pre-existing condition waiting periods, time-bound exclusions, and NCD from one insurer to another — this creates definitional complexity as the porting insurer must honour waiting period credits only up to the previous policy's sum insured, creating tiered exclusions for the excess amount. <span class="iai-source">[Sep 2016 Q1ii]</span></li>
+<li class="iai-li"><strong>Front-end vs back-end underwriting</strong> and its effect on claim definitions: in India the dominant practice is <em>back-end underwriting</em> (limited front-end checks; pre-existing conditions assessed at claim stage) — this creates definitional ambiguity at claim stage; introducing optional front-end medical tests with a moratorium waiver is a specific IAI exam design proposal tested in detail. <span class="iai-source">[Jun 2019 Q2v]</span></li>
+</ul>
+</td>
+
+<!-- CI -->
+<td class="cell-ci"><ul>
+<li>The <strong>CI condition list</strong> must balance breadth (covering more conditions to maximise sales appeal) against the need to maintain a manageable claims pay-out ratio — adding low-frequency conditions may be low risk but increases product complexity.</li>
+<li><strong>Severity thresholds</strong> for tiered or partial payment (e.g. early-stage vs advanced cancer, mild vs severe heart attack) must be precisely defined, typically by reference to objective medical criteria, to ensure consistency of claim decisions.</li>
+<li>A standard CI definition requires a <strong>survival period of 28 days post-diagnosis</strong> before a claim is paid — this prevents claims arising from diagnosis immediately preceding death where the condition, not the claim, is the primary event.</li>
+<li>Inclusion of <strong>mental health conditions</strong> in the CI definition requires careful specification of what constitutes 'serious' severity, since mental health diagnoses are inherently more subjective and prone to claims inflation.</li>
+<li>The <strong>definition of 'child'</strong> for children's CI benefit extensions (e.g. up to age 18 or 21) must be clearly stated, as must the conditions covered, since children's conditions differ meaningfully from adult CI conditions.</li>
+<li><strong>Independent medical verification</strong> requirements — specifying which medical professional must diagnose the condition — are an important claims control mechanism, particularly for conditions with subjective diagnostic criteria.</li>
+</ul>
+<!-- No significant IAI-specific additions beyond what IFoA covers for CI definitions -->
+</td>
+
+<!-- IP -->
+<td class="cell-ip"><ul>
+<li>The distinction between <strong>own occupation</strong> (incapable of performing the policyholder's specific job) and <strong>any occupation</strong> (incapable of performing any work) is the most fundamental definition in an IP policy, affecting both claim eligibility and premium.</li>
+<li>An <strong>Activities of Daily Working Life (ADWL) approach</strong> assesses disability by reference to a standardised set of physical and cognitive tasks required for work, providing a more objective basis for claim assessment in some occupation classes.</li>
+<li>The approach to <strong>pre-existing conditions</strong> — whether full medical UW exclusions or a moratorium — determines the nature and extent of exclusions in force at claim stage and is relevant to both individual and group IP design.</li>
+<li>The <strong>salary definition</strong> — whether it includes only basic salary or total compensation (bonuses, benefits in kind) — directly affects the replacement ratio calculation and hence the maximum benefit amount.</li>
+<li>The <strong>linked claims period</strong> specifies the minimum gap between two periods of incapacity for them to be treated as separate claims — without this, a policyholder could return to work briefly to 'reset' their deferred period and re-claim on the same condition.</li>
+<li><strong>Exclusions for hazardous activities</strong> (e.g. extreme sports) and certain occupational risks must be clearly defined; failure to exclude these appropriately can result in claims the insurer did not price for.</li>
+</ul>
+
+<span class="iai-section-label">◆ IAI-specific additions</span>
+<ul class="iai-ul">
+<li class="iai-li"><strong>Group IP policy conditions — IAI depth</strong>: IAI papers test detailed group IP policy wording including: compulsory medical re-certification every 6–12 months (to be checked by insurer, not employer); a minimum waiting period of employment (e.g. 12 months) before eligibility; benefit limitation formula set as a percentage of pre-disability income less <em>all</em> sources of continuing income (not just state benefits); pre-disability income averaging method over a defined prior period (e.g. 1 year) to handle bonuses; and linkage of expiry ages to the employer's pension scheme retirement ages. <span class="iai-source">[Mar 2021 Q1ii]</span></li>
+<li class="iai-li"><strong>Accident vs sickness claim boundary</strong>: for accident-only IP, the IAI specifically tests the definitional challenge where accident and sickness become blurred (e.g. falling because of a sickness episode, road accident caused by fatigue from illness) — the policy wording must clearly define 'accidental' cause and the insurer must be prepared for disputes and ombudsman/court challenges. <span class="iai-source">[Dec 2022 Q2iii]</span></li>
+</ul>
+</td>
+
+<!-- LTC -->
+<td class="cell-ltc"><ul>
+<li>The <strong>ADL trigger</strong> — specifying which activities (e.g. washing, dressing, feeding, transferring, continence, mobility) and how many must be failed — is the central claim trigger in LTC insurance and must be precisely defined to avoid disputes.</li>
+<li>A separate <strong>cognitive or mental impairment trigger</strong> (e.g. Alzheimer's, dementia) is included in most LTC policies alongside the ADL trigger, recognising that cognitively impaired individuals may retain physical ability to perform ADLs.</li>
+<li>The policy must specify whether disability assessment is based on a <strong>single point-in-time event</strong> or requires the inability to be <strong>ongoing and persistent</strong>, since the latter significantly reduces claim frequency.</li>
+<li><strong>Care setting definitions</strong> — distinguishing home care, assisted living, residential care, and nursing home care — determine what level of benefit applies in each setting and which costs are covered.</li>
+<li>LTC underwriting typically <strong>excludes pre-existing cognitive conditions</strong> diagnosed or symptomatic before inception; the precise exclusion wording is critical to avoid claims arising from conditions the insurer did not knowingly accept.</li>
+<li>At claim stage, requiring assessment by an <strong>independent qualified ADL assessor</strong> provides a more objective and consistent basis for determining whether the claim trigger has been met.</li>
+</ul>
+<!-- LTC definitions coverage is comprehensive in the IFoA matrix -->
+</td>
+
+<!-- STATE -->
+<td class="cell-state"><ul>
+<li>State and social insurance schemes require <strong>simple, unambiguous claim triggers</strong> to accommodate claimants with low financial literacy — complex eligibility criteria are a barrier to accessing cover and undermine the scheme's social purpose.</li>
+<li>A <strong>minimum hospitalisation stay threshold</strong> (e.g. at least one overnight stay) is used to define an eligible inpatient episode, distinguishing it from day-care or outpatient treatment.</li>
+<li>Government or regulator <strong>mandated standardised condition lists</strong> ensure consistency of cover across all providers in a regulated market, making it easier for consumers to compare products and for regulators to monitor fairness.</li>
+<li><strong>Exclusion of cosmetic and elective procedures</strong> is standard in state health schemes, ensuring public funds are directed to medically necessary treatments rather than procedures driven by personal preference.</li>
+<li>A <strong>catastrophe or pandemic trigger</strong> based on an objectively declared event (e.g. government emergency declaration) enables rapid mass pay-outs without individual claim assessment during a systemic event.</li>
+</ul>
+<!-- State definitions adequately covered in IFoA matrix -->
+</td>
+</tr>
+
+<!-- ═══════════════════════════════════════════════════════════
+     THEME 03 — PRODUCT FEATURES & OPTIONS
+     ═══════════════════════════════════════════════════════════ -->
+<tr>
+<td class="theme-cell"><span class="theme-num">03</span>Product Features &amp; Options</td>
+
+<!-- PMI -->
+<td class="cell-pmi"><ul>
+<li><strong>Guaranteed renewability</strong> ensures the policyholder cannot be cancelled due to deteriorating health, while <strong>continuity provisions</strong> address how pre-existing conditions and waiting periods are treated when a policyholder moves between schemes.</li>
+<li>A <strong>no-claims discount (NCD)</strong> or <strong>experience bonus</strong> rewards policyholders who do not claim in a given year with a premium reduction, incentivising low utilisation and helping the insurer retain good risks.</li>
+<li><strong>Modular add-ons</strong> — including dental, optical, maternity, outpatient wellness, and mental health riders — allow customers to build a personalised PMI package while the insurer prices each module based on its own risk profile.</li>
+<li><strong>Reviewable premiums</strong> — where the insurer can increase premiums at renewal based on claims experience — are common in PMI, but the frequency and basis of review must be disclosed clearly to policyholders.</li>
+<li>An <strong>open referral option</strong> (allowing policyholders to choose their own specialist rather than being referred by a GP) is a premium differentiator that adds value for customers who want greater control over their healthcare.</li>
+</ul>
+<div class="seg-label" style="color:var(--pmi);">▾ Individual</div><ul>
+<li><strong>Continuity of cover provisions</strong> for individuals moving between insurers — recognising pre-existing conditions on a moratorium basis rather than re-applying exclusions — are critical to avoid leaving policyholders with no effective cover.</li>
+</ul>
+<div class="seg-label" style="color:var(--pmi);">▾ Group</div><ul>
+<li>A <strong>top-up option</strong> over a base employer group scheme allows employees to purchase additional individual cover beyond what their employer provides, filling gaps without the need for full fresh underwriting.</li>
+<li><strong>Portability on leaving a group scheme</strong> allows an employee to continue PMI cover individually (often without fresh underwriting) when they leave their employer — an important feature for the departing employee and a retention tool for the insurer.</li>
+<li><strong>Self-funded vs insured scheme</strong> options allow larger employers to choose whether the employer bears the claims risk directly (with the insurer providing administration and stop-loss) or transfers full risk to the insurer via an insured scheme.</li>
+</ul>
+
+<span class="iai-section-label">◆ IAI-specific additions</span>
+<ul class="iai-ul">
+<li class="iai-li"><strong>IRDAI pricing incentive mechanisms</strong>: IRDAI regulations require that any incentive or mechanism to reward policyholders (for early entry, continued renewals, favourable claims experience, or wellness/preventive habits) must be disclosed upfront in the prospectus and policy document — and the scope of wellness/preventive habits must be clearly defined in every product. <span class="iai-source">[May 2024 Q3]</span></li>
+<li class="iai-li"><strong>Wearable-linked wellness discounts</strong>: a product feature whereby the insurer tracks health parameters via a wrist-worn device (step count, heart rate, sleep pattern) and offers premium discounts at renewal for healthy behaviour — distinct from NCB; challenges include device authentication, continuous engagement, and premium differentials attractive enough to overcome data-sharing reluctance. <span class="iai-source">[Mar 2017 Q1i]</span></li>
+<li class="iai-li"><strong>Free health check-up feature</strong> (India): offering annual free dental/health check-ups as a product feature — the IAI specifically tests cost-vs-benefit: the cost of providing check-ups against reduced morbidity experience and improved persistency from healthier detected-early lives. <span class="iai-source">[Sep 2016 Q1iv_c; Mar 2018 Q1i]</span></li>
+<li class="iai-li"><strong>Portability as a regulatory product feature</strong>: in India, portability is a mandated product feature — the insurer must allow policyholders to port to another insurer while carrying forward credits for pre-existing condition waiting periods and NCD up to the previous sum insured — practical challenges include system complexity, pricing difficulties (porting lives cannot be priced differently despite different expected morbidity), and initial expense non-recovery when healthy lives port out early. <span class="iai-source">[Sep 2016 Q1ii]</span></li>
+<li class="iai-li"><strong>COVID-19 rider vs standalone design decision</strong>: a key product feature decision is whether to offer pandemic cover as a rider (linked to a base product, with shared underwriting and easier cross-sell but harder to discontinue post-pandemic) or as a standalone product (simpler to design for the specific benefit, easier to stop selling, but higher mis-selling risk). <span class="iai-source">[Nov 2020 Q2i]</span></li>
+<li class="iai-li"><strong>Outpatient (OP) cover add-on</strong>: adding OP cover to an existing IP/PMI product in India requires specifying product design features including: co-pay/deductible structures; sub-limits for physiotherapy, pharmacy, and dental/optical; pre-authorisation thresholds; and the pharmacy generic vs branded drug approach — these are IAI-specific design details not present in the IFoA matrix. <span class="iai-source">[Jul 2022 Q2iv]</span></li>
+</ul>
+</td>
+
+<!-- CI -->
+<td class="cell-ci"><ul>
+<li><strong>Reviewable vs guaranteed premiums</strong> is a fundamental design choice: reviewable premiums are lower at outset but transfer repricing risk to the policyholder, whereas guaranteed premiums provide certainty but command a higher initial premium.</li>
+<li><strong>Optional additional condition riders</strong> (beyond the core CI list, e.g. diabetes, osteoporosis) allow the insurer to extend the product's appeal while keeping the core product simpler and avoiding the need to reprice the full product.</li>
+</ul>
+<div class="seg-label" style="color:var(--ci);">▾ Individual</div><ul>
+<li>A <strong>unit-linked CI structure</strong> combines a reviewable morbidity charge with a fixed fund allocation to an investment element — meaning the policyholder retains investment risk while the morbidity charge is subject to periodic review.</li>
+<li>A <strong>Return of Premium (ROP)</strong> feature specifies the trigger events (e.g. death without prior CI claim, policy expiry) under which premiums paid are refunded — this reduces lapse incentive and enhances the product's savings appeal for individual policyholders.</li>
+<li>A <strong>multi-pay CI option</strong> reinstates the full sum assured after a first claim, allowing the policyholder to claim again on a different specified CI condition — this is a significant product enhancement that reduces the 'one-shot' nature of standard CI.</li>
+<li>CI can be offered as a <strong>standalone individual product</strong> or as an <strong>accelerated benefit rider</strong> attached to a life policy — the latter pays the CI benefit against the life sum assured, reducing the death benefit by the amount paid.</li>
+</ul>
+<div class="seg-label" style="color:var(--ci);">▾ Group</div><ul>
+<li>Group CI is typically structured as a <strong>benefit multiple of salary</strong> (e.g. 2× or 4× annual salary) rather than a personally chosen sum assured, making the scheme simple to administer and align with other group death-in-service benefits.</li>
+<li>In a group CI scheme, the <strong>employer can negotiate standard terms</strong> for all members without individual selection — the scheme design reflects the employer's objectives rather than individual policyholder preferences.</li>
+</ul>
+<!-- CI features adequately covered in IFoA matrix -->
+</td>
+
+<!-- IP -->
+<td class="cell-ip"><ul>
+<li>A <strong>partial or proportional disability benefit</strong> option pays a reduced benefit when the policyholder is working but earning less than their pre-disability salary, encouraging gradual return to work and reducing the cliff-edge cessation of benefit.</li>
+<li><strong>Rehabilitation services</strong> (e.g. physiotherapy, occupational therapy, vocational retraining) provided as an integral product feature reduce total claim duration and cost, benefiting both the insurer and the policyholder.</li>
+<li><strong>Reviewable vs guaranteed premium structures</strong> present the same risk-transfer trade-off as in other H&amp;C products — reviewable premiums are lower initially but expose the policyholder to future increases.</li>
+</ul>
+<div class="seg-label" style="color:var(--ip);">▾ Individual</div><ul>
+<li><strong>Deferred period options</strong> (typically 1, 3, 6, or 12 months) allow the individual policyholder to align the start of benefit with the point at which their own savings or any employer/state sick pay is exhausted.</li>
+<li>Giving individual policyholders a choice between <strong>own occupation and any occupation</strong> definition provides flexibility at inception — the cheaper any occupation option means the policyholder accepts a higher bar before benefit is payable.</li>
+<li>A <strong>return-to-work incentive</strong> — such as a tapered benefit that reduces gradually as earned income increases — encourages policyholders to return to work without facing an immediate cliff-edge loss of IP benefit.</li>
+</ul>
+<div class="seg-label" style="color:var(--ip);">▾ Group</div><ul>
+<li>Group IP benefit structures are frequently <strong>differentiated by employment grade or salary band</strong> — for example, senior staff receiving a higher replacement ratio or longer maximum benefit period — reflecting the employer's relative valuation of different workforce segments.</li>
+<li><strong>Auto-enrolment and minimum participation requirements</strong> in group IP prevent the scheme from being disproportionately selected by employees who already have health concerns, maintaining average risk quality.</li>
+<li><strong>HR and payroll system integration</strong> — automating premium collection and salary data updates — is a standard operational feature of group IP schemes, reducing administration costs and improving accuracy.</li>
+</ul>
+
+<span class="iai-section-label">◆ IAI-specific additions</span>
+<ul class="iai-ul">
+<li class="iai-li"><strong>Overseas treatment continuation option</strong>: when a group IP member leaves employment, offering the option to continue the top-up overseas treatment cover on an individual basis — a retention feature specific to the Indian group health market where job mobility is high. <span class="iai-source">[Nov 2020 Q1v]</span></li>
+<li class="iai-li"><strong>Monthly premium mode aligned to payroll</strong>: for group products in India, allowing monthly premium deduction directly from payroll (rather than annual premium) is a specific product feature that increases affordability and reduces lapse due to premium non-payment. <span class="iai-source">[Nov 2020 Q1v]</span></li>
+<li class="iai-li"><strong>Waiting period of employment</strong> before scheme eligibility (e.g. 12 months from joining date): IAI tests this as a specific group IP feature that reduces both anti-selection and administrative costs from short-tenure employees cycling in and out of the scheme. <span class="iai-source">[Mar 2021 Q1ii]</span></li>
+</ul>
+</td>
+
+<!-- LTC -->
+<td class="cell-ltc"><ul>
+<li>A <strong>surrender value</strong> — the amount refundable if the policyholder cancels before claim — must be designed consistently with the reserving basis; a generous surrender value increases anti-selection risk as unhealthy lives are less likely to surrender.</li>
+<li>An <strong>inflation-linked benefit escalation option</strong> increases the benefit amount in line with a care cost index or general inflation, protecting the real value of the LTC benefit over a potentially decades-long duration.</li>
+<li>A <strong>death benefit during the pre-funding phase</strong> — typically a return of premiums paid — provides value to policyholders who die before making a claim, removing the 'use it or lose it' perception.</li>
+<li><strong>Premium waiver once a claim commences</strong> is a standard LTC feature, recognising that the policyholder should not be required to continue paying premiums in order to receive the benefit they have already qualified for.</li>
+<li>Offering <strong>pre-funded LTC</strong> and <strong>immediate-needs LTC annuities</strong> as separate product variants allows the insurer to serve both the planning market (younger purchasers) and the at-point-of-need market.</li>
+</ul>
+
+<span class="iai-section-label">◆ IAI-specific additions</span>
+<ul class="iai-ul">
+<li class="iai-li"><strong>Paid-up benefit option</strong>: in a pre-funded LTC product, after a minimum premium payment period, the policyholder may opt for a paid-up benefit (cease paying premiums, accepting a reduced benefit amount) — an IAI-tested feature not explicitly in the IFoA matrix. <span class="iai-source">[Nov 2019 Q1ii]</span></li>
+<li class="iai-li"><strong>Capital guarantee on immediate-needs annuity</strong>: some immediate-needs LTC annuities offer a capital guarantee whereby any excess of purchase price over total benefits received is paid out on death — this increases purchase price but reduces the policyholder's longevity risk concern. <span class="iai-source">[Nov 2019 Q1ii]</span></li>
+<li class="iai-li"><strong>Tax treatment of LTC benefits (India-specific)</strong>: disability-triggered LTC benefits are tax-free; for immediate-needs annuities, payments made directly to a registered care provider are not taxable in the hands of the insured — these tax features are IAI-specific and not covered in the IFoA matrix. <span class="iai-source">[Nov 2019 Q1ii]</span></li>
+</ul>
+</td>
+
+<!-- STATE -->
+<td class="cell-state"><ul>
+<li><strong>Mandatory or auto-enrolment</strong> design — eliminating individual opt-out — ensures universal participation, which is the prerequisite for community rating and the pooling of risk across the full population.</li>
+<li><strong>Premium reviewability built into the scheme structure</strong>, with regulator approval required for changes, allows the scheme to remain financially sustainable as claims experience and demographic trends evolve.</li>
+<li>A <strong>waiting period</strong> (e.g. 3 months from enrolment before cover activates) serves as an anti-selection control in lieu of medical underwriting, preventing individuals from joining specifically because they are about to incur a claim.</li>
+<li>A <strong>government backstop or guarantee</strong> for catastrophe events provides the insurer with protection against systemic aggregate risk that no single insurer could absorb commercially.</li>
+<li><strong>Tax incentives</strong> — such as tax relief on premiums or employer contributions — are commonly used by governments to stimulate demand for private cover, reducing the total fiscal burden on the public health system.</li>
+</ul>
+<!-- State features adequately covered -->
+</td>
+</tr>
+
+<!-- ═══════════════════════════════════════════════════════════
+     THEME 04 — TARGET MARKET & CUSTOMER NEEDS
+     ═══════════════════════════════════════════════════════════ -->
+<tr>
+<td class="theme-cell"><span class="theme-num">04</span>Target Market &amp; Customer Needs</td>
+
+<!-- PMI -->
+<td class="cell-pmi"><ul>
+<li>The primary demand driver for PMI is the <strong>gap between what state healthcare provides and what patients actually need</strong> — including shorter waiting times, choice of specialist, higher-quality facilities, and access to treatments not state-funded.</li>
+<li>An <strong>ageing population</strong> generates sustained demand for PMI as healthcare utilisation increases significantly with age, and age-related chronic conditions become more prevalent.</li>
+<li>Customers who want <strong>choice of provider, speed of access, and quality of facilities</strong> are willing to pay a PMI premium above state provision — this segment is less price-sensitive and more quality-sensitive.</li>
+<li><strong>Health inequalities</strong> — whether geographic, socioeconomic, or based on employment status — can be partially addressed by well-designed PMI products extending access to private care to underserved segments.</li>
+</ul>
+<div class="seg-label" style="color:var(--pmi);">▾ Individual</div><ul>
+<li><strong>Middle-income households</strong> that cannot self-fund significant medical expenditure but are not eligible for state-subsidised cover represent the core individual PMI target market.</li>
+</ul>
+<div class="seg-label" style="color:var(--pmi);">▾ Group</div><ul>
+<li>The <strong>employer-sponsored group PMI</strong> market targets organisations seeking to attract, retain, and maintain the productivity of a salaried workforce — the employer's HR and talent objectives drive purchasing decisions.</li>
+<li><strong>Corporate purchasers</strong> evaluating group PMI assess it as an employee benefit investment: they weigh the cost of premiums against the savings from reduced absenteeism and improved staff retention.</li>
+</ul>
+
+<span class="iai-section-label">◆ IAI-specific additions</span>
+<ul class="iai-ul">
+<li class="iai-li"><strong>Technologically aware, younger target segment</strong> for wearable-linked health products: customers who own wearable devices and are conscious of health management — socio-economically higher, digitally literate, more likely to be urban — form a distinct IAI-tested target segment requiring different marketing and distribution strategy (direct-to-customer, social media, gym partnerships). <span class="iai-source">[Mar 2017 Q1iii_a]</span></li>
+<li class="iai-li"><strong>Digital-native customers</strong> targeted by virtual health insurers (D2C model via mobile app) — the regulator may introduce 'virtual health insurer' licensing specifically to increase penetration among younger populations who are comfortable with entirely digital insurance journeys. <span class="iai-source">[Mar 2021 Q2i]</span></li>
+<li class="iai-li"><strong>Patients without insurance / cash-pay segment</strong>: the IAI curriculum specifically tests product design for uninsured patients paying out-of-pocket — this segment values certainty, transparency, affordability, and simplicity over comprehensive cover; a prepaid surgical bundle product targets this underserved group in private hospitals. <span class="iai-source">[May 2025 Q1a]</span></li>
+<li class="iai-li"><strong>Needs analysis before product launch</strong>: IAI papers emphasise the importance of market research, customer surveys, distributor sentiment analysis, and study of wearable device sales patterns as evidence of target market demand before designing and launching a new health product. <span class="iai-source">[Mar 2017 Q1i; Mar 2018 Q1i]</span></li>
+<li class="iai-li"><strong>Expatriate and overseas worker segment</strong>: group PMI products covering employees of Indian companies working abroad require specific target market analysis covering occupational risk by country visited, itinerary-based coverage, and differentiated class of cover for different employee risk profiles (e.g. site workers vs office staff). <span class="iai-source">[May 2023 Q2iib]</span></li>
+</ul>
+</td>
+
+<!-- CI -->
+<td class="cell-ci"><ul>
+<li><strong>Fear of cancer and cardiac disease</strong> is the primary emotional driver of CI demand — these two conditions account for the majority of CI claims and their high profile in consumer awareness makes CI an emotionally resonant product.</li>
+<li>CI is particularly valuable to individuals whose <strong>PMI covers medical expenses but not income loss on diagnosis</strong> — the lump sum fills this gap, enabling the policyholder to continue meeting financial commitments during recovery.</li>
+<li>In markets with <strong>low financial literacy</strong>, CI products must be simplified to a small core condition list with a clear single trigger to ensure the product is understood and trusted by the target market.</li>
+</ul>
+<div class="seg-label" style="color:var(--ci);">▾ Individual</div><ul>
+<li>CI cover is typically purchased by <strong>individuals with financial dependants</strong> who need a cash injection on diagnosis — to repay a mortgage, replace income during treatment, or fund care not covered by PMI.</li>
+<li><strong>Vulnerable or older customers</strong> require careful handling in CI product design and sales — they may have difficulty understanding complex condition lists or severity thresholds, raising consumer duty obligations.</li>
+</ul>
+<div class="seg-label" style="color:var(--ci);">▾ Group</div><ul>
+<li><strong>Employer-sponsored group CI</strong> targets employers seeking to provide financial security beyond occupational sick pay — typically aligned with a salary multiple as the sum assured, with free cover limits avoiding individual medical underwriting.</li>
+<li>In group CI, the <strong>employer's brand and staff welfare objectives</strong> drive scheme design — the employer wants a visible, credible benefit rather than a complex individually-tailored product.</li>
+</ul>
+<!-- CI target market well covered -->
+</td>
+
+<!-- IP -->
+<td class="cell-ip"><ul>
+<li>Workers in countries where <strong>state sick pay is inadequate or time-limited</strong> have a significant unmet need for income replacement in long-term disability — IP fills this gap for those who could not sustain their living expenses without earned income.</li>
+</ul>
+<div class="seg-label" style="color:var(--ip);">▾ Individual</div><ul>
+<li><strong>Self-employed individuals and those without employer sick pay</strong> are particularly vulnerable to income loss from disability, as they have no employer occupational sick pay scheme to rely on before state benefits or IP kicks in.</li>
+<li><strong>Students and young workers</strong> entering the labour market represent a high-value long-term IP market, as they are insuring a long future earnings stream — though low immediate awareness of disability risk may make acquisition challenging.</li>
+<li>The growth of the <strong>gig economy and flexible working</strong> creates a new IP market segment: workers whose income fluctuates and who may not qualify for standard salaried-employee IP products.</li>
+</ul>
+<div class="seg-label" style="color:var(--ip);">▾ Group</div><ul>
+<li><strong>Employers with a salaried workforce</strong> are the primary group IP customer, motivated by the desire to provide income continuity for absent employees, reduce presenteeism, and demonstrate duty of care as a staff retention tool.</li>
+<li>Group IP purchasers include organisations seeking to <strong>comply with duty-of-care obligations</strong> and reduce the risk of costly employment tribunals arising from inadequate support for long-term absent employees.</li>
+</ul>
+
+<span class="iai-section-label">◆ IAI-specific additions</span>
+<ul class="iai-ul">
+<li class="iai-li"><strong>Blue-collar and manual workers</strong> as a specific IP target: accident-only IP is better aligned to the needs of young lives in blue-collar industries who have a higher accident risk but whose sickness disability risk is lower — a target segment distinction not explicitly drawn in the IFoA matrix. <span class="iai-source">[Dec 2022 Q2iii]</span></li>
+<li class="iai-li"><strong>IP in a greenfield market (Country B scenario)</strong>: when no IP market exists and no state provision exists, the target market is the entire working population — but demand awareness, affordability and distribution channel development are the key barriers; consumer surveys are needed to assess latent demand before market entry. <span class="iai-source">[Dec 2022 Q2iv]</span></li>
+<li class="iai-li"><strong>Tax incentives as demand driver</strong>: IAI specifically tests whether personal tax incentives (premium deductibility, employer contribution tax relief) are available in the target country — their presence or absence materially affects the size and price-sensitivity of the target market. <span class="iai-source">[Dec 2022 Q2iv; May 2024 Q2ib]</span></li>
+</ul>
+</td>
+
+<!-- LTC -->
+<td class="cell-ltc"><ul>
+<li>The primary market for LTC insurance is the <strong>ageing population actively planning for future care costs</strong> — individuals aged 50–70 who want to protect their assets and avoid depleting savings or burdening family members.</li>
+<li><strong>Individuals aged 60+ who lack family care support</strong> (e.g. living alone, estranged from adult children, or unwilling to burden family) have the clearest immediate need for a formal LTC product.</li>
+<li>Those who wish to <strong>avoid becoming a financial burden on their family</strong> or to preserve their estate are strongly motivated LTC buyers — the product fulfils both a financial planning and an emotional need.</li>
+<li><strong>Pre-funded LTC product</strong> buyers are typically younger planners (50s–60s) purchasing before any care need arises, whereas <strong>immediate-needs annuity buyers</strong> are already in or entering care — fundamentally different risk profiles.</li>
+<li><strong>Consumer choice in the LTC market is limited</strong> — in markets where few commercial products exist, individuals may have no alternative to self-funding care, which increases the severity of the financial risk they face.</li>
+</ul>
+<!-- LTC target market well covered -->
+</td>
+
+<!-- STATE -->
+<td class="cell-state"><ul>
+<li>State health products are designed for the <strong>entire population as the target market</strong> — universal access is the defining objective, not segmentation by income, health status, or employment.</li>
+<li><strong>Low-income and uninsured populations</strong> are the most critical segment for state and social insurance schemes — affordability of the premium is the primary barrier to access for this group.</li>
+<li><strong>Microinsurance products</strong> specifically target <strong>low-income earners and informal sector workers</strong> who are excluded from formal employment-based cover and cannot afford commercial premiums.</li>
+<li>A primary policy objective of state health schemes is to <strong>reduce health inequalities</strong> — ensuring that health outcomes are not determined by ability to pay, geography, or employment status.</li>
+<li><strong>Low financial literacy</strong> across much of the target market means state schemes must use simple language, visual aids, and community-based education to ensure beneficiaries understand their entitlements.</li>
+</ul>
+<!-- State target market well covered -->
+</td>
+</tr>
+
+<!-- ═══════════════════════════════════════════════════════════
+     THEME 05 — UNDERWRITING APPROACH
+     ═══════════════════════════════════════════════════════════ -->
+<tr>
+<td class="theme-cell"><span class="theme-num">05</span>Underwriting Approach</td>
+
+<!-- PMI -->
+<td class="cell-pmi"><ul>
+<li><strong>Community rating</strong> has the advantage of providing broad access and simple administration, but creates adverse selection risk (healthier lives exit to cheaper risk-rated products) and requires mandatory participation or risk equalisation to be financially viable.</li>
+<li>Insurers may <strong>tighten underwriting standards</strong> in response to adverse claims experience — for example, by introducing stricter pre-existing condition exclusions — which can improve risk selection but may restrict access.</li>
+</ul>
+<div class="seg-label" style="color:var(--pmi);">▾ Individual</div><ul>
+<li>Individual PMI can be underwritten on a <strong>full medical underwriting (FMU) basis</strong>, a <strong>moratorium basis</strong>, or on a <strong>community rating basis</strong> — the choice is largely determined by regulatory requirements and has profound implications for adverse selection, affordability, and fairness.</li>
+<li><strong>Moratorium underwriting</strong> reduces friction at the point of sale but can lead to disputes at claim stage when the moratorium period has not yet expired for a relevant condition.</li>
+</ul>
+<div class="seg-label" style="color:var(--pmi);">▾ Group</div><ul>
+<li>In group PMI, a <strong>free cover limit (FCL)</strong> means members below a certain benefit amount are admitted without individual evidence of health.</li>
+<li>An <strong>at-work clause</strong> requires group members to be actively at work on the effective date of their cover.</li>
+<li><strong>Experience-based underwriting adjustments</strong> at group renewal allow the insurer to reflect actual risk in the group without individual re-underwriting.</li>
+</ul>
+
+<span class="iai-section-label">◆ IAI-specific additions</span>
+<ul class="iai-ul">
+<li class="iai-li"><strong>Factors influencing underwriting approach</strong> — IAI-specific list: range and size of benefits (sum insured level); type of product (hospital cash vs indemnity vs CI); distribution channel (socio-economic profile varies by channel); target market (design UW to match perceived risk of that segment); reinsurer's recommended UW approach; competitors' existing UW practices; level of competition; regulatory constraints (e.g. prohibition of genetic testing); and cost-vs-benefit of underwriting depth. <span class="iai-source">[Mar 2018 Q2v]</span></li>
+<li class="iai-li"><strong>Back-end underwriting as the dominant Indian PMI practice</strong>: limited front-end UW, with pre-existing conditions assessed only at claim stage — allows rapid policy issuance but creates significant information asymmetry and increases claims disputes; IAI papers analyse this as a feature distinct from the IFoA matrix's more balanced UW discussion. <span class="iai-source">[Jun 2019 Q2v]</span></li>
+<li class="iai-li"><strong>Optional front-end medical testing</strong>: an innovative UW proposal where the insurer offers policyholders the choice to undergo medical tests upfront — if they agree, no waiting periods apply from day 1; if they decline, standard waiting periods apply. The regulatory framework in India splits the cost of medicals between insurer and insured. IAI papers assess the advantages (better risk understanding, more competitive pricing) and challenges (expensive tests, lengthy issuance, high decline rates, possible adverse reputational impact). <span class="iai-source">[Jun 2019 Q2v]</span></li>
+<li class="iai-li"><strong>Group PMI underwriting for large groups (1000+ members)</strong>: IAI tests specific considerations including mandatory vs optional cover; industry/occupation risk profile; group size effect on expense economies of scale; system upgrades needed; and the potential for experience-based pricing adjustments even for large group renewals. <span class="iai-source">[Sep 2016 Q1iv_c]</span></li>
+<li class="iai-li"><strong>Smoking status as a rating factor</strong>: introducing smoking status as a new underwriting/rating factor in PMI — specific IAI considerations include how to verify smoking status (declaration vs biomarker test), system updates, re-underwriting of existing policyholders at renewal, competitive implications, and the risk of fraudulent declarations. <span class="iai-source">[Apr 2016 Q4]</span></li>
+<li class="iai-li"><strong>Underwriting for COVID-19 product</strong>: specific considerations include the appropriate questionnaire design (short form vs declaration of good health), questions about lifestyle diseases (diabetes, hypertension as co-morbidity risk), treatment of past COVID incidence, and whether pre-existing condition exclusion applies — all specific to a pandemic-context product. <span class="iai-source">[Nov 2020 Q2ii]</span></li>
+</ul>
+</td>
+
+<!-- CI -->
+<td class="cell-ci"><ul>
+<li><strong>AI and algorithmic underwriting tools</strong> can process large volumes of applications faster and more consistently than manual UW, but may introduce unintended bias if trained on non-representative data.</li>
+<li>The UW approach adopted affects <strong>lapse behaviour</strong> — policyholders who were fully underwritten and have known exclusions applied may be more or less likely to lapse than those on moratorium.</li>
+</ul>
+<div class="seg-label" style="color:var(--ci);">▾ Individual</div><ul>
+<li><strong>Full medical underwriting</strong> is the standard approach for individual CI policies, with the extent of underwriting scaled to the sum assured.</li>
+<li>Raising or lowering acceptance criteria is a tool for <strong>changing the business mix</strong> and managing aggregate morbidity risk.</li>
+</ul>
+<div class="seg-label" style="color:var(--ci);">▾ Group</div><ul>
+<li>For group CI, a <strong>free cover limit (FCL)</strong> protects the insurer against selection against the group.</li>
+<li>An <strong>at-work clause</strong> for group new joiners is a simple but effective anti-selection control.</li>
+<li><strong>New joiners to a group scheme</strong> after the initial enrolment window may be subject to individual evidence even below the FCL.</li>
+</ul>
+<!-- CI UW adequately covered -->
+</td>
+
+<!-- IP -->
+<td class="cell-ip"><ul>
+<li><strong>AI and automated UW tools</strong> in IP can enable faster decisions but may compress risk margins if healthier lives are identified and charged lower premiums, leaving a more adverse residual pool.</li>
+<li>The <strong>over-insurance risk</strong> is controlled by enforcing a replacement ratio limit at UW stage, requiring salary verification.</li>
+<li><strong>Periodic medical review</strong> during a long-duration IP claim serves as both a claims management tool and a check on continued eligibility.</li>
+</ul>
+<div class="seg-label" style="color:var(--ip);">▾ Individual</div><ul>
+<li>The choice between <strong>own occupation and any occupation definitions</strong> at underwriting is critical for individual IP.</li>
+<li><strong>Moratorium UW</strong> vs <strong>full medical UW</strong> presents the same trade-off as in PMI.</li>
+</ul>
+<div class="seg-label" style="color:var(--ip);">▾ Group</div><ul>
+<li>An <strong>at-work clause</strong> in group IP prevents individuals already absent through illness from joining and immediately claiming.</li>
+<li>A group IP <strong>free cover limit (FCL)</strong> simplifies mass enrolment.</li>
+<li>For group IP, the <strong>underwriting risk is assessed at the group level</strong> — industry, workforce age profile, and past absence data are the key inputs.</li>
+</ul>
+
+<span class="iai-section-label">◆ IAI-specific additions</span>
+<ul class="iai-ul">
+<li class="iai-li"><strong>Group IP FCL depends on group size and participation rate</strong>: the IAI exam specifically tests that the free cover limit should be set higher if membership is compulsory or participation rate is high (because adverse selection risk is lower), and lower if membership is entirely voluntary. The FCL may also reflect industry, location, and other group-level risk factors. <span class="iai-source">[May 2024 Q2ib; Mar 2021 Q1ii]</span></li>
+<li class="iai-li"><strong>At-work clause defined as absence-free period</strong>: the IAI curriculum defines a specific form of at-work criterion — requiring no sickness absence in the 3 months immediately prior to joining (rather than simply being "at work on day one") — as this is directly linked to the disability risk being insured. <span class="iai-source">[Mar 2021 Q1ii]</span></li>
+<li class="iai-li"><strong>Chronic disease exclusions in group IP</strong>: applying specific exclusions for chronic diseases (e.g. severe asthma) — while generally avoided because employers want universal cover and administration is simplified — is a specific IAI underwriting design option with a clear rationale for avoidance. <span class="iai-source">[Mar 2021 Q1ii]</span></li>
+<li class="iai-li"><strong>Accident-only IP underwriting advantage</strong>: simplified underwriting (or near-guaranteed acceptance) is a specific feature of accident-only IP that reduces a main sales barrier — but accepting more lives without underwriting creates anti-selection risk from those with higher accident exposure. <span class="iai-source">[Dec 2022 Q2iii]</span></li>
+</ul>
+</td>
+
+<!-- LTC -->
+<td class="cell-ltc"><ul>
+<li><strong>Full medical underwriting</strong> is standard for LTC, with particular focus on cognitive function and mobility assessments.</li>
+<li><strong>Early entry at younger ages</strong> is incentivised through lower premiums and easier UW.</li>
+<li><strong>Long waiting periods</strong> before benefit commences are used as a substitute for some UW rigour.</li>
+<li>The presence of a <strong>surrender value</strong> creates specific anti-selection risk at UW design stage.</li>
+<li><strong>Premium loadings for impaired lives</strong> may be appropriate for borderline health conditions.</li>
+</ul>
+<!-- LTC UW adequately covered -->
+</td>
+
+<!-- STATE -->
+<td class="cell-state"><ul>
+<li>State and social insurance schemes operate <strong>without individual underwriting by design</strong>.</li>
+<li><strong>Compulsory participation</strong> eliminates adverse selection completely.</li>
+<li><strong>Waiting periods</strong> serve as a simple substitute for medical underwriting.</li>
+<li><strong>Minimum participation thresholds</strong> for voluntary group schemes prevent the group from being used only by high-risk individuals.</li>
+</ul>
+<!-- State UW adequately covered -->
+</td>
+</tr>
+
+<!-- ═══════════════════════════════════════════════════════════
+     THEME 06 — PRICING CONSIDERATIONS
+     ═══════════════════════════════════════════════════════════ -->
+<tr>
+<td class="theme-cell"><span class="theme-num">06</span>Pricing Considerations</td>
+
+<!-- PMI -->
+<td class="cell-pmi"><ul>
+<li><strong>Medical inflation</strong> — the tendency for healthcare costs to rise faster than general price inflation — is the single most critical ongoing pricing risk in indemnity PMI.</li>
+<li><strong>Claims frequency and severity assumptions</strong> by category of treatment are the foundation of PMI pricing, requiring credible internal or industry data and regular updating.</li>
+<li><strong>Expense loadings</strong> — covering distribution costs, policy administration, and claims handling — must be included in the premium.</li>
+<li>When entering a new market, a <strong>lack of credible local claims data</strong> forces reliance on reinsurer tables, international benchmarks, or industry averages.</li>
+</ul>
+<div class="seg-label" style="color:var(--pmi);">▾ Individual</div><ul>
+<li>The choice between <strong>community rating</strong> and <strong>risk-rated individual premiums</strong> is largely determined by regulatory requirements.</li>
+</ul>
+<div class="seg-label" style="color:var(--pmi);">▾ Group</div><ul>
+<li><strong>Experience rating at group renewal</strong> adjusts the renewal premium to reflect the actual claims experience of the specific group.</li>
+<li>For <strong>small groups with insufficient claims credibility</strong>, a blended rate is used.</li>
+</ul>
+
+<span class="iai-section-label">◆ IAI-specific additions</span>
+<ul class="iai-ul">
+<li class="iai-li"><strong>PMI analysis of surplus vs long-term insurer</strong>: a key IAI-specific pricing/monitoring topic is that PMI profit analysis is performed more frequently (quarterly rather than annually) because the insurer can reprice at renewal — key items to monitor include incidence rates, average cost per claim, loss ratio by treatment category, persistency by cohort, and selection effect by duration. <span class="iai-source">[Mar 2022 Q1vi]</span></li>
+<li class="iai-li"><strong>Burning cost pricing method</strong>: the IAI curriculum explicitly teaches the burning cost approach (frequency × severity) for pricing outpatient cover, requiring separate estimates for: major risk factors (age, gender, network, occupation, location); dental/optical/maternity as separate cost components; underwriting loading for sub-standard lives; initial product development and system setup costs to be recouped; target loss ratio incorporating profit loading; and iterative profit testing and market testing. <span class="iai-source">[Jul 2022 Q2iii]</span></li>
+<li class="iai-li"><strong>Inflation-indexed product pricing complexity</strong>: pricing a sum-insured-inflation product requires projecting the index value to mid-projection period, applying to a banded sum insured structure, and reassessing the premium at each policy year as the index moves — significantly more complex than pricing a fixed sum insured product. <span class="iai-source">[Sep 2016 Q2ii]</span></li>
+<li class="iai-li"><strong>Pricing a new PMI insurer with no own data</strong>: IAI papers specifically test the data challenges for a new SAHI (Standalone Health Insurer) including: reliance on IRDAI industry data (may lack granularity); reinsurer data; distribution partner data; published medical research; need to adjust for anti-selection from moratorium underwriting; medical inflation significantly above CPI; and the break-even volume required to cover fixed expenses. <span class="iai-source">[Sep 2018 Q2ii]</span></li>
+<li class="iai-li"><strong>Mispricing risk management</strong>: the IAI introduces mispricing risk as a named category including poor selection, model error, parameter error, and random fluctuation risk — mitigants include reinsurance, margins for adverse deviation, frequent experience review, reviewable premiums (noting regulatory constraint on reviewing in first 3 years), and sensitivity testing. <span class="iai-source">[Mar 2017 Q1iv_a]</span></li>
+<li class="iai-li"><strong>Premium for overseas PMI/group product</strong>: pricing steps specific to IAI include obtaining data from IRDAI, local regulators, overseas medical journals, overseas hospitals directly, competitor quote portals, and reinsurers with multi-national data; adjusting Indian morbidity data for expatriate profile; and bottom-up expense estimation for the overseas operational model. <span class="iai-source">[May 2023 Q2iib]</span></li>
+<li class="iai-li"><strong>COVID-19 product pricing review checklist</strong>: IAI tests a specific review of whether: best estimate assumptions are justified; average claims cost varies by network/non-network hospital; sensitivity testing has been performed on key assumptions; maximum probable loss and capital adequacy have been assessed; reinsurance is available; volume estimates are reasonable; and whether pricing is appropriate for the level of underwriting applied. <span class="iai-source">[Nov 2020 Q2ii]</span></li>
+</ul>
+</td>
+
+<!-- CI -->
+<td class="cell-ci"><ul>
+<li><strong>Morbidity (incidence) assumptions</strong> by condition, age, and gender are the foundation of CI pricing.</li>
+<li>Pricing a <strong>children's cancer option</strong> is particularly challenging due to data scarcity.</li>
+<li><strong>Adverse lapse experience</strong> deteriorates the portfolio morbidity and reduces projected profit.</li>
+</ul>
+<div class="seg-label" style="color:var(--ci);">▾ Individual</div><ul>
+<li>In a <strong>unit-linked CI structure</strong>, the <strong>reviewable morbidity charge</strong> must be repriced periodically.</li>
+<li>Factors influencing the morbidity charge include <strong>age, gender, benefit amount, health status at UW, and smoking status</strong>.</li>
+</ul>
+<div class="seg-label" style="color:var(--ci);">▾ Group</div><ul>
+<li>Group CI pricing is based on the <strong>age and gender profile of the workforce</strong>.</li>
+<li><strong>Experience rating and retrospective premium adjustment</strong> at group CI renewal.</li>
+</ul>
+
+<span class="iai-section-label">◆ IAI-specific additions</span>
+<ul class="iai-ul">
+<li class="iai-li"><strong>Post-illness mortality assumption</strong>: for multi-pay and multi-condition CI products, pricing must model post-illness mortality rates (the higher mortality that follows a serious CI claim) — reducing expected future premium income and affecting the profitability of subsequent claim covers. <span class="iai-source">[Apr 2016 Q2iii_a]</span></li>
+<li class="iai-li"><strong>Risk discount rate adjustment for uncertainty</strong>: for new CI products with highly uncertain incidence assumptions, the risk discount rate used to discount future profit cash flows should be increased to reflect parameter and model uncertainty — an explicit IAI pricing principle. <span class="iai-source">[Apr 2016 Q2iii_a]</span></li>
+<li class="iai-li"><strong>Profit margin loading for novel products</strong>: the profit margin should be higher than normal for innovative CI variants (e.g. multi-pay) given the higher levels of uncertainty in incidence rates and inter-condition correlations. <span class="iai-source">[Apr 2016 Q2iii_a]</span></li>
+</ul>
+</td>
+
+<!-- IP -->
+<td class="cell-ip"><ul>
+<li><strong>Morbidity assumptions</strong> for IP cover both <strong>incidence</strong> and <strong>duration</strong> — both are required to price the full expected cost of a claim.</li>
+<li>IP premiums must incorporate <strong>salary and benefit inflation</strong> assumptions.</li>
+<li>The <strong>replacement ratio cap</strong> provides a pricing adjustment for moral hazard.</li>
+</ul>
+<div class="seg-label" style="color:var(--ip);">▾ Individual</div><ul>
+<li>A shorter <strong>deferred period</strong> generates significantly more claims frequency.</li>
+<li><strong>AI and insurtech UW tools</strong> may enable more individualised pricing but also risk compressing underwriting margins.</li>
+</ul>
+<div class="seg-label" style="color:var(--ip);">▾ Group</div><ul>
+<li><strong>Group IP benefits from economies of scale</strong> in administration, claims management, and distribution.</li>
+<li><strong>Experience rating</strong> is applied to credible group IP portfolios at renewal.</li>
+</ul>
+
+<span class="iai-section-label">◆ IAI-specific additions</span>
+<ul class="iai-ul">
+<li class="iai-li"><strong>Embedded Value (EV) impact of marketing focus on IP sales</strong>: IAI tests how a marketing campaign focused on IP sales affects EV analysis — specifically: no impact on current EV; increase in new business contribution; potential favourable expense assumption change (scale economies); marketing campaign cost reduces assets (expense item in analysis); and change in business mix effects on future assumptions. <span class="iai-source">[Mar 2022 Q1iii]</span></li>
+<li class="iai-li"><strong>State/political risk to demand</strong>: changes in state provision of sickness/disability benefits, or withdrawal of tax advantages for IP premiums, materially affect the pricing basis and volume assumptions — an IAI-specific pricing risk not in the IFoA matrix. <span class="iai-source">[May 2024 Q2ib]</span></li>
+<li class="iai-li"><strong>Group IP reinsurance structure</strong>: original-terms quota share (typically 60–75% of salary benefit) is the most appropriate reinsurance structure for group IP given the relatively standard and stable benefit level; the proportion reinsured may reduce over time as own experience develops. Catastrophe reinsurance is also appropriate where employer concentration risk is high. <span class="iai-source">[May 2024 Q2ib]</span></li>
+</ul>
+</td>
+
+<!-- LTC -->
+<td class="cell-ltc"><ul>
+<li><strong>Longevity risk</strong> is a critical pricing assumption for pre-funded LTC products.</li>
+<li><strong>Care cost inflation</strong> — which typically exceeds general CPI — must be explicitly modelled.</li>
+<li><strong>Morbidity incidence and prevalence assumptions</strong> for LTC reflect probability and expected duration of care need.</li>
+<li><strong>Investment risk</strong> is a core consideration given very long-duration liabilities.</li>
+<li><strong>Premium increase implications for reputation and lapse</strong> are a critical consideration in LTC repricing.</li>
+</ul>
+<!-- LTC pricing adequately covered -->
+</td>
+
+<!-- STATE -->
+<td class="cell-state"><ul>
+<li><strong>Social insurance pricing</strong> is based on solidarity — the 'premium' is typically a payroll levy or tax.</li>
+<li>The mechanism for <strong>premium collection</strong> determines the scheme's reach and compliance rate.</li>
+<li>The <strong>expense ratio</strong> is particularly critical in microinsurance and state schemes where premium levels are low.</li>
+<li>A <strong>premium reviewability mechanism</strong> is essential for long-term sustainability of state health schemes.</li>
+</ul>
+<!-- State pricing adequately covered -->
+</td>
+</tr>
+
+<!-- ═══════════════════════════════════════════════════════════
+     THEME 07 — DISTRIBUTION & SALES STRATEGY
+     ═══════════════════════════════════════════════════════════ -->
+<tr>
+<td class="theme-cell"><span class="theme-num">07</span>Distribution &amp; Sales Strategy</td>
+
+<!-- PMI -->
+<td class="cell-pmi"><ul>
+<li><strong>Cashless network empanelment</strong> — agreeing rates and referral protocols with hospitals and specialists — is itself a form of distribution.</li>
+<li>The trade-off between <strong>advertising-led brand building</strong> and <strong>partnership distribution</strong> affects the composition of PMI new business.</li>
+</ul>
+<div class="seg-label" style="color:var(--pmi);">▾ Individual</div><ul>
+<li><strong>Independent financial advisers (IFAs) and specialist health insurance brokers</strong> distribute individual PMI.</li>
+<li><strong>Digital and online channels</strong> are increasingly used for simpler, standardised individual PMI products.</li>
+<li><strong>Affinity partnerships</strong> (e.g. with supermarket chains, professional bodies, or trade unions) provide access to large consumer groups at low acquisition cost.</li>
+</ul>
+<div class="seg-label" style="color:var(--pmi);">▾ Group</div><ul>
+<li><strong>Corporate HR and employee benefits brokers</strong> are the primary distribution channel for group PMI.</li>
+<li><strong>Direct insurer-to-employer relationships</strong> are used for large corporates.</li>
+</ul>
+
+<span class="iai-section-label">◆ IAI-specific additions</span>
+<ul class="iai-ul">
+<li class="iai-li"><strong>Mobile application as primary distribution channel</strong>: IAI tests the specific operational and regulatory considerations of a digital-only insurer selling health products via mobile app — including regulatory requirements for innovative digital distribution, 24x7 customer support, online video product education, integration with core IT systems, and commission structure for alternative channels if any. <span class="iai-source">[Mar 2018 Q1i]</span></li>
+<li class="iai-li"><strong>Direct-to-consumer (D2C) model for virtual health insurer</strong>: the regulatory concept of a 'virtual health insurer' in India (requiring no physical infrastructure) targets the younger generation who prefer digital journeys; the D2C model cuts out intermediary cost, enabling better pricing — but requires strong brand and consumer trust. <span class="iai-source">[Mar 2021 Q2i]</span></li>
+<li class="iai-li"><strong>Non-traditional lead generation channels</strong>: for wearable-linked health products, IAI papers test distribution via gyms/fitness clubs, fitness consultants, adventure sports clubs, wearable device manufacturers, and online platforms — subject to IRDAI framework allowing such lead generation models. <span class="iai-source">[Mar 2017 Q1iii_a]</span></li>
+<li class="iai-li"><strong>Toothpaste/FMCG affinity partnership model</strong>: IAI tests a specific distribution partnership where an FMCG company (toothpaste brand) markets dental insurance via discount vouchers bundled with product purchase — raises issues of data adequacy, reinsurer comfort with customer profile, regulatory compensation rules, reputational linkage to partner brand quality, and conversion rate uncertainty. <span class="iai-source">[Mar 2018 Q1iv]</span></li>
+<li class="iai-li"><strong>Hospital as distribution partner</strong>: for a prepaid surgical bundle, the hospital group itself acts as the distribution intermediary — offering the product directly to patients at point of admission or inquiry, creating a fundamentally different distribution model vs traditional insurance. <span class="iai-source">[May 2025 Q1a]</span></li>
+</ul>
+</td>
+
+<!-- CI, IP, LTC, STATE — adequately covered in IFoA matrix, minor IAI additions -->
+
+<!-- CI -->
+<td class="cell-ci"><ul>
+<li><strong>Brand awareness</strong> is critical for a new entrant to the CI market.</li>
+<li><strong>Product differentiation beyond price</strong> — including claims service quality and value-added services — is important.</li>
+</ul>
+<div class="seg-label" style="color:var(--ci);">▾ Individual</div><ul>
+<li><strong>Online and direct-to-consumer channels</strong> suit simple, lump-sum individual CI products.</li>
+<li><strong>Bancassurance</strong> works well for straightforward individual CI products positioned alongside mortgage protection.</li>
+<li><strong>IFAs and tied agents</strong> are required for more complex individual CI products.</li>
+</ul>
+<div class="seg-label" style="color:var(--ci);">▾ Group</div><ul>
+<li><strong>Employee benefits brokers and consultants</strong> are the primary distribution channel for group CI.</li>
+<li><strong>Direct insurer-to-employer relationships</strong> may be used for large groups.</li>
+</ul>
+<!-- CI distribution adequately covered -->
+</td>
+
+<!-- IP -->
+<td class="cell-ip"><ul>
+<li>The <strong>financial literacy barrier</strong> means IP sales often require adviser-led education before a purchase decision is reached.</li>
+<li><strong>Outsourcing pricing and UW to an insurtech partner</strong> can allow a smaller insurer to enter the IP market.</li>
+</ul>
+<div class="seg-label" style="color:var(--ip);">▾ Individual</div><ul>
+<li><strong>Brokers and IFAs</strong> distribute individual IP, which requires advice-led sales.</li>
+<li><strong>IP is not typically a retail or online self-service product</strong> due to its complexity.</li>
+</ul>
+<div class="seg-label" style="color:var(--ip);">▾ Group</div><ul>
+<li><strong>Corporate HR departments and employee benefits consultants</strong> are the primary distribution channel for group IP.</li>
+<li>Group IP is frequently distributed as part of a <strong>bundled employee benefits tender</strong>.</li>
+</ul>
+
+<span class="iai-section-label">◆ IAI-specific additions</span>
+<ul class="iai-ul">
+<li class="iai-li"><strong>Tied agent and direct marketing unsuitable for group IP</strong>: IAI specifically highlights that most employers want flexibility to shop the market, making tied agents or direct-only marketing strategies uncompetitive — the insurer must build relationships with large employee benefit consultants and cannot justify a new dedicated direct sales force in this specialist market. <span class="iai-source">[May 2024 Q2ib]</span></li>
+<li class="iai-li"><strong>High commission strategy for early market entry</strong>: in a new group IP market, offering above-market commission levels to large brokers early on is an explicit IAI strategy to build the business — with the expectation that rates normalise as volume develops. <span class="iai-source">[May 2024 Q2ib]</span></li>
+<li class="iai-li"><strong>Financial advisers as best channel for unit-linked hospital cash</strong>: for complex unit-linked health products, independent financial advisers (familiar with unit-linked mechanics) are the best channel — tied agents or direct marketing cannot convey the product's complexity, and the insurer leverages its existing brand with the FA community. <span class="iai-source">[May 2024 Q2ic]</span></li>
+</ul>
+</td>
+
+<!-- LTC -->
+<td class="cell-ltc"><ul>
+<li><strong>IFAs and independent financial advisers</strong> are the primary distribution channel for LTC products.</li>
+<li><strong>Face-to-face sales</strong> are important for LTC given the age of the typical target market and the emotional sensitivity of the subject matter.</li>
+<li><strong>Bancassurance</strong> is a viable channel for pre-funded LTC products.</li>
+<li><strong>Care home and care provider networks</strong> can act as distribution partners for immediate-needs LTC annuities.</li>
+</ul>
+<!-- LTC distribution adequately covered -->
+</td>
+
+<!-- STATE -->
+<td class="cell-state"><ul>
+<li><strong>Government-administered auto-enrolment</strong> is the standard distribution mechanism for state health schemes.</li>
+<li><strong>Payroll deduction</strong> is the most efficient collection mechanism for employed workers.</li>
+<li><strong>Mobile and digital platforms</strong> are increasingly used for microinsurance distribution.</li>
+<li><strong>Group or community enrolment</strong> achieves the scale needed for microinsurance.</li>
+</ul>
+<!-- State distribution adequately covered -->
+</td>
+</tr>
+
+<!-- ═══════════════════════════════════════════════════════════
+     THEME 08 — PRODUCT DIFFERENTIATION
+     ═══════════════════════════════════════════════════════════ -->
+<tr>
+<td class="theme-cell"><span class="theme-num">08</span>Product Differentiation</td>
+
+<!-- PMI -->
+<td class="cell-pmi"><ul>
+<li>The <strong>size and quality of the cashless provider network</strong> is a primary differentiator for PMI customers.</li>
+<li><strong>Customer service quality and claims handling speed</strong> are critical differentiators.</li>
+<li><strong>Second opinion and medical concierge services</strong> differentiate premium PMI products.</li>
+<li><strong>Wellness and preventive health programmes</strong> differentiate PMI products by adding value beyond illness treatment.</li>
+<li><strong>Breadth of coverage versus price competitiveness</strong> is a fundamental positioning choice.</li>
+<li>A <strong>digital or app-based member experience</strong> is an increasingly important differentiator.</li>
+</ul>
+
+<span class="iai-section-label">◆ IAI-specific additions</span>
+<ul class="iai-ul">
+<li class="iai-li"><strong>First-mover advantage in new product segments</strong>: when launching a genuinely innovative product (e.g. wearable-linked health insurance or virtual insurer) in a market with no competition, the insurer can price with a higher margin initially to recover development costs, build brand recognition, and establish distribution relationships before competitors enter. <span class="iai-source">[Mar 2017 Q1i]</span></li>
+<li class="iai-li"><strong>Reputational risk as a differentiator's downside</strong>: the IAI curriculum specifically tests reputational risk from product failure — if the product fails to deliver on its promise (e.g. wearable device malfunctions, data breach, inadequate premium discount), the resulting negative customer sentiment can damage the insurer's entire portfolio, not just the new product. <span class="iai-source">[Mar 2017 Q1iv_b]</span></li>
+<li class="iai-li"><strong>Certainty and transparency as differentiation dimensions</strong>: for the prepaid surgical bundle product, the key differentiators are certainty (no surprises in total cost), transparency (pre-communicated pricing), zero out-of-pocket after payment, and simplicity (one payment, one procedure) — these are non-traditional insurance differentiators not covered in the IFoA matrix. <span class="iai-source">[May 2025 Q1a]</span></li>
+<li class="iai-li"><strong>AYUSH and alternative medicine coverage</strong> as a differentiator in the Indian market: covering Ayurveda, Yoga, Unani, Siddha, and Homeopathy (AYUSH) is a culturally relevant product feature in India that can differentiate a PMI product for customers preferring traditional medicine — not present in the IFoA matrix. <span class="iai-source">[Nov 2024 Q2a]</span></li>
+</ul>
+</td>
+
+<!-- CI -->
+<td class="cell-ci"><ul>
+<li>The <strong>breadth of the CI condition list</strong> versus <strong>clarity of definitions</strong> is the central product differentiation trade-off.</li>
+<li>Offering a <strong>severity-based or tiered payout</strong> is a market differentiator.</li>
+<li><strong>Children's benefit extensions</strong> differentiate CI products for family-oriented customers.</li>
+<li><strong>Brand reputation and financial strength</strong> are particularly important CI differentiators.</li>
+<li><strong>Value-added services</strong> — medical helplines, health apps, clinical second opinions — differentiate CI products.</li>
+</ul>
+<!-- CI differentiation adequately covered -->
+</td>
+
+<!-- IP -->
+<td class="cell-ip"><ul>
+<li><strong>The breadth of the own-occupation definition</strong> is a critical IP differentiator.</li>
+<li><strong>Rehabilitation and return-to-work services</strong> differentiate IP products.</li>
+<li><strong>AI underwriting speed and certainty</strong> differentiates IP distribution.</li>
+</ul>
+<div class="seg-label" style="color:var(--ip);">▾ Individual</div><ul>
+<li><strong>Flexibility in deferred period and benefit period options</strong> allows individual IP to be tailored.</li>
+<li><strong>Rewards and wellness programmes</strong> improve engagement and retain good risks.</li>
+</ul>
+<div class="seg-label" style="color:var(--ip);">▾ Group</div><ul>
+<li><strong>Integration with the employer's employee wellness programme</strong> differentiates group IP.</li>
+<li><strong>HR and payroll system integration</strong> differentiates group IP by reducing the employer's administrative burden.</li>
+</ul>
+
+<span class="iai-section-label">◆ IAI-specific additions</span>
+<ul class="iai-ul">
+<li class="iai-li"><strong>Accident-only IP as a differentiated product for specific segments</strong>: the accident-only variant serves as a differentiated product for younger blue-collar workers or manual occupations who want income protection against accidents at an affordable premium — positioned as a simpler alternative to full IP rather than a premium product. <span class="iai-source">[Dec 2022 Q2iii]</span></li>
+</ul>
+</td>
+
+<!-- LTC -->
+<td class="cell-ltc"><ul>
+<li>A <strong>care manager or case management service</strong> differentiates LTC products by adding practical value beyond the financial benefit.</li>
+<li><strong>Flexibility of care setting</strong> differentiates LTC products by respecting individual preferences.</li>
+<li>An <strong>inflation-protection benefit option</strong> differentiates LTC products.</li>
+<li><strong>Financial strength and longevity of the insurer</strong> are strong LTC differentiators.</li>
+</ul>
+<!-- LTC differentiation adequately covered -->
+</td>
+
+<!-- STATE -->
+<td class="cell-state"><ul>
+<li><strong>Affordability and universal access</strong> are the primary differentiators of state health products.</li>
+<li><strong>Government backing</strong> provides trust and credibility advantages.</li>
+<li><strong>Simplicity of the product</strong> is a differentiator in markets with low financial literacy.</li>
+</ul>
+<!-- State differentiation adequately covered -->
+</td>
+</tr>
+
+<!-- ═══════════════════════════════════════════════════════════
+     THEME 09 — RISK APPETITE & INSURER STRATEGY
+     ═══════════════════════════════════════════════════════════ -->
+<tr>
+<td class="theme-cell"><span class="theme-num">09</span>Risk Appetite &amp; Insurer Strategy</td>
+
+<td class="cell-pmi"><ul>
+<li>Before launching or expanding a PMI product, the insurer must assess whether it <strong>fits the company's current risk appetite</strong>.</li>
+<li><strong>New business volumes</strong> in PMI can generate significant <strong>capital strain</strong>.</li>
+<li><strong>Unlimited cost exposure under indemnity PMI</strong> represents the most significant long-term profitability risk.</li>
+<li><strong>Reviewable premium mechanisms</strong> are the primary tool for managing medical inflation risk.</li>
+<li><strong>Reinsurance</strong> is used to cap catastrophic individual claims and manage aggregate claims volatility.</li>
+</ul>
+
+<span class="iai-section-label">◆ IAI-specific additions</span>
+<ul class="iai-ul">
+<li class="iai-li"><strong>Closure to new business — risk appetite implications</strong>: if a CI product is being written at a loss and closed to new business, the IAI curriculum tests the full strategic impact on risk appetite: selective lapse of healthy lives accelerating the adverse pool; higher per-policy expenses; reserves becoming more volatile as volume declines; potential reinsurance treaty clause triggers; possible tax implications; and management of staff levels and distribution relationships during run-off. <span class="iai-source">[Mar 2017 Q2iii]</span></li>
+<li class="iai-li"><strong>Fixed overhead cost management as a strategic risk</strong>: the IAI specifically tests fixed cost risk — if volume projections are missed, high fixed costs become disproportionately large per policy, eroding profitability; strategies include reviewing business planning, improving process efficiency, skills development, and technology upgrade. <span class="iai-source">[Sep 2017 Q2vi_d]</span></li>
+<li class="iai-li"><strong>JV and foreign partner risk</strong>: for India-specific international market entry (foreign insurer JV with Indian partner), the IAI tests strategic risks including governance complexity, capital allocation conflicts, and management of product rationalisation decisions affecting both partners. <span class="iai-source">[Mar 2017 Q2iii]</span></li>
+<li class="iai-li"><strong>Manufacture vs partner decision</strong>: for a technology-embedded product (e.g. wearable device insurer), the make-vs-buy decision is a strategic risk appetite question — manufacturing in-house minimises counterparty risk and ensures data consistency but requires significant capital and non-core competency; partnering with a device manufacturer reduces capital intensity but creates supply chain and compatibility risks. <span class="iai-source">[Mar 2017 Q1v_a]</span></li>
+</ul>
+</td>
+
+<td class="cell-ci"><ul>
+<li><strong>Reinsurance is essential</strong> for large CI sums assured and new condition extensions.</li>
+<li><strong>Selective lapse risk</strong> represents a systemic risk to CI profitability.</li>
+<li><strong>Economic downturns</strong> may trigger a lapse spike.</li>
+<li><strong>New condition extensions</strong> require careful assessment of risk appetite.</li>
+</ul>
+<div class="seg-label" style="color:var(--ci);">▾ Individual</div><ul>
+<li>The <strong>unit-linked CI structure</strong> transfers investment risk to the policyholder.</li>
+</ul>
+<div class="seg-label" style="color:var(--ci);">▾ Group</div><ul>
+<li>In group CI, the <strong>employer as policyholder</strong> creates a concentration risk at renewal.</li>
+</ul>
+<!-- CI risk appetite adequately covered -->
+</td>
+
+<td class="cell-ip"><ul>
+<li><strong>Long-tail disability claims</strong> create significant capital and reserving strain.</li>
+<li><strong>Moral hazard</strong> is managed through replacement ratio design, rehabilitation, and regular medical review.</li>
+<li><strong>Economic downturns</strong> increase both IP claim incidence and duration.</li>
+<li><strong>Reinsurance</strong> is essential for IP portfolios.</li>
+</ul>
+<div class="seg-label" style="color:var(--ip);">▾ Group</div><ul>
+<li><strong>Operational capacity for long-term claims management</strong> must be assessed as a component of the group IP risk appetite.</li>
+<li>The <strong>concentration risk from a single large group IP scheme</strong> must be managed through diversification and reinsurance.</li>
+</ul>
+
+<span class="iai-section-label">◆ IAI-specific additions</span>
+<ul class="iai-ul">
+<li class="iai-li"><strong>Persistency risk in group IP</strong>: employers may change insurer every 1–2 years — creating a significant persistency risk that means development costs and initial expenses may not be recovered if the scheme is lost at early renewal. <span class="iai-source">[May 2024 Q2ib]</span></li>
+<li class="iai-li"><strong>Loss of direct customer contact risk</strong>: in broker-led group IP, the insurer loses direct contact with the insured employees — making cross-selling harder and claims control more difficult, as information flows through the broker rather than directly. <span class="iai-source">[May 2024 Q2ib]</span></li>
+<li class="iai-li"><strong>Accumulation risk from employer concentration</strong>: if the insurer has a concentration of one industry or employer type (e.g. construction), an industry-wide accident or illness wave creates correlated large claims — the IAI tests this explicitly as a reason to diversify across employer types and industries. <span class="iai-source">[May 2024 Q2ib]</span></li>
+</ul>
+</td>
+
+<td class="cell-ltc"><ul>
+<li><strong>Very long-tail LTC liabilities</strong> represent the most extreme capital and reserving challenge in health insurance.</li>
+<li><strong>Longevity and morbidity improvement uncertainty</strong> creates correlated risk.</li>
+<li><strong>Asset-liability matching (ALM)</strong> is critical for LTC.</li>
+<li><strong>Reinsurance availability for LTC</strong> is limited globally.</li>
+</ul>
+<!-- LTC risk appetite adequately covered -->
+</td>
+
+<td class="cell-state"><ul>
+<li>State health products require <strong>government backing or explicit guarantee</strong>.</li>
+<li><strong>Catastrophe and pandemic pooling</strong> creates extreme aggregate risk concentration.</li>
+<li><strong>Expense ratio sustainability</strong> is a core risk appetite question for state schemes.</li>
+</ul>
+<!-- State risk appetite adequately covered -->
+</td>
+</tr>
+
+<!-- ═══════════════════════════════════════════════════════════
+     THEME 10 — ANTI-SELECTION & LAPSE RISK
+     ═══════════════════════════════════════════════════════════ -->
+<tr>
+<td class="theme-cell"><span class="theme-num">10</span>Anti-selection &amp; Lapse Risk</td>
+
+<td class="cell-pmi"><ul>
+<li><strong>Anti-selection under community rating</strong> occurs when healthier individuals exit the pool.</li>
+<li><strong>Mandatory participation</strong> is the most effective remedy.</li>
+<li>A <strong>risk equalisation mechanism</strong> allows multiple insurers to operate in a community-rated market without competitive disadvantage.</li>
+<li><strong>Waiting periods and exclusions</strong> prevent individuals from joining PMI only when they need treatment imminently.</li>
+<li>A <strong>no-claims discount (NCD)</strong> rewards and retains good risks.</li>
+</ul>
+
+<span class="iai-section-label">◆ IAI-specific additions</span>
+<ul class="iai-ul">
+<li class="iai-li"><strong>Portability-induced selective lapsing</strong>: under the Indian PMI portability regulation, when a portfolio has adverse experience requiring a premium increase, healthy policyholders can port to another insurer without losing accumulated waiting-period credits — creating selective lapsing that worsens the remaining pool; the porting insurer cannot price differently for porting lives despite their different expected morbidity. <span class="iai-source">[Sep 2016 Q1ii]</span></li>
+<li class="iai-li"><strong>Wearable product — authentication anti-selection</strong>: a health monitoring device linked to premium discounts creates a specific anti-selection risk if a healthy person wears the device for an unhealthy policyholder — device authentication mechanisms are required to identify if the device is being worn by someone other than the insured. <span class="iai-source">[Mar 2017 Q1i]</span></li>
+<li class="iai-li"><strong>COVID product family floater anti-selection</strong>: offering a family floater COVID product raises accumulation and anti-selection risk — if one family member contracts COVID the probability of others being affected is high, creating within-policy correlation; the product design must consider limiting family floater or building in specific accumulation controls. <span class="iai-source">[Nov 2020 Q2ii]</span></li>
+<li class="iai-li"><strong>Micro-insurance IP — higher anti-selection and fraud risk</strong>: in micro-insurance IP, the population covered is often less financially literate, claim investigations are harder (remote locations, high travel cost), fraud is more difficult to detect (large volumes of small policies), and non-disclosure risk is higher due to lack of understanding of disclosure obligations — all anti-selection amplifiers specific to the micro-insurance context. <span class="iai-source">[Mar 2017 Q2iv]</span></li>
+</ul>
+</td>
+
+<td class="cell-ci"><ul>
+<li><strong>Selective lapsing</strong> — where policyholders who know they are healthy lapse — worsens the morbidity experience.</li>
+<li>During an <strong>economic downturn</strong>, a lapse spike may occur.</li>
+<li>Regular and transparent <strong>policyholder communication</strong> can reduce involuntary lapse.</li>
+</ul>
+<div class="seg-label" style="color:var(--ci);">▾ Individual</div><ul>
+<li>The <strong>ROP feature</strong> reduces the economic incentive to lapse.</li>
+<li>The <strong>lapse impact on morbidity</strong> in individual CI is particularly acute.</li>
+</ul>
+<div class="seg-label" style="color:var(--ci);">▾ Group</div><ul>
+<li>In <strong>group CI schemes, policyholders cannot lapse mid-policy year</strong>.</li>
+<li><strong>Employer renewal negotiation dynamics</strong> — the employer may lapse the entire group if a cheaper equivalent is available.</li>
+</ul>
+<!-- CI anti-selection adequately covered -->
+</td>
+
+<td class="cell-ip"><ul>
+<li><strong>Moral hazard</strong> in IP is managed by capping the replacement ratio below 100%.</li>
+<li>The <strong>linked claims period</strong> prevents gaming of the deferred period.</li>
+<li>The <strong>deferred period</strong> absorbs short-duration incapacity.</li>
+<li><strong>Periodic medical review</strong> during a long IP claim detects unreported recovery.</li>
+</ul>
+<div class="seg-label" style="color:var(--ip);">▾ Individual</div><ul>
+<li><strong>AI underwriting tools</strong> that identify only the healthiest individual risks may inadvertently worsen the adverse selection risk in the broader market.</li>
+</ul>
+<div class="seg-label" style="color:var(--ip);">▾ Group</div><ul>
+<li>In group IP, <strong>auto-enrolment with minimum participation thresholds</strong> is the primary anti-selection control.</li>
+<li><strong>Linked claims provisions</strong> in group IP prevent repeated short absences gaming the deferred period.</li>
+</ul>
+
+<span class="iai-section-label">◆ IAI-specific additions</span>
+<ul class="iai-ul">
+<li class="iai-li"><strong>Micro-insurance IP moral hazard</strong>: the IAI curriculum tests specific moral hazard risks in micro-insurance IP including: cultural attitudes to return to work; availability of local medical expertise and variable quality of medical certification; fraud in remote areas where investigators cannot travel easily; and premium payment irregularity (weather/crop-dependent income). <span class="iai-source">[Mar 2017 Q2iv]</span></li>
+<li class="iai-li"><strong>Over-insurance detection challenge in India</strong>: where the informal economy is large, verifying pre-disability income (and hence enforcing the replacement ratio cap) is operationally difficult — IAI papers note this as a specific underwriting and anti-selection control challenge. <span class="iai-source">[Mar 2021 Q1ii]</span></li>
+</ul>
+</td>
+
+<td class="cell-ltc"><ul>
+<li>In pre-funded LTC products with a surrender value, <strong>unhealthy lives approaching the claim trigger may exercise the surrender value</strong>.</li>
+<li>If <strong>healthy lives surrender</strong>, the remaining pool has higher average health risk.</li>
+<li>A <strong>premium increase</strong> typically triggers a disproportionate lapse among healthier policyholders.</li>
+<li><strong>TCF regulatory risk</strong> arises if the surrender value appears poor value.</li>
+</ul>
+<!-- LTC anti-selection adequately covered -->
+</td>
+
+<td class="cell-state"><ul>
+<li><strong>Compulsory participation</strong> in state health schemes completely eliminates adverse selection.</li>
+<li>For <strong>voluntary group microinsurance schemes</strong>, minimum participation thresholds are essential.</li>
+<li><strong>Premium affordability</strong> is the primary anti-lapse mechanism in state schemes.</li>
+</ul>
+<!-- State anti-selection adequately covered -->
+</td>
+</tr>
+
+<!-- ═══════════════════════════════════════════════════════════
+     THEME 11 — REGULATION & CONSUMER PROTECTION
+     ═══════════════════════════════════════════════════════════ -->
+<tr>
+<td class="theme-cell"><span class="theme-num">11</span>Regulation &amp; Consumer Protection</td>
+
+<td class="cell-pmi"><ul>
+<li><strong>Community rating regulations</strong> require associated rules on mandatory participation and risk equalisation.</li>
+<li><strong>Guaranteed renewability requirements</strong> prevent insurers from cancelling PMI cover.</li>
+<li><strong>Product filing and regulatory approval</strong> obligations require new product terms to be submitted before launch.</li>
+<li><strong>Anti-discrimination rules on underwriting factors</strong> constrain risk rating.</li>
+<li><strong>Disclosure requirements</strong> mandate clear explanation of exclusions, limitations, and co-payments.</li>
+<li><strong>Risk equalisation fund requirements</strong> prevent cherry-picking.</li>
+</ul>
+
+<span class="iai-section-label">◆ IAI-specific additions</span>
+<ul class="iai-ul">
+<li class="iai-li"><strong>IRDAI (Insurance Products) Regulations 2024</strong>: a comprehensive regulatory framework specific to India governing classification of health products (indemnity vs benefit), scope by insurer type (general/health/life), pricing rules (premium fixed for policy term; instalment options; wellness incentive disclosure), PED waiting period caps (maximum 36 months), specific waiting period guidance, and the 60-month moratorium rule — this entire regulatory framework is IAI-specific and has no IFoA equivalent. <span class="iai-source">[May 2024 Q3]</span></li>
+<li class="iai-li"><strong>IRDAI Guidelines for product filing</strong>: when withdrawing a product in India, the company must comply with IRDAI product filing guidelines — the regulator's involvement in product withdrawal (not just product launch) is an IAI-specific regulatory dimension. <span class="iai-source">[Mar 2017 Q2iii]</span></li>
+<li class="iai-li"><strong>Mental illness coverage mandate</strong>: IRDAI required that indemnity PMI policies cover mental illness — the IAI tests the regulatory compliance challenges including retroactive applicability (no prior questions on mental illness in proposal forms, making it impossible to apply pre-existing condition exclusions) and the need to update underwriting manuals and claims guidelines. <span class="iai-source">[Jun 2019 Q2vi]</span></li>
+<li class="iai-li"><strong>Virtual health insurer licensing concept</strong>: IAI tests the regulatory concept of a new class of health insurer licence (virtual health insurer) that requires no physical infrastructure — a specific Indian regulatory innovation to increase health insurance penetration. <span class="iai-source">[Mar 2021 Q2i]</span></li>
+<li class="iai-li"><strong>SAHI (Standalone Health Insurer) category</strong>: India has a specific regulatory category of health-only insurer (SAHI) with distinct capital, product, and solvency requirements — IAI papers test pricing, design, and operational considerations specific to this category. <span class="iai-source">[Sep 2018 Q2ii]</span></li>
+<li class="iai-li"><strong>Lifetime renewability clause</strong>: IRDAI mandates lifetime renewability for individual health insurance products in India — this affects product design (the insurer cannot cancel the policy if the individual's health deteriorates), claims management, and long-term financial planning in a way that differs from renewable annually PMI structures common in other markets. <span class="iai-source">[Jun 2019 Q2v]</span></li>
+</ul>
+</td>
+
+<td class="cell-ci"><ul>
+<li><strong>Consumer Responsibility and Consumer Duty obligations</strong> require CI insurers to ensure products are designed for the target market.</li>
+<li><strong>Treating Customers Fairly (TCF)</strong> is a regulatory focus given concerns about CI claims declined due to definitional technicalities.</li>
+<li><strong>MI and monitoring frameworks</strong> are required to demonstrate ongoing compliance.</li>
+<li><strong>Regulator-mandated standardisation of CI definitions</strong> removes the ability to compete on definition breadth alone.</li>
+</ul>
+<div class="seg-label" style="color:var(--ci);">▾ Individual</div><ul>
+<li><strong>Vulnerable customer protections</strong> apply particularly in individual CI sales.</li>
+</ul>
+<div class="seg-label" style="color:var(--ci);">▾ Group</div><ul>
+<li><strong>Employer obligations under group CI</strong> include duty to inform employees of cover terms.</li>
+</ul>
+<!-- CI regulation adequately covered -->
+</td>
+
+<td class="cell-ip"><ul>
+<li>The <strong>over-insurance rule</strong> is a fundamental regulatory and actuarial principle in IP design.</li>
+<li><strong>Data protection regulations</strong> governing the use of wearable health data are becoming increasingly significant.</li>
+<li><strong>AI underwriting in IP</strong> is subject to increasing regulatory scrutiny regarding algorithmic bias.</li>
+</ul>
+<div class="seg-label" style="color:var(--ip);">▾ Individual</div><ul>
+<li><strong>Regulatory requirements on minimum deferred periods</strong> may constrain individual IP product design.</li>
+</ul>
+<div class="seg-label" style="color:var(--ip);">▾ Group</div><ul>
+<li><strong>Employer obligations</strong> in a group IP scheme are regulated separately from the insurance product itself.</li>
+</ul>
+
+<span class="iai-section-label">◆ IAI-specific additions</span>
+<ul class="iai-ul">
+<li class="iai-li"><strong>Regulatory requirements specific to Country B entry</strong>: the IAI tests a full regulatory checklist for new market IP entry including licensing requirements, capital/solvency requirements, financial reporting standards, product design restrictions, investment restrictions, distributor regulation (commission levels), contract law, employment law, and the maturity of the insurance ombudsman/legal system — a comprehensive market entry regulatory due diligence list. <span class="iai-source">[Dec 2022 Q2iv]</span></li>
+</ul>
+</td>
+
+<td class="cell-ltc"><ul>
+<li><strong>Long-term reserving requirements</strong> for LTC are subject to prudential oversight.</li>
+<li><strong>Surrender value design</strong> in LTC is subject to TCF and regulatory fairness requirements.</li>
+<li><strong>Consumer protection on premium reviewability</strong> is a growing area of regulatory focus.</li>
+<li><strong>Regulatory approval for new long-term LTC product structures</strong> may require actuarial certification.</li>
+</ul>
+<!-- LTC regulation adequately covered -->
+</td>
+
+<td class="cell-state"><ul>
+<li><strong>Government mandate</strong> — typically through primary legislation — is required to establish a compulsory state health scheme.</li>
+<li><strong>Anti-discrimination provisions</strong> are the cornerstone of state health scheme consumer protection.</li>
+<li><strong>Treating customers fairly in low-literacy markets</strong> requires adapted communication strategies.</li>
+</ul>
+<!-- State regulation adequately covered -->
+</td>
+</tr>
+
+<!-- ═══════════════════════════════════════════════════════════
+     THEME 12 — PRODUCT REDESIGN & IN-FORCE MANAGEMENT
+     ═══════════════════════════════════════════════════════════ -->
+<tr>
+<td class="theme-cell"><span class="theme-num">12</span>Product Redesign &amp; In-force Management</td>
+
+<td class="cell-pmi"><ul>
+<li><strong>Tightening pre-authorisation requirements</strong> reduces claims leakage.</li>
+<li>The trade-off between <strong>repricing (premium increase)</strong> and <strong>structural benefit change</strong> must be evaluated carefully.</li>
+<li><strong>Changing underwriting criteria</strong> for new joiners can gradually improve the in-force book quality.</li>
+</ul>
+<div class="seg-label" style="color:var(--pmi);">▾ Individual</div><ul>
+<li><strong>Introducing or increasing excesses and co-insurance</strong> for individual policyholders is a direct mechanism to reduce claims.</li>
+</ul>
+<div class="seg-label" style="color:var(--pmi);">▾ Group</div><ul>
+<li><strong>Restricting the hospital or provider network</strong> reduces claims costs by channelling patients to contracted providers.</li>
+<li><strong>Experience rating adjustments</strong> at group renewal are the primary in-force management mechanism.</li>
+</ul>
+
+<span class="iai-section-label">◆ IAI-specific additions</span>
+<ul class="iai-ul">
+<li class="iai-li"><strong>Negotiating provider tariffs</strong> as a claims cost management tool: for dental and PMI products in India, the insurer can conduct surprise visits to empanelled providers to verify genuine claims and negotiate fixed tariffs for procedures — a specific in-force management technique tested in IAI papers. <span class="iai-source">[Mar 2018 Q1ii]</span></li>
+<li class="iai-li"><strong>Experience analysis as the trigger for in-force action</strong>: IAI papers test the full PMI experience analysis framework — morbidity (incidence and cost), expenses, investment returns, persistency/lapse, new business mix — as the essential diagnostic before any repricing or redesign decision. The analysis methodology includes calculation of exposed-to-risk, adjustments for waiting periods, issue-year cohort analysis, and comparison to pricing assumptions. <span class="iai-source">[Sep 2016 Q1i; Jun 2019 Q1iii]</span></li>
+<li class="iai-li"><strong>Product performance monitoring framework (post-launch)</strong>: the IAI curriculum tests a comprehensive post-launch performance monitoring framework covering: enrollment/market penetration vs projections; premium revenue growth; claims experience and loss ratios; customer satisfaction and retention; risk pool composition and adverse selection detection; financial performance (net income, operating margin); regulatory compliance; market share and competitive positioning; cost-effectiveness; and long-term sustainability — a broader and more structured framework than the IFoA matrix's in-force management coverage. <span class="iai-source">[Nov 2024 Q1d]</span></li>
+<li class="iai-li"><strong>Outpatient cover addition operational redesign</strong>: adding OP cover to an existing IP/PMI book requires operational changes across underwriting (anti-selection controls for chronic/pre-existing conditions), claims (pre-authorisation thresholds; high-frequency low-severity processing; TPA or in-house system changes), valuation (OP seasonality affects unexpired risk reserves; IBNR calculation differs), and reinsurance (quota share more appropriate than XL for OP; catastrophe/epidemic XL still needed). <span class="iai-source">[Jul 2022 Q2iv]</span></li>
+</ul>
+</td>
+
+<td class="cell-ci"><ul>
+<li>Following adverse experience, a <strong>CI premium rate review</strong> must be supported by actuarial analysis.</li>
+<li><strong>Amending the product structure</strong> — e.g. introducing severity tiers — can limit the premium increase required.</li>
+<li><strong>Consumer Duty compliance</strong> in a redesigned CI product requires evidence of suitability.</li>
+<li><strong>MI monitoring frameworks</strong> post-redesign track whether the redesign achieved its objectives.</li>
+</ul>
+<!-- CI redesign adequately covered -->
+</td>
+
+<td class="cell-ip"><ul>
+<li>Before any IP product redesign, the insurer should conduct a thorough <strong>loss ratio investigation</strong>.</li>
+<li><strong>Improving claims management and rehabilitation processes</strong> can reduce average claim duration without changing policy terms.</li>
+</ul>
+<div class="seg-label" style="color:var(--ip);">▾ Individual</div><ul>
+<li>For individual IP, the choice between a <strong>premium increase and a benefit reduction</strong> is a fundamental trade-off.</li>
+<li><strong>Tightening the underwriting policy</strong> for individual new joiners improves future risk selection.</li>
+</ul>
+<div class="seg-label" style="color:var(--ip);">▾ Group</div><ul>
+<li><strong>Changing the scheme's free cover limit</strong> is a targeted group IP redesign lever.</li>
+<li><strong>Renegotiating claims management and rehabilitation provider contracts</strong> can reduce per-claim costs.</li>
+</ul>
+<!-- IP redesign adequately covered -->
+</td>
+
+<td class="cell-ltc"><ul>
+<li><strong>Substantial premium increases</strong> in LTC carry significant reputational risk.</li>
+<li><strong>Structural amendments</strong> — such as changing from whole-of-life to fixed 5-year benefit — limit total liability.</li>
+<li><strong>Regulator communication</strong> on material LTC product changes is essential.</li>
+</ul>
+<!-- LTC redesign adequately covered -->
+</td>
+
+<td class="cell-state"><ul>
+<li><strong>Claims ratio monitoring</strong> is an essential governance mechanism for state health schemes.</li>
+<li><strong>Adding an outpatient benefit</strong> to an inpatient-only scheme is a common expansion pathway.</li>
+<li><strong>Premium reviewability as a planned redesign mechanism</strong> allows incremental premium adjustments without legislative change.</li>
+</ul>
+<!-- State redesign adequately covered -->
+</td>
+</tr>
+
+<!-- ═══════════════════════════════════════════════════════════
+     THEME 13 — GROUP PRODUCTS SPECIFIC CONSIDERATIONS
+     ═══════════════════════════════════════════════════════════ -->
+<tr>
+<td class="theme-cell"><span class="theme-num">13</span>Group Products — Specific Considerations</td>
+
+<td class="cell-pmi"><ul>
+<li><strong>Employer objectives</strong> — staff welfare, productivity, attraction, and retention — drive scheme design decisions.</li>
+<li><strong>Stakeholder management</strong> must address the sometimes diverging interests of employer, employee, and insurer.</li>
+<li><strong>Experience rating at renewal</strong> adjusts the renewal premium to reflect the group's actual claims history.</li>
+<li>The choice between a <strong>self-funded scheme</strong> and a fully <strong>insured scheme</strong> involves a cost certainty vs cost savings trade-off.</li>
+<li><strong>Cost reduction strategies during an economic downturn</strong> — such as reducing benefit levels or moving to self-funded — are frequently required.</li>
+<li><strong>Benefit matching for different employment grades</strong> requires careful management.</li>
+</ul>
+
+<span class="iai-section-label">◆ IAI-specific additions</span>
+<ul class="iai-ul">
+<li class="iai-li"><strong>Group PMI for large groups (1000+ members) — IAI-specific considerations</strong>: morbidity varies by industry and must be experience-rated despite market competition; economies of scale reduce per-policy expenses but may require system upgrades and new distribution infrastructure; lapse risk fluctuates more due to employer switching; investment pool grows with large group volumes enabling better asset matching. <span class="iai-source">[Sep 2016 Q1iv_c]</span></li>
+<li class="iai-li"><strong>Employer-managed scheme administration</strong>: IAI tests the option of requiring the employer to make valid claim payments as part of payroll (i.e. employer pays employees in claim, then accounts to insurer) — this reduces insurer administrative burden and speeds up benefit payment to employees, but requires a high-trust employer relationship. <span class="iai-source">[Mar 2021 Q1ii]</span></li>
+<li class="iai-li"><strong>Broker relationship management in group IP</strong>: large employee benefit consultants act as go-betweens for all communications between insurer and employer — the insurer may lose direct customer contact; brokers may carry out much of the scheme administration; but this reduces ongoing expenses for the insurer while introducing dependence on the broker relationship. <span class="iai-source">[May 2024 Q2ib]</span></li>
+</ul>
+</td>
+
+<td class="cell-ci"><ul>
+<li>The <strong>free cover limit (FCL)</strong> in group CI must balance ease of enrolment against adverse selection risk.</li>
+<li>The <strong>inability to lapse mid-policy year</strong> reduces within-year lapse risk but employer non-renewal is a mass lapse equivalent.</li>
+<li>In <strong>employer-led premium negotiation</strong>, the employer has more bargaining power in a large group.</li>
+<li><strong>Experience rating and retrospective premium adjustment</strong> introduce uncertainty for employer budgeting.</li>
+<li>The <strong>group scheme sponsor relationship</strong> replaces individual UW and individual policyholder communication.</li>
+</ul>
+<!-- CI group considerations adequately covered -->
+</td>
+
+<td class="cell-ip"><ul>
+<li><strong>Employer motive</strong> — staff retention, productivity, legal compliance, duty of care — drives group IP design.</li>
+<li><strong>Auto-enrolment and minimum participation requirements</strong> prevent disproportionate use by employees with health concerns.</li>
+<li><strong>Outsourcing scheme administration</strong> to a specialist employee benefits provider reduces employer HR cost burden.</li>
+<li>Group IP involves <strong>experience rating and retrospective adjustment</strong> at renewal.</li>
+</ul>
+
+<span class="iai-section-label">◆ IAI-specific additions</span>
+<ul class="iai-ul">
+<li class="iai-li"><strong>New business from taking over existing group scheme</strong>: IAI tests the specific scenario where a group IP new business case involves taking over an existing scheme from another insurer — this requires the incoming insurer to decide whether to accept responsibility for current claimants (on-risk for existing liabilities) as well as future new claims — a specific commercial and risk management decision in the group IP context. <span class="iai-source">[Mar 2021 Q1ii]</span></li>
+<li class="iai-li"><strong>Economic and political risk factors on group IP demand</strong>: IAI specifically tests that the group IP market is sensitive to business cycle (recession reduces demand), political factors (state benefit changes), and tax advantages — making group IP demand more cyclically volatile than individual IP. <span class="iai-source">[May 2024 Q2ib]</span></li>
+</ul>
+</td>
+
+<td class="cell-ltc"><ul>
+<li>While <strong>employer-sponsored LTC</strong> schemes exist in some markets, this is not widely established globally.</li>
+<li><strong>Government-sponsored group LTC schemes</strong> are the most common form of 'group' LTC product.</li>
+<li>In a group LTC context, <strong>aggregate ADL assessment</strong> provides a simplified approach to estimating near-term claim exposure.</li>
+</ul>
+<!-- LTC group considerations adequately covered -->
+</td>
+
+<td class="cell-state"><ul>
+<li>In mandatory state health schemes, the <strong>employer acts as the scheme sponsor</strong> collecting payroll deductions.</li>
+<li>In social insurance models, the <strong>government is the effective scheme sponsor</strong>.</li>
+<li><strong>Community or village group schemes</strong> in microinsurance use social capital as a substitute for formal UW.</li>
+<li><strong>Administration simplicity</strong> through group enrolment is a critical design objective.</li>
+</ul>
+<!-- State group considerations adequately covered -->
+</td>
+</tr>
+
+<!-- ═══════════════════════════════════════════════════════════
+     THEME 14 — NEW MARKET ENTRY & PRODUCT LAUNCH
+     ═══════════════════════════════════════════════════════════ -->
+<tr>
+<td class="theme-cell"><span class="theme-num">14</span>New Market Entry &amp; Product Launch</td>
+
+<td class="cell-pmi"><ul>
+<li>Before entering a new PMI market, the insurer must conduct thorough <strong>market research</strong>.</li>
+<li>In a new geography where <strong>local claims data is unavailable</strong>, the insurer must rely on benchmarks and reinsurer tables.</li>
+<li><strong>Cultural, religious, and linguistic considerations</strong> must be reflected in product design and communication.</li>
+<li>New market entry can be achieved through <strong>joint venture with a local partner</strong> or <strong>organic market entry</strong>.</li>
+<li><strong>Capital requirements and phased portfolio build</strong> must be planned carefully.</li>
+</ul>
+
+<span class="iai-section-label">◆ IAI-specific additions</span>
+<ul class="iai-ul">
+<li class="iai-li"><strong>New digital health insurer launch checklist</strong>: IAI provides a comprehensive pre-launch consideration checklist for a new SAHI (or digital-first insurer) including: customer needs research; profitability and capital adequacy assessment (WACC, return on capital); regulatory requirements for digital distribution; mobile app development costs and maintenance; IT system integration; actuarial model development (pricing and valuation); volume and profitability projection under multiple scenarios; and treating customers fairly compliance. <span class="iai-source">[Mar 2018 Q1i]</span></li>
+<li class="iai-li"><strong>Foreign JV market entry (India)</strong>: for a foreign insurer entering India via JV, the IAI tests specific data, staffing, and capital challenges unique to the Indian market — including lack of own local data, dependency on reinsurer data, regulatory constraints on product design (IRDAI rules), staff training needs, and distribution channel development. <span class="iai-source">[Mar 2017 Q2iii]</span></li>
+<li class="iai-li"><strong>Overseas expatriate group product launch</strong>: before launching a group PMI product for Indian corporate employees working abroad, specific pre-launch considerations include: obtaining the employer's itinerary; assessing country-specific occupational and medical risks; understanding existing state or employer cover in the host countries; and regulatory requirements in the host jurisdictions. <span class="iai-source">[May 2023 Q2iib]</span></li>
+<li class="iai-li"><strong>Product launch risks classification</strong>: the IAI tests a named taxonomy of new product launch risks: (1) product substitution risk; (2) over-sales capital strain; (3) sales failure — development cost non-recovery; (4) expense overruns; (5) product design failure; (6) product costing failure (parameter error) — this systematic risk taxonomy is not presented in the IFoA matrix in this form. <span class="iai-source">[Apr 2016 Q2ii]</span></li>
+</ul>
+</td>
+
+<td class="cell-ci"><ul>
+<li>In new CI markets, the insurer faces a <strong>lack of local morbidity data</strong>.</li>
+<li><strong>First-mover advantage</strong> must be weighed against <strong>first-mover risk</strong>.</li>
+<li><strong>Reinsurance is essential</strong> at CI market entry.</li>
+<li><strong>Consumer education</strong> about the CI concept is frequently required.</li>
+</ul>
+<!-- CI new market entry adequately covered -->
+</td>
+
+<td class="cell-ip"><ul>
+<li>IP market entry requires research into <strong>existing competitor products, pricing, and distribution channels</strong>.</li>
+<li>Without <strong>credible local IP claims data</strong>, pricing must rely on international benchmarks.</li>
+<li><strong>Building claims management expertise from scratch</strong> is a significant operational investment.</li>
+<li><strong>Monitoring emerging incidence and duration experience</strong> against initial pricing assumptions is critical.</li>
+</ul>
+
+<span class="iai-section-label">◆ IAI-specific additions</span>
+<ul class="iai-ul">
+<li class="iai-li"><strong>Comprehensive new IP market entry framework (Country B)</strong>: IAI tests a holistic market entry decision framework covering: demand/competition (potential volume, tax incentives, consumer awareness, survey approach); data and capital (availability of disability data, solvency requirements, new business strain, reserving standards); distribution (availability of qualified salespeople, bancassurance, IFAs, direct, outsourcing options); and profitability factors (demographics, investment returns, repatriation of profits, cultural claims behaviour, reinsurer willingness, healthcare infrastructure, fraud potential, and alternative of acquiring an existing local insurer). <span class="iai-source">[Dec 2022 Q2iv]</span></li>
+<li class="iai-li"><strong>Greenfield opportunity assessment</strong>: when no IP market exists and no state provision exists, the IAI frames this as a 'greenfield opportunity' — potential for significant volume and market-setting pricing, but balanced against the costs of market education, infrastructure build, and high initial parameter uncertainty. <span class="iai-source">[Dec 2022 Q2iv]</span></li>
+</ul>
+</td>
+
+<td class="cell-ltc"><ul>
+<li>LTC is a <strong>nascent product class</strong> in most markets globally.</li>
+<li><strong>Credible local LTC incidence data is virtually non-existent</strong> in most markets.</li>
+<li><strong>Government incentives or a regulatory mandate</strong> are typically required to stimulate demand.</li>
+<li>A plan to build the <strong>actuarial control cycle</strong> from day one is essential.</li>
+</ul>
+<!-- LTC new market entry adequately covered -->
+</td>
+
+<td class="cell-state"><ul>
+<li><strong>Political will and government mandate</strong> are the prerequisites for launching a state health scheme.</li>
+<li>A <strong>public education and awareness campaign</strong> at launch is essential.</li>
+<li>A <strong>pilot scheme approach</strong> allows lessons to be learned at manageable scale.</li>
+<li>The <strong>infrastructure build</strong> required before launch represents a major programme of work.</li>
+</ul>
+<!-- State new market entry adequately covered -->
+</td>
+</tr>
+
+<!-- ═══════════════════════════════════════════════════════════
+     THEME 15 — TECHNOLOGY & INNOVATION
+     ═══════════════════════════════════════════════════════════ -->
+<tr>
+<td class="theme-cell"><span class="theme-num">15</span>Technology &amp; Innovation</td>
+
+<td class="cell-pmi"><ul>
+<li><strong>Digital and online distribution</strong> enables customers to obtain quotes, complete health declarations, and purchase PMI digitally.</li>
+<li><strong>Cashless real-time pre-authorisation systems</strong> enable the cashless settlement model.</li>
+<li><strong>Health tracking and wearable devices</strong> used as engagement tools generate behavioural data.</li>
+<li><strong>AI-driven fraud detection</strong> in PMI claims can materially reduce claims leakage.</li>
+<li><strong>Telemedicine and telehealth services</strong> as integrated PMI benefits reduce claims costs by diverting minor conditions from expensive in-person consultations.</li>
+</ul>
+
+<span class="iai-section-label">◆ IAI-specific additions</span>
+<ul class="iai-ul">
+<li class="iai-li"><strong>Wearable device partnership vs manufacture decision</strong>: for wearable-linked health products, the IAI tests the full build-vs-buy technology decision — self-manufacturing minimises counterparty and compatibility risk, allows future upgrades, and ensures data quality consistency; partnering with a manufacturer reduces capital intensity and time-to-market but creates dependency; neither acquiring a device company is tested as a hybrid option. <span class="iai-source">[Mar 2017 Q1v_a]</span></li>
+<li class="iai-li"><strong>Data security and breach risk for health monitoring products</strong>: storing continuous personal health data (step counts, heart rate, sleep patterns) from wearable devices creates a specific data security risk — a breach of such intimate personal data causes significant reputational damage; data security testing and containment procedures must be built into the product architecture. <span class="iai-source">[Mar 2017 Q1iv_b]</span></li>
+<li class="iai-li"><strong>Virtual health insurer technology architecture</strong>: a fully digital health insurer (no physical infrastructure) requires modular/menu-style product administration systems capable of handling customised benefit combinations, seamless digital underwriting, fast electronic claim submission, and integrated wellness/prevention programme data — the IAI tests this as a technology-driven solution to health insurance penetration challenges. <span class="iai-source">[Mar 2021 Q2i]</span></li>
+<li class="iai-li"><strong>TPA vs in-house claims technology for OP cover</strong>: when adding outpatient cover, the claims system (whether in-house or TPA) must handle: pre-authorisation request and response turn-around times; high-frequency/low-severity claims processing; linkage to CPT/ICD-9/10 medical coding; pharmacy prescription management; and outside-network claim handling — specific system requirements not discussed in the IFoA matrix. <span class="iai-source">[Jul 2022 Q2iv]</span></li>
+<li class="iai-li"><strong>Mobile/digital premium payment and claims for micro-insurance</strong>: in the Indian micro-insurance context, monthly cash-based premium collection is a significant operational challenge — investment in IT infrastructure for electronic payment and record keeping (USSD/SMS/mobile money) reduces fraud risk (collectors not passing on premiums), improves record keeping, and enables large-volume policy administration at low cost. <span class="iai-source">[Mar 2017 Q2iv]</span></li>
+<li class="iai-li"><strong>Unit-linked health product system requirements</strong>: unit-linked hospital cash products require adapted systems to handle: unit fund valuation and reporting; morbidity charge deduction from fund; allocation of net premiums to fund; benefit payment mechanics; and capital charge calculations — significantly different from traditional PMI systems. <span class="iai-source">[May 2024 Q2ic]</span></li>
+</ul>
+</td>
+
+<td class="cell-ci"><ul>
+<li><strong>AI and automated underwriting</strong> for CI significantly reduces friction in the application process.</li>
+<li><strong>Wearable and health data in CI underwriting</strong> raises significant regulatory and ethical questions.</li>
+<li><strong>Digital claims notification and verification workflows</strong> improve policyholder experience and processing efficiency.</li>
+<li><strong>Data analytics for CI morbidity trend monitoring</strong> supports the actuarial control cycle.</li>
+</ul>
+<!-- CI technology adequately covered -->
+</td>
+
+<td class="cell-ip"><ul>
+<li><strong>AI and insurtech UW tools for IP</strong> enable more individualised risk pricing but also compress risk-based premium margins.</li>
+<li><strong>Wearables and physical activity data</strong> can be used at UW stage and during a claim.</li>
+</ul>
+<div class="seg-label" style="color:var(--ip);">▾ Individual</div><ul>
+<li><strong>Rewards programmes linked to individual health behaviour</strong> help insurers retain good risks.</li>
+</ul>
+<div class="seg-label" style="color:var(--ip);">▾ Group</div><ul>
+<li><strong>HR and payroll system integration</strong> for group IP reduces administration costs and errors.</li>
+<li><strong>Long-term case management platforms</strong> for group IP claimants reduce costs and improve outcomes.</li>
+</ul>
+<!-- IP technology adequately covered -->
+</td>
+
+<td class="cell-ltc"><ul>
+<li><strong>Remote ADL monitoring technology</strong> enables continuous objective assessment of a claimant's functional capability.</li>
+<li><strong>Digital care management platforms</strong> improve quality and efficiency of care delivery.</li>
+<li><strong>Long-duration policy administration systems</strong> capable of managing a policy over a 20–40 year horizon require specialist platform capability.</li>
+</ul>
+<!-- LTC technology adequately covered -->
+</td>
+
+<td class="cell-state"><ul>
+<li><strong>Mobile-based premium payment and claims submission</strong> for microinsurance enables participation without bank accounts.</li>
+<li><strong>Government data infrastructure for national enrolment</strong> linked to national ID systems enables efficient enrolment.</li>
+<li><strong>Digital claims adjudication</strong> reduces administrative cost of claims processing.</li>
+<li><strong>Centralised catastrophe event trigger and disbursement systems</strong> are an essential technology component of pandemic cover.</li>
+</ul>
+<!-- State technology adequately covered -->
+</td>
+</tr>
+
+</tbody></table></div>
+</body>
+</html>
