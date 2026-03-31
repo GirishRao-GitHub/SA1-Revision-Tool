@@ -886,12 +886,12 @@ window.onload = async function() {
 
     // Load Topic Frameworks Dictionary First
     try {
-        const fwRes = await fetch('data/Topic_Frameworks.json?t=' + new Date().getTime());
+        const fwRes = await fetch('data/Topic_Frameworks.json');
         if (!fwRes.ok) throw new Error('data/ path returned ' + fwRes.status);
         TOPIC_FRAMEWORKS = await fwRes.json();
     } catch {
         try {
-            const fwRes2 = await fetch('Topic_Frameworks.json?t=' + new Date().getTime());
+            const fwRes2 = await fetch('Topic_Frameworks.json');
             if (!fwRes2.ok) throw new Error('root path returned ' + fwRes2.status);
             TOPIC_FRAMEWORKS = await fwRes2.json();
         } catch(e) { console.warn("Frameworks not loaded", e); }
@@ -935,7 +935,7 @@ window.onload = async function() {
 
     // Load Pillars & Hooks JSON
     try {
-        const phRes = await fetch('data/Pillars_Hooks.json?t=' + new Date().getTime());
+        const phRes = await fetch('data/Pillars_Hooks.json');
         if (phRes.ok) PILLARS_HOOKS = await phRes.json();
     } catch(e) { console.warn("Pillars & Hooks not loaded", e); }
 
@@ -943,7 +943,7 @@ window.onload = async function() {
     for (const [source, files] of Object.entries(SOURCE_FILES)) {
         for (const f of files) {
             try {
-                const url = 'data/' + f + '?t=' + new Date().getTime();
+                const url = 'data/' + f;
                 const res = await fetch(url);
                 if (res.ok) {
                     const data = await res.json();
