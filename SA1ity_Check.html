@@ -939,34 +939,36 @@ window.onload = async function() {
         if (phRes.ok) PILLARS_HOOKS = await phRes.json();
     } catch(e) { console.warn("Pillars & Hooks not loaded", e); }
 
-    // Load ALL files from ALL sources
+    // Load ALL files from ALL sources — parallel via Promise.all
+    const allFetches = [];
     for (const [source, files] of Object.entries(SOURCE_FILES)) {
         for (const f of files) {
-            try {
-                const url = 'data/' + f;
-                const res = await fetch(url);
-                if (res.ok) {
-                    const data = await res.json();
-                    const key = f.replace('.json', '');
-                    SITTINGS[key] = data;
+            allFetches.push(
+                fetch('data/' + f)
+                    .then(res => {
+                        if (!res.ok) { console.warn(`Fetch failed for ${f}: ${res.status}`); return; }
+                        return res.json().then(data => {
+                            const key = f.replace('.json', '');
+                            SITTINGS[key] = data;
 
-                    // Ensure questions have labels (important for IAI)
-                    if (data.questions) {
-                        for (const [qk, qv] of Object.entries(data.questions)) {
-                            if (!qv.label) qv.label = qk;
-                        }
-                    }
+                            // Ensure questions have labels (important for IAI)
+                            if (data.questions) {
+                                for (const [qk, qv] of Object.entries(data.questions)) {
+                                    if (!qv.label) qv.label = qk;
+                                }
+                            }
 
-                    // Index to Thematics with Source aware
-                    indexThematics(key, data, source);
-                    loadedCount++;
-                    console.log(`Loaded ${source}: ${f}`);
-                } else {
-                    console.warn(`Fetch failed for ${f}: ${res.status}`);
-                }
-            } catch(e) { console.warn("Failed to load " + f, e); }
+                            // Index to Thematics with source awareness
+                            indexThematics(key, data, source);
+                            loadedCount++;
+                            console.log(`Loaded ${source}: ${f}`);
+                        });
+                    })
+                    .catch(e => console.warn("Failed to load " + f, e))
+            );
         }
     }
+    await Promise.all(allFetches);
 
     updateSourceUI();
     updateHeaderUI();
