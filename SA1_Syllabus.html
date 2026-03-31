@@ -1908,24 +1908,29 @@ function selectMemoryAid(url, label) {
   // Update header
   document.getElementById('header-chapter-title').textContent = '🧠 ' + label;
 
-  // Render iframe in right pane
-  const rawUrl    = url;
-  const openUrl   = url;  // same raw URL
+  // Render in right pane — SVGs use <img>, HTML files use <iframe>
+  const isSvg = url.toLowerCase().endsWith('.svg');
+  const contentHtml = isSvg
+    ? `<div style="overflow:auto;height:100%;padding:24px;background:#fff;display:flex;align-items:flex-start;justify-content:center;">
+        <img src="${url}" style="max-width:100%;height:auto;display:block;" alt="${label}">
+       </div>`
+    : `<iframe
+        class="memory-aid-frame"
+        src="${url}"
+        sandbox="allow-scripts allow-same-origin allow-forms"
+        title="${label}">
+       </iframe>`;
+
   document.getElementById('content-area').innerHTML = `
     <div class="memory-aid-wrapper">
       <div class="memory-aid-topbar">
         <span class="memory-aid-badge">🧠 Memory Aid</span>
         <span class="memory-aid-title">${label}</span>
-        <a class="memory-aid-open-btn" href="${openUrl}" target="_blank">
+        <a class="memory-aid-open-btn" href="${url}" target="_blank">
           ↗ Open in new tab
         </a>
       </div>
-      <iframe
-        class="memory-aid-frame"
-        src="${rawUrl}"
-        sandbox="allow-scripts allow-same-origin allow-forms"
-        title="${label}">
-      </iframe>
+      ${contentHtml}
     </div>`;
 
   // Make the canvas fill without its own padding (iframe fills it)
