@@ -1582,7 +1582,9 @@ function onThemeChange() {
 // UI LOGIC (CHRONO)
 // ═══════════════════════════════════════════════════════════
 function onAssignChange() {
-    saveAnswer(); // preserve answer before switching sitting
+    // Note: oninput already saves every keystroke. Do NOT call saveAnswer() here —
+    // by the time this fires, sel-assign.value is already the NEW sitting,
+    // which would write the old answer under the wrong sitting key.
     const ass = document.getElementById('sel-assign').value;
     document.getElementById('sel-assign').blur();
     console.log("onAssignChange: sitting selected =", ass);
@@ -1994,8 +1996,8 @@ function setupQuestion(q) {
 
   if (appMode === 'chrono') {
       ak = document.getElementById('sel-assign').value;
-      qk = currentQk || '';
-      sk = currentPk || '';
+      qk = currentQk;
+      sk = currentPk;
   } else {
       const mopt = document.getElementById('sel-match').selectedOptions[0];
       if (mopt && mopt.dataset.json) {
@@ -2003,8 +2005,6 @@ function setupQuestion(q) {
          ak = mj.sitting; qk = mj.qk; sk = mj.pk;
       }
   }
-
-  ab.value = localStorage.getItem(ansKey(ak, qk, sk)) || '';
 
   seconds = 0;
   // Standard SA1 marking speed: 1.8 mins/mark
@@ -2021,9 +2021,9 @@ function setupQuestion(q) {
     document.getElementById('timer-status').textContent = 'Timer paused';
   }
 
-  ab.value = ""; // Always reset textarea first
+  // Restore saved answer (single authoritative load)
   const saved = localStorage.getItem(ansKey(ak, qk, sk));
-  if (saved) ab.value = saved;
+  ab.value = saved || '';
   
   manualMode = false;
 
@@ -3053,19 +3053,19 @@ function getActiveKeys() {
 
 function saveAnswer() {
   const k = getActiveKeys();
-  if(!k.ak) return;
+  if(!k.ak || !k.qk) return; // guard: no sitting or no question loaded
   try { 
     localStorage.setItem(ansKey(k.ak, k.qk, k.sk), document.getElementById('answer-box').value); 
   } catch(e) {}
 }
 function saveNotes() {
   const k = getActiveKeys();
-  if(!k.ak) return;
+  if(!k.ak || !k.qk) return;
   try { localStorage.setItem(notesKey(k.ak, k.qk, k.sk), document.getElementById('notes-box').value); } catch(e) {}
 }
 function saveGroupNotes() {
   const k = getActiveKeys();
-  if(!k.ak) return;
+  if(!k.ak || !k.qk) return;
   try {
     const groups = {};
     currentPoints.forEach((p, idx) => {
