@@ -1370,6 +1370,7 @@ function handleScroll() {
 
 // ── VIEW SWITCHING ────────────────────────────────────────
 function setView(v) {
+  if (activeMemoryAid) { clearMemoryAidView(); activeMemoryAid = null; }
   activeView = v;
   ['notes','flashcards','glossary','framework'].forEach(id => {
     document.getElementById('tab-' + id).classList.toggle('active', id === v);
@@ -1914,6 +1915,14 @@ function selectMemoryAid(url, label) {
   canvas.style.padding = '0';
   canvas.style.overflow = 'hidden';
 
+  // content-area must be a flex column that fills canvas height,
+  // otherwise memory-aid-wrapper's height:100% has no reference and collapses
+  const contentArea = document.getElementById('content-area');
+  contentArea.style.height        = '100%';
+  contentArea.style.display       = 'flex';
+  contentArea.style.flexDirection = 'column';
+  contentArea.style.minHeight     = '0';
+
   const isSvg = url.toLowerCase().endsWith('.svg');
 
   // Render the topbar shell immediately
@@ -1974,8 +1983,15 @@ function selectMemoryAid(url, label) {
 // Restore canvas padding when navigating away from a memory aid
 function clearMemoryAidView() {
   const canvas = document.getElementById('canvas');
-  canvas.style.padding = '';
+  canvas.style.padding  = '';
   canvas.style.overflow = '';
+
+  // Reset content-area back to its normal (auto-height) state
+  const contentArea = document.getElementById('content-area');
+  contentArea.style.height        = '';
+  contentArea.style.display       = '';
+  contentArea.style.flexDirection = '';
+  contentArea.style.minHeight     = '';
 }
 
 // Kick off memory aids load
