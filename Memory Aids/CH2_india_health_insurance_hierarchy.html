@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>India Health Insurance Hierarchy</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background: #f7f6f2;
+    min-height: 100vh;
+    padding: 40px 24px 60px;
+    color: #1a1917;
+  }
+
+  .page {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  /* ── Page title ──────────────────────────────────── */
+  .page-title {
+    font-family: 'Fraunces', serif;
+    font-size: 22px;
+    font-weight: 600;
+    color: #1a1917;
+    text-align: center;
+    margin-bottom: 6px;
+    letter-spacing: -0.3px;
+  }
+  .page-subtitle {
+    text-align: center;
+    font-size: 13px;
+    color: #71726c;
+    margin-bottom: 36px;
+  }
+
+  /* ── Legend ──────────────────────────────────────── */
+  .legend {
+    display: flex;
+    gap: 24px;
+    justify-content: center;
+    margin-bottom: 36px;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: #4a4a46;
+    font-weight: 500;
+  }
+  .legend-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+  }
+  .dot-lt { background: #d1f0e5; border: 1.5px solid #0e7a5e; }
+  .dot-st { background: #fce8df; border: 1.5px solid #a83d1c; }
+
+  /* ── HIERARCHY SECTION ───────────────────────────── */
+  .hierarchy {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+  }
+
+  /* Root node */
+  .root-node {
+    background: #eeecfe;
+    border: 1.5px solid #5448b7;
+    border-radius: 10px;
+    padding: 10px 36px;
+    font-family: 'Fraunces', serif;
+    font-size: 15px;
+    font-weight: 600;
+    color: #3a328a;
+    letter-spacing: -0.2px;
+    position: relative;
+  }
+
+  /* Connector lines */
+  .connector-down {
+    width: 1.5px;
+    height: 24px;
+    background: #c8c7c2;
+  }
+  .connector-fork {
+    display: flex;
+    align-items: flex-start;
+    gap: 0;
+    width: 100%;
+    position: relative;
+  }
+  .connector-fork::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: calc(50% - 130px);
+    width: 260px;
+    height: 1.5px;
+    background: #c8c7c2;
+  }
+  .fork-arm {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .fork-stem {
+    width: 1.5px;
+    height: 20px;
+    background: #c8c7c2;
+  }
+
+  /* Two-branch layout */
+  .branches {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    width: 100%;
+    margin-top: 0;
+  }
+
+  /* Branch container */
+  .branch {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+  }
+
+  /* Class node (LT / ST) */
+  .class-node {
+    padding: 10px 24px;
+    border-radius: 10px;
+    font-family: 'Fraunces', serif;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: -0.2px;
+    text-align: center;
+    width: 100%;
+  }
+  .class-node.lt {
+    background: #d1f0e5;
+    border: 1.5px solid #0e7a5e;
+    color: #084e40;
+  }
+  .class-node.st {
+    background: #fce8df;
+    border: 1.5px solid #a83d1c;
+    color: #742a10;
+  }
+
+  /* Level label */
+  .level-label {
+    font-size: 10.5px;
+    font-weight: 600;
+    color: #9b9a95;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    margin-top: 18px;
+    margin-bottom: 8px;
+  }
+
+  /* Children row */
+  .children-row {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+    position: relative;
+    justify-content: center;
+  }
+  .children-row::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    height: 1.5px;
+    background: #c8c7c2;
+  }
+  .children-row.two::before  { left: 25%; width: 50%; }
+  .children-row.three::before{ left: 16.66%; width: 66.66%; }
+
+  .child-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+  }
+  .child-stem {
+    width: 1.5px;
+    height: 14px;
+    background: #c8c7c2;
+    margin-bottom: 0;
+  }
+
+  /* Leaf card */
+  .leaf {
+    border-radius: 8px;
+    padding: 9px 10px;
+    text-align: center;
+    width: 100%;
+    border: 1px solid transparent;
+  }
+  .leaf.lt {
+    background: #e8f8f2;
+    border-color: #9fd9c5;
+  }
+  .leaf.st {
+    background: #fdf1ec;
+    border-color: #f0b99c;
+  }
+  .leaf-title {
+    font-family: 'Fraunces', serif;
+    font-size: 12.5px;
+    font-weight: 600;
+    line-height: 1.3;
+  }
+  .leaf.lt .leaf-title { color: #084e40; }
+  .leaf.st .leaf-title { color: #742a10; }
+  .leaf-sub {
+    font-size: 10.5px;
+    margin-top: 3px;
+    font-style: italic;
+    line-height: 1.3;
+  }
+  .leaf.lt .leaf-sub { color: #1a7a5e; }
+  .leaf.st .leaf-sub { color: #a83d1c; }
+
+  /* ── SEPARATOR ───────────────────────────────────── */
+  .separator {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin: 40px 0 28px;
+  }
+  .sep-line {
+    flex: 1;
+    height: 1px;
+    background: #dddcd6;
+  }
+  .sep-label {
+    font-size: 11.5px;
+    font-weight: 600;
+    color: #9b9a95;
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+    white-space: nowrap;
+  }
+
+  /* ── EXAMPLE TABLE ───────────────────────────────── */
+  .example-header {
+    background: #eeecfe;
+    border: 1.5px solid #5448b7;
+    border-radius: 10px 10px 0 0;
+    padding: 11px 20px;
+    text-align: center;
+    font-family: 'Fraunces', serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: #3a328a;
+  }
+
+  .example-table {
+    border: 1.5px solid #dddcd6;
+    border-top: none;
+    border-radius: 0 0 10px 10px;
+    overflow: hidden;
+    background: white;
+  }
+
+  .table-row {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    border-bottom: 1px solid #eeede9;
+    transition: background 0.15s;
+  }
+  .table-row:last-child { border-bottom: none; }
+  .table-row:hover { background: #faf9f6; }
+
+  .cell-left {
+    padding: 14px 18px;
+    border-right: 1px solid #eeede9;
+    background: #f7f6f2;
+  }
+  .cell-label {
+    font-size: 10.5px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #9b9a95;
+    margin-bottom: 3px;
+  }
+  .cell-value {
+    font-family: 'Fraunces', serif;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: #1a1917;
+  }
+  .cell-right {
+    padding: 14px 18px;
+    font-size: 12.5px;
+    color: #4a4a46;
+    line-height: 1.55;
+    display: flex;
+    align-items: center;
+  }
+
+  /* Connector between stem and children */
+  .branch-connector {
+    width: 1.5px;
+    background: #c8c7c2;
+    height: 16px;
+    margin: 0 auto;
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <p class="page-title">India Health Insurance — Product Hierarchy</p>
+  <p class="page-subtitle">Chapter 2 · Classification of health &amp; care insurance products</p>
+
+  <!-- Legend -->
+  <div class="legend">
+    <div class="legend-item"><div class="legend-dot dot-lt"></div>Long-term class (IP, CI, LTCI)</div>
+    <div class="legend-item"><div class="legend-dot dot-st"></div>Short-term class (PMI, HCP, Top-up)</div>
+  </div>
+
+  <!-- HIERARCHY -->
+  <div class="hierarchy">
+
+    <!-- Root -->
+    <div class="root-node">Class of product</div>
+    <div class="connector-down"></div>
+
+    <!-- Fork bar connecting to two branches -->
+    <div style="position:relative; width:62%; height:1.5px; background:#c8c7c2;"></div>
+
+    <!-- Two branches -->
+    <div class="branches">
+
+      <!-- ═══ LEFT: LONG-TERM ═══ -->
+      <div class="branch">
+        <div style="height:18px; width:1.5px; background:#c8c7c2; margin:0 auto;"></div>
+        <div class="class-node lt">Long-term class</div>
+
+        <!-- LOB level -->
+        <p class="level-label">Line of Business</p>
+        <div class="children-row two">
+          <div class="child-col">
+            <div class="child-stem"></div>
+            <div class="leaf lt"><div class="leaf-title">Individual</div></div>
+          </div>
+          <div class="child-col">
+            <div class="child-stem"></div>
+            <div class="leaf lt"><div class="leaf-title">Group / Employer</div></div>
+          </div>
+        </div>
+
+        <!-- Product Type level -->
+        <p class="level-label">Product Type</p>
+        <div class="children-row two">
+          <div class="child-col">
+            <div class="child-stem"></div>
+            <div class="leaf lt">
+              <div class="leaf-title">CI<br>Critical Illness</div>
+              <div class="leaf-sub">Lump-sum on diagnosis</div>
+            </div>
+          </div>
+          <div class="child-col">
+            <div class="child-stem"></div>
+            <div class="leaf lt">
+              <div class="leaf-title">IP<br>Income Protection</div>
+              <div class="leaf-sub">Regular income on disability</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Product Line level -->
+        <p class="level-label">Product Line</p>
+        <div class="children-row two">
+          <div class="child-col">
+            <div class="child-stem"></div>
+            <div class="leaf lt">
+              <div class="leaf-title">Cancer Care Plan</div>
+              <div class="leaf-sub">e.g. ICICI Pru iProtect</div>
+            </div>
+          </div>
+          <div class="child-col">
+            <div class="child-stem"></div>
+            <div class="leaf lt">
+              <div class="leaf-title">Disability Income</div>
+              <div class="leaf-sub">e.g. LIC Jeevan Arogya</div>
+            </div>
+          </div>
+        </div>
+      </div><!-- /LT branch -->
+
+      <!-- ═══ RIGHT: SHORT-TERM ═══ -->
+      <div class="branch">
+        <div style="height:18px; width:1.5px; background:#c8c7c2; margin:0 auto;"></div>
+        <div class="class-node st">Short-term class</div>
+
+        <!-- LOB level -->
+        <p class="level-label">Line of Business</p>
+        <div class="children-row three">
+          <div class="child-col">
+            <div class="child-stem"></div>
+            <div class="leaf st"><div class="leaf-title">Individual</div></div>
+          </div>
+          <div class="child-col">
+            <div class="child-stem"></div>
+            <div class="leaf st"><div class="leaf-title">Group / Employer</div></div>
+          </div>
+          <div class="child-col">
+            <div class="child-stem"></div>
+            <div class="leaf st"><div class="leaf-title">Government</div></div>
+          </div>
+        </div>
+
+        <!-- Product Type level -->
+        <p class="level-label">Product Type</p>
+        <div class="children-row three">
+          <div class="child-col">
+            <div class="child-stem"></div>
+            <div class="leaf st">
+              <div class="leaf-title">PMI</div>
+              <div class="leaf-sub">Indemnity plan</div>
+            </div>
+          </div>
+          <div class="child-col">
+            <div class="child-stem"></div>
+            <div class="leaf st">
+              <div class="leaf-title">HCP</div>
+              <div class="leaf-sub">Fixed daily benefit</div>
+            </div>
+          </div>
+          <div class="child-col">
+            <div class="child-stem"></div>
+            <div class="leaf st">
+              <div class="leaf-title">Top-up</div>
+              <div class="leaf-sub">Excess layer cover</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Product Line level -->
+        <p class="level-label">Product Line</p>
+        <div class="children-row three">
+          <div class="child-col">
+            <div class="child-stem"></div>
+            <div class="leaf st">
+              <div class="leaf-title">Family Floater</div>
+              <div class="leaf-sub">e.g. Star Family Health Optima</div>
+            </div>
+          </div>
+          <div class="child-col">
+            <div class="child-stem"></div>
+            <div class="leaf st">
+              <div class="leaf-title">Senior Citizen</div>
+              <div class="leaf-sub">e.g. Niva Bupa Senior First</div>
+            </div>
+          </div>
+          <div class="child-col">
+            <div class="child-stem"></div>
+            <div class="leaf st">
+              <div class="leaf-title">Govt. Scheme</div>
+              <div class="leaf-sub">e.g. Ayushman Bharat PM-JAY</div>
+            </div>
+          </div>
+        </div>
+      </div><!-- /ST branch -->
+
+    </div><!-- /branches -->
+  </div><!-- /hierarchy -->
+
+  <!-- SEPARATOR -->
+  <div class="separator">
+    <div class="sep-line"></div>
+    <span class="sep-label">Example: reading a real product end-to-end</span>
+    <div class="sep-line"></div>
+  </div>
+
+  <!-- EXAMPLE TABLE -->
+  <div class="example-header">Star Health — Comprehensive Individual Plan</div>
+  <div class="example-table">
+    <div class="table-row">
+      <div class="cell-left">
+        <div class="cell-label">Class of product</div>
+        <div class="cell-value">Health &amp; care insurance</div>
+      </div>
+      <div class="cell-right">Covers medical / morbidity risk — distinct from pure life (mortality) cover</div>
+    </div>
+    <div class="table-row">
+      <div class="cell-left">
+        <div class="cell-label">Long / short term</div>
+        <div class="cell-value">Short-term</div>
+      </div>
+      <div class="cell-right">Annual renewable contract; filed under IRDAI general insurance rules; short-term claims reserving</div>
+    </div>
+    <div class="table-row">
+      <div class="cell-left">
+        <div class="cell-label">Line of business</div>
+        <div class="cell-value">Individual health</div>
+      </div>
+      <div class="cell-right">Single policyholder; IRDAI individual health filing category; drives how premium and claims are reported</div>
+    </div>
+    <div class="table-row">
+      <div class="cell-left">
+        <div class="cell-label">Product type</div>
+        <div class="cell-value">Indemnity PMI</div>
+      </div>
+      <div class="cell-right">Reimburses actual hospitalisation costs up to sum insured; not a fixed benefit / defined benefit plan</div>
+    </div>
+    <div class="table-row">
+      <div class="cell-left">
+        <div class="cell-label">Product line</div>
+        <div class="cell-value">Star Comprehensive</div>
+      </div>
+      <div class="cell-right">Marketed to working-age individuals; bundled OPD, maternity, and restoration benefits; sold through brokers and direct channel</div>
+    </div>
+  </div>
+
+</div><!-- /page -->
+</body>
+</html>
