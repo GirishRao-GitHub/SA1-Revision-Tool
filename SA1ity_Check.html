@@ -839,6 +839,7 @@ const SOURCE_FILES = {
 
 let currentSource = '';
 let appMode = '';
+const LOADED_SOURCES = new Set(); // tracks which sources have been lazy-loaded
 let currentQ = null, currentSub = null, currentPoints = [];
 let currentQk = null, currentPk = null; // track active dot keys
 let revealed = 0, hits = null, manualMode = false;
@@ -882,9 +883,8 @@ function filterPillar(p) {
 }
 
 window.onload = async function() {
-    let loadedCount = 0;
 
-    // Load Topic Frameworks Dictionary First
+    // Load shared dependencies only — sitting files are lazy-loaded per source in setSource()
     try {
         const fwRes = await fetch('data/Topic_Frameworks.json');
         if (!fwRes.ok) throw new Error('data/ path returned ' + fwRes.status);
@@ -906,7 +906,7 @@ window.onload = async function() {
                 const content = entry.content || [];
                 MASTER_TAXONOMY[key] = FrameworkParser.extractSubThemes(content);
             });
-            
+
             // Add Smart Aliases for common shorthand themes found in exam papers
             const aliases = {
                 "Risks": "Risks (Master List)",
@@ -939,43 +939,9 @@ window.onload = async function() {
         if (phRes.ok) PILLARS_HOOKS = await phRes.json();
     } catch(e) { console.warn("Pillars & Hooks not loaded", e); }
 
-    // Load ALL files from ALL sources — parallel via Promise.all
-    const allFetches = [];
-    for (const [source, files] of Object.entries(SOURCE_FILES)) {
-        for (const f of files) {
-            allFetches.push(
-                fetch('data/' + f)
-                    .then(res => {
-                        if (!res.ok) { console.warn(`Fetch failed for ${f}: ${res.status}`); return; }
-                        return res.json().then(data => {
-                            const key = f.replace('.json', '');
-                            SITTINGS[key] = data;
-
-                            // Ensure questions have labels (important for IAI)
-                            if (data.questions) {
-                                for (const [qk, qv] of Object.entries(data.questions)) {
-                                    if (!qv.label) qv.label = qk;
-                                }
-                            }
-
-                            // Index to Thematics with source awareness
-                            indexThematics(key, data, source);
-                            loadedCount++;
-                            console.log(`Loaded ${source}: ${f}`);
-                        });
-                    })
-                    .catch(e => console.warn("Failed to load " + f, e))
-            );
-        }
-    }
-    await Promise.all(allFetches);
-
-    updateSourceUI();
-    updateHeaderUI();
-    populateThemes(); 
-    // onAssignChange(); // Removed auto-load to allow user selection
+    // Sitting files are now lazy-loaded in setSource() — nothing more to do here
     startLiveClock();
-    document.getElementById('data-status').textContent = `${loadedCount} Files`;
+    document.getElementById('data-status').textContent = 'Ready';
 };
 
 function startLiveClock() {
@@ -1001,7 +967,7 @@ function updateLiveClock() {
     }
 }
 
-function setSource(src) {
+async function setSource(src) {
     try {
         console.log("Setting source to:", src);
         currentSource = src;
@@ -1030,10 +996,44 @@ function setSource(src) {
         const csr = document.getElementById('chrono-sitting-row');
         if (csr) csr.style.display = (appMode === 'chrono') ? 'flex' : 'none';
 
+        // LAZY LOAD: fetch this source's files only if not already loaded
+        if (!LOADED_SOURCES.has(src)) {
+            const ssel = document.getElementById('sel-assign');
+            if (ssel) { ssel.innerHTML = '<option value="">Loading...</option>'; ssel.disabled = true; }
+            document.getElementById('data-status').textContent = 'Loading...';
+
+            const files = SOURCE_FILES[src] || [];
+            let loadedCount = 0;
+            const fetches = files.map(f =>
+                fetch('data/' + f)
+                    .then(res => {
+                        if (!res.ok) { console.warn(`Fetch failed for ${f}: ${res.status}`); return; }
+                        return res.json().then(data => {
+                            const key = f.replace('.json', '');
+                            SITTINGS[key] = data;
+                            if (data.questions) {
+                                for (const [qk, qv] of Object.entries(data.questions)) {
+                                    if (!qv.label) qv.label = qk;
+                                }
+                            }
+                            indexThematics(key, data, src);
+                            loadedCount++;
+                            console.log(`Loaded ${src}: ${f}`);
+                        });
+                    })
+                    .catch(e => console.warn("Failed to load " + f, e))
+            );
+            await Promise.all(fetches);
+            LOADED_SOURCES.add(src);
+            document.getElementById('data-status').textContent = `${Object.keys(SITTINGS).length} Files`;
+            console.log(`Source '${src}' fully loaded: ${loadedCount} files`);
+        }
+
         updateSourceUI();
         updateHeaderUI();
         resetAll();
-        
+        populateThemes();
+
         // Reset sitting dropdown
         document.getElementById('sel-assign').value = "";
         renderQDotBar(null);
