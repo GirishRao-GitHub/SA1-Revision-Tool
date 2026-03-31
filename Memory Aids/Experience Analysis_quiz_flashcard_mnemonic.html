@@ -1,0 +1,1309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Experience Analysis — Quiz · Flashcards · Mnemonics</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Syne:wght@400;500;600;700&display=swap');
+
+:root {
+  --navy: #0a1020;
+  --card: #111827;
+  --card2: #172035;
+  --card3: #1c2840;
+  --purple: #7c6fe0;
+  --purple-light: #a89ef0;
+  --purple-dim: rgba(124,111,224,0.18);
+  --teal: #3eb8a0;
+  --teal-dim: rgba(62,184,160,0.15);
+  --amber: #e8a94a;
+  --amber-dim: rgba(232,169,74,0.12);
+  --pink: #e06fa0;
+  --red: #e07070;
+  --green: #6abf8a;
+  --text: #c8d0e8;
+  --text-dim: #6a74a0;
+  --text-mid: #9098bc;
+  --border: rgba(124,111,224,0.2);
+  --border2: rgba(255,255,255,0.06);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Syne', system-ui, sans-serif;
+  background: var(--navy);
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+
+/* ── HEADER ── */
+.hdr {
+  background: linear-gradient(135deg, #111827 0%, #0f1a2e 100%);
+  border-bottom: 1px solid var(--border);
+  padding: 1.1rem 1.4rem 1rem;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.hdr-inner { max-width: 860px; margin: 0 auto; }
+.hdr-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; }
+.hdr h1 { font-size: 14px; font-weight: 600; color: var(--purple-light); letter-spacing: .03em; }
+.hdr p { font-size: 11px; color: var(--text-dim); margin-top: 2px; }
+.src-badge {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9.5px;
+  background: rgba(62,184,160,0.12);
+  border: 1px solid rgba(62,184,160,0.25);
+  color: var(--teal);
+  padding: 3px 9px;
+  border-radius: 4px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* ── TABS ── */
+.tabs-wrap { max-width: 860px; margin: 0 auto; padding: .8rem 1.4rem 0; }
+.tabs { display: flex; gap: 5px; border-bottom: 1px solid var(--border2); padding-bottom: 0; }
+.tab {
+  padding: 7px 16px 8px;
+  border: none;
+  background: transparent;
+  color: var(--text-dim);
+  font-size: 12px;
+  font-family: 'Syne', sans-serif;
+  font-weight: 500;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: all .2s;
+  letter-spacing: .02em;
+}
+.tab.active { color: var(--purple-light); border-bottom-color: var(--purple); }
+.tab:hover:not(.active) { color: var(--text-mid); }
+
+/* ── MAIN ── */
+.main { max-width: 860px; margin: 0 auto; padding: 1rem 1.4rem 2rem; }
+.panel { display: none; }
+.panel.active { display: block; }
+
+/* ── QUIZ ── */
+.quiz-meta {
+  display: flex; align-items: center; gap: 10px; margin-bottom: 1rem;
+  font-size: 11px; color: var(--text-dim);
+}
+.score-bar {
+  height: 4px; background: var(--card3); border-radius: 2px;
+  flex: 1; overflow: hidden;
+}
+.score-fill {
+  height: 100%; background: var(--purple);
+  border-radius: 2px; transition: width .4s ease;
+  width: 0%;
+}
+.q-counter { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text-dim); }
+.score-label { font-family: 'IBM Plex Mono', monospace; font-size: 11px; }
+
+.q-card {
+  background: var(--card);
+  border: 1px solid var(--border2);
+  border-radius: 12px;
+  padding: 1.2rem 1.3rem;
+  margin-bottom: .8rem;
+}
+.q-source {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  color: var(--text-dim);
+  margin-bottom: .7rem;
+  display: flex; align-items: center; gap: 8px;
+}
+.q-source .sitting {
+  background: var(--purple-dim);
+  border: 1px solid var(--border);
+  color: var(--purple-light);
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+.q-marks {
+  background: rgba(232,169,74,.1);
+  border: 1px solid rgba(232,169,74,.2);
+  color: var(--amber);
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 10px;
+}
+.q-text {
+  font-size: 13.5px;
+  color: #dde4f8;
+  font-weight: 500;
+  margin-bottom: 1rem;
+  line-height: 1.55;
+}
+
+.options { display: flex; flex-direction: column; gap: 6px; }
+.opt {
+  display: flex; align-items: flex-start; gap: 10px;
+  background: var(--card2);
+  border: 1px solid var(--border2);
+  border-radius: 8px;
+  padding: 9px 12px;
+  cursor: pointer;
+  transition: all .15s;
+  font-size: 12.5px;
+  color: var(--text);
+  line-height: 1.45;
+}
+.opt:hover:not(.disabled) {
+  border-color: rgba(124,111,224,.4);
+  background: var(--card3);
+}
+.opt-key {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--text-dim);
+  width: 18px;
+  flex-shrink: 0;
+  padding-top: 1px;
+}
+.opt.correct { border-color: rgba(106,191,138,.5); background: rgba(106,191,138,.08); }
+.opt.correct .opt-key { color: var(--green); }
+.opt.wrong { border-color: rgba(224,112,112,.4); background: rgba(224,112,112,.07); }
+.opt.wrong .opt-key { color: var(--red); }
+.opt.disabled { cursor: default; }
+
+.q-feedback {
+  margin-top: .9rem;
+  padding: .75rem 1rem;
+  border-radius: 8px;
+  font-size: 12px;
+  line-height: 1.5;
+  display: none;
+}
+.q-feedback.correct {
+  background: rgba(106,191,138,.08);
+  border: 1px solid rgba(106,191,138,.25);
+  color: #8fd4a8;
+  display: block;
+}
+.q-feedback.wrong {
+  background: rgba(224,112,112,.07);
+  border: 1px solid rgba(224,112,112,.2);
+  color: #e09090;
+  display: block;
+}
+.q-feedback strong { font-weight: 600; }
+
+.quiz-nav {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-top: .9rem;
+}
+.btn {
+  padding: 8px 20px;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--purple-light);
+  font-size: 12px;
+  font-family: 'Syne', sans-serif;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all .2s;
+}
+.btn:hover { background: var(--purple-dim); border-color: var(--purple); }
+.btn.primary { background: var(--purple); border-color: var(--purple); color: #fff; }
+.btn.primary:hover { background: #9080f0; }
+.btn:disabled { opacity: .35; cursor: default; pointer-events: none; }
+
+.quiz-results {
+  background: var(--card);
+  border: 1px solid var(--border2);
+  border-radius: 12px;
+  padding: 2rem;
+  text-align: center;
+  display: none;
+}
+.results-score {
+  font-size: 48px;
+  font-weight: 700;
+  color: var(--purple-light);
+  line-height: 1;
+  margin-bottom: .4rem;
+}
+.results-label { font-size: 13px; color: var(--text-dim); margin-bottom: 1.2rem; }
+.results-breakdown {
+  display: flex; gap: 12px; justify-content: center; margin-bottom: 1.3rem;
+}
+.rb-item {
+  background: var(--card2);
+  border: 1px solid var(--border2);
+  border-radius: 8px;
+  padding: 10px 20px;
+  text-align: center;
+}
+.rb-n { font-size: 22px; font-weight: 600; }
+.rb-l { font-size: 11px; color: var(--text-dim); margin-top: 2px; }
+
+/* ── FLASHCARDS ── */
+.fc-meta { display: flex; align-items: center; gap: 10px; margin-bottom: 1rem; font-size: 11px; color: var(--text-dim); }
+.fc-nav-dots { display: flex; gap: 5px; flex: 1; justify-content: center; }
+.fc-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--card3); border: 1px solid var(--border2);
+  transition: all .2s; cursor: pointer;
+}
+.fc-dot.active { background: var(--purple); border-color: var(--purple); }
+.fc-dot.seen { background: var(--purple-dim); border-color: var(--border); }
+
+.fc-scene {
+  perspective: 1200px;
+  height: 280px;
+  margin-bottom: 1rem;
+  cursor: pointer;
+}
+.fc-inner {
+  position: relative;
+  width: 100%; height: 100%;
+  transform-style: preserve-3d;
+  transition: transform .5s cubic-bezier(.4,0,.2,1);
+}
+.fc-inner.flipped { transform: rotateY(180deg); }
+.fc-face {
+  position: absolute;
+  width: 100%; height: 100%;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: 12px;
+  padding: 1.4rem;
+  display: flex;
+  flex-direction: column;
+}
+.fc-front {
+  background: linear-gradient(135deg, var(--card) 0%, var(--card3) 100%);
+  border: 1px solid var(--border);
+}
+.fc-back {
+  background: linear-gradient(135deg, #0d1c35 0%, #0a1628 100%);
+  border: 1px solid rgba(62,184,160,0.3);
+  transform: rotateY(180deg);
+}
+
+.fc-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  margin-bottom: .8rem;
+  display: flex; align-items: center; gap: 8px;
+}
+.fc-label .sit {
+  color: var(--purple-light);
+  background: var(--purple-dim);
+  border: 1px solid var(--border);
+  padding: 2px 7px;
+  border-radius: 3px;
+}
+.fc-label .mk {
+  color: var(--amber);
+  background: rgba(232,169,74,.1);
+  border: 1px solid rgba(232,169,74,.2);
+  padding: 2px 7px;
+  border-radius: 3px;
+}
+.fc-q {
+  font-size: 14px;
+  font-weight: 600;
+  color: #e0e8ff;
+  flex: 1;
+  line-height: 1.55;
+}
+.fc-hint {
+  font-size: 11px;
+  color: var(--text-dim);
+  margin-top: auto;
+  text-align: center;
+  padding-top: .5rem;
+}
+.fc-back .fc-label { color: var(--teal); }
+.fc-bullets {
+  flex: 1;
+  overflow-y: auto;
+}
+.fc-bullets ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.fc-bullets li {
+  font-size: 12px;
+  color: var(--text);
+  padding-left: 14px;
+  position: relative;
+  line-height: 1.4;
+}
+.fc-bullets li::before {
+  content: '›';
+  position: absolute;
+  left: 0;
+  color: var(--teal);
+  font-weight: 600;
+}
+.fc-bullets li strong { color: #a0e0d0; font-weight: 600; }
+.fc-bullets .sub {
+  font-size: 11px;
+  color: var(--amber);
+  font-weight: 600;
+  padding-left: 0;
+  margin-top: 6px;
+  margin-bottom: 2px;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  font-size: 10px;
+}
+.fc-bullets .sub::before { display: none; }
+
+.fc-controls {
+  display: flex; align-items: center; justify-content: space-between; gap: 10px;
+}
+.fc-flip-hint {
+  font-size: 11px;
+  color: var(--text-dim);
+  text-align: center;
+}
+
+/* ── MNEMONICS ── */
+.mn-grid { display: flex; flex-direction: column; gap: .8rem; }
+.mn-card {
+  background: var(--card);
+  border: 1px solid var(--border2);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.mn-hdr {
+  padding: .9rem 1.1rem;
+  display: flex; align-items: flex-start; gap: 12px;
+  cursor: pointer;
+  transition: background .15s;
+}
+.mn-hdr:hover { background: var(--card2); }
+.mn-acro {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 18px;
+  font-weight: 500;
+  color: var(--purple-light);
+  min-width: 80px;
+  letter-spacing: .08em;
+}
+.mn-info { flex: 1; }
+.mn-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #dde4f8;
+  margin-bottom: 2px;
+}
+.mn-sub {
+  font-size: 11px;
+  color: var(--text-dim);
+}
+.mn-src {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9.5px;
+  color: var(--text-dim);
+  background: var(--card3);
+  border: 1px solid var(--border2);
+  padding: 2px 7px;
+  border-radius: 3px;
+  align-self: flex-start;
+  white-space: nowrap;
+}
+.mn-chev { color: var(--text-dim); font-size: 10px; transition: transform .2s; align-self: center; }
+.mn-card.open .mn-chev { transform: rotate(180deg); }
+.mn-body { display: none; padding: 0 1.1rem 1.1rem 1.1rem; }
+.mn-card.open .mn-body { display: block; }
+
+.mn-phrase-box {
+  background: linear-gradient(135deg, rgba(124,111,224,.12), rgba(62,184,160,.08));
+  border: 1px solid rgba(124,111,224,.25);
+  border-radius: 8px;
+  padding: .75rem 1rem;
+  margin-bottom: .9rem;
+  font-size: 12px;
+  font-style: italic;
+  color: var(--text-mid);
+}
+.mn-phrase-box strong { color: var(--purple-light); font-style: normal; }
+
+.mn-rows { display: flex; flex-direction: column; gap: 5px; }
+.mn-row {
+  display: flex; align-items: flex-start; gap: 10px;
+  background: var(--card2);
+  border: 1px solid var(--border2);
+  border-radius: 7px;
+  padding: 8px 11px;
+}
+.mn-letter {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 16px;
+  font-weight: 500;
+  width: 26px;
+  flex-shrink: 0;
+  line-height: 1;
+  padding-top: 2px;
+}
+.mn-row-content { flex: 1; }
+.mn-row-key {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #dde4f8;
+  margin-bottom: 2px;
+}
+.mn-row-detail {
+  font-size: 11px;
+  color: var(--text-dim);
+  line-height: 1.4;
+}
+.mn-row-detail em { color: var(--text-mid); font-style: normal; }
+
+.mn-notes {
+  margin-top: .8rem;
+  padding: .65rem .9rem;
+  background: rgba(232,169,74,.07);
+  border: 1px solid rgba(232,169,74,.2);
+  border-radius: 7px;
+  font-size: 11px;
+  color: #b89060;
+  line-height: 1.5;
+}
+.mn-notes strong { color: var(--amber); font-weight: 600; }
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(8px); }
+  to { opacity:1; transform:translateY(0); }
+}
+.q-card { animation: fadeUp .25s ease; }
+.mn-card { animation: fadeUp .2s ease both; }
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <div class="hdr-inner">
+    <div class="hdr-top">
+      <div>
+        <h1>Experience Analysis — Quiz · Flashcards · Mnemonics</h1>
+        <p>SA1 · IP · CI · PMI · LTCI · Microinsurance · IFoA 2019–2025</p>
+      </div>
+      <div class="src-badge">IFoA JSON only</div>
+    </div>
+  </div>
+</div>
+
+<div class="tabs-wrap">
+  <div class="tabs">
+    <button class="tab active" onclick="showPanel('quiz',this)">📝 Quiz (15 Qs)</button>
+    <button class="tab" onclick="showPanel('flash',this)">🃏 Flashcards (12)</button>
+    <button class="tab" onclick="showPanel('mnemo',this)">🧠 Mnemonics (5)</button>
+  </div>
+</div>
+
+<div class="main">
+
+<!-- ═══════════════════════════════════════════════
+     PANEL: QUIZ
+═══════════════════════════════════════════════ -->
+<div id="panel-quiz" class="panel active">
+
+  <div class="quiz-meta">
+    <span class="q-counter" id="q-counter">Q 1 / 15</span>
+    <div class="score-bar"><div class="score-fill" id="score-fill"></div></div>
+    <span class="score-label" id="score-label" style="color:var(--text-dim)">0 / 0</span>
+  </div>
+
+  <div id="q-area"></div>
+
+  <div class="quiz-nav">
+    <button class="btn" id="btn-prev" onclick="prevQ()" disabled>← Prev</button>
+    <div style="font-size:11px;color:var(--text-dim)" id="q-status"></div>
+    <button class="btn primary" id="btn-next" onclick="nextQ()" disabled>Next →</button>
+  </div>
+
+  <div class="quiz-results" id="quiz-results">
+    <div class="results-score" id="results-pct">—</div>
+    <div class="results-label" id="results-label">—</div>
+    <div class="results-breakdown">
+      <div class="rb-item">
+        <div class="rb-n" style="color:var(--green)" id="res-correct">0</div>
+        <div class="rb-l">Correct</div>
+      </div>
+      <div class="rb-item">
+        <div class="rb-n" style="color:var(--red)" id="res-wrong">0</div>
+        <div class="rb-l">Incorrect</div>
+      </div>
+      <div class="rb-item">
+        <div class="rb-n" style="color:var(--purple-light)" id="res-total">15</div>
+        <div class="rb-l">Total</div>
+      </div>
+    </div>
+    <button class="btn primary" onclick="restartQuiz()">Restart Quiz</button>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     PANEL: FLASHCARDS
+═══════════════════════════════════════════════ -->
+<div id="panel-flash" class="panel">
+
+  <div class="fc-meta">
+    <button class="btn" id="fc-prev" onclick="prevFC()">← Prev</button>
+    <div class="fc-nav-dots" id="fc-dots"></div>
+    <button class="btn" id="fc-next" onclick="nextFC()">Next →</button>
+  </div>
+
+  <div class="fc-scene" onclick="flipCard()">
+    <div class="fc-inner" id="fc-inner">
+      <div class="fc-face fc-front" id="fc-front-face"></div>
+      <div class="fc-face fc-back" id="fc-back-face"></div>
+    </div>
+  </div>
+
+  <div class="fc-controls">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--text-dim)" id="fc-counter">1 / 12</div>
+    <div class="fc-flip-hint">Click card to reveal answer</div>
+    <button class="btn" onclick="shuffleFC()" style="font-size:11px">Shuffle</button>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     PANEL: MNEMONICS
+═══════════════════════════════════════════════ -->
+<div id="panel-mnemo" class="panel">
+  <div class="mn-grid" id="mn-grid"></div>
+</div>
+
+</div><!-- .main -->
+
+<script>
+/* ════════════════════════════════════════════
+   DATA — all content derived from IFoA JSON
+   2019–2025 examiner solution bullets only
+════════════════════════════════════════════ */
+
+const QUIZ = [
+  {
+    sitting: "IFoA Sep 2024 Q3(i)",
+    marks: "10m",
+    q: "When investigating an increase in the IP loss ratio, which combination of reasons does the IFoA mark scheme explicitly list as the four main components?",
+    opts: [
+      "Higher claims inception rates, lower recovery rates, higher claim amounts, lower premium income",
+      "Higher claims inception rates, worse data quality, expense overruns, lower reserves",
+      "Lower premium income, increased reinsurance costs, higher claims inflation, tax changes",
+      "Higher claim amounts, provider cost increases, system failures, increased competition"
+    ],
+    correct: 0,
+    feedback: "Sep 2024 Q3(i) mark scheme states the loss ratio may be higher due to: 'Higher claims inception rates [½] / Lower recovery rates [½] / Higher claim amounts [½] / Lower premium income [½]'. Each awarded ½ mark."
+  },
+  {
+    sitting: "IFoA Apr 2021 Q3(ii)",
+    marks: "10m",
+    q: "In the LTCI experience analysis question, what is specifically noted about geographical analysis in Country B — a small country?",
+    opts: [
+      "Geographic analysis may not be material given the small size of the country",
+      "Geographic analysis must be done at postcode level",
+      "Geographic variation is the primary risk driver for LTCI",
+      "Geographic analysis requires external data from state providers"
+    ],
+    correct: 0,
+    feedback: "Apr 2021 Q3(ii): 'But as County B is small, it may not be material [½]'. Geographical variation data could be analysed by region, but materiality must be considered."
+  },
+  {
+    sitting: "IFoA Sep 2020 Q3(iii)",
+    marks: "15m",
+    q: "Per Sep 2020 Q3(iii), which of these is explicitly stated as a sub-division criterion when splitting CI business into homogeneous groups for an experience investigation?",
+    opts: [
+      "Product type — such as standalone and accelerated business",
+      "Gender of the policyholder",
+      "Policy currency",
+      "Investment strategy of the fund"
+    ],
+    correct: 0,
+    feedback: "Sep 2020 Q3(iii): 'Split existing policies into homogeneous groups. This should be by product types such as standalone and accelerated business. [½] And then further sub-divided based on pricing series and premium rates. [½]'."
+  },
+  {
+    sitting: "IFoA Apr 2021 Q3(iii)",
+    marks: "10m",
+    q: "Apr 2021 Q3(iii) identifies a factor related to claim eligibility as a cause of worsening LTCI experience. What is the specific example given?",
+    opts: [
+      "Changes to medical definitions used for functional tests like ADLs",
+      "Changes to reinsurance retention treaties",
+      "Changes to investment return assumptions",
+      "Changes to expense loading in premium rates"
+    ],
+    correct: 0,
+    feedback: "Apr 2021 Q3(iii): 'Claims eligibility could have weakened [½] e.g. due to changes to the medical definitions used for functional test like ADLs [½]'. This is explicitly listed under the 'Claims eligibility' sub-heading."
+  },
+  {
+    sitting: "IFoA Apr 2022 Q2(i)",
+    marks: "8m",
+    q: "Apr 2022 Q2(i) asks what could cause PMI claims to be worse than expected. Which of these is explicitly listed as a direct example of a change in business mix?",
+    opts: [
+      "Older lives",
+      "New reinsurance arrangements",
+      "Increased deductibles applied",
+      "Change in investment strategy"
+    ],
+    correct: 0,
+    feedback: "Apr 2022 Q2(i): 'The mix of business may differ to the expected mix [½] For example: Older lives [½] / Occupation category [½] / Selling through new distributors with a different mix of lives [½]'. Older lives is explicitly given as an example."
+  },
+  {
+    sitting: "IFoA Sep 2023 Q3(iv)",
+    marks: "6m",
+    q: "Sep 2023 Q3(iv) on IP underwriting review identifies which type of claims as 'particularly useful' for assessing anti-selection?",
+    opts: [
+      "Early claims",
+      "Large claims",
+      "Recurring claims",
+      "Long-duration claims"
+    ],
+    correct: 0,
+    feedback: "Sep 2023 Q3(iv): 'A claims investigation would be required [½] Early claims may be particularly useful to understand to assess anti-selection, impact of waiting periods [½]'. The mark scheme specifically calls out early claims for anti-selection assessment."
+  },
+  {
+    sitting: "IFoA Apr 2021 Q3(ii)",
+    marks: "10m",
+    q: "In the LTCI experience analysis (Apr 2021 Q3(ii)), which components of morbidity experience are explicitly listed by the mark scheme?",
+    opts: [
+      "Morbidity incidence rates, cost of care, average claim amounts, claims inflation",
+      "Mortality rates, reinsurance utilisation, investment income, policy fees",
+      "Premium rates, expense ratios, commission levels, capital requirements",
+      "New business volumes, lapse rates, profit margins, solvency ratios"
+    ],
+    correct: 0,
+    feedback: "Apr 2021 Q3(ii): 'Morbidity incidence rates [½] / Cost of care [½] / Average claim amounts will be important as the product is indemnity based [½] / And claims inflation [½]'. All four are listed under the Mortality and morbidity experience sub-heading."
+  },
+  {
+    sitting: "IFoA Sep 2022 Q3(v)",
+    marks: "8m",
+    q: "Sep 2022 Q3(v): When investigating a lower-than-expected claims ratio for a microinsurance product, which operational investigation is listed first in the mark scheme?",
+    opts: [
+      "Customer service queries",
+      "Premium rate adequacy review",
+      "Investment performance analysis",
+      "Reinsurance recovery rates"
+    ],
+    correct: 0,
+    feedback: "Sep 2022 Q3(v): 'Data needed / Operational investigations: Customer service queries [½] / Claims process audit including [½] / Declined claims [½] / Claim turnaround time [½]'. Customer service queries heads the operational list."
+  },
+  {
+    sitting: "IFoA Sep 2020 Q3(iii)",
+    marks: "15m",
+    q: "Sep 2020 Q3(iii) states that morbidity experience data for a CI premium review should be collected from which period?",
+    opts: [
+      "Since the last pricing or premium review date, whichever is the latest",
+      "Over the most recent five years, regardless of when pricing occurred",
+      "Since the company was founded",
+      "From the most recent calendar year only"
+    ],
+    correct: 0,
+    feedback: "Sep 2020 Q3(iii): 'Morbidity experience data should be collected since the last pricing or premium review date, whichever is the latest. [½]'. This precise wording is directly from the mark scheme."
+  },
+  {
+    sitting: "IFoA Apr 2021 Q3(iii)",
+    marks: "10m",
+    q: "Apr 2021 Q3(iii) mentions cultural factors as a cause of changed LTCI experience. Which specific example does the mark scheme give?",
+    opts: [
+      "Cultural shift from in-home care to care homes",
+      "Changed policyholder attitude to claiming",
+      "Increased reliance on state provision",
+      "Changed family structures reducing informal care"
+    ],
+    correct: 0,
+    feedback: "Apr 2021 Q3(iii): 'Cultural factors may change provision of care, for example from in-home care, to care homes [½]'. This is the verbatim example from the mark scheme under Claims amounts."
+  },
+  {
+    sitting: "IFoA Sep 2024 Q3(i)",
+    marks: "10m",
+    q: "Sep 2024 Q3(i): When investigating business mix as a contributor to an adverse IP loss ratio, which demographic variables does the mark scheme explicitly list?",
+    opts: [
+      "Age, gender, smoker",
+      "Height, weight, BMI",
+      "Education level, income band, region",
+      "Postcode, marital status, number of dependents"
+    ],
+    correct: 0,
+    feedback: "Sep 2024 Q3(i): 'Demographic trends (age, gender, smoker) [½]'. These three are the specific demographics listed. Occupation is separately listed as 'Or by occupation [½]'."
+  },
+  {
+    sitting: "IFoA Sep 2024 Q3(ii)",
+    marks: "5m",
+    q: "Sep 2024 Q3(ii): Which of these product term changes is explicitly listed as a way to improve an adverse IP loss ratio?",
+    opts: [
+      "Reduce maximum replacement ratio",
+      "Reduce deferred periods to encourage take-up",
+      "Remove waiting periods to simplify the product",
+      "Increase sum assured to attract healthier lives"
+    ],
+    correct: 0,
+    feedback: "Sep 2024 Q3(ii): 'Could amend product terms for example: / Reduce maximum replacement ratio [½] / To encourage return to work [½] / Increase waiting periods [½] / Increase deferred periods [½]'. Reducing the replacement ratio is explicitly listed to encourage return to work."
+  },
+  {
+    sitting: "IFoA Apr 2022 Q2(i)",
+    marks: "8m",
+    q: "Apr 2022 Q2(i): How does the mark scheme describe the impact of adjusted underwriting levels on claims experience?",
+    opts: [
+      "Higher and earlier claims compared to expected",
+      "Higher but later claims than expected",
+      "Lower claims but with longer average durations",
+      "Claims that are harder to adjudicate at the point of payment"
+    ],
+    correct: 0,
+    feedback: "Apr 2022 Q2(i): 'Underwriting levels may have been adjusted during the year leading to higher (and earlier) claims compared to expected [½]'. The mark scheme specifically pairs 'higher' with 'earlier' — both aspects matter."
+  },
+  {
+    sitting: "IFoA Sep 2020 Q3(iii)",
+    marks: "15m",
+    q: "Sep 2020 Q3(iii): Within each homogeneous group, the CI premium review assessment could be based on model points OR:",
+    opts: [
+      "All the policies within each group",
+      "A random 10% sample of policies",
+      "Only the top 20% of policies by sum assured",
+      "Policies written in the most recent year only"
+    ],
+    correct: 0,
+    feedback: "Sep 2020 Q3(iii): 'Within each homogeneous group, a number of model points could be chosen to represent the existing policy profile of that group. [½] Alternatively, the assessment could be based on all the policies within each group. [½]'. The mark scheme explicitly offers this as the alternative to model points."
+  },
+  {
+    sitting: "IFoA Sep 2023 Q3(iv)",
+    marks: "6m",
+    q: "Sep 2023 Q3(iv): The IP underwriting review investigation includes an analysis of claims relative to underwriting. What specific metric does the mark scheme use?",
+    opts: [
+      "Claims relative to underwriting category or loading",
+      "Claims relative to premium rates versus industry benchmarks",
+      "Claims relative to expense ratios by distribution channel",
+      "Claims relative to investment returns by asset class"
+    ],
+    correct: 0,
+    feedback: "Sep 2023 Q3(iv): 'Claims relative to underwriting category or loading would be useful to assess whether the current policy is effective [½]'. This directly measures whether the underwriting categories are appropriately pricing the risk."
+  }
+];
+
+const FLASHCARDS = [
+  {
+    sitting: "IFoA Apr 2021 Q3(ii)", marks: "10m",
+    front: "LTCI Experience Analysis — what investigations should the actuarial team perform?",
+    backTitle: "Mark scheme: morbidity, geography, lapses, expenses",
+    bullets: [
+      { type: "sub", text: "Geographical variation" },
+      { type: "b", text: "<strong>State vs private facility distribution</strong> by region" },
+      { type: "b", text: "Whether exposure is concentrated in specific locations" },
+      { type: "b", text: "Note: may not be material in a small country [½]" },
+      { type: "sub", text: "Mortality & morbidity experience" },
+      { type: "b", text: "<strong>Morbidity incidence rates</strong> [½]" },
+      { type: "b", text: "<strong>Cost of care</strong> [½]" },
+      { type: "b", text: "<strong>Average claim amounts</strong> (indemnity product) [½]" },
+      { type: "b", text: "<strong>Claims inflation</strong> [½]" },
+      { type: "b", text: "Recovery/termination rates" },
+      { type: "sub", text: "Also investigate" },
+      { type: "b", text: "Lapses, expenses, business mix, claim durations" }
+    ]
+  },
+  {
+    sitting: "IFoA Apr 2021 Q3(iii)", marks: "10m",
+    front: "LTCI — what factors could have caused experience to deteriorate substantially over time?",
+    backTitle: "Mark scheme: rates, eligibility, amounts, culture",
+    bullets: [
+      { type: "sub", text: "Mortality rates" },
+      { type: "b", text: "<strong>Life expectancy improved</strong> → people in care for longer [½]" },
+      { type: "sub", text: "Morbidity incidence" },
+      { type: "b", text: "<strong>Changes to policyholder behaviour</strong> / propensity to claim [½]" },
+      { type: "sub", text: "Claims eligibility" },
+      { type: "b", text: "<strong>Eligibility weakened</strong>, e.g. ADL definitions changed [½]" },
+      { type: "sub", text: "Claim amounts" },
+      { type: "b", text: "<strong>Treatment protocols changed</strong> → different claim amounts [½]" },
+      { type: "b", text: "<strong>Cultural shift</strong> from in-home care to care homes [½]" },
+      { type: "b", text: "Ongoing long-term care claims increasing [½]" }
+    ]
+  },
+  {
+    sitting: "IFoA Sep 2020 Q3(iii)", marks: "15m",
+    front: "CI Premium Review — how should the experience investigation be structured?",
+    backTitle: "Mark scheme: split → collect → analyse by dimension",
+    bullets: [
+      { type: "sub", text: "Step 1: Split into homogeneous groups" },
+      { type: "b", text: "By <strong>product type</strong> — standalone vs accelerated [½]" },
+      { type: "b", text: "Then by <strong>pricing series and premium rates</strong> [½]" },
+      { type: "sub", text: "Step 2: Model points or all policies" },
+      { type: "b", text: "Choose model points to represent profile, <strong>OR</strong> use all policies [½]" },
+      { type: "sub", text: "Step 3: Collect morbidity data" },
+      { type: "b", text: "Since <strong>last pricing OR last review date, whichever is latest</strong> [½]" },
+      { type: "sub", text: "Step 4: Analyse incidence rates by" },
+      { type: "b", text: "Age, sex, duration, <strong>cause</strong>, benefit amount [1]" }
+    ]
+  },
+  {
+    sitting: "IFoA Sep 2024 Q3(i)", marks: "10m",
+    front: "IP business — what investigations should be undertaken to understand an increase in the loss ratio?",
+    backTitle: "Mark scheme: four drivers + business mix dimensions",
+    bullets: [
+      { type: "sub", text: "Four main drivers to investigate" },
+      { type: "b", text: "<strong>Higher claims inception rates</strong> [½]" },
+      { type: "b", text: "<strong>Lower recovery rates</strong> [½]" },
+      { type: "b", text: "<strong>Higher claim amounts</strong> [½]" },
+      { type: "b", text: "<strong>Lower premium income</strong> [½]" },
+      { type: "sub", text: "Business mix dimensions" },
+      { type: "b", text: "Demographic trends: <strong>age, gender, smoker</strong> [½]" },
+      { type: "b", text: "By <strong>occupation</strong> [½]" },
+      { type: "b", text: "Cross-subsidies in the pricing basis [½]" },
+      { type: "b", text: "Whether changes in NB mix or selective lapses explain the shift [½]" }
+    ]
+  },
+  {
+    sitting: "IFoA Apr 2022 Q2(i)", marks: "8m",
+    front: "PMI — what factors could have led to claims experience being worse than expected?",
+    backTitle: "Mark scheme: mix, underwriting, lapses",
+    bullets: [
+      { type: "sub", text: "Business mix" },
+      { type: "b", text: "Mix may differ — e.g. <strong>older lives</strong>, different occupation [½]" },
+      { type: "b", text: "Selling through <strong>new distributors</strong> with different mix [½]" },
+      { type: "b", text: "Different <strong>group/individual split</strong> [½]" },
+      { type: "sub", text: "Underwriting" },
+      { type: "b", text: "Underwriting levels adjusted → <strong>higher and earlier claims</strong> [½]" },
+      { type: "sub", text: "Lapses" },
+      { type: "b", text: "<strong>Selective lapses</strong>: higher for certain categories [½]" },
+      { type: "b", text: "Healthier lives lapsing → worse remaining risk pool [½]" },
+      { type: "sub", text: "Other" },
+      { type: "b", text: "New treatments / provider cost increases [½]" }
+    ]
+  },
+  {
+    sitting: "IFoA Sep 2023 Q3(iv)", marks: "6m",
+    front: "IP — what investigations support a review of the underwriting policy?",
+    backTitle: "Mark scheme: implementation, cost/benefit, claims, exposure",
+    bullets: [
+      { type: "b", text: "Investigate <strong>how underwriting is being implemented</strong> (e.g. frequency of doctors' reports) [½]" },
+      { type: "b", text: "<strong>Cost/benefit analysis</strong> of current underwriting policy [½]" },
+      { type: "b", text: "Claims investigation required [½]" },
+      { type: "b", text: "<strong>Early claims</strong> particularly useful — assess anti-selection and waiting period impact [½]" },
+      { type: "b", text: "Claims <strong>relative to underwriting category or loading</strong> — test policy effectiveness [½]" },
+      { type: "b", text: "<strong>Declined claims</strong> — where underwriting is unclear, impacting customer experience [½]" },
+      { type: "b", text: "Exposure data — are segments <strong>under/over-represented</strong>? [½]" }
+    ]
+  },
+  {
+    sitting: "IFoA Sep 2024 Q3(ii)", marks: "5m",
+    front: "IP — what actions can Company X take to improve an adverse loss ratio?",
+    backTitle: "Mark scheme: pricing, product terms, claims management",
+    bullets: [
+      { type: "sub", text: "Pricing" },
+      { type: "b", text: "Increase premium rates [½]" },
+      { type: "b", text: "Implement <strong>more granular premium rates</strong> [½]" },
+      { type: "sub", text: "Product terms" },
+      { type: "b", text: "<strong>Reduce maximum replacement ratio</strong> — encourages return to work [½]" },
+      { type: "b", text: "Increase <strong>waiting periods</strong> [½]" },
+      { type: "b", text: "Increase <strong>deferred periods</strong> [½]" },
+      { type: "b", text: "Introduce partial or <strong>rehabilitation benefits</strong> [½]" },
+      { type: "sub", text: "Claims management" },
+      { type: "b", text: "Set up dedicated claims management team [½]" },
+      { type: "b", text: "Tighten underwriting; consider reinsurance [½]" }
+    ]
+  },
+  {
+    sitting: "IFoA Sep 2022 Q3(v)", marks: "8m",
+    front: "Microinsurance — claims ratio lower than expected. What data and investigations are needed?",
+    backTitle: "Mark scheme: operational + data checks",
+    bullets: [
+      { type: "sub", text: "Operational investigations" },
+      { type: "b", text: "<strong>Customer service queries</strong> [½]" },
+      { type: "b", text: "Claims process audit: <strong>declined claims</strong> [½]" },
+      { type: "b", text: "Claim turnaround time [½]" },
+      { type: "b", text: "% of claims with all documents submitted [½]" },
+      { type: "b", text: "Claims submitted where customer has <strong>no cover</strong> [½]" },
+      { type: "b", text: "Complaints [½]" },
+      { type: "sub", text: "Data required" },
+      { type: "b", text: "<strong>Premium amounts</strong> (needed for claims ratio denominator) [½]" },
+      { type: "b", text: "Awareness of product among target population [½]" }
+    ]
+  },
+  {
+    sitting: "IFoA Sep 2020 Q3(iii)",
+    marks: "½m per point",
+    front: "CI premium review — what is the correct definition of the data collection period for the experience investigation?",
+    backTitle: "Exact wording from mark scheme",
+    bullets: [
+      { type: "b", text: "Collect morbidity experience data <strong>since the last pricing or premium review date, whichever is the latest</strong>" },
+      { type: "b", text: "This ensures the investigation uses <strong>current, relevant experience</strong>" },
+      { type: "b", text: "Avoids double-counting data already used in the prior pricing exercise" },
+      { type: "b", text: "Key distinction: 'last pricing' ≠ 'last review' — use the <strong>more recent of the two</strong>" }
+    ]
+  },
+  {
+    sitting: "IFoA Apr 2021 Q3(iii)",
+    marks: "½m per point",
+    front: "LTCI — what is the ADL-related mechanism for experience deterioration, and why does it matter?",
+    backTitle: "Mark scheme: eligibility weakening",
+    bullets: [
+      { type: "b", text: "Mark scheme: '<strong>Claims eligibility could have weakened</strong> [½]'" },
+      { type: "b", text: "Specifically: '<strong>e.g. due to changes to the medical definitions used for functional test like ADLs</strong> [½]'" },
+      { type: "b", text: "ADLs = Activities of Daily Living — typically used to trigger LTCI claims" },
+      { type: "b", text: "If the threshold for failing an ADL is lowered → more policyholders qualify to claim" },
+      { type: "b", text: "This directly inflates morbidity incidence beyond the original pricing assumption" }
+    ]
+  },
+  {
+    sitting: "IFoA Sep 2024 Q3(i)",
+    marks: "½m per point",
+    front: "IP — what role do 'cross subsidies in the pricing basis' play when investigating a higher loss ratio?",
+    backTitle: "Mark scheme: mix shift + cross-subsidy interaction",
+    bullets: [
+      { type: "b", text: "Mark scheme lists: '<strong>There may be cross subsidies in the pricing basis</strong> [½]'" },
+      { type: "b", text: "Cross-subsidy = some risk segments subsidise others within the same premium rate" },
+      { type: "b", text: "If the business <strong>mix shifts toward the subsidised (higher-risk) group</strong>, the aggregate loss ratio rises" },
+      { type: "b", text: "Even if no individual rate is inadequate, the portfolio loss ratio deteriorates" },
+      { type: "b", text: "Solution: more granular pricing (Sep 2024 Q3(ii)) — 'implement more granular premium rates [½]'" }
+    ]
+  },
+  {
+    sitting: "IFoA Apr 2022 Q2(i)",
+    marks: "½m per point",
+    front: "PMI — why do selective lapses worsen claims experience, and what mechanism does the mark scheme describe?",
+    backTitle: "Mark scheme: lapse concentration by health status",
+    bullets: [
+      { type: "b", text: "Mark scheme: '<strong>Lapse/non-renewal of business was higher than expected for certain categories</strong> [½]'" },
+      { type: "b", text: "Healthier policyholders are more likely to lapse (less need for cover; cost sensitivity)" },
+      { type: "b", text: "Sicker or higher-risk policyholders persist → remaining pool is <strong>adversely selected</strong>" },
+      { type: "b", text: "Even if total policy count is unchanged, average risk per policy is now higher" },
+      { type: "b", text: "This is sometimes called 'anti-selection on lapse' — distinct from plain lapse volume" }
+    ]
+  }
+];
+
+const MNEMONICS = [
+  {
+    acro: "DISC",
+    title: "What to investigate in ANY experience analysis",
+    subtitle: "Works for IP, CI, PMI, LTCI — universal investigation structure",
+    src: "Apr 2021 Q3(ii), Sep 2024 Q3(i)",
+    phrase: "\"<strong>D</strong>octors <strong>I</strong>nvestigate <strong>S</strong>ick <strong>C</strong>ases\"",
+    rows: [
+      { letter: "D", color: "#a89ef0", key: "Demographics", detail: "Age, gender, smoker, occupation — check for mix shifts <em>[Sep 2024 Q3(i): 'Demographic trends (age, gender, smoker) [½]']</em>" },
+      { letter: "I", color: "#3eb8a0", key: "Inception/Incidence rates", detail: "Morbidity incidence rates, claim inception frequency — the primary rate driver <em>[Apr 2021 Q3(ii): 'Morbidity incidence rates [½]']</em>" },
+      { letter: "S", color: "#e8a94a", key: "Severity (amounts + inflation)", detail: "Cost of care, average claim amounts, claims inflation <em>[Apr 2021 Q3(ii): 'Average claim amounts… claims inflation [½]']</em>" },
+      { letter: "C", color: "#e06fa0", key: "Cessation (recovery, lapse, termination)", detail: "Recovery rates, lapse rates, termination — the duration driver <em>[Sep 2024 Q3(i): 'Lower recovery rates [½]']</em>" }
+    ],
+    note: "<strong>Source:</strong> Apr 2021 Q3(ii) lists all DISC components for LTCI. Sep 2024 Q3(i) explicitly identifies all four in the IP context. Geographical variation is a fifth dimension for certain products."
+  },
+  {
+    acro: "MADE",
+    title: "Factors causing experience to DETERIORATE over time",
+    subtitle: "LTCI premium review — why has experience worsened?",
+    src: "Apr 2021 Q3(iii)",
+    phrase: "\"Experience was <strong>MADE</strong> worse by...\"",
+    rows: [
+      { letter: "M", color: "#a89ef0", key: "Morbidity behaviour changed", detail: "Propensity to claim changed; policyholder behaviour altered <em>['Changes to policyholder behaviour which impact the propensity to claim [½]']</em>" },
+      { letter: "A", color: "#3eb8a0", key: "Amount per claim changed", detail: "Treatment protocols changed; cultural shift from in-home to care homes <em>['Treatment protocols may have changed which could change claim amounts [½]']</em>" },
+      { letter: "D", color: "#e8a94a", key: "Definition weakened (ADLs)", detail: "Claim eligibility weakened through changed ADL definitions <em>['changes to the medical definitions used for functional test like ADLs [½]']</em>" },
+      { letter: "E", color: "#e06fa0", key: "Extended longevity", detail: "Life expectancy improved → people in care for longer <em>['Life expectancy could have improved… meaning people are in care for longer [½]']</em>" }
+    ],
+    note: "<strong>Source:</strong> All four MADE points come directly from Apr 2021 Q3(iii). The mark scheme sub-heads are: Rates/Mortality, Morbidity incidence, Claims eligibility, Claims amounts."
+  },
+  {
+    acro: "MULD",
+    title: "Why PMI claims are WORSE than expected",
+    subtitle: "Business mix, underwriting, lapses, distribution",
+    src: "Apr 2022 Q2(i)",
+    phrase: "\"<strong>MULD</strong> it over — what changed in PMI?\"",
+    rows: [
+      { letter: "M", color: "#a89ef0", key: "Mix of business shifted", detail: "Older lives, different occupation, new distributors, different group/individual split <em>['mix of business may differ… For example: Older lives [½]']</em>" },
+      { letter: "U", color: "#3eb8a0", key: "Underwriting levels adjusted", detail: "Leading to higher AND earlier claims than expected <em>['Underwriting levels may have been adjusted during the year leading to higher (and earlier) claims [½]']</em>" },
+      { letter: "L", color: "#e8a94a", key: "Lapses selective", detail: "Healthier lives lapsing leaves a higher-risk pool <em>['Lapse/non-renewal was higher than expected for certain categories [½]']</em>" },
+      { letter: "D", color: "#e06fa0", key: "Distribution via new channels", detail: "New distributors with a different mix of insured lives <em>['Selling through new distributors with a different mix of lives [½]']</em>" }
+    ],
+    note: "<strong>Source:</strong> All four MULD points are explicitly from Apr 2022 Q2(i) mark scheme. Provider cost increases and new treatment advances are additional ½-mark points in the same question."
+  },
+  {
+    acro: "SHoMI",
+    title: "CI premium review — 4 steps in the experience investigation",
+    subtitle: "The mark scheme structure for Sep 2020 Q3(iii)",
+    src: "Sep 2020 Q3(iii)",
+    phrase: "\"<strong>SH</strong>ow <strong>M</strong>e the <strong>I</strong>ncidence!\"",
+    rows: [
+      { letter: "S", color: "#a89ef0", key: "Split into homogeneous groups", detail: "By product type first (standalone vs accelerated), then by pricing series and premium rates <em>['Split existing policies into homogeneous groups [½]']</em>" },
+      { letter: "Ho", color: "#3eb8a0", key: "Homogenise using model points", detail: "Choose model points to represent group profile, OR use all policies <em>['a number of model points could be chosen… Alternatively… all the policies [½]']</em>" },
+      { letter: "M", color: "#e8a94a", key: "Morbidity data collection", detail: "Collect since the last pricing OR last premium review, whichever is latest <em>['since the last pricing or premium review date, whichever is the latest [½]']</em>" },
+      { letter: "I", color: "#e06fa0", key: "Investigate incidence by dimension", detail: "Age, sex, duration, cause, benefit amount <em>['Incidence rates will be examined… subdivided into the following areas for analyses [1]']</em>" }
+    ],
+    note: "<strong>Source:</strong> Sep 2020 Q3(iii) [15 marks]. Each SHoMI step maps to an explicit ½–1 mark bullet in the mark scheme. The 'whichever is latest' rule in M is commonly tested."
+  },
+  {
+    acro: "PRIOR",
+    title: "IP loss ratio deterioration — investigation structure",
+    subtitle: "Run a PRIOR investigation when the loss ratio rises",
+    src: "Sep 2024 Q3(i)",
+    phrase: "\"Run a <strong>PRIOR</strong> investigation before drawing conclusions\"",
+    rows: [
+      { letter: "P", color: "#a89ef0", key: "Premium income — is it lower?", detail: "Lower premium (e.g. from selective lapses) raises the loss ratio even if claims are unchanged <em>['Lower premium income [½]']</em>" },
+      { letter: "R", color: "#3eb8a0", key: "Recovery rates — have they fallen?", detail: "Lower recovery = longer average claim duration = higher total cost <em>['Lower recovery rates [½]']</em>" },
+      { letter: "I", color: "#e8a94a", key: "Inception rates — have they risen?", detail: "Higher claim incidence is the most obvious driver of a worse loss ratio <em>['Higher claims inception rates [½]']</em>" },
+      { letter: "O", color: "#6abf8a", key: "Occupation/demographic mix shift?", detail: "Mix shifted to higher-risk segments — age, gender, smoker, occupation <em>['Demographic trends (age, gender, smoker) [½] / Or by occupation [½]']</em>" },
+      { letter: "R", color: "#e06fa0", key: "Rate cross-subsidies in pricing?", detail: "Portfolio-level pricing inadequacy from cross-subsidies even if no individual rate is wrong <em>['There may be cross subsidies in the pricing basis [½]']</em>" }
+    ],
+    note: "<strong>Source:</strong> All five PRIOR items come directly from Sep 2024 Q3(i) mark scheme. The R-O-R grouping represents the mark scheme's sequence: first identify whether the issue is volume (I), duration (R₁), amount (implied in O/R₂), or income (P)."
+  }
+];
+
+/* ════════════════════════════════════════════
+   QUIZ LOGIC
+════════════════════════════════════════════ */
+let qIdx = 0;
+let answers = new Array(QUIZ.length).fill(null);
+let score = 0;
+
+function renderQuestion() {
+  const q = QUIZ[qIdx];
+  const area = document.getElementById('q-area');
+  const chosen = answers[qIdx];
+
+  let optsHtml = q.opts.map((o, i) => {
+    let cls = 'opt';
+    if (chosen !== null) {
+      cls += ' disabled';
+      if (i === q.correct) cls += ' correct';
+      else if (i === chosen) cls += ' wrong';
+    }
+    const keys = ['A','B','C','D'];
+    return `<div class="${cls}" onclick="chooseOpt(${i})">
+      <span class="opt-key">${keys[i]}</span>
+      <span>${o}</span>
+    </div>`;
+  }).join('');
+
+  let fbHtml = '';
+  if (chosen !== null) {
+    const ok = chosen === q.correct;
+    fbHtml = `<div class="q-feedback ${ok?'correct':'wrong'}">
+      <strong>${ok ? '✓ Correct' : '✗ Incorrect'}</strong> — ${q.feedback}
+    </div>`;
+  }
+
+  area.innerHTML = `
+    <div class="q-card">
+      <div class="q-source">
+        <span class="sitting">${q.sitting}</span>
+        <span class="q-marks">${q.marks}</span>
+      </div>
+      <div class="q-text">${q.q}</div>
+      <div class="options">${optsHtml}</div>
+      ${fbHtml}
+    </div>`;
+
+  // update meta
+  const total = answers.filter(a => a !== null).length;
+  const correct = answers.reduce((acc, a, i) => acc + (a === QUIZ[i].correct ? 1 : 0), 0);
+  document.getElementById('q-counter').textContent = `Q ${qIdx+1} / ${QUIZ.length}`;
+  document.getElementById('score-fill').style.width = (total/QUIZ.length*100) + '%';
+  document.getElementById('score-label').textContent = `${correct} / ${total}`;
+  document.getElementById('score-label').style.color = total === 0 ? 'var(--text-dim)' : correct/total >= 0.7 ? 'var(--green)' : 'var(--red)';
+
+  document.getElementById('btn-prev').disabled = qIdx === 0;
+  document.getElementById('btn-next').disabled = chosen === null;
+
+  // status
+  const remaining = QUIZ.filter((_,i) => answers[i] === null).length;
+  document.getElementById('q-status').textContent = remaining + ' unanswered';
+}
+
+function chooseOpt(i) {
+  if (answers[qIdx] !== null) return;
+  answers[qIdx] = i;
+  renderQuestion();
+
+  // check if all answered
+  if (answers.every(a => a !== null)) {
+    setTimeout(showResults, 400);
+  }
+}
+
+function prevQ() { qIdx = Math.max(0, qIdx-1); renderQuestion(); }
+function nextQ() {
+  if (qIdx < QUIZ.length - 1) { qIdx++; renderQuestion(); }
+  else showResults();
+}
+
+function showResults() {
+  document.getElementById('q-area').style.display = 'none';
+  document.querySelector('.quiz-nav').style.display = 'none';
+  document.querySelector('.quiz-meta').style.display = 'none';
+  const correct = answers.reduce((acc,a,i) => acc+(a===QUIZ[i].correct?1:0), 0);
+  const pct = Math.round(correct/QUIZ.length*100);
+  const res = document.getElementById('quiz-results');
+  res.style.display = 'block';
+  document.getElementById('results-pct').textContent = pct+'%';
+  document.getElementById('results-label').textContent =
+    pct >= 80 ? '🎉 Excellent — strong EA recall' :
+    pct >= 60 ? '📖 Good — a few mark scheme details to revisit' :
+    '🔁 Review needed — focus on DISC framework and exact mark scheme wording';
+  document.getElementById('res-correct').textContent = correct;
+  document.getElementById('res-wrong').textContent = QUIZ.length - correct;
+  document.getElementById('res-total').textContent = QUIZ.length;
+}
+
+function restartQuiz() {
+  qIdx = 0;
+  answers = new Array(QUIZ.length).fill(null);
+  document.getElementById('q-area').style.display = 'block';
+  document.querySelector('.quiz-nav').style.display = 'flex';
+  document.querySelector('.quiz-meta').style.display = 'flex';
+  document.getElementById('quiz-results').style.display = 'none';
+  renderQuestion();
+}
+
+/* ════════════════════════════════════════════
+   FLASHCARD LOGIC
+════════════════════════════════════════════ */
+let fcIdx = 0;
+let fcOrder = FLASHCARDS.map((_,i) => i);
+let fcSeen = new Set();
+
+function buildFCDots() {
+  const dots = document.getElementById('fc-dots');
+  dots.innerHTML = fcOrder.map((_, i) => 
+    `<div class="fc-dot${i===fcIdx?' active':''}${fcSeen.has(i)&&i!==fcIdx?' seen':''}" onclick="goFC(${i})"></div>`
+  ).join('');
+}
+
+function renderFC() {
+  const card = FLASHCARDS[fcOrder[fcIdx]];
+  const inner = document.getElementById('fc-inner');
+  inner.classList.remove('flipped');
+
+  // front
+  document.getElementById('fc-front-face').innerHTML = `
+    <div class="fc-label">
+      <span class="sit">${card.sitting}</span>
+      <span class="mk">${card.marks}</span>
+      <span style="margin-left:auto;font-size:10px;color:var(--text-dim)">QUESTION</span>
+    </div>
+    <div class="fc-q">${card.front}</div>
+    <div class="fc-hint">↕ Click to reveal mark scheme answer</div>
+  `;
+
+  // back
+  const bulletHtml = card.bullets.map(b => {
+    if (b.type === 'sub') return `<li class="sub">${b.text}</li>`;
+    return `<li>${b.text}</li>`;
+  }).join('');
+
+  document.getElementById('fc-back-face').innerHTML = `
+    <div class="fc-label">
+      <span style="color:var(--teal)">ANSWER</span>
+      <span style="margin-left:6px;color:var(--text-dim);font-style:italic">${card.backTitle}</span>
+    </div>
+    <div class="fc-bullets"><ul>${bulletHtml}</ul></div>
+  `;
+
+  document.getElementById('fc-counter').textContent = `${fcIdx+1} / ${FLASHCARDS.length}`;
+  document.getElementById('fc-prev').disabled = fcIdx === 0;
+  document.getElementById('fc-next').disabled = fcIdx === fcOrder.length - 1;
+  fcSeen.add(fcIdx);
+  buildFCDots();
+}
+
+function flipCard() {
+  document.getElementById('fc-inner').classList.toggle('flipped');
+}
+
+function prevFC() { if (fcIdx > 0) { fcIdx--; renderFC(); } }
+function nextFC() { if (fcIdx < fcOrder.length-1) { fcIdx++; renderFC(); } }
+function goFC(i) { fcIdx = i; renderFC(); }
+
+function shuffleFC() {
+  for (let i = fcOrder.length-1; i > 0; i--) {
+    const j = Math.floor(Math.random()*(i+1));
+    [fcOrder[i], fcOrder[j]] = [fcOrder[j], fcOrder[i]];
+  }
+  fcIdx = 0;
+  fcSeen = new Set();
+  renderFC();
+}
+
+/* ════════════════════════════════════════════
+   MNEMONICS
+════════════════════════════════════════════ */
+const colors = {
+  "#a89ef0": "rgba(168,158,240,0.15)",
+  "#3eb8a0": "rgba(62,184,160,0.15)",
+  "#e8a94a": "rgba(232,169,74,0.12)",
+  "#e06fa0": "rgba(224,111,160,0.13)",
+  "#6abf8a": "rgba(106,191,138,0.13)"
+};
+
+function buildMnemonics() {
+  const grid = document.getElementById('mn-grid');
+  grid.innerHTML = MNEMONICS.map((mn, mi) => {
+    const rows = mn.rows.map(r => `
+      <div class="mn-row">
+        <div class="mn-letter" style="color:${r.color};background:${colors[r.color]||'rgba(124,111,224,0.12)'};border-radius:6px;text-align:center;line-height:26px;height:26px;">${r.letter}</div>
+        <div class="mn-row-content">
+          <div class="mn-row-key">${r.key}</div>
+          <div class="mn-row-detail">${r.detail}</div>
+        </div>
+      </div>`).join('');
+
+    return `
+      <div class="mn-card" id="mn-${mi}">
+        <div class="mn-hdr" onclick="toggleMn(${mi})">
+          <div class="mn-acro">${mn.acro}</div>
+          <div class="mn-info">
+            <div class="mn-title">${mn.title}</div>
+            <div class="mn-sub">${mn.subtitle}</div>
+          </div>
+          <div class="mn-src">${mn.src}</div>
+          <div class="mn-chev">▼</div>
+        </div>
+        <div class="mn-body">
+          <div class="mn-phrase-box">${mn.phrase}</div>
+          <div class="mn-rows">${rows}</div>
+          <div class="mn-notes">${mn.note}</div>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function toggleMn(i) {
+  document.getElementById('mn-'+i).classList.toggle('open');
+}
+
+/* ════════════════════════════════════════════
+   PANEL SWITCHING
+════════════════════════════════════════════ */
+function showPanel(name, btn) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('panel-'+name).classList.add('active');
+  btn.classList.add('active');
+}
+
+/* ════════════════════════════════════════════
+   INIT
+════════════════════════════════════════════ */
+renderQuestion();
+renderFC();
+buildMnemonics();
+// Open first mnemonic by default
+document.getElementById('mn-0').classList.add('open');
+</script>
+</body>
+</html>

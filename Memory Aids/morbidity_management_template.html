@@ -1,0 +1,387 @@
+
+<style>
+  :root { --navy: #0f1629; --card: #1a2340; --card2: #1e2a45; --purple: #7c6fe0; --purple-light: #a89ef0; --teal: #3eb8a0; --amber: #e8a94a; --pink: #e06fa0; --text: #c8d0e8; --text-dim: #7a84a8; --border: rgba(124,111,224,0.25); }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font-sans, system-ui, sans-serif); background: transparent; color: var(--text); font-size: 14px; line-height: 1.6; }
+  .wrapper { padding: 0 0 1rem; }
+  .header { background: linear-gradient(135deg, #0f1629 0%, #1a2340 100%); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem 1.5rem; margin-bottom: 1rem; }
+  .header h1 { font-size: 16px; font-weight: 500; color: var(--purple-light); margin-bottom: 0.25rem; }
+  .header p { font-size: 12px; color: var(--text-dim); }
+  .tabs { display: flex; gap: 8px; margin-bottom: 1rem; }
+  .tab { flex: 1; padding: 8px 12px; border-radius: 8px; border: 1px solid var(--border); background: transparent; color: var(--text-dim); font-size: 13px; cursor: pointer; text-align: center; transition: all 0.2s; font-family: inherit; }
+  .tab.active { background: var(--purple); border-color: var(--purple); color: #fff; font-weight: 500; }
+  .tab:hover:not(.active) { border-color: var(--purple-light); color: var(--purple-light); }
+  .panel { display: none; }
+  .panel.active { display: block; }
+  .mnemonic-box { background: #1a1035; border: 1px solid rgba(124,111,224,0.4); border-radius: 10px; padding: 1rem 1.25rem; margin-bottom: 1rem; }
+  .mnemonic-label { font-size: 11px; color: var(--purple-light); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.5rem; font-weight: 500; }
+  .mnemonic-main { font-size: 20px; font-weight: 500; color: #fff; letter-spacing: 0.05em; margin-bottom: 0.4rem; }
+  .mnemonic-phrase { font-size: 12px; color: var(--text-dim); font-style: italic; }
+  .mnemonic-phrase span { color: var(--purple-light); font-style: normal; font-weight: 500; }
+  .steps { display: flex; flex-direction: column; gap: 8px; }
+  .step { background: var(--card); border: 1px solid rgba(255,255,255,0.07); border-radius: 9px; overflow: hidden; }
+  .step-header { display: flex; align-items: center; gap: 10px; padding: 10px 14px; cursor: pointer; transition: background 0.15s; }
+  .step-header:hover { background: var(--card2); }
+  .step-num { width: 26px; height: 26px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 500; flex-shrink: 0; }
+  .step-title { flex: 1; font-size: 13px; font-weight: 500; color: #d0d8f0; }
+  .step-marks { font-size: 11px; color: var(--text-dim); background: rgba(255,255,255,0.06); padding: 2px 8px; border-radius: 20px; }
+  .step-chevron { font-size: 10px; color: var(--text-dim); transition: transform 0.2s; }
+  .step.open .step-chevron { transform: rotate(180deg); }
+  .step-body { display: none; padding: 0 14px 12px 50px; }
+  .step.open .step-body { display: block; }
+  .bullet-list { list-style: none; }
+  .bullet-list li { font-size: 12px; color: var(--text-dim); padding: 3px 0; padding-left: 14px; position: relative; line-height: 1.5; }
+  .bullet-list li::before { content: '›'; position: absolute; left: 0; color: var(--purple-light); }
+  .bullet-list li em { color: var(--teal); font-style: normal; font-weight: 500; }
+  .sub-label { font-size: 11px; color: var(--amber); font-weight: 500; margin: 8px 0 4px; }
+  .letter-chip { display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; border-radius: 5px; font-size: 12px; font-weight: 500; margin-right: 4px; }
+  .alert-box { background: rgba(232,169,74,0.1); border: 1px solid rgba(232,169,74,0.3); border-radius: 8px; padding: 10px 14px; margin-bottom: 1rem; font-size: 12px; color: var(--amber); }
+  .alert-box strong { display: block; margin-bottom: 2px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; }
+  .template-box { background: rgba(62,184,160,0.08); border: 1px solid rgba(62,184,160,0.25); border-radius: 8px; padding: 10px 14px; margin-bottom: 1rem; font-size: 12px; color: var(--teal); }
+  .template-box strong { display: block; margin-bottom: 4px; font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; color: #6fd4c0; }
+  .marks-row { display: flex; gap: 8px; margin-bottom: 1rem; }
+  .mark-card { flex: 1; background: var(--card); border: 1px solid rgba(255,255,255,0.07); border-radius: 8px; padding: 10px 12px; text-align: center; }
+  .mark-card .num { font-size: 22px; font-weight: 500; }
+  .mark-card .lbl { font-size: 11px; color: var(--text-dim); margin-top: 2px; }
+  .flow-row { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; margin-bottom: 0.75rem; }
+  .flow-chip { background: rgba(124,111,224,0.15); border: 1px solid rgba(124,111,224,0.3); border-radius: 6px; padding: 4px 10px; font-size: 12px; color: var(--purple-light); font-weight: 500; }
+  .flow-arrow { color: var(--text-dim); font-size: 14px; }
+  .fb-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-top: 8px; }
+  .fb-card { background: rgba(124,111,224,0.1); border: 1px solid rgba(124,111,224,0.2); border-radius: 7px; padding: 8px 10px; }
+  .fb-card .fb-title { font-size: 12px; font-weight: 500; color: var(--purple-light); margin-bottom: 3px; }
+  .fb-card .fb-body { font-size: 11px; color: var(--text-dim); line-height: 1.4; }
+</style>
+<div class="wrapper">
+  <div class="header">
+    <h1>Morbidity Experience — Generic Answer Template</h1>
+    <p>ACC monitoring + management of adverse morbidity | SA1 / SP1</p>
+  </div>
+
+  <div class="marks-row">
+    <div class="mark-card"><div class="num" style="color:var(--purple-light)">3</div><div class="lbl">Part (a) max marks<br>ACC application</div></div>
+    <div class="mark-card"><div class="num" style="color:var(--teal)">10</div><div class="lbl">Part (b) max marks<br>Management actions</div></div>
+    <div class="mark-card"><div class="num" style="color:var(--amber)">½</div><div class="lbl">Per bullet<br>standard rate</div></div>
+  </div>
+
+  <div class="tabs">
+    <button class="tab active" onclick="showPanel('acc')">Part (a): ACC</button>
+    <button class="tab" onclick="showPanel('manage')">Part (b): Management</button>
+    <button class="tab" onclick="showPanel('template')">Full Template</button>
+  </div>
+
+  <!-- PANEL A: ACC -->
+  <div id="panel-acc" class="panel active">
+    <div class="mnemonic-box">
+      <div class="mnemonic-label">Mnemonic — Part (a)</div>
+      <div class="mnemonic-main">MAC → FPR&nbsp;&nbsp;<span style="font-size:13px;color:var(--text-dim);font-weight:400">then three feedback arms</span></div>
+      <div class="mnemonic-phrase">
+        "<span>M</span>ost <span>A</span>ctuaries <span>C</span>arefully <span>F</span>ollow <span>P</span>roper <span>R</span>isk <span>R</span>ules"
+      </div>
+    </div>
+
+    <div class="flow-row">
+      <div class="flow-chip">M — Monitor</div><div class="flow-arrow">→</div>
+      <div class="flow-chip">A — Analyse surplus</div><div class="flow-arrow">→</div>
+      <div class="flow-chip">C — Consistency check</div><div class="flow-arrow">→</div>
+      <div class="flow-chip">Feed back into FPR</div>
+    </div>
+
+    <div class="steps">
+      <div class="step open">
+        <div class="step-header" onclick="toggleStep(this)">
+          <div class="step-num" style="background:rgba(124,111,224,0.2);color:var(--purple-light)">M</div>
+          <div class="step-title">Monitor actual vs expected morbidity</div>
+          <div class="step-marks">1 mk</div>
+          <div class="step-chevron">▼</div>
+        </div>
+        <div class="step-body">
+          <ul class="bullet-list">
+            <li>Compare actual claim inception/termination rates to those assumed in the <em>premium basis</em> and <em>reserving basis</em></li>
+            <li>Monitor separately for each product type (CI, IP, LTC, PHI etc.) — don't aggregate</li>
+            <li>For unit-linked, also compare charges assumed vs actual morbidity cost</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-header" onclick="toggleStep(this)">
+          <div class="step-num" style="background:rgba(62,184,160,0.2);color:var(--teal)">A</div>
+          <div class="step-title">Analyse surplus — isolate morbidity P&amp;L</div>
+          <div class="step-marks">1½ mk</div>
+          <div class="step-chevron">▼</div>
+        </div>
+        <div class="step-body">
+          <ul class="bullet-list">
+            <li>Perform an <em>analysis of surplus</em> to quantify the morbidity loss separately from other profit/loss sources (mortality, lapse, investment etc.)</li>
+            <li>This puts losses in context — is the magnitude sufficient to justify remedial action?</li>
+            <li>Distinguish between one-off fluctuations and systematic adverse experience</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-header" onclick="toggleStep(this)">
+          <div class="step-num" style="background:rgba(232,169,74,0.2);color:var(--amber)">C</div>
+          <div class="step-title">Consistency check — trends over time</div>
+          <div class="step-marks">½ mk</div>
+          <div class="step-chevron">▼</div>
+        </div>
+        <div class="step-body">
+          <ul class="bullet-list">
+            <li>Review past experience data — is the adverse morbidity <em>persistent and worsening</em>, or random?</li>
+            <li>This determines whether model/parameter error or random fluctuation is the likely cause</li>
+            <li>Persistent = systemic problem needing structural action; one-off = monitor and hold</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-header" onclick="toggleStep(this)">
+          <div class="step-num" style="background:rgba(224,111,160,0.2);color:var(--pink)">F</div>
+          <div class="step-title">Feed back revised assumptions into FPR</div>
+          <div class="step-marks">3 mk</div>
+          <div class="step-chevron">▼</div>
+        </div>
+        <div class="step-body">
+          <div class="fb-grid">
+            <div class="fb-card">
+              <div class="fb-title">P — Pricing</div>
+              <div class="fb-body">Revise premium rates and/or unit-linked charges. For reviewable contracts, apply immediately. Prevents losses on future new business.</div>
+            </div>
+            <div class="fb-card">
+              <div class="fb-title">R — Reserving</div>
+              <div class="fb-body">Revise reserving basis upward. Prevents over-distribution of profit to capital providers. Protects solvency of in-force book.</div>
+            </div>
+            <div class="fb-card">
+              <div class="fb-title">R — Risk mgmt</div>
+              <div class="fb-body">Update risk/ruin models. Recalculate reinsurance needs (e.g. surplus treaty amounts) and revise reinsurance policy accordingly.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL B: MANAGEMENT -->
+  <div id="panel-manage" class="panel">
+    <div class="mnemonic-box">
+      <div class="mnemonic-label">Mnemonic — Part (b)</div>
+      <div class="mnemonic-main">PRUCCS</div>
+      <div class="mnemonic-phrase">
+        "<span>P</span>retty <span>R</span>ough <span>U</span>nderwriting <span>C</span>reates <span>C</span>laim <span>S</span>urprises"
+      </div>
+    </div>
+
+    <div class="alert-box">
+      <strong>Exam technique</strong>
+      Always give the action AND its mechanism/rationale — every bullet is worth ½ mark, but examiner typically wants both the "what" and the "why/how".
+    </div>
+
+    <div class="steps">
+      <div class="step open">
+        <div class="step-header" onclick="toggleStep(this)">
+          <div class="step-num" style="background:rgba(124,111,224,0.2);color:var(--purple-light)">P</div>
+          <div class="step-title">Product redesign</div>
+          <div class="step-marks">3 mk</div>
+          <div class="step-chevron">▼</div>
+        </div>
+        <div class="step-body">
+          <ul class="bullet-list">
+            <li><em>Tighten definition of claim</em> (policy wording) — reduces incidence of borderline/ambiguous claims</li>
+            <li>Introduce a <em>partial return-to-work benefit</em> — incentivises rehabilitation, reduces claim duration</li>
+            <li><em>Reduce guarantees and options</em> — limits company exposure to future adverse trends</li>
+            <li>Introduce or extend <em>premium/charge review facility</em> — allows company to reprice in-force book</li>
+            <li>Shorten <em>linked-claims period</em> — reduces moral hazard for IP policies</li>
+            <li>Switch from <em>with-profits to unit-linked design</em> — transfers investment risk; easier to adjust charges</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-header" onclick="toggleStep(this)">
+          <div class="step-num" style="background:rgba(62,184,160,0.2);color:var(--teal)">R</div>
+          <div class="step-title">Reinsurance strategy revision</div>
+          <div class="step-marks">1 mk</div>
+          <div class="step-chevron">▼</div>
+        </div>
+        <div class="step-body">
+          <ul class="bullet-list">
+            <li>Consider a <em>surplus reinsurance treaty</em> to cap aggregate morbidity losses</li>
+            <li>Can be arranged on <em>original terms (OT)</em> basis or <em>risk premium (RP)</em> basis depending on cost/benefit</li>
+            <li>Recalculate optimal retention level using revised morbidity assumptions</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-header" onclick="toggleStep(this)">
+          <div class="step-num" style="background:rgba(232,169,74,0.2);color:var(--amber)">U</div>
+          <div class="step-title">Underwriting strategy revision</div>
+          <div class="step-marks">1 mk</div>
+          <div class="step-chevron">▼</div>
+        </div>
+        <div class="step-body">
+          <ul class="bullet-list">
+            <li>Review whether underwriting strategy is <em>consistent with standard pricing assumptions</em></li>
+            <li>A mismatch between underwriting decisions and pricing morbidity rates is a common driver of losses</li>
+            <li>May need to tighten medical evidence requirements, exclusions, or ratings at point of sale</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-header" onclick="toggleStep(this)">
+          <div class="step-num" style="background:rgba(224,111,160,0.2);color:var(--pink)">C</div>
+          <div class="step-title">Claims control improvement</div>
+          <div class="step-marks">1 mk</div>
+          <div class="step-chevron">▼</div>
+        </div>
+        <div class="step-body">
+          <ul class="bullet-list">
+            <li>Reassess and recertify <em>sickness status of claimants more frequently</em> — reduces spurious long-term claims</li>
+            <li>Use <em>independent medical examiners</em> rather than claimant's own GP — more objective recertification</li>
+            <li>Introduce <em>active case management</em> for high-value/long-duration claims</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-header" onclick="toggleStep(this)">
+          <div class="step-num" style="background:rgba(62,184,160,0.2);color:var(--teal)">C</div>
+          <div class="step-title">Counselling / Rehabilitation services</div>
+          <div class="step-marks">½ mk</div>
+          <div class="step-chevron">▼</div>
+        </div>
+        <div class="step-body">
+          <ul class="bullet-list">
+            <li>Introduce rehabilitation and counselling programmes — only if <em>cost-effective</em> (cost of service &lt; claims cost saved)</li>
+            <li>Particularly effective for mental health and musculoskeletal IP claims — fastest-growing claim categories in India</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-header" onclick="toggleStep(this)">
+          <div class="step-num" style="background:rgba(124,111,224,0.2);color:var(--purple-light)">S</div>
+          <div class="step-title">Selling / Distribution focus</div>
+          <div class="step-marks">½ mk</div>
+          <div class="step-chevron">▼</div>
+        </div>
+        <div class="step-body">
+          <ul class="bullet-list">
+            <li>Target sales to lives with genuine <em>financial need</em> rather than potential claimants</li>
+            <li>Reduces selective withdrawal: financially motivated lives lapse less, removing the healthy-lives-lapse bias</li>
+            <li>Better quality book improves morbidity experience over time</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL: FULL TEMPLATE -->
+  <div id="panel-template" class="panel">
+    <div class="template-box">
+      <strong>Generic Answer Framework</strong>
+      Adapt language to the specific product type in the question. If IP/PHI: focus on recovery/rehabilitation, claim duration, return-to-work. If CI: focus on incidence rates, definition of claim. If LTC: focus on care needs assessment, linked claims period.
+    </div>
+
+    <div class="steps">
+      <div class="step open">
+        <div class="step-header" onclick="toggleStep(this)">
+          <div class="step-num" style="background:rgba(124,111,224,0.2);color:var(--purple-light)">a</div>
+          <div class="step-title">Part (a) — ACC template [3 marks]</div>
+          <div class="step-marks">MAC→FPR</div>
+          <div class="step-chevron">▼</div>
+        </div>
+        <div class="step-body" style="padding-left:14px">
+          <div class="sub-label">Opening — Monitor (½ mk)</div>
+          <ul class="bullet-list">
+            <li>"The extent of the problem can be identified by monitoring experience, comparing actual [morbidity/claim] rates against those assumed in the [premium/reserving] basis."</li>
+          </ul>
+          <div class="sub-label">Core — Analysis of Surplus (1 mk)</div>
+          <ul class="bullet-list">
+            <li>"An analysis of surplus will be performed to quantify the loss attributable to adverse morbidity, separately from other profit/loss sources (investment, lapse, expense etc.)."</li>
+            <li>"This contextualises the loss and establishes whether it is sufficiently material to justify remedial action."</li>
+          </ul>
+          <div class="sub-label">Consistency check (½ mk)</div>
+          <ul class="bullet-list">
+            <li>"Past trends should be examined to determine whether the problem is persistent (systematic parameter/model error) or a one-off random fluctuation."</li>
+          </ul>
+          <div class="sub-label">Feedback arms — each ½ mk, max 3 bullets (1½ mk)</div>
+          <ul class="bullet-list">
+            <li>"Revised assumptions fed into <em>pricing basis</em> → premiums/charges revised upward; if contracts reviewable, applies to in-force book too."</li>
+            <li>"Revised assumptions fed into <em>reserving basis</em> → prevents over-distribution of surplus to capital providers; protects solvency."</li>
+            <li>"Revised assumptions fed into <em>risk management models</em> → reinsurance retention and treaty terms reconsidered."</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="step open">
+        <div class="step-header" onclick="toggleStep(this)">
+          <div class="step-num" style="background:rgba(62,184,160,0.2);color:var(--teal)">b</div>
+          <div class="step-title">Part (b) — Management template [10 marks]</div>
+          <div class="step-marks">PRUCCS</div>
+          <div class="step-chevron">▼</div>
+        </div>
+        <div class="step-body" style="padding-left:14px">
+          <div class="sub-label">P — Product redesign (up to 3 mk — pick any 3 sub-points)</div>
+          <ul class="bullet-list">
+            <li>"In the longer term, the product design could be changed: [tighten claim definition / partial return-to-work benefit / reduce guarantees / introduce charge review / shorten linked claims period / move to UL from WP]."</li>
+          </ul>
+          <div class="sub-label">R — Reinsurance (1 mk)</div>
+          <ul class="bullet-list">
+            <li>"The reinsurance strategy could be revised — a surplus reinsurance treaty on an original terms or risk premium basis may be appropriate to cap aggregate morbidity exposure."</li>
+          </ul>
+          <div class="sub-label">U — Underwriting (1 mk)</div>
+          <ul class="bullet-list">
+            <li>"The underwriting strategy could be reviewed to ensure consistency with pricing morbidity assumptions — an inconsistency is a significant driver of losses."</li>
+          </ul>
+          <div class="sub-label">C — Claims control (1 mk)</div>
+          <ul class="bullet-list">
+            <li>"Claims control procedures could be improved — e.g. more frequent and independent recertification of sickness status to reduce spurious long-duration claims."</li>
+          </ul>
+          <div class="sub-label">C — Counselling/Rehab (½ mk)</div>
+          <ul class="bullet-list">
+            <li>"Rehabilitation and counselling services could be introduced if cost-effective (cost of service &lt; claims cost saved)."</li>
+          </ul>
+          <div class="sub-label">S — Selling focus (½ mk)</div>
+          <ul class="bullet-list">
+            <li>"More focused selling based on financial need reduces selective withdrawal by healthy lives, thereby improving portfolio morbidity experience."</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-header" onclick="toggleStep(this)">
+          <div class="step-num" style="background:rgba(232,169,74,0.2);color:var(--amber)">!</div>
+          <div class="step-title">Common mistakes &amp; exam tips</div>
+          <div class="step-marks">watch out</div>
+          <div class="step-chevron">▼</div>
+        </div>
+        <div class="step-body" style="padding-left:14px">
+          <ul class="bullet-list">
+            <li><em>Don't confuse (a) and (b)</em> — (a) is purely about the ACC loop; (b) is specific remedial actions. Many candidates mix them.</li>
+            <li><em>Part (a) does not need many actions</em> — it's only 3 marks. Two feedback arm bullets are typically sufficient; don't over-write.</li>
+            <li><em>Part (b) needs the "why" not just the "what"</em> — "improve claims control" alone gets ½ mk; adding "by more frequent independent recertification" earns the second ½ mk.</li>
+            <li><em>Product redesign is a multi-bullet goldmine</em> — list 3–4 sub-types quickly; each earns ½ mk up to a reasonable sub-max.</li>
+            <li><em>Reinsurance</em> — always specify <em>surplus treaty</em> and whether OT or RP basis; vague "get more reinsurance" is not credit-worthy.</li>
+            <li><em>Reviewable contracts</em> — always flag this in the pricing feedback arm; examiners reward it consistently.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function showPanel(name) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('panel-'+name).classList.add('active');
+  event.target.classList.add('active');
+}
+function toggleStep(header) {
+  const step = header.parentElement;
+  step.classList.toggle('open');
+}
+</script>

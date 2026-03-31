@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Investment &amp; ALM Theme Matrix</title>
+<style>
+  body { font-family: Arial, sans-serif; font-size: 12px; margin: 20px; }
+  h1 { font-size: 15px; margin-bottom: 4px; }
+  p.note { font-size: 11px; color: #555; margin-bottom: 12px; }
+  table { border-collapse: collapse; width: 100%; table-layout: fixed; }
+  th, td { border: 1px solid #aaa; padding: 6px 8px; vertical-align: top; }
+  th { background: #f0f0f0; font-size: 11px; font-weight: bold; text-align: left; }
+  th.theme-col { width: 140px; }
+  td.theme-cell { font-weight: bold; font-size: 11px; background: #f8f8f8; }
+  ul { margin: 0; padding-left: 14px; }
+  li { margin-bottom: 2px; line-height: 1.4; }
+  .sitting { font-size: 10px; color: #555; display: block; margin-top: 3px; }
+</style>
+</head>
+<body>
+<h1>Investment &amp; ALM — Theme Application by Product / Context</h1>
+<p class="note">
+  Source: IAI exam questions 2016–2025, filtered and classified by content. Section flags in source data not used; classification based on question and answer content.<br>
+  Columns: (1) IP — Group &amp; Individual [Mar21-Q1v, May23-Q1ii, May25-Q3d] &nbsp;|&nbsp;
+           (2) Long Term Care [Nov19-Q1iv, Dec22-Q1iv] &nbsp;|&nbsp;
+           (3) PMI / Short-tail Health [Apr16-Q3ii] &nbsp;|&nbsp;
+           (4) Unit-linked Health [May24-Q2ic, Jul22-Q1vi–vii] &nbsp;|&nbsp;
+           (5) Solvency II / Regulatory Framework [Sep21-Q2i, Nov23-Q1vii, Dec22-Q1iv–v] &nbsp;|&nbsp;
+           (6) EV / Embedded Value [Mar22-Q1ii, Dec22-Q1v]
+</p>
+
+<table>
+<thead>
+<tr>
+  <th class="theme-col">Theme</th>
+  <th>IP<br>(Group &amp; Individual)</th>
+  <th>Long Term Care</th>
+  <th>PMI / Short-tail Health</th>
+  <th>Unit-linked Health<br>(ULIP / Hospital Cash)</th>
+  <th>Solvency II /<br>Regulatory Framework</th>
+  <th>Embedded Value /<br>Financial Reporting</th>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+<td class="theme-cell">1. Investment objective &amp; guiding principle</td>
+<td><ul>
+<li>Maximise return subject to acceptable risk</li>
+<li>Match assets to liability nature (currency, term, benefit type)</li>
+<li>Liability nature determines asset mix: level benefits → fixed income; salary-linked benefits → index-linked or real assets</li>
+</ul><span class="sitting">Mar21-Q1v; May23-Q1ii; May25-Q3d</span></td>
+<td><ul>
+<li>Same principle: maximise return subject to risk</li>
+<li>Pre-funded liabilities tolerate more risk than immediate-needs liabilities</li>
+<li>Benefits increase at 3% p.a. — inflation-linked assets preferred</li>
+</ul><span class="sitting">Nov19-Q1iv</span></td>
+<td><ul>
+<li>Short-tail nature limits investment float — assets must be short-dated</li>
+<li>Short-term bonds and money market instruments suitable for health</li>
+<li>IRDAI admissibility rules constrain asset selection</li>
+</ul><span class="sitting">Apr16-Q3ii</span></td>
+<td><ul>
+<li>Investment risk borne by policyholder in unit fund; insurer bears non-unit risk only</li>
+<li>Shareholder fund must reflect movement in RSM driven by unit fund performance</li>
+</ul><span class="sitting">Jul22-Q1vi, Q1vii</span></td>
+<td><ul>
+<li>BEL discounted using risk-free rate term structure — market-consistent approach</li>
+<li>Matching adjustment or volatility adjustment may be added to discount rate</li>
+</ul><span class="sitting">Sep21-Q2i; Nov23-Q1vii</span></td>
+<td><ul>
+<li>Investment return assumption drives PVIF projection</li>
+<li>Market-consistent EV uses risk-free rates; traditional EV allows for risk premium</li>
+</ul><span class="sitting">Mar22-Q1ii; Dec22-Q1v</span></td>
+</tr>
+
+<tr>
+<td class="theme-cell">2. Asset-liability modelling (ALM) process</td>
+<td><ul>
+<li>Project liabilities via model office; select model points (enough for realism, few enough for run-time)</li>
+<li>Liabilities typically projected deterministically; stochastic inflation possible for expenses</li>
+<li>Decision on whether to include new business (unrealistic without it; uncertain to predict)</li>
+<li>Choose trial investment distribution; project returns using stochastic model; vary mix and iterate</li>
+<li>Optimisation criterion: maximise return subject to low probability of insolvency or capital breach</li>
+<li>Dynamic interactions: lower returns reduce salary-linked benefits and expense inflation</li>
+<li>Number of simulations (1,000–10,000) and time horizon (5–25 years) to be decided</li>
+<li>All results checked for reasonableness</li>
+</ul><span class="sitting">Mar21-Q1v</span></td>
+<td><ul>
+<li>ALM results inform asset mix — particularly relevant for long-dated LTC liabilities</li>
+<li>Results of ALM exercise needed before finalising asset allocation</li>
+</ul><span class="sitting">Nov19-Q1iv</span></td>
+<td><ul>
+<li>Existing ALM model (from non-health lines) can be adapted for health</li>
+<li>Lag/delay table for claims development needed for liability projection</li>
+<li>Durational matching tested under scenarios (±20% loss ratio, ±2% interest rate, ±20% volume)</li>
+<li>Simulations identify mismatches beyond target range (e.g. ±5%); extreme scenarios covered by reserves</li>
+<li>Currency impact considered if overseas (travel) cover included</li>
+</ul><span class="sitting">Apr16-Q3ii</span></td>
+<td><ul>
+<li>Non-unit reserve separate from unit fund; ALM applies to non-unit liability only</li>
+<li>Unit fund moves with market — RSM also moves; ASM must mirror this</li>
+</ul><span class="sitting">Jul22-Q1vi, Q1vii</span></td>
+<td><ul>
+<li>Under Solvency II, BEL projection performed on best estimate assumptions</li>
+<li>Stochastic or market-consistent simulation used where financial guarantees or options are embedded</li>
+</ul><span class="sitting">Nov23-Q1vii</span></td>
+<td><ul>
+<li>PVIF model projects future shareholder cashflows including future supervisory reserves and SCR</li>
+<li>Unit and non-unit funds both projected for unit-linked products</li>
+<li>Model points used if individual policy modelling impractical</li>
+</ul><span class="sitting">Dec22-Q1v</span></td>
+</tr>
+
+<tr>
+<td class="theme-cell">3. Suitable asset classes by product type</td>
+<td><ul>
+<li>Level benefits: short-dated fixed-interest bonds and cash</li>
+<li>Salary-linked / increasing benefits: index-linked gilts; or real assets (equities, property) as alternative</li>
+<li>Proprietary insurer: equities and property appropriate for free surplus to meet shareholder duty</li>
+<li>Small/inexperienced insurer: avoid large proportion of volatile assets</li>
+<li>Well-capitalised insurer: can take more risk and mismatch</li>
+</ul><span class="sitting">May23-Q1ii; May25-Q3d</span></td>
+<td><ul>
+<li>3% p.a. increasing benefits: index-linked gilts preferred</li>
+<li>Pre-funded portfolio: more scope for risky assets (long horizon)</li>
+<li>Immediate-needs portfolio: more conservative; closer to payment</li>
+<li>Short-dated gilts/cash for SCR backing to reduce market risk</li>
+<li>Equity and property for free surplus; duty to shareholders</li>
+</ul><span class="sitting">Nov19-Q1iv</span></td>
+<td><ul>
+<li>Short-term bonds and money market instruments (short-tail liability)</li>
+<li>IRDAI admissibility rules constrain eligible assets</li>
+<li>Lower investment float than long-tail lines</li>
+</ul><span class="sitting">Apr16-Q3ii</span></td>
+<td><ul>
+<li>Unit fund: policyholder's chosen fund (equity, balanced, debt, etc.)</li>
+<li>Non-unit fund: conventional short-term fixed income to back risk charges</li>
+<li>Shareholder fund: mirror policyholder unit fund exposure proportionally for ULIP equity</li>
+</ul><span class="sitting">Jul22-Q1vi, Q1vii</span></td>
+<td><ul>
+<li>Fixed-interest: income and redemption known — model default allowance only</li>
+<li>Index-linked: as fixed-interest but model future index changes</li>
+<li>Equities: project current dividend stream; assume on market growth outlook</li>
+<li>Property: project rental income and capital growth; allow for void, refurbishment, illiquidity</li>
+<li>Money market: model as infinite income at short-term rates, or lump sum if imminent</li>
+<li>Overseas assets: same approach with exchange rate and default risk adjustments</li>
+</ul><span class="sitting">Sep21-Q2i</span></td>
+<td><ul>
+<li>Investment return assumption needed for PVIF — must be consistent with liability assumptions</li>
+<li>Market-consistent EV: risk-free investment return; separate allowance for non-hedgeable risk</li>
+</ul><span class="sitting">Dec22-Q1v</span></td>
+</tr>
+
+<tr>
+<td class="theme-cell">4. Currency &amp; overseas matching</td>
+<td><ul>
+<li>Assets must be in same currency as liabilities</li>
+<li>If policies cover overseas employees: match with overseas investments in that currency</li>
+</ul><span class="sitting">May23-Q1ii; May25-Q3d</span></td>
+<td><ul>
+<li>Same principle applies; need to know if overseas policyholders are covered</li>
+</ul><span class="sitting">Nov19-Q1iv</span></td>
+<td><ul>
+<li>Exchange rate impact of currency must be factored if travel/overseas cover is included</li>
+</ul><span class="sitting">Apr16-Q3ii</span></td>
+<td><ul>
+<li>Not the primary issue for unit-linked; unit fund currency follows fund currency</li>
+</ul></td>
+<td><ul>
+<li>Correct risk-free reference rate depends on currency and timing of each cashflow</li>
+<li>Overseas assets: allow for exchange rates and jurisdiction-specific default risk</li>
+</ul><span class="sitting">Sep21-Q2i; Nov23-Q1vii</span></td>
+<td><ul>
+<li>Currency of investment return assumption must match liability currency</li>
+</ul></td>
+</tr>
+
+<tr>
+<td class="theme-cell">5. Liquidity considerations</td>
+<td><ul>
+<li>Growing company can use incoming premiums to pay claims — but future premiums not guaranteed</li>
+<li>Volatile outgo → retain higher proportion of liquid assets</li>
+<li>Large proportion of guaranteed business makes net outgo more volatile → more caution needed</li>
+</ul><span class="sitting">May23-Q1ii; May25-Q3d</span></td>
+<td><ul>
+<li>Same liquidity caution applies; illiquid assets (property) less suitable for immediate-needs portfolio</li>
+<li>Pre-funded portfolio can tolerate illiquidity better given long horizon</li>
+</ul><span class="sitting">Nov19-Q1iv</span></td>
+<td><ul>
+<li>Short-tail health: claims paid quickly — high liquidity requirement</li>
+<li>Lower float than long-tail lines limits ability to hold illiquid assets</li>
+</ul><span class="sitting">Apr16-Q3ii</span></td>
+<td><ul>
+<li>Unit fund is liquid (unit prices published daily/weekly)</li>
+<li>Shareholder fund liquidity: cash preferred when solvency is marginally above minimum</li>
+</ul><span class="sitting">Jul22-Q1vi</span></td>
+<td><ul>
+<li>Volatility adjustment designed to prevent forced asset sales during extreme spread events</li>
+<li>Liquidity plan required as condition for using volatility adjustment</li>
+</ul><span class="sitting">Nov23-Q1vii</span></td>
+<td><ul>
+<li>Not a primary EV consideration, but liquidity risk affects frictional costs in PVIF</li>
+</ul></td>
+</tr>
+
+<tr>
+<td class="theme-cell">6. Capital backing &amp; solvency interaction</td>
+<td><ul>
+<li>Short-dated gilts and cash appropriate to back SCR — reduces market risk exposure</li>
+<li>Less critical for well-capitalised company with large free surplus relative to SCR</li>
+</ul><span class="sitting">May23-Q1ii; May25-Q3d</span></td>
+<td><ul>
+<li>Short-dated gilts/cash for SCR backing; proportion of risky assets depends on size of free surplus vs SCR</li>
+<li>Very long-tail liability: significant capital strain; ALM challenge</li>
+</ul><span class="sitting">Nov19-Q1iv</span></td>
+<td><ul>
+<li>Capital model must account for investment income on health float (lower float than other lines)</li>
+<li>Impact of health LOB on overall solvency ratio to be assessed</li>
+</ul><span class="sitting">Apr16-Q3ii</span></td>
+<td><ul>
+<li>RSM moves with unit fund market values; ASM must include equity in same proportion</li>
+<li>If equity rises in unit fund and ASM has no equity, RSM increases without ASM support — solvency falls</li>
+<li>When solvency marginally above minimum: cash preferred for excess assets</li>
+<li>When solvency well above minimum: excess assets may include equity, bonds, property for higher return</li>
+</ul><span class="sitting">Jul22-Q1vi, Q1vii</span></td>
+<td><ul>
+<li>SCR released over time is part of PVIF in Solvency II EV</li>
+<li>Risk margin = cost of holding SCR against non-hedgeable risks at 6% p.a. cost of capital rate</li>
+<li>Matching adjustment reduces BEL by raising discount rate — reduces capital required</li>
+</ul><span class="sitting">Sep21-Q2i; Nov23-Q1vii; Dec22-Q1iv</span></td>
+<td><ul>
+<li>Net assets = assets in excess of technical provisions + SCR</li>
+<li>Release of SCR and risk margin over time forms part of PVIF</li>
+<li>Frictional costs (tax, agency costs) on cost of holding required capital deducted from PVIF</li>
+</ul><span class="sitting">Dec22-Q1v</span></td>
+</tr>
+
+<tr>
+<td class="theme-cell">7. Matching adjustment &amp; Solvency II discount rate</td>
+<td><ul>
+<li>ALM exercise results inform whether matching adjustment may be applicable</li>
+</ul></td>
+<td><ul>
+<li>LTC liabilities may qualify for matching adjustment: long-term, predictable, key risks are longevity and expense</li>
+<li>Conditions: regulator approval; no surrender; ring-fenced assets; assets matched by nature, term and currency</li>
+<li>Extent of matching adjustment = additional yield on backing assets less fundamental spread (default allowance)</li>
+<li>Example: 50% of assets with +1.50% yield, deduct 0.50% default → matching adjustment = 0.50% p.a.</li>
+</ul><span class="sitting">Dec22-Q1iv; Nov23-Q1vii</span></td>
+<td><ul>
+<li>Short-tail health: typically ineligible for matching adjustment (not long-term predictable)</li>
+<li>Risk-free discount rate applies; volatility adjustment may be considered</li>
+</ul></td>
+<td><ul>
+<li>Unit fund reserve: unit values at market — no matching adjustment relevant</li>
+<li>Non-unit reserve: risk-free discount rate applies</li>
+</ul></td>
+<td><ul>
+<li>Risk-free rate term structure used for all BEL discounting</li>
+<li>Matching adjustment: additional yield on backing bonds less fundamental spread</li>
+<li>Volatility adjustment: added to risk-free rate where MA not eligible; subject to supervisory approval and risk management conditions</li>
+<li>Both adjustments must be approved by regulator</li>
+</ul><span class="sitting">Nov23-Q1vii; Dec22-Q1iv</span></td>
+<td><ul>
+<li>Investment return assumption consistent with discount rate basis chosen (market-consistent or traditional)</li>
+<li>If MA applied to BEL, the higher discount rate reduces BEL and increases net assets</li>
+</ul><span class="sitting">Dec22-Q1iv-v</span></td>
+</tr>
+
+<tr>
+<td class="theme-cell">8. Investment income estimation (Solvency II)</td>
+<td><ul>
+<li>Investment return assumptions must be consistent with liability cashflow assumptions</li>
+</ul></td>
+<td><ul>
+<li>Long duration: need to project income over extended horizon</li>
+<li>Index-linked: model future index changes for benefits increasing at 3% p.a.</li>
+</ul></td>
+<td><ul>
+<li>Short horizon: investment income projections simpler but float is limited</li>
+</ul></td>
+<td><ul>
+<li>Unit fund income: fund manager projects returns by asset class within fund</li>
+<li>Non-unit fund income: conventional fixed-income projection</li>
+</ul></td>
+<td><ul>
+<li>Allow for investment expenses on all assets</li>
+<li>Fixed-interest: known income and redemption; allow for default on non-government issues</li>
+<li>Index-linked: as fixed-interest plus estimate of future index changes</li>
+<li>Equities: project dividend stream using economic outlook; model assumptions for anticipated sales</li>
+<li>Property: project rental income and capital growth; allow for void, refurbishment, illiquidity</li>
+<li>Money market: model as income stream at short rates or as lump sum if imminent claims</li>
+<li>Overseas: same approach with exchange rate and default risk adjustments</li>
+<li>Assumptions consistent with those used for liability cashflows</li>
+</ul><span class="sitting">Sep21-Q2i</span></td>
+<td><ul>
+<li>Investment return assumption feeds PVIF projection; must match discount rate basis</li>
+<li>Market-consistent: risk-free rates only; non-hedgeable risks treated separately</li>
+</ul><span class="sitting">Dec22-Q1v</span></td>
+</tr>
+
+<tr>
+<td class="theme-cell">9. Unit-linked specific investment considerations</td>
+<td><ul>
+<li>Not applicable to conventional IP</li>
+</ul></td>
+<td><ul>
+<li>Unit-linked LTCI: unit and non-unit fund both projected; non-unit cashflows depend on unit fund size</li>
+<li>Market-consistent EV applies to unit-linked LTCI block</li>
+</ul><span class="sitting">Dec22-Q1v</span></td>
+<td><ul>
+<li>Not applicable to conventional PMI</li>
+</ul></td>
+<td><ul>
+<li>Investment risk borne by policyholder; insurer bears only non-unit risk</li>
+<li>Risk premium reinsurance appropriate (not investment-linked reinsurance)</li>
+<li>Capital requirements low if risk borne by customer; charging structure determines extent</li>
+<li>Poor recent equity performance may depress demand — consider promoting fixed-interest fund options</li>
+<li>Premium charges deducted from unit fund: risk charges, expenses, taxes all charged against units</li>
+<li>ASM must include equity in proportion to ULIP equity fund to maintain RSM/ASM balance</li>
+</ul><span class="sitting">Jul22-Q1vi, Q1vii; May24-Q2ic</span></td>
+<td><ul>
+<li>For unit-linked, financial guarantees may require stochastic / market-consistent simulation for BEL</li>
+<li>Risk margin uses cost of capital method on non-hedgeable risks only (market risk hedged via unit fund)</li>
+</ul><span class="sitting">Nov23-Q1vii</span></td>
+<td><ul>
+<li>Unit-linked EV: unit fund projected separately from non-unit; PVIF depends on both</li>
+<li>Market-consistent basis standard for unit-linked EV</li>
+</ul><span class="sitting">Dec22-Q1v</span></td>
+</tr>
+
+<tr>
+<td class="theme-cell">10. Further information needed to refine asset mix</td>
+<td><ul>
+<li>Mix of business and how benefits increase (level vs salary-linked)</li>
+<li>Whether policies cover overseas employees (currency)</li>
+<li>Size and investment expertise of insurer</li>
+<li>Size of free surplus relative to SCR</li>
+<li>Recent claims experience and variability</li>
+<li>Extent of guaranteed vs reviewable benefits</li>
+<li>Tax position of the company</li>
+<li>Legislative investment restrictions (IRDAI)</li>
+<li>Results of any existing ALM exercise</li>
+</ul><span class="sitting">May23-Q1ii; May25-Q3d</span></td>
+<td><ul>
+<li>Duration to retirement (pre-funded) and post-retirement duration (immediate needs)</li>
+<li>Proportion of pre-funded vs immediate needs in portfolio</li>
+<li>Same further information points as IP apply</li>
+</ul><span class="sitting">Nov19-Q1iv</span></td>
+<td><ul>
+<li>Claims development pattern (lag/delay table) from IIB or public disclosures</li>
+<li>Whether overseas / travel cover is included (currency exposure)</li>
+<li>IRDAI admissibility rules for specific asset classes</li>
+</ul><span class="sitting">Apr16-Q3ii</span></td>
+<td><ul>
+<li>Size of ULIP equity fund relative to total policyholder fund</li>
+<li>Solvency ratio: level above/below regulatory minimum</li>
+<li>Fund performance history and policyholder behaviour assumptions</li>
+</ul><span class="sitting">Jul22-Q1vi, Q1vii</span></td>
+<td><ul>
+<li>Currency and timing of each liability cashflow to identify correct risk-free reference rate</li>
+<li>Whether liabilities qualify for matching adjustment (predictability, surrenders)</li>
+<li>Regulator-published fundamental spreads for matching adjustment calculation</li>
+</ul><span class="sitting">Nov23-Q1vii; Dec22-Q1iv</span></td>
+<td><ul>
+<li>Tax position of company (applied at global level in EV)</li>
+<li>Whether EV is traditional or market-consistent (drives investment return and discount rate choice)</li>
+<li>Contract boundary definition (affects which future premiums are included in BEL)</li>
+</ul><span class="sitting">Dec22-Q1v; Nov23-Q1vii</span></td>
+</tr>
+
+</tbody>
+</table>
+</body>
+</html>

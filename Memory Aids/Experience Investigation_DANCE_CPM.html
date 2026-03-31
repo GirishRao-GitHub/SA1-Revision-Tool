@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mortality / Experience Investigation — Memory Tool</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #F4F1EB;
+    --surface: #FFFFFF;
+    --border: #DDD9CE;
+    --ink: #1C1A15;
+    --ink-soft: #7A776C;
+    --ink-faint: #B5B2A7;
+
+    --phase1: #E8F0FA; --phase1-text: #1A3F7A; --phase1-dot: #3A6BC7;
+    --phase2: #E5F6EF; --phase2-text: #0D4F38; --phase2-dot: #1A9E6A;
+    --phase3: #FDF0E2; --phase3-text: #6B3300; --phase3-dot: #D4730A;
+
+    --correct-bg: #E5F6EF; --correct-text: #0D4F38; --correct-border: #1A9E6A;
+    --wrong-bg: #FDECE8; --wrong-text: #5A1E0A; --wrong-border: #D84B25;
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    padding: 28px 16px 60px;
+    min-height: 100vh;
+  }
+
+  .container { max-width: 700px; margin: 0 auto; }
+
+  /* ── HEADER ── */
+  .header { margin-bottom: 24px; }
+  .eyebrow { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.12em; color: var(--ink-soft); text-transform: uppercase; margin-bottom: 4px; }
+  h1 { font-family: 'DM Serif Display', serif; font-size: 26px; line-height: 1.2; margin-bottom: 2px; }
+  .subtitle { font-size: 13px; color: var(--ink-soft); }
+
+  /* ── TABS ── */
+  .tabs { display: flex; gap: 6px; margin-bottom: 20px; flex-wrap: wrap; }
+  .tab-btn {
+    padding: 6px 16px; font-size: 13px; border-radius: 20px;
+    border: 1px solid var(--border); background: transparent;
+    color: var(--ink-soft); cursor: pointer;
+    transition: all 0.18s; font-family: 'DM Sans', sans-serif;
+  }
+  .tab-btn.active { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+  .tab-btn:hover:not(.active) { border-color: var(--ink-soft); color: var(--ink); }
+
+  /* ── MNEMONIC ── */
+  .mnemonic-sentence {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 14px; padding: 22px 24px; margin-bottom: 14px;
+  }
+  .sentence-text {
+    font-family: 'DM Serif Display', serif; font-size: 20px;
+    line-height: 1.8; margin-bottom: 16px;
+  }
+  .key-letter { font-style: italic; }
+  .legend { display: flex; flex-wrap: wrap; gap: 6px 20px; font-size: 12px; color: var(--ink-soft); }
+  .legend b { color: var(--ink); }
+
+  .two-part { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; }
+  @media (max-width: 520px) { .two-part { grid-template-columns: 1fr; } }
+
+  .mini-box {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; padding: 16px;
+  }
+  .mini-box-label {
+    font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--ink-soft); margin-bottom: 10px;
+  }
+  .mini-row { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 7px; font-size: 13px; line-height: 1.4; }
+  .mini-row:last-child { margin-bottom: 0; }
+  .pill {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 22px; height: 22px; border-radius: 50%;
+    font-family: 'DM Mono', monospace; font-weight: 500; font-size: 12px; flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .tip-bar {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; padding: 12px 16px;
+    font-size: 13px; color: var(--ink-soft); line-height: 1.5;
+    margin-bottom: 14px;
+  }
+  .tip-bar strong { color: var(--ink); }
+
+  /* ── CHUNKS ── */
+  .chunk-box {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; padding: 16px 18px; margin-bottom: 12px;
+  }
+  .phase-label {
+    display: inline-block; font-size: 11px; font-weight: 500;
+    padding: 3px 12px; border-radius: 20px; margin-bottom: 12px;
+  }
+  .row-item { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 8px; font-size: 14px; line-height: 1.4; }
+  .row-item:last-child { margin-bottom: 0; }
+  .row-item .desc { color: var(--ink-soft); font-size: 12px; margin-top: 1px; display: block; }
+
+  /* ── INLTC SPECIAL BOX ── */
+  .special-box {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 12px; padding: 16px 18px; margin-bottom: 12px;
+  }
+  .special-label {
+    font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--ink-soft); margin-bottom: 12px;
+  }
+
+  /* ── FLASHCARDS ── */
+  .card-wrap { perspective: 900px; cursor: pointer; user-select: none; margin-bottom: 14px; }
+  .card-inner {
+    position: relative; width: 100%; height: 220px;
+    transform-style: preserve-3d; transition: transform 0.42s;
+  }
+  .card-inner.flipped { transform: rotateY(180deg); }
+  .card-front, .card-back {
+    position: absolute; width: 100%; height: 100%;
+    backface-visibility: hidden; -webkit-backface-visibility: hidden;
+    border-radius: 14px; display: flex; flex-direction: column;
+    justify-content: center; align-items: center;
+    padding: 22px; text-align: center;
+    border: 1px solid var(--border);
+  }
+  .card-front { background: var(--surface); }
+  .card-back { transform: rotateY(180deg); background: var(--bg); }
+  .card-step { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--ink-faint); margin-bottom: 8px; }
+  .card-title { font-family: 'DM Serif Display', serif; font-size: 22px; margin: 8px 0 6px; }
+  .card-hint { font-size: 12px; color: var(--ink-faint); }
+  .card-back ul { text-align: left; font-size: 13px; line-height: 1.75; padding-left: 18px; margin: 0; }
+  .card-back li { margin-bottom: 3px; }
+
+  .step-dots { display: flex; justify-content: center; gap: 5px; margin: 14px 0 12px; }
+  .step-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--border); }
+  .step-dot.active { background: var(--ink); }
+
+  .nav-row { display: flex; gap: 10px; justify-content: center; }
+  .btn {
+    padding: 7px 22px; border-radius: 20px; border: 1px solid var(--border);
+    font-size: 13px; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.15s;
+  }
+  .btn-primary { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+  .btn-secondary { background: transparent; color: var(--ink); }
+  .btn:hover { opacity: 0.82; }
+
+  /* ── QUIZ ── */
+  .quiz-meta { display: flex; justify-content: space-between; font-size: 13px; color: var(--ink-soft); margin-bottom: 12px; }
+  .question-text { font-size: 15px; font-weight: 500; line-height: 1.5; margin-bottom: 14px; }
+  .quiz-opt {
+    width: 100%; text-align: left; padding: 11px 16px;
+    border-radius: 10px; border: 1px solid var(--border);
+    background: var(--surface); color: var(--ink);
+    font-size: 13.5px; cursor: pointer; margin-bottom: 8px;
+    font-family: 'DM Sans', sans-serif; transition: all 0.15s;
+  }
+  .quiz-opt:hover:not(:disabled) { border-color: var(--ink-soft); background: var(--bg); }
+  .quiz-opt.correct { border-color: var(--correct-border); background: var(--correct-bg); color: var(--correct-text); }
+  .quiz-opt.wrong { border-color: var(--wrong-border); background: var(--wrong-bg); color: var(--wrong-text); }
+  .quiz-opt:disabled { cursor: default; }
+  .feedback-bar {
+    display: none; border-radius: 10px; padding: 11px 16px;
+    font-size: 13px; margin-top: 4px; margin-bottom: 10px; line-height: 1.5;
+  }
+  .result-box {
+    display: none; background: var(--surface); border: 1px solid var(--border);
+    border-radius: 14px; padding: 30px 24px; text-align: center;
+  }
+  .result-score { font-family: 'DM Serif Display', serif; font-size: 44px; margin: 8px 0 4px; }
+  .result-msg { font-size: 14px; color: var(--ink-soft); margin-bottom: 20px; }
+
+  /* colour helpers */
+  .c1 { color: var(--phase1-dot); } .c2 { color: var(--phase2-dot); } .c3 { color: var(--phase3-dot); }
+  .bg1 { background: var(--phase1); } .bg2 { background: var(--phase2); } .bg3 { background: var(--phase3); }
+  .t1 { color: var(--phase1-text); } .t2 { color: var(--phase2-text); } .t3 { color: var(--phase3-text); }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <div class="eyebrow">Actuarial · SP1 / CP1</div>
+    <h1>Mortality &amp; Experience Investigation</h1>
+    <p class="subtitle">5-step DANCE framework · INLTC special cases · Flashcards · Quiz</p>
+  </div>
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('mnemonic')">Mnemonic</button>
+    <button class="tab-btn" onclick="switchTab('chunks')">Phase chunks</button>
+    <button class="tab-btn" onclick="switchTab('flashcards')">Flashcards</button>
+    <button class="tab-btn" onclick="switchTab('quiz')">Quiz</button>
+  </div>
+
+  <!-- ══ MNEMONIC TAB ══ -->
+  <div id="tab-mnemonic">
+    <p style="font-size:13px;color:var(--ink-soft);margin-bottom:12px">Each letter maps to one investigation step, in order.</p>
+
+    <div class="mnemonic-sentence">
+      <p class="sentence-text">
+        "<span class="key-letter c1">D</span>etectives
+        <span class="key-letter c1">A</span>lways
+        <span class="key-letter c1">N</span>ote
+        <span class="key-letter c2">C</span>laims
+        <span class="key-letter c2">E</span>xactly —
+        then
+        <span class="key-letter c3">C</span>alibrate,
+        <span class="key-letter c3">P</span>roject,
+        <span class="key-letter c3">M</span>argin."
+      </p>
+      <div class="legend">
+        <span><b>D</b> = Data collection &amp; cleaning</span>
+        <span><b>A</b> = Analyse into cells</span>
+        <span><b>N</b> = Normalise (exposed-to-risk)</span>
+        <span><b>C</b> = Compare A vs E</span>
+        <span><b>E</b> = Extrapolate trends</span>
+        <span><b>C</b> = Calibrate the basis</span>
+        <span><b>P</b> = Project future rates</span>
+        <span><b>M</b> = Margin for uncertainty</span>
+      </div>
+    </div>
+
+    <div class="two-part">
+      <div class="mini-box">
+        <div class="mini-box-label">Phase 1 · DANCE — Run the investigation</div>
+        <div class="mini-row"><span class="pill bg1 t1">D</span><span>Data collection &amp; cleaning</span></div>
+        <div class="mini-row"><span class="pill bg1 t1">A</span><span>Analyse into cells</span></div>
+        <div class="mini-row"><span class="pill bg1 t1">N</span><span>Normalise exposed-to-risk</span></div>
+        <div class="mini-row"><span class="pill bg2 t2">C</span><span>Compare actual vs expected</span></div>
+        <div class="mini-row"><span class="pill bg2 t2">E</span><span>Extrapolate trends</span></div>
+      </div>
+      <div class="mini-box">
+        <div class="mini-box-label">Phase 2 · CPM — Set the assumption</div>
+        <div class="mini-row"><span class="pill bg3 t3">C</span><span>Calibrate the basis</span></div>
+        <div class="mini-row"><span class="pill bg3 t3">P</span><span>Project future rates</span></div>
+        <div class="mini-row"><span class="pill bg3 t3">M</span><span>Margin for uncertainty</span></div>
+        <div style="height:8px"></div>
+        <div class="mini-box-label" style="margin-bottom:4px">Then always…</div>
+        <div class="mini-row" style="font-size:12px;color:var(--ink-soft)">🔄 Monitor emerging experience &amp; update</div>
+      </div>
+    </div>
+
+    <div class="tip-bar">
+      <strong>Memory trick:</strong> Detectives solve a case — you solve the experience. The first five letters <em>DANCE</em> describe the investigation itself; <em>CPM</em> is what you do with the answer afterwards. Monitoring is the epilogue that always gets marks.
+    </div>
+
+    <button class="btn btn-secondary" onclick="switchTab('flashcards')">Drill each step with flashcards →</button>
+  </div>
+
+  <!-- ══ CHUNKS TAB ══ -->
+  <div id="tab-chunks" style="display:none">
+    <p style="font-size:13px;color:var(--ink-soft);margin-bottom:14px">Three natural phases — easier to recall under exam pressure than 8 scattered bullets.</p>
+
+    <div class="chunk-box">
+      <span class="phase-label bg1 t1">Phase 1 · Run the investigation (DANCE)</span>
+
+      <div class="row-item">
+        <span class="pill bg1 t1">D</span>
+        <span><strong>Data collection &amp; cleaning</strong><span class="desc">Gather policy records, claims, deaths. Check for duplicates, missing data, IBNR/IBNER. Choose investigation period — recent enough to be relevant, long enough to be credible.</span></span>
+      </div>
+      <div class="row-item">
+        <span class="pill bg1 t1">A</span>
+        <span><strong>Analyse into homogeneous cells</strong><span class="desc">Subdivide by age, gender, policy duration, smoker status, care level (L1/L2), ADL score, territory, sales channel. Each cell must be genuinely homogeneous.</span></span>
+      </div>
+      <div class="row-item">
+        <span class="pill bg1 t1">N</span>
+        <span><strong>Normalise — calculate exposed-to-risk</strong><span class="desc">Central or initial exposed-to-risk. Account for partial years, withdrawals, new entrants. For INLTC: only count time in correct benefit level for each cell.</span></span>
+      </div>
+      <div class="row-item">
+        <span class="pill bg2 t2">C</span>
+        <span><strong>Compare actual deaths vs expected</strong><span class="desc">Choose a standard table (e.g. CMI INLTC IL series) or the original pricing basis. Compute A/E ratios per cell. Identify cells with materially different experience.</span></span>
+      </div>
+      <div class="row-item" style="margin-bottom:0">
+        <span class="pill bg2 t2">E</span>
+        <span><strong>Extrapolate trends</strong><span class="desc">Look at own experience over a longer window. Cross-reference industry and population data (CMI, ONS). Identify persistent trends — improvement, deterioration, care pathway changes.</span></span>
+      </div>
+    </div>
+
+    <div class="chunk-box">
+      <span class="phase-label bg3 t3">Phase 2 · Set the assumption (CPM)</span>
+
+      <div class="row-item">
+        <span class="pill bg3 t3">C</span>
+        <span><strong>Calibrate the basis</strong><span class="desc">Derive best-estimate rates from A/E ratios. Smooth or graduate sparse cells. For new products (e.g. enhanced L1) use analogous data, duration proxies, or industry tables with adjustment.</span></span>
+      </div>
+      <div class="row-item">
+        <span class="pill bg3 t3">P</span>
+        <span><strong>Project future rates</strong><span class="desc">Apply mortality improvement factors. Allow for future changes — underwriting, care pathways, medical advances, population ageing. Extrapolate recent experience trends.</span></span>
+      </div>
+      <div class="row-item" style="margin-bottom:0">
+        <span class="pill bg3 t3">M</span>
+        <span><strong>Margin for uncertainty</strong><span class="desc">Add prudence (lighter mortality for annuities = lower expected deaths = longer payment). Larger margin where data is thin or the product is novel. State the margin explicitly.</span></span>
+      </div>
+    </div>
+
+    <div class="special-box">
+      <div class="special-label">🔍 INLTC-specific complications to add</div>
+      <div class="row-item">
+        <span style="font-size:16px;margin-top:1px">⏱</span>
+        <span><strong>Duration effect (select period)</strong><span class="desc">INLTC lives are sickest at inception. Mortality falls then rises — subdivide by policy year. Treating all durations alike masks the select effect.</span></span>
+      </div>
+      <div class="row-item">
+        <span style="font-size:16px;margin-top:1px">🔀</span>
+        <span><strong>Benefit level leakage (L1 → L2)</strong><span class="desc">L1 exposed-to-risk is contaminated as lives deteriorate to L2 over time. Fix: track address changes, use early durations only, or apply a duration-based proxy.</span></span>
+      </div>
+      <div class="row-item" style="margin-bottom:0">
+        <span style="font-size:16px;margin-top:1px">🔄</span>
+        <span><strong>Monitor &amp; update — always</strong><span class="desc">Especially for the new variant. Close monitoring is imperative; update pricing basis as experience emerges. This always earns marks.</span></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ FLASHCARDS TAB ══ -->
+  <div id="tab-flashcards" style="display:none">
+    <p style="font-size:13px;color:var(--ink-soft);margin-bottom:14px">Tap the card to flip it. Step through all 8.</p>
+    <div class="card-wrap" onclick="flipCard()">
+      <div class="card-inner" id="card-inner">
+        <div class="card-front">
+          <div class="card-step">Step <span id="step-num">1</span> of 8</div>
+          <div id="fc-badge" class="phase-label"></div>
+          <div class="card-title" id="fc-title"></div>
+          <div class="card-hint">tap to see key points</div>
+        </div>
+        <div class="card-back">
+          <ul id="fc-points"></ul>
+        </div>
+      </div>
+    </div>
+    <div class="step-dots" id="step-dots"></div>
+    <div class="nav-row">
+      <button class="btn btn-secondary" onclick="prevCard()">← Prev</button>
+      <button class="btn btn-primary" onclick="nextCard()">Next →</button>
+    </div>
+  </div>
+
+  <!-- ══ QUIZ TAB ══ -->
+  <div id="tab-quiz" style="display:none">
+    <div class="quiz-meta">
+      <span>Question <span id="q-num">1</span> of 8</span>
+      <span>Score: <span id="score">0</span></span>
+    </div>
+    <div class="question-text" id="question-text"></div>
+    <div id="options-container"></div>
+    <div class="feedback-bar" id="quiz-feedback"></div>
+    <button class="btn btn-primary" id="next-q-btn" onclick="nextQuestion()" style="display:none;margin-top:4px">Next question →</button>
+    <div class="result-box" id="quiz-result">
+      <div style="font-size:13px;color:var(--ink-soft)">Final score</div>
+      <div class="result-score" id="result-score"></div>
+      <div class="result-msg" id="result-msg"></div>
+      <button class="btn btn-primary" onclick="restartQuiz()">Try again</button>
+    </div>
+  </div>
+
+</div><!-- /container -->
+
+<script>
+const steps = [
+  {
+    letter:'D', title:'Data collection & cleaning',
+    phase:'Phase 1 · Run the investigation', phaseClass:'bg1 t1',
+    points:[
+      'Gather policy records, deaths, claim records — check for duplicates & gaps',
+      'Decide investigation period: recent enough to be relevant, long enough for credibility',
+      'Apply IBNR / IBNER adjustments for late-reported or under-developed claims',
+      'Document data limitations; flag any changes in recording practices',
+    ]
+  },
+  {
+    letter:'A', title:'Analyse into homogeneous cells',
+    phase:'Phase 1 · Run the investigation', phaseClass:'bg1 t1',
+    points:[
+      'Subdivide by age, gender, smoker status, policy duration',
+      'For INLTC: split by care level (L1 vs L2) and ADL score at entry',
+      'Also consider territory, sales channel, distribution method',
+      'Each cell should be genuinely homogeneous — like with like',
+    ]
+  },
+  {
+    letter:'N', title:'Normalise — exposed-to-risk',
+    phase:'Phase 1 · Run the investigation', phaseClass:'bg1 t1',
+    points:[
+      'Calculate central or initial exposed-to-risk per cell',
+      'Adjust for partial-year exposure, new entrants, lapses/withdrawals',
+      'INLTC: count time only while policyholder is at the correct benefit level for that cell',
+      'Contaminated ETR (e.g. L1 lives who have drifted to L2) must be excluded or adjusted',
+    ]
+  },
+  {
+    letter:'C', title:'Compare actual vs expected',
+    phase:'Phase 1 · Run the investigation', phaseClass:'bg2 t2',
+    points:[
+      'Select a standard table: e.g. CMI INLTC IL series, or original pricing basis',
+      'Compute A/E ratio = actual deaths ÷ expected deaths per cell',
+      'Identify cells with materially high or low A/E ratios',
+      'Consider credibility — thin cells may need grouping or smoothing',
+    ]
+  },
+  {
+    letter:'E', title:'Extrapolate trends',
+    phase:'Phase 1 · Run the investigation', phaseClass:'bg2 t2',
+    points:[
+      'Analyse own experience over a longer historical window',
+      'Cross-reference industry data (CMI) and population data (ONS, national stats)',
+      'Identify persistent trends: improving mortality, care pathway changes, underwriting shifts',
+      'Duration trends: INLTC shows high early mortality then decline — is this changing?',
+    ]
+  },
+  {
+    letter:'C', title:'Calibrate the basis',
+    phase:'Phase 2 · Set the assumption', phaseClass:'bg3 t3',
+    points:[
+      'Derive best-estimate rates from A/E analysis by cell',
+      'Graduate or smooth rates where cells lack credibility',
+      'For novel products (enhanced L1): use analogous data, duration proxy, or industry tables',
+      'Address L1 contamination: track address changes or use early-duration data only',
+    ]
+  },
+  {
+    letter:'P', title:'Project future rates',
+    phase:'Phase 2 · Set the assumption', phaseClass:'bg3 t3',
+    points:[
+      'Apply mortality improvement factors (e.g. CMI improvement model)',
+      'Allow for anticipated changes: care pathways, medical advances, underwriting procedures',
+      'Extrapolate recent experience trends that are expected to continue',
+      'Check consistency with industry and population projections',
+    ]
+  },
+  {
+    letter:'M', title:'Margin for uncertainty',
+    phase:'Phase 2 · Set the assumption', phaseClass:'bg3 t3',
+    points:[
+      'Annuities: assume lighter mortality than best estimate (longer payouts = more prudent)',
+      'Larger margin where data is sparse, product is novel, or trend is uncertain',
+      'State the margin explicitly and document the rationale',
+      'Commit to close monitoring — update the basis as new experience emerges',
+    ]
+  },
+];
+
+let currentCard = 0, isFlipped = false;
+
+function renderCard() {
+  const s = steps[currentCard];
+  document.getElementById('step-num').textContent = currentCard + 1;
+  document.getElementById('fc-title').textContent = s.letter + ' — ' + s.title;
+  const badge = document.getElementById('fc-badge');
+  badge.textContent = s.phase;
+  badge.className = 'phase-label ' + s.phaseClass;
+  document.getElementById('fc-points').innerHTML = s.points.map(p => `<li style="margin-bottom:4px">${p}</li>`).join('');
+  if (isFlipped) { document.getElementById('card-inner').classList.remove('flipped'); isFlipped = false; }
+  document.getElementById('step-dots').innerHTML = steps.map((_,i) =>
+    `<span class="step-dot${i===currentCard?' active':''}"></span>`).join('');
+}
+
+function flipCard() { isFlipped = !isFlipped; document.getElementById('card-inner').classList.toggle('flipped', isFlipped); }
+function nextCard() { currentCard = (currentCard + 1) % steps.length; isFlipped = false; renderCard(); }
+function prevCard() { currentCard = (currentCard - 1 + steps.length) % steps.length; isFlipped = false; renderCard(); }
+
+const quizQuestions = [
+  { q:'In an INLTC investigation, why must you subdivide data by policy duration?', ans:1,
+    opts:['To comply with regulatory filing requirements','Because the select-at-entry effect means mortality is highest at outset then falls — duration is a proxy for health status','To increase the size of each data cell','To simplify the A/E calculation'] },
+  { q:'What does "N" (Normalise) in DANCE specifically require for Level 1 INLTC policyholders?', ans:2,
+    opts:['Adjusting for inflation','Applying a standard mortality table','Excluding time spent in a Level 2 care setting from the exposed-to-risk','Doubling the credibility weight'] },
+  { q:'Which step involves choosing the CMI INLTC IL tables and computing A/E ratios per cell?', ans:0,
+    opts:['Compare actual vs expected (C)','Extrapolate trends (E)','Calibrate the basis (C)','Data collection (D)'] },
+  { q:'For a novel enhanced Level 1 product with no own-data, what is the recommended approach for calibration?', ans:3,
+    opts:['Assume the same rates as Level 2','Ignore mortality and price conservatively','Use competitor rates','Use early-duration L1 data as a proxy, or industry tables with adjustment'] },
+  { q:'Why must mortality assumptions for INLTC annuities be prudently lighter than best estimate?', ans:2,
+    opts:['Regulators require it in all cases','Lighter mortality increases the single premium collected','Lighter mortality means longer expected payment periods — understating it would underprice','Lighter mortality reduces the reserve'] },
+  { q:'A detective notices that many Level 1 policyholders have moved to nursing homes. Which DANCE step is most relevant to this observation?', ans:1,
+    opts:['Data collection (D)','Normalise — exposed-to-risk (N)','Compare A vs E (C)','Margin for uncertainty (M)'] },
+  { q:'What does "E" in DANCE stand for, and what sources should you use?', ans:0,
+    opts:['Extrapolate trends — own data over longer period, CMI industry data, ONS population data','Estimate reserves — using best-estimate assumptions','Evaluate credibility — using Bühlmann-Straub','Examine underwriting — reviewing medical records'] },
+  { q:'Which step in CPM should always be mentioned at the end of any experience investigation answer, regardless of the product?', ans:2,
+    opts:['Calibrate (C)','Project (P)','Margin — with a commitment to monitor emerging experience and update (M)','None — CPM is optional'] },
+];
+
+let qIdx = 0, score = 0, answered = false, qOrder = [];
+
+function shuffleArr(a) { return [...a].sort(() => Math.random() - 0.5); }
+
+function renderQuestion() {
+  const q = quizQuestions[qOrder[qIdx]];
+  document.getElementById('q-num').textContent = qIdx + 1;
+  document.getElementById('question-text').textContent = q.q;
+  document.getElementById('quiz-feedback').style.display = 'none';
+  document.getElementById('next-q-btn').style.display = 'none';
+  document.getElementById('quiz-result').style.display = 'none';
+  answered = false;
+  document.getElementById('options-container').innerHTML = q.opts.map((o,i) =>
+    `<button class="quiz-opt" onclick="selectOpt(${i})">${o}</button>`).join('');
+}
+
+function selectOpt(i) {
+  if (answered) return;
+  answered = true;
+  const q = quizQuestions[qOrder[qIdx]];
+  const btns = document.querySelectorAll('.quiz-opt');
+  btns.forEach(b => b.disabled = true);
+  const fb = document.getElementById('quiz-feedback');
+  if (i === q.ans) {
+    score++;
+    document.getElementById('score').textContent = score;
+    btns[i].classList.add('correct');
+    fb.style.cssText = 'display:block;background:var(--correct-bg);color:var(--correct-text);border:1px solid var(--correct-border);margin-top:8px;font-size:13px;border-radius:10px;padding:11px 16px';
+    fb.textContent = '✓ Correct!';
+  } else {
+    btns[i].classList.add('wrong');
+    btns[q.ans].classList.add('correct');
+    fb.style.cssText = 'display:block;background:var(--wrong-bg);color:var(--wrong-text);border:1px solid var(--wrong-border);margin-top:8px;font-size:13px;border-radius:10px;padding:11px 16px';
+    fb.textContent = '✗ The answer is: "' + q.opts[q.ans] + '"';
+  }
+  if (qIdx < quizQuestions.length - 1) {
+    document.getElementById('next-q-btn').style.display = 'block';
+  } else {
+    setTimeout(showResult, 950);
+  }
+}
+
+function nextQuestion() { qIdx++; renderQuestion(); }
+
+function showResult() {
+  document.getElementById('quiz-feedback').style.display = 'none';
+  document.getElementById('next-q-btn').style.display = 'none';
+  document.getElementById('options-container').innerHTML = '';
+  document.getElementById('question-text').textContent = '';
+  document.getElementById('quiz-result').style.display = 'block';
+  document.getElementById('result-score').textContent = score + ' / ' + quizQuestions.length;
+  const msgs = ['Keep at it — revisit the flashcards!','Getting there — one more round!','Solid work!','Excellent — exam-ready! 🎯'];
+  document.getElementById('result-msg').textContent = msgs[score <= 2 ? 0 : score <= 5 ? 1 : score <= 7 ? 2 : 3];
+}
+
+function restartQuiz() {
+  qIdx = 0; score = 0; answered = false;
+  document.getElementById('score').textContent = 0;
+  qOrder = shuffleArr([...Array(quizQuestions.length).keys()]);
+  renderQuestion();
+}
+
+function switchTab(name) {
+  ['mnemonic','chunks','flashcards','quiz'].forEach(t => {
+    document.getElementById('tab-' + t).style.display = t === name ? 'block' : 'none';
+  });
+  document.querySelectorAll('.tab-btn').forEach((b,i) => {
+    b.classList.toggle('active', ['mnemonic','chunks','flashcards','quiz'][i] === name);
+  });
+  if (name === 'flashcards') renderCard();
+  if (name === 'quiz') restartQuiz();
+}
+
+renderCard();
+</script>
+</body>
+</html>

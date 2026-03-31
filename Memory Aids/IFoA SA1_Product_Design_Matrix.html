@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>SA1 — Product Design Theme Matrix</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,600;1,300&display=swap');
+
+  :root {
+    --ink:       #1a1a2e;
+    --ink-light: #4a4a6a;
+    --rule:      #d0d0e0;
+    --rule-dark: #b0b0c8;
+    --bg:        #f7f7fb;
+    --white:     #ffffff;
+
+    /* product column accent colours */
+    --pmi:   #1a5c9c;
+    --ci:    #8b1a1a;
+    --ip:    #1a6b3c;
+    --ltc:   #6b3a1a;
+    --state: #3a1a6b;
+
+    --pmi-bg:   #e8f0f9;
+    --ci-bg:    #f9e8e8;
+    --ip-bg:    #e8f5ee;
+    --ltc-bg:   #f5ede8;
+    --state-bg: #ede8f5;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 11.5px;
+    line-height: 1.5;
+    background: var(--bg);
+    color: var(--ink);
+    padding: 28px 24px 48px;
+  }
+
+  /* ── Header ── */
+  header {
+    border-left: 4px solid var(--ink);
+    padding-left: 14px;
+    margin-bottom: 20px;
+  }
+  header h1 {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+  header p {
+    font-size: 10.5px;
+    color: var(--ink-light);
+    font-style: italic;
+    margin-top: 4px;
+  }
+
+  /* ── Legend ── */
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 20px;
+    margin-bottom: 18px;
+    font-size: 10px;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+  .legend-item { display: flex; align-items: center; gap: 6px; }
+  .legend-dot {
+    width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0;
+  }
+
+  /* ── Table wrapper ── */
+  .scroll-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--rule-dark);
+    border-radius: 4px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  }
+
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    min-width: 860px;
+    table-layout: fixed;
+    background: var(--white);
+  }
+
+  /* Column widths */
+  col.col-theme { width: 148px; }
+  col.col-pmi   { width: 17%; }
+  col.col-ci    { width: 17%; }
+  col.col-ip    { width: 17%; }
+  col.col-ltc   { width: 17%; }
+  col.col-state { width: 17%; }
+
+  th, td {
+    border: 1px solid var(--rule);
+    padding: 7px 9px;
+    vertical-align: top;
+  }
+
+  /* ── Column headers ── */
+  thead tr.header-row th {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    text-align: center;
+    border-bottom: 2px solid var(--rule-dark);
+  }
+  th.hdr-theme {
+    background: var(--ink);
+    color: var(--white);
+    text-align: left;
+    font-size: 10px;
+  }
+  th.hdr-pmi   { background: var(--pmi-bg);   color: var(--pmi);   border-top: 3px solid var(--pmi);   }
+  th.hdr-ci    { background: var(--ci-bg);    color: var(--ci);    border-top: 3px solid var(--ci);    }
+  th.hdr-ip    { background: var(--ip-bg);    color: var(--ip);    border-top: 3px solid var(--ip);    }
+  th.hdr-ltc   { background: var(--ltc-bg);   color: var(--ltc);   border-top: 3px solid var(--ltc);   }
+  th.hdr-state { background: var(--state-bg); color: var(--state); border-top: 3px solid var(--state); }
+
+  /* sub-header with paper refs */
+  thead tr.subhdr th {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    font-weight: 400;
+    text-align: center;
+    color: var(--ink-light);
+    border-bottom: 2px solid var(--rule-dark);
+    padding: 3px 6px;
+  }
+  th.subhdr-theme { background: var(--ink); border-bottom: 2px solid #444; }
+  th.subhdr-pmi   { background: var(--pmi-bg); }
+  th.subhdr-ci    { background: var(--ci-bg);  }
+  th.subhdr-ip    { background: var(--ip-bg);  }
+  th.subhdr-ltc   { background: var(--ltc-bg); }
+  th.subhdr-state { background: var(--state-bg); }
+
+  /* ── Theme cell ── */
+  td.theme-cell {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    background: #f0f0f6;
+    color: var(--ink);
+    border-right: 2px solid var(--rule-dark);
+    vertical-align: middle;
+    line-height: 1.4;
+  }
+  td.theme-cell .theme-num {
+    display: block;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--rule-dark);
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  /* ── Content cells ── */
+  td.cell-pmi   { background: #fafcff; }
+  td.cell-ci    { background: #fffafa; }
+  td.cell-ip    { background: #fafffc; }
+  td.cell-ltc   { background: #fffaf7; }
+  td.cell-state { background: #fafaff; }
+
+  td ul { margin: 0; padding-left: 13px; }
+  td li {
+    margin-bottom: 3px;
+    font-size: 11px;
+    color: var(--ink);
+    line-height: 1.45;
+  }
+  td li::marker { color: var(--rule-dark); }
+
+  /* paper refs */
+  .ref {
+    display: inline-block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    color: var(--white);
+    border-radius: 2px;
+    padding: 1px 4px;
+    margin-left: 4px;
+    vertical-align: middle;
+    white-space: nowrap;
+  }
+  .ref-pmi   { background: var(--pmi);   }
+  .ref-ci    { background: var(--ci);    }
+  .ref-ip    { background: var(--ip);    }
+  .ref-ltc   { background: var(--ltc);   }
+  .ref-state { background: var(--state); }
+
+  /* ── Alternating rows ── */
+  tbody tr:nth-child(even) td.theme-cell { background: #e8e8f2; }
+
+  /* ── Not applicable ── */
+  .na {
+    color: var(--rule-dark);
+    font-style: italic;
+    font-size: 10.5px;
+  }
+
+  /* ── Footer ── */
+  footer {
+    margin-top: 16px;
+    font-size: 9.5px;
+    color: var(--ink-light);
+    font-style: italic;
+    border-top: 1px solid var(--rule);
+    padding-top: 8px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>SA1 Health &amp; Care — Product Design Theme Matrix</h1>
+  <p>Source: IFoA SA1 exam papers, April 2019 – September 2025 &nbsp;|&nbsp; 80 product-design-tagged question parts across 14 sittings &nbsp;|&nbsp; All content derived exclusively from exam papers</p>
+</header>
+
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot" style="background:var(--pmi)"></div>PMI / Medical Insurance</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--ci)"></div>Critical Illness</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--ip)"></div>Income Protection</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--ltc)"></div>Long-Term Care</div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--state)"></div>State / Social / Micro-insurance</div>
+</div>
+
+<div class="scroll-wrap">
+<table>
+<colgroup>
+  <col class="col-theme">
+  <col class="col-pmi">
+  <col class="col-ci">
+  <col class="col-ip">
+  <col class="col-ltc">
+  <col class="col-state">
+</colgroup>
+<thead>
+  <tr class="header-row">
+    <th class="hdr-theme">Theme</th>
+    <th class="hdr-pmi">PMI &amp;<br>Medical Insurance</th>
+    <th class="hdr-ci">Critical Illness</th>
+    <th class="hdr-ip">Income Protection</th>
+    <th class="hdr-ltc">Long-Term Care</th>
+    <th class="hdr-state">State / Social /<br>Micro-insurance</th>
+  </tr>
+  <tr class="subhdr">
+    <th class="subhdr-theme"></th>
+    <th class="subhdr-pmi">Apr19·Q2 | Sep19·Q3 | Apr20·Q1 | Apr21·Q1 | Apr22·Q2 | Sep22·Q1 | Apr23·Q1,Q3 | Apr24·Q2,Q3 | Apr25·Q3 | Sep25·Q1</th>
+    <th class="subhdr-ci">Apr20·Q3 | Apr22·Q1 | Apr23·Q2 | Sep24·Q2 | Apr25·Q1 | Sep25·Q3</th>
+    <th class="subhdr-ip">Sep20·Q1,Q2 | Apr22·Q3 | Sep22·Q2 | Sep23·Q3 | Apr24·Q1 | Sep24·Q3 | Apr25·Q2</th>
+    <th class="subhdr-ltc">Sep19·Q1 | Apr21·Q3 | Sep22·Q1 | Sep25·Q2</th>
+    <th class="subhdr-state">Apr19·Q1 | Sep19·Q2 | Sep20·Q2 | Sep21·Q1,Q2 | Sep22·Q3 | Apr24·Q2</th>
+  </tr>
+</thead>
+<tbody>
+
+<!-- 1. Benefit Structure -->
+<tr>
+  <td class="theme-cell"><span class="theme-num">01</span>Benefit Structure</td>
+  <td class="cell-pmi"><ul>
+    <li>Indemnity (cost reimbursement) vs fixed cash benefits</li>
+    <li>Inpatient / outpatient / day-care scope and boundaries</li>
+    <li>Sub-limits per category; annual monetary limits</li>
+    <li>Excesses, co-insurance, and cost-sharing mechanisms</li>
+    <li>Restricted vs open provider networks</li>
+    <li>Cashless settlement vs reimbursement model</li>
+    <li>Waiting periods for pre-existing conditions</li>
+    <li>Integration with state healthcare provision</li>
+    <li>Hospital cash benefit as ancillary fixed benefit <span class="ref ref-pmi">Apr24·Q3</span></li>
+  </ul></td>
+  <td class="cell-ci"><ul>
+    <li>Lump sum on diagnosis vs severity-based tiered payment</li>
+    <li>Fixed benefit — not indemnity; no cost escalation exposure</li>
+    <li>Children's cancer / additional condition extensions <span class="ref ref-ci">Apr20·Q3</span></li>
+    <li>Unit-linked structure with reviewable morbidity charge <span class="ref ref-ci">Apr20·Q3</span></li>
+    <li>Return of Premium (ROP) option and trigger events <span class="ref ref-ci">Apr23·Q2</span></li>
+    <li>Mental health conditions as covered events <span class="ref ref-ci">Sep24·Q2</span></li>
+    <li>Survival period as integral part of benefit design</li>
+  </ul></td>
+  <td class="cell-ip"><ul>
+    <li>Benefit as % of pre-disability salary (replacement ratio)</li>
+    <li>Deferred / waiting period before benefit commences <span class="ref ref-ip">Sep20·Q2</span></li>
+    <li>Maximum benefit period; linked claims periods</li>
+    <li>Stepped / proportional benefit for partial disability</li>
+    <li>Rehabilitation benefit and phased return-to-work provision <span class="ref ref-ip">Sep20·Q2</span></li>
+    <li>Benefit cessation: recovery, retirement, or death</li>
+    <li>Indexation of benefit in payment</li>
+    <li>Replacement ratio cap to preserve return-to-work incentive <span class="ref ref-ip">Sep20·Q2</span></li>
+  </ul></td>
+  <td class="cell-ltc"><ul>
+    <li>Lump sum vs regular income benefit</li>
+    <li>Indemnity (care cost reimbursement) vs fixed / indexed benefit <span class="ref ref-ltc">Sep19·Q1</span></li>
+    <li>Fixed-term vs whole-of-life benefit duration</li>
+    <li>Benefit level linked to degree of disability (ADL count)</li>
+    <li>Home care vs residential / nursing facility benefit</li>
+    <li>Pre-funded (deferred onset) vs immediate-needs product</li>
+    <li>Indexation of benefit in payment (earnings / RPI) <span class="ref ref-ltc">Sep19·Q1</span></li>
+    <li>Death benefit and surrender value as ancillary features <span class="ref ref-ltc">Sep19·Q1</span></li>
+    <li>Integration with state LTC provision to maximise value</li>
+  </ul></td>
+  <td class="cell-state"><ul>
+    <li>Standardised / simplified benefit for broad population access</li>
+    <li>Mandatory cover design — no individual opt-out</li>
+    <li>Per-person caps and aggregate pool limits</li>
+    <li>Microinsurance: simple, low-sum benefits for affordability <span class="ref ref-state">Sep21·Q1</span></li>
+    <li>Co-insurance / co-payment to share cost with beneficiary</li>
+    <li>Fixed cash sum for hospitalisation (e.g. hospital cash) <span class="ref ref-state">Sep22·Q3</span></li>
+    <li>Waiting periods for pre-existing / high-cost conditions</li>
+    <li>Social insurance structure: solidarity over individual pricing <span class="ref ref-state">Apr24·Q2</span></li>
+  </ul></td>
+</tr>
+
+<!-- 2. Cover / Claim Definitions -->
+<tr>
+  <td class="theme-cell"><span class="theme-num">02</span>Cover &amp; Claim Definitions</td>
+  <td class="cell-pmi"><ul>
+    <li>Clear IP vs OP vs day-care boundary to avoid disputes</li>
+    <li>Definition of eligible treatments and procedures</li>
+    <li>Exclusion list — standard, special, and condition-specific</li>
+    <li>Pre-existing condition definition and exclusion period</li>
+    <li>Territorial scope of cover</li>
+    <li>Definition of eligible provider / hospital</li>
+    <li>Maternity, cosmetic, and chronic disease exclusions</li>
+  </ul></td>
+  <td class="cell-ci"><ul>
+    <li>Precise CI condition list — breadth vs claims pay-out ratio <span class="ref ref-ci">Apr25·Q1</span></li>
+    <li>Severity thresholds for tiered / partial payment</li>
+    <li>Survival period post-diagnosis (e.g. 28 days)</li>
+    <li>Mental health: definition of "serious" / measurable severity <span class="ref ref-ci">Sep24·Q2</span></li>
+    <li>Definition of "child" for children's benefit extensions</li>
+    <li>Independent medical verification of diagnosis</li>
+    <li>Linked claims period for multi-pay products</li>
+  </ul></td>
+  <td class="cell-ip"><ul>
+    <li>Own occupation vs any occupation definition of incapacity</li>
+    <li>Activities of daily working life (ADWL) approach</li>
+    <li>Moratorium vs full medical UW approach to pre-existing conditions <span class="ref ref-ip">Sep23·Q3</span></li>
+    <li>Salary definition — basic only vs total compensation</li>
+    <li>Linked claims period — when a new claim period begins</li>
+    <li>Exclusions: hazardous pursuits, self-inflicted, drug abuse <span class="ref ref-ip">Sep20·Q2</span></li>
+    <li>Geographical residency conditions on payment</li>
+  </ul></td>
+  <td class="cell-ltc"><ul>
+    <li>ADL trigger — which activities, how many must be failed <span class="ref ref-ltc">Sep19·Q1</span></li>
+    <li>Cognitive / mental impairment trigger definition</li>
+    <li>Single-event vs ongoing assessment approach <span class="ref ref-ltc">Sep19·Q1</span></li>
+    <li>Care setting definitions: home, residential, nursing</li>
+    <li>Exclusion of pre-existing cognitive conditions at UW</li>
+    <li>Independent ADL assessor requirement at claim</li>
+    <li>Benefit indexation terms clearly specified</li>
+  </ul></td>
+  <td class="cell-state"><ul>
+    <li>Simple, unambiguous trigger to aid low-literacy claimants</li>
+    <li>Hospitalisation definition — minimum stay thresholds</li>
+    <li>Standardised condition list (government / regulator mandated)</li>
+    <li>Exclusion of cosmetic / elective procedures</li>
+    <li>Catastrophe / pandemic trigger — objective declared-event basis <span class="ref ref-state">Apr19·Q1</span></li>
+  </ul></td>
+</tr>
+
+<!-- 3. Product Features and Options -->
+<tr>
+  <td class="theme-cell"><span class="theme-num">03</span>Product Features &amp; Options</td>
+  <td class="cell-pmi"><ul>
+    <li>Guaranteed renewability and continuity provisions</li>
+    <li>No-claims discount / bonus to incentivise low utilisation</li>
+    <li>Modular add-ons: dental, optical, maternity, OPD wellness</li>
+    <li>Top-up option over base employer cover</li>
+    <li>Portability on leaving employer group scheme</li>
+    <li>Reviewable premiums — frequency and basis</li>
+    <li>Open referral vs GP-gatekeeping model</li>
+  </ul></td>
+  <td class="cell-ci"><ul>
+    <li>Reviewable vs guaranteed premiums — risk transfer implications</li>
+    <li>Unit-linked product: reviewable morbidity charge, fixed allocation <span class="ref ref-ci">Apr20·Q3</span></li>
+    <li>Return of Premium (ROP): pre-specified trigger events <span class="ref ref-ci">Apr23·Q2</span></li>
+    <li>Multi-pay option: benefit reinstated after first claim</li>
+    <li>Optional additional conditions beyond standard list</li>
+    <li>Standalone vs rider on life / PMI policy</li>
+    <li>Profit share arrangements for group / government contracts <span class="ref ref-ci">Apr19·Q1</span></li>
+  </ul></td>
+  <td class="cell-ip"><ul>
+    <li>Deferred period options (1, 3, 6, 12 months)</li>
+    <li>Own vs any occupation definition choice</li>
+    <li>Partial / proportional disability benefit option</li>
+    <li>Return-to-work incentive: benefit tapered on partial return</li>
+    <li>Rehabilitation services as integral product feature <span class="ref ref-ip">Sep20·Q2</span></li>
+    <li>Reviewable vs guaranteed premium structure</li>
+    <li>Employee / employer contribution split options (group)</li>
+    <li>Linked claims provision: restart if same condition recurs <span class="ref ref-ip">Sep20·Q2</span></li>
+  </ul></td>
+  <td class="cell-ltc"><ul>
+    <li>Surrender value — pre-claim and in-claim design <span class="ref ref-ltc">Sep19·Q1</span></li>
+    <li>Inflation-linked benefit escalation option <span class="ref ref-ltc">Sep19·Q1</span></li>
+    <li>Death benefit during pre-funding phase</li>
+    <li>Premium waiver once claim commences</li>
+    <li>Pre-funded vs immediate-needs as separate product variants</li>
+    <li>Home care vs facility care benefit options</li>
+    <li>Reviewable premium basis for long-duration product <span class="ref ref-ltc">Apr21·Q3</span></li>
+  </ul></td>
+  <td class="cell-state"><ul>
+    <li>Mandatory / auto-enrolment — no individual opt-out</li>
+    <li>Premium reviewability built in — regulator-approved mechanism</li>
+    <li>Waiting period as anti-selection control feature <span class="ref ref-state">Sep22·Q3</span></li>
+    <li>Government backstop / guarantee for catastrophe pool</li>
+    <li>Outpatient add-on expansion to basic hospitalisation product <span class="ref ref-state">Sep22·Q3</span></li>
+    <li>Tax incentives as demand-creation feature <span class="ref ref-state">Apr23·Q1</span></li>
+  </ul></td>
+</tr>
+
+<!-- 4. Target Market and Customer Needs -->
+<tr>
+  <td class="theme-cell"><span class="theme-num">04</span>Target Market &amp; Customer Needs</td>
+  <td class="cell-pmi"><ul>
+    <li>Gap between state provision and actual healthcare need <span class="ref ref-pmi">Apr21·Q1</span></li>
+    <li>Middle-income households unable to self-fund treatment</li>
+    <li>Employed / corporate segment; employer-sponsored group</li>
+    <li>Ageing population with rising chronic care needs</li>
+    <li>Customers seeking choice, speed, and quality of care</li>
+    <li>Health inequalities — geographic and socioeconomic gaps <span class="ref ref-pmi">Apr21·Q1</span></li>
+    <li>Customers seeking certainty and absence of billing shock</li>
+  </ul></td>
+  <td class="cell-ci"><ul>
+    <li>Individuals with financial dependants needing income protection</li>
+    <li>Cancer / cardiac fear as primary demand driver</li>
+    <li>Those whose PMI does not cover income loss on diagnosis</li>
+    <li>Vulnerable / older customers — definition fairness concern <span class="ref ref-ci">Apr25·Q1</span></li>
+    <li>Low financial literacy — simple product with clear trigger</li>
+    <li>Employer-sponsored group CI for workforce protection</li>
+  </ul></td>
+  <td class="cell-ip"><ul>
+    <li>Employers with salaried workforce — staff retention motive <span class="ref ref-ip">Sep20·Q2</span></li>
+    <li>Workers without adequate state sick-pay provision</li>
+    <li>Self-employed and those without employer sick pay</li>
+    <li>Students and young workers entering market for first time <span class="ref ref-ip">Sep21·Q2</span></li>
+    <li>Low financial literacy market — simplified product design <span class="ref ref-ip">Sep21·Q2</span></li>
+    <li>Gig economy / flexible workforce with non-standard income</li>
+  </ul></td>
+  <td class="cell-ltc"><ul>
+    <li>Ageing population planning for future care costs <span class="ref ref-ltc">Apr21·Q3</span></li>
+    <li>60+ individuals without family care support</li>
+    <li>Those seeking to avoid financial burden on family</li>
+    <li>Pre-planners (pre-funded product) vs immediate-needs buyers</li>
+    <li>Consumer choice limited by market monopoly <span class="ref ref-ltc">Apr21·Q3</span></li>
+  </ul></td>
+  <td class="cell-state"><ul>
+    <li>Entire population — universal access objective <span class="ref ref-state">Apr24·Q2</span></li>
+    <li>Low-income and uninsured majority — affordability paramount</li>
+    <li>Microinsurance: low-income earners, informal sector workers <span class="ref ref-state">Sep21·Q1</span></li>
+    <li>Students / niche segments — bespoke simplified design <span class="ref ref-state">Sep21·Q2</span></li>
+    <li>Reducing health inequalities as primary policy objective <span class="ref ref-state">Apr21·Q1</span></li>
+    <li>Low financial literacy — simple benefit, simple trigger</li>
+  </ul></td>
+</tr>
+
+<!-- 5. Underwriting Approach -->
+<tr>
+  <td class="theme-cell"><span class="theme-num">05</span>Underwriting Approach</td>
+  <td class="cell-pmi"><ul>
+    <li>Full medical UW vs moratorium vs community rating <span class="ref ref-pmi">Apr20·Q1</span></li>
+    <li>Community rating — advantages (fairness, access) and disadvantages (moral hazard, anti-selection) <span class="ref ref-pmi">Apr20·Q1</span></li>
+    <li>Mandatory participation to make community rating viable</li>
+    <li>Free cover limits for group; individual evidence above FCL</li>
+    <li>Tightening UW standards in response to poor claims experience <span class="ref ref-pmi">Sep19·Q3</span></li>
+    <li>Point-of-sale UW vs referral — cost vs rigour trade-off <span class="ref ref-pmi">Sep19·Q3</span></li>
+  </ul></td>
+  <td class="cell-ci"><ul>
+    <li>Full medical UW for individual policies</li>
+    <li>Group: free cover limit; individual evidence above FCL</li>
+    <li>At-work clause for group new joiners</li>
+    <li>AI / algorithmic underwriting tools — impact on acceptance <span class="ref ref-ci">Apr24·Q1</span></li>
+    <li>Impact of UW approach on lapse behaviour <span class="ref ref-ci">Apr22·Q1</span></li>
+    <li>Raising / lowering acceptance criteria to change business mix</li>
+  </ul></td>
+  <td class="cell-ip"><ul>
+    <li>Own occupation vs any occupation — UW risk implications</li>
+    <li>Moratorium vs full medical UW — anti-selection trade-off <span class="ref ref-ip">Sep23·Q3</span></li>
+    <li>AI / automated UW tools: individualised pricing, reduced margin <span class="ref ref-ip">Apr22·Q3</span></li>
+    <li>At-work clause for group schemes</li>
+    <li>Over-insurance risk — replacement ratio limit enforcement <span class="ref ref-ip">Sep23·Q3</span></li>
+    <li>Periodic medical review during claim</li>
+  </ul></td>
+  <td class="cell-ltc"><ul>
+    <li>Full medical UW; pre-existing cognitive impairment excluded</li>
+    <li>Early entry incentivised — lower premium, easier UW</li>
+    <li>Long waiting periods given long-tail nature of risk</li>
+    <li>Anti-selection risk from surrender value availability <span class="ref ref-ltc">Sep19·Q1</span></li>
+    <li>Premium loading for impaired lives</li>
+  </ul></td>
+  <td class="cell-state"><ul>
+    <li>No individual UW by design — population pooling</li>
+    <li>Compulsory participation removes adverse selection</li>
+    <li>Waiting periods as substitute for underwriting</li>
+    <li>Simplified / group-based UW for microinsurance products <span class="ref ref-state">Sep22·Q3</span></li>
+    <li>Minimum participation thresholds for voluntary group covers</li>
+  </ul></td>
+</tr>
+
+<!-- 6. Pricing Considerations -->
+<tr>
+  <td class="theme-cell"><span class="theme-num">06</span>Pricing Considerations</td>
+  <td class="cell-pmi"><ul>
+    <li>Community rating vs risk-rated premium — regulatory basis</li>
+    <li>Medical inflation as key pricing risk — reviewable premiums</li>
+    <li>Claims frequency and severity assumptions by category</li>
+    <li>Expense loadings; distribution costs</li>
+    <li>Experience rating at renewal for group schemes</li>
+    <li>Lack of credible local data for new market entrants <span class="ref ref-pmi">Apr21·Q1</span></li>
+    <li>Profit margins, required return on capital</li>
+  </ul></td>
+  <td class="cell-ci"><ul>
+    <li>Morbidity (incidence) assumptions by condition and age/gender</li>
+    <li>Reviewable morbidity charge in unit-linked structure <span class="ref ref-ci">Apr20·Q3</span></li>
+    <li>Factors influencing morbidity charge: age, gender, benefit amount, health status <span class="ref ref-ci">Apr20·Q3</span></li>
+    <li>Pricing for children's cancer option — data scarcity <span class="ref ref-ci">Apr20·Q3</span></li>
+    <li>Adverse lapse experience — impact on profitability <span class="ref ref-ci">Apr22·Q1</span></li>
+    <li>Reinsurance cost and availability for new conditions</li>
+    <li>Premium review following substantial experience deterioration <span class="ref ref-ci">Apr21·Q3</span></li>
+  </ul></td>
+  <td class="cell-ip"><ul>
+    <li>Morbidity (incidence and duration) assumptions</li>
+    <li>Salary / benefit inflation assumptions</li>
+    <li>Deferred period choice — impact on claim frequency</li>
+    <li>Expense loadings; economies of scale for group schemes</li>
+    <li>Replacement ratio cap — moral hazard pricing adjustment</li>
+    <li>Insurtech / AI UW: individualised pricing, margin compression <span class="ref ref-ip">Apr22·Q3</span></li>
+    <li>Loss ratio deterioration and repricing actions <span class="ref ref-ip">Sep24·Q3</span></li>
+  </ul></td>
+  <td class="cell-ltc"><ul>
+    <li>Longevity risk — policy may be in-force decades <span class="ref ref-ltc">Apr21·Q3</span></li>
+    <li>Claims inflation — care cost escalation above general inflation <span class="ref ref-ltc">Apr21·Q3</span></li>
+    <li>Morbidity incidence / prevalence assumptions</li>
+    <li>Geographic rating variation <span class="ref ref-ltc">Apr21·Q3</span></li>
+    <li>Investment risk — long-duration liabilities require ALM</li>
+    <li>Premium increase implications for reputation / lapse <span class="ref ref-ltc">Apr21·Q3</span></li>
+    <li>Reinsurance availability and cost</li>
+  </ul></td>
+  <td class="cell-state"><ul>
+    <li>Social insurance / solidarity pricing — not commercially rated</li>
+    <li>Payroll deduction vs general taxation as collection mechanism <span class="ref ref-state">Apr24·Q2</span></li>
+    <li>Expense ratio critical — high distribution cost is unviable</li>
+    <li>Microinsurance: premium collection via mobile / group <span class="ref ref-state">Sep22·Q3</span></li>
+    <li>Premium reviewability mechanism essential for sustainability</li>
+    <li>Claim frequency assumptions with limited data</li>
+  </ul></td>
+</tr>
+
+<!-- 7. Distribution and Sales Strategy -->
+<tr>
+  <td class="theme-cell"><span class="theme-num">07</span>Distribution &amp; Sales Strategy</td>
+  <td class="cell-pmi"><ul>
+    <li>Corporate HR / employee benefits broker for group PMI</li>
+    <li>Independent financial adviser / broker for individual PMI</li>
+    <li>Digital / online for simplified products <span class="ref ref-pmi">Apr24·Q3</span></li>
+    <li>Affinity / grocery chain partnership model <span class="ref ref-pmi">Apr24·Q3</span></li>
+    <li>Advertising campaigns vs partnership distribution trade-off <span class="ref ref-pmi">Apr24·Q3</span></li>
+    <li>Cashless network empanelment as distribution infrastructure</li>
+    <li>Commission structures for intermediaries</li>
+  </ul></td>
+  <td class="cell-ci"><ul>
+    <li>Online / direct for simple lump-sum CI products</li>
+    <li>Bancassurance for straightforward products</li>
+    <li>IFA / tied agent for complex / multi-pay CI</li>
+    <li>Broker networks for individual and group distribution <span class="ref ref-ci">Apr25·Q2</span></li>
+    <li>Brand awareness — critical for new entrant <span class="ref ref-ci">Sep20·Q1</span></li>
+    <li>Product differentiation beyond price: service, value-adds <span class="ref ref-ci">Apr20·Q3</span></li>
+  </ul></td>
+  <td class="cell-ip"><ul>
+    <li>Corporate HR and employee benefits consultant for group IP</li>
+    <li>Broker / IFA for individual IP</li>
+    <li>Not typically a retail / online product</li>
+    <li>Outsourcing pricing and UW to insurtech partner <span class="ref ref-ip">Sep21·Q2</span></li>
+    <li>Financial literacy barrier — need for adviser-led sales <span class="ref ref-ip">Sep21·Q2</span></li>
+    <li>Retail distribution channel — individual vs group trade-off <span class="ref ref-ip">Apr25·Q2</span></li>
+  </ul></td>
+  <td class="cell-ltc"><ul>
+    <li>IFA / independent financial adviser — complexity requires advice</li>
+    <li>Face-to-face channel given complexity and age of target market</li>
+    <li>Bancassurance possible for pre-funded variant</li>
+    <li>Government-mandated channel if social LTC scheme</li>
+    <li>Provider / care home network as distribution partner</li>
+  </ul></td>
+  <td class="cell-state"><ul>
+    <li>Government / auto-enrolment — no commercial distribution <span class="ref ref-state">Apr24·Q2</span></li>
+    <li>Payroll deduction as collection mechanism <span class="ref ref-state">Apr24·Q2</span></li>
+    <li>Mobile / digital for microinsurance in low-income markets <span class="ref ref-state">Sep21·Q1</span></li>
+    <li>Group / community enrolment to achieve scale</li>
+    <li>Language and literacy challenges in multi-lingual markets <span class="ref ref-state">Apr19·Q1</span></li>
+  </ul></td>
+</tr>
+
+<!-- 8. Product Differentiation -->
+<tr>
+  <td class="theme-cell"><span class="theme-num">08</span>Product Differentiation</td>
+  <td class="cell-pmi"><ul>
+    <li>Cashless network size and quality</li>
+    <li>Customer service and claims handling speed</li>
+    <li>Second opinion / concierge medical services</li>
+    <li>Wellness and preventive health programmes</li>
+    <li>Breadth of coverage vs price competitiveness</li>
+    <li>Digital / app-based member experience</li>
+  </ul></td>
+  <td class="cell-ci"><ul>
+    <li>Breadth of CI condition list vs clarity of definitions</li>
+    <li>Severity-based / tiered payout as market differentiator</li>
+    <li>Children's benefit extensions <span class="ref ref-ci">Apr20·Q3</span></li>
+    <li>Brand reputation and financial strength</li>
+    <li>Value-added services: medical helplines, health apps <span class="ref ref-ci">Apr20·Q3</span></li>
+    <li>Faster claims payment process</li>
+    <li>Definition transparency — clear pay-out criteria <span class="ref ref-ci">Apr25·Q1</span></li>
+  </ul></td>
+  <td class="cell-ip"><ul>
+    <li>Breadth of own-occupation definition</li>
+    <li>Rehabilitation and return-to-work services</li>
+    <li>Flexibility of deferred period and benefit period options</li>
+    <li>Employee wellness programme integration</li>
+    <li>Technology: AI underwriting speed and certainty <span class="ref ref-ip">Apr22·Q3</span></li>
+    <li>Rewards / wellness programme for policyholders <span class="ref ref-ip">Apr22·Q3</span></li>
+  </ul></td>
+  <td class="cell-ltc"><ul>
+    <li>Care manager / case management service</li>
+    <li>Flexibility of care setting (home vs residential)</li>
+    <li>Inflation-protection benefit option</li>
+    <li>First-mover advantage in nascent markets <span class="ref ref-ltc">Apr21·Q3</span></li>
+    <li>Financial strength and longevity of insurer</li>
+  </ul></td>
+  <td class="cell-state"><ul>
+    <li>Affordability and universal access as primary differentiator</li>
+    <li>Government backing provides trust and credibility</li>
+    <li>Simplicity of product — ease of understanding</li>
+    <li>Speed of claim payment</li>
+  </ul></td>
+</tr>
+
+<!-- 9. Risk Appetite and Insurer Strategy -->
+<tr>
+  <td class="theme-cell"><span class="theme-num">09</span>Risk Appetite &amp; Insurer Strategy</td>
+  <td class="cell-pmi"><ul>
+    <li>Does product fit current risk appetite? <span class="ref ref-pmi">Apr19·Q1</span></li>
+    <li>Capital strain from new business volumes</li>
+    <li>Medical inflation — unlimited cost exposure under indemnity</li>
+    <li>Impact of inflation on profitability — reviewable premium mechanism <span class="ref ref-pmi">Sep24·Q1</span></li>
+    <li>Reinsurance to cap per-risk and aggregate exposure</li>
+    <li>Business mix impact on overall portfolio diversification</li>
+    <li>One-off bespoke contracts (government) vs scalable product <span class="ref ref-pmi">Apr19·Q1</span></li>
+  </ul></td>
+  <td class="cell-ci"><ul>
+    <li>New condition extensions — risk appetite and data adequacy <span class="ref ref-ci">Apr20·Q3</span></li>
+    <li>Unit-linked structure — transfer of investment risk to policyholder <span class="ref ref-ci">Apr20·Q3</span></li>
+    <li>Reinsurance essential for large sum insured / new conditions</li>
+    <li>Selective lapse risk — impact on pool quality <span class="ref ref-ci">Apr22·Q1</span></li>
+    <li>Economic downturn — lapse spike and capital impact <span class="ref ref-ci">Apr22·Q1</span></li>
+    <li>Inflation impact across product lines <span class="ref ref-ci">Sep24·Q1</span></li>
+  </ul></td>
+  <td class="cell-ip"><ul>
+    <li>Long-tail disability — significant capital and reserving strain</li>
+    <li>Moral hazard — replacement ratio design to manage</li>
+    <li>Economic downturn — incidence and duration risk <span class="ref ref-ip">Sep24·Q3</span></li>
+    <li>Reinsurance (XL or quota share) essential</li>
+    <li>Operational capacity for claims management long-term</li>
+    <li>New market entry — no local experience data <span class="ref ref-ip">Sep20·Q1</span></li>
+  </ul></td>
+  <td class="cell-ltc"><ul>
+    <li>Very long-tail liability — decades of reserve and capital strain</li>
+    <li>Longevity and morbidity improvement uncertainty <span class="ref ref-ltc">Apr21·Q3</span></li>
+    <li>ALM challenge: matching long liabilities to appropriate assets</li>
+    <li>Limited reinsurance availability <span class="ref ref-ltc">Sep19·Q1</span></li>
+    <li>Surrender value — liquidity risk if many exercise simultaneously <span class="ref ref-ltc">Sep19·Q1</span></li>
+    <li>Political risk — state LTC provision changes <span class="ref ref-ltc">Sep19·Q1</span></li>
+  </ul></td>
+  <td class="cell-state"><ul>
+    <li>Government backing required — commercial insurer cannot absorb alone</li>
+    <li>Catastrophe / pandemic pooling — aggregate risk concentration</li>
+    <li>Premium collection risk — defaults and non-payment <span class="ref ref-state">Sep22·Q3</span></li>
+    <li>Expense ratio sustainability at low premium levels</li>
+    <li>Reputation risk if claims are disputed or delayed</li>
+  </ul></td>
+</tr>
+
+<!-- 10. Anti-selection and Lapse Risk -->
+<tr>
+  <td class="theme-cell"><span class="theme-num">10</span>Anti-selection &amp; Lapse Risk</td>
+  <td class="cell-pmi"><ul>
+    <li>Anti-selection under community rating — better risks exit <span class="ref ref-pmi">Apr20·Q1</span></li>
+    <li>Mandatory participation required to sustain community rating</li>
+    <li>Risk equalisation mechanism needed across insurers</li>
+    <li>Waiting periods and exclusions as anti-selection controls</li>
+    <li>No-claims discount to reward and retain good risks</li>
+  </ul></td>
+  <td class="cell-ci"><ul>
+    <li>Selective lapsing — healthy lives lapse, pool deteriorates <span class="ref ref-ci">Apr22·Q1</span></li>
+    <li>Economic downturn — lapse spike; adverse selection remains <span class="ref ref-ci">Apr22·Q1</span></li>
+    <li>Group CI: no lapse mid-year; renewal negotiation dynamics <span class="ref ref-ci">Apr22·Q1</span></li>
+    <li>ROP option reduces lapse incentive — design trade-off <span class="ref ref-ci">Apr23·Q2</span></li>
+    <li>Policyholder communication to reduce involuntary lapse <span class="ref ref-ci">Apr22·Q1</span></li>
+    <li>Impact of lapse on cashflow and investment strategy <span class="ref ref-ci">Apr22·Q1</span></li>
+  </ul></td>
+  <td class="cell-ip"><ul>
+    <li>Moral hazard — replacement ratio must not exceed net salary</li>
+    <li>Linked claims period prevents fragmented short-term claims</li>
+    <li>Deferred period absorbs short-term / malingering claims</li>
+    <li>Periodic medical review to detect recovery</li>
+    <li>AI underwriting — potential for adverse selection if healthier lives excluded <span class="ref ref-ip">Apr22·Q3</span></li>
+  </ul></td>
+  <td class="cell-ltc"><ul>
+    <li>Surrender value — anti-selection by unhealthy lives (in-claim) <span class="ref ref-ltc">Sep19·Q1</span></li>
+    <li>Surrender value — healthier lives exit pre-claim, pool worsens <span class="ref ref-ltc">Sep19·Q1</span></li>
+    <li>Premium increase — lapse spike from healthy lives <span class="ref ref-ltc">Apr21·Q3</span></li>
+    <li>TCF risk if surrender value appears poor value <span class="ref ref-ltc">Sep19·Q1</span></li>
+    <li>Liquidity risk if many surrenders occur simultaneously <span class="ref ref-ltc">Sep19·Q1</span></li>
+  </ul></td>
+  <td class="cell-state"><ul>
+    <li>Compulsory participation eliminates adverse selection <span class="ref ref-state">Apr24·Q2</span></li>
+    <li>Voluntary group schemes — minimum participation thresholds needed</li>
+    <li>Premium affordability critical to prevent non-payment / dropout <span class="ref ref-state">Sep22·Q3</span></li>
+    <li>Moral hazard from fixed / indemnity benefit without co-pay</li>
+  </ul></td>
+</tr>
+
+<!-- 11. Regulation and Consumer Protection -->
+<tr>
+  <td class="theme-cell"><span class="theme-num">11</span>Regulation &amp; Consumer Protection</td>
+  <td class="cell-pmi"><ul>
+    <li>Community rating regulation — mandatory participation rules <span class="ref ref-pmi">Apr20·Q1</span></li>
+    <li>Guaranteed renewability requirements</li>
+    <li>Product filing and regulatory approval</li>
+    <li>Anti-discrimination rules on underwriting factors</li>
+    <li>Disclosure requirements — exclusions, limitations, co-pays</li>
+    <li>Risk equalisation fund requirements across insurers</li>
+    <li>Social insurance regulation — government oversight <span class="ref ref-pmi">Apr24·Q2</span></li>
+  </ul></td>
+  <td class="cell-ci"><ul>
+    <li>Consumer Responsibility / Consumer Duty obligations <span class="ref ref-ci">Apr25·Q1</span></li>
+    <li>Treating Customers Fairly — definition clarity, pay-out fairness <span class="ref ref-ci">Apr25·Q1</span></li>
+    <li>Management information (MI) and monitoring for compliance <span class="ref ref-ci">Apr25·Q1</span></li>
+    <li>Regulator-mandated CI definition standardisation</li>
+    <li>Vulnerable customer protections — age, health status <span class="ref ref-ci">Apr25·Q1</span></li>
+    <li>Foreign insurer licensing — market entry requirements <span class="ref ref-ci">Apr23·Q1</span></li>
+  </ul></td>
+  <td class="cell-ip"><ul>
+    <li>Over-insurance rule — benefit cannot exceed pre-disability income</li>
+    <li>Regulatory requirements on deferred period minimum</li>
+    <li>AI underwriting — regulatory scrutiny on fairness / bias <span class="ref ref-ip">Apr24·Q1</span></li>
+    <li>Data protection regulation on wearable / health data use</li>
+    <li>Professional obligations — actuarial code of conduct <span class="ref ref-ip">Sep19·Q2</span></li>
+  </ul></td>
+  <td class="cell-ltc"><ul>
+    <li>Long-term reserving requirements — prudential oversight</li>
+    <li>Surrender value — TCF and regulatory fairness <span class="ref ref-ltc">Sep19·Q1</span></li>
+    <li>Consumer protection on premium reviewability</li>
+    <li>Regulatory approval for new long-term product structures</li>
+    <li>Government policy changes affecting LTC provision <span class="ref ref-ltc">Sep19·Q1</span></li>
+  </ul></td>
+  <td class="cell-state"><ul>
+    <li>Government mandate required for compulsory schemes <span class="ref ref-state">Apr24·Q2</span></li>
+    <li>Special regulatory framework — not standard product filing</li>
+    <li>Reporting and conduct requirements in new / overseas markets <span class="ref ref-state">Apr19·Q1</span></li>
+    <li>Anti-discrimination — community rating protections</li>
+    <li>Treating customers fairly in low-literacy markets <span class="ref ref-state">Sep22·Q3</span></li>
+  </ul></td>
+</tr>
+
+<!-- 12. Product Redesign and In-force Management -->
+<tr>
+  <td class="theme-cell"><span class="theme-num">12</span>Product Redesign &amp; In-force Management</td>
+  <td class="cell-pmi"><ul>
+    <li>Introducing excesses / co-insurance to reduce claims <span class="ref ref-pmi">Sep19·Q3</span></li>
+    <li>Restricting hospital / provider network to control costs <span class="ref ref-pmi">Sep19·Q3</span></li>
+    <li>Tightening pre-authorisation requirements</li>
+    <li>Changing underwriting criteria to improve business mix <span class="ref ref-pmi">Sep19·Q3</span></li>
+    <li>Repricing vs structural benefit change trade-off <span class="ref ref-pmi">Apr22·Q2</span></li>
+    <li>Treating existing policyholders fairly during redesign</li>
+    <li>Communication strategy for in-force product changes</li>
+  </ul></td>
+  <td class="cell-ci"><ul>
+    <li>Premium rate review following adverse morbidity <span class="ref ref-ci">Apr21·Q3</span></li>
+    <li>Amending product structure to limit premium increase impact <span class="ref ref-ci">Apr21·Q3</span></li>
+    <li>Moral hazard considerations in benefit redesign <span class="ref ref-ci">Apr21·Q3</span></li>
+    <li>Consumer Duty compliance in redesigned product <span class="ref ref-ci">Apr25·Q1</span></li>
+    <li>MI monitoring framework post-redesign <span class="ref ref-ci">Apr25·Q1</span></li>
+    <li>Impact on reserving basis from structural changes</li>
+  </ul></td>
+  <td class="cell-ip"><ul>
+    <li>Loss ratio investigation before redesign action <span class="ref ref-ip">Sep24·Q3</span></li>
+    <li>Repricing: premium increase vs benefit reduction trade-off <span class="ref ref-ip">Sep24·Q3</span></li>
+    <li>Changing deferred period, benefit period, or definition <span class="ref ref-ip">Sep24·Q3</span></li>
+    <li>Tightening underwriting policy — moratorium vs full UW <span class="ref ref-ip">Sep23·Q3</span></li>
+    <li>Improving claims management and rehabilitation processes</li>
+    <li>Changing distribution or target market to improve mix</li>
+  </ul></td>
+  <td class="cell-ltc"><ul>
+    <li>Substantial premium increases — reputational and lapse impact <span class="ref ref-ltc">Apr21·Q3</span></li>
+    <li>Structural amendments to limit premium increase <span class="ref ref-ltc">Apr21·Q3</span></li>
+    <li>Surrender value basis adaptation from reserving basis <span class="ref ref-ltc">Sep19·Q1</span></li>
+    <li>Treating customers fairly — avoiding moral hazard in redesign</li>
+    <li>Regulator communication on material product changes</li>
+  </ul></td>
+  <td class="cell-state"><ul>
+    <li>Claims ratio monitoring — triggers for redesign action <span class="ref ref-state">Sep22·Q3</span></li>
+    <li>Adding outpatient benefit to inpatient product <span class="ref ref-state">Sep22·Q3</span></li>
+    <li>Premium reviewability as planned redesign mechanism</li>
+    <li>Operational audit to identify claims leakage <span class="ref ref-state">Sep22·Q3</span></li>
+    <li>Government policy changes forcing product modification <span class="ref ref-state">Apr24·Q2</span></li>
+  </ul></td>
+</tr>
+
+<!-- 13. Group Products — Specific Considerations -->
+<tr>
+  <td class="theme-cell"><span class="theme-num">13</span>Group Products — Specific Considerations</td>
+  <td class="cell-pmi"><ul>
+    <li>Employer objectives: staff welfare, retention, recruitment <span class="ref ref-pmi">Apr25·Q3</span></li>
+    <li>Stakeholder management: employer, employee, insurer <span class="ref ref-pmi">Apr25·Q3</span></li>
+    <li>Experience rating vs pooled rating at renewal</li>
+    <li>Self-funded vs insured scheme trade-offs <span class="ref ref-pmi">Apr25·Q3</span></li>
+    <li>Scheme transition management <span class="ref ref-pmi">Apr25·Q3</span></li>
+    <li>Cost reduction strategies during economic downturn <span class="ref ref-pmi">Apr25·Q3</span></li>
+    <li>Benefit matching for staff transferring from in-house scheme <span class="ref ref-pmi">Apr25·Q3</span></li>
+  </ul></td>
+  <td class="cell-ci"><ul>
+    <li>Free cover limits — no UW required below threshold</li>
+    <li>No lapse mid-policy year — renewal negotiation as control</li>
+    <li>Employer-led premium negotiation dynamics <span class="ref ref-ci">Apr22·Q1</span></li>
+    <li>Experience rating and retrospective adjustment at renewal <span class="ref ref-ci">Apr22·Q1</span></li>
+    <li>Group scheme: sponsor relationship replaces individual UW</li>
+  </ul></td>
+  <td class="cell-ip"><ul>
+    <li>Employer motive: staff retention, productivity, legal compliance <span class="ref ref-ip">Sep20·Q2</span></li>
+    <li>Benefit structure by grade / salary band</li>
+    <li>Auto-enrolment and minimum participation for anti-selection control</li>
+    <li>Outsourcing scheme administration to control costs <span class="ref ref-ip">Sep20·Q2</span></li>
+    <li>HR / payroll system integration for premium and benefits</li>
+    <li>Group IP: experience monitoring and cost management</li>
+    <li>Employee consultation on scheme design <span class="ref ref-ip">Sep20·Q2</span></li>
+  </ul></td>
+  <td class="cell-ltc"><ul>
+    <li>Employer-sponsored LTC: limited market precedent</li>
+    <li>Government-sponsored group LTC schemes</li>
+    <li>Group underwriting — aggregate ADL assessment</li>
+  </ul></td>
+  <td class="cell-state"><ul>
+    <li>Employer as scheme sponsor for mandatory group cover <span class="ref ref-state">Apr24·Q2</span></li>
+    <li>Government as scheme sponsor for social insurance</li>
+    <li>Community / village group schemes for microinsurance <span class="ref ref-state">Sep21·Q1</span></li>
+    <li>Administration simplicity — group enrolment vs individual</li>
+    <li>Payroll deduction as low-cost collection mechanism</li>
+  </ul></td>
+</tr>
+
+<!-- 14. New Market Entry and Product Launch -->
+<tr>
+  <td class="theme-cell"><span class="theme-num">14</span>New Market Entry &amp; Product Launch</td>
+  <td class="cell-pmi"><ul>
+    <li>Market research: size, growth, competition, regulation <span class="ref ref-pmi">Sep20·Q1</span></li>
+    <li>Lack of local claims data — use of industry / reinsurer data <span class="ref ref-pmi">Apr21·Q1</span></li>
+    <li>Competitive landscape — existing dominant players <span class="ref ref-pmi">Sep20·Q1</span></li>
+    <li>Cultural, religious, linguistic considerations <span class="ref ref-pmi">Apr19·Q1</span></li>
+    <li>Foreign insurer market entry — JV vs organic <span class="ref ref-pmi">Apr23·Q1</span></li>
+    <li>Capital requirements; phased portfolio build-up <span class="ref ref-pmi">Sep20·Q1</span></li>
+    <li>Actuarial control cycle — monitoring emerging experience <span class="ref ref-pmi">Apr21·Q1</span></li>
+    <li>Due diligence and cultural fit for JV partner <span class="ref ref-pmi">Apr23·Q1</span></li>
+  </ul></td>
+  <td class="cell-ci"><ul>
+    <li>No local morbidity data — reliance on reinsurer tables</li>
+    <li>First-mover advantage vs first-mover risk</li>
+    <li>Reinsurance essential to support launch capital</li>
+    <li>Consumer education — explaining CI concept to new market</li>
+    <li>Foreign insurer licensing requirements <span class="ref ref-ci">Apr23·Q1</span></li>
+    <li>Building credible experience for future repricing</li>
+  </ul></td>
+  <td class="cell-ip"><ul>
+    <li>IP market research — competitor products, pricing, distribution <span class="ref ref-ip">Apr25·Q2</span></li>
+    <li>Labour market dynamics — gig economy, remote work trends <span class="ref ref-ip">Apr25·Q2</span></li>
+    <li>No credible local IP claims data — pricing uncertainty</li>
+    <li>Building claim management expertise from scratch <span class="ref ref-ip">Sep20·Q1</span></li>
+    <li>Monitoring of emerging incidence and duration experience</li>
+    <li>Reinsurance quota share to share development risk</li>
+  </ul></td>
+  <td class="cell-ltc"><ul>
+    <li>Very limited precedent — nascent product class <span class="ref ref-ltc">Apr21·Q3</span></li>
+    <li>No credible local LTC incidence data — heavy reliance on foreign data</li>
+    <li>Benchmark against out-of-pocket care costs</li>
+    <li>Government incentives / mandate to stimulate demand</li>
+    <li>Consumer awareness and education campaign required</li>
+    <li>Actuarial control cycle essential — long experience run-off period</li>
+  </ul></td>
+  <td class="cell-state"><ul>
+    <li>Government mandate / political will as prerequisite <span class="ref ref-state">Apr24·Q2</span></li>
+    <li>Public education and awareness campaign at launch</li>
+    <li>Infrastructure build: enrolment, premium collection, claims systems <span class="ref ref-state">Sep22·Q3</span></li>
+    <li>Pilot scheme approach before national rollout</li>
+    <li>Regulatory framework creation — may require new legislation</li>
+    <li>Experience monitoring from launch to inform premium reviews</li>
+  </ul></td>
+</tr>
+
+<!-- 15. Technology and Innovation -->
+<tr>
+  <td class="theme-cell"><span class="theme-num">15</span>Technology &amp; Innovation</td>
+  <td class="cell-pmi"><ul>
+    <li>Digital / online distribution and onboarding</li>
+    <li>Cashless claims — real-time pre-authorisation systems</li>
+    <li>Health tracking / wearables as engagement tool</li>
+    <li>AI-driven fraud detection in claims</li>
+    <li>Data governance and cyber risk management <span class="ref ref-pmi">Sep20·Q1</span></li>
+    <li>Telemedicine / telehealth as value-added benefit</li>
+    <li>Analytics for experience monitoring and repricing</li>
+  </ul></td>
+  <td class="cell-ci"><ul>
+    <li>AI / automated underwriting — faster acceptance <span class="ref ref-ci">Apr24·Q1</span></li>
+    <li>Unit-linked product administration — fund management systems <span class="ref ref-ci">Apr20·Q3</span></li>
+    <li>Wearables / health data in UW — regulatory and fairness issues <span class="ref ref-ci">Apr24·Q1</span></li>
+    <li>Digital claims notification and verification workflows</li>
+    <li>Data analytics for morbidity trend monitoring</li>
+  </ul></td>
+  <td class="cell-ip"><ul>
+    <li>AI / insurtech UW tools — individualised pricing <span class="ref ref-ip">Apr22·Q3</span></li>
+    <li>Wearables / activity data in UW and claims validation <span class="ref ref-ip">Apr22·Q3</span></li>
+    <li>Rewards programmes linked to health behaviour <span class="ref ref-ip">Apr22·Q3</span></li>
+    <li>Long-term case management platform for claimants</li>
+    <li>HR / payroll system integration for group schemes</li>
+    <li>Human vs machine UW — regulatory scrutiny on bias <span class="ref ref-ip">Apr24·Q1</span></li>
+  </ul></td>
+  <td class="cell-ltc"><ul>
+    <li>Remote ADL monitoring technology — sensors, AI assessment</li>
+    <li>Digital care management platforms</li>
+    <li>Long-duration policy administration systems (20–40 year horizon)</li>
+    <li>Annuity-style payment systems once benefit triggered</li>
+    <li>Data analytics for longevity and morbidity trend monitoring</li>
+  </ul></td>
+  <td class="cell-state"><ul>
+    <li>Mobile-based premium payment and claims for microinsurance <span class="ref ref-state">Sep21·Q1</span></li>
+    <li>Government data infrastructure for national enrolment <span class="ref ref-state">Apr24·Q2</span></li>
+    <li>Digital claims adjudication for speed and cost</li>
+    <li>Centralised catastrophe event trigger and disbursement system</li>
+    <li>Data quality risks in low-resource markets <span class="ref ref-state">Sep22·Q2</span></li>
+  </ul></td>
+</tr>
+
+</tbody>
+</table>
+</div>
+
+<footer>
+  All content derived exclusively from IFoA SA1 exam papers (April 2019 – September 2025). Paper references shown as coloured tags. No general actuarial knowledge has been used to supplement this matrix.
+</footer>
+
+</body>
+</html>

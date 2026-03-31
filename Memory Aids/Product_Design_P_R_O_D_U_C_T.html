@@ -1,0 +1,197 @@
+<style>
+  :root { --card-bg: var(--color-background-primary); --card-border: var(--color-border-tertiary); }
+  .mnem { font-family: var(--font-mono); font-size: 15px; letter-spacing: 0.05em; }
+  .pill { display: inline-block; padding: 2px 8px; border-radius: 20px; font-size: 13px; font-weight: 500; }
+  .branch-grid { display: grid; gap: 8px; }
+  .sub-item { padding: 6px 10px; border-radius: 6px; background: var(--color-background-secondary); border-left: 2px solid; font-size: 14px; color: var(--color-text-primary); }
+  .letter-btn { cursor: pointer; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-lg); padding: 10px 12px; background: var(--card-bg); transition: all 0.15s; display: flex; align-items: flex-start; gap: 10px; }
+  .letter-btn:hover { background: var(--color-background-secondary); }
+  .letter-btn.active { border-width: 1.5px; }
+  .big-letter { font-size: 32px; font-weight: 500; line-height: 1; min-width: 36px; }
+  .detail-panel { display: none; margin-top: 4px; padding: 12px 14px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-tertiary); background: var(--color-background-secondary); }
+  .detail-panel.open { display: block; }
+  .detail-panel h4 { margin: 0 0 8px; font-size: 15px; font-weight: 500; }
+  .sub-list { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 4px; }
+  .sub-list li { font-size: 14px; color: var(--color-text-secondary); padding: 6px 10px; border-radius: 4px; background: var(--card-bg); border-left: 2px solid; }
+  .mnem-bar { display: flex; gap: 4px; justify-content: center; margin-bottom: 16px; flex-wrap: wrap; }
+  .mnem-chip { width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; border-radius: 8px; font-size: 26px; font-weight: 500; cursor: pointer; border: 0.5px solid; transition: transform 0.1s; }
+  .mnem-chip:hover { transform: scale(1.08); }
+  .tip { font-size: 13px; color: var(--color-text-secondary); text-align: center; margin-bottom: 12px; }
+</style>
+
+<div style="padding: 1rem 0;">
+  <div class="mnem-bar" id="mnemBar"></div>
+  <p class="tip">Click a letter to expand ↓</p>
+  <div id="cards" style="display: flex; flex-direction: column; gap: 6px;"></div>
+</div>
+
+<script>
+const DATA = [
+  {
+    letter: 'P',
+    word: 'Pricing & Data',
+    color: '#534AB7',
+    bg: '#EEEDFE',
+    border: '#AFA9EC',
+    sub: [
+      'Start with internal experience (credibility check)',
+      'Adjust claim severity: remove one-offs, product restrictions, IBNER',
+      'Adjust claim frequency: deductible, IBNR, trend',
+      'Project to future inception date with medical inflation',
+      'Allow for maturity effects: select lives, waiting periods, selective lapse',
+      'Profit-test: risk premium + expense loading + margin',
+      'Sensitivity & scenario testing',
+    ],
+    memory: 'Burning cost = frequency × severity. Always start with own data.'
+  },
+  {
+    letter: 'R',
+    word: 'Reinsurance & Capital',
+    color: '#0F6E56',
+    bg: '#E1F5EE',
+    border: '#5DCAA5',
+    sub: [
+      'Proportional (quota share): risk + capacity sharing',
+      'Non-proportional (XOL): protect against large single claims',
+      'Consider catastrophe/stop-loss for pandemic or aggregate risk',
+      'Capital adequacy: economic capital, solvency margins',
+      'Reinsurer can provide pricing data and technical support',
+      'Review reinsurance need as experience develops',
+    ],
+    memory: 'High severity new product → always explore RI. RI = data + capacity + protection.'
+  },
+  {
+    letter: 'O',
+    word: 'Operations & Administration',
+    color: '#BA7517',
+    bg: '#FAEEDA',
+    border: '#EF9F27',
+    sub: [
+      'Policy admin system: new fields, workflows, renewals',
+      'Claims system: pre-auth, cashless network, TPA vs in-house',
+      'IT integration: sales, underwriting, claims, MIS',
+      'One-time setup costs (price in!)',
+      'Ongoing maintenance and scalability',
+      'IBNR/reserving: lag patterns, new product uncertainty',
+    ],
+    memory: 'Every new feature = system change + training cost. Don\'t forget setup in pricing.'
+  },
+  {
+    letter: 'D',
+    word: 'Distribution & Sales',
+    color: '#A32D2D',
+    bg: '#FCEBEB',
+    border: '#F09595',
+    sub: [
+      'Choose channels: agents, brokers, bancassurance, D2C, digital',
+      'Commission structure and incentives',
+      'Training: product is new → higher training cost',
+      'Marketing spend: aggressive launch vs slow build',
+      'Mis-selling risk: complex product → stronger governance',
+      'Target segment alignment with channel choice',
+    ],
+    memory: 'Complex product → agents/brokers. Simple/online → D2C. Marketing = capital spend.'
+  },
+  {
+    letter: 'U',
+    word: 'Underwriting',
+    color: '#185FA5',
+    bg: '#E6F1FB',
+    border: '#85B7EB',
+    sub: [
+      'Front-end (full UW) vs back-end (moratorium/exclusions)',
+      'Free cover limits for group; trigger levels for individual',
+      'Medical tests: cost vs benefit; age/SI thresholds',
+      'Anti-selection controls: waiting periods, deferred periods',
+      'Underwriting manual: new product → update required',
+      'PED, initial waiting periods, moratorium (now 60 months under IRDAI 2024)',
+    ],
+    memory: 'Lower UW = faster sales but higher anti-selection risk. Balance cost vs selection benefit.'
+  },
+  {
+    letter: 'C',
+    word: 'Coverage Design (Features)',
+    color: '#993556',
+    bg: '#FBEAF0',
+    border: '#ED93B1',
+    sub: [
+      'Benefit type: indemnity vs lump-sum vs cash',
+      'Scope: IP only / OP / OPD / global / critical illness',
+      'Sum insured, limits, sub-limits, co-pay, deductible',
+      'Exclusions: PED, cosmetic, self-inflicted, named conditions',
+      'Waiting periods, deferred periods, linking period',
+      'NCB / wellness rewards / premium incentives',
+      'Renewability: yearly, lifetime, guaranteed',
+    ],
+    memory: 'SCREW: Scope, Co-pay, Renewability, Exclusions, Waiting periods.'
+  },
+  {
+    letter: 'T',
+    word: 'Target Market & Regulation',
+    color: '#3B6D11',
+    bg: '#EAF3DE',
+    border: '#97C459',
+    sub: [
+      'Define target segment: age, income, geography, occupation',
+      'Market research: customer need, willingness to pay',
+      'Competitive benchmarking: pricing, features, channels',
+      'Conflict with existing products (cannibalisation risk)',
+      'Regulatory approval: IRDAI File & Use / Use & File',
+      'IRDAI 2024: PED max 36 months, moratorium 60 months',
+      'Policyholder Reasonable Expectations (PRE)',
+    ],
+    memory: 'Always start here. No market = no product. Regulation shapes everything else.'
+  },
+];
+
+const bar = document.getElementById('mnemBar');
+const cards = document.getElementById('cards');
+let active = null;
+
+DATA.forEach((d, i) => {
+  const chip = document.createElement('div');
+  chip.className = 'mnem-chip';
+  chip.style.cssText = `background:${d.bg};border-color:${d.border};color:${d.color}`;
+  chip.textContent = d.letter;
+  chip.title = d.word;
+  chip.onclick = () => toggle(i);
+  bar.appendChild(chip);
+
+  const card = document.createElement('div');
+  card.innerHTML = `
+    <div class="letter-btn" id="btn${i}" onclick="toggle(${i})">
+      <span class="big-letter" style="color:${d.color}">${d.letter}</span>
+      <div style="flex:1">
+        <div style="font-size:16px;font-weight:500;color:var(--color-text-primary)">${d.word}</div>
+        <div style="font-size:13px;color:var(--color-text-secondary);margin-top:2px">click to expand</div>
+      </div>
+      <span style="font-size:14px;color:var(--color-text-secondary);padding-top:2px" id="arr${i}">▸</span>
+    </div>
+    <div class="detail-panel" id="panel${i}">
+      <h4 style="color:${d.color}">Key sub-points</h4>
+      <ul class="sub-list">${d.sub.map(s=>`<li style="border-color:${d.border}">${s}</li>`).join('')}</ul>
+      <div style="margin-top:10px;padding:8px 10px;background:${d.bg};border-radius:6px;border-left:3px solid ${d.color}">
+        <span style="font-size:13px;font-weight:500;color:${d.color}">Memory hook: </span>
+        <span style="font-size:14px;color:var(--color-text-secondary)">${d.memory}</span>
+      </div>
+    </div>
+  `;
+  cards.appendChild(card);
+});
+
+function toggle(i) {
+  const panel = document.getElementById(`panel${i}`);
+  const btn = document.getElementById(`btn${i}`);
+  const arr = document.getElementById(`arr${i}`);
+  const isOpen = panel.classList.contains('open');
+  document.querySelectorAll('.detail-panel').forEach(p => p.classList.remove('open'));
+  document.querySelectorAll('.letter-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('[id^=arr]').forEach(a => a.textContent = '▸');
+  if (!isOpen) {
+    panel.classList.add('open');
+    btn.classList.add('active');
+    btn.style.borderColor = DATA[i].color;
+    arr.textContent = '▾';
+  }
+}
+</script>

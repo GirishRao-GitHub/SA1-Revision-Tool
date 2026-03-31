@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Experience Investigation — Memory Tool</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap');
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #F4F1EB; --surface: #FFFFFF; --border: #DDD9CE;
+    --ink: #1C1A15; --ink-soft: #7A776C; --ink-faint: #B5B2A7;
+    --p1-bg: #E8F0FA; --p1-text: #1A3F7A; --p1-dot: #3A6BC7;
+    --p2-bg: #E5F6EF; --p2-text: #0D4F38; --p2-dot: #1A9E6A;
+    --p3-bg: #FDF0E2; --p3-text: #6B3300; --p3-dot: #D4730A;
+    --ok-bg: #E5F6EF; --ok-text: #0D4F38; --ok-bd: #1A9E6A;
+    --no-bg: #FDECE8; --no-text: #5A1E0A; --no-bd: #D84B25;
+    /* type accent colours */
+    --mort: #3A6BC7; --morb: #1A9E6A; --term: #C4660A; --laps: #7B3FB0;
+  }
+
+  body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--ink); padding:28px 16px 70px; }
+  .container { max-width:720px; margin:0 auto; }
+
+  /* header */
+  .eyebrow { font-family:'DM Mono',monospace; font-size:11px; letter-spacing:.12em; color:var(--ink-soft); text-transform:uppercase; margin-bottom:4px; }
+  h1 { font-family:'DM Serif Display',serif; font-size:26px; line-height:1.2; margin-bottom:3px; }
+  .subtitle { font-size:13px; color:var(--ink-soft); margin-bottom:20px; }
+
+  /* tabs */
+  .tabs { display:flex; gap:6px; margin-bottom:20px; flex-wrap:wrap; }
+  .tab-btn { padding:6px 16px; font-size:13px; border-radius:20px; border:1px solid var(--border); background:transparent; color:var(--ink-soft); cursor:pointer; transition:all .18s; font-family:'DM Sans',sans-serif; }
+  .tab-btn.active { background:var(--ink); color:var(--bg); border-color:var(--ink); }
+  .tab-btn:hover:not(.active) { border-color:var(--ink-soft); color:var(--ink); }
+
+  /* type filter pills */
+  .type-filter { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:16px; align-items:center; }
+  .type-filter span { font-size:12px; color:var(--ink-soft); margin-right:2px; }
+  .type-pill { padding:4px 13px; font-size:12px; border-radius:20px; border:1px solid var(--border); background:transparent; cursor:pointer; font-family:'DM Sans',sans-serif; transition:all .15s; color:var(--ink-soft); }
+  .type-pill.active-mort { background:#EBF0FA; border-color:var(--mort); color:var(--mort); font-weight:500; }
+  .type-pill.active-morb { background:#E5F6EF; border-color:var(--morb); color:var(--morb); font-weight:500; }
+  .type-pill.active-term { background:#FDF0E2; border-color:var(--term); color:var(--term); font-weight:500; }
+  .type-pill.active-laps { background:#F3EEF9; border-color:var(--laps); color:var(--laps); font-weight:500; }
+
+  /* mnemonic */
+  .mnemonic-box { background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:22px 24px; margin-bottom:14px; }
+  .sentence-text { font-family:'DM Serif Display',serif; font-size:19px; line-height:1.9; margin-bottom:16px; }
+  .legend { display:flex; flex-wrap:wrap; gap:5px 18px; font-size:12px; color:var(--ink-soft); }
+  .legend b { color:var(--ink); }
+  .two-col { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:14px; }
+  @media(max-width:520px){ .two-col{ grid-template-columns:1fr; } }
+  .mini-box { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:16px; }
+  .mini-label { font-family:'DM Mono',monospace; font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--ink-soft); margin-bottom:10px; }
+  .mini-row { display:flex; align-items:flex-start; gap:9px; margin-bottom:7px; font-size:13px; line-height:1.4; }
+  .mini-row:last-child{ margin-bottom:0; }
+  .pill { display:inline-flex; align-items:center; justify-content:center; width:22px; height:22px; border-radius:50%; font-family:'DM Mono',monospace; font-weight:500; font-size:12px; flex-shrink:0; margin-top:1px; }
+  .tip-bar { background:var(--surface); border:1px solid var(--border); border-radius:10px; padding:12px 16px; font-size:13px; color:var(--ink-soft); line-height:1.5; margin-bottom:14px; }
+  .tip-bar strong { color:var(--ink); }
+
+  /* chunks */
+  .chunk-box { background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:16px 18px; margin-bottom:12px; }
+  .phase-label { display:inline-block; font-size:11px; font-weight:500; padding:3px 12px; border-radius:20px; margin-bottom:12px; }
+  .row-item { display:flex; align-items:flex-start; gap:10px; margin-bottom:9px; font-size:14px; line-height:1.4; }
+  .row-item:last-child{ margin-bottom:0; }
+  .row-item .desc { color:var(--ink-soft); font-size:12px; margin-top:2px; display:block; }
+  .row-item .examples { margin-top:6px; display:flex; flex-direction:column; gap:3px; }
+  .ex-chip { display:inline-flex; align-items:baseline; gap:5px; font-size:11.5px; line-height:1.45; }
+  .ex-dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; display:inline-block; margin-top:3px; }
+
+  /* flashcards */
+  .card-wrap { perspective:900px; cursor:pointer; user-select:none; margin-bottom:14px; }
+  .card-inner { position:relative; width:100%; height:230px; transform-style:preserve-3d; transition:transform .42s; }
+  .card-inner.flipped { transform:rotateY(180deg); }
+  .card-front, .card-back { position:absolute; width:100%; height:100%; backface-visibility:hidden; -webkit-backface-visibility:hidden; border-radius:14px; display:flex; flex-direction:column; justify-content:center; align-items:center; padding:22px; text-align:center; border:1px solid var(--border); }
+  .card-front { background:var(--surface); }
+  .card-back { transform:rotateY(180deg); background:var(--bg); }
+  .card-step { font-family:'DM Mono',monospace; font-size:11px; color:var(--ink-faint); margin-bottom:8px; }
+  .card-title { font-family:'DM Serif Display',serif; font-size:21px; margin:8px 0 6px; line-height:1.3; }
+  .card-hint { font-size:12px; color:var(--ink-faint); }
+  .card-back ul { text-align:left; font-size:13px; line-height:1.75; padding-left:18px; margin:0; max-height:180px; overflow-y:auto; }
+  .card-back li { margin-bottom:3px; }
+  .step-dots { display:flex; justify-content:center; gap:5px; margin:14px 0 12px; }
+  .step-dot { width:7px; height:7px; border-radius:50%; background:var(--border); }
+  .step-dot.active { background:var(--ink); }
+  .nav-row { display:flex; gap:10px; justify-content:center; }
+
+  /* quiz */
+  .btn { padding:7px 22px; border-radius:20px; border:1px solid var(--border); font-size:13px; cursor:pointer; font-family:'DM Sans',sans-serif; transition:all .15s; }
+  .btn-primary { background:var(--ink); color:var(--bg); border-color:var(--ink); }
+  .btn-secondary { background:transparent; color:var(--ink); }
+  .btn:hover { opacity:.82; }
+  .quiz-meta { display:flex; justify-content:space-between; font-size:13px; color:var(--ink-soft); margin-bottom:12px; }
+  .question-text { font-size:15px; font-weight:500; line-height:1.5; margin-bottom:14px; }
+  .quiz-opt { width:100%; text-align:left; padding:11px 16px; border-radius:10px; border:1px solid var(--border); background:var(--surface); color:var(--ink); font-size:13.5px; cursor:pointer; margin-bottom:8px; font-family:'DM Sans',sans-serif; transition:all .15s; }
+  .quiz-opt:hover:not(:disabled){ border-color:var(--ink-soft); background:var(--bg); }
+  .quiz-opt.correct { border-color:var(--ok-bd); background:var(--ok-bg); color:var(--ok-text); }
+  .quiz-opt.wrong   { border-color:var(--no-bd); background:var(--no-bg); color:var(--no-text); }
+  .quiz-opt:disabled { cursor:default; }
+  .feedback-bar { display:none; border-radius:10px; padding:11px 16px; font-size:13px; margin-top:4px; margin-bottom:10px; line-height:1.5; }
+  .result-box { display:none; background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:30px 24px; text-align:center; }
+  .result-score { font-family:'DM Serif Display',serif; font-size:44px; margin:8px 0 4px; }
+  .result-msg { font-size:14px; color:var(--ink-soft); margin-bottom:20px; }
+
+  /* helpers */
+  .bg1{background:var(--p1-bg)}.t1{color:var(--p1-text)}
+  .bg2{background:var(--p2-bg)}.t2{color:var(--p2-text)}
+  .bg3{background:var(--p3-bg)}.t3{color:var(--p3-text)}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="eyebrow">Actuarial · SP1 / CP1</div>
+  <h1>Experience Investigation</h1>
+  <p class="subtitle">General framework · All four experience types · DANCE + CPM mnemonic · Flashcards · Quiz</p>
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('mnemonic')">Mnemonic</button>
+    <button class="tab-btn" onclick="switchTab('chunks')">Phase chunks</button>
+    <button class="tab-btn" onclick="switchTab('flashcards')">Flashcards</button>
+    <button class="tab-btn" onclick="switchTab('quiz')">Quiz</button>
+  </div>
+
+  <!-- ══════════ MNEMONIC ══════════ -->
+  <div id="tab-mnemonic">
+    <p style="font-size:13px;color:var(--ink-soft);margin-bottom:12px">One framework. Any experience type. Each letter = one step, in order.</p>
+
+    <div class="mnemonic-box">
+      <p class="sentence-text">
+        "<span style="color:var(--p1-dot);font-style:italic">D</span>etectives
+        <span style="color:var(--p1-dot);font-style:italic">A</span>lways
+        <span style="color:var(--p1-dot);font-style:italic">N</span>ote
+        <span style="color:var(--p2-dot);font-style:italic">C</span>laims
+        <span style="color:var(--p2-dot);font-style:italic">E</span>xactly —
+        then
+        <span style="color:var(--p3-dot);font-style:italic">C</span>alibrate,
+        <span style="color:var(--p3-dot);font-style:italic">P</span>roject,
+        <span style="color:var(--p3-dot);font-style:italic">M</span>argin."
+      </p>
+      <div class="legend">
+        <span><b>D</b> = Data collection &amp; cleaning</span>
+        <span><b>A</b> = Analyse into cells</span>
+        <span><b>N</b> = Normalise (exposed-to-risk)</span>
+        <span><b>C</b> = Compare actual vs expected</span>
+        <span><b>E</b> = Extrapolate trends</span>
+        <span><b>C</b> = Calibrate the basis</span>
+        <span><b>P</b> = Project future rates</span>
+        <span><b>M</b> = Margin + Monitor</span>
+      </div>
+    </div>
+
+    <div class="two-col">
+      <div class="mini-box">
+        <div class="mini-label">Phase 1 · DANCE — the investigation</div>
+        <div class="mini-row"><span class="pill bg1 t1">D</span><span>Data collection &amp; cleaning</span></div>
+        <div class="mini-row"><span class="pill bg1 t1">A</span><span>Analyse into cells</span></div>
+        <div class="mini-row"><span class="pill bg1 t1">N</span><span>Normalise exposed-to-risk</span></div>
+        <div class="mini-row"><span class="pill bg2 t2">C</span><span>Compare actual vs expected</span></div>
+        <div class="mini-row"><span class="pill bg2 t2">E</span><span>Extrapolate trends</span></div>
+      </div>
+      <div class="mini-box">
+        <div class="mini-label">Phase 2 · CPM — set the assumption</div>
+        <div class="mini-row"><span class="pill bg3 t3">C</span><span>Calibrate the basis</span></div>
+        <div class="mini-row"><span class="pill bg3 t3">P</span><span>Project future rates</span></div>
+        <div class="mini-row"><span class="pill bg3 t3">M</span><span>Margin for uncertainty</span></div>
+        <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border)">
+          <div class="mini-label" style="margin-bottom:4px">Always add…</div>
+          <div class="mini-row" style="font-size:12px;color:var(--ink-soft)">🔄 Monitor emerging experience &amp; update basis</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- type applicability grid -->
+    <div class="chunk-box" style="margin-bottom:14px">
+      <div class="mini-label" style="margin-bottom:12px">How DANCE applies across all four experience types</div>
+      <div style="overflow-x:auto">
+        <table style="width:100%;border-collapse:collapse;font-size:12.5px">
+          <thead>
+            <tr style="border-bottom:1px solid var(--border)">
+              <th style="text-align:left;padding:6px 8px;font-weight:500;color:var(--ink-soft)">Step</th>
+              <th style="padding:6px 8px;font-weight:500;color:var(--mort)">Mortality</th>
+              <th style="padding:6px 8px;font-weight:500;color:var(--morb)">Morbidity</th>
+              <th style="padding:6px 8px;font-weight:500;color:var(--term)">Claim termination</th>
+              <th style="padding:6px 8px;font-weight:500;color:var(--laps)">Lapses</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom:1px solid var(--border)">
+              <td style="padding:7px 8px;font-weight:500">D</td>
+              <td style="padding:7px 8px;color:var(--ink-soft)">Deaths &amp; policy data</td>
+              <td style="padding:7px 8px;color:var(--ink-soft)">Claim inceptions</td>
+              <td style="padding:7px 8px;color:var(--ink-soft)">Claim recoveries &amp; deaths in claim</td>
+              <td style="padding:7px 8px;color:var(--ink-soft)">Policy terminations</td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--border)">
+              <td style="padding:7px 8px;font-weight:500">A</td>
+              <td style="padding:7px 8px;color:var(--ink-soft)">Age, gender, duration, smoker</td>
+              <td style="padding:7px 8px;color:var(--ink-soft)">Cause, age, occupation, deferred period</td>
+              <td style="padding:7px 8px;color:var(--ink-soft)">Cause, claim duration, age</td>
+              <td style="padding:7px 8px;color:var(--ink-soft)">Policy year, premium size, channel</td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--border)">
+              <td style="padding:7px 8px;font-weight:500">N</td>
+              <td style="padding:7px 8px;color:var(--ink-soft)">Lives exposed to death</td>
+              <td style="padding:7px 8px;color:var(--ink-soft)">Healthy lives exposed to falling sick</td>
+              <td style="padding:7px 8px;color:var(--ink-soft)">Open claims exposed to recovery/death</td>
+              <td style="padding:7px 8px;color:var(--ink-soft)">In-force policies exposed to lapse</td>
+            </tr>
+            <tr style="border-bottom:1px solid var(--border)">
+              <td style="padding:7px 8px;font-weight:500">C</td>
+              <td style="padding:7px 8px;color:var(--ink-soft)">vs standard mortality table</td>
+              <td style="padding:7px 8px;color:var(--ink-soft)">vs CMIR / industry inception rates</td>
+              <td style="padding:7px 8px;color:var(--ink-soft)">vs industry recovery rates</td>
+              <td style="padding:7px 8px;color:var(--ink-soft)">vs pricing lapse assumption</td>
+            </tr>
+            <tr>
+              <td style="padding:7px 8px;font-weight:500">E</td>
+              <td style="padding:7px 8px;color:var(--ink-soft)">Mortality improvements, care pathways</td>
+              <td style="padding:7px 8px;color:var(--ink-soft)">Medical advances, changed definitions</td>
+              <td style="padding:7px 8px;color:var(--ink-soft)">Rehabilitation trends, claim management</td>
+              <td style="padding:7px 8px;color:var(--ink-soft)">Competitor activity, economic cycles</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="tip-bar">
+      <strong>The key insight:</strong> The DANCE steps never change — only the <em>decrement being counted</em> and the <em>cell variables</em> change. Swap "deaths" for "claim inceptions" or "lapses" and the logic is identical.
+    </div>
+    <button class="btn btn-secondary" onclick="switchTab('chunks')">See full detail by phase →</button>
+  </div>
+
+  <!-- ══════════ PHASE CHUNKS ══════════ -->
+  <div id="tab-chunks" style="display:none">
+
+    <p style="font-size:13px;color:var(--ink-soft);margin-bottom:6px">Filter to see type-specific examples alongside the general step.</p>
+
+    <div class="type-filter">
+      <span>Show examples for:</span>
+      <button class="type-pill active-mort" id="pill-mort" onclick="toggleType('mort')">Mortality</button>
+      <button class="type-pill active-morb" id="pill-morb" onclick="toggleType('morb')">Morbidity</button>
+      <button class="type-pill active-term" id="pill-term" onclick="toggleType('term')">Claim termination</button>
+      <button class="type-pill active-laps" id="pill-laps" onclick="toggleType('laps')">Lapses</button>
+    </div>
+
+    <!-- PHASE 1 -->
+    <div class="chunk-box">
+      <span class="phase-label bg1 t1">Phase 1 · Run the investigation (DANCE)</span>
+
+      <div class="row-item">
+        <span class="pill bg1 t1">D</span>
+        <span>
+          <strong>Data collection &amp; cleaning</strong>
+          <span class="desc">Gather relevant records and check quality. Fix duplicates, missing values, late-reported events (IBNR/IBNER). Choose investigation period — recent enough to be relevant, long enough for credibility.</span>
+          <span class="examples">
+            <span class="ex-chip type-mort"><span class="ex-dot" style="background:var(--mort)"></span><em>Mortality:</em> death registrations, policy termination records</span>
+            <span class="ex-chip type-morb"><span class="ex-dot" style="background:var(--morb)"></span><em>Morbidity:</em> claim inception records, medical evidence files</span>
+            <span class="ex-chip type-term"><span class="ex-dot" style="background:var(--term)"></span><em>Claim termination:</em> recovery notices, claim closure dates, cause of termination</span>
+            <span class="ex-chip type-laps"><span class="ex-dot" style="background:var(--laps)"></span><em>Lapses:</em> policy cancellation records, premium cessation dates</span>
+          </span>
+        </span>
+      </div>
+
+      <div class="row-item">
+        <span class="pill bg1 t1">A</span>
+        <span>
+          <strong>Analyse into homogeneous cells</strong>
+          <span class="desc">Subdivide data so like is compared with like. Each cell should contain policyholders whose expected rate is genuinely similar.</span>
+          <span class="examples">
+            <span class="ex-chip type-mort"><span class="ex-dot" style="background:var(--mort)"></span><em>Mortality:</em> age, gender, policy duration, smoker status, care level (INLTC)</span>
+            <span class="ex-chip type-morb"><span class="ex-dot" style="background:var(--morb)"></span><em>Morbidity:</em> cause of claim, age, occupation class, deferred period, benefit period</span>
+            <span class="ex-chip type-term"><span class="ex-dot" style="background:var(--term)"></span><em>Claim termination:</em> cause of claim, duration on claim, age at claim, benefit type</span>
+            <span class="ex-chip type-laps"><span class="ex-dot" style="background:var(--laps)"></span><em>Lapses:</em> policy year, premium size, distribution channel, product type, payment method</span>
+          </span>
+        </span>
+      </div>
+
+      <div class="row-item">
+        <span class="pill bg1 t1">N</span>
+        <span>
+          <strong>Normalise — calculate exposed-to-risk</strong>
+          <span class="desc">Count only the time each life was actually exposed to the decrement in question. Adjust for new entrants, partial years, exits for other reasons. Correct contaminated cells.</span>
+          <span class="examples">
+            <span class="ex-chip type-mort"><span class="ex-dot" style="background:var(--mort)"></span><em>Mortality:</em> lives exposed to death risk; INLTC L1: exclude time spent at L2 care level</span>
+            <span class="ex-chip type-morb"><span class="ex-dot" style="background:var(--morb)"></span><em>Morbidity:</em> healthy in-force lives exposed to claim inception; exclude those already on claim</span>
+            <span class="ex-chip type-term"><span class="ex-dot" style="background:var(--term)"></span><em>Claim termination:</em> open claims exposed to recovery or death; split recovery ETR from death ETR</span>
+            <span class="ex-chip type-laps"><span class="ex-dot" style="background:var(--laps)"></span><em>Lapses:</em> in-force policies exposed to voluntary lapse; exclude deaths, maturities, surrenders</span>
+          </span>
+        </span>
+      </div>
+
+      <div class="row-item">
+        <span class="pill bg2 t2">C</span>
+        <span>
+          <strong>Compare actual vs expected (A/E)</strong>
+          <span class="desc">Choose a benchmark — standard industry table or original pricing basis. Compute A/E ratio per cell. Identify cells where experience deviates materially. Consider credibility of thin cells.</span>
+          <span class="examples">
+            <span class="ex-chip type-mort"><span class="ex-dot" style="background:var(--mort)"></span><em>Mortality:</em> CMI INLTC IL series, CMI assured lives tables, or pricing basis q<sub>x</sub></span>
+            <span class="ex-chip type-morb"><span class="ex-dot" style="background:var(--morb)"></span><em>Morbidity:</em> CMIR inception rates, industry PHI tables, or pricing incidence assumption</span>
+            <span class="ex-chip type-term"><span class="ex-dot" style="background:var(--term)"></span><em>Claim termination:</em> CMIR recovery rates / IPTS tables; separate recovery from death termination</span>
+            <span class="ex-chip type-laps"><span class="ex-dot" style="background:var(--laps)"></span><em>Lapses:</em> pricing lapse rates; industry surveys if available; compare by policy year shape</span>
+          </span>
+        </span>
+      </div>
+
+      <div class="row-item" style="margin-bottom:0">
+        <span class="pill bg2 t2">E</span>
+        <span>
+          <strong>Extrapolate trends</strong>
+          <span class="desc">Look at own data over a longer window and cross-reference industry/population sources. Identify persistent trends expected to continue into the future.</span>
+          <span class="examples">
+            <span class="ex-chip type-mort"><span class="ex-dot" style="background:var(--mort)"></span><em>Mortality:</em> mortality improvements, care pathway changes (faster discharge), ageing population</span>
+            <span class="ex-chip type-morb"><span class="ex-dot" style="background:var(--morb)"></span><em>Morbidity:</em> rising mental health claims, changed policy definitions, better diagnostics</span>
+            <span class="ex-chip type-term"><span class="ex-dot" style="background:var(--term)"></span><em>Claim termination:</em> improved rehabilitation, stricter claims management, medical advances</span>
+            <span class="ex-chip type-laps"><span class="ex-dot" style="background:var(--laps)"></span><em>Lapses:</em> economic downturns, competitor pricing, changes in distribution or customer profile</span>
+          </span>
+        </span>
+      </div>
+    </div>
+
+    <!-- PHASE 2 -->
+    <div class="chunk-box">
+      <span class="phase-label bg3 t3">Phase 2 · Set the assumption (CPM)</span>
+
+      <div class="row-item">
+        <span class="pill bg3 t3">C</span>
+        <span>
+          <strong>Calibrate the basis</strong>
+          <span class="desc">Derive best-estimate rates from A/E analysis. Smooth or graduate sparse cells using credibility methods or graduation. For novel products, use analogous data with explicit adjustments.</span>
+          <span class="examples">
+            <span class="ex-chip type-mort"><span class="ex-dot" style="background:var(--mort)"></span><em>Mortality:</em> INLTC L1 contamination fix — use early durations only or track care address changes</span>
+            <span class="ex-chip type-morb"><span class="ex-dot" style="background:var(--morb)"></span><em>Morbidity:</em> if new product, borrow from similar benefit/occupation class with adjustment factor</span>
+            <span class="ex-chip type-term"><span class="ex-dot" style="background:var(--term)"></span><em>Claim termination:</em> set separate recovery and mortality rates within claim; use claim duration shape</span>
+            <span class="ex-chip type-laps"><span class="ex-dot" style="background:var(--laps)"></span><em>Lapses:</em> set rates by policy year; check select vs ultimate pattern; adjust for new channels</span>
+          </span>
+        </span>
+      </div>
+
+      <div class="row-item">
+        <span class="pill bg3 t3">P</span>
+        <span>
+          <strong>Project future rates</strong>
+          <span class="desc">Apply improvement or deterioration factors identified in E. Allow for anticipated changes in underwriting, products, or external environment. Check consistency with wider industry projections.</span>
+          <span class="examples">
+            <span class="ex-chip type-mort"><span class="ex-dot" style="background:var(--mort)"></span><em>Mortality:</em> CMI improvement model; allow for future care setting shifts</span>
+            <span class="ex-chip type-morb"><span class="ex-dot" style="background:var(--morb)"></span><em>Morbidity:</em> project mental health trend; allow for any definition tightening planned</span>
+            <span class="ex-chip type-term"><span class="ex-dot" style="background:var(--term)"></span><em>Claim termination:</em> project impact of new rehabilitation programmes on recovery rates</span>
+            <span class="ex-chip type-laps"><span class="ex-dot" style="background:var(--laps)"></span><em>Lapses:</em> project economic scenario impact; allow for upcoming product redesign</span>
+          </span>
+        </span>
+      </div>
+
+      <div class="row-item" style="margin-bottom:0">
+        <span class="pill bg3 t3">M</span>
+        <span>
+          <strong>Margin for uncertainty + Monitor</strong>
+          <span class="desc">Add prudent margin — direction depends on which way the risk bites. State and document the margin. Then commit to monitoring emerging experience and updating the basis.</span>
+          <span class="examples">
+            <span class="ex-chip type-mort"><span class="ex-dot" style="background:var(--mort)"></span><em>Mortality (annuity):</em> assume lighter mortality → longer payments → higher reserve</span>
+            <span class="ex-chip type-morb"><span class="ex-dot" style="background:var(--morb)"></span><em>Morbidity:</em> assume higher inception rates and slower recovery → more / longer claims</span>
+            <span class="ex-chip type-term"><span class="ex-dot" style="background:var(--term)"></span><em>Claim termination:</em> assume slower recovery → claims stay open longer → higher reserve</span>
+            <span class="ex-chip type-laps"><span class="ex-dot" style="background:var(--laps)"></span><em>Lapses:</em> direction depends — high lapses hurt if profitable, low lapses hurt if unprofitable</span>
+          </span>
+        </span>
+      </div>
+    </div>
+
+    <!-- monitor reminder -->
+    <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:14px 18px;font-size:13px;line-height:1.6">
+      <strong>🔄 Monitor &amp; update — always earns marks</strong><br>
+      <span style="color:var(--ink-soft)">For any experience type, the answer is incomplete without mentioning that emerging experience will be monitored closely and the basis updated as it develops — especially for novel or uncertain products.</span>
+    </div>
+  </div>
+
+  <!-- ══════════ FLASHCARDS ══════════ -->
+  <div id="tab-flashcards" style="display:none">
+    <p style="font-size:13px;color:var(--ink-soft);margin-bottom:14px">Tap to flip. Step through all 8 stages.</p>
+    <div class="card-wrap" onclick="flipCard()">
+      <div class="card-inner" id="card-inner">
+        <div class="card-front">
+          <div class="card-step">Step <span id="step-num">1</span> of 8</div>
+          <div id="fc-badge" class="phase-label"></div>
+          <div class="card-title" id="fc-title"></div>
+          <div class="card-hint">tap to reveal</div>
+        </div>
+        <div class="card-back">
+          <ul id="fc-points"></ul>
+        </div>
+      </div>
+    </div>
+    <div class="step-dots" id="step-dots"></div>
+    <div class="nav-row">
+      <button class="btn btn-secondary" onclick="prevCard()">← Prev</button>
+      <button class="btn btn-primary"   onclick="nextCard()">Next →</button>
+    </div>
+  </div>
+
+  <!-- ══════════ QUIZ ══════════ -->
+  <div id="tab-quiz" style="display:none">
+    <div class="quiz-meta">
+      <span>Question <span id="q-num">1</span> of 10</span>
+      <span>Score: <span id="score">0</span></span>
+    </div>
+    <div class="question-text" id="question-text"></div>
+    <div id="options-container"></div>
+    <div class="feedback-bar" id="quiz-feedback"></div>
+    <button class="btn btn-primary" id="next-q-btn" onclick="nextQuestion()" style="display:none;margin-top:4px">Next question →</button>
+    <div class="result-box" id="quiz-result">
+      <div style="font-size:13px;color:var(--ink-soft)">Final score</div>
+      <div class="result-score" id="result-score"></div>
+      <div class="result-msg" id="result-msg"></div>
+      <button class="btn btn-primary" onclick="restartQuiz()">Try again</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ── TYPE FILTER ──────────────────────────────────────────────
+const activeTypes = new Set(['mort','morb','term','laps']);
+
+function toggleType(t) {
+  if (activeTypes.has(t)) {
+    if (activeTypes.size === 1) return; // keep at least one
+    activeTypes.delete(t);
+    document.getElementById('pill-'+t).className = 'type-pill';
+  } else {
+    activeTypes.add(t);
+    const classes = {mort:'active-mort',morb:'active-morb',term:'active-term',laps:'active-laps'};
+    document.getElementById('pill-'+t).className = 'type-pill ' + classes[t];
+  }
+  applyTypeFilter();
+}
+
+function applyTypeFilter() {
+  document.querySelectorAll('.ex-chip').forEach(el => {
+    const matches = [...activeTypes].some(t => el.classList.contains('type-'+t));
+    el.style.display = matches ? 'inline-flex' : 'none';
+  });
+}
+
+// ── FLASHCARD DATA ────────────────────────────────────────────
+const steps = [
+  { letter:'D', title:'Data collection & cleaning', phase:'Phase 1 · Run the investigation', pc:'bg1 t1',
+    points:[
+      'Gather policy records, decrement records (deaths / claim inceptions / lapses), and claims data',
+      'Check for duplicates, missing data, and late-reported events (IBNR / IBNER)',
+      'Choose investigation period — recent enough to reflect current conditions, long enough for credibility',
+      'Document data limitations and note any changes in recording practices over the period',
+    ]},
+  { letter:'A', title:'Analyse into homogeneous cells', phase:'Phase 1 · Run the investigation', pc:'bg1 t1',
+    points:[
+      'Subdivide so that lives within each cell face genuinely similar expected rates',
+      'Standard factors: age, gender, policy duration, smoker status',
+      'Type-specific factors — Mortality: care level, ADL score | Morbidity: cause, occupation, deferred period | Lapses: channel, premium size, policy year',
+      'Other factors: territory, sales channel, medical/family history where available',
+    ]},
+  { letter:'N', title:'Normalise — exposed-to-risk', phase:'Phase 1 · Run the investigation', pc:'bg1 t1',
+    points:[
+      'Calculate central or initial exposed-to-risk per cell',
+      'Adjust for partial-year exposure, new entrants, and exits for reasons other than the decrement of interest',
+      'Critical: count only time in the correct state — e.g. for morbidity, exclude time already on claim; for INLTC L1 mortality, exclude time in Level 2 care',
+      'Contaminated ETR distorts A/E ratios — must be corrected before proceeding',
+    ]},
+  { letter:'C', title:'Compare actual vs expected', phase:'Phase 1 · Run the investigation', pc:'bg2 t2',
+    points:[
+      'Select a benchmark — standard industry table or the original pricing assumption',
+      'Compute A/E ratio = actual decrements ÷ expected decrements per cell',
+      'Mortality: CMI tables | Morbidity: CMIR / industry PHI inception tables | Claim termination: CMIR / IPTS recovery rates | Lapses: pricing assumption',
+      'Flag cells with high or low A/E ratios; apply credibility weighting to thin cells',
+    ]},
+  { letter:'E', title:'Extrapolate trends', phase:'Phase 1 · Run the investigation', pc:'bg2 t2',
+    points:[
+      'Analyse own experience over a longer historical window to spot persistent trends',
+      'Cross-reference industry data (CMI, CMIR) and national population data (ONS)',
+      'Mortality: improvement trends, care pathway changes | Morbidity: rising mental health claims, definition drift | Lapses: economic cycles, competitor pricing',
+      'Identify which trends are expected to continue — these feed directly into projection (step P)',
+    ]},
+  { letter:'C', title:'Calibrate the basis', phase:'Phase 2 · Set the assumption', pc:'bg3 t3',
+    points:[
+      'Derive best-estimate rates by cell from the A/E analysis',
+      'Graduate or smooth rates where individual cells lack credibility',
+      'For novel products with no own-data: use analogous data, duration proxy, or industry tables with explicit adjustment factor',
+      'INLTC example: L1 contamination — use early-duration data only, or track care address changes as a proxy for benefit level',
+    ]},
+  { letter:'P', title:'Project future rates', phase:'Phase 2 · Set the assumption', pc:'bg3 t3',
+    points:[
+      'Apply improvement / deterioration factors identified in the Extrapolation step',
+      'Allow for anticipated changes: underwriting procedures, product definitions, care delivery, medical advances',
+      'Check consistency with relevant industry improvement models (e.g. CMI improvement model for mortality)',
+      'Extrapolate recent experience trends that are genuinely expected to persist',
+    ]},
+  { letter:'M', title:'Margin for uncertainty + Monitor', phase:'Phase 2 · Set the assumption', pc:'bg3 t3',
+    points:[
+      'Add a prudent margin — direction depends on which side of the assumption bites harder',
+      'Annuity / INLTC: lighter mortality (longer payments) | PHI / LTCI: higher incidence + slower recovery | Lapses: depends on whether high or low lapses are worse',
+      'State and document the margin and its rationale explicitly',
+      'Commit to close monitoring of emerging experience — especially for novel products — and update the basis as it develops',
+    ]},
+];
+
+let currentCard = 0, isFlipped = false;
+
+function renderCard() {
+  const s = steps[currentCard];
+  document.getElementById('step-num').textContent = currentCard + 1;
+  document.getElementById('fc-title').textContent = s.letter + ' — ' + s.title;
+  const badge = document.getElementById('fc-badge');
+  badge.textContent = s.phase; badge.className = 'phase-label ' + s.pc;
+  document.getElementById('fc-points').innerHTML = s.points.map(p => `<li style="margin-bottom:4px">${p}</li>`).join('');
+  if (isFlipped) { document.getElementById('card-inner').classList.remove('flipped'); isFlipped = false; }
+  document.getElementById('step-dots').innerHTML = steps.map((_,i) =>
+    `<span class="step-dot${i===currentCard?' active':''}"></span>`).join('');
+}
+function flipCard(){ isFlipped=!isFlipped; document.getElementById('card-inner').classList.toggle('flipped',isFlipped); }
+function nextCard(){ currentCard=(currentCard+1)%steps.length; isFlipped=false; renderCard(); }
+function prevCard(){ currentCard=(currentCard-1+steps.length)%steps.length; isFlipped=false; renderCard(); }
+
+// ── QUIZ DATA ────────────────────────────────────────────────
+const quizQuestions = [
+  { q:'For a morbidity investigation, what is the correct exposed-to-risk to use in the "Normalise" step?',
+    ans:2, opts:['All in-force lives including those already on claim','Only lives who subsequently made a claim','Healthy in-force lives not already on claim, exposed to the risk of falling sick','Total policy count at mid-year'] },
+  { q:'A lapse investigation shows high A/E ratios in policy year 1. Which step of DANCE does this finding emerge from?',
+    ans:1, opts:['Analyse into cells','Compare actual vs expected','Extrapolate trends','Calibrate the basis'] },
+  { q:'In which direction should you apply a prudence margin for a PHI (income protection) morbidity assumption?',
+    ans:0, opts:['Assume higher incidence rates and slower recovery rates','Assume lower incidence rates — this reduces reserves','Assume faster recovery rates to reduce claim reserves','No margin needed if data is credible'] },
+  { q:'For claim termination experience, which two separate rates must you estimate?',
+    ans:3, opts:['Lapse rate and renewal rate','Inception rate and recovery rate','Death rate and inception rate','Recovery rate and mortality rate while on claim'] },
+  { q:'An INLTC Level 1 policyholder moves to a nursing home. How does this affect your mortality ETR for Level 1?',
+    ans:1, opts:['No adjustment needed — they are still Level 1 policyholders','Time from the move onwards must be excluded from the Level 1 ETR','The entire policy history should be excluded from Level 1','They should be reclassified retroactively to Level 2'] },
+  { q:'Which external data source is most relevant when extrapolating morbidity trends for income protection?',
+    ans:2, opts:['ONS population mortality data','CMI mortality improvement model','CMIR (Continuous Mortality Investigation Reports) on PHI experience','Bank of England interest rate data'] },
+  { q:'For lapses, the direction of prudence in the margin depends on context. When would you assume LOWER lapses than best estimate?',
+    ans:0, opts:['When in-force policies are unprofitable — keeping them worsens outcomes','When the product is still in the select period','When lapse rates have been falling for several years','When reinsurance covers lapse risk'] },
+  { q:'What is the purpose of "graduating" rates in the Calibrate step?',
+    ans:3, opts:['To apply regulatory adjustments to the basis','To convert central ETR to initial ETR','To remove the impact of seasonal variation','To smooth out statistical noise in cells with low credibility'] },
+  { q:'A company is pricing a novel variant of an income protection policy with no own-data. What is the recommended approach for calibration?',
+    ans:1, opts:['Use only population incidence data with no adjustment','Use data from the closest analogous product, with an explicit adjustment factor','Defer pricing until sufficient own-data is available','Use the competitor\u2019s published premium rates to back-solve'] },
+  { q:'Which step is most commonly omitted by candidates but consistently earns marks in any experience investigation question?',
+    ans:2, opts:['Analysing into cells','Extrapolating trends','Committing to monitor emerging experience and update the basis','Comparing actual vs expected'] },
+];
+
+let qIdx=0, score=0, answered=false, qOrder=[];
+function shuffleArr(a){ return [...a].sort(()=>Math.random()-.5); }
+
+function renderQuestion(){
+  const q = quizQuestions[qOrder[qIdx]];
+  document.getElementById('q-num').textContent = qIdx+1;
+  document.getElementById('question-text').textContent = q.q;
+  document.getElementById('quiz-feedback').style.display='none';
+  document.getElementById('next-q-btn').style.display='none';
+  document.getElementById('quiz-result').style.display='none';
+  answered=false;
+  document.getElementById('options-container').innerHTML = q.opts.map((o,i)=>
+    `<button class="quiz-opt" onclick="selectOpt(${i})">${o}</button>`).join('');
+}
+
+function selectOpt(i){
+  if(answered) return; answered=true;
+  const q=quizQuestions[qOrder[qIdx]];
+  const btns=document.querySelectorAll('.quiz-opt');
+  btns.forEach(b=>b.disabled=true);
+  const fb=document.getElementById('quiz-feedback');
+  if(i===q.ans){
+    score++; document.getElementById('score').textContent=score;
+    btns[i].classList.add('correct');
+    fb.style.cssText='display:block;background:var(--ok-bg);color:var(--ok-text);border:1px solid var(--ok-bd);margin-top:8px;font-size:13px;border-radius:10px;padding:11px 16px';
+    fb.textContent='✓ Correct!';
+  } else {
+    btns[i].classList.add('wrong'); btns[q.ans].classList.add('correct');
+    fb.style.cssText='display:block;background:var(--no-bg);color:var(--no-text);border:1px solid var(--no-bd);margin-top:8px;font-size:13px;border-radius:10px;padding:11px 16px';
+    fb.textContent='✗ Answer: "'+q.opts[q.ans]+'"';
+  }
+  if(qIdx<quizQuestions.length-1) document.getElementById('next-q-btn').style.display='block';
+  else setTimeout(showResult,950);
+}
+
+function nextQuestion(){ qIdx++; renderQuestion(); }
+
+function showResult(){
+  document.getElementById('quiz-feedback').style.display='none';
+  document.getElementById('next-q-btn').style.display='none';
+  document.getElementById('options-container').innerHTML='';
+  document.getElementById('question-text').textContent='';
+  document.getElementById('quiz-result').style.display='block';
+  document.getElementById('result-score').textContent=score+' / '+quizQuestions.length;
+  const msgs=['Keep at it — revisit the flashcards!','Getting there — one more round!','Solid work!','Excellent — exam-ready! 🎯'];
+  document.getElementById('result-msg').textContent=msgs[score<=3?0:score<=6?1:score<=9?2:3];
+}
+
+function restartQuiz(){
+  qIdx=0; score=0; answered=false;
+  document.getElementById('score').textContent=0;
+  qOrder=shuffleArr([...Array(quizQuestions.length).keys()]);
+  renderQuestion();
+}
+
+function switchTab(name){
+  ['mnemonic','chunks','flashcards','quiz'].forEach(t=>{
+    document.getElementById('tab-'+t).style.display=t===name?'block':'none';
+  });
+  document.querySelectorAll('.tab-btn').forEach((b,i)=>{
+    b.classList.toggle('active',['mnemonic','chunks','flashcards','quiz'][i]===name);
+  });
+  if(name==='flashcards') renderCard();
+  if(name==='quiz') restartQuiz();
+}
+
+renderCard();
+applyTypeFilter();
+</script>
+</body>
+</html>

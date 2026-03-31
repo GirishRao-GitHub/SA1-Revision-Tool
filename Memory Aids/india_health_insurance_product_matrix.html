@@ -1,0 +1,290 @@
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-sans); }
+.controls { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+.filter-btn { font-size: 12px; padding: 5px 12px; border-radius: 20px; border: 0.5px solid var(--color-border-secondary); background: var(--color-background-primary); color: var(--color-text-secondary); cursor: pointer; transition: all 0.15s; }
+.filter-btn:hover { background: var(--color-background-secondary); }
+.filter-btn.active { border-color: transparent; color: #fff; }
+.filter-btn.active.lt { background: #0F6E56; }
+.filter-btn.active.st { background: #993C1D; }
+.filter-btn.active.all { background: #534AB7; }
+.matrix { width: 100%; border-collapse: collapse; font-size: 13px; }
+.matrix th { font-weight: 500; font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--color-text-tertiary); padding: 8px 10px; border-bottom: 0.5px solid var(--color-border-secondary); text-align: left; white-space: nowrap; }
+.matrix td { padding: 9px 10px; border-bottom: 0.5px solid var(--color-border-tertiary); vertical-align: top; color: var(--color-text-primary); font-size: 12px; line-height: 1.5; }
+.matrix tr:hover td { background: var(--color-background-secondary); }
+.matrix tr.hidden { display: none; }
+.badge { display: inline-block; font-size: 10px; font-weight: 500; padding: 2px 7px; border-radius: 10px; white-space: nowrap; }
+.badge.lt { background: #E1F5EE; color: #0F6E56; }
+.badge.st { background: #FAECE7; color: #993C1D; }
+.badge.na { background: #F1EFE8; color: #5F5E5A; font-style: italic; }
+.prod-name { font-weight: 500; color: var(--color-text-primary); display: block; margin-bottom: 2px; }
+.prod-eg { color: var(--color-text-secondary); font-size: 11px; }
+.lob-cell { color: var(--color-text-secondary); }
+.section-row td { background: var(--color-background-secondary); font-weight: 500; font-size: 11px; color: var(--color-text-tertiary); letter-spacing: 0.03em; padding: 6px 10px; border-bottom: 0.5px solid var(--color-border-secondary); }
+.col-class { width: 90px; }
+.col-term  { width: 80px; }
+.col-lob   { width: 110px; }
+.col-type  { width: 110px; }
+.col-line  { width: 140px; }
+.col-eg    { width: auto; }
+.note { font-size: 11px; color: var(--color-text-tertiary); margin-top: 12px; line-height: 1.6; }
+.dot { width: 7px; height: 7px; border-radius: 50%; display: inline-block; margin-right: 5px; vertical-align: middle; }
+.dot.lt { background: #0F6E56; }
+.dot.st { background: #993C1D; }
+</style>
+
+<div style="padding: 4px 0 16px;">
+  <div class="controls">
+    <span style="font-size: 12px; color: var(--color-text-secondary); align-self: center; margin-right: 4px;">Filter:</span>
+    <button class="filter-btn active all" onclick="filterMatrix('all')">All products</button>
+    <button class="filter-btn lt" onclick="filterMatrix('lt')"><span class="dot lt"></span>Long-term only</button>
+    <button class="filter-btn st" onclick="filterMatrix('st')"><span class="dot st"></span>Short-term only</button>
+  </div>
+
+  <div style="overflow-x: auto;">
+  <table class="matrix">
+    <colgroup>
+      <col class="col-class"><col class="col-term"><col class="col-lob"><col class="col-type"><col class="col-line"><col class="col-eg">
+    </colgroup>
+    <thead>
+      <tr>
+        <th>Class</th>
+        <th>Term</th>
+        <th>Line of business</th>
+        <th>Product type</th>
+        <th>Product line</th>
+        <th>Indian market examples</th>
+      </tr>
+    </thead>
+    <tbody id="matrix-body">
+
+      <tr class="section-row"><td colspan="6">— Long-term health &amp; care products —</td></tr>
+
+      <tr data-term="lt">
+        <td>Health &amp; care</td>
+        <td><span class="badge lt">Long-term</span></td>
+        <td class="lob-cell">Individual — life insurer</td>
+        <td>Critical illness (CI) — lump-sum defined benefit</td>
+        <td>Standalone CI plan</td>
+        <td><span class="prod-name">ICICI Pru iProtect Smart (CI rider)</span><span class="prod-eg">Max Life Critical Illness &amp; Disability rider · HDFC Life Cancer Care</span></td>
+      </tr>
+
+      <tr data-term="lt">
+        <td>Health &amp; care</td>
+        <td><span class="badge lt">Long-term</span></td>
+        <td class="lob-cell">Individual — life insurer</td>
+        <td>Critical illness — cancer specific</td>
+        <td>Cancer care plan</td>
+        <td><span class="prod-name">Star Cancer Care Platinum</span><span class="prod-eg">Niva Bupa CritiCare · Bajaj Allianz Cancer Secure</span></td>
+      </tr>
+
+      <tr data-term="lt">
+        <td>Health &amp; care</td>
+        <td><span class="badge lt">Long-term</span></td>
+        <td class="lob-cell">Individual — life insurer</td>
+        <td>CI — multi-disease (heart, kidney, stroke etc.)</td>
+        <td>Multi-CI plan</td>
+        <td><span class="prod-name">Aditya Birla Activ Secure — Critical Illness plan</span><span class="prod-eg">Care Supreme Critical Illness · SBI Life Smart Shield CI rider</span></td>
+      </tr>
+
+      <tr data-term="lt">
+        <td>Health &amp; care</td>
+        <td><span class="badge lt">Long-term</span></td>
+        <td class="lob-cell">Individual — life insurer</td>
+        <td>Income protection / disability income</td>
+        <td>Disability income plan</td>
+        <td><span class="prod-name">LIC New Jeevan Arogya (limited IP cover)</span><span class="prod-eg">Kotak Income Protection rider · HDFC Life Income Benefit on Accidental Disability</span></td>
+      </tr>
+
+      <tr data-term="lt">
+        <td>Health &amp; care</td>
+        <td><span class="badge lt">Long-term</span></td>
+        <td class="lob-cell">Individual — life insurer</td>
+        <td>Long-term care (LTCI) — nascent</td>
+        <td>Care annuity / care benefit</td>
+        <td><span class="prod-name">No mainstream standalone LTCI product yet</span><span class="prod-eg">Some immediate annuity plans have embedded care features (LIC Jeevan Akshay)</span></td>
+      </tr>
+
+      <tr data-term="lt">
+        <td>Health &amp; care</td>
+        <td><span class="badge lt">Long-term</span></td>
+        <td class="lob-cell">Group — employer / association</td>
+        <td>Group CI / group disability — employer-paid</td>
+        <td>Group protection plan</td>
+        <td><span class="prod-name">Prudential / Max Life group critical illness</span><span class="prod-eg">HDFC Life Group Credit Protect · Kotak Group Secure</span></td>
+      </tr>
+
+      <tr class="section-row"><td colspan="6">— Short-term health &amp; care products —</td></tr>
+
+      <tr data-term="st">
+        <td>Health &amp; care</td>
+        <td><span class="badge st">Short-term</span></td>
+        <td class="lob-cell">Individual — standalone health insurer</td>
+        <td>PMI — indemnity, comprehensive</td>
+        <td>Individual comprehensive plan</td>
+        <td><span class="prod-name">Star Health Comprehensive</span><span class="prod-eg">Niva Bupa Reassure 2.0 · Care Supreme · ManipalCigna ProHealth Plus</span></td>
+      </tr>
+
+      <tr data-term="st">
+        <td>Health &amp; care</td>
+        <td><span class="badge st">Short-term</span></td>
+        <td class="lob-cell">Individual — standalone health insurer</td>
+        <td>PMI — indemnity, family floater</td>
+        <td>Family floater plan</td>
+        <td><span class="prod-name">Star Family Health Optima</span><span class="prod-eg">Niva Bupa Health Companion · HDFC Ergo Optima Restore Family</span></td>
+      </tr>
+
+      <tr data-term="st">
+        <td>Health &amp; care</td>
+        <td><span class="badge st">Short-term</span></td>
+        <td class="lob-cell">Individual — standalone health insurer</td>
+        <td>PMI — senior citizen / elderly focused</td>
+        <td>Senior citizen plan</td>
+        <td><span class="prod-name">Niva Bupa Senior First</span><span class="prod-eg">Star Senior Citizens Red Carpet · Care Senior · Bajaj Allianz Silver Health</span></td>
+      </tr>
+
+      <tr data-term="st">
+        <td>Health &amp; care</td>
+        <td><span class="badge st">Short-term</span></td>
+        <td class="lob-cell">Individual — standalone health insurer</td>
+        <td>PMI — top-up / super top-up</td>
+        <td>Top-up plan</td>
+        <td><span class="prod-name">Niva Bupa ReAssure Top-up</span><span class="prod-eg">Star Super Surplus · ManipalCigna Lifestyle Protection · HDFC Ergo My:Health Medisure Super Top-up</span></td>
+      </tr>
+
+      <tr data-term="st">
+        <td>Health &amp; care</td>
+        <td><span class="badge st">Short-term</span></td>
+        <td class="lob-cell">Individual — standalone health insurer</td>
+        <td>PMI — OPD / outpatient focused</td>
+        <td>OPD / outpatient plan</td>
+        <td><span class="prod-name">Niva Bupa OPD Care</span><span class="prod-eg">Aditya Birla Activ Health Platinum (OPD add-on) · ManipalCigna OPD Rider</span></td>
+      </tr>
+
+      <tr data-term="st">
+        <td>Health &amp; care</td>
+        <td><span class="badge st">Short-term</span></td>
+        <td class="lob-cell">Individual — standalone health insurer</td>
+        <td>PMI — disease specific (diabetes, cardiac)</td>
+        <td>Disease-specific plan</td>
+        <td><span class="prod-name">Star Diabetes Safe Insurance</span><span class="prod-eg">Care Heart · Niva Bupa Health Pulse · Aditya Birla Activ Health (diabetes cover)</span></td>
+      </tr>
+
+      <tr data-term="st">
+        <td>Health &amp; care</td>
+        <td><span class="badge st">Short-term</span></td>
+        <td class="lob-cell">Individual — standalone health insurer</td>
+        <td>PMI — maternity focused</td>
+        <td>Maternity plan</td>
+        <td><span class="prod-name">Star Comprehensive (maternity variant)</span><span class="prod-eg">Niva Bupa Maternity add-on · Care Joy maternity plan · ManipalCigna ProHealth Prime Protect</span></td>
+      </tr>
+
+      <tr data-term="st">
+        <td>Health &amp; care</td>
+        <td><span class="badge st">Short-term</span></td>
+        <td class="lob-cell">Individual — standalone health insurer</td>
+        <td>HCP — hospital cash, fixed daily benefit</td>
+        <td>Hospital cash plan</td>
+        <td><span class="prod-name">Care Hospital Cash</span><span class="prod-eg">Star Hospital Cash · HDFC Ergo My:Health Medisure Cash · Bajaj Allianz Hospital Cash</span></td>
+      </tr>
+
+      <tr data-term="st">
+        <td>Health &amp; care</td>
+        <td><span class="badge st">Short-term</span></td>
+        <td class="lob-cell">Individual — standalone health insurer</td>
+        <td>Personal accident — indemnity &amp; defined benefit</td>
+        <td>Personal accident plan</td>
+        <td><span class="prod-name">Bajaj Allianz Personal Guard</span><span class="prod-eg">New India Personal Accident · Tata AIG Accident Guard · HDFC Ergo Personal Accident</span></td>
+      </tr>
+
+      <tr data-term="st">
+        <td>Health &amp; care</td>
+        <td><span class="badge st">Short-term</span></td>
+        <td class="lob-cell">Group — employer / corporate</td>
+        <td>Group mediclaim — employer-sponsored GMC</td>
+        <td>Group mediclaim (GMC)</td>
+        <td><span class="prod-name">New India Group Mediclaim</span><span class="prod-eg">Star Group Health · United India Group Mediclaim · Oriental Group Mediclaim</span></td>
+      </tr>
+
+      <tr data-term="st">
+        <td>Health &amp; care</td>
+        <td><span class="badge st">Short-term</span></td>
+        <td class="lob-cell">Group — employer / corporate</td>
+        <td>Group personal accident — employer-sponsored GPA</td>
+        <td>Group personal accident (GPA)</td>
+        <td><span class="prod-name">New India Group Personal Accident</span><span class="prod-eg">Bajaj Allianz GPA · Tata AIG Group Accident · ICICI Lombard GPA</span></td>
+      </tr>
+
+      <tr data-term="st">
+        <td>Health &amp; care</td>
+        <td><span class="badge st">Short-term</span></td>
+        <td class="lob-cell">Group — employer / corporate</td>
+        <td>Group term health — top-up over GMC</td>
+        <td>Group top-up plan</td>
+        <td><span class="prod-name">Niva Bupa Group Top-up</span><span class="prod-eg">Star Group Super Surplus · Care Group Top-up</span></td>
+      </tr>
+
+      <tr data-term="st">
+        <td>Health &amp; care</td>
+        <td><span class="badge st">Short-term</span></td>
+        <td class="lob-cell">Government / public scheme</td>
+        <td>Government-sponsored health scheme — indemnity</td>
+        <td>Govt. scheme (central)</td>
+        <td><span class="prod-name">Ayushman Bharat PM-JAY</span><span class="prod-eg">CGHS (Central Govt. Health Scheme) · ECHS (Ex-servicemen)</span></td>
+      </tr>
+
+      <tr data-term="st">
+        <td>Health &amp; care</td>
+        <td><span class="badge st">Short-term</span></td>
+        <td class="lob-cell">Government / public scheme</td>
+        <td>State-sponsored health scheme</td>
+        <td>Govt. scheme (state)</td>
+        <td><span class="prod-name">Aarogyasri (Telangana / AP)</span><span class="prod-eg">Mahatma Jyotiba Phule Jan Arogya (Maharashtra) · Chief Minister's Comprehensive Health Insurance (Tamil Nadu)</span></td>
+      </tr>
+
+      <tr data-term="st">
+        <td>Health &amp; care</td>
+        <td><span class="badge st">Short-term</span></td>
+        <td class="lob-cell">Individual — micro / rural</td>
+        <td>Micro-insurance / low-ticket health</td>
+        <td>Micro health plan</td>
+        <td><span class="prod-name">Niva Bupa Health Premia (low-sum-insured)</span><span class="prod-eg">Star Micro Rural &amp; Farmers Care · Pradhan Mantri Suraksha Bima Yojana (accident only)</span></td>
+      </tr>
+
+      <tr data-term="st">
+        <td>Health &amp; care</td>
+        <td><span class="badge st">Short-term</span></td>
+        <td class="lob-cell">Individual — travel</td>
+        <td>Travel health — overseas medical emergency</td>
+        <td>Travel insurance</td>
+        <td><span class="prod-name">Tata AIG Travel Guard</span><span class="prod-eg">Bajaj Allianz Travel Elite · HDFC Ergo Travel Insurance · Care Travel</span></td>
+      </tr>
+
+    </tbody>
+  </table>
+  </div>
+
+  <p class="note">* Long-term products are predominantly written by life insurers (LIC, ICICI Pru, HDFC Life, Max Life, Kotak Life) and regulated under IRDAI life insurance rules. Short-term products are written by standalone health insurers (Star, Niva Bupa, Care, ManipalCigna) and general insurers (New India, United India, Bajaj Allianz, ICICI Lombard, Tata AIG, HDFC Ergo) under IRDAI general insurance rules. Product examples are indicative; names and features change with IRDAI filings.</p>
+</div>
+
+<script>
+function filterMatrix(type) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  const btn = event.target.closest('.filter-btn');
+  btn.classList.add('active');
+  const rows = document.querySelectorAll('#matrix-body tr[data-term]');
+  const sections = document.querySelectorAll('#matrix-body tr.section-row');
+  rows.forEach(r => {
+    if (type === 'all' || r.dataset.term === type) r.classList.remove('hidden');
+    else r.classList.add('hidden');
+  });
+  sections.forEach(s => {
+    const isLT = s.textContent.includes('Long-term');
+    if (type === 'all') s.classList.remove('hidden');
+    else if (type === 'lt' && isLT) s.classList.remove('hidden');
+    else if (type === 'st' && !isLT) s.classList.remove('hidden');
+    else s.classList.add('hidden');
+  });
+}
+</script>

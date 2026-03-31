@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Pricing Theme Matrix — SA1 Health &amp; Care</title>
+<style>
+  body { font-family: Arial, sans-serif; font-size: 12px; margin: 20px; }
+  h1 { font-size: 15px; margin-bottom: 4px; }
+  p.note { font-size: 11px; color: #555; margin-bottom: 12px; }
+  table { border-collapse: collapse; width: 100%; table-layout: fixed; }
+  th, td { border: 1px solid #aaa; padding: 6px 8px; vertical-align: top; }
+  th { background: #f0f0f0; font-size: 11px; font-weight: bold; text-align: left; }
+  th.theme-col { width: 140px; }
+  td.theme-cell { font-weight: bold; font-size: 11px; background: #f8f8f8; }
+  ul { margin: 0; padding-left: 14px; }
+  li { margin-bottom: 2px; line-height: 1.4; }
+  .groupnote { font-size: 10px; color: #666; font-weight: normal; display: block; margin-top: 2px; font-style: italic; }
+</style>
+</head>
+<body>
+<h1>Pricing — Theme Application by Product Pricing Process</h1>
+<p class="note">
+  Products grouped by similarity of pricing process, not product type. 
+  PMI and Dental/OPD share the same indemnity (frequency × severity) mechanics and are combined. 
+  Columns: (1) Indemnity — Hospital &amp; OPD [PMI, Dental, OPD] &nbsp;|&nbsp; 
+  (2) Critical Illness [Lump sum / Multi-pay] &nbsp;|&nbsp; 
+  (3) Income Protection [Group &amp; Individual] &nbsp;|&nbsp; 
+  (4) Long Term Care &nbsp;|&nbsp; 
+  (5) Prepaid / Packaged Surgical &nbsp;|&nbsp; 
+  (6) Catastrophe / Pandemic Pool
+</p>
+
+<table>
+<thead>
+<tr>
+  <th class="theme-col">Theme</th>
+  <th>Indemnity — Hospital &amp; OPD<br><span class="groupnote">PMI / Dental / OPD<br>Pricing: frequency × severity</span></th>
+  <th>Critical Illness<br><span class="groupnote">Lump sum / Multi-pay<br>Pricing: incidence × sum insured</span></th>
+  <th>Income Protection<br><span class="groupnote">Group &amp; Individual<br>Pricing: inception × duration × benefit</span></th>
+  <th>Long Term Care<br><span class="groupnote">Pre-funded / Immediate needs<br>Pricing: inception × care duration × daily cost</span></th>
+  <th>Prepaid / Packaged Surgical<br><span class="groupnote">Pricing: negotiated package margin</span></th>
+  <th>Catastrophe / Pandemic Pool<br><span class="groupnote">Pricing: pool adequacy / scenario modelling</span></th>
+</tr>
+</thead>
+<tbody>
+
+<tr>
+<td class="theme-cell">1. Claim cost projection methodology</td>
+<td><ul>
+<li>Frequency × average cost per claim; separate IP and OP rates</li>
+<li>Utilisation rate per 1,000 lives × average cost per admission / visit</li>
+<li>Day-care, inpatient, OPD modelled separately</li>
+<li>Seasonal and geographic adjustment to base rates</li>
+</ul></td>
+<td><ul>
+<li>Incidence rate per condition × sum insured (fixed benefit — no cost component)</li>
+<li>No direct medical cost exposure; claim cost known at design stage</li>
+<li>Multi-pay: weight incidence by tier-specific partial payment</li>
+</ul></td>
+<td><ul>
+<li>Inception rate × expected claim duration × monthly benefit</li>
+<li>Separate inception and termination (recovery / death) rate tables</li>
+<li>Claim reserve = present value of future payments on in-force claims</li>
+</ul></td>
+<td><ul>
+<li>Care inception rate × expected care duration × daily cost of care</li>
+<li>Multi-state model: healthy → dependent → deceased</li>
+<li>Long projection horizon (20–40 years) — actuarial modelling essential</li>
+<li>Home care and residential care cost modelled separately</li>
+</ul></td>
+<td><ul>
+<li>Package price = negotiated hospital cost + insurer margin</li>
+<li>Not frequency/severity based — margin model, not loss model</li>
+<li>Procedure mix × package price per procedure type</li>
+<li>Hospital bears cost overrun above package price</li>
+</ul></td>
+<td><ul>
+<li>Scenario-based: probability of declared event × aggregate payout</li>
+<li>Return-period modelling (e.g. 1-in-50 year pandemic)</li>
+<li>Pool adequacy = accumulated levy vs expected worst-case payout</li>
+<li>Not individual policy pricing — fund-level projection</li>
+</ul></td>
+</tr>
+
+<tr>
+<td class="theme-cell">2. Rating factors &amp; risk segmentation</td>
+<td><ul>
+<li>Age band, gender, geography (metro / non-metro), sum insured tier</li>
+<li>Smoking status, BMI (individual); occupation for manual workers</li>
+<li>Group: age/gender distribution, industry sector, group size</li>
+<li>Network usage (cashless vs reimbursement) affects cost</li>
+</ul></td>
+<td><ul>
+<li>Age, gender, smoking status are primary drivers</li>
+<li>Individual: full medical history / family history for key conditions</li>
+<li>Group: average age and gender distribution; rarely rated by occupation</li>
+<li>Sum insured band — higher SI attracts higher-risk purchasers</li>
+</ul></td>
+<td><ul>
+<li>Occupation class is the dominant factor (manual vs professional)</li>
+<li>Age, gender, deferred period, benefit period, benefit amount</li>
+<li>Own-occupation vs any-occupation definition materially affects rate</li>
+<li>Group: industry sector, workforce demographics, sick-pay structure</li>
+</ul></td>
+<td><ul>
+<li>Age at entry is the critical driver — steep age gradient</li>
+<li>Gender; health status; pre-existing cognitive / physical impairment</li>
+<li>Care setting required (home / residential)</li>
+<li>Very limited rating segmentation available at current market stage</li>
+</ul></td>
+<td><ul>
+<li>Procedure type is the primary differentiator — not individual characteristics</li>
+<li>Geography affects hospital cost (tier-1 vs tier-2 cities)</li>
+<li>No individual underwriting or demographic rating needed</li>
+</ul></td>
+<td><ul>
+<li>No individual rating — community or population-wide basis</li>
+<li>Possible geographic allocation of levy (urban vs rural exposure)</li>
+<li>Income-based contribution tiering under social insurance model</li>
+</ul></td>
+</tr>
+
+<tr>
+<td class="theme-cell">3. Data sources &amp; credibility</td>
+<td><ul>
+<li>Own TPA claims data; IRDAI industry pool data; hospital network costs</li>
+<li>Credibility weighting: small groups blend own experience with market</li>
+<li>New groups: rely fully on market tables until own data develops</li>
+<li>IRDAI annual report and industry loss ratio benchmarks</li>
+</ul></td>
+<td><ul>
+<li>International reinsurer tables (Swiss Re, RGA, Munich Re) as primary source</li>
+<li>Limited India-specific CI incidence data — gap vs UK / US tables</li>
+<li>ICMR cancer / cardiac incidence data as a cross-check</li>
+<li>Own portfolio data only credible after significant scale</li>
+</ul></td>
+<td><ul>
+<li>Very limited India-specific IP data — nascent market</li>
+<li>UK CMI / international tables used as proxy, adjusted for India</li>
+<li>Employer sick-pay scheme experience where available</li>
+<li>Significant parameter uncertainty — must be reflected in pricing margins</li>
+</ul></td>
+<td><ul>
+<li>No meaningful India LTC experience data exists</li>
+<li>International tables (UK, US, Australia) used as starting point</li>
+<li>Demographic projections from Census / UN for ageing population</li>
+<li>Data risk is a primary pricing challenge — largest uncertainty</li>
+</ul></td>
+<td><ul>
+<li>Hospital procedure cost data negotiated directly — not statistical modelling</li>
+<li>Procedure volume and mix from hospital referral data</li>
+<li>No industry data pool equivalent — proprietary pricing</li>
+</ul></td>
+<td><ul>
+<li>Global pandemic / catastrophe models; COVID-19 as reference event</li>
+<li>WHO / government epidemiological data</li>
+<li>Return-period data from catastrophe modelling firms</li>
+<li>Scenario analysis replaces statistical credibility</li>
+</ul></td>
+</tr>
+
+<tr>
+<td class="theme-cell">4. Medical inflation &amp; trend allowance</td>
+<td><ul>
+<li>Core pricing risk — India medical inflation running 10–15% p.a.</li>
+<li>Technology-led cost push: new treatments, diagnostics, drugs</li>
+<li>Utilisation trend: increasing claim frequency over time</li>
+<li>Mix shift: proportionately more expensive procedures over time</li>
+<li>Must be explicitly projected — flat assumptions will under-price</li>
+</ul></td>
+<td><ul>
+<li>No direct exposure to medical cost inflation (fixed benefit)</li>
+<li>Indirect: sum insured adequacy erodes if inflation not reflected in benefit increases</li>
+<li>Medical advances may reduce incidence (e.g. better cardiac outcomes)</li>
+</ul></td>
+<td><ul>
+<li>No direct medical cost exposure — fixed income benefit</li>
+<li>Salary inflation affects benefit amount (if salary-linked benefit)</li>
+<li>Rehabilitation / case management costs subject to service inflation</li>
+</ul></td>
+<td><ul>
+<li>Care cost inflation is the dominant long-term pricing risk</li>
+<li>Residential and domiciliary care costs inflate above general CPI</li>
+<li>Wage inflation in care sector adds to cost pressure</li>
+<li>20–40 year inflation projection is highly uncertain — scenario range essential</li>
+</ul></td>
+<td><ul>
+<li>Package price renegotiated with hospital periodically — inflation managed at repricing</li>
+<li>Frequency of package repricing is the key inflation control mechanism</li>
+<li>Between repricing events, insurer bears medical cost inflation risk</li>
+</ul></td>
+<td><ul>
+<li>Healthcare delivery cost relevant if benefit is cost-reimbursement based</li>
+<li>Less relevant if pool pays fixed per-capita benefit on trigger</li>
+<li>Levy level reviewed periodically to reflect cost changes</li>
+</ul></td>
+</tr>
+
+<tr>
+<td class="theme-cell">5. Morbidity / incidence &amp; utilisation assumptions</td>
+<td><ul>
+<li>Hospital admission rates by age, gender, condition category</li>
+<li>Length of stay; day-care vs inpatient treatment split</li>
+<li>OPD: per-visit frequency; dental: procedure frequency by type</li>
+<li>Chronic disease prevalence increasing — key utilisation driver</li>
+</ul></td>
+<td><ul>
+<li>Condition-specific incidence rates (cancer, cardiac, renal, etc.)</li>
+<li>Survival period assumption: probability of surviving 30 days post-diagnosis</li>
+<li>Improving survival rates for some conditions — favourable trend for insurer</li>
+<li>India-specific epidemiology differs from Western tables — adjustment essential</li>
+</ul></td>
+<td><ul>
+<li>Sickness inception rates by occupation class, age, gender</li>
+<li>Claim termination (recovery) rates by duration on claim</li>
+<li>Growing mental health and musculoskeletal claim frequency</li>
+<li>Return-to-work rates critical to average claim duration assumption</li>
+</ul></td>
+<td><ul>
+<li>ADL failure inception rates by age — steep increase after age 75</li>
+<li>Cognitive impairment rates — dementia prevalence projections</li>
+<li>Co-morbidity: multiple conditions triggering claim simultaneously</li>
+<li>Improving longevity means more people live to need care — adverse trend</li>
+</ul></td>
+<td><ul>
+<li>Surgical procedure demand rates by geography and income band</li>
+<li>Not morbidity-driven pricing — demand / volume assumptions instead</li>
+<li>Procedure mix shift risk: more complex procedures sought over time</li>
+</ul></td>
+<td><ul>
+<li>Pandemic inception frequency (recurrence interval)</li>
+<li>Severity distribution: mild / moderate / severe pandemic scenario</li>
+<li>COVID-19 benchmark used as calibration reference</li>
+</ul></td>
+</tr>
+
+<tr>
+<td class="theme-cell">6. Expense loadings</td>
+<td><ul>
+<li>TPA costs (typically 3–5% of premium) — in-house or outsourced</li>
+<li>Claims handling, pre-auth processing, provider network management</li>
+<li>Distribution commission; policy admin system costs</li>
+<li>Expenses allocated across individual and group portfolios separately</li>
+</ul></td>
+<td><ul>
+<li>Lower ongoing claims admin than indemnity — single event, not continuous</li>
+<li>Medical verification cost at claim (one-off per claim)</li>
+<li>Distribution cost significant for individual standalone CI</li>
+<li>Expense loading lower than PMI as % of premium</li>
+</ul></td>
+<td><ul>
+<li>Case management and rehabilitation costs — significant for long-duration claims</li>
+<li>Payroll integration setup cost for group schemes</li>
+<li>Claim investigation cost at inception and periodic review</li>
+<li>Per-claim expense higher than indemnity due to ongoing management</li>
+</ul></td>
+<td><ul>
+<li>Long policy duration — initial expenses amortised over many decades</li>
+<li>ADL assessment cost at claim inception and periodic review</li>
+<li>Care management / case manager fees once benefit triggered</li>
+<li>Reserve for future care management expenses must be built in</li>
+</ul></td>
+<td><ul>
+<li>Minimal insurer expense — admin borne largely by hospital</li>
+<li>Digital booking and payment platform cost</li>
+<li>No TPA required; no claims adjustment team needed</li>
+<li>Expense loading significantly lower than traditional health products</li>
+</ul></td>
+<td><ul>
+<li>Centralised government / IRDAI admin — low per-capita expense</li>
+<li>No distribution commission — mandatory enrolment</li>
+<li>One-off event-driven disbursement cost at trigger</li>
+</ul></td>
+</tr>
+
+<tr>
+<td class="theme-cell">7. Profit &amp; capital loading</td>
+<td><ul>
+<li>Commercial profit loading to meet ROC / WACC targets</li>
+<li>Capital for claims volatility buffer and IRDAI solvency margin</li>
+<li>Reinsurance reduces capital requirement — net pricing reflects this</li>
+<li>Group: competitive pressure compresses margin; individual: wider margin</li>
+</ul></td>
+<td><ul>
+<li>Longer tail than PMI — capital required for large sum insured in force</li>
+<li>Capital cost of multi-pay: reserve for potential future payments on same life</li>
+<li>Reinsurance commission credits partially offset capital loading</li>
+</ul></td>
+<td><ul>
+<li>Long-tail liability — significant capital strain from new business</li>
+<li>New market — parameter uncertainty demands higher risk margin</li>
+<li>ROC assessment critical before launch; payback period may be long</li>
+<li>Reinsurance structure materially affects net capital requirement</li>
+</ul></td>
+<td><ul>
+<li>Very high capital requirement — longest liability tail of any H&amp;C product</li>
+<li>ALM mismatch between long liabilities and shorter-duration assets</li>
+<li>Market entry may require accepting lower initial ROC to build scale</li>
+<li>Commercial loading must reflect illiquidity premium on long-dated liabilities</li>
+</ul></td>
+<td><ul>
+<li>Margin-based revenue model — capital requirement low (no underwriting risk)</li>
+<li>Profit = volume × margin per package; not affected by claims volatility</li>
+<li>Provider insolvency / non-performance is the key capital risk</li>
+</ul></td>
+<td><ul>
+<li>No commercial profit loading — social insurance basis</li>
+<li>Government guarantee / backstop replaces commercial capital requirement</li>
+<li>Pool adequacy assessment replaces traditional solvency margin</li>
+</ul></td>
+</tr>
+
+<tr>
+<td class="theme-cell">8. Reinsurance allowance in price</td>
+<td><ul>
+<li>Quota share or per-risk XL; reinsurance premium explicitly costed</li>
+<li>Proportional commission offsets expense loading in the gross price</li>
+<li>Aggregate XL for cat / pandemic scenarios (PMI)</li>
+<li>Reinsurer provides pricing support and market benchmarks</li>
+</ul></td>
+<td><ul>
+<li>Individual XL essential for large sum insured — reinsurer sets price threshold</li>
+<li>Reinsurer provides incidence tables — data and pricing are linked</li>
+<li>Reinsurance premium net of commission loaded into individual policy price</li>
+</ul></td>
+<td><ul>
+<li>XL reinsurance for long-tail risk; quota share likely at launch to limit capital</li>
+<li>Reinsurer expertise in IP pricing is valuable — limited India benchmarks</li>
+<li>Reinsurance cost must be reflected in pricing — can be significant for new entrant</li>
+</ul></td>
+<td><ul>
+<li>Very limited LTC reinsurance availability in Indian market</li>
+<li>International reinsurance may be sought but pricing will be conservative</li>
+<li>Absence of reinsurance = insurer retains full long-tail risk — major constraint</li>
+<li>Reinsurance pricing uncertainty itself becomes a pricing risk</li>
+</ul></td>
+<td><ul>
+<li>No traditional reinsurance needed — insurer bears no underwriting risk</li>
+<li>Aggregate stop-loss possible to protect against provider default or volume shortfall</li>
+</ul></td>
+<td><ul>
+<li>Government backstop and/or sovereign reinsurance essential</li>
+<li>Commercial reinsurance for layer above government attachment point</li>
+<li>Parametric reinsurance (trigger = declared event) is a natural fit</li>
+</ul></td>
+</tr>
+
+<tr>
+<td class="theme-cell">9. Premium basis &amp; reviewability</td>
+<td><ul>
+<li>Short-term, annually reviewable — pricing basis refreshed at each renewal</li>
+<li>Group: experience-rated renewal premium (see theme 10)</li>
+<li>Individual: community-rated bands, reviewed annually by portfolio loss ratio</li>
+<li>Guaranteed renewability requirement (IRDAI) — insurer cannot refuse renewal</li>
+</ul></td>
+<td><ul>
+<li>Individual: guaranteed premium more common for shorter policy terms</li>
+<li>Group: reviewable annually with notice</li>
+<li>Long-term guaranteed rates increase pricing uncertainty — wider margin needed</li>
+</ul></td>
+<td><ul>
+<li>Group: annually reviewable; individual: reviewable with regulatory notice</li>
+<li>Own-occupation definition choice affects rate sustainability over time</li>
+<li>Longer guarantee periods require larger margins for uncertainty</li>
+</ul></td>
+<td><ul>
+<li>Pre-funded product requires long-term rate stability — reviewability clauses essential</li>
+<li>Level premium over working life — investment return assumption embedded in basis</li>
+<li>Regulatory approval of reviewability clause critical before product launch</li>
+</ul></td>
+<td><ul>
+<li>Package price renegotiated with hospital on periodic basis (not annual policy renewal)</li>
+<li>Single point-of-sale transaction — no ongoing premium; price fixed at purchase</li>
+</ul></td>
+<td><ul>
+<li>Levy set periodically by government / IRDAI based on pool adequacy review</li>
+<li>Not traditional annual renewal — mandatory contribution adjusted by regulation</li>
+</ul></td>
+</tr>
+
+<tr>
+<td class="theme-cell">10. Experience rating &amp; renewal pricing</td>
+<td><ul>
+<li>Large groups: fully experience-rated on prior year claims</li>
+<li>Small groups: credibility blend of own experience + market rate</li>
+<li>Individual: no experience rating — portfolio loss ratio drives premium change</li>
+<li>No-claim discount possible for individual to incentivise low utilisation</li>
+</ul></td>
+<td><ul>
+<li>Group: experience-rated if sufficient claim data; incidence events are rare — credibility builds slowly</li>
+<li>Individual: portfolio-level experience only; individual CI history not experience-rated</li>
+</ul></td>
+<td><ul>
+<li>Group: fully experience-rated on claim inception and duration</li>
+<li>Rehabilitation outcomes tracked as part of renewal experience</li>
+<li>Individual: portfolio experience; no individual experience rating</li>
+</ul></td>
+<td><ul>
+<li>Product too new for meaningful experience rating — rely on assumptions initially</li>
+<li>As portfolio matures, experience monitoring becomes central to repricing</li>
+<li>Long-term nature means early experience has limited predictive value for tail</li>
+</ul></td>
+<td><ul>
+<li>Package price reviewed against actual hospital cost delivery — quasi experience rating at provider level</li>
+<li>Insurer margin reviewed against volume — volume shortfall triggers package renegotiation</li>
+</ul></td>
+<td><ul>
+<li>No renewal pricing — pool adequacy reviewed against levy and fund balance</li>
+<li>Levy adjusted if pool is under- or over-funded relative to scenario liability</li>
+</ul></td>
+</tr>
+
+<tr>
+<td class="theme-cell">11. Anti-selection adjustments</td>
+<td><ul>
+<li>Higher-risk individuals disproportionately purchase — price above average must reflect this</li>
+<li>Individual: loading for expected adverse selection vs population; compulsory group removes this</li>
+<li>Sub-limit and co-pay design reduces moral hazard; waiting periods reduce immediate adverse selection</li>
+</ul></td>
+<td><ul>
+<li>Individuals with family history or early symptoms disproportionately buy CI</li>
+<li>Waiting period at entry reduces selection for imminent diagnosis</li>
+<li>Full medical underwriting for individual removes selection at entry</li>
+<li>Survival period reduces selection by those with terminal prognosis</li>
+</ul></td>
+<td><ul>
+<li>Those already experiencing symptoms more likely to buy — price must reflect</li>
+<li>At-work clause for group new joiners limits selection at entry</li>
+<li>Own-occupation definition attracts worse-risk purchasers — price differential justified</li>
+</ul></td>
+<td><ul>
+<li>Adverse selection risk is highest of any H&amp;C product — those nearest to care most likely to buy</li>
+<li>Long waiting periods and full medical underwriting essential to mitigate</li>
+<li>Price must include explicit selection loading — empirically derived where possible</li>
+</ul></td>
+<td><ul>
+<li>Open access by design — no selection control at entry</li>
+<li>Fixed package price limits severity exposure regardless of patient condition</li>
+<li>Adverse selection on procedure complexity — higher-risk patients use more complex packages</li>
+</ul></td>
+<td><ul>
+<li>Mandatory pool eliminates adverse selection by design</li>
+<li>No selection loading required — universal participation assumption</li>
+</ul></td>
+</tr>
+
+<tr>
+<td class="theme-cell">12. Sensitivity &amp; scenario testing</td>
+<td><ul>
+<li>Medical inflation sensitivity: impact of 2–3% higher inflation on break-even loss ratio</li>
+<li>Utilisation trend deterioration; pandemic / mass hospitalisation scenario</li>
+<li>Large group lapse: loss of profitable accounts vs adverse selection in retained book</li>
+<li>Reinsurer withdrawal scenario; network hospital pricing renegotiation</li>
+</ul></td>
+<td><ul>
+<li>Incidence improvement / deterioration vs pricing assumption</li>
+<li>Medical advances: new treatments reducing CI-triggering event severity</li>
+<li>New CI conditions not in pricing basis emerging post-launch</li>
+<li>Sum insured concentration risk — large individual policy stress test</li>
+</ul></td>
+<td><ul>
+<li>Economic recession scenario: unemployment-related mental health and stress claims spike</li>
+<li>Return-to-work rate deterioration — average duration extends beyond pricing assumption</li>
+<li>Salary inflation diverging from benefit level — benefit adequacy erodes</li>
+<li>Occupational mix shift — more manual / high-risk workers in portfolio</li>
+</ul></td>
+<td><ul>
+<li>Longevity improvement: more people living long enough to reach care need</li>
+<li>Care cost inflation 20-year scenario range — key sensitivity</li>
+<li>Investment return stress: long-dated liability funded by lower-yield assets</li>
+<li>Policy lapse before claim — premium income lost; selection worsens for remainers</li>
+</ul></td>
+<td><ul>
+<li>Hospital cost escalation beyond package rate between repricing events</li>
+<li>Procedure mix shift: patients using higher-complexity (higher-cost) packages</li>
+<li>Volume shortfall: margin model depends on scale — low uptake destroys economics</li>
+</ul></td>
+<td><ul>
+<li>COVID-19 equivalent scenario: frequency, duration, aggregate payout</li>
+<li>Concurrent events: pandemic + natural catastrophe in same period</li>
+<li>Pool depletion speed — does levy accumulation keep pace with event timing?</li>
+<li>Government funding delay / political risk on backstop</li>
+</ul></td>
+</tr>
+
+</tbody>
+</table>
+</body>
+</html>

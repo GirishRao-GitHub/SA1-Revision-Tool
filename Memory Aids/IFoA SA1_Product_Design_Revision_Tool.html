@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SA1 — Product Design Revision Tool</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  background: #f4f3ee;
+  color: #1c1b18;
+  padding: 22px 16px 60px;
+}
+
+.container { max-width: 720px; margin: 0 auto; }
+
+h1 { font-size: 19px; font-weight: 600; margin-bottom: 3px; }
+.subtitle { font-size: 12px; color: #8a8880; margin-bottom: 18px; }
+
+/* ── Tabs ── */
+.tabs { display: flex; gap: 5px; margin-bottom: 20px; flex-wrap: wrap; }
+.tab-btn {
+  padding: 6px 15px; font-size: 12.5px; border-radius: 20px;
+  border: 1px solid #d4d2c8; background: transparent;
+  color: #8a8880; cursor: pointer; font-family: inherit;
+  transition: all 0.18s;
+}
+.tab-btn.active { background: #1c1b18; color: #f4f3ee; border-color: #1c1b18; }
+
+/* ── Product pill colours ── */
+:root {
+  --pmi:   #1a5c9c; --pmi-bg:   #e6f0fb;
+  --ci:    #8b1a1a; --ci-bg:    #faeaea;
+  --ip:    #1a6b3c; --ip-bg:    #e6f4ec;
+  --ltc:   #6b3a1a; --ltc-bg:   #f5ede6;
+  --state: #3a1a6b; --state-bg: #ede6f5;
+}
+
+/* ── OVERVIEW tab ── */
+.overview-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+}
+.overview-card {
+  background: #fff; border: 1px solid #dddbd2; border-radius: 10px;
+  padding: 12px 14px; cursor: pointer; transition: box-shadow 0.15s;
+}
+.overview-card:hover { box-shadow: 0 2px 10px rgba(0,0,0,0.08); }
+.ov-num { font-size: 22px; font-weight: 700; color: #dddbd2; line-height: 1; }
+.ov-title { font-size: 13px; font-weight: 600; margin: 3px 0 6px; }
+.ov-pills { display: flex; flex-wrap: wrap; gap: 4px; }
+.pill {
+  font-size: 10px; font-weight: 500; padding: 2px 7px;
+  border-radius: 10px; white-space: nowrap;
+}
+.pill-pmi   { background: var(--pmi-bg);   color: var(--pmi);   }
+.pill-ci    { background: var(--ci-bg);    color: var(--ci);    }
+.pill-ip    { background: var(--ip-bg);    color: var(--ip);    }
+.pill-ltc   { background: var(--ltc-bg);   color: var(--ltc);   }
+.pill-state { background: var(--state-bg); color: var(--state); }
+
+/* ── FLASHCARDS tab ── */
+.fc-controls {
+  display: flex; align-items: center; gap: 10px;
+  margin-bottom: 14px; flex-wrap: wrap;
+}
+.fc-controls label { font-size: 12px; color: #8a8880; }
+.fc-controls select {
+  font-size: 12px; padding: 4px 8px; border-radius: 6px;
+  border: 1px solid #d4d2c8; background: #fff; font-family: inherit;
+}
+
+.progress-bar-wrap {
+  height: 3px; background: #e8e6de; border-radius: 2px; margin-bottom: 16px;
+}
+.progress-bar-fill {
+  height: 100%; background: #1c1b18; border-radius: 2px;
+  transition: width 0.3s;
+}
+
+.card-wrap {
+  perspective: 1000px; cursor: pointer; user-select: none;
+  margin-bottom: 14px;
+}
+.card-inner {
+  position: relative; width: 100%; min-height: 240px;
+  transform-style: preserve-3d; transition: transform 0.42s cubic-bezier(.4,0,.2,1);
+}
+.card-inner.flipped { transform: rotateY(180deg); }
+.card-front, .card-back {
+  position: absolute; width: 100%; min-height: 240px;
+  backface-visibility: hidden; -webkit-backface-visibility: hidden;
+  border-radius: 14px; padding: 22px 24px;
+  border: 1px solid #d4d2c8; background: #fff;
+}
+.card-back {
+  transform: rotateY(180deg);
+  background: #f9f8f4;
+  display: flex; flex-direction: column; justify-content: flex-start;
+}
+.card-front {
+  display: flex; flex-direction: column;
+  justify-content: center; align-items: center; text-align: center;
+}
+.card-theme-num { font-size: 42px; font-weight: 700; color: #e8e6de; line-height: 1; }
+.card-theme-title { font-size: 19px; font-weight: 600; margin: 6px 0 8px; }
+.card-product-badge {
+  font-size: 11px; font-weight: 500; padding: 3px 10px;
+  border-radius: 12px; margin-bottom: 10px;
+}
+.card-hint { font-size: 11px; color: #b4b2aa; margin-top: 10px; }
+.card-back-header {
+  font-size: 11px; font-weight: 600; text-transform: uppercase;
+  letter-spacing: 0.06em; color: #8a8880; margin-bottom: 10px;
+}
+.card-back ul { padding-left: 16px; }
+.card-back li { font-size: 12.5px; line-height: 1.6; margin-bottom: 4px; color: #1c1b18; }
+.card-back li::marker { color: #c8c6be; }
+.card-paper-ref {
+  display: inline-block; font-size: 9.5px;
+  background: #e8e6de; color: #5a5850;
+  border-radius: 4px; padding: 1px 5px; margin-left: 5px;
+  font-weight: 500; vertical-align: middle; white-space: nowrap;
+}
+
+.fc-nav { display: flex; gap: 8px; justify-content: center; align-items: center; }
+.btn {
+  padding: 7px 20px; border-radius: 20px; border: 1px solid #d4d2c8;
+  font-size: 12.5px; cursor: pointer; font-family: inherit; transition: all 0.15s;
+}
+.btn-primary { background: #1c1b18; color: #f4f3ee; border-color: #1c1b18; }
+.btn-primary:hover { background: #333; }
+.btn-secondary { background: transparent; color: #1c1b18; }
+.btn-secondary:hover { background: #e8e6de; }
+.btn-sm { padding: 5px 12px; font-size: 11.5px; }
+.card-counter { font-size: 12px; color: #8a8880; min-width: 60px; text-align: center; }
+
+.dot-row { display: flex; gap: 4px; justify-content: center; flex-wrap: wrap; margin: 10px 0; }
+.dot {
+  width: 7px; height: 7px; border-radius: 50%; background: #dddbd2; cursor: pointer;
+  transition: background 0.15s;
+}
+.dot.seen { background: #a8a69e; }
+.dot.current { background: #1c1b18; }
+
+/* ── QUIZ tab ── */
+.quiz-meta {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 12px; font-size: 12px; color: #8a8880;
+}
+.quiz-q-box {
+  background: #fff; border: 1px solid #d4d2c8; border-radius: 10px;
+  padding: 14px 16px; margin-bottom: 12px;
+}
+.quiz-q-text { font-size: 14px; font-weight: 500; line-height: 1.5; }
+.quiz-q-context { font-size: 11px; color: #8a8880; margin-top: 5px; font-style: italic; }
+
+.quiz-opt {
+  width: 100%; text-align: left; padding: 10px 14px;
+  border-radius: 8px; border: 1px solid #d4d2c8;
+  background: #fff; color: #1c1b18; font-size: 13.5px;
+  cursor: pointer; margin-bottom: 7px; font-family: inherit;
+  transition: all 0.12s;
+}
+.quiz-opt:hover:not(:disabled) { border-color: #8a8880; background: #f4f3ee; }
+.quiz-opt.correct { border-color: #1a7a55; background: #e4f5ed; color: #0a4a30; }
+.quiz-opt.wrong   { border-color: #c0392b; background: #faeaea; color: #4a1010; }
+.quiz-opt:disabled { cursor: default; }
+
+.quiz-feedback {
+  border-radius: 8px; padding: 10px 14px;
+  font-size: 12.5px; margin-top: 6px; display: none;
+}
+.quiz-feedback.correct { background: #e4f5ed; color: #0a4a30; border: 1px solid #1a7a55; }
+.quiz-feedback.wrong   { background: #faeaea; color: #4a1010; border: 1px solid #c0392b; }
+
+.quiz-result {
+  text-align: center; padding: 28px 10px; display: none;
+}
+.result-score { font-size: 36px; font-weight: 700; margin-bottom: 6px; }
+.result-msg { font-size: 13px; color: #8a8880; margin-bottom: 20px; }
+
+/* ── MATRIX tab ── */
+.matrix-scroll { overflow-x: auto; border: 1px solid #d4d2c8; border-radius: 10px; }
+.matrix-table { border-collapse: collapse; min-width: 700px; width: 100%; background: #fff; }
+.matrix-table th, .matrix-table td {
+  border: 1px solid #e8e6de; padding: 7px 10px; vertical-align: top; font-size: 11.5px;
+}
+.matrix-table thead th {
+  font-size: 10.5px; font-weight: 600; text-align: center; white-space: nowrap;
+}
+.th-theme { background: #1c1b18; color: #f4f3ee; text-align: left !important; width: 130px; }
+.th-pmi   { background: var(--pmi-bg); color: var(--pmi); border-top: 3px solid var(--pmi); }
+.th-ci    { background: var(--ci-bg);  color: var(--ci);  border-top: 3px solid var(--ci);  }
+.th-ip    { background: var(--ip-bg);  color: var(--ip);  border-top: 3px solid var(--ip);  }
+.th-ltc   { background: var(--ltc-bg); color: var(--ltc); border-top: 3px solid var(--ltc); }
+.th-state { background: var(--state-bg); color: var(--state); border-top: 3px solid var(--state); }
+
+.td-theme {
+  font-weight: 600; font-size: 11px; background: #f0efe9;
+  border-right: 2px solid #d4d2c8; cursor: pointer;
+}
+.td-theme:hover { background: #e8e6de; }
+.td-pmi   { background: #fafcff; }
+.td-ci    { background: #fffafa; }
+.td-ip    { background: #fafffc; }
+.td-ltc   { background: #fffaf6; }
+.td-state { background: #fafaff; }
+.matrix-table td ul { padding-left: 13px; margin: 0; }
+.matrix-table td li { line-height: 1.45; margin-bottom: 2px; }
+.matrix-table td li::marker { color: #c8c6be; }
+
+.cell-clickable { cursor: pointer; }
+.cell-clickable:hover { opacity: 0.85; }
+
+/* ── Detail modal ── */
+.modal-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.4);
+  display: flex; align-items: center; justify-content: center;
+  z-index: 100; padding: 20px;
+}
+.modal-overlay.hidden { display: none; }
+.modal-box {
+  background: #fff; border-radius: 14px; max-width: 600px; width: 100%;
+  max-height: 80vh; overflow-y: auto; padding: 22px 24px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+}
+.modal-header {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  margin-bottom: 14px;
+}
+.modal-title { font-size: 15px; font-weight: 600; }
+.modal-close {
+  background: none; border: none; font-size: 20px; cursor: pointer;
+  color: #8a8880; line-height: 1; padding: 0 4px;
+}
+.modal-product-label {
+  font-size: 11px; font-weight: 600; padding: 3px 10px;
+  border-radius: 10px; margin-bottom: 12px; display: inline-block;
+}
+.modal-points li { font-size: 13px; line-height: 1.65; margin-bottom: 5px; }
+.modal-exam-ref {
+  margin-top: 14px; padding-top: 10px; border-top: 1px solid #e8e6de;
+  font-size: 11px; color: #8a8880;
+}
+
+/* score badge */
+.score-badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  background: #e8e6de; border-radius: 20px; padding: 3px 10px;
+  font-size: 12px; font-weight: 600;
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <h1>SA1 · Product Design</h1>
+  <p class="subtitle">15 themes × 5 product types · Flashcards · Quiz · Matrix · All content from exam papers Apr 2019 – Sep 2025</p>
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('overview')">Overview</button>
+    <button class="tab-btn" onclick="switchTab('flashcards')">Flashcards</button>
+    <button class="tab-btn" onclick="switchTab('quiz')">Quiz</button>
+    <button class="tab-btn" onclick="switchTab('matrix')">Matrix</button>
+  </div>
+
+  <!-- ═══════════════════════════════ OVERVIEW ═══════════════════════════════ -->
+  <div id="tab-overview">
+    <p style="font-size:12px;color:#8a8880;margin-bottom:12px">15 product design themes from SA1 exam papers. Click any theme to drill it in flashcard mode.</p>
+    <div class="overview-grid" id="overview-grid"></div>
+  </div>
+
+  <!-- ═══════════════════════════════ FLASHCARDS ════════════════════════════ -->
+  <div id="tab-flashcards" style="display:none">
+    <div class="fc-controls">
+      <label>Filter by product:</label>
+      <select id="fc-product-filter" onchange="applyFilter()">
+        <option value="all">All products</option>
+        <option value="pmi">PMI / Medical</option>
+        <option value="ci">Critical Illness</option>
+        <option value="ip">Income Protection</option>
+        <option value="ltc">Long-Term Care</option>
+        <option value="state">State / Social / Micro</option>
+      </select>
+      <label style="margin-left:8px">Theme:</label>
+      <select id="fc-theme-filter" onchange="applyFilter()">
+        <option value="all">All themes</option>
+      </select>
+      <button class="btn btn-secondary btn-sm" onclick="shuffleCards()" style="margin-left:auto">Shuffle</button>
+    </div>
+
+    <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progress-fill" style="width:0%"></div></div>
+
+    <div class="card-wrap" onclick="flipCard()">
+      <div class="card-inner" id="card-inner">
+        <div class="card-front">
+          <div class="card-theme-num" id="fc-num">01</div>
+          <div id="fc-product-badge" class="card-product-badge"></div>
+          <div class="card-theme-title" id="fc-title"></div>
+          <div class="card-hint">tap to reveal key points</div>
+        </div>
+        <div class="card-back">
+          <div class="card-back-header" id="fc-back-header"></div>
+          <ul id="fc-points"></ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="dot-row" id="dot-row"></div>
+
+    <div class="fc-nav">
+      <button class="btn btn-secondary" onclick="prevCard()">← Prev</button>
+      <span class="card-counter" id="card-counter">1 / 15</span>
+      <button class="btn btn-primary" onclick="nextCard()">Next →</button>
+    </div>
+    <p style="font-size:11px;color:#8a8880;text-align:center;margin-top:10px">
+      Showing <span id="fc-filter-label">all 75 cards</span> (15 themes × 5 products)
+    </p>
+  </div>
+
+  <!-- ═══════════════════════════════ QUIZ ═══════════════════════════════════ -->
+  <div id="tab-quiz" style="display:none">
+    <div class="quiz-meta">
+      <span>Question <span id="q-num">1</span> of <span id="q-total">12</span></span>
+      <span class="score-badge">Score: <span id="score">0</span> / <span id="score-total">12</span></span>
+    </div>
+    <div class="progress-bar-wrap"><div class="progress-bar-fill" id="quiz-progress" style="width:0%"></div></div>
+    <div class="quiz-q-box">
+      <p class="quiz-q-text" id="question-text"></p>
+      <p class="quiz-q-context" id="question-context"></p>
+    </div>
+    <div id="options-container"></div>
+    <div class="quiz-feedback" id="quiz-feedback"></div>
+    <button class="btn btn-primary" id="next-q-btn" onclick="nextQuestion()" style="display:none;margin-top:12px">Next →</button>
+    <div class="quiz-result" id="quiz-result">
+      <div class="result-score" id="result-score"></div>
+      <div class="result-msg" id="result-msg"></div>
+      <button class="btn btn-primary" onclick="restartQuiz()">Try again</button>
+      <button class="btn btn-secondary" onclick="switchTab('flashcards')" style="margin-left:8px">Review flashcards</button>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════ MATRIX ═════════════════════════════════ -->
+  <div id="tab-matrix" style="display:none">
+    <p style="font-size:12px;color:#8a8880;margin-bottom:10px">Click any cell to see the full exam-paper content for that theme × product combination.</p>
+    <div class="matrix-scroll">
+      <table class="matrix-table" id="matrix-table"></table>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══ DETAIL MODAL ═══ -->
+<div class="modal-overlay hidden" id="modal" onclick="closeModal(event)">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title" id="modal-title"></div>
+        <div style="margin-top:4px"><span class="modal-product-label" id="modal-product"></span></div>
+      </div>
+      <button class="modal-close" onclick="document.getElementById('modal').classList.add('hidden')">×</button>
+    </div>
+    <ul class="modal-points" id="modal-points" style="padding-left:18px"></ul>
+    <div class="modal-exam-ref" id="modal-ref"></div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════════════════════
+// DATA — 15 themes × 5 products, all points from exam papers
+// ═══════════════════════════════════════════════════════════════════════════
+
+const PRODUCTS = [
+  { key:'pmi',   label:'PMI / Medical Insurance',       cls:'pill-pmi',   badgeBg:'#e6f0fb', badgeColor:'#1a5c9c' },
+  { key:'ci',    label:'Critical Illness',              cls:'pill-ci',    badgeBg:'#faeaea', badgeColor:'#8b1a1a' },
+  { key:'ip',    label:'Income Protection',             cls:'pill-ip',    badgeBg:'#e6f4ec', badgeColor:'#1a6b3c' },
+  { key:'ltc',   label:'Long-Term Care',                cls:'pill-ltc',   badgeBg:'#f5ede6', badgeColor:'#6b3a1a' },
+  { key:'state', label:'State / Social / Micro-ins.',   cls:'pill-state', badgeBg:'#ede6f5', badgeColor:'#3a1a6b' },
+];
+
+const THEMES = [
+  {
+    num:'01', title:'Benefit Structure',
+    cells: {
+      pmi:   { ref:'Apr20·Q1 | Apr21·Q1 | Sep22·Q1 | Apr24·Q3', points:['Indemnity (cost reimbursement) vs fixed cash benefit','Inpatient / outpatient / day-care scope and sub-limits','Excesses and co-insurance to share cost with policyholder','Waiting periods for pre-existing conditions','Integration with state healthcare provision','Cashless settlement vs reimbursement model','Hospital cash benefit as a simple fixed ancillary benefit'] },
+      ci:    { ref:'Apr20·Q3 | Apr23·Q2 | Sep24·Q2', points:['Lump sum on diagnosis vs severity-based tiered payment','Fixed benefit — not indemnity; no medical cost escalation exposure','Children\'s cancer / additional condition extensions','Unit-linked structure with reviewable morbidity charge','Return of Premium (ROP) option and trigger events','Mental health conditions as covered CI events','Survival period as integral part of benefit design'] },
+      ip:    { ref:'Sep20·Q2 | Sep24·Q3', points:['Benefit as % of pre-disability salary — replacement ratio design','Deferred / waiting period before benefit commences','Maximum benefit period; linked claims periods','Stepped / proportional benefit for partial disability','Rehabilitation benefit and phased return-to-work provision','Indexation of benefit in payment (RPI / NAE)','Replacement ratio cap to preserve return-to-work incentive'] },
+      ltc:   { ref:'Sep19·Q1 | Apr21·Q3', points:['Lump sum vs regular income benefit','Indemnity (care cost reimbursement) vs fixed / indexed benefit','Benefit level linked to degree of disability (ADL count)','Home care vs residential / nursing facility benefit','Pre-funded (deferred onset) vs immediate-needs product','Indexation of benefit in payment','Death benefit and surrender value as ancillary features','Integration with state LTC provision'] },
+      state: { ref:'Sep21·Q1 | Sep22·Q3 | Apr24·Q2', points:['Simplified benefit for broad population access','Mandatory cover — no individual opt-out','Per-person caps and aggregate pool limits','Microinsurance: low-sum benefit for affordability','Co-payment to share cost with beneficiary','Social insurance: solidarity over individual pricing','Waiting periods for high-cost / pre-existing conditions'] },
+    }
+  },
+  {
+    num:'02', title:'Cover & Claim Definitions',
+    cells: {
+      pmi:   { ref:'Sep19·Q3 | Apr22·Q2', points:['Clear inpatient / outpatient / day-care boundary to avoid disputes','Definition of eligible treatments and procedures','Standard exclusions — pre-existing, cosmetic, maternity','Pre-existing condition definition and exclusion period','Territorial scope of cover','Definition of eligible provider / hospital'] },
+      ci:    { ref:'Apr20·Q3 | Apr25·Q1 | Sep24·Q2', points:['Precise CI condition list — breadth vs claims pay-out ratio','Severity thresholds for tiered / partial payment','Survival period post-diagnosis (e.g. 28 days)','Mental health: definition of "serious" with measurable severity','Definition of "child" for children\'s benefit extensions','Independent medical verification of diagnosis','Linked claims period for multi-pay products'] },
+      ip:    { ref:'Sep20·Q2 | Sep23·Q3', points:['Own occupation vs any occupation definition of incapacity','Moratorium vs full medical UW approach to pre-existing conditions','Salary definition — basic only vs total compensation','Linked claims period — when a new claim period begins','Exclusions: hazardous pursuits, self-inflicted, drug abuse','Geographical residency conditions on payment'] },
+      ltc:   { ref:'Sep19·Q1', points:['ADL trigger — which activities, how many must be failed','Cognitive / mental impairment trigger definition','Single-event vs ongoing assessment approach','Care setting definitions: home, residential, nursing','Exclusion of pre-existing cognitive conditions at underwriting','Independent ADL assessor requirement at claim'] },
+      state: { ref:'Sep22·Q3 | Apr19·Q1', points:['Simple, unambiguous trigger to aid low-literacy claimants','Hospitalisation definition — minimum stay thresholds','Standardised condition list (government-mandated)','Exclusion of cosmetic / elective procedures','Catastrophe trigger — objective declared-event basis'] },
+    }
+  },
+  {
+    num:'03', title:'Product Features & Options',
+    cells: {
+      pmi:   { ref:'Sep19·Q3 | Apr25·Q3', points:['Guaranteed renewability and continuity provisions','No-claims discount to incentivise low utilisation','Modular add-ons: dental, optical, maternity, wellness','Top-up option over base employer cover','Portability on leaving employer group scheme','Reviewable premiums — frequency and basis'] },
+      ci:    { ref:'Apr20·Q3 | Apr22·Q1 | Apr23·Q2', points:['Reviewable vs guaranteed premiums — risk transfer implications','Unit-linked: reviewable morbidity charge, fixed allocation','Return of Premium (ROP): pre-specified trigger events','Multi-pay option: benefit reinstated after first claim','Optional additional conditions beyond standard list','Profit share arrangements for group / government contracts'] },
+      ip:    { ref:'Sep20·Q2 | Sep23·Q3', points:['Deferred period options (1, 3, 6, 12 months)','Own vs any occupation definition choice','Partial / proportional disability benefit option','Return-to-work incentive: benefit tapered on partial return','Rehabilitation services as integral product feature','Linked claims provision: restart if same condition recurs'] },
+      ltc:   { ref:'Sep19·Q1 | Apr21·Q3', points:['Surrender value — pre-claim and in-claim design','Inflation-linked benefit escalation option','Death benefit during pre-funding phase','Premium waiver once claim commences','Reviewable premium basis for long-duration product'] },
+      state: { ref:'Sep22·Q3 | Apr23·Q1', points:['Mandatory / auto-enrolment — no individual opt-out','Premium reviewability built in — regulator-approved mechanism','Waiting period as anti-selection control feature','Government backstop for catastrophe pool','Tax incentives as demand-creation feature'] },
+    }
+  },
+  {
+    num:'04', title:'Target Market & Customer Needs',
+    cells: {
+      pmi:   { ref:'Apr21·Q1 | Apr24·Q3', points:['Gap between state provision and actual healthcare need','Middle-income households unable to self-fund treatment','Ageing population with rising chronic care needs','Customers seeking choice, speed, and quality of care','Health inequalities — geographic and socioeconomic gaps','Customers seeking certainty and absence of billing shock'] },
+      ci:    { ref:'Apr20·Q3 | Apr25·Q1', points:['Individuals with financial dependants — income replacement need','Cancer / cardiac fear as primary demand driver','Those whose PMI does not cover income loss on diagnosis','Vulnerable / older customers — definition fairness concern','Low financial literacy — simple product with clear trigger','Employer-sponsored group CI for workforce protection'] },
+      ip:    { ref:'Sep20·Q2 | Sep21·Q2', points:['Employers with salaried workforce — staff retention motive','Workers without adequate state sick-pay provision','Self-employed and those without employer sick pay','Students and young workers entering market first time','Low financial literacy market — need for simplified product','Gig economy / flexible workforce with non-standard income'] },
+      ltc:   { ref:'Apr21·Q3', points:['Ageing population planning for future care costs','60+ individuals without family care support','Those seeking to avoid financial burden on family','Pre-planners (pre-funded) vs immediate-needs buyers','Consumer choice limited by market monopoly'] },
+      state: { ref:'Sep21·Q1 | Sep21·Q2 | Apr24·Q2', points:['Entire population — universal access objective','Low-income and uninsured majority — affordability paramount','Microinsurance: informal sector, low-income earners','Students / niche segments — bespoke simplified design','Reducing health inequalities as primary policy objective'] },
+    }
+  },
+  {
+    num:'05', title:'Underwriting Approach',
+    cells: {
+      pmi:   { ref:'Apr20·Q1 | Sep19·Q3', points:['Full medical UW vs moratorium vs community rating','Community rating advantages: fairness, accessibility, no discrimination','Community rating disadvantages: moral hazard, anti-selection risk','Mandatory participation to make community rating viable','Free cover limits for group; individual evidence above FCL','Tightening UW standards in response to poor claims experience','Point-of-sale UW vs referral — cost vs rigour trade-off'] },
+      ci:    { ref:'Apr22·Q1 | Apr24·Q1', points:['Full medical underwriting for individual policies','Group: free cover limit; individual evidence above FCL','At-work clause for group new joiners','AI / algorithmic underwriting tools — impact on acceptance','Impact of UW approach on lapse behaviour','Raising / lowering acceptance criteria to change business mix'] },
+      ip:    { ref:'Sep23·Q3 | Apr22·Q3 | Apr24·Q1', points:['Own occupation vs any occupation — underwriting risk implications','Moratorium vs full medical UW — anti-selection trade-off','AI / automated UW tools: individualised pricing, margin compression','At-work clause for group schemes','Over-insurance risk — replacement ratio limit enforcement','Periodic medical review during claim'] },
+      ltc:   { ref:'Sep19·Q1 | Apr21·Q3', points:['Full medical underwriting; pre-existing cognitive impairment excluded','Early entry incentivised — lower premium, easier underwriting','Long waiting periods given long-tail nature of risk','Anti-selection risk from surrender value availability','Premium loading for impaired lives'] },
+      state: { ref:'Sep22·Q3 | Apr24·Q2', points:['No individual underwriting — population pooling by design','Compulsory participation removes adverse selection','Waiting periods as substitute for underwriting','Simplified / group UW for microinsurance products','Minimum participation thresholds for voluntary group covers'] },
+    }
+  },
+  {
+    num:'06', title:'Pricing Considerations',
+    cells: {
+      pmi:   { ref:'Apr20·Q1 | Apr21·Q1 | Sep19·Q3', points:['Community rating vs risk-rated premium','Medical inflation as key pricing risk — reviewable premiums','Claims frequency and severity assumptions by treatment category','Experience rating at renewal for group schemes','Lack of credible local data for new market entrants','Profit margins and required return on capital'] },
+      ci:    { ref:'Apr20·Q3 | Apr22·Q1 | Apr21·Q3', points:['Morbidity (incidence) assumptions by condition, age and gender','Reviewable morbidity charge in unit-linked structure','Factors influencing charge: age, gender, benefit amount, health','Pricing children\'s cancer option — data scarcity','Adverse lapse experience — impact on profitability','Premium review following substantial experience deterioration'] },
+      ip:    { ref:'Sep20·Q2 | Apr22·Q3 | Sep24·Q3', points:['Morbidity incidence and duration assumptions','Salary / benefit inflation assumptions','Deferred period choice — impact on claim frequency','Replacement ratio cap — moral hazard pricing adjustment','Insurtech / AI UW: individualised pricing, margin compression','Loss ratio deterioration and repricing actions'] },
+      ltc:   { ref:'Apr21·Q3', points:['Longevity risk — policy may be in-force for decades','Claims inflation — care cost escalation above general inflation','Morbidity incidence / prevalence assumptions','Geographic rating variation','Investment risk — long-duration liabilities require ALM','Premium increase implications for reputation and lapse'] },
+      state: { ref:'Apr24·Q2 | Sep22·Q3', points:['Social insurance / solidarity pricing — not commercially rated','Payroll deduction vs general taxation as collection mechanism','Expense ratio critical — high distribution costs are unviable','Microinsurance: premium collection via mobile / group','Premium reviewability mechanism essential for sustainability'] },
+    }
+  },
+  {
+    num:'07', title:'Distribution & Sales Strategy',
+    cells: {
+      pmi:   { ref:'Apr24·Q3', points:['Corporate HR / employee benefits broker for group PMI','Independent financial adviser / broker for individual PMI','Digital / online for simplified products','Affinity / grocery chain partnership model','Advertising campaigns vs partnership distribution trade-off','Cashless network empanelment as distribution infrastructure'] },
+      ci:    { ref:'Apr20·Q3 | Sep20·Q1 | Apr25·Q2', points:['Online / direct for simple lump-sum CI products','Bancassurance for straightforward products','IFA / tied agent for complex / multi-pay CI','Broker networks for individual and group distribution','Brand awareness — critical for new market entrant','Product differentiation beyond price: service, value-adds'] },
+      ip:    { ref:'Sep21·Q2 | Apr25·Q2', points:['Corporate HR and employee benefits consultant for group IP','Broker / IFA for individual IP — not typically a retail product','Outsourcing pricing and underwriting to insurtech partner','Financial literacy barrier — need for adviser-led sales','Retail distribution channel — individual vs group trade-off','Student / affinity channel for niche markets'] },
+      ltc:   { ref:'Apr21·Q3', points:['IFA / independent financial adviser — complexity demands advice','Face-to-face channel given complexity and age of target market','Bancassurance possible for pre-funded variant','Government-mandated channel if social LTC scheme','Provider / care home network as distribution partner'] },
+      state: { ref:'Apr24·Q2 | Sep21·Q1', points:['Government / auto-enrolment — no commercial distribution','Payroll deduction as low-cost collection mechanism','Mobile / digital for microinsurance in low-income markets','Group / community enrolment to achieve scale','Language and literacy challenges in multi-lingual markets'] },
+    }
+  },
+  {
+    num:'08', title:'Product Differentiation',
+    cells: {
+      pmi:   { ref:'Sep19·Q3 | Apr24·Q3', points:['Cashless network size and quality','Customer service and claims handling speed','Second opinion / concierge medical services','Wellness and preventive health programmes','Breadth of coverage vs price competitiveness','Digital / app-based member experience'] },
+      ci:    { ref:'Apr20·Q3 | Apr25·Q1', points:['Breadth of CI condition list vs clarity of definitions','Severity-based / tiered payout as market differentiator','Children\'s benefit extensions','Brand reputation and financial strength','Value-added services: medical helplines, health apps','Definition transparency — clear pay-out criteria'] },
+      ip:    { ref:'Apr22·Q3', points:['Breadth of own-occupation definition','Rehabilitation and return-to-work support services','Flexibility of deferred period and benefit period options','Employee wellness programme integration','Technology: AI underwriting speed and certainty','Rewards / wellness programme for policyholders'] },
+      ltc:   { ref:'Apr21·Q3', points:['Care manager / case management service','Flexibility of care setting (home vs residential)','Inflation-protection benefit option','First-mover advantage in nascent markets','Financial strength and longevity of insurer'] },
+      state: { ref:'Apr24·Q2', points:['Affordability and universal access as primary differentiator','Government backing provides trust and credibility','Simplicity of product — ease of understanding','Speed of claim payment','Absence of billing shock'] },
+    }
+  },
+  {
+    num:'09', title:'Risk Appetite & Insurer Strategy',
+    cells: {
+      pmi:   { ref:'Apr19·Q1 | Sep24·Q1', points:['Does product fit current risk appetite?','Capital strain from new business volumes','Medical inflation — unlimited cost exposure under indemnity','Impact of inflation on profitability — reviewable premium mechanism','Reinsurance to cap per-risk and aggregate exposure','One-off bespoke government contracts vs scalable product lines'] },
+      ci:    { ref:'Apr20·Q3 | Apr22·Q1 | Sep24·Q1', points:['New condition extensions — risk appetite and data adequacy','Unit-linked structure transfers investment risk to policyholder','Reinsurance essential for large sum insured / new conditions','Selective lapse risk — impact on portfolio quality','Economic downturn — lapse spike and capital impact','Inflation impact across CI product lines'] },
+      ip:    { ref:'Sep20·Q1 | Sep24·Q3', points:['Long-tail disability — significant capital and reserving strain','Moral hazard — replacement ratio design to manage','Economic downturn — incidence and duration risk','Reinsurance (XL or quota share) essential','Operational capacity for long-term claims management','New market entry — no local experience data'] },
+      ltc:   { ref:'Sep19·Q1 | Apr21·Q3', points:['Very long-tail liability — decades of reserve and capital strain','Longevity and morbidity improvement uncertainty','ALM challenge: matching long liabilities to appropriate assets','Limited reinsurance availability','Surrender value — liquidity risk if many exercise simultaneously','Political risk — state LTC provision changes'] },
+      state: { ref:'Sep22·Q3 | Apr24·Q2', points:['Government backing required — commercial insurer cannot absorb alone','Catastrophe / pandemic pooling — aggregate risk concentration','Premium collection risk — defaults and non-payment','Expense ratio sustainability at low premium levels','Reputation risk if claims are disputed or delayed'] },
+    }
+  },
+  {
+    num:'10', title:'Anti-selection & Lapse Risk',
+    cells: {
+      pmi:   { ref:'Apr20·Q1 | Sep19·Q3', points:['Anti-selection under community rating — better risks exit','Mandatory participation required to sustain community rating','Risk equalisation mechanism needed across insurers','Waiting periods and exclusions as anti-selection controls','No-claims discount to reward and retain good risks'] },
+      ci:    { ref:'Apr22·Q1 | Apr23·Q2', points:['Selective lapsing — healthy lives lapse, pool deteriorates','Economic downturn — lapse spike; adverse selection remains','Group CI: no lapse mid-year; renewal negotiation as control','ROP option reduces lapse incentive — design trade-off','Policyholder communication strategy to reduce involuntary lapse','Impact of lapse on cashflow and investment strategy'] },
+      ip:    { ref:'Sep20·Q2 | Apr22·Q3 | Sep23·Q3', points:['Moral hazard — replacement ratio must not exceed net salary','Linked claims period prevents fragmented short-term claims','Deferred period absorbs short-term / malingering claims','Periodic medical review to detect recovery','AI UW: potential adverse selection if healthier lives excluded'] },
+      ltc:   { ref:'Sep19·Q1 | Apr21·Q3', points:['Surrender value — anti-selection by unhealthy in-claim lives','Surrender value — healthier lives exit pre-claim, pool worsens','Premium increase — lapse spike from healthy lives','TCF risk if surrender value appears poor value','Liquidity risk if many surrenders occur simultaneously'] },
+      state: { ref:'Apr24·Q2 | Sep22·Q3', points:['Compulsory participation eliminates adverse selection','Voluntary schemes — minimum participation thresholds needed','Premium affordability critical to prevent dropout','Moral hazard from fixed / indemnity benefit without co-pay'] },
+    }
+  },
+  {
+    num:'11', title:'Regulation & Consumer Protection',
+    cells: {
+      pmi:   { ref:'Apr20·Q1 | Apr24·Q2', points:['Community rating regulation — mandatory participation rules','Guaranteed renewability requirements','Product filing and regulatory approval','Anti-discrimination rules on underwriting factors','Disclosure requirements — exclusions, limitations, co-pays','Social insurance regulation — government oversight'] },
+      ci:    { ref:'Apr25·Q1 | Apr23·Q1', points:['Consumer Responsibility / Consumer Duty obligations','Treating Customers Fairly — definition clarity, pay-out fairness','Management information and monitoring for compliance','Regulator-mandated CI definition standardisation','Vulnerable customer protections — age, health status','Foreign insurer licensing — market entry requirements'] },
+      ip:    { ref:'Sep19·Q2 | Apr24·Q1', points:['Over-insurance rule — benefit cannot exceed pre-disability income','Regulatory requirements on minimum deferred periods','AI underwriting — regulatory scrutiny on fairness and bias','Data protection regulation on wearable / health data use','Professional obligations — actuarial code of conduct'] },
+      ltc:   { ref:'Sep19·Q1 | Apr21·Q3', points:['Long-term reserving requirements — prudential oversight','Surrender value — TCF and regulatory fairness','Consumer protection on premium reviewability','Regulatory approval for new long-term product structures','Government policy changes affecting LTC provision'] },
+      state: { ref:'Apr24·Q2 | Sep22·Q3', points:['Government mandate required for compulsory schemes','Special regulatory framework — not standard product filing','Reporting and conduct requirements in new markets','Anti-discrimination — community rating protections','Treating customers fairly in low-literacy markets'] },
+    }
+  },
+  {
+    num:'12', title:'Product Redesign & In-force Management',
+    cells: {
+      pmi:   { ref:'Sep19·Q3 | Apr22·Q2', points:['Introducing excesses / co-insurance to reduce claims','Restricting hospital / provider network to control costs','Tightening pre-authorisation requirements','Changing underwriting criteria to improve business mix','Repricing vs structural benefit change trade-off','Treating existing policyholders fairly during redesign'] },
+      ci:    { ref:'Apr21·Q3 | Apr25·Q1', points:['Premium rate review following adverse morbidity experience','Amending product structure to limit premium increase impact','Moral hazard considerations in benefit redesign','Consumer Duty compliance in redesigned product','MI monitoring framework post-redesign','Impact on reserving basis from structural changes'] },
+      ip:    { ref:'Sep24·Q3 | Sep23·Q3', points:['Loss ratio investigation before redesign action','Repricing: premium increase vs benefit reduction trade-off','Changing deferred period, benefit period, or definition','Tightening underwriting policy — moratorium vs full UW','Improving claims management and rehabilitation processes','Changing distribution or target market to improve business mix'] },
+      ltc:   { ref:'Sep19·Q1 | Apr21·Q3', points:['Substantial premium increases — reputational and lapse impact','Structural amendments to limit premium increase','Surrender value basis adaptation from reserving basis','Treating customers fairly — avoiding moral hazard in redesign','Regulator communication on material product changes'] },
+      state: { ref:'Sep22·Q3 | Apr24·Q2', points:['Claims ratio monitoring — triggers for redesign action','Adding outpatient benefit to inpatient product','Premium reviewability as planned redesign mechanism','Operational audit to identify claims leakage','Government policy changes forcing product modification'] },
+    }
+  },
+  {
+    num:'13', title:'Group Products — Specific Considerations',
+    cells: {
+      pmi:   { ref:'Apr25·Q3', points:['Employer objectives: staff welfare, retention, recruitment','Stakeholder management: employer, employee, insurer','Experience rating vs pooled rating at renewal','Self-funded vs fully insured scheme trade-offs','Scheme transition management — benefit matching for transferring staff','Cost reduction strategies during economic downturn'] },
+      ci:    { ref:'Apr22·Q1', points:['Free cover limits — no underwriting required below threshold','No lapse mid-policy year — renewal negotiation as control','Employer-led premium negotiation dynamics','Experience rating and retrospective adjustment at renewal','Group scheme: sponsor relationship replaces individual underwriting'] },
+      ip:    { ref:'Sep20·Q2', points:['Employer motive: staff retention, productivity, legal compliance','Benefit structure by grade / salary band','Auto-enrolment and minimum participation for anti-selection control','Outsourcing scheme administration to control costs','HR / payroll system integration for premium and benefits','Employee consultation on scheme design'] },
+      ltc:   { ref:'Apr21·Q3', points:['Employer-sponsored LTC: limited market precedent','Government-sponsored group LTC schemes','Group underwriting — aggregate ADL assessment basis'] },
+      state: { ref:'Apr24·Q2 | Sep21·Q1', points:['Employer as scheme sponsor for mandatory group cover','Government as scheme sponsor for social insurance','Community / village group schemes for microinsurance','Administration simplicity — group enrolment vs individual','Payroll deduction as low-cost collection mechanism'] },
+    }
+  },
+  {
+    num:'14', title:'New Market Entry & Product Launch',
+    cells: {
+      pmi:   { ref:'Sep20·Q1 | Apr21·Q1 | Apr23·Q1', points:['Market research: size, growth, competition, regulation','Lack of local claims data — use of industry / reinsurer data','Competitive landscape — existing dominant players','Cultural, religious, linguistic considerations','Foreign insurer market entry — JV vs organic launch','Capital requirements; phased portfolio build-up','Actuarial control cycle — monitoring emerging experience','Due diligence and cultural fit for JV partner'] },
+      ci:    { ref:'Apr23·Q1 | Sep20·Q1', points:['No local morbidity data — reliance on reinsurer tables','First-mover advantage vs first-mover risk','Reinsurance essential to support launch capital','Consumer education — explaining CI concept to new market','Foreign insurer licensing requirements','Building credible experience for future repricing'] },
+      ip:    { ref:'Apr25·Q2 | Sep20·Q1', points:['IP market research — competitor products, pricing, distribution','Labour market dynamics — gig economy, remote work trends','No credible local IP claims data — pricing uncertainty','Building claims management expertise from scratch','Monitoring of emerging incidence and duration experience','Reinsurance quota share to share development risk'] },
+      ltc:   { ref:'Apr21·Q3', points:['Very limited precedent — nascent product class','No credible local LTC incidence data — heavy reliance on foreign data','Benchmark against out-of-pocket care costs','Government incentives / mandate to stimulate demand','Consumer awareness and education campaign required','Actuarial control cycle essential — long experience run-off'] },
+      state: { ref:'Apr24·Q2 | Sep22·Q3', points:['Government mandate / political will as prerequisite','Public education and awareness campaign at launch','Infrastructure build: enrolment, premium collection, claims systems','Pilot scheme approach before national rollout','Regulatory framework creation — may require new legislation','Experience monitoring from launch to inform premium reviews'] },
+    }
+  },
+  {
+    num:'15', title:'Technology & Innovation',
+    cells: {
+      pmi:   { ref:'Sep20·Q1 | Apr22·Q2', points:['Digital / online distribution and onboarding','Cashless claims — real-time pre-authorisation systems','Health tracking / wearables as member engagement tool','AI-driven fraud detection in claims management','Data governance and cyber risk management','Telemedicine / telehealth as value-added benefit','Analytics for experience monitoring and repricing'] },
+      ci:    { ref:'Apr24·Q1 | Apr20·Q3', points:['AI / automated underwriting — faster policy acceptance','Unit-linked product administration — fund management systems','Wearables / health data in underwriting — regulatory and fairness issues','Digital claims notification and verification workflows','Data analytics for morbidity trend monitoring'] },
+      ip:    { ref:'Apr22·Q3 | Apr24·Q1', points:['AI / insurtech underwriting tools — individualised pricing','Wearables / activity data in UW and claims validation','Rewards programmes linked to health behaviour data','Long-term case management platform for claimants','HR / payroll system integration for group schemes','Human vs machine UW — regulatory scrutiny on bias'] },
+      ltc:   { ref:'Apr21·Q3', points:['Remote ADL monitoring technology — sensors, AI assessment','Digital care management platforms','Long-duration policy administration systems (20–40 year horizon)','Annuity-style payment systems once benefit triggered','Data analytics for longevity and morbidity trend monitoring'] },
+      state: { ref:'Sep21·Q1 | Apr24·Q2', points:['Mobile-based premium payment and claims for microinsurance','Government data infrastructure for national enrolment','Digital claims adjudication for speed and cost','Centralised catastrophe event trigger and disbursement system','Data quality risks in low-resource markets'] },
+    }
+  },
+];
+
+// ── Build flat card deck from themes × products
+function buildDeck(productFilter, themeFilter) {
+  const deck = [];
+  THEMES.forEach(theme => {
+    if (themeFilter !== 'all' && theme.num !== themeFilter) return;
+    PRODUCTS.forEach(p => {
+      if (productFilter !== 'all' && p.key !== productFilter) return;
+      const cell = theme.cells[p.key];
+      deck.push({ theme, product: p, cell });
+    });
+  });
+  return deck;
+}
+
+let deck = buildDeck('all', 'all');
+let currentCard = 0;
+let isFlipped = false;
+let seenCards = new Set();
+
+function shuffleCards() {
+  for (let i = deck.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [deck[i], deck[j]] = [deck[j], deck[i]];
+  }
+  currentCard = 0;
+  seenCards.clear();
+  isFlipped = false;
+  renderCard();
+}
+
+function applyFilter() {
+  const pf = document.getElementById('fc-product-filter').value;
+  const tf = document.getElementById('fc-theme-filter').value;
+  deck = buildDeck(pf, tf);
+  currentCard = 0;
+  seenCards.clear();
+  isFlipped = false;
+  const label = pf === 'all' && tf === 'all'
+    ? `all ${deck.length} cards (15 themes × 5 products)`
+    : `${deck.length} card${deck.length !== 1 ? 's' : ''}`;
+  document.getElementById('fc-filter-label').textContent = label;
+  renderCard();
+}
+
+function renderCard() {
+  if (!deck.length) return;
+  seenCards.add(currentCard);
+  const { theme, product, cell } = deck[currentCard];
+  document.getElementById('fc-num').textContent = theme.num;
+  document.getElementById('fc-title').textContent = theme.title;
+  const badge = document.getElementById('fc-product-badge');
+  badge.textContent = product.label;
+  badge.style.background = product.badgeBg;
+  badge.style.color = product.badgeColor;
+  document.getElementById('fc-back-header').textContent = `${theme.title} · ${product.label}`;
+  document.getElementById('fc-points').innerHTML = cell.points
+    .map(p => `<li>${p} <span class="card-paper-ref">${cell.ref.split(' | ')[0]}</span></li>`)
+    .join('');
+  document.getElementById('card-counter').textContent = `${currentCard + 1} / ${deck.length}`;
+  document.getElementById('progress-fill').style.width = `${((currentCard + 1) / deck.length) * 100}%`;
+  // Dots
+  const dotRow = document.getElementById('dot-row');
+  const show = Math.min(deck.length, 30);
+  dotRow.innerHTML = Array.from({ length: show }, (_, i) => {
+    let cls = 'dot';
+    if (i === currentCard) cls += ' current';
+    else if (seenCards.has(i)) cls += ' seen';
+    return `<span class="${cls}" onclick="jumpCard(${i})"></span>`;
+  }).join('');
+  if (isFlipped) {
+    document.getElementById('card-inner').classList.remove('flipped');
+    isFlipped = false;
+  }
+}
+
+function flipCard() {
+  isFlipped = !isFlipped;
+  document.getElementById('card-inner').classList.toggle('flipped', isFlipped);
+}
+function nextCard() { currentCard = (currentCard + 1) % deck.length; isFlipped = false; renderCard(); }
+function prevCard() { currentCard = (currentCard - 1 + deck.length) % deck.length; isFlipped = false; renderCard(); }
+function jumpCard(i) { currentCard = i; isFlipped = false; renderCard(); }
+
+// ═══════════════════════════════════════════════════════════════════════════
+// QUIZ DATA
+// ═══════════════════════════════════════════════════════════════════════════
+
+const quizQuestions = [
+  { q:'For which product type is the "replacement ratio" the most critical benefit design parameter?',
+    context:'Think about what the benefit is designed to replace.',
+    ans:2, opts:['PMI / Medical Insurance','Long-Term Care','Income Protection','Critical Illness'] },
+  { q:'ADL (Activities of Daily Living) triggers are a defining feature of which product\'s claim definition?',
+    context:'Consider which product pays out based on functional limitations rather than a diagnosis.',
+    ans:1, opts:['Critical Illness','Long-Term Care','Income Protection','PMI'] },
+  { q:'Selective lapsing is most damaging for which product because healthier lives exit, leaving a worse pool?',
+    context:'Think about which product has the most significant anti-selection / lapse dynamic based on exam papers.',
+    ans:0, opts:['Critical Illness','Income Protection','Long-Term Care','PMI'] },
+  { q:'A "survival period" (e.g. 28 days post-diagnosis) is a claim definition feature of which product?',
+    context:'This feature prevents spurious claims where the condition was terminal from the outset.',
+    ans:3, opts:['Income Protection','Long-Term Care','PMI','Critical Illness'] },
+  { q:'Community rating advantages include fairness and accessibility, but its main disadvantage is:',
+    context:'Apr 2020 Q1(iv) — PMI pricing system discussion.',
+    ans:1, opts:['It requires complex underwriting systems','Moral hazard and anti-selection — better risks may exit','It is prohibited by most regulators','It increases claims volatility for the insurer'] },
+  { q:'For a unit-linked CI product, the monthly cost deducted from the unit fund is called:',
+    context:'Apr 2020 Q3(iii) — definition tested directly in the exam.',
+    ans:0, opts:['Morbidity charge','Risk premium','Mortality levy','Incidence loading'] },
+  { q:'When an LTC insurer adds a surrender value option, which risk arises in the in-claim phase?',
+    context:'Sep 2019 Q1(v) — the most anti-selective surrender scenario.',
+    ans:2, opts:['Lapse of healthy pre-claim lives improves the pool','Investment risk increases due to unit-linking','Unhealthy in-claim lives surrender, undermining mortality assumptions','Capital strain from new business volumes'] },
+  { q:'Which of the following is NOT a valid way to differentiate a CI product other than through product features?',
+    context:'Apr 2020 Q3(i) — differentiation strategies discussed in exam.',
+    ans:3, opts:['Brand reputation','Better claims handling speed','Value-added services (e.g. helplines)','Increasing the survival period to 60 days'] },
+  { q:'An employer setting up a group IP scheme should cap the replacement benefit to avoid:',
+    context:'Sep 2020 Q2(ii) — the reason for replacement ratio limits.',
+    ans:1, opts:['Regulatory non-compliance on benefit limits','Removing the financial incentive to return to work','Exceeding the insurer\'s risk appetite','Triggering mandatory reinsurance requirements'] },
+  { q:'The Return of Premium (ROP) option in a CI product is primarily designed to:',
+    context:'Apr 2023 Q2(i) — product design feature discussion.',
+    ans:0, opts:['Reduce lapse incentive and improve persistency','Transfer investment risk to the policyholder','Simplify the claim definition','Satisfy community rating regulations'] },
+  { q:'For a microinsurance product in a low-income market, the MOST important design constraint is:',
+    context:'Sep 2021 Q1(i) — microinsurance suitability discussion.',
+    ans:2, opts:['Maximum medical underwriting rigour','Breadth of condition list','Low premiums and simple benefits to ensure affordability','Full indemnity basis to maximise value'] },
+  { q:'When Company Z (LTC monopoly) raises premiums substantially, the main product redesign risk when applying changes to existing policyholders is:',
+    context:'Apr 2021 Q3(iv) — Treating Customers Fairly in LTC redesign.',
+    ans:3, opts:['Reinsurance unavailability','AI underwriting bias claims','Regulatory premium approval delays','TCF (Treating Customers Fairly) concerns and lapse of healthy lives'] },
+  { q:'Moratorium underwriting vs full medical underwriting for Income Protection creates a trade-off between:',
+    context:'Sep 2023 Q3(ii) — underwriting approach comparison.',
+    ans:1, opts:['Investment returns and expense ratios','Anti-selection risk and ease of sale / customer experience','Regulatory compliance and profit margins','Deferred period length and benefit duration'] },
+  { q:'For a new market entrant with no local data, the actuarial control cycle is important because:',
+    context:'Apr 2021 Q1(vi) — assumption setting for new not-for-profit PMI.',
+    ans:0, opts:['It provides a framework to regularly update assumptions as experience emerges','It eliminates the need for reinsurance in early years','It replaces the need for a pricing actuary','It satisfies the community rating requirement'] },
+  { q:'AI-based underwriting tools for IP create margin compression because:',
+    context:'Apr 2022 Q3(i) — insurtech underwriting impact.',
+    ans:2, opts:['They increase expense loadings','They reduce claims frequency','Individualised pricing reduces the cross-subsidy that funds uncertainty margins','They require regulatory approval which delays product launch'] },
+];
+
+let qOrder = [], qIdx = 0, score = 0, answered = false;
+
+function restartQuiz() {
+  qIdx = 0; score = 0; answered = false;
+  document.getElementById('score').textContent = 0;
+  document.getElementById('quiz-result').style.display = 'none';
+  qOrder = [...Array(quizQuestions.length).keys()].sort(() => Math.random() - 0.5);
+  document.getElementById('q-total').textContent = quizQuestions.length;
+  document.getElementById('score-total').textContent = quizQuestions.length;
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const q = quizQuestions[qOrder[qIdx]];
+  document.getElementById('q-num').textContent = qIdx + 1;
+  document.getElementById('question-text').textContent = q.q;
+  document.getElementById('question-context').textContent = q.context || '';
+  document.getElementById('quiz-feedback').style.display = 'none';
+  document.getElementById('next-q-btn').style.display = 'none';
+  document.getElementById('quiz-result').style.display = 'none';
+  document.getElementById('quiz-progress').style.width = `${(qIdx / quizQuestions.length) * 100}%`;
+  answered = false;
+  document.getElementById('options-container').innerHTML = q.opts
+    .map((o, i) => `<button class="quiz-opt" onclick="selectOpt(${i})">${o}</button>`)
+    .join('');
+}
+
+function selectOpt(i) {
+  if (answered) return;
+  answered = true;
+  const q = quizQuestions[qOrder[qIdx]];
+  const btns = document.querySelectorAll('.quiz-opt');
+  btns.forEach(b => b.disabled = true);
+  const fb = document.getElementById('quiz-feedback');
+  if (i === q.ans) {
+    score++;
+    document.getElementById('score').textContent = score;
+    btns[i].classList.add('correct');
+    fb.className = 'quiz-feedback correct';
+    fb.textContent = '✓ Correct!';
+  } else {
+    btns[i].classList.add('wrong');
+    btns[q.ans].classList.add('correct');
+    fb.className = 'quiz-feedback wrong';
+    fb.textContent = `✗ Answer: "${q.opts[q.ans]}"`;
+  }
+  fb.style.display = 'block';
+  if (qIdx < quizQuestions.length - 1) {
+    document.getElementById('next-q-btn').style.display = 'inline-block';
+  } else {
+    setTimeout(showResult, 1000);
+  }
+}
+
+function nextQuestion() { qIdx++; renderQuestion(); }
+
+function showResult() {
+  document.getElementById('quiz-progress').style.width = '100%';
+  document.getElementById('options-container').innerHTML = '';
+  document.getElementById('question-text').textContent = '';
+  document.getElementById('question-context').textContent = '';
+  document.getElementById('quiz-feedback').style.display = 'none';
+  document.getElementById('next-q-btn').style.display = 'none';
+  document.getElementById('quiz-result').style.display = 'block';
+  document.getElementById('result-score').textContent = `${score} / ${quizQuestions.length}`;
+  const pct = score / quizQuestions.length;
+  const msgs = [
+    'Keep reviewing — work through the flashcards for each theme.',
+    'Getting there — try filtering flashcards by product type.',
+    'Good work — a few more rounds and you\'re exam-ready.',
+    'Excellent — strong command of the topic!'
+  ];
+  document.getElementById('result-msg').textContent =
+    msgs[pct < 0.5 ? 0 : pct < 0.7 ? 1 : pct < 0.9 ? 2 : 3];
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// OVERVIEW
+// ═══════════════════════════════════════════════════════════════════════════
+
+function buildOverview() {
+  const grid = document.getElementById('overview-grid');
+  grid.innerHTML = THEMES.map(t => `
+    <div class="overview-card" onclick="drillTheme('${t.num}')">
+      <div class="ov-num">${t.num}</div>
+      <div class="ov-title">${t.title}</div>
+      <div class="ov-pills">
+        ${PRODUCTS.map(p => `<span class="pill ${p.cls}">${p.label.split(' /')[0].split(' ')[0] === 'PMI' ? 'PMI' : p.label.split(' ')[0]}</span>`).join('')}
+      </div>
+    </div>
+  `).join('');
+}
+
+function drillTheme(num) {
+  document.getElementById('fc-theme-filter').value = num;
+  document.getElementById('fc-product-filter').value = 'all';
+  applyFilter();
+  switchTab('flashcards');
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// MATRIX
+// ═══════════════════════════════════════════════════════════════════════════
+
+function buildMatrix() {
+  const table = document.getElementById('matrix-table');
+  const head = document.createElement('thead');
+  head.innerHTML = `<tr>
+    <th class="th-theme">Theme</th>
+    ${PRODUCTS.map(p => `<th class="th-${p.key}">${p.label}</th>`).join('')}
+  </tr>`;
+  table.appendChild(head);
+  const body = document.createElement('tbody');
+  THEMES.forEach(t => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td class="td-theme" onclick="drillTheme('${t.num}')" title="Click to drill in flashcards">${t.num}. ${t.title}</td>` +
+      PRODUCTS.map(p => {
+        const cell = t.cells[p.key];
+        const preview = cell.points.slice(0, 3).map(pt => `<li>${pt}</li>`).join('');
+        const more = cell.points.length > 3 ? `<li style="color:#a8a6a0;font-style:italic">+${cell.points.length - 3} more…</li>` : '';
+        return `<td class="td-${p.key} cell-clickable" onclick="openModal('${t.num}','${p.key}')">
+          <ul>${preview}${more}</ul>
+        </td>`;
+      }).join('');
+    body.appendChild(tr);
+  });
+  table.appendChild(body);
+}
+
+function openModal(themeNum, productKey) {
+  const theme = THEMES.find(t => t.num === themeNum);
+  const product = PRODUCTS.find(p => p.key === productKey);
+  const cell = theme.cells[productKey];
+  document.getElementById('modal-title').textContent = `${theme.num}. ${theme.title}`;
+  const mp = document.getElementById('modal-product');
+  mp.textContent = product.label;
+  mp.style.background = product.badgeBg;
+  mp.style.color = product.badgeColor;
+  document.getElementById('modal-points').innerHTML = cell.points
+    .map(p => `<li style="margin-bottom:6px;line-height:1.6">${p}</li>`)
+    .join('');
+  document.getElementById('modal-ref').innerHTML = `📄 Exam papers: ${cell.ref}`;
+  document.getElementById('modal').classList.remove('hidden');
+}
+
+function closeModal(e) {
+  if (e.target === document.getElementById('modal'))
+    document.getElementById('modal').classList.add('hidden');
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// TAB SWITCHING
+// ═══════════════════════════════════════════════════════════════════════════
+
+function switchTab(name) {
+  ['overview','flashcards','quiz','matrix'].forEach(t => {
+    document.getElementById('tab-' + t).style.display = t === name ? 'block' : 'none';
+  });
+  document.querySelectorAll('.tab-btn').forEach((b, i) => {
+    b.classList.toggle('active', ['overview','flashcards','quiz','matrix'][i] === name);
+  });
+  if (name === 'flashcards') renderCard();
+  if (name === 'quiz') restartQuiz();
+}
+
+// ═══════════════════════════════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════════════════════════════
+
+// Populate theme filter dropdown
+const tfSel = document.getElementById('fc-theme-filter');
+THEMES.forEach(t => {
+  const opt = document.createElement('option');
+  opt.value = t.num;
+  opt.textContent = `${t.num}. ${t.title}`;
+  tfSel.appendChild(opt);
+});
+
+buildOverview();
+buildMatrix();
+renderCard();
+restartQuiz();
+
+</script>
+</body>
+</html>

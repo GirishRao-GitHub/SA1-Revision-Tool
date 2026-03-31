@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Health Insurance Pricing — Memory Tool</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: system-ui, -apple-system, sans-serif; background: #f5f4ef; color: #1a1a18; padding: 24px 16px; }
+  h1 { font-size: 20px; font-weight: 500; margin-bottom: 4px; }
+  .subtitle { font-size: 13px; color: #888780; margin-bottom: 20px; }
+  .container { max-width: 680px; margin: 0 auto; }
+  .tabs { display: flex; gap: 6px; margin-bottom: 18px; flex-wrap: wrap; }
+  .tab-btn { padding: 6px 14px; font-size: 13px; border-radius: 20px; border: 0.5px solid #d3d1c7; background: transparent; color: #888780; cursor: pointer; transition: all 0.2s; font-family: inherit; }
+  .tab-btn.active { background: #1a1a18; color: #f5f4ef; border-color: transparent; }
+  .card-wrap { perspective: 900px; cursor: pointer; user-select: none; margin-bottom: 14px; }
+  .card-inner { position: relative; width: 100%; height: 210px; transform-style: preserve-3d; transition: transform 0.45s; }
+  .card-inner.flipped { transform: rotateY(180deg); }
+  .card-front, .card-back { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; -webkit-backface-visibility: hidden; border-radius: 12px; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 20px; text-align: center; border: 0.5px solid #d3d1c7; background: #fff; }
+  .card-back { transform: rotateY(180deg); background: #f5f4ef; }
+  .phase-badge { display: inline-block; font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: 20px; margin-bottom: 6px; }
+  .step-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin: 0 2px; background: #d3d1c7; }
+  .step-dot.active { background: #1a1a18; }
+  .chunk-box { border: 0.5px solid #d3d1c7; border-radius: 10px; padding: 10px 14px; margin-bottom: 10px; background: #fff; }
+  .letter-pill { display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; border-radius: 50%; font-weight: 500; font-size: 13px; margin-right: 8px; flex-shrink: 0; }
+  .quiz-opt { width: 100%; text-align: left; padding: 10px 14px; border-radius: 8px; border: 0.5px solid #d3d1c7; background: #fff; color: #1a1a18; font-size: 14px; cursor: pointer; margin-bottom: 8px; font-family: inherit; }
+  .quiz-opt:hover:not(:disabled) { border-color: #888780; background: #f5f4ef; }
+  .quiz-opt.correct { border-color: #1D9E75; background: #E1F5EE; color: #085041; }
+  .quiz-opt.wrong { border-color: #D85A30; background: #FAECE7; color: #4A1B0C; }
+  .quiz-opt:disabled { cursor: default; }
+  .mnemonic-box { background: #fff; border-radius: 12px; padding: 16px 18px; margin-bottom: 16px; border: 0.5px solid #d3d1c7; }
+  .btn { padding: 7px 20px; border-radius: 20px; border: 0.5px solid #d3d1c7; font-size: 13px; cursor: pointer; font-family: inherit; }
+  .btn-primary { background: #1a1a18; color: #f5f4ef; border-color: #1a1a18; }
+  .btn-secondary { background: transparent; color: #1a1a18; }
+  .row-item { display: flex; align-items: center; margin-bottom: 6px; font-size: 14px; }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Health Insurance Pricing</h1>
+  <p class="subtitle">8-step pricing process · DAMRLPRO mnemonic · Flashcards · Quiz</p>
+
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('mnemonic')">Mnemonic</button>
+    <button class="tab-btn" onclick="switchTab('chunks')">Phase chunks</button>
+    <button class="tab-btn" onclick="switchTab('flashcards')">Flashcards</button>
+    <button class="tab-btn" onclick="switchTab('quiz')">Quiz</button>
+  </div>
+
+  <!-- MNEMONIC TAB -->
+  <div id="tab-mnemonic">
+    <p style="font-size:13px;color:#888780;margin:0 0 12px">Each word's first letter = one pricing step, in order.</p>
+    <div class="mnemonic-box">
+      <p style="font-size:16px;font-weight:500;margin:0 0 12px;line-height:1.9">
+        "<span style="color:#185FA5">D</span>ata
+        <span style="color:#0F6E56">A</span>lways
+        <span style="color:#993C1D">M</span>akes
+        <span style="color:#533AB7">R</span>ates
+        <span style="color:#854F0B">L</span>ook
+        <span style="color:#993556">P</span>erfectly
+        <span style="color:#185FA5">R</span>ealistic,
+        <span style="color:#3B6D11">O</span>bviously."
+      </p>
+      <div style="display:flex;flex-wrap:wrap;gap:4px 16px;font-size:12px;color:#888780">
+        <span><b style="color:#1a1a18">D</b> = Data collection</span>
+        <span><b style="color:#1a1a18">A</b> = Assumptions</span>
+        <span><b style="color:#1a1a18">M</b> = Maturity adjustments</span>
+        <span><b style="color:#1a1a18">R</b> = Risk premium</span>
+        <span><b style="color:#1a1a18">L</b> = Loadings</span>
+        <span><b style="color:#1a1a18">P</b> = Profit testing</span>
+        <span><b style="color:#1a1a18">R</b> = Regulatory review</span>
+        <span><b style="color:#1a1a18">O</b> = Ongoing monitoring</span>
+      </div>
+    </div>
+    <p style="font-size:13px;color:#888780;margin:0 0 10px">Tip: say it 5x aloud, then cover it and write the 8 steps from memory.</p>
+    <button class="btn btn-secondary" onclick="switchTab('flashcards')">Go to flashcards to drill each step</button>
+  </div>
+
+  <!-- PHASE CHUNKS TAB -->
+  <div id="tab-chunks" style="display:none">
+    <p style="font-size:13px;color:#888780;margin:0 0 14px">Think of pricing in 3 natural phases — easier to recall under exam pressure.</p>
+    <div class="chunk-box">
+      <div style="margin-bottom:10px"><span style="font-size:12px;font-weight:500;background:#E6F1FB;color:#0C447C;padding:2px 10px;border-radius:20px">Phase 1 · Build foundations (steps 1-3)</span></div>
+      <div class="row-item"><span class="letter-pill" style="background:#E6F1FB;color:#0C447C">D</span>Data collection &amp; preparation</div>
+      <div class="row-item"><span class="letter-pill" style="background:#E6F1FB;color:#0C447C">A</span>Assumption setting</div>
+      <div class="row-item" style="margin-bottom:0"><span class="letter-pill" style="background:#E6F1FB;color:#0C447C">M</span>Maturity adjustments</div>
+    </div>
+    <div class="chunk-box">
+      <div style="margin-bottom:10px"><span style="font-size:12px;font-weight:500;background:#E1F5EE;color:#085041;padding:2px 10px;border-radius:20px">Phase 2 · Build the price (steps 4-6)</span></div>
+      <div class="row-item"><span class="letter-pill" style="background:#E1F5EE;color:#085041">R</span>Risk premium calculation</div>
+      <div class="row-item"><span class="letter-pill" style="background:#E1F5EE;color:#085041">L</span>Loadings</div>
+      <div class="row-item" style="margin-bottom:0"><span class="letter-pill" style="background:#E1F5EE;color:#085041">P</span>Profit testing</div>
+    </div>
+    <div class="chunk-box">
+      <div style="margin-bottom:10px"><span style="font-size:12px;font-weight:500;background:#FAEEDA;color:#633806;padding:2px 10px;border-radius:20px">Phase 3 · Validate &amp; sustain (steps 7-8)</span></div>
+      <div class="row-item"><span class="letter-pill" style="background:#FAEEDA;color:#633806">R</span>Regulatory &amp; competitive review</div>
+      <div class="row-item" style="margin-bottom:0"><span class="letter-pill" style="background:#FAEEDA;color:#633806">O</span>Ongoing monitoring</div>
+    </div>
+  </div>
+
+  <!-- FLASHCARDS TAB -->
+  <div id="tab-flashcards" style="display:none">
+    <p style="font-size:13px;color:#888780;margin:0 0 12px">Click the card to flip it. Step through all 8.</p>
+    <div class="card-wrap" onclick="flipCard()">
+      <div class="card-inner" id="card-inner">
+        <div class="card-front">
+          <span style="font-size:11px;color:#b4b2a9;margin-bottom:6px">Step <span id="step-num">1</span> of 8</span>
+          <div id="fc-phase-badge" class="phase-badge"></div>
+          <p style="font-size:22px;font-weight:500;margin:8px 0 4px" id="fc-title"></p>
+          <p style="font-size:12px;color:#b4b2a9">tap to see key points</p>
+        </div>
+        <div class="card-back">
+          <ul id="fc-points" style="text-align:left;font-size:13px;line-height:1.7;padding-left:18px;margin:0"></ul>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;justify-content:center;gap:4px;margin:14px 0 12px" id="step-dots"></div>
+    <div style="display:flex;gap:10px;justify-content:center">
+      <button class="btn btn-secondary" onclick="prevCard()">Prev</button>
+      <button class="btn btn-primary" onclick="nextCard()">Next</button>
+    </div>
+  </div>
+
+  <!-- QUIZ TAB -->
+  <div id="tab-quiz" style="display:none">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+      <p style="font-size:13px;color:#888780">Question <span id="q-num">1</span> of 8</p>
+      <span style="font-size:13px;color:#888780">Score: <span id="score">0</span>/8</span>
+    </div>
+    <div style="background:#fff;border-radius:10px;padding:14px 16px;margin-bottom:14px;border:0.5px solid #d3d1c7">
+      <p style="font-size:15px;font-weight:500;margin:0" id="question-text"></p>
+    </div>
+    <div id="options-container"></div>
+    <div id="quiz-feedback" style="display:none;margin-top:8px;font-size:13px;border-radius:8px;padding:10px 14px"></div>
+    <button id="next-q-btn" class="btn btn-primary" onclick="nextQuestion()" style="display:none;margin-top:12px">Next question</button>
+    <div id="quiz-result" style="display:none;text-align:center;padding:20px">
+      <p style="font-size:24px;font-weight:500;margin:0 0 6px" id="result-score"></p>
+      <p style="font-size:13px;color:#888780;margin:0 0 16px" id="result-msg"></p>
+      <button class="btn btn-primary" onclick="restartQuiz()">Try again</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const steps = [
+  { title:'Data collection & prep', phase:'Phase 1 · Build foundations', phaseColor:'#E6F1FB', phaseText:'#0C447C',
+    points:['Gather 8+ years of internal claims data','Supplement with IRDAI/GIC, reinsurer, and international data','Adjust for large one-off claims, IBNR/IBNER','Correct for product feature restrictions and past medical inflation'] },
+  { title:'Assumption setting', phase:'Phase 1 · Build foundations', phaseColor:'#E6F1FB', phaseText:'#0C447C',
+    points:['Claim frequency by age, gender, SI, location, duration','Claim severity by diagnosis/procedure','Medical inflation projection to claim inception date','Lapse, expenses, investment returns — all documented & sensitivity-tested'] },
+  { title:'Maturity adjustments', phase:'Phase 1 · Build foundations', phaseColor:'#E6F1FB', phaseText:'#0C447C',
+    points:['Allow for select lives effect from initial underwriting','Adjust for waiting periods on PEDs and named ailments','Account for selective lapsing (anti-selection)','Balance so premiums remain competitive'] },
+  { title:'Risk premium calculation', phase:'Phase 2 · Build the price', phaseColor:'#E1F5EE', phaseText:'#085041',
+    points:['Expected claims cost per policy year','Adjust for benefit design: deductibles, co-pays, sub-limits, waiting periods','For novel risks, derive cost multipliers by region using published stats and reinsurer input'] },
+  { title:'Loadings', phase:'Phase 2 · Build the price', phaseColor:'#E1F5EE', phaseText:'#085041',
+    points:['Expenses (initial + renewal + claims handling)','Profit margin','Contingency margin','Reinsurance cost net of recoveries'] },
+  { title:'Profit testing', phase:'Phase 2 · Build the price', phaseColor:'#E1F5EE', phaseText:'#085041',
+    points:['Project cash flows forward, discount at risk discount rate','Verify required return on capital at projected volumes','Stress-test for profitability across multiple scenarios'] },
+  { title:'Regulatory & competitive review', phase:'Phase 3 · Validate & sustain', phaseColor:'#FAEEDA', phaseText:'#633806',
+    points:['Benchmark rates against market competitors','Ensure IRDAI compliance','File under File & Use or Use & File as applicable'] },
+  { title:'Ongoing monitoring', phase:'Phase 3 · Validate & sustain', phaseColor:'#FAEEDA', phaseText:'#633806',
+    points:['Conduct actual vs expected (A/E) analysis periodically','Review assumptions regularly','Re-file rates if experience deteriorates materially'] },
+];
+
+let currentCard = 0, isFlipped = false;
+
+function renderCard() {
+  const s = steps[currentCard];
+  document.getElementById('step-num').textContent = currentCard + 1;
+  document.getElementById('fc-title').textContent = s.title;
+  const badge = document.getElementById('fc-phase-badge');
+  badge.textContent = s.phase;
+  badge.style.background = s.phaseColor;
+  badge.style.color = s.phaseText;
+  document.getElementById('fc-points').innerHTML = s.points.map(p => `<li style="margin-bottom:4px">${p}</li>`).join('');
+  if (isFlipped) { document.getElementById('card-inner').classList.remove('flipped'); isFlipped = false; }
+  document.getElementById('step-dots').innerHTML = steps.map((_,i) => `<span class="step-dot${i===currentCard?' active':''}"></span>`).join('');
+}
+
+function flipCard() { isFlipped = !isFlipped; document.getElementById('card-inner').classList.toggle('flipped', isFlipped); }
+function nextCard() { currentCard = (currentCard + 1) % steps.length; isFlipped = false; renderCard(); }
+function prevCard() { currentCard = (currentCard - 1 + steps.length) % steps.length; isFlipped = false; renderCard(); }
+
+const quizQuestions = [
+  { q:'Which step involves adjusting for selective lapsing and the select lives effect?', ans:1, opts:['Assumption setting','Maturity adjustments','Risk premium calculation','Profit testing'] },
+  { q:'Where do you add margins for expenses, profit, contingency, and reinsurance?', ans:2, opts:['Risk premium calculation','Profit testing','Loadings','Regulatory review'] },
+  { q:'Discounting projected cash flows at the risk discount rate happens in which step?', ans:1, opts:['Assumption setting','Profit testing','Loadings','Ongoing monitoring'] },
+  { q:'IBNR/IBNER adjustments are made in which step?', ans:0, opts:['Data collection & prep','Maturity adjustments','Risk premium calculation','Assumption setting'] },
+  { q:'Benchmarking against competitors and filing under Use & File falls under which step?', ans:2, opts:['Profit testing','Ongoing monitoring','Regulatory & competitive review','Assumption setting'] },
+  { q:'Actual vs expected (A/E) analysis is part of which step?', ans:3, opts:['Regulatory review','Profit testing','Risk premium calculation','Ongoing monitoring'] },
+  { q:'Medical inflation projection to claim inception date is set in which step?', ans:2, opts:['Data collection','Risk premium calculation','Assumption setting','Maturity adjustments'] },
+  { q:'What is step 4 in the pricing process (R in DAMRLPRO)?', ans:0, opts:['Risk premium calculation','Regulatory review','Reinsurance loading','Rate benchmarking'] },
+];
+
+let qIdx = 0, score = 0, answered = false, qOrder = [];
+
+function shuffleArr(a) { return [...a].sort(() => Math.random() - 0.5); }
+
+function renderQuestion() {
+  const q = quizQuestions[qOrder[qIdx]];
+  document.getElementById('q-num').textContent = qIdx + 1;
+  document.getElementById('question-text').textContent = q.q;
+  document.getElementById('quiz-feedback').style.display = 'none';
+  document.getElementById('next-q-btn').style.display = 'none';
+  document.getElementById('quiz-result').style.display = 'none';
+  answered = false;
+  document.getElementById('options-container').innerHTML = q.opts.map((o,i) => `<button class="quiz-opt" onclick="selectOpt(${i})">${o}</button>`).join('');
+}
+
+function selectOpt(i) {
+  if (answered) return;
+  answered = true;
+  const q = quizQuestions[qOrder[qIdx]];
+  const btns = document.querySelectorAll('.quiz-opt');
+  btns.forEach(b => b.disabled = true);
+  const fb = document.getElementById('quiz-feedback');
+  if (i === q.ans) {
+    score++;
+    document.getElementById('score').textContent = score;
+    btns[i].classList.add('correct');
+    fb.style.cssText = 'display:block;background:#E1F5EE;color:#085041;border:0.5px solid #1D9E75;margin-top:8px;font-size:13px;border-radius:8px;padding:10px 14px';
+    fb.textContent = 'Correct!';
+  } else {
+    btns[i].classList.add('wrong');
+    btns[q.ans].classList.add('correct');
+    fb.style.cssText = 'display:block;background:#FAECE7;color:#4A1B0C;border:0.5px solid #D85A30;margin-top:8px;font-size:13px;border-radius:8px;padding:10px 14px';
+    fb.textContent = 'The answer is: "' + q.opts[q.ans] + '"';
+  }
+  if (qIdx < quizQuestions.length - 1) {
+    document.getElementById('next-q-btn').style.display = 'block';
+  } else {
+    setTimeout(showResult, 900);
+  }
+}
+
+function nextQuestion() { qIdx++; renderQuestion(); }
+
+function showResult() {
+  document.getElementById('quiz-feedback').style.display = 'none';
+  document.getElementById('next-q-btn').style.display = 'none';
+  document.getElementById('options-container').innerHTML = '';
+  document.getElementById('question-text').textContent = '';
+  document.getElementById('quiz-result').style.display = 'block';
+  document.getElementById('result-score').textContent = score + ' / ' + quizQuestions.length;
+  const msgs = ['Keep reviewing — try the flashcards!','Getting there — one more round!','Good work!','Excellent — exam-ready!'];
+  document.getElementById('result-msg').textContent = msgs[score <= 3 ? 0 : score <= 5 ? 1 : score <= 7 ? 2 : 3];
+}
+
+function restartQuiz() {
+  qIdx = 0; score = 0; answered = false;
+  document.getElementById('score').textContent = 0;
+  qOrder = shuffleArr([...Array(quizQuestions.length).keys()]);
+  renderQuestion();
+}
+
+function switchTab(name) {
+  ['mnemonic','chunks','flashcards','quiz'].forEach(t => {
+    document.getElementById('tab-' + t).style.display = t === name ? 'block' : 'none';
+  });
+  document.querySelectorAll('.tab-btn').forEach((b, i) => {
+    b.classList.toggle('active', ['mnemonic','chunks','flashcards','quiz'][i] === name);
+  });
+  if (name === 'flashcards') renderCard();
+  if (name === 'quiz') { restartQuiz(); }
+}
+
+renderCard();
+</script>
+</body>
+</html>
