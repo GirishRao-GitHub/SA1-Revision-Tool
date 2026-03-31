@@ -839,7 +839,8 @@ const SOURCE_FILES = {
 
 let currentSource = '';
 let appMode = '';
-const LOADED_SOURCES = new Set(); // tracks which sources have been lazy-loaded
+const LOADED_SOURCES = new Set();  // tracks which sources have been fully lazy-loaded
+const LOADING_SOURCES = new Set(); // tracks which sources are currently mid-fetch (race guard)
 let currentQ = null, currentSub = null, currentPoints = [];
 let currentQk = null, currentPk = null; // track active dot keys
 let revealed = 0, hits = null, manualMode = false;
@@ -996,8 +997,9 @@ async function setSource(src) {
         const csr = document.getElementById('chrono-sitting-row');
         if (csr) csr.style.display = (appMode === 'chrono') ? 'flex' : 'none';
 
-        // LAZY LOAD: fetch this source's files only if not already loaded
-        if (!LOADED_SOURCES.has(src)) {
+        // LAZY LOAD: fetch this source's files only if not already loaded or currently loading
+        if (!LOADED_SOURCES.has(src) && !LOADING_SOURCES.has(src)) {
+            LOADING_SOURCES.add(src);
             const ssel = document.getElementById('sel-assign');
             if (ssel) { ssel.innerHTML = '<option value="">Loading...</option>'; ssel.disabled = true; }
             document.getElementById('data-status').textContent = 'Loading...';
@@ -1025,8 +1027,16 @@ async function setSource(src) {
             );
             await Promise.all(fetches);
             LOADED_SOURCES.add(src);
+            LOADING_SOURCES.delete(src);
             document.getElementById('data-status').textContent = `${Object.keys(SITTINGS).length} Files`;
             console.log(`Source '${src}' fully loaded: ${loadedCount} files`);
+        } else if (LOADING_SOURCES.has(src)) {
+            // Another click arrived while this source was mid-fetch — wait for it to finish
+            await new Promise(resolve => {
+                const poll = setInterval(() => {
+                    if (LOADED_SOURCES.has(src)) { clearInterval(poll); resolve(); }
+                }, 100);
+            });
         }
 
         updateSourceUI();
