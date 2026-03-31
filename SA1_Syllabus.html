@@ -248,6 +248,57 @@
     opacity: .7;
   }
 
+  /* ── SECTION ROWS (intermediate tier: chapter → section → subsection) ── */
+  .nav-section { margin-bottom: 1px; }
+  .nav-section-header {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 5px 12px 5px 12px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-dim);
+    user-select: none;
+    transition: background .12s;
+    border-left: 2px solid transparent;
+    margin-left: 12px;
+    line-height: 1.35;
+  }
+  .nav-section-header:hover { background: var(--bg); color: var(--text); }
+  .nav-section-header.has-active {
+    color: var(--accent);
+    border-left-color: var(--accent);
+    background: var(--accent-lo);
+  }
+  .nav-sec-id {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--text-dim);
+    background: var(--border);
+    padding: 1px 5px;
+    border-radius: 3px;
+    flex-shrink: 0;
+  }
+  .nav-sec-title {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .nav-sec-chevron {
+    margin-left: auto;
+    width: 9px;
+    height: 9px;
+    color: var(--text-dim);
+    transition: transform .2s;
+    flex-shrink: 0;
+  }
+  .nav-section.open .nav-sec-chevron { transform: rotate(90deg); }
+  .nav-section-subs { display: none; }
+  .nav-section.open .nav-section-subs { display: block; }
+
   /* ── MEMORY AIDS ── */
   .nav-memory-aid {
     padding: 4px 12px 4px 44px;
@@ -1215,6 +1266,7 @@ const MEMORY_AIDS_API = 'https://api.github.com/repos/GirishRao-GitHub/SA1-Revis
 const MEMORY_AIDS_RAW  = 'https://raw.githubusercontent.com/GirishRao-GitHub/SA1-Revision-Tool/main/Memory%20Aids/';
 const MEMORY_AIDS_BY_CHAPTER = {};  // { chapterNum (or 0) → [ { label, url, filename, ext }, … ] }
 let activeMemoryAid = null;  // { label, url }
+const openSections  = new Set(); // "chNum_secId" keys for expanded section rows
 
 // ── INIT ─────────────────────────────────────────────────
 renderNav();       // Render nav skeleton immediately (no chapter data yet)
@@ -1286,12 +1338,34 @@ function renderNav() {
 
     if (hasData) {
       data.sections.forEach(sec => {
-        const secMatch = !q || sec.title.toLowerCase().includes(q);
-        sec.subsections.forEach(sub => {
-          if (q && !secMatch && !sub.title.toLowerCase().includes(q)) return;
+        const secKey    = `${ch.num}_${sec.id}`;
+        const secMatch  = !q || sec.title.toLowerCase().includes(q);
+        const matchSubs = sec.subsections.filter(sub =>
+          !q || secMatch || sub.title.toLowerCase().includes(q)
+        );
+        if (q && !secMatch && matchSubs.length === 0) return;
+
+        const hasActiveSub = activeChapterNum === ch.num &&
+                             sec.subsections.some(sub => sub.id === activeSubId);
+        const isSecOpen    = openSections.has(secKey) || hasActiveSub ||
+                             (q && matchSubs.length > 0);
+
+        html += `<div class="nav-section ${isSecOpen ? 'open' : ''}">
+          <div class="nav-section-header ${hasActiveSub ? 'has-active' : ''}"
+               onclick="toggleSection('${secKey}')">
+            <span class="nav-sec-id">${sec.id}</span>
+            <span class="nav-sec-title">${sec.title}</span>
+            <svg class="nav-sec-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+          </div>
+          <div class="nav-section-subs">`;
+
+        matchSubs.forEach(sub => {
           const isSubActive = activeChapterNum === ch.num && activeSubId === sub.id;
-          html += `<div class="nav-sub ${isSubActive ? 'active' : ''}" onclick="selectSub(${ch.num}, '${sec.id}', '${sub.id}')">${sub.id} · ${sub.title}</div>`;
+          html += `<div class="nav-sub ${isSubActive ? 'active' : ''}"
+            onclick="selectSub(${ch.num}, '${sec.id}', '${sub.id}')">${sub.id} · ${sub.title}</div>`;
         });
+
+        html += `</div></div>`;
       });
     } else {
       html += `<div class="nav-upload-hint">Notes not yet uploaded</div>`;
@@ -1345,11 +1419,21 @@ function toggleChapter(num) {
   }
 }
 
+function toggleSection(secKey) {
+  if (openSections.has(secKey)) {
+    openSections.delete(secKey);
+  } else {
+    openSections.add(secKey);
+  }
+  renderNav();
+}
+
 function selectSub(chNum, secId, subId) {
   activeChapterNum = chNum;
   activeSectionId  = secId;
   activeSubId      = subId;
   activeMemoryAid  = null;
+  openSections.add(`${chNum}_${secId}`); // keep parent section open in nav
   clearMemoryAidView();
   renderNav();
   const data = CHAPTER_DATA[String(chNum)];
