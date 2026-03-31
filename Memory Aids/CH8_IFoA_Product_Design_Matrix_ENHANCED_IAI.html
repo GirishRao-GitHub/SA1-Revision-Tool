@@ -29,25 +29,25 @@
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   body {
     font-family: 'IBM Plex Sans', sans-serif;
-    font-size: 11.5px; line-height: 1.55;
+    font-size: 13.5px; line-height: 1.55;
     background: var(--bg); color: var(--ink);
     padding: 28px 24px 48px;
   }
   header { border-left: 4px solid var(--ink); padding-left: 14px; margin-bottom: 20px; }
   header h1 {
-    font-family: 'IBM Plex Mono', monospace; font-size: 15px; font-weight: 600;
+    font-family: 'IBM Plex Mono', monospace; font-size: 17px; font-weight: 600;
     letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink);
   }
-  header p { font-size: 10.5px; color: var(--ink-light); font-style: italic; margin-top: 4px; }
+  header p { font-size: 12.5px; color: var(--ink-light); font-style: italic; margin-top: 4px; }
   .legend { display: flex; flex-wrap: wrap; gap: 10px 20px; margin-bottom: 18px;
-    font-size: 10px; font-family: 'IBM Plex Mono', monospace; }
+    font-size: 12px; font-family: 'IBM Plex Mono', monospace; }
   .legend-item { display: flex; align-items: center; gap: 6px; }
   .legend-dot { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
   .iai-legend {
     display: flex; align-items: center; gap: 8px;
     background: var(--iai-bg); border: 1.5px solid var(--iai);
     border-radius: 4px; padding: 6px 12px; margin-bottom: 16px;
-    font-size: 10.5px; font-family: 'IBM Plex Mono', monospace; color: var(--iai);
+    font-size: 12.5px; font-family: 'IBM Plex Mono', monospace; color: var(--iai);
   }
   .iai-legend strong { font-weight: 600; }
   .scroll-wrap {
@@ -62,7 +62,7 @@
   col.col-pmi, col.col-ci, col.col-ip, col.col-ltc, col.col-state { width: 17%; }
   th, td { border: 1px solid var(--rule); padding: 8px 10px; vertical-align: top; }
   thead tr.header-row th {
-    font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 600;
+    font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 600;
     letter-spacing: 0.05em; text-transform: uppercase;
     text-align: center; border-bottom: 2px solid var(--rule-dark);
   }
@@ -73,7 +73,7 @@
   th.hdr-ltc   { background: var(--ltc-bg);   color: var(--ltc);   border-top: 3px solid var(--ltc);   }
   th.hdr-state { background: var(--state-bg); color: var(--state); border-top: 3px solid var(--state); }
   thead tr.subhdr th {
-    font-family: 'IBM Plex Mono', monospace; font-size: 9px; font-weight: 400;
+    font-family: 'IBM Plex Mono', monospace; font-size: 11px; font-weight: 400;
     text-align: center; color: var(--ink-light);
     border-bottom: 2px solid var(--rule-dark); padding: 3px 6px;
   }
@@ -84,13 +84,13 @@
   th.subhdr-ltc   { background: var(--ltc-bg); }
   th.subhdr-state { background: var(--state-bg); }
   td.theme-cell {
-    font-family: 'IBM Plex Mono', monospace; font-size: 10px; font-weight: 600;
+    font-family: 'IBM Plex Mono', monospace; font-size: 12px; font-weight: 600;
     background: #f0f0f6; color: var(--ink);
     border-right: 2px solid var(--rule-dark);
     vertical-align: middle; line-height: 1.4;
   }
   td.theme-cell .theme-num {
-    display: block; font-size: 16px; font-weight: 600;
+    display: block; font-size: 18px; font-weight: 600;
     color: var(--rule-dark); line-height: 1; margin-bottom: 4px;
   }
   td.cell-pmi   { background: #fafcff; }
@@ -100,19 +100,19 @@
   td.cell-state { background: #fafaff; }
   td ul { margin: 0; padding-left: 0; list-style: none; }
   td li {
-    margin-bottom: 6px; font-size: 11px; color: var(--ink);
+    margin-bottom: 6px; font-size: 13px; color: var(--ink);
     line-height: 1.5; padding-left: 14px; position: relative;
   }
   td li::before {
     content: "▸"; position: absolute; left: 0; top: 0;
-    color: var(--rule-dark); font-size: 9px; line-height: 1.8;
+    color: var(--rule-dark); font-size: 11px; line-height: 1.8;
   }
   td li strong { font-weight: 600; }
 
   /* ── IAI-specific additions ── */
   .iai-section-label {
     font-family: 'IBM Plex Mono', monospace;
-    font-size: 9px; font-weight: 700;
+    font-size: 11px; font-weight: 700;
     text-transform: uppercase; letter-spacing: 0.08em;
     color: var(--iai);
     background: var(--iai-bg);
@@ -126,8 +126,7 @@
   .iai-ul { margin: 0; padding-left: 0; list-style: none; }
   .iai-li {
     margin-bottom: 6px;
-    font-size: 11px;
-    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 13px;
     font-style: italic;
     color: var(--iai) !important;
     line-height: 1.5;
@@ -137,11 +136,11 @@
   .iai-li::before {
     content: "◆";
     position: absolute; left: 0; top: 0;
-    color: var(--iai); font-size: 8px; line-height: 1.9;
+    color: var(--iai); font-size: 10px; line-height: 1.9;
   }
   .iai-li strong { font-weight: 600; color: var(--iai); }
   .iai-source {
-    font-size: 8.5px; font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px; font-family: 'IBM Plex Mono', monospace;
     color: #7799cc; font-style: normal;
     display: inline-block; margin-left: 4px;
   }
@@ -149,7 +148,7 @@
   /* ── Segment labels ── */
   .seg-label {
     font-family: 'IBM Plex Mono', monospace;
-    font-size: 9px; font-weight: 600;
+    font-size: 11px; font-weight: 600;
     text-transform: uppercase; letter-spacing: 0.06em;
     margin-top: 9px; margin-bottom: 4px;
     padding-top: 6px; border-top: 1px dashed var(--rule);
