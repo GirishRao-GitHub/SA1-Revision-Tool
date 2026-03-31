@@ -248,6 +248,95 @@
     opacity: .7;
   }
 
+  /* ── MEMORY AIDS ── */
+  .nav-memory-aid {
+    padding: 4px 12px 4px 44px;
+    font-size: 12px;
+    color: #4ec994;
+    cursor: pointer;
+    transition: all .12s;
+    border-left: 2px solid transparent;
+    margin-left: 12px;
+    line-height: 1.4;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .nav-memory-aid:hover { background: var(--green-lo); border-left-color: var(--green); }
+  .nav-memory-aid.active { background: var(--green-lo); border-left-color: var(--green); color: var(--green); }
+  .nav-memory-aid-icon { font-size: 10px; flex-shrink: 0; }
+
+  /* Global memory aids section label */
+  .nav-global-aids-label {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: #4ec994;
+    padding: 10px 14px 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    opacity: .8;
+  }
+  .nav-global-aids-label::after { content: ''; flex: 1; height: 1px; background: var(--green-lo); }
+
+  /* Memory aid iframe pane */
+  .memory-aid-frame {
+    width: 100%;
+    height: 100%;
+    border: none;
+    background: #fff;
+    border-radius: 0;
+  }
+  .memory-aid-wrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  .memory-aid-topbar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 16px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+  .memory-aid-badge {
+    font-family: var(--mono);
+    font-size: 9px;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--green);
+    background: var(--green-lo);
+    padding: 2px 8px;
+    border-radius: 3px;
+    border: 1px solid rgba(78,201,148,.3);
+  }
+  .memory-aid-title {
+    font-family: var(--sans);
+    font-size: 13px;
+    color: var(--text-hi);
+    flex: 1;
+  }
+  .memory-aid-open-btn {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-dim);
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 3px 8px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all .15s;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .memory-aid-open-btn:hover { color: var(--accent); border-color: var(--accent); background: var(--accent-lo); }
+
   /* ── CANVAS ── */
   .canvas {
     flex: 1;
@@ -1120,6 +1209,12 @@ let activeSectionId  = null;
 let activeSubId      = null;
 let searchQuery      = '';
 
+// ── MEMORY AIDS STATE ─────────────────────────────────────
+const MEMORY_AIDS_API = 'https://api.github.com/repos/GirishRao-GitHub/SA1-Revision-Tool/contents/Memory%20Aids';
+const MEMORY_AIDS_RAW  = 'https://raw.githubusercontent.com/GirishRao-GitHub/SA1-Revision-Tool/main/Memory%20Aids/';
+const MEMORY_AIDS_BY_CHAPTER = {};  // { chapterNum (or 0) → [ { label, url, filename, ext }, … ] }
+let activeMemoryAid = null;  // { label, url }
+
 // ── INIT ─────────────────────────────────────────────────
 renderNav();       // Render nav skeleton immediately (no chapter data yet)
 loadChapterData(); // Async: fetch chapter data, then re-render
@@ -1131,9 +1226,27 @@ function renderNav() {
   let html = '';
   let lastPart = 'NONE';
 
+  // ── CH0 Global Memory Aids at the very top ────────────
+  const globalAids = MEMORY_AIDS_BY_CHAPTER[0] || [];
+  if (globalAids.length) {
+    const globalMatch = !q || globalAids.some(a => a.label.toLowerCase().includes(q));
+    if (globalMatch) {
+      html += `<div class="nav-global-aids-label">Global Memory Aids</div>`;
+      globalAids.forEach(aid => {
+        if (q && !aid.label.toLowerCase().includes(q)) return;
+        const isActive = activeMemoryAid && activeMemoryAid.url === aid.url;
+        html += `<div class="nav-memory-aid ${isActive ? 'active' : ''}"
+          onclick="selectMemoryAid('${aid.url}', '${aid.label.replace(/'/g, "\\'")}')">
+          <span class="nav-memory-aid-icon">🧠</span>${aid.label}
+        </div>`;
+      });
+    }
+  }
+
   CHAPTERS.forEach(ch => {
     const data = CHAPTER_DATA[String(ch.num)];
     const chLabel = ch.num === 0 ? 'Ch 0' : `Ch ${ch.num}`;
+    const chAids  = MEMORY_AIDS_BY_CHAPTER[ch.num] || [];
 
     // Part separator
     const partKey = ch.part === null ? (ch.num === 26 ? 'GLOSS' : 'INTRO') : ch.part;
@@ -1148,23 +1261,25 @@ function renderNav() {
 
     // Filter by search
     if (q) {
-      const titleMatch = ch.title.toLowerCase().includes(q);
+      const titleMatch   = ch.title.toLowerCase().includes(q);
       const sectionMatch = data && data.sections && data.sections.some(s =>
         s.title.toLowerCase().includes(q) ||
         (s.subsections && s.subsections.some(sub => sub.title.toLowerCase().includes(q)))
       );
-      if (!titleMatch && !sectionMatch) return;
+      const aidMatch     = chAids.some(a => a.label.toLowerCase().includes(q));
+      if (!titleMatch && !sectionMatch && !aidMatch) return;
     }
 
-    const isOpen   = activeChapterNum === ch.num || (q && data);
+    const isOpen   = activeChapterNum === ch.num || (q && (data || chAids.length));
     const isActive = activeChapterNum === ch.num;
     const hasData  = !!data;
+    const hasAids  = chAids.length > 0;
 
     html += `<div class="nav-chapter ${isOpen ? 'open' : ''}" id="nav-ch-${ch.num}">
       <div class="nav-chapter-header ${isActive ? 'active' : ''}" onclick="toggleChapter(${ch.num})">
         <span class="nav-ch-num ${!hasData ? 'no-data' : ''}">${chLabel}</span>
         <span class="nav-ch-title">${ch.title}</span>
-        ${hasData ? `<svg class="nav-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>` : ''}
+        ${(hasData || hasAids) ? `<svg class="nav-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>` : ''}
       </div>
       <div class="nav-subsections">`;
 
@@ -1181,6 +1296,18 @@ function renderNav() {
       html += `<div class="nav-upload-hint">Notes not yet uploaded</div>`;
     }
 
+    // Inject memory aid entries at the bottom of each chapter's subsection list
+    if (hasAids) {
+      chAids.forEach(aid => {
+        if (q && !aid.label.toLowerCase().includes(q)) return;
+        const isActive = activeMemoryAid && activeMemoryAid.url === aid.url;
+        html += `<div class="nav-memory-aid ${isActive ? 'active' : ''}"
+          onclick="selectMemoryAid('${aid.url}', '${aid.label.replace(/'/g, "\\'")}')">
+          <span class="nav-memory-aid-icon">🧠</span>${aid.label}
+        </div>`;
+      });
+    }
+
     html += `</div></div>`;
   });
 
@@ -1192,11 +1319,15 @@ function toggleChapter(num) {
     activeChapterNum = null;
     activeSectionId  = null;
     activeSubId      = null;
+    activeMemoryAid  = null;
+    clearMemoryAidView();
     renderNav();
     showWelcome();
     document.getElementById('header-chapter-title').textContent = 'Health and Care · All Chapters';
     return;
   }
+  activeMemoryAid  = null;
+  clearMemoryAidView();
   activeChapterNum = num;
   activeSectionId  = null;
   activeSubId      = null;
@@ -1217,6 +1348,8 @@ function selectSub(chNum, secId, subId) {
   activeChapterNum = chNum;
   activeSectionId  = secId;
   activeSubId      = subId;
+  activeMemoryAid  = null;
+  clearMemoryAidView();
   renderNav();
   const data = CHAPTER_DATA[String(chNum)];
   if (data) renderSection(data, secId, subId);
@@ -1724,6 +1857,92 @@ function escAttr(str) {
 
 // Kick off SP1 data load in background on page load
 loadSP1Data();
+
+// ── MEMORY AIDS ───────────────────────────────────────────
+// Files named CH{n}_{descriptor}.html in the Memory Aids folder
+// are fetched from GitHub API on load and auto-routed to the
+// matching chapter in the sidebar.  CH0 = global (no chapter).
+
+function parseMemoryAidFilename(filename) {
+  // Accepts CH4_pricing_theme_matrix.html  or  CH0_topic_coverage_matrix.html
+  const m = filename.match(/^CH(\d+)_(.+)\.(html|svg)$/i);
+  if (!m) return null;
+  const chNum  = parseInt(m[1], 10);
+  const slug   = m[2];
+  const ext    = m[3].toLowerCase();
+  // Convert slug to title: underscores → spaces, title-case words
+  const label  = slug
+    .replace(/_/g, ' ')
+    .replace(/\b\w/g, c => c.toUpperCase());
+  return { chNum, label, ext };
+}
+
+function loadMemoryAids() {
+  fetch(MEMORY_AIDS_API)
+    .then(r => r.json())
+    .then(files => {
+      if (!Array.isArray(files)) return;
+      files.forEach(f => {
+        const parsed = parseMemoryAidFilename(f.name);
+        if (!parsed) return;
+        const { chNum, label, ext } = parsed;
+        const url = MEMORY_AIDS_RAW + encodeURIComponent(f.name);
+        if (!MEMORY_AIDS_BY_CHAPTER[chNum]) MEMORY_AIDS_BY_CHAPTER[chNum] = [];
+        MEMORY_AIDS_BY_CHAPTER[chNum].push({ label, url, filename: f.name, ext });
+      });
+      // Sort each chapter's aids alphabetically
+      Object.values(MEMORY_AIDS_BY_CHAPTER).forEach(arr =>
+        arr.sort((a, b) => a.label.localeCompare(b.label)));
+      renderNav();   // Re-render nav to include memory aid entries
+    })
+    .catch(() => {}); // Fail silently — memory aids are supplementary
+}
+
+// Called when a memory aid sidebar item is clicked
+function selectMemoryAid(url, label) {
+  activeMemoryAid = { url, label };
+  activeSectionId = null;
+  activeSubId     = null;
+  renderNav();
+
+  // Update header
+  document.getElementById('header-chapter-title').textContent = '🧠 ' + label;
+
+  // Render iframe in right pane
+  const rawUrl    = url;
+  const openUrl   = url;  // same raw URL
+  document.getElementById('content-area').innerHTML = `
+    <div class="memory-aid-wrapper">
+      <div class="memory-aid-topbar">
+        <span class="memory-aid-badge">🧠 Memory Aid</span>
+        <span class="memory-aid-title">${label}</span>
+        <a class="memory-aid-open-btn" href="${openUrl}" target="_blank">
+          ↗ Open in new tab
+        </a>
+      </div>
+      <iframe
+        class="memory-aid-frame"
+        src="${rawUrl}"
+        sandbox="allow-scripts allow-same-origin allow-forms"
+        title="${label}">
+      </iframe>
+    </div>`;
+
+  // Make the canvas fill without its own padding (iframe fills it)
+  const canvas = document.getElementById('canvas');
+  canvas.style.padding = '0';
+  canvas.style.overflow = 'hidden';
+}
+
+// Restore canvas padding when navigating away from a memory aid
+function clearMemoryAidView() {
+  const canvas = document.getElementById('canvas');
+  canvas.style.padding = '';
+  canvas.style.overflow = '';
+}
+
+// Kick off memory aids load
+loadMemoryAids();
 
 // ── FLASHCARDS ────────────────────────────────────────────
 function renderFlashcards(sec, chapterLabel) {
