@@ -1582,6 +1582,7 @@ function onThemeChange() {
 // UI LOGIC (CHRONO)
 // ═══════════════════════════════════════════════════════════
 function onAssignChange() {
+    saveAnswer(); // preserve answer before switching sitting
     const ass = document.getElementById('sel-assign').value;
     document.getElementById('sel-assign').blur();
     console.log("onAssignChange: sitting selected =", ass);
@@ -1756,6 +1757,7 @@ function renderSubDotBar(sittingData, qk) {
 }
 
 function selectQuestion(qk) {
+    saveAnswer(); // preserve answer before switching question
     const ak = document.getElementById('sel-assign').value;
     if (!ak || !SITTINGS[ak]) return;
     const data = SITTINGS[ak];
@@ -1784,6 +1786,7 @@ function selectQuestion(qk) {
 }
 
 function selectSub(pk) {
+    saveAnswer(); // preserve answer before switching sub-question
     const ak = document.getElementById('sel-assign').value;
     if (!ak || !SITTINGS[ak] || !currentQk) return;
     const data = SITTINGS[ak];
