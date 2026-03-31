@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Assumption-Setting Process – Experience Analysis</title>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink:        #000000;
+    --rule:       #c8c0b0;
+    --rule-light: #e8e2d8;
+    --bg:         #faf8f4;
+    --paper:      #ffffff;
+
+    /* Step column accent colours */
+    --c1: #1a4a2e; --c1b: #edf7f0; --c1r: #b6dfc5;
+    --c2: #2c3e6b; --c2b: #eef1fb; --c2r: #b8c5ef;
+    --c3: #5a2d0c; --c3b: #fdf3ec; --c3r: #f0c9a0;
+    --c4: #3b2060; --c4b: #f5f0fc; --c4r: #cbbfe8;
+    --c5: #1a3a4a; --c5b: #eaf4f8; --c5r: #a8d4e0;
+    --c6: #4a1a2e; --c6b: #faeef3; --c6r: #e8b6c8;
+
+    --col-w: 210px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'EB Garamond', Georgia, serif;
+    font-size: 17px;
+    line-height: 1.65;
+    color: var(--ink);
+    background: var(--bg);
+    padding: 40px 32px 80px;
+  }
+
+  /* ── Header ── */
+  .page-header {
+    max-width: 1600px;
+    margin: 0 auto 28px;
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 14px;
+  }
+  .page-header h1 { font-size: 26px; font-weight: 600; letter-spacing: -0.3px; }
+  .page-header .sub {
+    font-size: 13px;
+    font-family: 'DM Mono', monospace;
+    color: #444;
+    margin-top: 4px;
+  }
+
+  /* step legend */
+  .step-legend {
+    max-width: 1600px;
+    margin: 0 auto 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .step-legend-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11.5px;
+    color: #666;
+    margin-right: 4px;
+    align-self: center;
+  }
+  .step-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 10px;
+    border-radius: 3px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+    border-width: 1px;
+    border-style: solid;
+  }
+  .s1 { background: var(--c1b); color: var(--c1); border-color: var(--c1r); }
+  .s2 { background: var(--c2b); color: var(--c2); border-color: var(--c2r); }
+  .s3 { background: var(--c3b); color: var(--c3); border-color: var(--c3r); }
+  .s4 { background: var(--c4b); color: var(--c4); border-color: var(--c4r); }
+  .s5 { background: var(--c5b); color: var(--c5); border-color: var(--c5r); }
+  .s6 { background: var(--c6b); color: var(--c6); border-color: var(--c6r); }
+
+  /* ── Table ── */
+  .table-scroll {
+    max-width: 1600px;
+    margin: 0 auto;
+    overflow-x: auto;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    table-layout: fixed;
+  }
+
+  col.c-assumption { width: 170px; }
+  col.c-s1, col.c-s2, col.c-s3,
+  col.c-s4, col.c-s5, col.c-s6 { width: var(--col-w); }
+
+  thead th {
+    padding: 10px 13px;
+    text-align: left;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.7px;
+    text-transform: uppercase;
+    border-bottom: 2px solid var(--ink);
+    background: var(--paper);
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    vertical-align: bottom;
+  }
+  thead th.th-s1 { border-top: 3px solid var(--c1); color: var(--c1); }
+  thead th.th-s2 { border-top: 3px solid var(--c2); color: var(--c2); }
+  thead th.th-s3 { border-top: 3px solid var(--c3); color: var(--c3); }
+  thead th.th-s4 { border-top: 3px solid var(--c4); color: var(--c4); }
+  thead th.th-s5 { border-top: 3px solid var(--c5); color: var(--c5); }
+  thead th.th-s6 { border-top: 3px solid var(--c6); color: var(--c6); }
+
+  /* section divider rows */
+  tr.section-row td {
+    background: var(--ink);
+    color: #fff;
+    font-family: 'DM Mono', monospace;
+    font-size: 10.5px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 6px 13px;
+    font-weight: 500;
+  }
+
+  tbody tr.data-row {
+    border-bottom: 1px solid var(--rule-light);
+    transition: background 0.1s;
+  }
+  tbody tr.data-row:hover { background: #f5f1ea; }
+
+  td {
+    padding: 11px 13px;
+    vertical-align: top;
+    border-right: 1px solid var(--rule-light);
+    font-size: 15.5px;
+  }
+  td:last-child { border-right: none; }
+
+  td.assumption {
+    font-weight: 600;
+    font-size: 15.5px;
+    color: #000000;
+    border-right: 1px solid var(--rule);
+  }
+
+  ul.pts {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  ul.pts li {
+    position: relative;
+    padding-left: 13px;
+    margin-bottom: 6px;
+    font-size: 15.5px;
+    line-height: 1.55;
+    color: #000000;
+  }
+  ul.pts li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--rule);
+    font-size: 12px;
+    top: 2px;
+  }
+
+  .src {
+    display: block;
+    margin-top: 7px;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: #999;
+    letter-spacing: 0.3px;
+  }
+
+  .nc {
+    color: #bbb;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    font-style: italic;
+  }
+
+  @media print {
+    body { padding: 16px; background: #fff; }
+    thead th { position: static; }
+    tr.data-row:hover { background: none; }
+    .step-legend { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<header class="page-header">
+  <h1>Assumption-Setting Process Matrix</h1>
+  <div class="sub">Experience Analysis · Health &amp; Care Insurance · IFoA exam evidence 2019–2025</div>
+</header>
+
+<div class="step-legend">
+  <span class="step-legend-label">Process steps →</span>
+  <span class="step-badge s1">Step 1 · Data Collection &amp; Segmentation</span>
+  <span class="step-badge s2">Step 2 · Data Checks &amp; Validation</span>
+  <span class="step-badge s3">Step 3 · Exposed to Risk &amp; Crude Rates</span>
+  <span class="step-badge s4">Step 4 · Actual vs Expected &amp; Credibility</span>
+  <span class="step-badge s5">Step 5 · Setting the Best Estimate &amp; Trends</span>
+  <span class="step-badge s6">Step 6 · Margins, Governance &amp; Sign-off</span>
+</div>
+
+<div class="table-scroll">
+<table>
+<colgroup>
+  <col class="c-assumption">
+  <col class="c-s1"><col class="c-s2"><col class="c-s3">
+  <col class="c-s4"><col class="c-s5"><col class="c-s6">
+</colgroup>
+<thead>
+  <tr>
+    <th>Assumption</th>
+    <th class="th-s1">Step 1<br>Data Collection &amp; Segmentation</th>
+    <th class="th-s2">Step 2<br>Data Checks &amp; Validation</th>
+    <th class="th-s3">Step 3<br>Exposed to Risk &amp; Crude Rates</th>
+    <th class="th-s4">Step 4<br>Actual vs Expected &amp; Credibility</th>
+    <th class="th-s5">Step 5<br>Best Estimate &amp; Trend Allowance</th>
+    <th class="th-s6">Step 6<br>Margins, Governance &amp; Sign-off</th>
+  </tr>
+</thead>
+<tbody>
+
+<!-- ══════════════════════════════════════
+     SECTION A – MORBIDITY
+     ══════════════════════════════════════ -->
+<tr class="section-row"><td colspan="7">A · Morbidity (Inception &amp; Termination Rates)</td></tr>
+
+<tr class="data-row">
+  <td class="assumption">Morbidity – Inception Rates</td>
+
+  <!-- S1 -->
+  <td>
+    <ul class="pts">
+      <li>Collect morbidity experience data since last pricing or premium review date</li>
+      <li>Subdivide by homogeneous group: age, gender, occupation, region, duration from entry, underwriting method</li>
+      <li>For CI, further split by condition severity if reduced benefits apply to lower-severity cases (e.g. early-stage cancer)</li>
+      <li>For LTCI, split by care setting (home vs. residential vs. nursing)</li>
+    </ul>
+    <span class="src">Sep 2020 Q3(iii)</span>
+  </td>
+
+  <!-- S2 -->
+  <td>
+    <ul class="pts">
+      <li>Carry out data checks on all extracts; reconcile policy data against policy admin system control reports</li>
+      <li>Investigate early claims and claims by notification date to detect anti-selective behaviour</li>
+      <li>Check for outlier/abnormal claims that may distort incidence rates</li>
+      <li>Ensure claims are correctly included in the investigation period</li>
+    </ul>
+    <span class="src">Sep 2019 Q2(iv) · Sep 2024 Q3(i)</span>
+  </td>
+
+  <!-- S3 -->
+  <td>
+    <ul class="pts">
+      <li>Only lives insured within the investigation period should be included in exposed-to-risk figures</li>
+      <li>Adjust exposed-to-risk on a life-by-life basis where a life's exposure covers only part of the period (using dates of entry and exit)</li>
+      <li>Ensure claims and lapses in the period are correctly reflected so that crude incidence rates are not distorted</li>
+    </ul>
+    <span class="src">Sep 2020 Q3(iii)</span>
+  </td>
+
+  <!-- S4 -->
+  <td>
+    <ul class="pts">
+      <li>Monitor actual claims experience against expected level for each homogeneous group</li>
+      <li>Consider sufficiency and credibility of own data; if data for certain groups are sparse, supplement with reinsurer, market or population data (adjusted for relevance)</li>
+      <li>For a small market (e.g. LTCI), credibility of own data may be low; more weight placed on external benchmarks</li>
+    </ul>
+    <span class="src">Sep 2020 Q3(iii,iv) · Apr 2021 Q3(ii)</span>
+  </td>
+
+  <!-- S5 -->
+  <td>
+    <ul class="pts">
+      <li>Revise best estimate incidence assumptions based on experience investigation results</li>
+      <li>Make allowance for future trends in incidence: diagnostic trends, changes in treatment protocols, introduction of new conditions, changes in claims eligibility criteria (e.g. ADL definitions for LTCI)</li>
+      <li>Consider whether the cause mix of claims is shifting (e.g. rise in mental health/stress for IP) and adjust inception rate projection accordingly</li>
+    </ul>
+    <span class="src">Sep 2020 Q3(iii) · Apr 2021 Q3(iii) · Sep 2024 Q3(i)</span>
+  </td>
+
+  <!-- S6 -->
+  <td>
+    <ul class="pts">
+      <li>Given uncertainty (e.g. new disease, limited LTCI data), add appropriate margins above best estimate for pricing/reserving</li>
+      <li>For a new or uncertain product, margins will be higher; reduce over time as credibility builds</li>
+      <li>Reinsurer or independent review can validate the assumptions; document all judgements</li>
+      <li>Assumptions should be approved by senior colleagues (e.g. Chief Actuary) and the process clearly documented</li>
+    </ul>
+    <span class="src">Apr 2019 Q1(v) · Apr 2021 Q2(ii) · Sep 2019 Q2(iv)</span>
+  </td>
+</tr>
+
+<tr class="data-row">
+  <td class="assumption">Morbidity – Termination / Recovery Rates</td>
+
+  <!-- S1 -->
+  <td>
+    <ul class="pts">
+      <li>Collect claim duration data and cause-of-claim data to understand termination patterns</li>
+      <li>For IP: distinguish recovery (return to work), mortality in-claim, and withdrawal from claim; analyse by cause of claim and deferred period</li>
+      <li>For LTCI: recovery rates likely immaterial; focus on mortality in-claim as principal termination decrement</li>
+    </ul>
+    <span class="src">Sep 2024 Q3(i,iii)</span>
+  </td>
+
+  <!-- S2 -->
+  <td>
+    <ul class="pts">
+      <li>Validate claim termination dates; check for duplicate or incomplete claim records</li>
+      <li>Reconcile claims in payment at start and end of period against reserves</li>
+    </ul>
+    <span class="src">Sep 2019 Q2(iv)</span>
+  </td>
+
+  <!-- S3 -->
+  <td>
+    <span class="nc">Not covered in provided material</span>
+  </td>
+
+  <!-- S4 -->
+  <td>
+    <ul class="pts">
+      <li>Compare actual termination/recovery rates against expected; investigate if cause mix has shifted (e.g. more mental health claims with lower recovery rates)</li>
+      <li>Assess whether claims management or rehabilitation interventions have materially affected observed recovery rates</li>
+    </ul>
+    <span class="src">Sep 2024 Q3(i,iii)</span>
+  </td>
+
+  <!-- S5 -->
+  <td>
+    <ul class="pts">
+      <li>Adjust recovery rate assumptions for projected changes in cause mix and effectiveness of claims management</li>
+      <li>For LTCI: project impaired mortality trends; improving general mortality extends claim durations</li>
+      <li>Allowance for partial, proportional or rehabilitation benefits affects the net termination rate assumption</li>
+    </ul>
+    <span class="src">Apr 2021 Q3(ii,iii) · Sep 2024 Q3(ii)</span>
+  </td>
+
+  <!-- S6 -->
+  <td>
+    <ul class="pts">
+      <li>If cause-mix shift is uncertain (e.g. mental health trends), margins in termination rates should reflect that uncertainty</li>
+      <li>Document rationale for any departure from previous assumption; sign off at appropriate level</li>
+    </ul>
+    <span class="src">Sep 2019 Q2(iv) · Apr 2021 Q2(ii)</span>
+  </td>
+</tr>
+
+<!-- ══════════════════════════════════════
+     SECTION B – MORTALITY
+     ══════════════════════════════════════ -->
+<tr class="section-row"><td colspan="7">B · Mortality</td></tr>
+
+<tr class="data-row">
+  <td class="assumption">Mortality (pre-claim &amp; in-claim)</td>
+
+  <!-- S1 -->
+  <td>
+    <ul class="pts">
+      <li>Investigate separately: mortality pre-claim (affects exposure), impaired mortality in-claim (affects claim termination)</li>
+      <li>For CI accelerated cover, death is a claim trigger; for standalone CI, death releases reserve — both require data collection</li>
+      <li>For LTCI, impaired mortality is the primary in-claim decrement</li>
+    </ul>
+    <span class="src">Sep 2020 Q3(iii) · Apr 2021 Q3(ii)</span>
+  </td>
+
+  <!-- S2 -->
+  <td>
+    <ul class="pts">
+      <li>Reconcile death claims against insured lives data; check for missing death notifications</li>
+      <li>Ensure deaths within the deferred period are correctly excluded from IP claim inception counts</li>
+    </ul>
+    <span class="src">Sep 2019 Q2(iv)</span>
+  </td>
+
+  <!-- S3 -->
+  <td>
+    <span class="nc">Not covered in provided material</span>
+  </td>
+
+  <!-- S4 -->
+  <td>
+    <ul class="pts">
+      <li>Compare actual deaths to expected under current basis; assess whether improving mortality trend is continuing</li>
+      <li>For LTCI: improving general mortality means more lives reaching care age AND longer durations in claim — both directions adverse</li>
+    </ul>
+    <span class="src">Apr 2021 Q3(ii,iii)</span>
+  </td>
+
+  <!-- S5 -->
+  <td>
+    <ul class="pts">
+      <li>Estimate future mortality improvement trends; in a well-developed country, continued improvement is likely</li>
+      <li>For LTCI, project both pre-claim mortality (more lives reaching care age) and in-claim impaired mortality (longer claim durations) separately</li>
+    </ul>
+    <span class="src">Apr 2021 Q3(ii,iii)</span>
+  </td>
+
+  <!-- S6 -->
+  <td>
+    <ul class="pts">
+      <li>Mortality improvement uncertainty requires margins, particularly for long-term products (LTCI, IP) where small changes compound over many years</li>
+      <li>Guaranteed return-of-premium on death (LTCI) may be more costly than expected; review and add margin if experience has been adverse</li>
+    </ul>
+    <span class="src">Apr 2021 Q3(iii)</span>
+  </td>
+</tr>
+
+<!-- ══════════════════════════════════════
+     SECTION C – LAPSE & PERSISTENCY
+     ══════════════════════════════════════ -->
+<tr class="section-row"><td colspan="7">C · Lapse &amp; Persistency</td></tr>
+
+<tr class="data-row">
+  <td class="assumption">Lapse Rates</td>
+
+  <!-- S1 -->
+  <td>
+    <ul class="pts">
+      <li>Collect lapse data by: duration in force, premium payment method, premium size, distribution channel, individual vs. group, product type</li>
+      <li>For CI: also analyse by whether premiums are guaranteed or reviewable, as this affects lapse incentive</li>
+      <li>For PMI: track non-renewal rates at annual renewal as the equivalent of lapse</li>
+    </ul>
+    <span class="src">Sep 2020 Q3(iii) · Apr 2021 Q3(ii)</span>
+  </td>
+
+  <!-- S2 -->
+  <td>
+    <ul class="pts">
+      <li>Check for duplicate lapse records; ensure lapses and surrenders are correctly distinguished</li>
+      <li>Verify lapse dates align with premium payment records</li>
+    </ul>
+    <span class="src">Sep 2019 Q2(iv)</span>
+  </td>
+
+  <!-- S3 -->
+  <td>
+    <ul class="pts">
+      <li>Compare number of lapses in each duration band to the exposed-to-risk in that band to produce crude lapse rates by duration</li>
+      <li>A key focus for long-term business is duration from entry: determines the degree to which acquisition costs have been recouped prior to lapse</li>
+    </ul>
+    <span class="src">Sep 2020 Q3(iii)</span>
+  </td>
+
+  <!-- S4 -->
+  <td>
+    <ul class="pts">
+      <li>Compare actual lapse rates against expected; investigate whether selective lapsing is occurring (healthy lives exiting, impaired lives remaining)</li>
+      <li>Assess whether distributor churning or adverse economic conditions are driving observed lapses above expected</li>
+      <li>Consider sufficiency: if portfolio is small, lapse data may lack credibility for fine sub-divisions</li>
+    </ul>
+    <span class="src">Sep 2020 Q3(iii,iv) · Apr 2022 Q1(i) · Sep 2024 Q1(i)</span>
+  </td>
+
+  <!-- S5 -->
+  <td>
+    <ul class="pts">
+      <li>Set best estimate lapse rates allowing for expected economic conditions, competitive environment and product features (e.g. surrender penalties, payment holidays)</li>
+      <li>Allow for the lapse-rate–anti-selection interaction: higher lapse assumptions imply worse remaining pool, which feeds back into morbidity assumptions</li>
+      <li>Regular experience analysis on lapses helps ensure the loading is adequate</li>
+    </ul>
+    <span class="src">Sep 2022 Q1(iv) · Apr 2022 Q1(ii)</span>
+  </td>
+
+  <!-- S6 -->
+  <td>
+    <ul class="pts">
+      <li>In an economic downturn or high-inflation environment, add margins to lapse assumptions to reflect greater uncertainty</li>
+      <li>Commission clawback and surrender penalties reduce lapse risk; their presence should be reflected in the governance framework for the assumption</li>
+    </ul>
+    <span class="src">Sep 2022 Q1(iv) · Sep 2024 Q1(i)</span>
+  </td>
+</tr>
+
+<!-- ══════════════════════════════════════
+     SECTION D – EXPENSES
+     ══════════════════════════════════════ -->
+<tr class="section-row"><td colspan="7">D · Expenses</td></tr>
+
+<tr class="data-row">
+  <td class="assumption">Expense Rates &amp; Inflation</td>
+
+  <!-- S1 -->
+  <td>
+    <ul class="pts">
+      <li>Divide expenses into: acquisition (initial), policy administration (renewal), claim assessment, claims management expenses</li>
+      <li>Collect actual expense data by product line and split fixed vs. variable components</li>
+      <li>Identify and separately record any one-off or non-recurring expenses to exclude from the ongoing basis</li>
+      <li>Commission is collected separately and excluded from the expense investigation proper</li>
+    </ul>
+    <span class="src">Sep 2020 Q3(iii) · Apr 2021 Q3(ii)</span>
+  </td>
+
+  <!-- S2 -->
+  <td>
+    <ul class="pts">
+      <li>Carry out spot checks on expense data; reconcile total expenses to management accounts or audited figures</li>
+      <li>Ensure all data extracts used are subject to systematic checks (e.g. number of data items, total premiums per product line)</li>
+    </ul>
+    <span class="src">Sep 2019 Q2(iv)</span>
+  </td>
+
+  <!-- S3 -->
+  <td>
+    <span class="nc">Not covered in provided material</span>
+  </td>
+
+  <!-- S4 -->
+  <td>
+    <ul class="pts">
+      <li>Monitor actual expenses incurred against expected level, allowing for inflation since last analysis</li>
+      <li>Assess whether fixed costs are being adequately recovered given current policy volumes; smaller book = higher per-policy expense</li>
+      <li>Check whether expense loading method (by premium, by sum insured, fixed per policy, or combination) remains appropriate for the business mix</li>
+    </ul>
+    <span class="src">Sep 2020 Q3(iii) · Sep 2022 Q1(iii,iv) · Sep 2024 Q1(v)</span>
+  </td>
+
+  <!-- S5 -->
+  <td>
+    <ul class="pts">
+      <li>Update expense assumptions for observed inflation; in a high-inflation environment, both fixed (rent, IT) and variable (staff salaries) components increase</li>
+      <li>Project future expense levels allowing for expected new business volumes: if volumes are lower than expected, per-policy loading must increase</li>
+      <li>Expense loading by sum insured may best reflect the risk profile for CI and IP in a higher socio-economic market segment</li>
+    </ul>
+    <span class="src">Sep 2024 Q1(i,v) · Apr 2021 Q3(iii)</span>
+  </td>
+
+  <!-- S6 -->
+  <td>
+    <ul class="pts">
+      <li>Ensure expense loadings are sufficient to cover anticipated costs; higher margins needed if volumes are uncertain or inflation is elevated</li>
+      <li>Regular experience analysis on expenses helps ensure the loading remains adequate given lapse experience</li>
+      <li>For a new product or market, there is greater need to incorporate margins to reflect approximations and unknowns</li>
+    </ul>
+    <span class="src">Apr 2019 Q1(v) · Sep 2022 Q1(iv)</span>
+  </td>
+</tr>
+
+<!-- ══════════════════════════════════════
+     SECTION E – CLAIMS COSTS / INFLATION
+     ══════════════════════════════════════ -->
+<tr class="section-row"><td colspan="7">E · Claims Costs &amp; Medical Inflation</td></tr>
+
+<tr class="data-row">
+  <td class="assumption">Average Claim Amount &amp; Claims Inflation</td>
+
+  <!-- S1 -->
+  <td>
+    <ul class="pts">
+      <li>Collect average claim amounts by condition, treatment type, provider and region</li>
+      <li>For LTCI (indemnity basis): collect cost of care data separately by care setting; distinguish care cost inflation from general inflation</li>
+      <li>For PMI: track claim amounts at the level of individual procedures/treatments to detect protocol or tariff changes</li>
+    </ul>
+    <span class="src">Apr 2021 Q3(ii) · Apr 2022 Q2(i)</span>
+  </td>
+
+  <!-- S2 -->
+  <td>
+    <ul class="pts">
+      <li>Identify large individual claims that may be outliers; assess whether they distort the average</li>
+      <li>Reconcile total claims paid to management accounts; check for double-counting or missing claims</li>
+    </ul>
+    <span class="src">Apr 2022 Q2(i)</span>
+  </td>
+
+  <!-- S3 -->
+  <td>
+    <span class="nc">Not covered in provided material</span>
+  </td>
+
+  <!-- S4 -->
+  <td>
+    <ul class="pts">
+      <li>Compare actual average claim amounts and total claims costs against expected; decompose into frequency and average cost movements</li>
+      <li>Investigate whether medical inflation, changes in treatment protocols, new procedures or changes in provider tariffs explain the deviation</li>
+      <li>Assess whether provider fee schedules have been renegotiated at higher rates</li>
+    </ul>
+    <span class="src">Apr 2022 Q2(i) · Sep 2024 Q3(i)</span>
+  </td>
+
+  <!-- S5 -->
+  <td>
+    <ul class="pts">
+      <li>Set a claims inflation assumption that reflects the specific drivers of medical cost inflation (not just general CPI), including staff salaries, treatment protocols, new procedures and provider pricing power</li>
+      <li>Where a fixed fee schedule exists with providers, the inflation assumption may be lower and more predictable</li>
+      <li>For long-term products (IP, LTCI) with salary-linked benefits, allow separately for salary inflation as a driver of claim amount</li>
+    </ul>
+    <span class="src">Apr 2022 Q2(i,ii) · Apr 2021 Q3(iii) · Sep 2024 Q1(i)</span>
+  </td>
+
+  <!-- S6 -->
+  <td>
+    <ul class="pts">
+      <li>In a high-inflation environment, add margins on the claims inflation assumption, particularly for products with guaranteed premiums where the insurer cannot reprice</li>
+      <li>Reviewable premiums reduce the need for embedded inflation margins; guaranteed premiums require larger ones</li>
+      <li>Document the rationale for the inflation assumption relative to market data and provider tariff evidence</li>
+    </ul>
+    <span class="src">Sep 2024 Q1(i,vi) · Apr 2021 Q2(ii)</span>
+  </td>
+</tr>
+
+<!-- ══════════════════════════════════════
+     SECTION F – INVESTMENT RETURN
+     ══════════════════════════════════════ -->
+<tr class="section-row"><td colspan="7">F · Investment Return</td></tr>
+
+<tr class="data-row">
+  <td class="assumption">Investment Return</td>
+
+  <!-- S1 -->
+  <td>
+    <ul class="pts">
+      <li>Collect actual investment income received (after allowing for capital movements) split by investment class: dividends, interest, capital gains (realised and unrealised)</li>
+    </ul>
+    <span class="src">Sep 2020 Q3(iii)</span>
+  </td>
+
+  <!-- S2 -->
+  <td>
+    <ul class="pts">
+      <li>Reconcile investment income to audited accounts; check market values of assets against independently sourced data (e.g. Bloomberg)</li>
+      <li>Check credit ratings and currency of assets against independent sources</li>
+    </ul>
+    <span class="src">Apr 2019 Q2(iii)</span>
+  </td>
+
+  <!-- S3 -->
+  <td>
+    <span class="nc">Not covered in provided material</span>
+  </td>
+
+  <!-- S4 -->
+  <td>
+    <ul class="pts">
+      <li>Monitor actual investment income against expected; note that for short-tail products (PMI) the investment income assumption is less material than for long-tail products (LTCI, IP)</li>
+      <li>Assess impact of changes in interest rates on the value of claims-in-payment reserves</li>
+    </ul>
+    <span class="src">Sep 2020 Q3(iii) · Sep 2024 Q3(i)</span>
+  </td>
+
+  <!-- S5 -->
+  <td>
+    <ul class="pts">
+      <li>Investment return assumption must be consistent with the risk discount rate and expense inflation assumption</li>
+      <li>The risk-free rate should be consistent with current economic conditions; the risk discount rate is based on the insurer's required profit margin</li>
+      <li>In a high-inflation environment, consider whether Asset Liability Matching (inflation-linked bonds, swaps) is in place; if not, the investment return assumption carries more uncertainty</li>
+    </ul>
+    <span class="src">Sep 2020 Q3(iii) · Sep 2022 Q1(iv) · Sep 2024 Q1(i)</span>
+  </td>
+
+  <!-- S6 -->
+  <td>
+    <ul class="pts">
+      <li>Best estimate investment return forms the base; the risk margin (Solvency II) uses a 6% cost-of-capital rate applied to projected non-hedgeable risks</li>
+      <li>If investment strategy has changed (e.g. in response to inflation), re-examine margins; document any departure from prior basis</li>
+    </ul>
+    <span class="src">Apr 2019 Q2(i,iii) · Sep 2019 Q1(viii)</span>
+  </td>
+</tr>
+
+<!-- ══════════════════════════════════════
+     SECTION G – REINSURANCE COSTS
+     ══════════════════════════════════════ -->
+<tr class="section-row"><td colspan="7">G · Reinsurance Costs</td></tr>
+
+<tr class="data-row">
+  <td class="assumption">Reinsurance Costs &amp; Recoveries</td>
+
+  <!-- S1 -->
+  <td>
+    <ul class="pts">
+      <li>Collect actual reinsurance premiums paid and recoveries received by product line and treaty</li>
+    </ul>
+    <span class="src">Sep 2020 Q3(iii)</span>
+  </td>
+
+  <!-- S2 -->
+  <td>
+    <ul class="pts">
+      <li>Regular (e.g. quarterly or at each premium due date) review of reinsurance premiums and reinsured sum at risk</li>
+      <li>Check reinsurance recoverables and ensure any expected counterparty default has been allowed for</li>
+    </ul>
+    <span class="src">Sep 2019 Q2(iv)</span>
+  </td>
+
+  <!-- S3 -->
+  <td>
+    <span class="nc">Not covered in provided material</span>
+  </td>
+
+  <!-- S4 -->
+  <td>
+    <ul class="pts">
+      <li>Note: reinsurance is not part of the contractual arrangement between insurer and policyholder, so profit/loss on reinsurance is excluded from the premium review exercise itself</li>
+      <li>However, for reserving purposes, reinsurance recoverables must be assessed separately from the gross BEL</li>
+    </ul>
+    <span class="src">Sep 2020 Q3(iii) · Apr 2019 Q2(iii)</span>
+  </td>
+
+  <!-- S5 -->
+  <td>
+    <ul class="pts">
+      <li>Reinsurers may provide advice on rates and market data to inform assumption setting, particularly for products with limited own-data credibility (e.g. LTCI)</li>
+      <li>Seek independent advice from reinsurers on whether they are also considering changes to reinsurance premium rates, as this affects the overall cost base</li>
+      <li>As own data credibility grows over time, the level of reinsurance may be reduced</li>
+    </ul>
+    <span class="src">Apr 2021 Q3(ii) · Sep 2020 Q3(iv) · Apr 2023 Q1(iv)</span>
+  </td>
+
+  <!-- S6 -->
+  <td>
+    <ul class="pts">
+      <li>Counterparty default risk on reinsurance must be assessed and reflected in capital/reserves</li>
+      <li>Reinsurer may require higher margins for business accepted using a new underwriting tool until experience is built up</li>
+      <li>Document any reinsurance treaty changes and their impact on the net assumption basis</li>
+    </ul>
+    <span class="src">Apr 2022 Q3(ii) · Sep 2019 Q2(iv)</span>
+  </td>
+</tr>
+
+<!-- ══════════════════════════════════════
+     SECTION H – OVERALL ASSUMPTION PROCESS
+     ══════════════════════════════════════ -->
+<tr class="section-row"><td colspan="7">H · Overall Assumption-Setting Process &amp; Governance</td></tr>
+
+<tr class="data-row">
+  <td class="assumption">Homogeneous Groups &amp; Model Points</td>
+
+  <!-- S1 -->
+  <td>
+    <ul class="pts">
+      <li>Split existing policies into homogeneous groups by product type (e.g. standalone vs. accelerated CI; group vs. individual), pricing series and premium rate band</li>
+      <li>Within each group, select a set of model points to represent the existing policy profile, or assess on a policy-by-policy basis if data permits</li>
+    </ul>
+    <span class="src">Sep 2020 Q3(iii)</span>
+  </td>
+
+  <!-- S2 -->
+  <td>
+    <ul class="pts">
+      <li>Check that business has been segmented appropriately at the homogeneous risk group level (Solvency II: by prescribed Lines of Business and further by currency)</li>
+      <li>Check that all parameters and assumptions have been entered correctly into models</li>
+    </ul>
+    <span class="src">Apr 2019 Q2(iii) · Sep 2019 Q2(iv)</span>
+  </td>
+
+  <!-- S3 -->
+  <td>
+    <ul class="pts">
+      <li>Experience investigation should be carried out for each homogeneous group</li>
+      <li>If data for certain sub-groups are sparse, consider whether further subdivision is credible or whether groups should be merged</li>
+    </ul>
+    <span class="src">Sep 2020 Q3(iii,iv)</span>
+  </td>
+
+  <!-- S4 -->
+  <td>
+    <ul class="pts">
+      <li>Results of experience investigations form the basis for revising all best estimate assumptions</li>
+      <li>Assess whether any deviation from expected arises from a single controllable item or from broad multi-assumption trends</li>
+      <li>Consider whether the experience exercise itself is sufficiently robust to rely upon before acting on results</li>
+    </ul>
+    <span class="src">Sep 2020 Q3(iv) · Apr 2019 Q2(iii)</span>
+  </td>
+
+  <!-- S5 -->
+  <td>
+    <ul class="pts">
+      <li>All assumptions should be best estimate and consistent with the results of the experience investigations</li>
+      <li>Investment return, expense inflation and risk discount rate must be mutually consistent</li>
+      <li>Profit test each policy/model point by projecting cashflows forward from the review date (premiums, expenses, commission, claims, reserve contributions, capital requirements, interest, tax)</li>
+    </ul>
+    <span class="src">Sep 2020 Q3(iii) · Apr 2019 Q2(iii)</span>
+  </td>
+
+  <!-- S6 -->
+  <td>
+    <ul class="pts">
+      <li>Governance: assumptions must be reviewed and approved at an appropriate level of seniority (e.g. Finance Director, Chief Actuary)</li>
+      <li>Experience investigation team makes recommendations; senior review follows; the process must be clearly documented</li>
+      <li>Review compliance with relevant professional and regulatory standards (e.g. TASs in the UK)</li>
+      <li>Consider commissioning an external independent review to demonstrate accuracy and transparency</li>
+      <li>Review issues and errors log; ensure all material issues are addressed with agreed follow-up actions</li>
+    </ul>
+    <span class="src">Sep 2019 Q2(iv) · Apr 2019 Q2(iii)</span>
+  </td>
+</tr>
+
+<tr class="data-row">
+  <td class="assumption">Profit Testing &amp; Office Premium Build-up</td>
+
+  <!-- S1 -->
+  <td>
+    <span class="nc">Not covered in provided material</span>
+  </td>
+
+  <!-- S2 -->
+  <td>
+    <span class="nc">Not covered in provided material</span>
+  </td>
+
+  <!-- S3 -->
+  <td>
+    <span class="nc">Not covered in provided material</span>
+  </td>
+
+  <!-- S4 -->
+  <td>
+    <ul class="pts">
+      <li>Compare the calculated office premium against market pricing and competitor rates; assess whether the required profit margin can be achieved at a marketable price</li>
+      <li>Assess price elasticity by product line and business mix segment to understand the realistic range for the final premium</li>
+    </ul>
+    <span class="src">Sep 2024 Q1(vi)</span>
+  </td>
+
+  <!-- S5 -->
+  <td>
+    <ul class="pts">
+      <li>Calculated premium = underlying risk premium + loading for: expenses, profit margin, commission, cost of capital, cost of reserves, reinsurance, margins, investment return offset, persistency adjustment, tax</li>
+      <li>Final office premium = calculated premium adjusted for market conditions, position in underwriting cycle, loss leaders/cross-subsidies, distribution channel, regulatory min/max levels</li>
+    </ul>
+    <span class="src">Sep 2024 Q1(vi)</span>
+  </td>
+
+  <!-- S6 -->
+  <td>
+    <ul class="pts">
+      <li>If calculated premium cannot achieve acceptable profit for a product line, options are: sell as a loss leader; cease selling; substitute with more profitable product lines</li>
+      <li>Consider regulatory guidance on reviewability, materiality of changes and Treating Customers Fairly before implementing rate changes arising from the review</li>
+      <li>Consider precedent, policyholder reactions, press coverage and distributor reactions when determining the final action</li>
+    </ul>
+    <span class="src">Sep 2020 Q3(iv) · Sep 2024 Q1(vi)</span>
+  </td>
+</tr>
+
+</tbody>
+</table>
+</div>
+
+</body>
+</html>
