@@ -336,7 +336,7 @@
 <!-- MASTHEAD -->
 <div class="masthead">
   <div class="masthead-title">Monitoring Stage of the Actuarial Control Cycle</div>
-  <span class="masthead-sub">SP1 Ch.29 · SA1</span>
+  <span class="masthead-sub">SP1 Ch.29 · SA1 Ch.19–20</span>
   <span class="masthead-tag">EXHIBIT I — HIGH LEVEL</span>
 </div>
 
@@ -382,6 +382,43 @@
       <li>Two strands: <strong>A vs E</strong> direct · <strong>Analysis of Surplus</strong></li>
     </ul>
   </div>
+</div>
+
+<!-- INVESTIGATION FREQUENCY (SA1 Ch19 §1.1) -->
+<div class="section-label">Investigation Frequency — by Product Type (SA1 Ch19 §1.1)</div>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;margin-bottom:20px;">
+
+  <div class="card" style="border-top:3px solid var(--blue);">
+    <div class="card-title blue" style="font-size:13px;">📅 Monthly — PMI &amp; Health Cash Plans</div>
+    <ul class="pill-list">
+      <li class="blue-hl"><strong>Reason:</strong> Claims highly volatile — extreme weather / viruses can change experience dramatically within weeks</li>
+      <li>Short-term, annually renewable → anti-selection can emerge fast</li>
+      <li>Early trend detection needed to prevent deteriorating experience</li>
+      <li>Adjustment at renewal requires current data</li>
+    </ul>
+  </div>
+
+  <div class="card" style="border-top:3px solid var(--gold);">
+    <div class="card-title" style="color:var(--gold);font-family:'Playfair Display',serif;font-size:13px;font-weight:700;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--rule);">📅 Quarterly — CI &amp; Income Protection</div>
+    <ul class="pill-list">
+      <li style="border-left-color:var(--gold);"><strong>Reason:</strong> Morbidity claims more predictable and less volatile than medical expenses</li>
+      <li>Longer-term policies → experience changes more gradually</li>
+      <li>Quarterly cadence balances timeliness against data volume</li>
+    </ul>
+  </div>
+
+  <div class="card" style="border-top:3px solid var(--green);">
+    <div class="card-title green" style="font-size:13px;">📅 Half-Yearly — Long-Term Care Insurance</div>
+    <ul class="pill-list">
+      <li class="green-hl"><strong>Reason:</strong> Claims payments spread over the care period — adverse experience takes time to materialise</li>
+      <li>Small portfolio volumes → longer period needed for credibility</li>
+      <li>Longer observation window still valid as experience is stable</li>
+    </ul>
+  </div>
+</div>
+
+<div style="background:var(--cream);border:1px solid var(--rule);padding:10px 14px;margin-bottom:20px;font-size:11.5px;">
+  <strong>Other factors affecting frequency:</strong> time &amp; cost of investigation · past variability of experience · quality of data available · period beyond which past experience becomes irrelevant to future. Volume of data: <em>sparse data → less frequent; high volume → more frequent.</em>
 </div>
 
 <!-- EXPERIENCE INVESTIGATIONS MATRIX -->
@@ -451,7 +488,34 @@
           <span class="dot r"></span>By asset class, gross &amp; net of expenses
         </td>
         <td>Asset class · Market value vs book value basis</td>
-        <td>Method of asset valuation affects measured return. Market value: includes unrealised gains.</td>
+        <td>Method of asset valuation affects measured return. Market value: includes unrealised gains. PMI: investment income significance low. IP: very significant due to size of claims reserves.</td>
+      </tr>
+      <tr>
+        <td>IBNR &amp; RBNS<br><span style="font-size:9px;color:var(--muted);">SA1 §2.5</span></td>
+        <td>
+          <span class="dot r"></span>Check retrospectively that IBNR (incurred but not reported) and RBNS (reported but not settled) bases are adequate<br>
+          <span class="dot r"></span>Quantify under-reserving risk
+        </td>
+        <td>Product type · Year of diagnosis · Settlement lag pattern</td>
+        <td><strong>IBNR:</strong> Policyholders unaware of cover, or illness too traumatic to claim promptly (e.g. terminal cancer). <strong>RBNS:</strong> Verification &amp; information gathering delays; 30-day survival clause delays. <em>UK CI example: 50% of ultimate claims cost is RBNS at year-end diagnosis; 10% still RBNS after 12 months.</em> Higher IBNR provision needed at year-end (Christmas processing delays).</td>
+      </tr>
+      <tr>
+        <td>Seasonality<br><span style="font-size:9px;color:var(--muted);">SA1 §2.6</span></td>
+        <td>
+          <span class="dot b"></span>Identify seasonal peaks/troughs in claims<br>
+          <span class="dot b"></span>Adjust investigation results accordingly
+        </td>
+        <td>Month / quarter · Product type · Claim type</td>
+        <td><strong>PMI/Health Cash:</strong> Bias towards non-holiday times (elective procedures). <strong>Winter sports:</strong> Specialised claim distribution. <strong>IP (6-month deferred):</strong> Peak claims at end-of-summer (= winter peak + 6m). <strong>Pricing:</strong> Smooth seasonal claims to derive annual cost. <strong>Reserving:</strong> Reserve seasonally explicitly (do not smooth — creates wrong quarterly reserves). Higher IBNR at December year-end (Christmas processing slowdown → January bulge).</td>
+      </tr>
+      <tr>
+        <td>Reinsurance<br><span style="font-size:9px;color:var(--muted);">SA1 §2.7</span></td>
+        <td>
+          <span class="dot g"></span>Compare ceded experience vs expected<br>
+          <span class="dot g"></span>Assess whether reinsurance structure remains appropriate
+        </td>
+        <td>Reinsurance type · Cedant retained vs ceded split</td>
+        <td><strong>Quota share:</strong> Claims experience identical for cedant and reinsurer (each claim split same proportions) — profitability differs due to expenses/commission/risk premium. <strong>Surplus:</strong> Pure claims experience <em>will</em> differ between cedant and reinsurer (proportion varies by contract).</td>
       </tr>
     </tbody>
   </table>
@@ -567,6 +631,161 @@
   </table>
 </div>
 
+<!-- SA1 CH19 ADDITIONAL DETAIL PANEL -->
+<div class="section-label">SA1 Ch19 — Additional Analytical Detail</div>
+
+<!-- Row 1: Sub-divisions + Economic Conditions -->
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+
+  <div class="card" style="border-top:3px solid var(--ink);">
+    <div class="card-title" style="color:var(--ink);font-size:13px;">Data Sub-Divisions (§1.2) — Full List</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;font-size:11.5px;">
+      <div style="background:white;border-left:3px solid var(--accent);padding:4px 7px;">Product type</div>
+      <div style="background:white;border-left:3px solid var(--accent);padding:4px 7px;">Gender</div>
+      <div style="background:white;border-left:3px solid var(--blue);padding:4px 7px;">Age</div>
+      <div style="background:white;border-left:3px solid var(--blue);padding:4px 7px;">Region / location</div>
+      <div style="background:white;border-left:3px solid var(--blue);padding:4px 7px;">Occupation</div>
+      <div style="background:white;border-left:3px solid var(--blue);padding:4px 7px;">Sales channel</div>
+      <div style="background:white;border-left:3px solid var(--rule);padding:4px 7px;">Sales individual</div>
+      <div style="background:white;border-left:3px solid var(--rule);padding:4px 7px;">Policy type</div>
+      <div style="background:white;border-left:3px solid var(--rule);padding:4px 7px;">Policy size</div>
+      <div style="background:white;border-left:3px solid var(--rule);padding:4px 7px;">Duration from entry</div>
+      <div style="background:white;border-left:3px solid var(--green);padding:4px 7px;">Reinsurance category</div>
+      <div style="background:white;border-left:3px solid var(--green);padding:4px 7px;">Member cost-sharing (excess)</div>
+      <div style="background:white;border-left:3px solid var(--green);padding:4px 7px;">Underwriting method</div>
+      <div style="background:white;border-left:3px solid var(--green);padding:4px 7px;">Group size</div>
+      <div style="background:white;border-left:3px solid var(--gold);padding:4px 7px;grid-column:1/-1;">Industry (for group business)</div>
+    </div>
+    <div style="margin-top:8px;font-size:11px;color:var(--muted);border-top:1px solid var(--rule);padding-top:6px;">
+      ⚠ In practice: sub-divisions depend on <em>volume</em>. Small portfolios produce sparse cells — actuary must exercise judgement. Results must be communicated to: marketing &amp; sales, reinsurance, product development, pricing, reserving, audit, tax, accounts, rating agencies, management.
+    </div>
+  </div>
+
+  <div class="card" style="border-top:3px solid var(--accent);">
+    <div class="card-title accent" style="font-size:13px;">Economic Conditions &amp; Claims (§4.1)</div>
+    <table style="width:100%;border-collapse:collapse;font-size:11.5px;">
+      <thead>
+        <tr>
+          <th style="background:var(--ink);color:var(--paper);padding:5px 8px;font-family:'IBM Plex Mono',monospace;font-size:9px;text-transform:uppercase;letter-spacing:1px;text-align:left;width:30%;">Type</th>
+          <th style="background:var(--ink);color:var(--paper);padding:5px 8px;font-family:'IBM Plex Mono',monospace;font-size:9px;text-transform:uppercase;letter-spacing:1px;text-align:left;">Effect on Claims</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="padding:6px 8px;border:1px solid var(--rule);font-weight:600;background:#e8e2d4;">Adverse <em>company</em> conditions</td>
+          <td style="padding:6px 8px;border:1px solid var(--rule);background:white;">Redundancy threat → employees accelerate claims (PMI/health cash). <strong>IP:</strong> employer may initiate IP claim rather than impose redundancy; or conversely, makes least healthy redundant first → IP experience improves short-term. Recovery rates fall (no jobs to return to). Analyse employer-by-employer.</td>
+        </tr>
+        <tr>
+          <td style="padding:6px 8px;border:1px solid var(--rule);font-weight:600;background:#e8e2d4;">General economic downturn</td>
+          <td style="padding:6px 8px;border:1px solid var(--rule);background:var(--cream);">Higher morbidity due to stress, poverty, uncertainty. Incorporate into group new business pricing.</td>
+        </tr>
+        <tr>
+          <td style="padding:6px 8px;border:1px solid var(--rule);font-weight:600;background:#e8e2d4;">Regional economic conditions</td>
+          <td style="padding:6px 8px;border:1px solid var(--rule);background:white;">Industry-specific impact. Greatest effect on specific sectors. Must feed into group pricing by industry.</td>
+        </tr>
+      </tbody>
+    </table>
+    <div style="margin-top:8px;font-size:11px;background:white;border-left:3px solid var(--accent);padding:5px 8px;">
+      <strong>Measuring impact:</strong> Compare affected period vs unaffected benchmark period for same company (or unaffected company in same market). Adjust for inflation and other unrelated factors.
+    </div>
+  </div>
+</div>
+
+<!-- Row 2: Anti-selection/Non-disclosure + Insurance Cycle -->
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+
+  <div class="card" style="border-top:3px solid var(--gold);">
+    <div class="card-title" style="color:var(--gold);font-family:'Playfair Display',serif;font-size:13px;font-weight:700;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--rule);">Anti-selection, Non-disclosure &amp; Early Claims (§3)</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;font-size:11.5px;">
+      <div style="background:white;border-left:3px solid var(--gold);padding:6px 8px;">
+        <strong>Anti-selection:</strong> Potential policyholders use private health information to take cover on favourable terms — those most likely to claim are most likely to insure.
+      </div>
+      <div style="background:white;border-left:3px solid var(--accent);padding:6px 8px;">
+        <strong>Non-disclosure:</strong> Applicant is asked for information but <em>fails to disclose</em> it. Distinct from anti-selection (which may be passive).
+      </div>
+    </div>
+    <div style="font-size:11.5px;background:#fff8e8;border:1px solid var(--gold);padding:8px 10px;margin-bottom:6px;">
+      <strong>⏱ Durational effect:</strong> Impact concentrated in <strong>Year 1</strong> and to a lesser extent <strong>Year 2</strong>. After that, policyholders who selected adversely will have already claimed (their health was already poor). Experience then "reverts to normal" — other factors dominate from Year 3+.
+    </div>
+    <div style="font-size:11px;color:var(--muted);">
+      Actuary's response: investigate early claims by cause · review standard proposal questions · review UW sum insured triggers · review supplementary questionnaire content · review sales methods &amp; target market. Incorporate in pricing &amp; reserving bases (durational select tables).
+    </div>
+  </div>
+
+  <div class="card" style="border-top:3px solid #5c3d7a;">
+    <div class="card-title" style="color:#5c3d7a;font-family:'Playfair Display',serif;font-size:13px;font-weight:700;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--rule);">The Insurance Cycle (§4.3)</div>
+    <div style="display:flex;flex-direction:column;gap:5px;font-size:11.5px;">
+      <div style="background:white;border-left:4px solid #2d5a3d;padding:5px 8px;"><span style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:#2d5a3d;font-weight:600;">PHASE 1</span> <strong>High Profits</strong> — Premium rates high; insurers profitable; new entrants attracted to market; existing insurers try to expand.</div>
+      <div style="background:white;border-left:4px solid var(--blue);padding:5px 8px;"><span style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--blue);font-weight:600;">PHASE 2</span> <strong>Greater Competition</strong> — More insurers → premiums "soften" (fall); commissions raised; advertising increased; prices cut. Profit margins trimmed. Often coincides with economic upturn optimism.</div>
+      <div style="background:white;border-left:4px solid var(--accent);padding:5px 8px;"><span style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--accent);font-weight:600;">PHASE 3</span> <strong>Losses</strong> — Reduced profits or losses. Cycle goes into depression. Insurers leave market or reduce involvement.</div>
+      <div style="background:white;border-left:4px solid var(--gold);padding:5px 8px;"><span style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--gold);font-weight:600;">PHASE 4</span> <strong>Reduced Competition / Upswing</strong> — Losses → appetite for expansion falls; premium rates rise; smaller insurers may struggle to survive. Leads back to Phase 1.</div>
+    </div>
+    <div style="margin-top:8px;font-size:11px;background:#f3eef9;border-left:3px solid #5c3d7a;padding:5px 8px;">
+      More influential in <strong>short-term group risks</strong> (PMI, group IP) than long-term individual CI/IP (premium locked in at inception). Different classes at different cycle points simultaneously. Monitoring inter-company data (e.g. CMI pooled data in UK) helps identify where own experience sits relative to cycle.
+    </div>
+  </div>
+</div>
+
+<!-- Row 3: Portfolio Analysis + Movement Analysis -->
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;">
+
+  <div class="card" style="border-top:3px solid var(--blue);">
+    <div class="card-title blue" style="font-size:13px;">Portfolio Analysis (§8) — Structure</div>
+    <div style="font-size:11.5px;margin-bottom:8px;">
+      A portfolio analysis investigates risks covered, broken down by grouping policies of similar nature.
+    </div>
+    <table style="width:100%;border-collapse:collapse;font-size:11px;margin-bottom:8px;">
+      <thead>
+        <tr>
+          <th style="background:var(--ink);color:var(--paper);padding:5px 8px;font-family:'IBM Plex Mono',monospace;font-size:9px;text-transform:uppercase;text-align:left;">Level</th>
+          <th style="background:var(--ink);color:var(--paper);padding:5px 8px;font-family:'IBM Plex Mono',monospace;font-size:9px;text-transform:uppercase;text-align:left;">What &amp; Why</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="padding:5px 8px;border:1px solid var(--rule);font-weight:600;background:#e8e2d4;white-space:nowrap;">By Class</td>
+          <td style="padding:5px 8px;border:1px solid var(--rule);background:white;">Split by CI/IP/LTCI/PMI, group vs individual. Shows no. policies &amp; premium income by class. ⚠ Policies of different sizes make count misleading; non-annual policies distort census analysis.</td>
+        </tr>
+        <tr>
+          <td style="padding:5px 8px;border:1px solid var(--rule);font-weight:600;background:#e8e2d4;white-space:nowrap;">By Risk Group<br><span style="font-weight:400;font-size:9px;">(§8.3)</span></td>
+          <td style="padding:5px 8px;border:1px solid var(--rule);background:var(--cream);">Break portfolio within a class by rating factor. Use exposure measure for comparable "risk units".</td>
+        </tr>
+        <tr>
+          <td style="padding:5px 8px;border:1px solid var(--rule);font-weight:600;background:#e8e2d4;white-space:nowrap;">One-Way Table<br>(Single factor)</td>
+          <td style="padding:5px 8px;border:1px solid var(--rule);background:white;">Each rating factor considered individually. Simple but may conceal correlations between factors.</td>
+        </tr>
+        <tr>
+          <td style="padding:5px 8px;border:1px solid var(--rule);font-weight:600;background:#e8e2d4;white-space:nowrap;">Multi-Factor Table</td>
+          <td style="padding:5px 8px;border:1px solid var(--rule);background:var(--cream);">Several rating factors in a single table (e.g. age × gender × hospital band × excess). Removes distortions caused by correlations. ⚠ Cells must be grouped into broad bands to avoid unmanageably sparse data.</td>
+        </tr>
+      </tbody>
+    </table>
+    <div style="font-size:11px;background:white;border-left:3px solid var(--blue);padding:5px 8px;">
+      <strong>Purposes:</strong> Show business volume &amp; mix · Identify out-of-line premium rates vs market · Flag over-concentration in a risk type · Support planning &amp; budgeting
+    </div>
+  </div>
+
+  <div class="card" style="border-top:3px solid var(--green);">
+    <div class="card-title green" style="font-size:13px;">Movement Analysis — Delay Methodology (§7.3)</div>
+    <div style="font-size:11.5px;margin-bottom:8px;">
+      Movement rates (lapse, new business, cancellation, endorsement) must use <em>movements actually taking place</em> in the period, not movements <em>reported</em> — reporting delays distort early readings.
+    </div>
+    <div style="background:#fff8e8;border:1px solid var(--gold);padding:8px 10px;margin-bottom:8px;font-size:11.5px;">
+      <strong>Lapse rate (short-term business):</strong><br>
+      <code style="font-size:12px;background:var(--ink);color:var(--paper);padding:3px 6px;display:inline-block;margin-top:4px;">Lapse Rate = Lapses (period x) ÷ Renewals Invited (period x)</code><br>
+      <br>
+      <strong>Delay adjustment (projection):</strong> Build a delay development table from historical data showing % of lapses processed by end of each subsequent month (e.g. 37% by month 0, 68% by month 1, 89% by month 2, 97% by month 3, 100% by month 4). Divide observed count by % to project ultimate lapses.
+      <br><br>
+      <em>Example: April lapses observed = 177 at end of May (month 1 development). 68% processed by month 1. Estimated ultimate = 177 ÷ 0.68 = 260. Lapse rate = 260 ÷ 880 renewals = 30%.</em>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;font-size:11px;">
+      <div style="background:white;border-left:3px solid var(--green);padding:4px 7px;"><strong>Mid-term cancellation rate</strong> = cancellations ÷ mean in-force portfolio (gives m-type rate)</div>
+      <div style="background:white;border-left:3px solid var(--blue);padding:4px 7px;"><strong>New business rate</strong> = new policies ÷ renewals invited (same base as lapse rate — enables direct comparison)</div>
+      <div style="background:white;border-left:3px solid var(--rule);padding:4px 7px;grid-column:1/-1;"><strong>Portfolio signal:</strong> If lapse rate &gt; new business rate → portfolio contracting. If lapse rate &lt; new business rate → portfolio expanding.</div>
+    </div>
+  </div>
+</div>
+
 <!-- USES TO CONTROL RISKS -->
 <div class="section-label">Using Results to Control Risks — Feedback into ACC</div>
 <div class="data-box">
@@ -604,7 +823,7 @@
 </div>
 
 <div class="footer">
-  <span>SP1 Chapter 29 · SA1 Chapters 19–20 · Source: IFE 2019</span>
+  <span>SP1 Chapter 29 · SA1 Chapters 19–20 · Source: IFE 2024</span>
   <span>EXHIBIT I — HIGH LEVEL MEMORY AID</span>
   <span>Monitoring Stage · ACC</span>
 </div>
