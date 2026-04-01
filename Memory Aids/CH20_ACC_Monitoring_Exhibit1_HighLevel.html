@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ACC Monitoring Stage — Quick Reference</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0f1117;
+    --paper: #f5f0e8;
+    --cream: #ede7d6;
+    --accent: #c0392b;
+    --gold: #b8860b;
+    --blue: #1a3a5c;
+    --green: #1e5f3f;
+    --muted: #6b6560;
+    --rule: #c8bfaf;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 13px;
+    line-height: 1.5;
+    padding: 32px 24px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  /* ── MASTHEAD ── */
+  .masthead {
+    border-top: 4px solid var(--ink);
+    border-bottom: 2px solid var(--ink);
+    padding: 14px 0 12px;
+    margin-bottom: 28px;
+    display: flex;
+    align-items: baseline;
+    gap: 20px;
+  }
+  .masthead-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 900;
+    letter-spacing: -0.5px;
+    color: var(--ink);
+    flex: 1;
+  }
+  .masthead-sub {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+  }
+  .masthead-tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    background: var(--accent);
+    color: #fff;
+    padding: 3px 8px;
+    letter-spacing: 1px;
+  }
+
+  /* ── SECTION LABEL ── */
+  .section-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--muted);
+    margin-bottom: 6px;
+    border-left: 3px solid var(--accent);
+    padding-left: 8px;
+  }
+
+  /* ── TOP ROW: Why + What + How ── */
+  .top-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+
+  .card {
+    background: var(--cream);
+    border: 1px solid var(--rule);
+    padding: 14px 16px;
+  }
+  .card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .card-title.accent { color: var(--accent); }
+  .card-title.blue   { color: var(--blue); }
+  .card-title.green  { color: var(--green); }
+
+  .pill-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+  .pill-list li {
+    background: white;
+    border-left: 3px solid var(--rule);
+    padding: 5px 8px;
+    font-size: 12px;
+    line-height: 1.4;
+  }
+  .pill-list li.highlight { border-left-color: var(--accent); }
+  .pill-list li.blue-hl   { border-left-color: var(--blue); }
+  .pill-list li.green-hl  { border-left-color: var(--green); }
+
+  /* ── EXPERIENCE MATRIX ── */
+  .matrix-wrap {
+    margin-bottom: 20px;
+  }
+
+  table.matrix {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11.5px;
+  }
+  table.matrix thead th {
+    background: var(--ink);
+    color: var(--paper);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 8px 10px;
+    text-align: left;
+    border-right: 1px solid #2a2d38;
+  }
+  table.matrix thead th:first-child {
+    width: 130px;
+    background: var(--accent);
+  }
+  table.matrix tbody tr:nth-child(even) { background: var(--cream); }
+  table.matrix tbody tr:nth-child(odd)  { background: white; }
+  table.matrix tbody td {
+    padding: 8px 10px;
+    border: 1px solid var(--rule);
+    vertical-align: top;
+    line-height: 1.45;
+  }
+  table.matrix tbody td:first-child {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10.5px;
+    font-weight: 600;
+    color: var(--ink);
+    background: #e8e2d4;
+    border-right: 2px solid var(--ink);
+  }
+  .dot { display: inline-block; width: 5px; height: 5px; border-radius: 50%; background: var(--muted); margin-right: 5px; vertical-align: middle; }
+  .dot.r { background: var(--accent); }
+  .dot.b { background: var(--blue); }
+  .dot.g { background: var(--green); }
+
+  /* ── BOTTOM ROW: Surplus + EV + Uses ── */
+  .bottom-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+
+  .card-dark {
+    padding: 14px 16px;
+    border: 1px solid var(--rule);
+  }
+  .card-dark.lt  { background: #eef2f7; }
+  .card-dark.st  { background: #f7f3ee; }
+  .card-dark.ctrl { background: #eef7f2; }
+
+  .badge {
+    display: inline-block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 2px 7px;
+    margin-bottom: 8px;
+  }
+  .badge.lt   { background: var(--blue);   color: white; }
+  .badge.st   { background: var(--gold);   color: white; }
+  .badge.ctrl { background: var(--green);  color: white; }
+  .badge.ev   { background: #5c3d7a;       color: white; }
+
+  .mini-list {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-top: 6px;
+  }
+  .mini-list li {
+    background: white;
+    border: 1px solid var(--rule);
+    padding: 3px 8px;
+    font-size: 11px;
+    font-family: 'IBM Plex Sans', sans-serif;
+  }
+
+  /* ── PRODUCT NUANCES STRIP ── */
+  .product-row {
+    margin-bottom: 20px;
+  }
+  table.products {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 11px;
+  }
+  table.products thead th {
+    padding: 7px 10px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-align: left;
+    border-right: 1px solid var(--rule);
+  }
+  table.products thead th:nth-child(1) { background: var(--ink);   color: var(--paper); width: 90px; }
+  table.products thead th:nth-child(2) { background: #1a3a5c; color: white; }
+  table.products thead th:nth-child(3) { background: #7b2d2d; color: white; }
+  table.products thead th:nth-child(4) { background: #2d5a3d; color: white; }
+  table.products thead th:nth-child(5) { background: #5c3d1a; color: white; }
+  table.products thead th:nth-child(6) { background: #3d3d5c; color: white; }
+  table.products tbody td {
+    padding: 7px 10px;
+    border: 1px solid var(--rule);
+    vertical-align: top;
+    line-height: 1.4;
+    background: white;
+  }
+  table.products tbody td:first-child {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    font-weight: 600;
+    background: #e8e2d4;
+    border-right: 2px solid var(--ink);
+  }
+  table.products tbody tr:nth-child(even) td { background: var(--cream); }
+  table.products tbody tr:nth-child(even) td:first-child { background: #ddd7c8; }
+
+  /* ── DATA REQUIREMENTS BOX ── */
+  .data-box {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 14px 18px;
+    margin-bottom: 20px;
+    display: flex;
+    gap: 24px;
+    align-items: flex-start;
+  }
+  .data-box-label {
+    font-family: 'Playfair Display', serif;
+    font-size: 14px;
+    font-weight: 700;
+    white-space: nowrap;
+    margin-top: 2px;
+    flex-shrink: 0;
+  }
+  .data-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .data-pill {
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.25);
+    padding: 4px 10px;
+    font-size: 11px;
+    font-family: 'IBM Plex Mono', monospace;
+  }
+  .data-pill.key {
+    background: var(--accent);
+    border-color: var(--accent);
+    font-weight: 600;
+  }
+
+  /* ── FOOTER ── */
+  .footer {
+    border-top: 1px solid var(--rule);
+    padding-top: 10px;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    color: var(--muted);
+    display: flex;
+    justify-content: space-between;
+  }
+
+  /* ── ANALYSIS DIVIDER ── */
+  .divider-row {
+    display: grid;
+    grid-template-columns: 1fr 1px 1fr;
+    gap: 0;
+    margin-bottom: 20px;
+    border: 1px solid var(--rule);
+  }
+  .divider-col {
+    padding: 14px 16px;
+  }
+  .divider-col:first-child { background: #eef2f7; }
+  .divider-col:last-child  { background: #f7f3ee; }
+  .divider-sep { background: var(--rule); }
+  .col-head {
+    font-family: 'Playfair Display', serif;
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--rule);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  @media print {
+    body { padding: 12px; font-size: 11px; }
+    .masthead-title { font-size: 22px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- MASTHEAD -->
+<div class="masthead">
+  <div class="masthead-title">Monitoring Stage of the Actuarial Control Cycle</div>
+  <span class="masthead-sub">SP1 Ch.29 · SA1</span>
+  <span class="masthead-tag">EXHIBIT I — HIGH LEVEL</span>
+</div>
+
+<!-- WHY / WHAT / HOW -->
+<div class="section-label">The Three Pillars</div>
+<div class="top-row">
+  <div class="card">
+    <div class="card-title accent">① Why Monitor?</div>
+    <ul class="pill-list">
+      <li class="highlight">Update assumptions for future experience</li>
+      <li class="highlight">Monitor adverse trends in experience</li>
+      <li>Compare actual vs expected → corrective action</li>
+      <li>Provide management information for business decisions</li>
+      <li>Inform pricing & reserving adequacy</li>
+      <li>Check underwriting effectiveness & anti-selection</li>
+      <li>Assess reinsurance need / profit share</li>
+      <li>Identify profitable products, markets, channels</li>
+    </ul>
+  </div>
+  <div class="card">
+    <div class="card-title blue">② What is Monitored?</div>
+    <ul class="pill-list">
+      <li class="blue-hl">New business volumes &amp; mix</li>
+      <li class="blue-hl">Mortality &amp; morbidity (incidence &amp; termination)</li>
+      <li class="blue-hl">Claims amounts</li>
+      <li class="blue-hl">Persistency / lapse rates</li>
+      <li class="blue-hl">Expenses</li>
+      <li class="blue-hl">Investment returns</li>
+      <li>Renewal rates</li>
+      <li>Option take-up rates</li>
+      <li>Customer satisfaction · Reinsurance performance · Solvency</li>
+    </ul>
+  </div>
+  <div class="card">
+    <div class="card-title green">③ How? Data Requirements</div>
+    <ul class="pill-list">
+      <li class="green-hl">Reasonable volume — stable &amp; consistent</li>
+      <li class="green-hl">Homogeneous risk groups (balance vs credibility)</li>
+      <li>Same data source, grouping criteria, reliability across groups</li>
+      <li>Period: long enough for volume, short enough for relevance</li>
+      <li>Expenses: ~12 months · Morbidity: 3–5 years</li>
+      <li>Own portfolio + market data + reinsurer data</li>
+      <li>Two strands: <strong>A vs E</strong> direct · <strong>Analysis of Surplus</strong></li>
+    </ul>
+  </div>
+</div>
+
+<!-- EXPERIENCE INVESTIGATIONS MATRIX -->
+<div class="section-label">Experience Investigations — Key Points by Type</div>
+<div class="matrix-wrap">
+  <table class="matrix">
+    <thead>
+      <tr>
+        <th>Investigation</th>
+        <th>Purpose / What to Check</th>
+        <th>Key Data Splits</th>
+        <th>Notable Nuances</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>New Business</td>
+        <td>
+          <span class="dot r"></span>New business strain vs capital<br>
+          <span class="dot r"></span>Mix vs pricing basis<br>
+          <span class="dot r"></span>Staffing adequacy<br>
+          <span class="dot r"></span>Commissions paid vs assumed
+        </td>
+        <td>Product type · Distribution channel · Agent</td>
+        <td>Cross-subsidy risk (e.g. PMI: young subsidise old). Wrong mix → reprice.</td>
+      </tr>
+      <tr>
+        <td>Mortality &amp; Morbidity</td>
+        <td>
+          <span class="dot b"></span>Actual vs expected transition rates<br>
+          <span class="dot b"></span>Healthy→Sick, Sick→Healthy, →Dead
+        </td>
+        <td>Age · Gender · Duration · Smoker status · Underwriting · Deferred period · Occupation · Geography · Group size</td>
+        <td>IP: deferred period critical (shorter = heavier morbidity). CI: split by illness type. PMI: excess, NCD, hospital band.</td>
+      </tr>
+      <tr>
+        <td>Claims Amounts</td>
+        <td>
+          <span class="dot r"></span>Indemnity: actual vs expected amounts<br>
+          <span class="dot r"></span>Fixed benefit: incidence by sum insured band
+        </td>
+        <td>Procedure type (PMI) · Hospital/surgeon · Sum insured band</td>
+        <td>Trend (rate of inflation) often more important than day-to-day volatility. Fixed benefit: watch for anti-selection.</td>
+      </tr>
+      <tr>
+        <td>Persistency</td>
+        <td>
+          <span class="dot b"></span>Lapse rates vs assumptions<br>
+          <span class="dot b"></span>Impact on profitability (recouping initial costs)
+        </td>
+        <td>Region · Policy type · Distribution channel · Duration</td>
+        <td>PMI: not profitable until year 2–3+. Broker &gt; Direct Sales &gt; Direct Marketing (persistency ranking). Economy &amp; competition affect future rates.</td>
+      </tr>
+      <tr>
+        <td>Expenses</td>
+        <td>
+          <span class="dot g"></span>Allocate costs to policy cells<br>
+          <span class="dot g"></span>Per policy / per premium / per sum insured
+        </td>
+        <td>Initial · Renewal · Termination · Claims · Investment. Direct vs Overhead.</td>
+        <td>Commission excluded (known — allowed explicitly). Overheads split pragmatically. Investment expenses → yield reduction by asset class.</td>
+      </tr>
+      <tr>
+        <td>Investment</td>
+        <td>
+          <span class="dot r"></span>Return achieved vs expected<br>
+          <span class="dot r"></span>By asset class, gross &amp; net of expenses
+        </td>
+        <td>Asset class · Market value vs book value basis</td>
+        <td>Method of asset valuation affects measured return. Market value: includes unrealised gains.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ANALYSIS OF SURPLUS / PROFIT + EV -->
+<div class="section-label">Analysis of Surplus / Profit &amp; Embedded Value</div>
+<div class="divider-row">
+  <div class="divider-col">
+    <div class="col-head">
+      <span class="badge lt">Long Term</span> Analysis of Surplus Arising
+    </div>
+    <strong>How done:</strong> Surplus arising = (A₁ − L₁) − (A₀ − L₀). Breakdown by source: mortality/morbidity, expenses, withdrawals, interest, new business impact.
+    <br><br>
+    <strong>Why / Uses:</strong>
+    <ul class="mini-list">
+      <li>Financial effect of A vs E divergences</li>
+      <li>Financial effect of new business</li>
+      <li>Check on valuation data &amp; process</li>
+      <li>Identify non-recurring surplus → distribution decisions</li>
+      <li>Regulatory compliance</li>
+      <li>Trend identification (multi-year)</li>
+    </ul>
+    <br>
+    <strong>Analysis of EV Profit:</strong> <span class="badge ev">EV</span>
+    <ul class="mini-list">
+      <li>Validate calculations, assumptions &amp; data</li>
+      <li>Reconcile successive years</li>
+      <li>Management information</li>
+      <li>Executive remuneration data</li>
+      <li>Publication in accounts (value of new business)</li>
+      <li>Identify profitable lines · Assess return on capital</li>
+    </ul>
+  </div>
+  <div class="divider-sep"></div>
+  <div class="divider-col">
+    <div class="col-head">
+      <span class="badge st">Short Term</span> Analysis of Profit
+    </div>
+    <strong>How done:</strong> Compare actual vs expected claim and expense <em>ratios</em> for cohorts of business.
+    <br><br>
+    <strong>Why / Uses:</strong>
+    <ul class="mini-list">
+      <li>Same underlying reasons as surplus for long-term</li>
+      <li>Identify adverse claims trends early</li>
+      <li>Repricing trigger (annually renewable)</li>
+      <li>Assess cohort-level profitability</li>
+    </ul>
+    <br>
+    <strong>Key difference from LT surplus:</strong><br>
+    No long-term reserving basis involved. Focus on current-period ratios rather than movements in actuarial reserves.
+    <br><br>
+    <strong>EV analysis:</strong> Not applicable for pure short-term products (no embedded future profit stream to project).
+  </div>
+</div>
+
+<!-- PRODUCT NUANCES -->
+<div class="section-label">Product-Type Nuances</div>
+<div class="product-row">
+  <table class="products">
+    <thead>
+      <tr>
+        <th>Aspect</th>
+        <th>IP (Income Protection)</th>
+        <th>CI (Critical Illness)</th>
+        <th>LTCI (Long-Term Care)</th>
+        <th>PMI (Private Medical)</th>
+        <th>Group</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Key Morbidity Splits</td>
+        <td>Deferred period; claim duration; linked-claims; recovery rates</td>
+        <td>By illness type (cause of claim); sum insured band</td>
+        <td>Care needs level; cognitive vs physical impairment</td>
+        <td>Procedure type; hospital band; NCD; excess level</td>
+        <td>Industry / occupation; group size; scheme design</td>
+      </tr>
+      <tr>
+        <td>Claims Amount</td>
+        <td>Fixed benefit — monitor incidence; proportionate payments for partial years</td>
+        <td>Fixed lump sum — monitor anti-selection by sum insured</td>
+        <td>Indemnity elements possible — cost trend critical</td>
+        <td>Indemnity — trend in cost escalation vs inflation index; surgeon-level analysis</td>
+        <td>Both fixed &amp; indemnity possible; aggregate stop-loss relevant</td>
+      </tr>
+      <tr>
+        <td>Persistency Focus</td>
+        <td>Long-term — lapse rare; focus on claim termination rates</td>
+        <td>Long-term — lapse vs claim; anti-selection on lapse</td>
+        <td>Long-term — lapse rates &amp; conversion to claim state</td>
+        <td>Annual renewal — lapse rates crucial; profitability depends on multi-year retention</td>
+        <td>Group renewal rates; member turnover within scheme</td>
+      </tr>
+      <tr>
+        <td>New Business Checks</td>
+        <td>Occupational class mix; deferred period mix</td>
+        <td>Illness cover mix; sum insured distribution</td>
+        <td>Age at entry; care need assumptions</td>
+        <td>Age mix (cross-subsidy risk); individual vs company</td>
+        <td>Size &amp; type of group; industry sector</td>
+      </tr>
+      <tr>
+        <td>Surplus / Profit Analysis</td>
+        <td>Long-term: full analysis of surplus + EV analysis applicable</td>
+        <td>Long-term: full analysis of surplus + EV analysis applicable</td>
+        <td>Long-term: full analysis of surplus + EV analysis applicable</td>
+        <td>Short-term: claim &amp; expense ratios; no EV analysis</td>
+        <td>Depends on term; short-term: ratio analysis; long-term: surplus analysis</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- USES TO CONTROL RISKS -->
+<div class="section-label">Using Results to Control Risks — Feedback into ACC</div>
+<div class="data-box">
+  <div class="data-box-label">Actions</div>
+  <div class="data-pills">
+    <span class="data-pill key">Reprice / Redesign</span>
+    <span class="data-pill key">Revise Reserving Basis</span>
+    <span class="data-pill">Improve Marketing</span>
+    <span class="data-pill">Revise Sales Procedures &amp; Commission</span>
+    <span class="data-pill">Staffing (numbers &amp; competence)</span>
+    <span class="data-pill">Revise Underwriting</span>
+    <span class="data-pill">Revise Claims Handling</span>
+    <span class="data-pill">Capital Allocation</span>
+    <span class="data-pill">Systems &amp; Data Recording</span>
+    <span class="data-pill">Revise Policy Design</span>
+    <span class="data-pill key">Improve Policy Wording (esp. CI)</span>
+    <span class="data-pill">Reinsurance Strategy</span>
+    <span class="data-pill">Investment Strategy</span>
+  </div>
+</div>
+
+<!-- CUSTOMER VALUE -->
+<div class="section-label">Customer Value &amp; Iterative Nature</div>
+<div class="card" style="margin-bottom:20px;">
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+    <div>
+      <div class="card-title accent" style="font-size:13px;">Customer Value</div>
+      Experience monitoring enables the insurer to provide better value by: identifying over-priced products, improving claims handling efficiency, ensuring underwriting fairness, and aligning product design with actual policyholder needs. Monitoring persistency and complaints data helps gauge perceived value and satisfaction.
+    </div>
+    <div>
+      <div class="card-title blue" style="font-size:13px;">Iterative Process</div>
+      Monitoring is <em>continuous</em> — the ever-changing nature of actual experience means assumptions never fully converge on reality. Historical data becomes less relevant over time. Assumptions must contain <strong>margins for model error</strong>. Frequency of review depends on class of business (e.g. expenses quarterly; LTC claim rates annually).
+    </div>
+  </div>
+</div>
+
+<div class="footer">
+  <span>SP1 Chapter 29 · SA1 Chapters 19–20 · Source: IFE 2019</span>
+  <span>EXHIBIT I — HIGH LEVEL MEMORY AID</span>
+  <span>Monitoring Stage · ACC</span>
+</div>
+
+</body>
+</html>
