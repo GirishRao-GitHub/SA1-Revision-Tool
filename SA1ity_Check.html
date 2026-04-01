@@ -103,6 +103,33 @@ select:focus{outline:none;border-color:var(--accent);}
 .marks-row{display:flex;gap:8px;align-items:center;flex-wrap:nowrap;}
 .btn-export:hover{background:#64748b;color:#fff;border-color:#94a3b8;}
 
+/* GITHUB SYNC MODAL */
+#gh-sync-modal { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.7); z-index:9999; align-items:center; justify-content:center; }
+#gh-sync-modal.open { display:flex; }
+.gh-modal-box { background:var(--surface); border:1px solid var(--border2); border-radius:var(--radius2); padding:24px; width:420px; max-width:95vw; display:flex; flex-direction:column; gap:14px; box-shadow:0 8px 40px rgba(0,0,0,0.5); }
+.gh-modal-title { font-family:var(--mono); font-size:13px; font-weight:700; color:var(--accent); letter-spacing:.05em; display:flex; align-items:center; gap:8px; }
+.gh-modal-title span { font-size:16px; }
+.gh-pat-row { display:flex; flex-direction:column; gap:6px; }
+.gh-pat-label { font-size:11px; font-weight:600; color:var(--text3); text-transform:uppercase; letter-spacing:.07em; }
+.gh-pat-input { font-family:var(--mono); font-size:12px; padding:8px 10px; border-radius:var(--radius); border:1px solid var(--border); background:var(--bg); color:var(--text); width:100%; }
+.gh-pat-input:focus { outline:none; border-color:var(--accent); }
+.gh-btn-row { display:flex; gap:8px; }
+.gh-btn { font-family:var(--mono); font-size:12px; font-weight:700; padding:8px 14px; border-radius:var(--radius); border:1px solid; cursor:pointer; flex:1; transition:all .2s; }
+.gh-btn-push { background:var(--greenbg); border-color:var(--green); color:var(--green); }
+.gh-btn-push:hover { background:var(--green); color:#000; }
+.gh-btn-pull { background:var(--accentbg); border-color:var(--accent); color:var(--accent); }
+.gh-btn-pull:hover { background:var(--accent); color:#fff; }
+.gh-btn-close { background:var(--surface2); border-color:var(--border); color:var(--text3); flex:0 0 auto; }
+.gh-btn-close:hover { background:var(--surface3); color:var(--text); }
+.gh-status { font-size:12px; font-family:var(--mono); padding:8px 10px; border-radius:var(--radius); background:var(--surface2); color:var(--text3); min-height:36px; line-height:1.5; display:none; }
+.gh-status.visible { display:block; }
+.gh-status.ok { color:var(--green); background:var(--greenbg); border:1px solid var(--green); }
+.gh-status.err { color:var(--red); background:var(--redbg); border:1px solid var(--red); }
+.gh-status.info { color:var(--accent); background:var(--accentbg); border:1px solid var(--accent); }
+.gh-info-row { font-size:11px; color:var(--text3); line-height:1.6; }
+.gh-info-row a { color:var(--accent); }
+.gh-btn-push:disabled, .gh-btn-pull:disabled { opacity:.4; cursor:default; }
+
 /* PILLAR TAGS */
 .pillar-tag {
   font-family: var(--mono);
@@ -483,9 +510,36 @@ kbd{background:var(--surface2);border:1px solid var(--border2);border-radius:3px
     <div style="width:2px; height:24px; background:var(--border); margin:0 6px;"></div>
     <!-- Utility buttons: icon-only, grouped -->
     <div style="display:flex; gap:2px; align-items:center; background:var(--surface2); padding:2px; border-radius:6px; border:1px solid var(--border);">
+      <button class="mode-btn" onclick="openGhSyncModal()" title="Sync attempts to GitHub" style="color:#60a5fa;">&#9729;</button>
       <button class="mode-btn" onclick="toggleFullScreen(event)" title="Full Screen">&#9111;</button>
       <button class="mode-btn" onclick="confirmRefresh()" title="Refresh">&#8635;</button>
       <button class="mode-btn" onclick="exitTool()" title="Exit" style="color:var(--red);">&#10005;</button>
+    </div>
+  </div>
+</div>
+
+<!-- GITHUB SYNC MODAL -->
+<div id="gh-sync-modal" onclick="if(event.target===this)closeGhSyncModal()">
+  <div class="gh-modal-box">
+    <div class="gh-modal-title"><span>&#9729;</span> GitHub Attempts Sync</div>
+    <div class="gh-info-row">
+      Saves all your answers, notes &amp; progress to <code style="color:var(--accent)">data/sa1_attempts.json</code> in your repo.<br>
+      Your PAT is stored only on this device (never synced).
+    </div>
+    <div class="gh-pat-row">
+      <div class="gh-pat-label">Personal Access Token (PAT)</div>
+      <input id="gh-pat-input" class="gh-pat-input" type="password" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" autocomplete="off" />
+    </div>
+    <div class="gh-btn-row">
+      <button class="gh-btn gh-btn-push" onclick="ghPush()">&#11014; Push to GitHub</button>
+      <button class="gh-btn gh-btn-pull" onclick="ghPull()">&#11015; Pull from GitHub</button>
+      <button class="gh-btn gh-btn-close" onclick="closeGhSyncModal()">&#10005;</button>
+    </div>
+    <div id="gh-status" class="gh-status"></div>
+    <div class="gh-info-row" style="margin-top:4px;font-size:10px;color:var(--text3);">
+      <b style="color:var(--text2)">Push</b> = saves current device → GitHub &nbsp;|&nbsp;
+      <b style="color:var(--text2)">Pull</b> = loads GitHub → this device<br>
+      Always Push before switching devices. Pull first on a new device.
     </div>
   </div>
 </div>
@@ -3133,7 +3187,109 @@ const KeyboardHandler = {
   }
 };
 
-document.addEventListener('keydown', (e) => KeyboardHandler.onKeyDown(e));
+// ═══════════════════════════════════════════════════════════
+// GITHUB ATTEMPTS SYNC
+// ═══════════════════════════════════════════════════════════
+const GH_OWNER  = 'girishrao-github';
+const GH_REPO   = 'SA1-Revision-Tool';
+const GH_PATH   = 'data/sa1_attempts.json';
+const GH_API    = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${GH_PATH}`;
+const PAT_KEY   = 'sa1_github_pat';
+const SYNC_PREFIX = 'sa1_e_';
+
+function openGhSyncModal() {
+  const pat = localStorage.getItem(PAT_KEY) || '';
+  document.getElementById('gh-pat-input').value = pat;
+  ghSetStatus('', '');
+  document.getElementById('gh-sync-modal').classList.add('open');
+}
+function closeGhSyncModal() {
+  document.getElementById('gh-sync-modal').classList.remove('open');
+}
+function ghSetStatus(msg, type) {
+  const el = document.getElementById('gh-status');
+  el.textContent = msg;
+  el.className = 'gh-status' + (msg ? ' visible' : '') + (type ? ' ' + type : '');
+}
+function ghGetPat() {
+  const pat = document.getElementById('gh-pat-input').value.trim();
+  if (pat) localStorage.setItem(PAT_KEY, pat);
+  return pat;
+}
+function ghCollectData() {
+  const data = {};
+  for (let i = 0; i < localStorage.length; i++) {
+    const k = localStorage.key(i);
+    if (k && k.startsWith(SYNC_PREFIX)) data[k] = localStorage.getItem(k);
+  }
+  return data;
+}
+function ghRestoreData(data) {
+  let count = 0;
+  Object.entries(data).forEach(([k, v]) => {
+    if (k.startsWith(SYNC_PREFIX)) { localStorage.setItem(k, v); count++; }
+  });
+  return count;
+}
+
+async function ghGetFileSha(pat) {
+  const res = await fetch(GH_API, {
+    headers: { 'Authorization': 'token ' + pat, 'Accept': 'application/vnd.github.v3+json' }
+  });
+  if (res.status === 404) return null;
+  if (!res.ok) throw new Error('GitHub API error: ' + res.status);
+  const json = await res.json();
+  return json.sha || null;
+}
+
+async function ghPush() {
+  const pat = ghGetPat();
+  if (!pat) { ghSetStatus('Please enter your Personal Access Token.', 'err'); return; }
+  ghSetStatus('Collecting data...', 'info');
+  const data = ghCollectData();
+  const count = Object.keys(data).length;
+  if (count === 0) { ghSetStatus('Nothing to push — no attempt data found in localStorage.', 'err'); return; }
+  ghSetStatus(`Pushing ${count} entries to GitHub...`, 'info');
+  try {
+    const sha = await ghGetFileSha(pat);
+    const content = btoa(unescape(encodeURIComponent(JSON.stringify(data, null, 2))));
+    const body = { message: `SA1 attempts sync — ${new Date().toISOString().slice(0,16).replace('T',' ')}`, content };
+    if (sha) body.sha = sha;
+    const res = await fetch(GH_API, {
+      method: 'PUT',
+      headers: { 'Authorization': 'token ' + pat, 'Content-Type': 'application/json', 'Accept': 'application/vnd.github.v3+json' },
+      body: JSON.stringify(body)
+    });
+    if (!res.ok) {
+      const err = await res.json();
+      throw new Error(err.message || res.status);
+    }
+    ghSetStatus(`✓ Pushed ${count} entries successfully.`, 'ok');
+  } catch(e) {
+    ghSetStatus('Push failed: ' + e.message, 'err');
+  }
+}
+
+async function ghPull() {
+  const pat = ghGetPat();
+  if (!pat) { ghSetStatus('Please enter your Personal Access Token.', 'err'); return; }
+  ghSetStatus('Fetching from GitHub...', 'info');
+  try {
+    const res = await fetch(GH_API, {
+      headers: { 'Authorization': 'token ' + pat, 'Accept': 'application/vnd.github.v3+json' }
+    });
+    if (res.status === 404) { ghSetStatus('No sync file found on GitHub yet. Push from another device first.', 'err'); return; }
+    if (!res.ok) throw new Error('GitHub API error: ' + res.status);
+    const json = await res.json();
+    const decoded = decodeURIComponent(escape(atob(json.content.replace(/\n/g, ''))));
+    const data = JSON.parse(decoded);
+    const count = ghRestoreData(data);
+    ghSetStatus(`✓ Pulled and restored ${count} entries. Reload the page to see updated attempt status.`, 'ok');
+  } catch(e) {
+    ghSetStatus('Pull failed: ' + e.message, 'err');
+  }
+}
+
 
 function saveQuestionOnlyDoc() { exportCurrentQuestionDoc(); }
 
