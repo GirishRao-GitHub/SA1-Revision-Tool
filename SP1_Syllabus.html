@@ -1427,38 +1427,62 @@ function renderSummary(chNum) {
         <div class="sum-empty-icon">✏️</div>
         <p class="sum-empty-text">No summary has been added for this chapter yet.</p>
       </div>`;
-  } else if (Array.isArray(raw)) {
-    // Array-of-strings format
-    bodyHtml = `<ul class="sum-list">${raw.map(pt => `<li class="sum-point">${pt}</li>`).join('')}</ul>`;
   } else {
-    // Verbatim string — parse line by line into headings / bullets / paragraphs
-    const lines = raw.split('\n');
+    const text = Array.isArray(raw) ? raw.join('\n') : raw;
+
+    // First pass: join wrapped lines back together.
+    // A line is a continuation if it doesn't start with • and doesn't look like
+    // a heading or blank, and the previous non-blank line was not a heading.
+    const rawLines = text.split('\n');
+    const joined = [];
+    for (let i = 0; i < rawLines.length; i++) {
+      const line = rawLines[i];
+      const t = line.trim();
+      const isBulletLine = t.startsWith('\u2022');
+      const isBlank = t === '';
+      const prevJoined = joined[joined.length - 1];
+      const prevIsBullet = prevJoined && prevJoined.trim().startsWith('\u2022');
+      const prevIsBlank  = !prevJoined || prevJoined.trim() === '';
+
+      // Skip the "Chapter X Summary" / "Chapter X Summary continued" title lines
+      if (/^Chapter\s+\d+\s+Summary/i.test(t)) continue;
+
+      if (!isBlank && !isBulletLine && !prevIsBlank && prevJoined !== undefined) {
+        // Continuation: append to previous line
+        joined[joined.length - 1] = joined[joined.length - 1].trimEnd() + ' ' + t;
+      } else {
+        joined.push(line);
+      }
+    }
+
+    // Second pass: render joined lines
     let html = '';
     let inList = false;
 
-    const isBullet  = line => /^\s+-\s/.test(line);
-    const isBlank   = line => line.trim() === '';
-    const isHeading = line => {
-      const t = line.trim();
-      if (!t || isBullet(line)) return false;
-      if (/^Chapter\s+\d+\s+Summary/i.test(t)) return false; // skip the top title line
-      return t.length <= 60 && !t.endsWith('.') && !t.endsWith(',') && !/^[a-z]/.test(t);
+    const esc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
+    const isBullet  = t => t.startsWith('\u2022');
+    const isBlank   = t => t === '';
+    const isHeading = t => {
+      if (!t || isBullet(t)) return false;
+      return t.length <= 70 && !t.endsWith('.') && !t.endsWith(',') && !/^[a-z]/.test(t);
     };
 
-    for (const line of lines) {
-      if (isBlank(line)) {
+    for (const line of joined) {
+      const t = line.trim();
+      if (isBlank(t)) {
         if (inList) { html += '</ul>'; inList = false; }
         continue;
       }
-      if (isBullet(line)) {
+      if (isBullet(t)) {
         if (!inList) { html += '<ul class="sum-list">'; inList = true; }
-        html += `<li class="sum-point">${line.replace(/^\s*-\s*/, '')}</li>`;
-      } else if (isHeading(line)) {
+        html += `<li class="sum-point">${esc(t.replace(/^\u2022\s*/, ''))}</li>`;
+      } else if (isHeading(t)) {
         if (inList) { html += '</ul>'; inList = false; }
-        html += `<h3 class="sum-section-heading">${line.trim()}</h3>`;
+        html += `<h3 class="sum-section-heading">${esc(t)}</h3>`;
       } else {
         if (inList) { html += '</ul>'; inList = false; }
-        html += `<p class="sum-para">${line.trim()}</p>`;
+        html += `<p class="sum-para">${esc(t)}</p>`;
       }
     }
     if (inList) html += '</ul>';
