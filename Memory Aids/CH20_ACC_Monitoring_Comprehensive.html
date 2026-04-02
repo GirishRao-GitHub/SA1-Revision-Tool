@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ACC Monitoring Stage — Consolidated Study Matrix</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0f1117;
+    --paper: #f5f0e8;
+    --cream: #ede7d6;
+    --accent: #c0392b;
+    --gold: #b8860b;
+    --blue: #1a3a5c;
+    --green: #1e5f3f;
+    --purple: #5c3d7a;
+    --stat: #1a3a5c;
+    --solv: #7a3d1a;
+    --muted: #6b6560;
+    --rule: #c8bfaf;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--paper); color:var(--ink); font-family:'IBM Plex Sans',sans-serif; font-size:12.5px; line-height:1.5; padding:28px 22px; max-width:1140px; margin:0 auto; }
+
+  /* MASTHEAD */
+  .masthead { border-top:4px solid var(--ink); border-bottom:2px solid var(--ink); padding:12px 0 10px; margin-bottom:22px; display:flex; align-items:baseline; gap:16px; }
+  .masthead-title { font-family:'Playfair Display',serif; font-size:26px; font-weight:900; flex:1; }
+  .masthead-sub { font-family:'IBM Plex Mono',monospace; font-size:9.5px; color:var(--muted); text-transform:uppercase; letter-spacing:1.5px; }
+  .masthead-tag { font-family:'IBM Plex Mono',monospace; font-size:9.5px; background:var(--accent); color:#fff; padding:3px 8px; letter-spacing:1px; }
+
+  /* SECTION LABEL */
+  .sl { font-family:'IBM Plex Mono',monospace; font-size:9px; text-transform:uppercase; letter-spacing:2px; color:var(--muted); margin-bottom:5px; border-left:3px solid var(--accent); padding-left:7px; }
+
+  /* GRID HELPERS */
+  .g3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px; margin-bottom:18px; }
+  .g2 { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:18px; }
+
+  /* CARD */
+  .card { background:var(--cream); border:1px solid var(--rule); padding:12px 14px; }
+  .ct { font-family:'Playfair Display',serif; font-size:14px; font-weight:700; margin-bottom:8px; padding-bottom:5px; border-bottom:1px solid var(--rule); }
+  .ct.r { color:var(--accent); } .ct.b { color:var(--blue); } .ct.g { color:var(--green); } .ct.p { color:var(--purple); }
+
+  .pl { list-style:none; display:flex; flex-direction:column; gap:4px; }
+  .pl li { background:white; border-left:3px solid var(--rule); padding:4px 7px; font-size:11.5px; line-height:1.4; }
+  .pl li.r { border-left-color:var(--accent); }
+  .pl li.b { border-left-color:var(--blue); }
+  .pl li.g { border-left-color:var(--green); }
+
+  /* MATRIX TABLE */
+  table.mx { width:100%; border-collapse:collapse; font-size:11px; margin-bottom:18px; }
+  table.mx thead th { background:var(--ink); color:var(--paper); font-family:'IBM Plex Mono',monospace; font-size:9.5px; text-transform:uppercase; letter-spacing:.8px; padding:7px 9px; text-align:left; border-right:1px solid #2a2d38; }
+  table.mx thead th:first-child { background:var(--accent); width:110px; }
+  table.mx tbody tr:nth-child(even) { background:var(--cream); }
+  table.mx tbody tr:nth-child(odd)  { background:white; }
+  table.mx tbody td { padding:7px 9px; border:1px solid var(--rule); vertical-align:top; line-height:1.4; }
+  table.mx tbody td:first-child { font-family:'IBM Plex Mono',monospace; font-size:10px; font-weight:600; background:#e8e2d4; border-right:2px solid var(--ink); }
+
+  /* SURPLUS SECTION — the centrepiece */
+  .surplus-wrap { margin-bottom:18px; }
+  .surplus-header { background:var(--ink); color:var(--paper); padding:9px 14px; display:flex; align-items:center; gap:12px; margin-bottom:0; }
+  .surplus-header-title { font-family:'Playfair Display',serif; font-size:16px; font-weight:700; flex:1; }
+
+  .surplus-cols { display:grid; grid-template-columns:1fr 1fr; border:1px solid var(--rule); border-top:none; }
+  .sc { padding:13px 14px; }
+  .sc.stat { background:#eef2f7; border-right:2px solid var(--ink); }
+  .sc.solv { background:#f7f0e8; }
+
+  .basis-head { display:flex; align-items:center; gap:8px; margin-bottom:10px; padding-bottom:7px; border-bottom:2px solid; }
+  .basis-head.stat { border-color:var(--stat); }
+  .basis-head.solv { border-color:var(--solv); }
+  .basis-badge { font-family:'IBM Plex Mono',monospace; font-size:9px; font-weight:600; text-transform:uppercase; letter-spacing:1px; padding:2px 8px; color:white; }
+  .basis-badge.stat { background:var(--stat); }
+  .basis-badge.solv { background:var(--solv); }
+  .basis-subtitle { font-size:10.5px; color:var(--muted); font-style:italic; }
+
+  .sources-grid { display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-bottom:10px; }
+  .src { background:white; border:1px solid var(--rule); padding:5px 8px; font-size:11px; line-height:1.4; }
+  .src strong { display:block; font-size:10px; font-family:'IBM Plex Mono',monospace; text-transform:uppercase; letter-spacing:.5px; margin-bottom:2px; }
+  .src.extra { border-left:3px solid var(--solv); background:#fdf8f0; }
+  .src.shared { border-left:3px solid var(--muted); }
+
+  .process-steps { margin-top:8px; }
+  .process-steps .ps { display:flex; gap:8px; margin-bottom:5px; font-size:11px; align-items:flex-start; }
+  .ps-num { background:var(--ink); color:white; font-family:'IBM Plex Mono',monospace; font-size:9px; padding:2px 6px; flex-shrink:0; margin-top:1px; }
+  .ps-num.s { background:var(--stat); }
+  .ps-num.v { background:var(--solv); }
+
+  .surplus-uses { background:#f0f4f0; border:1px solid var(--rule); border-top:2px solid var(--green); padding:10px 14px; margin-top:0; }
+  .uses-title { font-family:'IBM Plex Mono',monospace; font-size:9px; text-transform:uppercase; letter-spacing:1.5px; color:var(--green); margin-bottom:7px; }
+  .uses-grid { display:flex; flex-wrap:wrap; gap:5px; }
+  .use-pill { background:white; border:1px solid var(--rule); padding:3px 9px; font-size:11px; }
+  .use-pill.k { background:var(--green); color:white; border-color:var(--green); font-weight:500; }
+
+  /* COMPARISON TABLE */
+  table.cmp { width:100%; border-collapse:collapse; font-size:11px; margin-bottom:18px; }
+  table.cmp thead th { padding:7px 10px; font-family:'IBM Plex Mono',monospace; font-size:9.5px; text-transform:uppercase; letter-spacing:.8px; text-align:left; }
+  table.cmp thead th:nth-child(1) { background:var(--ink); color:white; width:160px; }
+  table.cmp thead th:nth-child(2) { background:var(--stat); color:white; }
+  table.cmp thead th:nth-child(3) { background:var(--solv); color:white; }
+  table.cmp tbody td { padding:7px 10px; border:1px solid var(--rule); vertical-align:top; line-height:1.4; }
+  table.cmp tbody td:first-child { font-family:'IBM Plex Mono',monospace; font-size:10px; font-weight:600; background:#e8e2d4; border-right:2px solid var(--ink); }
+  table.cmp tbody tr:nth-child(even) td { background:var(--cream); }
+  table.cmp tbody tr:nth-child(even) td:first-child { background:#ddd7c8; }
+  table.cmp tbody tr:nth-child(odd) td { background:white; }
+
+  /* EV SECTION */
+  .ev-wrap { margin-bottom:18px; }
+  .ev-header { background:var(--purple); color:white; padding:9px 14px; display:flex; align-items:center; gap:10px; }
+  .ev-header-title { font-family:'Playfair Display',serif; font-size:15px; font-weight:700; flex:1; }
+  .ev-body { border:1px solid var(--rule); border-top:none; background:white; padding:13px 14px; }
+  .ev-components { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:10px; }
+  .ev-comp { background:#f5f0f9; border:1px solid #d4c8e8; padding:7px 9px; }
+  .ev-comp strong { display:block; font-size:10px; font-family:'IBM Plex Mono',monospace; color:var(--purple); margin-bottom:3px; }
+  .ev-comp span { font-size:11px; line-height:1.4; }
+  .ev-note { background:#fdf8ff; border-left:3px solid var(--purple); padding:7px 10px; font-size:11px; margin-top:8px; }
+
+  /* SHORT TERM PROFIT */
+  .st-wrap { margin-bottom:18px; border:1px solid var(--rule); }
+  .st-header { background:var(--gold); color:white; padding:9px 14px; font-family:'Playfair Display',serif; font-size:15px; font-weight:700; }
+  .st-body { padding:13px 14px; background:#fffdf5; }
+  .indices { display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; margin-bottom:10px; }
+  .idx { border:2px solid var(--gold); padding:8px 10px; background:white; }
+  .idx-name { font-family:'IBM Plex Mono',monospace; font-size:9.5px; text-transform:uppercase; letter-spacing:.5px; color:var(--gold); margin-bottom:4px; }
+  .idx-def { font-size:11px; line-height:1.4; margin-bottom:3px; }
+  .idx-note { font-size:10.5px; color:var(--muted); font-style:italic; }
+
+  /* PRODUCT TABLE */
+  table.prod { width:100%; border-collapse:collapse; font-size:11px; margin-bottom:18px; }
+  table.prod thead th { padding:7px 9px; font-family:'IBM Plex Mono',monospace; font-size:9.5px; text-transform:uppercase; letter-spacing:.7px; text-align:left; border-right:1px solid rgba(255,255,255,0.3); }
+  table.prod thead th:nth-child(1) { background:var(--ink); color:var(--paper); width:85px; }
+  table.prod thead th:nth-child(2) { background:#1a3a5c; color:white; }
+  table.prod thead th:nth-child(3) { background:#7b2d2d; color:white; }
+  table.prod thead th:nth-child(4) { background:#2d5a3d; color:white; }
+  table.prod thead th:nth-child(5) { background:#5c3d1a; color:white; }
+  table.prod thead th:nth-child(6) { background:#3d3d5c; color:white; }
+  table.prod tbody td { padding:6px 9px; border:1px solid var(--rule); vertical-align:top; line-height:1.4; background:white; }
+  table.prod tbody td:first-child { font-family:'IBM Plex Mono',monospace; font-size:9.5px; font-weight:600; background:#e8e2d4; border-right:2px solid var(--ink); }
+  table.prod tbody tr:nth-child(even) td { background:var(--cream); }
+  table.prod tbody tr:nth-child(even) td:first-child { background:#ddd7c8; }
+
+  /* CUSTOMER VALUE */
+  .cv-wrap { background:#f0f4f0; border:1px solid var(--rule); border-top:3px solid var(--green); padding:12px 14px; margin-bottom:18px; display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px; }
+  .cv-item strong { display:block; font-family:'IBM Plex Mono',monospace; font-size:9px; text-transform:uppercase; letter-spacing:1px; color:var(--green); margin-bottom:5px; }
+
+  /* RISK CONTROL BAR */
+  .rc-bar { background:var(--ink); color:var(--paper); padding:12px 16px; margin-bottom:18px; display:flex; gap:20px; align-items:flex-start; }
+  .rc-label { font-family:'Playfair Display',serif; font-size:13px; font-weight:700; white-space:nowrap; flex-shrink:0; margin-top:2px; }
+  .rc-pills { display:flex; flex-wrap:wrap; gap:5px; }
+  .rc-pill { background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.25); padding:3px 9px; font-size:10.5px; font-family:'IBM Plex Mono',monospace; }
+  .rc-pill.k { background:var(--accent); border-color:var(--accent); }
+
+  /* FOOTER */
+  .footer { border-top:1px solid var(--rule); padding-top:8px; font-family:'IBM Plex Mono',monospace; font-size:9px; color:var(--muted); display:flex; justify-content:space-between; }
+
+  .dot { display:inline-block; width:5px; height:5px; border-radius:50%; background:var(--muted); margin-right:4px; vertical-align:middle; }
+  .dot.r { background:var(--accent); } .dot.b { background:var(--blue); } .dot.g { background:var(--green); }
+
+  @media print { body { padding:10px; font-size:11px; } }
+</style>
+</head>
+<body>
+
+<!-- MASTHEAD -->
+<div class="masthead">
+  <div class="masthead-title">Monitoring Stage of the Actuarial Control Cycle</div>
+  <span class="masthead-sub">SP1 Ch.29 · SA1 Ch.19–20</span>
+  <span class="masthead-tag">CONSOLIDATED STUDY MATRIX — OVERVIEW</span>
+</div>
+
+<!-- THREE PILLARS -->
+<div class="sl">The Three Pillars of Monitoring</div>
+<div class="g3">
+  <div class="card">
+    <div class="ct r">① Why Monitor?</div>
+    <ul class="pl">
+      <li class="r">Update assumptions for future experience</li>
+      <li class="r">Monitor adverse trends in experience</li>
+      <li>Compare actual vs expected → corrective action</li>
+      <li>Provide management information for decisions</li>
+      <li>Inform pricing &amp; reserving adequacy</li>
+      <li>Check underwriting effectiveness &amp; anti-selection</li>
+      <li>Assess reinsurance need / profit share entitlement</li>
+      <li>Identify profitable products, markets, channels</li>
+      <li>Feed back into the actuarial control cycle</li>
+    </ul>
+  </div>
+  <div class="card">
+    <div class="ct b">② What is Monitored?</div>
+    <ul class="pl">
+      <li class="b">New business volumes &amp; mix</li>
+      <li class="b">Mortality &amp; morbidity (incidence &amp; termination)</li>
+      <li class="b">Claims amounts &amp; cost trends</li>
+      <li class="b">Persistency / lapse rates</li>
+      <li class="b">Expenses (initial, renewal, termination, claims, investment)</li>
+      <li class="b">Investment returns</li>
+      <li>Renewal rates · Option take-up rates</li>
+      <li>Customer satisfaction · Reinsurance performance</li>
+      <li>Solvency levels · Competition &amp; regulation</li>
+    </ul>
+  </div>
+  <div class="card">
+    <div class="ct g">③ How? Data Requirements</div>
+    <ul class="pl">
+      <li class="g">Reasonable volume — stable &amp; consistent</li>
+      <li class="g">Homogeneous risk groups (credibility vs granularity)</li>
+      <li>Same source, grouping criteria, reliability across groups</li>
+      <li>Period: long enough for volume, short enough for relevance</li>
+      <li>Expenses: ~12 months · Morbidity: 3–5 years</li>
+      <li>Own portfolio + market + reinsurer data</li>
+      <li><strong>Two strands:</strong> Direct A vs E · Analysis of Surplus/Profit</li>
+      <li>Frequency depends on class (e.g. LTC annual; new product expenses quarterly)</li>
+    </ul>
+  </div>
+</div>
+
+<!-- EXPERIENCE INVESTIGATIONS MATRIX -->
+<div class="sl">Experience Investigations — by Type</div>
+<table class="mx">
+  <thead>
+    <tr>
+      <th>Type</th>
+      <th>Purpose / What to Check</th>
+      <th>Key Data Splits</th>
+      <th>Notable Nuances</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>New Business</td>
+      <td><span class="dot r"></span>NB strain vs capital set aside<br><span class="dot r"></span>Mix vs pricing basis<br><span class="dot r"></span>Staffing adequacy<br><span class="dot r"></span>Commission paid vs assumed</td>
+      <td>Product type · Distribution channel · Agent</td>
+      <td>Cross-subsidy risk (PMI: young subsidise old). Wrong mix → reassess pricing.</td>
+    </tr>
+    <tr>
+      <td>Mortality &amp; Morbidity</td>
+      <td><span class="dot b"></span>Actual vs expected transition rates<br><span class="dot b"></span>Healthy→Sick, Sick→Healthy, →Dead</td>
+      <td>Age · Gender · Duration · Smoker · Underwriting · Deferred period · Occupation · Geography · Group size</td>
+      <td>IP: deferred period critical. CI: split by illness type. PMI: excess, NCD, hospital band. Period ≤5 years.</td>
+    </tr>
+    <tr>
+      <td>Claims Amounts</td>
+      <td><span class="dot r"></span>Indemnity: actual vs expected amounts &amp; trend<br><span class="dot r"></span>Fixed benefit: incidence by sum insured band</td>
+      <td>Procedure type · Hospital/surgeon · Sum insured band</td>
+      <td>Cost inflation trend often more important than day-to-day volatility. Fixed benefit: watch for anti-selection.</td>
+    </tr>
+    <tr>
+      <td>Persistency</td>
+      <td><span class="dot b"></span>Lapse rates vs assumptions<br><span class="dot b"></span>Impact on recouping initial costs</td>
+      <td>Region · Policy type · Distribution channel · Duration</td>
+      <td>PMI: not profitable until yr 2–3+. Broker &gt; Direct Sales &gt; Direct Mktg (persistency). Economy &amp; competition affect future.</td>
+    </tr>
+    <tr>
+      <td>Expenses</td>
+      <td><span class="dot g"></span>Allocate costs to policy cells<br><span class="dot g"></span>Per policy / per premium / per sum insured</td>
+      <td>Initial · Renewal · Termination · Claims · Investment. Direct vs Overhead.</td>
+      <td>Commission excluded (allowed explicitly). Overheads split pragmatically. Investment expenses → yield reduction by asset class.</td>
+    </tr>
+    <tr>
+      <td>Investment</td>
+      <td><span class="dot r"></span>Return achieved vs expected<br><span class="dot r"></span>By asset class, gross &amp; net of expenses</td>
+      <td>Asset class · Market value vs book value</td>
+      <td>Basis of asset valuation affects measured return. Market value: includes unrealised gains/losses.</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- ANALYSIS OF SURPLUS — CENTREPIECE -->
+<div class="sl">Analysis of Surplus / Profit — The Two Bases</div>
+<div class="surplus-wrap">
+  <div class="surplus-header">
+    <div class="surplus-header-title">Analysis of Surplus Arising (Long-Term Insurance)</div>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;opacity:.7;">Surplus arising = (A₁ − L₁) − (A₀ − L₀) · Reconciliation of start-year to end-year surplus, broken into contributory factors</span>
+  </div>
+  <div class="surplus-cols">
+
+    <!-- STATUTORY -->
+    <div class="sc stat">
+      <div class="basis-head stat">
+        <span class="basis-badge stat">Statutory Basis</span>
+        <span class="basis-subtitle">Reserves include prudential margins</span>
+      </div>
+      <div style="font-size:11px;margin-bottom:8px;"><strong>Liabilities defined as:</strong> Supervisory reserves with prudential margins baked in. Surplus = Assets − Prudential Reserves.</div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;text-transform:uppercase;letter-spacing:.8px;color:var(--stat);margin-bottom:5px;">Sources of Surplus</div>
+      <div class="sources-grid">
+        <div class="src shared"><strong>Opening Adjustments</strong>Model/data corrections; methodology changes (e.g. ESG, proxy model updates)</div>
+        <div class="src shared"><strong>Return on Opening Surplus</strong>Expected investment return on the opening surplus (at discount rate)</div>
+        <div class="src shared"><strong>Economic Variances</strong>Differences in actual vs expected investment returns, inflation, FX. Usually the dominant source. Includes mismatch profit/loss.</div>
+        <div class="src shared"><strong>Non-Economic (Insurance) Variances</strong>Morbidity, mortality, persistency, expense differences vs valuation assumptions</div>
+        <div class="src shared"><strong>Assumption Changes</strong>Updates to non-economic or economic valuation assumptions</div>
+        <div class="src shared"><strong>New Business Impact</strong>Premiums less initial outgo + investment return to valuation date. On prudent basis → often negative (NB strain)</div>
+        <div class="src shared"><strong>Other Variances</strong>Capital injections, tax changes</div>
+        <div class="src shared"><strong>Unexplained Movements</strong>Residual — management should set acceptable tolerance level</div>
+      </div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;text-transform:uppercase;letter-spacing:.8px;color:var(--stat);margin-bottom:5px;margin-top:6px;">Key Characteristic</div>
+      <div style="font-size:11px;background:white;border-left:3px solid var(--stat);padding:5px 8px;">Prudential margins release to surplus over time. An insurer <em>expects</em> to see positive surplus items on a prudent basis. Alarm if any item is negative.</div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;text-transform:uppercase;letter-spacing:.8px;color:var(--stat);margin-bottom:5px;margin-top:8px;">Process (Roll-Forward)</div>
+      <div class="process-steps">
+        <div class="ps"><span class="ps-num s">1</span>Re-run start-year valuation model</div>
+        <div class="ps"><span class="ps-num s">2</span>Apply opening adjustments (corrections, methodology changes)</div>
+        <div class="ps"><span class="ps-num s">3</span>Run with new non-economic assumptions → isolate assumption change impact</div>
+        <div class="ps"><span class="ps-num s">4</span>Roll forward using actual investment returns + new economic scenarios → economic variance</div>
+        <div class="ps"><span class="ps-num s">5</span>Adjust for known non-economic A vs E differences (expenses, morbidity etc) → insurance variance</div>
+        <div class="ps"><span class="ps-num s">6</span>Add new business written in period</div>
+        <div class="ps"><span class="ps-num s">7</span>Adjust for capital injections, tax changes</div>
+        <div class="ps"><span class="ps-num s">8</span>Compare final rolled-forward B/S to actual year-end B/S → unexplained</div>
+      </div>
+      <div style="font-size:10.5px;color:var(--muted);margin-top:6px;font-style:italic;">Order matters — no uniquely correct method, but must be consistent year-to-year for trend comparisons.</div>
+    </div>
+
+    <!-- SOLVENCY II -->
+    <div class="sc solv">
+      <div class="basis-head solv">
+        <span class="basis-badge solv">Solvency II Basis</span>
+        <span class="basis-subtitle">BEL + Risk Margin + SCR</span>
+      </div>
+      <div style="font-size:11px;margin-bottom:8px;"><strong>Liabilities defined as:</strong> Technical Provisions = BEL + Risk Margin. Surplus = Assets − TP (or Assets − TP − SCR if capital included).</div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;text-transform:uppercase;letter-spacing:.8px;color:var(--solv);margin-bottom:5px;">Additional Sources vs Statutory</div>
+      <div class="sources-grid">
+        <div class="src shared"><strong>Opening Adjustments</strong>As statutory — corrections, methodology changes</div>
+        <div class="src shared"><strong>Return on Opening Surplus</strong>As statutory — expected return on opening surplus</div>
+        <div class="src extra"><strong>Economic Variances (incl. MA/VA)</strong>Dominant source. Includes mismatch profit. Under matching adjustment: surplus reflects difference between actual spread/defaults and fundamental spread assumption. Under volatility adjustment: spread on actual holdings vs EIOPA representative portfolio.</div>
+        <div class="src shared"><strong>Non-Economic Variances</strong>As statutory — morbidity, mortality, persistency, expenses</div>
+        <div class="src shared"><strong>Assumption Changes</strong>As statutory — but economic assumption changes include risk discount rate changes</div>
+        <div class="src extra"><strong>Risk Margin Changes</strong>Changes in allowances for diversification within RM calculations; reinsurance strategy changes can have significant impact → identified separately</div>
+        <div class="src extra"><strong>SCR Changes</strong>Changes in size of SCR components; shift from standard formula to internal model; inclusion of new risk factors</div>
+        <div class="src shared"><strong>New Business / Other / Unexplained</strong>As statutory</div>
+      </div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;text-transform:uppercase;letter-spacing:.8px;color:var(--solv);margin-bottom:5px;margin-top:6px;">Key Characteristic</div>
+      <div style="font-size:11px;background:white;border-left:3px solid var(--solv);padding:5px 8px;"><strong>No prudential margin release.</strong> BEL is best estimate → insurer expects to see both positive and negative items. A negative result is not alarming unless large or persistent. Under Solvency II, profit &amp; loss attribution is a <em>regulatory requirement</em> (internal model approval).</div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;text-transform:uppercase;letter-spacing:.8px;color:var(--solv);margin-bottom:5px;margin-top:8px;">Process (Roll-Forward)</div>
+      <div class="process-steps">
+        <div class="ps"><span class="ps-num v">1–8</span>Same roll-forward process as statutory</div>
+        <div class="ps"><span class="ps-num v">+</span>Additionally allow for changes in <strong>Risk Margin</strong> over valuation period (simplified approach likely — complexity of RM calculation)</div>
+        <div class="ps"><span class="ps-num v">+</span>Additionally allow for changes in <strong>SCR</strong> if surplus defined as assets minus TP minus SCR</div>
+        <div class="ps"><span class="ps-num v">+</span>For MA portfolios: identify variance from difference between actual defaults/spreads and fundamental spread assumption</div>
+      </div>
+      <div style="font-size:10.5px;background:#fdf8f0;border-left:3px solid var(--solv);padding:5px 8px;margin-top:6px;font-style:italic;">If PVIF is zero or immaterial (common under Solvency II for EU insurers), analysis of change in EV = analysis of change in free surplus. No additional value from EV analysis beyond AoS.</div>
+    </div>
+  </div>
+
+  <!-- STATUTORY vs SOLVENCY II COMPARISON -->
+  <div style="margin-top:0;">
+    <table class="cmp">
+      <thead>
+        <tr>
+          <th>Dimension</th>
+          <th>Statutory Basis</th>
+          <th>Solvency II Basis</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Liabilities</td>
+          <td>Reserves with prudential margins</td>
+          <td>BEL + Risk Margin (Technical Provisions)</td>
+        </tr>
+        <tr>
+          <td>Expected surplus</td>
+          <td>Positive expected (margin release) — alarm if negative</td>
+          <td>No systematic bias — negative items normal on best estimate basis</td>
+        </tr>
+        <tr>
+          <td>Additional analysis items</td>
+          <td>Standard sources only</td>
+          <td>Risk margin changes + SCR changes + MA/VA impact</td>
+        </tr>
+        <tr>
+          <td>EV / PVIF</td>
+          <td>PVIF material — includes value of future margin releases</td>
+          <td>PVIF often zero/immaterial → AoE ≈ AoS in free surplus</td>
+        </tr>
+        <tr>
+          <td>Regulatory driver</td>
+          <td>Local statutory requirement</td>
+          <td>Solvency II internal model approval requires P&amp;L attribution</td>
+        </tr>
+        <tr>
+          <td>New business impact</td>
+          <td>Usually negative (NB strain from prudent reserves)</td>
+          <td>Positive if profitable (BEL basis — no strain on best estimate)</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- USES -->
+  <div class="surplus-uses">
+    <div class="uses-title">Uses of Analysis of Surplus Results</div>
+    <div class="uses-grid">
+      <span class="use-pill k">Reprice / Redesign products</span>
+      <span class="use-pill k">Revise reserving basis</span>
+      <span class="use-pill">Financial effect of A vs E divergences</span>
+      <span class="use-pill">Expose most financially significant assumptions</span>
+      <span class="use-pill">Show financial effect of new business</span>
+      <span class="use-pill">Check on valuation data &amp; process</span>
+      <span class="use-pill">Identify non-recurring surplus → distribution decisions</span>
+      <span class="use-pill">Limit / motivate new business volumes</span>
+      <span class="use-pill">Drive de-risking decisions (financially weak company)</span>
+      <span class="use-pill">Update prudential margins / best estimate assumptions</span>
+      <span class="use-pill">Alter contract design (e.g. unit-linked charges)</span>
+      <span class="use-pill">Identify new risks → risk identification process</span>
+      <span class="use-pill">Multi-year trend analysis</span>
+      <span class="use-pill k">Regulatory compliance</span>
+    </div>
+  </div>
+</div>
+
+<!-- ANALYSIS OF SHORT-TERM PROFIT -->
+<div class="sl">Analysis of Profit — Short-Term Insurance (e.g. PMI)</div>
+<div class="st-wrap">
+  <div class="st-header">Short-Term Profit Analysis</div>
+  <div class="st-body">
+    <div style="font-size:11.5px;margin-bottom:10px;">No long-term reserving basis involved. Profitability assessed by <strong>yearly cohort</strong> with <strong>quarterly analyses</strong> to establish up-to-date positions. Three key indices monitored — quarterly results feed into pricing for new business.</div>
+    <div class="indices">
+      <div class="idx">
+        <div class="idx-name">Rate of Incidence</div>
+        <div class="idx-def"><strong>= No. of separate claims ÷ Exposed to risk</strong></div>
+        <div class="idx-note">Measures frequency of claims. Preferred over loss ratio for trend detection.</div>
+      </div>
+      <div class="idx">
+        <div class="idx-name">Average Cost Per Claim</div>
+        <div class="idx-def"><strong>= Total incurred claims cost ÷ No. of separate claims</strong></div>
+        <div class="idx-note">Measures severity. Combined with incidence gives full picture of claims experience.</div>
+      </div>
+      <div class="idx">
+        <div class="idx-name">Loss Ratio</div>
+        <div class="idx-def"><strong>= Total incurred claims cost ÷ Earned premium</strong></div>
+        <div class="idx-note">Quick &amp; simple but hides frequency vs severity trends. Use as cross-check only.</div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:11px;">
+      <div>
+        <strong style="font-family:'IBM Plex Mono',monospace;font-size:9px;text-transform:uppercase;letter-spacing:.5px;color:var(--gold);">Incurred Claims must include:</strong>
+        <ul style="list-style:none;margin-top:4px;display:flex;flex-direction:column;gap:3px;">
+          <li style="background:white;border-left:3px solid var(--gold);padding:3px 7px;">Claims paid to date (OS)</li>
+          <li style="background:white;border-left:3px solid var(--gold);padding:3px 7px;">Claims reported, payment outstanding</li>
+          <li style="background:white;border-left:3px solid var(--gold);padding:3px 7px;">Claims incurred but not yet reported (IBNR)</li>
+        </ul>
+      </div>
+      <div>
+        <strong style="font-family:'IBM Plex Mono',monospace;font-size:9px;text-transform:uppercase;letter-spacing:.5px;color:var(--gold);">PMI Specific Points:</strong>
+        <ul style="list-style:none;margin-top:4px;display:flex;flex-direction:column;gap:3px;">
+          <li style="background:white;border-left:3px solid var(--gold);padding:3px 7px;">Duration-based cohorts — selection effect in early years (lower loss ratios)</li>
+          <li style="background:white;border-left:3px solid var(--gold);padding:3px 7px;">NCD system: must assess cohort experience quickly to adjust promotion/demotion rules</li>
+          <li style="background:white;border-left:3px solid var(--gold);padding:3px 7px;">Group PMI: straightforward — claims vs premiums + expenses per scheme</li>
+          <li style="background:white;border-left:3px solid var(--gold);padding:3px 7px;">Consistent claim definition essential for cross-insurer comparisons</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- EV ANALYSIS -->
+<div class="sl">Analysis of Change in Embedded Value (Long-Term only)</div>
+<div class="ev-wrap">
+  <div class="ev-header">
+    <div class="ev-header-title">Analysis of Change in EV &nbsp;·&nbsp; EV = Net Assets + PVIF</div>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;opacity:.8;">Net Assets = Free Surplus + Required Capital (less cost of holding)</span>
+  </div>
+  <div class="ev-body">
+    <div style="font-size:11.5px;margin-bottom:10px;">EV does not include value of future new business. Any new business written in the period → change in EV. Analysis typically over one year. Components of change in EV:</div>
+    <div class="ev-components">
+      <div class="ev-comp"><strong>① Return on Net Assets</strong><span>Actual investment return on opening net assets. Split: expected return + excess over expected. For McEV: expected = risk-free rate.</span></div>
+      <div class="ev-comp"><strong>② Expected Return on In-Force</strong><span>'Unwind' of discount rate on opening PVIF = PVIF(t)×r − S(t). Transfer from PVIF to net assets as expected profits emerge. Zero net impact on total EV.</span></div>
+      <div class="ev-comp"><strong>③ Experience Variances</strong><span>Differences between actual &amp; expected experience (economic + non-economic). Economic: in net assets. Non-economic: in PVIF (e.g. higher CI lapses → fewer future profits → lower PVIF).</span></div>
+      <div class="ev-comp"><strong>④ Operating Assumption Changes</strong><span>Changes to projection/experience basis (non-economic) AND supervisory valuation basis (economic, incl. risk discount rate). Projection basis changes mainly affect PVIF; supervisory basis changes affect both net assets and PVIF.</span></div>
+      <div class="ev-comp"><strong>⑤ New Business Contribution</strong><span>PV of future profits from new business written. Prudent basis: ↓ net assets (NB strain) but ↑ PVIF. Best estimate basis: ↑ net assets, neutral PVIF. Overall EV increases if business is profitable.</span></div>
+      <div class="ev-comp"><strong>⑥ Other Items</strong><span>Model changes, capital injections, tax changes, exceptional expenses — as for analysis of surplus.</span></div>
+    </div>
+    <div class="ev-note">
+      <strong>Solvency II impact on EV analysis:</strong> Under Solvency II, PVIF often zero/immaterial (BEL basis → no explicit prudential margins to release). In this case, AoE in EV = analysis of change in free surplus. Required capital component changes due to: actual investment return on RC, differences in actual vs expected release of RC, frictional lock-in cost differences, new business increasing RC, methodology/calibration changes. Many EU health &amp; care companies no longer carry out formal EV analysis under Solvency II.
+    </div>
+    <div style="margin-top:10px;font-size:11px;"><strong>Uses of EV Analysis:</strong>
+      <span style="display:inline-flex;flex-wrap:wrap;gap:5px;margin-top:4px;">
+        <span style="background:#f5f0f9;border:1px solid #d4c8e8;padding:2px 8px;">Validate calculations, assumptions &amp; data</span>
+        <span style="background:#f5f0f9;border:1px solid #d4c8e8;padding:2px 8px;">Reconcile successive years' values</span>
+        <span style="background:#f5f0f9;border:1px solid #d4c8e8;padding:2px 8px;">Management information</span>
+        <span style="background:#f5f0f9;border:1px solid #d4c8e8;padding:2px 8px;">Executive remuneration data</span>
+        <span style="background:#f5f0f9;border:1px solid #d4c8e8;padding:2px 8px;">Publication in accounts (value of new business)</span>
+        <span style="background:#f5f0f9;border:1px solid #d4c8e8;padding:2px 8px;">Identify profitable lines · Return on capital</span>
+        <span style="background:#5c3d7a;color:white;border:1px solid #5c3d7a;padding:2px 8px;">Identify drivers of profit at customer level</span>
+      </span>
+    </div>
+  </div>
+</div>
+
+<!-- PRODUCT NUANCES -->
+<div class="sl">Product-Type Nuances</div>
+<table class="prod">
+  <thead>
+    <tr><th>Aspect</th><th>IP</th><th>CI</th><th>LTCI</th><th>PMI</th><th>Group</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Morbidity Splits</td>
+      <td>Deferred period; claim duration; linked-claims; recovery rates</td>
+      <td>By illness type; sum insured band; underwriting class</td>
+      <td>Care needs level; cognitive vs physical impairment</td>
+      <td>Procedure type; hospital band; NCD; excess level</td>
+      <td>Industry/occupation; group size; scheme design</td>
+    </tr>
+    <tr>
+      <td>Claims Amount</td>
+      <td>Fixed benefit — monitor incidence; proportionate payments for partial years</td>
+      <td>Fixed lump sum — anti-selection by sum insured</td>
+      <td>Indemnity elements — cost trend critical; care cost inflation</td>
+      <td>Indemnity — cost escalation vs inflation; surgeon-level analysis; IBNR material</td>
+      <td>Fixed &amp; indemnity; aggregate stop-loss relevant</td>
+    </tr>
+    <tr>
+      <td>Persistency Focus</td>
+      <td>Long-term — lapse rare; focus on claim termination rates</td>
+      <td>Long-term — anti-selection on lapse; higher lapses → lower PVIF</td>
+      <td>Long-term — lapse &amp; conversion to claim state</td>
+      <td>Annual renewal — critical; profitability depends on multi-year retention; NCD cohort tracking</td>
+      <td>Group renewal rates; member turnover within scheme</td>
+    </tr>
+    <tr>
+      <td>Surplus / Profit Tool</td>
+      <td>Long-term: Analysis of Surplus (statutory or SII) + EV analysis</td>
+      <td>Long-term: Analysis of Surplus + EV analysis</td>
+      <td>Long-term: Analysis of Surplus + EV analysis</td>
+      <td>Short-term: Loss ratio / incidence / avg cost. Cohort &amp; quarterly. No EV.</td>
+      <td>Depends on term. Short-term: ratio analysis. Long-term: surplus analysis.</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- CUSTOMER VALUE -->
+<div class="sl">Customer Value</div>
+<div class="cv-wrap">
+  <div class="cv-item">
+    <strong>What it measures</strong>
+    Value placed on an existing or potential new customer throughout their lifetime. Monitored via persistency rates and/or EV-based measures including expected profits from future cross-selling and fulfilling changing needs.
+  </div>
+  <div class="cv-item">
+    <strong>How it's analysed</strong>
+    EV analysis techniques identify drivers of profit/loss at customer level. Simulation/scenario approaches used where traditional financial models are insufficient. Analysis of impact of business decisions (marketing, distribution, UW approach, product design, pricing) on customer value.
+  </div>
+  <div class="cv-item">
+    <strong>Special cases</strong>
+    Legacy portfolios &amp; closed funds: customer value analysis to maximise profit from the existing block — e.g. outsourcing admin/claims management to reduce costs, while monitoring impact on lapses. Modelling requirements are complex with limited data on customer behaviour.
+  </div>
+</div>
+
+<!-- CH19 SECTIONS -->
+<div class="sl">SA1 Ch.19 — Data, Behavioural &amp; Structural Considerations</div>
+
+<!-- Row 1: Data Sub-Divisions + Economic Conditions -->
+<div class="g2" style="margin-bottom:14px;">
+
+  <div class="card" style="border-top:3px solid var(--blue);">
+    <div class="ct b" style="font-size:13px;">Data Sub-Divisions (§1.2) — Full List</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px;font-size:11px;">
+      <div style="background:white;border-left:3px solid var(--blue);padding:4px 7px;"><strong>By class of business</strong> — CI / IP / LTCI / PMI / Group</div>
+      <div style="background:white;border-left:3px solid var(--blue);padding:4px 7px;"><strong>By age &amp; gender</strong> — core rating factors</div>
+      <div style="background:white;border-left:3px solid var(--blue);padding:4px 7px;"><strong>By smoker status</strong> — significant morbidity differentiator</div>
+      <div style="background:white;border-left:3px solid var(--blue);padding:4px 7px;"><strong>By occupational class</strong> — key for IP &amp; group</div>
+      <div style="background:white;border-left:3px solid var(--blue);padding:4px 7px;"><strong>By policy duration</strong> — select vs ultimate; durational anti-selection</div>
+      <div style="background:white;border-left:3px solid var(--blue);padding:4px 7px;"><strong>By underwriting status</strong> — standard / rated / exclusions</div>
+      <div style="background:white;border-left:3px solid var(--blue);padding:4px 7px;"><strong>By benefit level / sum insured</strong> — identifies anti-selection at high amounts</div>
+      <div style="background:white;border-left:3px solid var(--blue);padding:4px 7px;"><strong>By deferred period</strong> — IP: shorter = heavier morbidity</div>
+      <div style="background:white;border-left:3px solid var(--blue);padding:4px 7px;"><strong>By distribution channel</strong> — broker vs direct vs group scheme</div>
+      <div style="background:white;border-left:3px solid var(--blue);padding:4px 7px;"><strong>By geographical region</strong> — local environment &amp; healthcare access</div>
+      <div style="background:white;border-left:3px solid var(--blue);padding:4px 7px;"><strong>By cause of claim</strong> — especially CI: by illness type</div>
+      <div style="background:white;border-left:3px solid var(--blue);padding:4px 7px;"><strong>By calendar year / policy year</strong> — trend identification</div>
+      <div style="background:white;border-left:3px solid var(--blue);padding:4px 7px;"><strong>By group size</strong> — group business only</div>
+      <div style="background:white;border-left:3px solid var(--blue);padding:4px 7px;"><strong>By benefit conditions</strong> — linked-claims, waiting periods, NCD, excess, hospital band (PMI)</div>
+    </div>
+    <div style="margin-top:7px;font-size:11px;background:white;border-left:3px solid var(--accent);padding:4px 7px;">⚠ Balance granularity vs credibility — too fine → sparse cells. Combine if experience similar across adjacent groups.</div>
+  </div>
+
+  <div class="card" style="border-top:3px solid var(--accent);">
+    <div class="ct r" style="font-size:13px;">Economic Conditions &amp; Claims (§4.1)</div>
+    <div style="font-size:11.5px;margin-bottom:8px;">Economic conditions can significantly distort health &amp; care claims experience — must be identified and separated from genuine long-term trends.</div>
+    <table style="width:100%;border-collapse:collapse;font-size:11px;margin-bottom:8px;">
+      <thead>
+        <tr>
+          <th style="background:var(--ink);color:var(--paper);padding:5px 8px;font-family:'IBM Plex Mono',monospace;font-size:9px;text-transform:uppercase;text-align:left;">Economic Factor</th>
+          <th style="background:var(--accent);color:white;padding:5px 8px;font-family:'IBM Plex Mono',monospace;font-size:9px;text-transform:uppercase;text-align:left;">Impact on Claims</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td style="padding:5px 8px;border:1px solid var(--rule);background:#e8e2d4;font-weight:600;">Recession / High unemployment</td><td style="padding:5px 8px;border:1px solid var(--rule);background:white;">↑ IP claims (stress-related illness; reluctance to return to work if job at risk). ↑ PMI usage before potential job loss.</td></tr>
+        <tr><td style="padding:5px 8px;border:1px solid var(--rule);background:#e8e2d4;font-weight:600;">Economic upturn</td><td style="padding:5px 8px;border:1px solid var(--rule);background:var(--cream);">↓ IP claims (more willing to return to work). ↑ new business.</td></tr>
+        <tr><td style="padding:5px 8px;border:1px solid var(--rule);background:#e8e2d4;font-weight:600;">Inflation (medical cost)</td><td style="padding:5px 8px;border:1px solid var(--rule);background:white;">↑ PMI claim amounts even if frequency unchanged. Trend more important than day-to-day volatility.</td></tr>
+        <tr><td style="padding:5px 8px;border:1px solid var(--rule);background:#e8e2d4;font-weight:600;">Interest rates</td><td style="padding:5px 8px;border:1px solid var(--rule);background:var(--cream);">↓ rates → ↑ reserve values → impacts surplus analysis (economic variance).</td></tr>
+      </tbody>
+    </table>
+    <div style="font-size:11px;background:white;border-left:3px solid var(--accent);padding:5px 8px;"><strong>Measuring impact:</strong> Compare affected period vs unaffected benchmark period for same company (or unaffected company in same market). Adjust for inflation and other unrelated factors.</div>
+  </div>
+</div>
+
+<!-- Row 2: Anti-selection + Insurance Cycle -->
+<div class="g2" style="margin-bottom:14px;">
+
+  <div class="card" style="border-top:3px solid var(--gold);">
+    <div class="ct" style="color:var(--gold);font-size:13px;">Anti-selection, Non-disclosure &amp; Early Claims (§3)</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:8px;font-size:11.5px;">
+      <div style="background:white;border-left:3px solid var(--gold);padding:5px 8px;"><strong>Anti-selection:</strong> Potential policyholders use private health information to take cover on favourable terms — those most likely to claim are most likely to insure.</div>
+      <div style="background:white;border-left:3px solid var(--accent);padding:5px 8px;"><strong>Non-disclosure:</strong> Applicant asked for information but <em>fails to disclose</em> it. Distinct from anti-selection (which may be passive).</div>
+    </div>
+    <div style="font-size:11.5px;background:#fff8e8;border:1px solid var(--gold);padding:7px 9px;margin-bottom:6px;">
+      <strong>⏱ Durational effect:</strong> Impact concentrated in <strong>Year 1</strong> and to a lesser extent <strong>Year 2</strong>. After that, adversely selected policyholders will have already claimed. Experience "reverts to normal" from Year 3+ — other factors dominate.
+    </div>
+    <div style="font-size:11px;color:var(--muted);">Actuary's response: investigate early claims by cause · review proposal questions · review UW sum insured triggers · review supplementary questionnaire · review sales methods &amp; target market. Incorporate in pricing &amp; reserving via durational select tables.</div>
+  </div>
+
+  <div class="card" style="border-top:3px solid var(--purple);">
+    <div class="ct p" style="font-size:13px;">The Insurance Cycle (§4.3)</div>
+    <div style="display:flex;flex-direction:column;gap:5px;font-size:11.5px;margin-bottom:7px;">
+      <div style="background:white;border-left:4px solid var(--green);padding:5px 8px;"><span style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--green);font-weight:600;">PHASE 1</span> <strong>High Profits</strong> — Rates high; insurers profitable; new entrants attracted; existing insurers try to expand.</div>
+      <div style="background:white;border-left:4px solid var(--blue);padding:5px 8px;"><span style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--blue);font-weight:600;">PHASE 2</span> <strong>Greater Competition</strong> — More insurers → premiums soften; commissions raised; advertising increased. Margins trimmed. Often coincides with economic upturn optimism.</div>
+      <div style="background:white;border-left:4px solid var(--accent);padding:5px 8px;"><span style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--accent);font-weight:600;">PHASE 3</span> <strong>Losses</strong> — Reduced profits or losses. Cycle depressed. Insurers exit or reduce involvement.</div>
+      <div style="background:white;border-left:4px solid var(--gold);padding:5px 8px;"><span style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--gold);font-weight:600;">PHASE 4</span> <strong>Upswing</strong> — Losses reduce appetite; premium rates rise; smaller insurers struggle. Leads back to Phase 1.</div>
+    </div>
+    <div style="font-size:11px;background:#f3eef9;border-left:3px solid var(--purple);padding:5px 8px;">More influential in <strong>short-term group risks</strong> (PMI, group IP) than long-term individual CI/IP (premium locked in at inception). Different classes at different cycle points simultaneously. Inter-company data (e.g. CMI pooled data) helps identify where own experience sits relative to cycle.</div>
+  </div>
+</div>
+
+<!-- Row 3: Portfolio Analysis + Movement Analysis -->
+<div class="g2" style="margin-bottom:18px;">
+
+  <div class="card" style="border-top:3px solid var(--blue);">
+    <div class="ct b" style="font-size:13px;">Portfolio Analysis (§8) — Structure</div>
+    <div style="font-size:11.5px;margin-bottom:7px;">Investigates risks covered, broken down by grouping policies of similar nature.</div>
+    <table style="width:100%;border-collapse:collapse;font-size:11px;margin-bottom:7px;">
+      <thead>
+        <tr>
+          <th style="background:var(--ink);color:var(--paper);padding:5px 8px;font-family:'IBM Plex Mono',monospace;font-size:9px;text-transform:uppercase;text-align:left;width:110px;">Level</th>
+          <th style="background:var(--blue);color:white;padding:5px 8px;font-family:'IBM Plex Mono',monospace;font-size:9px;text-transform:uppercase;text-align:left;">What &amp; Why</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td style="padding:5px 8px;border:1px solid var(--rule);font-weight:600;background:#e8e2d4;">By Class</td><td style="padding:5px 8px;border:1px solid var(--rule);background:white;">Split by CI/IP/LTCI/PMI, group vs individual. Shows no. of policies &amp; premium income by class. ⚠ Policies of different sizes make count misleading; non-annual policies distort census analysis.</td></tr>
+        <tr><td style="padding:5px 8px;border:1px solid var(--rule);font-weight:600;background:#e8e2d4;">By Risk Group (§8.3)</td><td style="padding:5px 8px;border:1px solid var(--rule);background:var(--cream);">Break portfolio within a class by rating factor. Use exposure measure for comparable "risk units".</td></tr>
+        <tr><td style="padding:5px 8px;border:1px solid var(--rule);font-weight:600;background:#e8e2d4;">One-Way Table</td><td style="padding:5px 8px;border:1px solid var(--rule);background:white;">Each rating factor considered individually. Simple but may conceal correlations between factors.</td></tr>
+        <tr><td style="padding:5px 8px;border:1px solid var(--rule);font-weight:600;background:#e8e2d4;">Multi-Factor Table</td><td style="padding:5px 8px;border:1px solid var(--rule);background:var(--cream);">Several rating factors in single table (e.g. age × gender × hospital band × excess). Removes distortions from correlations. ⚠ Cells must be grouped into broad bands to avoid unmanageably sparse data.</td></tr>
+      </tbody>
+    </table>
+    <div style="font-size:11px;background:white;border-left:3px solid var(--blue);padding:5px 8px;"><strong>Purposes:</strong> Show business volume &amp; mix · Identify out-of-line premium rates vs market · Flag over-concentration in a risk type · Support planning &amp; budgeting</div>
+  </div>
+
+  <div class="card" style="border-top:3px solid var(--green);">
+    <div class="ct g" style="font-size:13px;">Movement Analysis — Delay Methodology (§7.3)</div>
+    <div style="font-size:11.5px;margin-bottom:7px;">Movement rates (lapse, NB, cancellation, endorsement) must use <em>movements actually taking place</em> in the period, not movements <em>reported</em> — reporting delays distort early readings.</div>
+    <div style="background:#fff8e8;border:1px solid var(--gold);padding:8px 10px;margin-bottom:7px;font-size:11.5px;">
+      <strong>Lapse rate (short-term):</strong><br>
+      <code style="font-size:11.5px;background:var(--ink);color:var(--paper);padding:3px 7px;display:inline-block;margin-top:4px;">Lapse Rate = Lapses (period x) ÷ Renewals Invited (period x)</code><br><br>
+      <strong>Delay adjustment:</strong> Build development table from history showing % of lapses processed by end of each subsequent month (e.g. 37% month 0 → 68% month 1 → 89% month 2 → 97% month 3 → 100% month 4). Divide observed count by % to project ultimate.<br><br>
+      <em>Example: April lapses observed = 177 at end of May (month 1). 68% processed. Estimated ultimate = 177 ÷ 0.68 = 260. Lapse rate = 260 ÷ 880 renewals = 30%.</em>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;font-size:11px;">
+      <div style="background:white;border-left:3px solid var(--green);padding:4px 7px;"><strong>Mid-term cancellation rate</strong> = cancellations ÷ mean in-force (m-type rate)</div>
+      <div style="background:white;border-left:3px solid var(--blue);padding:4px 7px;"><strong>New business rate</strong> = new policies ÷ renewals invited (same base as lapse rate — direct comparison)</div>
+      <div style="background:white;border-left:3px solid var(--rule);padding:4px 7px;grid-column:1/-1;"><strong>Portfolio signal:</strong> Lapse rate &gt; NB rate → portfolio contracting. Lapse rate &lt; NB rate → portfolio expanding.</div>
+    </div>
+  </div>
+</div>
+
+<!-- RISK CONTROL BAR -->
+<div class="sl">Using Results to Control Risks — Feedback into ACC</div>
+<div class="rc-bar">
+  <div class="rc-label">Actions</div>
+  <div class="rc-pills">
+    <span class="rc-pill k">Reprice / Redesign</span>
+    <span class="rc-pill k">Revise Reserving Basis</span>
+    <span class="rc-pill k">Update Valuation Assumptions</span>
+    <span class="rc-pill">Improve Marketing</span>
+    <span class="rc-pill">Revise Sales Procedures &amp; Commission</span>
+    <span class="rc-pill">Staffing (numbers &amp; competence)</span>
+    <span class="rc-pill">Revise Underwriting</span>
+    <span class="rc-pill">Revise Claims Handling</span>
+    <span class="rc-pill">Capital Allocation</span>
+    <span class="rc-pill">Systems &amp; Data Recording</span>
+    <span class="rc-pill">Revise Policy Design</span>
+    <span class="rc-pill k">Improve Policy Wording (esp. CI)</span>
+    <span class="rc-pill">Reinsurance Strategy</span>
+    <span class="rc-pill">Investment Strategy</span>
+    <span class="rc-pill">De-risk Balance Sheet</span>
+    <span class="rc-pill">New Risk Identification</span>
+  </div>
+</div>
+
+<div class="footer">
+  <span>SP1 Ch.29 · SA1 Ch.19–20 · IFE 2019 / 2024</span>
+  <span>CONSOLIDATED STUDY MATRIX — OVERVIEW</span>
+  <span>Monitoring Stage · ACC</span>
+</div>
+
+</body>
+</html>
