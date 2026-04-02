@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SA1 Ch.13 — Other Approaches to Solvency Regulation — Outline Navigator</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0f1117;
+    --paper: #f5f0e8;
+    --cream: #ede7d6;
+    --accent: #c0392b;
+    --gold: #b8860b;
+    --blue: #1a3a5c;
+    --green: #1e5f3f;
+    --purple: #5c3d7a;
+    --brown: #5c3d1a;
+    --teal: #1a5c5c;
+    --muted: #6b6560;
+    --rule: #c8bfaf;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 12px;
+    line-height: 1.5;
+    padding: 28px 24px;
+    max-width: 1140px;
+    margin: 0 auto;
+  }
+
+  /* MASTHEAD */
+  .masthead { border-top:4px solid var(--ink); border-bottom:2px solid var(--ink); padding:12px 0 10px; margin-bottom:28px; display:flex; align-items:baseline; gap:16px; }
+  .masthead-title { font-family:'Playfair Display',serif; font-size:26px; font-weight:900; flex:1; }
+  .masthead-sub { font-family:'IBM Plex Mono',monospace; font-size:9.5px; color:var(--muted); text-transform:uppercase; letter-spacing:1.5px; }
+  .masthead-tag { font-family:'IBM Plex Mono',monospace; font-size:9.5px; background:var(--ink); color:#fff; padding:3px 8px; letter-spacing:1px; }
+
+  /* FLOW CONTAINER */
+  .flow {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    position: relative;
+  }
+
+  /* CONNECTOR LINE */
+  .flow::before {
+    content: '';
+    position: absolute;
+    left: 22px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--blue), var(--accent), var(--brown), var(--green), var(--purple), var(--teal), var(--gold));
+    z-index: 0;
+  }
+
+  /* BLOCK */
+  .block {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    margin-bottom: 6px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* NUMBER BADGE */
+  .num {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 900;
+    color: white;
+    flex-shrink: 0;
+    border: 3px solid var(--paper);
+    box-shadow: 0 0 0 2px currentColor;
+  }
+
+  /* BLOCK CONTENT */
+  .block-content {
+    flex: 1;
+    border-left: 3px solid;
+    padding: 10px 14px;
+    background: var(--cream);
+  }
+
+  .block-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+
+  .sub-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+
+  .sub {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    padding: 3px 9px;
+    border: 1px solid;
+    background: white;
+    letter-spacing: 0.3px;
+  }
+
+  .sub.key {
+    color: white !important;
+    background: var(--ink);
+    border-color: transparent;
+    font-weight: 600;
+  }
+
+  /* ARROW CONNECTOR BETWEEN BLOCKS */
+  .arrow {
+    display: flex;
+    align-items: center;
+    padding-left: 14px;
+    margin: 2px 0;
+    color: var(--muted);
+    font-size: 16px;
+    z-index: 1;
+    position: relative;
+  }
+
+  /* NOTE */
+  .note {
+    margin-top: 7px;
+    font-size: 10.5px;
+    color: var(--muted);
+    font-style: italic;
+    border-top: 1px solid var(--rule);
+    padding-top: 5px;
+  }
+
+  /* COLOR SCHEMES */
+  .b1 .num { background: var(--blue); box-shadow: 0 0 0 2px var(--blue); }
+  .b1 .block-content { border-color: var(--blue); background: #eef2f7; }
+  .b1 .block-title { color: var(--blue); }
+  .b1 .sub { color: var(--blue); border-color: #a0b4c8; }
+  .b1 .sub.key { background: var(--blue); }
+
+  .b2 .num { background: var(--accent); box-shadow: 0 0 0 2px var(--accent); }
+  .b2 .block-content { border-color: var(--accent); }
+  .b2 .block-title { color: var(--accent); }
+  .b2 .sub { color: var(--accent); border-color: #e8a09a; }
+  .b2 .sub.key { background: var(--accent); }
+  .b2 .sub.eu { background: var(--blue); color:white; border-color: var(--blue); font-weight:600; }
+
+  .b3 .num { background: var(--brown); box-shadow: 0 0 0 2px var(--brown); }
+  .b3 .block-content { border-color: var(--brown); background: #f7f0e8; }
+  .b3 .block-title { color: var(--brown); }
+  .b3 .sub { color: var(--brown); border-color: #c4a888; }
+  .b3 .sub.key { background: var(--brown); }
+
+  .b4 .num { background: var(--green); box-shadow: 0 0 0 2px var(--green); }
+  .b4 .block-content { border-color: var(--green); background: #eef7f2; }
+  .b4 .block-title { color: var(--green); }
+  .b4 .sub { color: var(--green); border-color: #90c4a8; }
+  .b4 .sub.key { background: var(--green); }
+
+  .b5 .num { background: var(--purple); box-shadow: 0 0 0 2px var(--purple); }
+  .b5 .block-content { border-color: var(--purple); background: #f8f4fc; }
+  .b5 .block-title { color: var(--purple); }
+  .b5 .sub { color: var(--purple); border-color: #c4a8e0; }
+  .b5 .sub.key { background: var(--purple); }
+
+  .b6 .num { background: var(--teal); box-shadow: 0 0 0 2px var(--teal); }
+  .b6 .block-content { border-color: var(--teal); background: #eef7f7; }
+  .b6 .block-title { color: var(--teal); }
+  .b6 .sub { color: var(--teal); border-color: #90c4c4; }
+  .b6 .sub.key { background: var(--teal); }
+  .b6 .sub.hi { background: var(--blue); color:white; border-color:var(--blue); font-weight:600; }
+
+  .b7 .num { background: var(--gold); box-shadow: 0 0 0 2px var(--gold); }
+  .b7 .block-content { border-color: var(--gold); background: #fffdf0; }
+  .b7 .block-title { color: var(--gold); }
+  .b7 .sub { color: var(--gold); border-color: #d4b86a; }
+  .b7 .sub.key { background: var(--gold); }
+
+  /* FOOTER */
+  .footer { margin-top:28px; border-top:2px solid var(--ink); padding-top:8px; display:flex; justify-content:space-between; font-family:'IBM Plex Mono',monospace; font-size:9px; color:var(--muted); text-transform:uppercase; letter-spacing:1px; }
+</style>
+</head>
+<body>
+
+<div class="masthead">
+  <div class="masthead-title">Other Approaches to Solvency Regulation</div>
+  <div class="masthead-sub">SA1 · Chapter 13 · IFE 2024</div>
+  <div class="masthead-tag">OUTLINE NAVIGATOR</div>
+</div>
+
+<div class="flow">
+
+  <!-- ① UK -->
+  <div class="block b1">
+    <div class="num">①</div>
+    <div class="block-content">
+      <div class="block-title">United Kingdom — Post-Brexit Position</div>
+      <div class="sub-items">
+        <span class="sub key">Left EU: 1 Jan 2021</span>
+        <span class="sub">No EU-wide financial services arrangement at exit</span>
+        <span class="sub key">At exit: aligned with Solvency II</span>
+        <span class="sub">UK insurers → third-country undertakings in EU</span>
+        <span class="sub key">PRA considering reform</span>
+        <span class="sub">Potential reduction in capital requirements</span>
+        <span class="sub">Third-country equivalence applies</span>
+        <span class="sub">Future alignment uncertain</span>
+      </div>
+      <div class="note">Solvency II described in Chapters 11 &amp; 12. UK reforms ongoing — section to be updated.</div>
+    </div>
+  </div>
+
+  <div class="arrow">↓</div>
+
+  <!-- ② USA -->
+  <div class="block b2">
+    <div class="num">②</div>
+    <div class="block-content">
+      <div class="block-title">USA — State-Based System &amp; Solvency Modernisation</div>
+      <div class="sub-items">
+        <span class="sub key">State-Based</span>
+        <span class="sub">50 states + DC + 5 territories · Each state has own regulator</span>
+        <span class="sub key">NAIC</span>
+        <span class="sub">Coordinates standards / model laws · Uniformity of reporting &amp; capital</span>
+        <span class="sub key">Federal: FIO + FRB</span>
+        <span class="sub">FIO monitors &amp; advises (no supervisory role) · FRB oversees systemically important insurers</span>
+        <span class="sub key">RBC</span>
+        <span class="sub">Standard formula · Asset/insurance/business risk factors · Identifies weakly capitalised firms · ≈ MCR under Solvency II</span>
+        <span class="sub key">PBR (from 2017)</span>
+        <span class="sub">Replaces formulaic reserves · Net premium / deterministic / stochastic reserve · Hold highest</span>
+        <span class="sub key">ORSA</span>
+        <span class="sub">Annual self-assessment · Risk management adequacy · ≈ Solvency II ORSA · IAIS ICP 16 compliant</span>
+        <span class="sub key">SMI (2008)</span>
+        <span class="sub">Self-examination of US solvency framework · Capital, governance, group supervision, reinsurance</span>
+        <span class="sub eu">vs EU: RBC ≈ MCR · US reserves formulaic vs SII market-consistent · SII focuses on firm-specific risks</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="arrow">↓</div>
+
+  <!-- ③ CHINA -->
+  <div class="block b3">
+    <div class="num">③</div>
+    <div class="block-content">
+      <div class="block-title">China — C-ROSS Framework</div>
+      <div class="sub-items">
+        <span class="sub key">Regulator: CBIRC</span>
+        <span class="sub">Supervision · Enforcement · Capital changes</span>
+        <span class="sub key">C-ROSS: 3 Pillars</span>
+        <span class="sub">Pillar I — Quantitative capital (insurance/market/credit risk)</span>
+        <span class="sub">Pillar II — Qualitative: rating system + ORSA equivalent + liquidity indicators</span>
+        <span class="sub">Pillar III — Transparency &amp; disclosure; systemic risk</span>
+        <span class="sub key">vs Solvency II</span>
+        <span class="sub">Assets at GAAP value (not mark-to-market)</span>
+        <span class="sub">Discount yield ≈ GAAP liability yield (not risk-free curve)</span>
+        <span class="sub">All insurers use same rules — no internal models allowed</span>
+        <span class="sub key">Challenges</span>
+        <span class="sub">Complex production · Significant extra workload · Pillar II frameworks to build · Streamline reporting</span>
+      </div>
+      <div class="note">C-ROSS similar to Solvency II but reflects China's younger, developing insurance market.</div>
+    </div>
+  </div>
+
+  <div class="arrow">↓</div>
+
+  <!-- ④ AUSTRALIA -->
+  <div class="block b4">
+    <div class="num">④</div>
+    <div class="block-content">
+      <div class="block-title">Australia — LAGIC &amp; APRA</div>
+      <div class="sub-items">
+        <span class="sub key">Regulator: APRA</span>
+        <span class="sub">Risk-based approach · Targets highest-risk areas</span>
+        <span class="sub key">LAGIC (from Jan 2013)</span>
+        <span class="sub">Life &amp; General Insurance Capital · Three pillars · Strong parallels to Solvency II</span>
+        <span class="sub key">Pillar I: PCA</span>
+        <span class="sub">Prescribed Capital Amount · 99.5% VaR over 1 year · Standard method or internal model · Insurance/asset/concentration/operational risk · ≈ SCR</span>
+        <span class="sub key">Pillar II</span>
+        <span class="sub">Good governance &amp; risk management · Individual capital adequacy assessment ≈ ORSA</span>
+        <span class="sub key">Pillar III</span>
+        <span class="sub">Regular disclosure requirements</span>
+        <span class="sub key">Supervisory adjustment</span>
+        <span class="sub">APRA can increase or decrease required capital · ≈ Solvency II capital add-on</span>
+        <span class="sub key">Equivalence</span>
+        <span class="sub">Provisional equivalence with Solvency II (10-year periods)</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="arrow">↓</div>
+
+  <!-- ⑤ SOUTH AFRICA -->
+  <div class="block b5">
+    <div class="num">⑤</div>
+    <div class="block-content">
+      <div class="block-title">South Africa — SAM Framework</div>
+      <div class="sub-items">
+        <span class="sub key">Regulators</span>
+        <span class="sub">PA (Prudential Authority) — licensing, supervision, enforcement</span>
+        <span class="sub">FSCA — market conduct, consumer protection, financial literacy</span>
+        <span class="sub key">SAM (from July 2018)</span>
+        <span class="sub">Solvency Assessment &amp; Management · Largely based on Solvency II · Three pillars</span>
+        <span class="sub key">Pillar I</span>
+        <span class="sub">Quantitative · SAM balance sheet &amp; capital · 1-in-200 year loss event · ≈ SCR · Standardised formula or internal model</span>
+        <span class="sub key">Pillar II</span>
+        <span class="sub">Qualitative · Sound governance &amp; risk management</span>
+        <span class="sub key">Pillar III</span>
+        <span class="sub">Regulatory reporting + public disclosures</span>
+        <span class="sub key">SA adaptations</span>
+        <span class="sub">SA risk-free rates · Market risk calibrated to SA · Microinsurance: reduced MCR to widen access</span>
+        <span class="sub key">Equivalence goal</span>
+        <span class="sub">Designed to comply with Solvency II third-country equivalence criteria</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="arrow">↓</div>
+
+  <!-- ⑥ ASIA / PACIFIC -->
+  <div class="block b6">
+    <div class="num">⑥</div>
+    <div class="block-content">
+      <div class="block-title">Asia / Pacific — Sophistication Spectrum</div>
+      <div class="sub-items">
+        <span class="sub key">Trend</span>
+        <span class="sub">Building more robust regulatory &amp; solvency frameworks across the region</span>
+        <span class="sub key">Min Capital</span>
+        <span class="sub">Myanmar</span>
+        <span class="sub key">Formula-based</span>
+        <span class="sub">India · Vietnam · Brunei</span>
+        <span class="sub key">Risk-based Capital</span>
+        <span class="sub">Indonesia</span>
+        <span class="sub hi">Economic Capital + ORSA</span>
+        <span class="sub">China · Japan · Malaysia · Australia</span>
+      </div>
+      <div class="note">Sophistication ranges from simple minimum capital to full economic capital + ORSA. Most regulators moving rightward.</div>
+    </div>
+  </div>
+
+  <div class="arrow">↓</div>
+
+  <!-- ⑦ LATIN AMERICA -->
+  <div class="block b7">
+    <div class="num">⑦</div>
+    <div class="block-content">
+      <div class="block-title">Latin America — Solvency II-Type Adoption</div>
+      <div class="sub-items">
+        <span class="sub key">Direction</span>
+        <span class="sub">Many countries adopting Solvency II-type frameworks or risk-based capital elements</span>
+        <span class="sub key">Mexico</span>
+        <span class="sub">First in region to adopt Solvency II-like framework</span>
+        <span class="sub key">Brazil</span>
+        <span class="sub">Provisional Solvency II equivalence from 1 Jan 2016 (10 years) · ORSA equivalent introduced</span>
+        <span class="sub key">Chile</span>
+        <span class="sub">Developing risk-based capital approach modelled after Solvency II · ORSA equivalent introduced</span>
+        <span class="sub key">Consequence</span>
+        <span class="sub">Greater focus on risk management expected across the region</span>
+      </div>
+    </div>
+  </div>
+
+</div><!-- end flow -->
+
+<div class="footer">
+  <span>SA1 Ch.13 · IFE 2024 Examinations</span>
+  <span>OTHER APPROACHES TO SOLVENCY REGULATION — OUTLINE NAVIGATOR</span>
+  <span>UK · USA · China · Australia · South Africa · Asia/Pacific · LatAm</span>
+</div>
+
+</body>
+</html>

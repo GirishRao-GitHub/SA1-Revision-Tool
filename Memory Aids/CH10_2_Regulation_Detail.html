@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Approaches to Regulation — Consolidated Study Matrix</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0f1117;
+    --paper: #f5f0e8;
+    --cream: #ede7d6;
+    --accent: #c0392b;
+    --accent-text: #a83226;
+    --gold: #b8860b;
+    --gold-text: #7a5c00;
+    --blue: #1a3a5c;
+    --green: #1e5f3f;
+    --purple: #5c3d7a;
+    --teal: #1a5c5c;
+    --brown: #5c3d1a;
+    --muted: #6b6560;
+    --rule: #c8bfaf;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--paper); color:var(--ink); font-family:'IBM Plex Sans',sans-serif; font-size:12.5px; line-height:1.5; padding:28px 22px; max-width:1140px; margin:0 auto; }
+
+  /* MASTHEAD */
+  .masthead { border-top:4px solid var(--ink); border-bottom:2px solid var(--ink); padding:12px 0 10px; margin-bottom:22px; display:flex; align-items:baseline; gap:16px; }
+  .masthead-title { font-family:'Playfair Display',serif; font-size:26px; font-weight:900; flex:1; }
+  .masthead-sub { font-family:'IBM Plex Mono',monospace; font-size:9.5px; color:var(--muted); text-transform:uppercase; letter-spacing:1.5px; }
+  .masthead-tag { font-family:'IBM Plex Mono',monospace; font-size:9.5px; background:var(--accent); color:#fff; padding:3px 8px; letter-spacing:1px; }
+
+  /* SECTION LABEL */
+  .sl { font-family:'IBM Plex Mono',monospace; font-size:9px; text-transform:uppercase; letter-spacing:2px; color:var(--muted); margin-bottom:5px; border-left:3px solid var(--accent); padding-left:7px; }
+
+  /* GRID HELPERS */
+  .g3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px; margin-bottom:18px; }
+  .g2 { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:18px; }
+
+  /* CARD */
+  .card { background:var(--cream); border:1px solid var(--rule); padding:12px 14px; }
+  .ct { font-family:'Playfair Display',serif; font-size:14px; font-weight:700; margin-bottom:8px; padding-bottom:5px; border-bottom:1px solid var(--rule); }
+  .ct.r { color:var(--accent-text); } .ct.b { color:var(--blue); } .ct.g { color:var(--green); }
+  .ct.p { color:var(--purple); } .ct.tl { color:var(--teal); } .ct.br { color:var(--brown); }
+
+  .pl { list-style:none; display:flex; flex-direction:column; gap:4px; }
+  .pl li { background:white; border-left:3px solid var(--rule); padding:4px 7px; font-size:11.5px; line-height:1.4; }
+  .pl li.r { border-left-color:var(--accent); }
+  .pl li.b { border-left-color:var(--blue); }
+  .pl li.g { border-left-color:var(--green); }
+  .pl li.p { border-left-color:var(--purple); }
+  .pl li.tl { border-left-color:var(--teal); }
+
+  /* MATRIX TABLE */
+  table.mx { width:100%; border-collapse:collapse; font-size:11px; margin-bottom:18px; }
+  table.mx thead th { background:var(--ink); color:var(--paper); font-family:'IBM Plex Mono',monospace; font-size:9.5px; text-transform:uppercase; letter-spacing:.8px; padding:7px 9px; text-align:left; border-right:1px solid #2a2d38; }
+  table.mx thead th:first-child { background:var(--accent); width:120px; }
+  table.mx tbody tr:nth-child(even) { background:var(--cream); }
+  table.mx tbody tr:nth-child(odd)  { background:white; }
+  table.mx tbody td { padding:7px 9px; border:1px solid var(--rule); vertical-align:top; line-height:1.4; }
+  table.mx tbody td:first-child { font-family:'IBM Plex Mono',monospace; font-size:10px; font-weight:600; background:#e8e2d4; border-right:2px solid var(--ink); }
+
+  /* RESPONSIBILITIES WRAP */
+  .resp-wrap { margin-bottom:18px; }
+  .resp-header { background:var(--ink); color:var(--paper); padding:9px 14px; display:flex; align-items:center; gap:12px; }
+  .resp-header-title { font-family:'Playfair Display',serif; font-size:16px; font-weight:700; flex:1; }
+
+  .resp-cols { display:grid; grid-template-columns:1fr 1fr; border:1px solid var(--rule); border-top:none; }
+  .rc { padding:13px 14px; }
+  .rc.left { background:#eef2f7; border-right:2px solid var(--ink); }
+  .rc.right { background:#f7f0e8; }
+
+  .resp-head { display:flex; align-items:center; gap:8px; margin-bottom:10px; padding-bottom:7px; border-bottom:2px solid; }
+  .resp-badge { font-family:'IBM Plex Mono',monospace; font-size:9px; font-weight:600; text-transform:uppercase; letter-spacing:1px; padding:2px 8px; color:white; }
+  .resp-badge.blue { background:var(--blue); }
+  .resp-badge.brown { background:var(--brown); }
+  .resp-subtitle { font-size:10.5px; color:var(--muted); font-style:italic; }
+
+  .items-grid { display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-bottom:10px; }
+  .item { background:white; border:1px solid var(--rule); padding:5px 8px; font-size:11px; line-height:1.4; }
+  .item strong { display:block; font-size:10px; font-family:'IBM Plex Mono',monospace; text-transform:uppercase; letter-spacing:.5px; margin-bottom:2px; }
+  .item.blue-l { border-left:3px solid var(--blue); }
+  .item.brown-l { border-left:3px solid var(--brown); }
+  .item.muted-l { border-left:3px solid var(--muted); }
+
+  /* TCF SECTION */
+  .tcf-wrap { margin-bottom:18px; }
+  .tcf-header { background:var(--brown); color:white; padding:9px 14px; font-family:'Playfair Display',serif; font-size:15px; font-weight:700; }
+  .tcf-body { border:1px solid var(--rule); border-top:none; background:#fdf8f0; padding:13px 14px; }
+
+  /* VALUATION & CAPITAL */
+  .val-wrap { margin-bottom:18px; border:1px solid var(--rule); }
+  .val-header { background:var(--gold); color:var(--ink); padding:9px 14px; font-family:'Playfair Display',serif; font-size:15px; font-weight:700; }
+  .val-body { padding:13px 14px; background:#fffdf5; }
+  .val-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:10px; }
+  .val-item { background:white; border:1px solid var(--rule); border-top:3px solid var(--gold); padding:7px 9px; }
+  .val-item strong { display:block; font-size:10px; font-family:'IBM Plex Mono',monospace; color:var(--gold-text); margin-bottom:3px; }
+  .val-item span { font-size:11px; line-height:1.4; }
+
+  /* ACTIONS TABLE */
+  .actions-wrap { background:var(--ink); color:var(--paper); padding:12px 16px; margin-bottom:18px; }
+  .actions-title { font-family:'Playfair Display',serif; font-size:13px; font-weight:700; margin-bottom:8px; color:var(--paper); }
+  .actions-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:7px; }
+  .action-item { background:rgba(255,255,255,.07); border:1px solid rgba(255,255,255,.15); padding:5px 9px; font-size:11px; font-family:'IBM Plex Mono',monospace; }
+  .action-item.k { background:var(--accent); border-color:var(--accent); font-weight:600; }
+  .action-item.note { background:rgba(255,255,255,0); border:none; font-style:italic; font-size:10.5px; color:#a0a8b8; font-family:'IBM Plex Sans',sans-serif; grid-column:1/-1; margin-top:4px; }
+
+  /* STATUTORY ACTUARY */
+  .sa-wrap { margin-bottom:18px; }
+  .sa-header { background:var(--teal); color:white; padding:9px 14px; display:flex; align-items:center; gap:10px; }
+  .sa-header-title { font-family:'Playfair Display',serif; font-size:15px; font-weight:700; flex:1; }
+  .sa-body { border:1px solid var(--rule); border-top:none; background:white; padding:13px 14px; }
+  .sa-roles { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:10px; }
+  .sa-role { background:#edf5f5; border:1px solid #88c4c4; padding:7px 9px; }
+  .sa-role strong { display:block; font-size:10px; font-family:'IBM Plex Mono',monospace; color:var(--teal); margin-bottom:3px; }
+
+  /* EQUALITY TABLE */
+  table.eq { width:100%; border-collapse:collapse; font-size:11px; margin-bottom:18px; }
+  table.eq thead th { padding:7px 10px; font-family:'IBM Plex Mono',monospace; font-size:9.5px; text-transform:uppercase; letter-spacing:.8px; text-align:left; }
+  table.eq thead th:nth-child(1) { background:var(--ink); color:white; width:160px; }
+  table.eq thead th:nth-child(2) { background:var(--green); color:white; }
+  table.eq thead th:nth-child(3) { background:var(--accent); color:white; }
+  table.eq thead th:nth-child(4) { background:var(--blue); color:white; }
+  table.eq tbody td { padding:7px 10px; border:1px solid var(--rule); vertical-align:top; line-height:1.4; }
+  table.eq tbody td:first-child { font-family:'IBM Plex Mono',monospace; font-size:10px; font-weight:600; background:#e8e2d4; border-right:2px solid var(--ink); }
+  table.eq tbody tr:nth-child(even) td { background:var(--cream); }
+  table.eq tbody tr:nth-child(even) td:first-child { background:#ddd7c8; }
+  table.eq tbody tr:nth-child(odd) td { background:white; }
+
+  /* JURISDICTION TABLE */
+  table.jur { width:100%; border-collapse:collapse; font-size:11px; margin-bottom:18px; }
+  table.jur thead th { padding:7px 9px; font-family:'IBM Plex Mono',monospace; font-size:9.5px; text-transform:uppercase; letter-spacing:.7px; text-align:left; border-right:1px solid rgba(255,255,255,0.3); }
+  table.jur thead th:nth-child(1) { background:var(--ink); color:var(--paper); width:90px; }
+  table.jur thead th:nth-child(2) { background:#1a3a5c; color:white; }
+  table.jur thead th:nth-child(3) { background:#3d2a10; color:white; }
+  table.jur thead th:nth-child(4) { background:#1a4a4a; color:white; }
+  table.jur thead th:nth-child(5) { background:#2d5a3d; color:white; }
+  table.jur thead th:nth-child(6) { background:#3d1a3d; color:white; }
+  table.jur tbody td { padding:6px 9px; border:1px solid var(--rule); vertical-align:top; line-height:1.4; background:white; }
+  table.jur tbody td:first-child { font-family:'IBM Plex Mono',monospace; font-size:9.5px; font-weight:600; background:#e8e2d4; border-right:2px solid var(--ink); }
+  table.jur tbody tr:nth-child(even) td { background:var(--cream); }
+  table.jur tbody tr:nth-child(even) td:first-child { background:#ddd7c8; }
+
+  /* CONSUMER LEGISLATION */
+  .cl-wrap { margin-bottom:18px; border:1px solid var(--rule); border-top:3px solid var(--purple); }
+  .cl-header { background:#f8f4fc; padding:9px 14px; font-family:'Playfair Display',serif; font-size:15px; font-weight:700; color:var(--purple); border-bottom:1px solid var(--rule); }
+  .cl-body { padding:13px 14px; display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  .cl-col strong { display:block; font-family:'IBM Plex Mono',monospace; font-size:9px; text-transform:uppercase; letter-spacing:1px; color:var(--purple); margin-bottom:5px; }
+
+  /* CLIMATE BAR */
+  .climate-bar { background:#eef7f2; border:1px solid var(--rule); border-top:3px solid var(--green); padding:12px 14px; margin-bottom:18px; }
+  .climate-title { font-family:'IBM Plex Mono',monospace; font-size:9px; text-transform:uppercase; letter-spacing:1.5px; color:var(--green); margin-bottom:7px; }
+  .climate-grid { display:flex; flex-wrap:wrap; gap:5px; }
+  .c-pill { background:white; border:1px solid var(--rule); padding:3px 9px; font-size:11px; }
+  .c-pill.k { background:var(--green); color:white; border-color:var(--green); font-weight:500; }
+
+  /* PROFESSIONAL GUIDANCE */
+  .pg-wrap { margin-bottom:18px; background:var(--cream); border:1px solid var(--rule); border-top:3px solid var(--purple); padding:12px 14px; }
+  .pg-title { font-family:'Playfair Display',serif; font-size:14px; font-weight:700; color:var(--purple); margin-bottom:8px; }
+  .pg-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; }
+  .pg-item { background:white; border:1px solid #d4c8e8; padding:7px 9px; }
+  .pg-item strong { display:block; font-size:10px; font-family:'IBM Plex Mono',monospace; color:var(--purple); margin-bottom:3px; }
+  .pg-item span { font-size:11px; line-height:1.4; }
+
+  /* FOOTER */
+  .footer { border-top:1px solid var(--rule); padding-top:8px; font-family:'IBM Plex Mono',monospace; font-size:9px; color:var(--muted); display:flex; justify-content:space-between; }
+
+  .dot { display:inline-block; width:5px; height:5px; border-radius:50%; background:var(--muted); margin-right:4px; vertical-align:middle; }
+  .dot.r { background:var(--accent); } .dot.b { background:var(--blue); } .dot.g { background:var(--green); }
+  .dot.p { background:var(--purple); } .dot.tl { background:var(--teal); }
+
+  @media print { body { padding:10px; font-size:11px; } }
+</style>
+</head>
+<body>
+
+<!-- MASTHEAD -->
+<div class="masthead">
+  <div class="masthead-title">Approaches to Regulation — Health &amp; Care Insurance</div>
+  <span class="masthead-sub">SA1 Ch.10 · IFE 2024</span>
+  <span class="masthead-tag">CONSOLIDATED STUDY MATRIX</span>
+</div>
+
+<!-- ① REGULATORY OBJECTIVES -->
+<div class="sl">① Regulatory Objectives</div>
+<div class="g3" style="margin-bottom:18px;">
+  <div class="card">
+    <div class="ct r">Why Insurance is Regulated</div>
+    <ul class="pl">
+      <li class="r">Policyholders pay premiums in advance — must trust insurer to pay future claims</li>
+      <li class="r">Insurer may collapse before claim arises; policyholders cannot easily monitor solvency</li>
+      <li>Danger from unscrupulous or incompetent operators</li>
+      <li>Controls needed over: classes written, people running company, financial strength, published information</li>
+      <li>Compensation schemes exist if individual companies fail</li>
+    </ul>
+  </div>
+  <div class="card">
+    <div class="ct b">Regulator Objectives (Examples)</div>
+    <ul class="pl">
+      <li class="b">Promote safety &amp; soundness of supervised companies</li>
+      <li class="b">Secure appropriate degree of consumer protection</li>
+      <li class="b">Ensure appropriate consumer outcomes</li>
+      <li class="b">Promote effective competition in consumers' interests</li>
+      <li class="b">Protect &amp; enhance integrity of the financial system</li>
+      <li class="b">Promote development of the insurance industry</li>
+    </ul>
+  </div>
+  <div class="card">
+    <div class="ct g">The Balancing Act &amp; Drivers of Change</div>
+    <ul class="pl">
+      <li class="g"><strong>Too little regulation:</strong> higher risk to policyholders, potential losses</li>
+      <li class="g"><strong>Too much regulation:</strong> ↑ compliance costs → ↑ premiums, ↓ competition, ↓ coverage</li>
+      <li>Indirect costs: changing consumer behaviour, reduced product innovation (hard to quantify)</li>
+      <li><strong>Drivers of change:</strong> Economic environment (2008 crisis → US reform; Solvency II), desire to harmonise across jurisdictions, advances in risk management</li>
+      <li>Supra-national bodies (IAIS, EIOPA) set global standards</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ② TYPES OF REGULATORY RESPONSIBILITIES -->
+<div class="sl">② Types of Regulatory Responsibilities — Overview</div>
+<div class="resp-wrap">
+  <div class="resp-header">
+    <div class="resp-header-title">Regulatory Responsibilities — Health &amp; Care Insurers</div>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;opacity:.7;">Produced via rulebooks + supervisory statements / guidance notes</span>
+  </div>
+  <div style="border:1px solid var(--rule);border-top:none;background:var(--cream);padding:13px 14px;">
+    <table class="mx" style="margin-bottom:0;">
+      <thead>
+        <tr>
+          <th>Responsibility</th>
+          <th>What it covers</th>
+          <th>Key Point</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Authorisation</td>
+          <td>Permission requirements &amp; process for writing specific classes; separate applications per class</td>
+          <td>EU: authorised in one member state → passport to write business across all EU states under home-state supervision</td>
+        </tr>
+        <tr>
+          <td>Business Standards</td>
+          <td>Day-to-day conduct: senior management systems &amp; controls; market conduct; TCF</td>
+          <td>Some generic (all companies); some insurance-specific. Affects every aspect of operations.</td>
+        </tr>
+        <tr>
+          <td>Supervisory Reporting</td>
+          <td>Form, frequency &amp; content of financial and management reports to regulator</td>
+          <td>Standardised templates + possible additional management reports. Balance sheet, revenue account, business plan (3+ year forward look), stress tests.</td>
+        </tr>
+        <tr>
+          <td>Monitoring</td>
+          <td>Regular assessment visits; governance review; supervisory reviews of regulatory reports</td>
+          <td>Degree of scrutiny ∝ inherent risk of company. High-risk firms get more attention.</td>
+        </tr>
+        <tr>
+          <td>Valuation &amp; Capital</td>
+          <td>Rules for asset valuation, liability calculation, assumptions, capital requirement levels &amp; triggers</td>
+          <td>Minimum levels required + supervisory intervention levels; may be fund-specific (LT fund vs shareholder fund)</td>
+        </tr>
+        <tr>
+          <td>Fit &amp; Proper</td>
+          <td>Vetting senior position holders; ongoing assessment; withdrawal of approval</td>
+          <td>Criteria: integrity, competence &amp; experience, qualifications &amp; training</td>
+        </tr>
+        <tr>
+          <td>Actions by Regulator</td>
+          <td>Powers where insurer acts inappropriately</td>
+          <td>Proportionate to nature, scale &amp; complexity. Range: fines → revoking permission → criminal prosecution.</td>
+        </tr>
+        <tr>
+          <td>Transfer of Surplus</td>
+          <td>Rules on moving surplus from LT insurance fund to shareholders' fund</td>
+          <td>Regulator may also assess quality/liquidity of capital remaining post-transfer</td>
+        </tr>
+        <tr>
+          <td>Transfer of Liabilities</td>
+          <td>Takeovers, mergers, internal group restructuring — protecting all three policyholder groups</td>
+          <td>UK: Court approval required + Independent Expert report. USA: indemnity vs assumption reinsurance.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ③ AUTHORISATION & BUSINESS STANDARDS DETAIL -->
+<div class="sl">③ Authorisation &amp; Business Standards in Detail</div>
+<div class="g2" style="margin-bottom:18px;">
+  <div class="card" style="border-top:3px solid var(--brown);">
+    <div class="ct br">Authorisation</div>
+    <ul class="pl">
+      <li class="tl">Authorisation required for each class of business (e.g. health &amp; care separately from annuity)</li>
+      <li>New product types may require additional authorisation applications — can take time</li>
+      <li><strong>Some jurisdictions:</strong> new product must be pre-approved before sale to consumers</li>
+      <li><strong>Other jurisdictions:</strong> no pre-approval but expect discussion of high-risk or novel products</li>
+      <li class="tl"><strong>EU passporting:</strong> authorised in one member state → can write in any EU state, supervised by home-state regulator</li>
+    </ul>
+  </div>
+  <div class="card" style="border-top:3px solid var(--brown);">
+    <div class="ct br">Senior Management Systems &amp; Controls</div>
+    <ul class="pl">
+      <li>Compliance framework</li>
+      <li>Risk management systems</li>
+      <li>Internal systems &amp; controls</li>
+      <li>Outsourcing governance</li>
+      <li>Appointment of fit &amp; proper persons + statutory actuarial roles (see §⑤)</li>
+      <li>Regular meetings with senior management at the firm</li>
+      <li>Regulatory supervisory &amp; disciplinary processes</li>
+    </ul>
+  </div>
+</div>
+
+<!-- TCF SECTION -->
+<div class="tcf-wrap">
+  <div class="tcf-header">Market Conduct — Treating Customers Fairly (TCF)</div>
+  <div class="tcf-body">
+    <div style="font-size:11.5px;margin-bottom:10px;">Rules require firms to act <strong>honestly, fairly and professionally</strong> in accordance with client best interests. Interpretation of TCF varies significantly by jurisdiction.</div>
+    <table class="mx" style="margin-bottom:0;">
+      <thead>
+        <tr>
+          <th>TCF Area</th>
+          <th>Key Requirements</th>
+          <th>Notable Detail</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Communications</td>
+          <td>All communications: clear, fair, not misleading</td>
+          <td>Specific rules on use of past performance in promotions. Cold calls &amp; distance marketing (internet/email) have separate rules.</td>
+        </tr>
+        <tr>
+          <td>Remuneration Disclosure</td>
+          <td>Disclose firm's nature, services &amp; remuneration method at first contact</td>
+          <td>Commission or 'commission equivalent' basis must be explained. Some jurisdictions ban commission on some/all products → fee-based system. Details still communicated.</td>
+        </tr>
+        <tr>
+          <td>Product Information</td>
+          <td>Key features document at or before point of sale</td>
+          <td>Customer-specific expenses &amp; charges; projected values at multiple investment returns (e.g. 3%, 6%, 9% at 5/10/15 yrs for unit-linked); impact of charges shown as reduction in yield (RIY). Fixed rates in some jurisdictions.</td>
+        </tr>
+        <tr>
+          <td>Compensation</td>
+          <td>Rules for dealing with complaints and paying compensation to customers</td>
+          <td>Typically an independent complaints body / ombudsman exists alongside regulator</td>
+        </tr>
+        <tr>
+          <td>Other</td>
+          <td>Suitability assessment; record-keeping; deal execution; right to cancel; claims handling; transaction-related info; unit-linked underlying assets</td>
+          <td>All items in best interests of firm anyway — reduce risk of bad publicity from unhappy policyholders</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ④ VALUATION, CAPITAL & ACTIONS -->
+<div class="sl">④ Valuation, Capital Requirements &amp; Regulator Actions</div>
+<div class="val-wrap">
+  <div class="val-header">Valuation &amp; Capital Requirements</div>
+  <div class="val-body">
+    <div style="font-size:11.5px;margin-bottom:10px;">Given significant uncertainty in asset and liability values, regulators specify rules and/or principles for valuation and capital requirement derivation.</div>
+    <div class="val-grid">
+      <div class="val-item">
+        <strong>Asset Valuation</strong>
+        <span>Market value vs book value; treatment of unlisted assets; models used; restrictions on asset types (admissibility limits)</span>
+      </div>
+      <div class="val-item">
+        <strong>Liabilities</strong>
+        <span>Types of business included; treatment of discretionary increases (bonuses); treatment of options and guarantees embedded in contracts</span>
+      </div>
+      <div class="val-item">
+        <strong>Assumptions</strong>
+        <span>Discount rate derivation (best estimate, risk-free or prudent); demographic assumptions; persistency; options/guarantee valuation method; whether reinsurance credit allowed</span>
+      </div>
+      <div class="val-item">
+        <strong>Reinsurance</strong>
+        <span>How to allow for reinsurance recoveries; risk of reinsurer default — may limit credit taken or require net-of-RI liability floor</span>
+      </div>
+      <div class="val-item">
+        <strong>Capital Requirements</strong>
+        <span>Derivation method / principles; minimum levels required; levels triggering supervisory intervention; fund-specific requirements (LT business fund vs shareholder fund)</span>
+      </div>
+      <div class="val-item">
+        <strong>Transfer of Surplus</strong>
+        <span>LT insurance fund → shareholder fund. May allow any disclosed surplus, or may require a minimum capital buffer to be maintained. Post-transfer liquidity assessed by regulator.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- REGULATOR ACTIONS -->
+<div class="actions-wrap">
+  <div class="actions-title">Actions Available to Regulators (where insurer acts inappropriately)</div>
+  <div class="actions-grid">
+    <span class="action-item k">Require insurer to remedy situation</span>
+    <span class="action-item k">Public censure</span>
+    <span class="action-item k">Fines</span>
+    <span class="action-item">Require purchase of reinsurance</span>
+    <span class="action-item">Require additional capital to be held</span>
+    <span class="action-item">Revoke permission to carry out regulated activities</span>
+    <span class="action-item">Revoke managers' ability to hold senior positions</span>
+    <span class="action-item">Require insurer to pursue merger or acquisition</span>
+    <span class="action-item">Refuse to approve transfer of liabilities</span>
+    <span class="action-item k">Criminal prosecutions</span>
+    <span class="action-item note">Proportionality applies: actions should match the nature, scale and complexity of risk. Some jurisdictions: rule-based triggers. Others: regulator has discretion. Key factors: proximity of failure, confidence insurer will act on instructions, potential impact on policyholders &amp; financial system stability.</span>
+  </div>
+</div>
+
+<!-- ⑤ FIT & PROPER + STATUTORY ACTUARIAL ROLES -->
+<div class="sl">⑤ Fit &amp; Proper Persons &amp; Statutory Actuarial Roles</div>
+<div class="sa-wrap">
+  <div class="sa-header">
+    <div class="sa-header-title">Fit &amp; Proper &nbsp;·&nbsp; Statutory Actuarial Roles</div>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;opacity:.8;">Covered by regulatory rulebooks and 'fit &amp; proper' persons regulations</span>
+  </div>
+  <div class="sa-body">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:12px;">
+      <div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;text-transform:uppercase;letter-spacing:.8px;color:var(--teal);margin-bottom:6px;">Fit &amp; Proper Assessment Criteria</div>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:4px;">
+          <li style="background:#edf5f5;border-left:3px solid var(--teal);padding:5px 8px;font-size:11.5px;"><strong>Personal characteristics</strong> — e.g. integrity, honesty</li>
+          <li style="background:#edf5f5;border-left:3px solid var(--teal);padding:5px 8px;font-size:11.5px;"><strong>Level of competence &amp; experience</strong> — appropriate industry seniority</li>
+          <li style="background:#edf5f5;border-left:3px solid var(--teal);padding:5px 8px;font-size:11.5px;"><strong>Qualifications &amp; training</strong> — relevant professional credentials</li>
+        </ul>
+        <div style="margin-top:7px;font-size:11px;background:white;border-left:3px solid var(--teal);padding:5px 8px;">Assessment includes: background checks, relevant industry experience review, possible interview with regulator's staff. Ongoing assessment required — approval can be withdrawn.</div>
+      </div>
+      <div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;text-transform:uppercase;letter-spacing:.8px;color:var(--teal);margin-bottom:6px;">Statutory Actuarial Roles — by Jurisdiction</div>
+        <div class="sa-roles" style="grid-template-columns:1fr 1fr;">
+          <div class="sa-role"><strong>Solvency II (EU)</strong>Chief Actuary + Actuarial Function Holder (AFH)</div>
+          <div class="sa-role"><strong>UK</strong>With-Profits Actuary, Reviewing Actuary — see APS L1</div>
+          <div class="sa-role"><strong>Other Jurisdictions</strong>Appropriate Actuary or Appointed Actuary</div>
+          <div class="sa-role"><strong>Tasks similar</strong>regardless of jurisdiction or title — see responsibilities below</div>
+        </div>
+      </div>
+    </div>
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;text-transform:uppercase;letter-spacing:.8px;color:var(--teal);margin-bottom:6px;">Statutory Actuarial Responsibilities (examples)</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:6px;margin-bottom:10px;">
+      <div style="background:#edf5f5;border:1px solid #88c4c4;padding:5px 8px;font-size:11px;">Ensuring adequacy of technical provisions</div>
+      <div style="background:#edf5f5;border:1px solid #88c4c4;padding:5px 8px;font-size:11px;">Ensuring appropriateness of methodology &amp; assumptions for technical provisions</div>
+      <div style="background:#edf5f5;border:1px solid #88c4c4;padding:5px 8px;font-size:11px;">Assessing sufficiency &amp; adequacy of data used</div>
+      <div style="background:#edf5f5;border:1px solid #88c4c4;padding:5px 8px;font-size:11px;">Expressing opinion on adequacy of reinsurance arrangements</div>
+    </div>
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;text-transform:uppercase;letter-spacing:.8px;color:var(--teal);margin-bottom:6px;">Firm's Obligations to the Statutory Actuary</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;">
+      <div style="background:white;border-left:3px solid var(--teal);padding:5px 8px;font-size:11px;">Keep actuary informed of business plans; seek advice on implications for policyholders</div>
+      <div style="background:white;border-left:3px solid var(--teal);padding:5px 8px;font-size:11px;">Pay due regard to the actuary's advice</div>
+      <div style="background:white;border-left:3px solid var(--teal);padding:5px 8px;font-size:11px;">Provide adequate resources, data and systems as reasonably required</div>
+    </div>
+    <div style="margin-top:8px;font-size:11px;background:#fff8e0;border-left:3px solid var(--gold);padding:5px 8px;">Holders cannot fulfil other roles causing a conflict of interest, or must declare such roles to the regulator. Roles covered by 'fit &amp; proper' persons regulations.</div>
+  </div>
+</div>
+
+<!-- ⑥ PROFESSIONAL GUIDANCE & CONSUMER LEGISLATION -->
+<div class="sl">⑥ Other Legislation &amp; Professional Guidance</div>
+<div class="pg-wrap">
+  <div class="pg-title">IFoA Actuarial Professional Standards (APSs)</div>
+  <div class="pg-grid">
+    <div class="pg-item">
+      <strong>APS L1</strong>
+      <span>Duties &amp; Responsibilities of Life Assurance Actuaries. Applies to Chief Actuaries, Small Insurer Chief Actuaries, With-Profits Actuaries, Appropriate Actuaries, Reviewing Actuaries — in UK authorised insurers &amp; friendly societies.</span>
+    </div>
+    <div class="pg-item">
+      <strong>APS L2</strong>
+      <span>FSMA 2000 (Communications by Actuaries) Regulations 2003. Applies to AFHs, With-Profits Actuaries, Appropriate Actuaries of UK authorised insurers. Also applies to Chief Actuaries. Triggers for mandatory regulator communication: legislation contravention; assets may be insufficient; policyholder interests not considered; inadequate insurer–actuary relationship.</span>
+    </div>
+    <div class="pg-item">
+      <strong>APS X1</strong>
+      <span>Applying Standards to Actuarial Work (eff. Jul 2017). Principles for determining which standards apply. Applies to IFoA members outside UK too.</span>
+    </div>
+    <div class="pg-item">
+      <strong>APS X2</strong>
+      <span>Review of Actuarial Work. Applies to all members — extent to which independent peer review is required for actuarial work on which recipients are entitled to rely.</span>
+    </div>
+    <div class="pg-item">
+      <strong>APS X3</strong>
+      <span>The Actuary as Expert in Legal Proceedings. Applies to actuaries appointed as expert witnesses in courts, tribunals or similar.</span>
+    </div>
+    <div class="pg-item">
+      <strong>Other Guidance</strong>
+      <span>Other professional actuarial bodies may issue jurisdiction-specific guidance. Must be followed alongside IFoA guidance in accordance with APS X1. All IFoA members covered by The Actuaries' Code regardless of location.</span>
+    </div>
+  </div>
+</div>
+
+<!-- CONSUMER LEGISLATION -->
+<div class="cl-wrap">
+  <div class="cl-header">⑥ Consumer Legislation — Fair Contract Requirements</div>
+  <div class="cl-body">
+    <div class="cl-col">
+      <strong>Features of a Fair Contract</strong>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:4px;">
+        <li style="background:white;border-left:3px solid var(--purple);padding:4px 7px;font-size:11.5px;">Drafted so customers can easily understand terms</li>
+        <li style="background:white;border-left:3px solid var(--purple);padding:4px 7px;font-size:11.5px;">Cannot contain unfair penalties (e.g. cancellation — only recover losses reasonably incurred)</li>
+        <li style="background:white;border-left:3px solid var(--purple);padding:4px 7px;font-size:11.5px;">Must have clearly defined cancellation rights</li>
+        <li style="background:white;border-left:3px solid var(--purple);padding:4px 7px;font-size:11.5px;">Must have clearly defined and explained charges</li>
+        <li style="background:white;border-left:3px solid var(--purple);padding:4px 7px;font-size:11.5px;">Must have a clear definition of how the contract may be changed or varied</li>
+        <li style="background:white;border-left:3px solid var(--purple);padding:4px 7px;font-size:11.5px;">Must provide a clear explanation of how premiums for a policy could be varied</li>
+      </ul>
+    </div>
+    <div class="cl-col">
+      <strong>Examples of Unfair Terms</strong>
+      <ul style="list-style:none;display:flex;flex-direction:column;gap:4px;">
+        <li style="background:white;border-left:3px solid var(--accent);padding:4px 7px;font-size:11.5px;">Company can change service characteristics after customer is bound by contract</li>
+        <li style="background:white;border-left:3px solid var(--accent);padding:4px 7px;font-size:11.5px;">Customer required to pay for unused services when they end the contract</li>
+        <li style="background:white;border-left:3px solid var(--accent);padding:4px 7px;font-size:11.5px;">Customer required to pay disproportionate charges when ending contract</li>
+        <li style="background:white;border-left:3px solid var(--accent);padding:4px 7px;font-size:11.5px;">Company has discretion over price after customer is bound</li>
+        <li style="background:white;border-left:3px solid var(--accent);padding:4px 7px;font-size:11.5px;">Customer not allowed to cancel the service under any circumstances</li>
+      </ul>
+      <div style="margin-top:6px;font-size:11px;background:#f8f4fc;border-left:3px solid var(--purple);padding:5px 8px;"><strong>'Unfair'</strong> = contrary to good faith, causes significant imbalance in parties' rights &amp; obligations to consumer's detriment. Consumer protection body may be independent of insurance regulator.</div>
+    </div>
+  </div>
+</div>
+
+<!-- CLIMATE CHANGE -->
+<div class="climate-bar">
+  <div class="climate-title">⑥ Climate Change Legislation — Regulatory Aims for Financial Institutions</div>
+  <div class="climate-grid">
+    <span class="c-pill k">Consider climate risks in strategic planning</span>
+    <span class="c-pill k">Disclose &amp; report climate-related risks &amp; opportunities</span>
+    <span class="c-pill">Adopt consistent &amp; reliable means of pricing climate-related risks</span>
+    <span class="c-pill">Incorporate ESG factors into investment management decisions</span>
+    <span class="c-pill">Incorporate financial risks from climate change into existing risk mgmt processes</span>
+    <span class="c-pill">Use scenario analysis to estimate financial risks from climate change</span>
+    <span class="c-pill">Consider impact of climate risks on ability to meet policyholder obligations</span>
+    <span class="c-pill">UK PRA 2019 Stress Test: physical + transition channels; firms share internally derived assumptions</span>
+  </div>
+</div>
+
+<!-- ⑦ EQUALITY LEGISLATION -->
+<div class="sl">⑦ Equality Legislation</div>
+<table class="eq">
+  <thead>
+    <tr>
+      <th>Protected Characteristic</th>
+      <th>General Position</th>
+      <th>What is Permitted</th>
+      <th>Key Insurance Implication</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Age</td>
+      <td>Cannot discriminate on grounds of age (UK: 2010 Equality Act). Both direct and indirect discrimination unlawful unless justified.</td>
+      <td>Age bands OK if based on appropriate data about risks. Age limits permitted with signposting to alternative provider. Differential treatment OK if 'proportionate means to a legitimate aim'.</td>
+      <td>Insurance prices may still vary by age where it genuinely reflects risk or cost. Differences in treatment resulting from maternity/pregnancy costs are unlawful.</td>
+    </tr>
+    <tr>
+      <td>Disability</td>
+      <td>UK: disability = physical or mental impairment with substantial, long-term adverse effect on normal daily activities. HIV, cancer, MS &amp; some visual impairments also protected.</td>
+      <td>Decline or impose special terms if based on information that is relevant to the risk, from a reasonable source, and the decision is reasonable given that information.</td>
+      <td>Key data quality issue: decisions must be justifiable by evidence. Special terms can be imposed — but only with sufficient, relevant, accurate data. Illustrates importance of good underwriting data.</td>
+    </tr>
+    <tr>
+      <td>Gender</td>
+      <td>EU Gender Directive: equal treatment of men and women in access to goods &amp; services. Originally had opt-out for insurance — removed by ECJ from 21 December 2012.</td>
+      <td>None for new business from Dec 2012 in EU. Reviewable premiums not treated as new business. Some products already required unisex rates (e.g. annuities with protected rights).</td>
+      <td>Cannot use gender as rating factor for new business. Proxy factors highly correlated to gender also not permitted (indirect discrimination). Contingency loadings needed for gender mix uncertainty. Significant for annuities and protection products where mortality/morbidity differs materially by gender.</td>
+    </tr>
+    <tr>
+      <td>Other characteristics</td>
+      <td>Race, religion &amp; belief, sexual orientation, gender reassignment, marriage &amp; civil partnership, pregnancy &amp; maternity — all protected</td>
+      <td>Indirect discrimination may be justified if proportionate means to a legitimate aim (except pregnancy &amp; maternity — no justification)</td>
+      <td>Anti-discrimination laws may be overseen by body independent of insurance regulator. Exact features of fair vs unfair treatment differ between jurisdictions.</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- ⑧ REGULATORY APPROACH BY JURISDICTION -->
+<div class="sl">⑧ Regulatory Approach by Jurisdiction</div>
+<table class="jur">
+  <thead>
+    <tr>
+      <th>Aspect</th>
+      <th>UK</th>
+      <th>USA</th>
+      <th>China</th>
+      <th>Australia</th>
+      <th>South Africa</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Regulator(s)</td>
+      <td>PRA (prudential) + FCA (conduct). Both statutory duty to co-ordinate.</td>
+      <td>State-level regulators (50 states). NAIC co-ordinates. FIO (monitoring) + Federal Reserve (systemic).</td>
+      <td>CBIRC — established April 2018 by merger of CBRC + CIRC. Responsible for banking &amp; insurance supervision and enforcement.</td>
+      <td>APRA — Australian Prudential Regulation Authority. Est. 1 July 1998. Funded by supervised industries.</td>
+      <td>PA (Prudential Authority) + FSCA (Financial Sector Conduct Authority). FSB split Apr 2018. Twin peaks model.</td>
+    </tr>
+    <tr>
+      <td>Approach Type</td>
+      <td>Principles-based (14 PRA/FCA principles for business). Risk-based supervision — high-risk firms get most scrutiny.</td>
+      <td>Prescriptive rules + overall asset adequacy analysis. Recent inclusion of some principles-based elements.</td>
+      <td>Mix of detailed rules and principles. Significant changes via C-ROSS framework.</td>
+      <td>Risk-based supervision — targets areas of greatest risk to entity and financial system.</td>
+      <td>SAM framework (risk-based). FSCA aims to enhance market integrity, fair customer treatment, financial education.</td>
+    </tr>
+    <tr>
+      <td>Capital Framework</td>
+      <td>Solvency II (currently under UK Government review post-Brexit — assumed to continue at time of writing).</td>
+      <td>Risk-Based Capital (RBC) standards. NAIC sets model laws; significant uniformity of reporting/valuation/capital across states.</td>
+      <td>C-ROSS (China Risk Oriented Solvency System). Similar to Solvency II but reflects specific Chinese insurance market circumstances.</td>
+      <td>LAGIC (Life &amp; General Insurance Capital standards). Strong parallels to Solvency II; 3-pillar structure. Implemented 1 Jan 2013.</td>
+      <td>SAM (Solvency Assessment &amp; Management). SII-based. Implemented 1 July 2018. Part of broader Twin Peaks financial sector reforms.</td>
+    </tr>
+    <tr>
+      <td>International Links</td>
+      <td>Works with EIOPA; participates in IAIS. Left EU Jan 2021 — no longer part of EU passporting.</td>
+      <td>FIO advises on international matters. Federal Reserve has consolidated oversight of systemically important insurers.</td>
+      <td>Large, rapidly growing market. Higher growth than most western countries since insurance industry reopened in 1980s.</td>
+      <td>APRA mission: establish and enforce prudential standards ensuring financial promises are met in stable, efficient and competitive system.</td>
+      <td>PA responsible for licensing, ongoing supervision and enforcement across banks, insurers, financial conglomerates and market infrastructure.</td>
+    </tr>
+    <tr>
+      <td>Key Feature</td>
+      <td>FCA: product lifecycle concern from design stage; can ban products. PRA: not required to ensure no insurer fails — appropriate degree of protection only.</td>
+      <td>NAIC provides guidance &amp; model laws but has no enforcement power over states. Each state implements its own regulations.</td>
+      <td>C-ROSS intended to reflect Chinese specifics, not be a direct copy of Solvency II. Covered in more detail in Chapter 13.</td>
+      <td>Identified limitations of earlier regime (risk-based capital, risk mgmt, disclosure). LAGIC developed to address these — covered in Ch. 13.</td>
+      <td>Similar Twin Peaks model to UK. One regulator for prudential (PA ≈ PRA), one for market conduct (FSCA ≈ FCA).</td>
+    </tr>
+  </tbody>
+</table>
+
+<div style="background:var(--ink);color:var(--paper);padding:10px 16px;margin-bottom:18px;font-size:11px;font-family:'IBM Plex Mono',monospace;">
+  <span style="color:var(--gold);text-transform:uppercase;letter-spacing:1px;font-size:9px;font-weight:600;">Exam Note · </span>
+  You are not expected to know jurisdiction-specific details for the SA1 exam. Focus on the <em>ideas and concepts</em> each jurisdiction illustrates — principles-based vs rules-based, twin peaks model, risk-based capital, passporting, harmonisation rationale, etc.
+</div>
+
+<div class="footer">
+  <span>SA1 Ch.10 · IFE 2024</span>
+  <span>CONSOLIDATED STUDY MATRIX</span>
+  <span>Approaches to Regulation</span>
+</div>
+
+</body>
+</html>

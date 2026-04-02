@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Approaches to Regulation — Outline Navigator</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0f1117;
+    --paper: #f5f0e8;
+    --cream: #ede7d6;
+    --accent: #c0392b;
+    --gold: #b8860b;
+    --blue: #1a3a5c;
+    --green: #1e5f3f;
+    --purple: #5c3d7a;
+    --teal: #1a5c5c;
+    --brown: #5c3d1a;
+    --muted: #6b6560;
+    --rule: #c8bfaf;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 12px;
+    line-height: 1.5;
+    padding: 28px 24px;
+    max-width: 1140px;
+    margin: 0 auto;
+  }
+
+  /* MASTHEAD */
+  .masthead { border-top:4px solid var(--ink); border-bottom:2px solid var(--ink); padding:12px 0 10px; margin-bottom:28px; display:flex; align-items:baseline; gap:16px; }
+  .masthead-title { font-family:'Playfair Display',serif; font-size:26px; font-weight:900; flex:1; }
+  .masthead-sub { font-family:'IBM Plex Mono',monospace; font-size:9.5px; color:var(--muted); text-transform:uppercase; letter-spacing:1.5px; }
+  .masthead-tag { font-family:'IBM Plex Mono',monospace; font-size:9.5px; background:var(--ink); color:#fff; padding:3px 8px; letter-spacing:1px; }
+
+  /* FLOW CONTAINER */
+  .flow {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    position: relative;
+  }
+
+  /* CONNECTOR LINE */
+  .flow::before {
+    content: '';
+    position: absolute;
+    left: 22px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--accent), var(--blue), var(--brown), var(--gold), var(--teal), var(--purple), var(--green), var(--ink));
+    z-index: 0;
+  }
+
+  /* BLOCK */
+  .block {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    margin-bottom: 6px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* NUMBER BADGE */
+  .num {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 900;
+    color: white;
+    flex-shrink: 0;
+    border: 3px solid var(--paper);
+    box-shadow: 0 0 0 2px currentColor;
+  }
+
+  /* BLOCK CONTENT */
+  .block-content {
+    flex: 1;
+    border-left: 3px solid;
+    padding: 10px 14px;
+    background: var(--cream);
+  }
+
+  .block-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+
+  .sub-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+
+  .sub {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    padding: 3px 9px;
+    border: 1px solid;
+    background: white;
+    letter-spacing: 0.3px;
+  }
+
+  .sub.key {
+    color: white !important;
+    background: var(--ink);
+    border-color: transparent;
+    font-weight: 600;
+  }
+
+  /* ARROW CONNECTOR */
+  .arrow {
+    display: flex;
+    align-items: center;
+    padding-left: 14px;
+    margin: 2px 0;
+    color: var(--muted);
+    font-size: 16px;
+    z-index: 1;
+    position: relative;
+  }
+
+  /* COLOR SCHEMES PER BLOCK */
+  .b1 .num { background: var(--accent); box-shadow: 0 0 0 2px var(--accent); }
+  .b1 .block-content { border-color: var(--accent); }
+  .b1 .block-title { color: var(--accent); }
+  .b1 .sub { color: var(--accent); border-color: #e8a09a; }
+  .b1 .sub.key { background: var(--accent); }
+
+  .b2 .num { background: var(--blue); box-shadow: 0 0 0 2px var(--blue); }
+  .b2 .block-content { border-color: var(--blue); background: #eef2f7; }
+  .b2 .block-title { color: var(--blue); }
+  .b2 .sub { color: var(--blue); border-color: #a0b4c8; }
+  .b2 .sub.key { background: var(--blue); }
+
+  .b3 .num { background: var(--brown); box-shadow: 0 0 0 2px var(--brown); }
+  .b3 .block-content { border-color: var(--brown); }
+  .b3 .block-title { color: var(--brown); }
+  .b3 .sub { color: var(--brown); border-color: #c4a888; }
+  .b3 .sub.key { background: var(--brown); }
+
+  .b4 .num { background: var(--gold); box-shadow: 0 0 0 2px var(--gold); }
+  .b4 .block-content { border-color: var(--gold); background: #fffdf0; }
+  .b4 .block-title { color: var(--gold); }
+  .b4 .sub { color: var(--gold); border-color: #d4b86a; }
+  .b4 .sub.key { background: var(--gold); }
+  .b4 .sub.accent { background: var(--accent); color:white; border-color:var(--accent); font-weight:600; }
+
+  .b5 .num { background: var(--teal); box-shadow: 0 0 0 2px var(--teal); }
+  .b5 .block-content { border-color: var(--teal); background: #edf5f5; }
+  .b5 .block-title { color: var(--teal); }
+  .b5 .sub { color: var(--teal); border-color: #88c4c4; }
+  .b5 .sub.key { background: var(--teal); }
+
+  .b6 .num { background: var(--purple); box-shadow: 0 0 0 2px var(--purple); }
+  .b6 .block-content { border-color: var(--purple); background: #f8f4fc; }
+  .b6 .block-title { color: var(--purple); }
+  .b6 .sub { color: var(--purple); border-color: #c4a8e0; }
+  .b6 .sub.key { background: var(--purple); }
+
+  .b7 .num { background: var(--green); box-shadow: 0 0 0 2px var(--green); }
+  .b7 .block-content { border-color: var(--green); background: #eef7f2; }
+  .b7 .block-title { color: var(--green); }
+  .b7 .sub { color: var(--green); border-color: #90c4a8; }
+  .b7 .sub.key { background: var(--green); }
+  .b7 .sub.blue { background: var(--blue); color:white; border-color:var(--blue); font-weight:600; }
+
+  .b8 .num { background: var(--ink); box-shadow: 0 0 0 2px var(--ink); }
+  .b8 .block-content { border-color: var(--ink); background: #1a1d24; color: var(--paper); }
+  .b8 .block-title { color: var(--paper); }
+  .b8 .sub { color: var(--paper); border-color: #444; background: #2a2d38; }
+  .b8 .sub.key { background: var(--accent); border-color: var(--accent); color:white; }
+
+  /* NOTE BOX */
+  .note {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9.5px;
+    color: var(--muted);
+    margin-top: 6px;
+    font-style: italic;
+  }
+
+  /* FOOTER */
+  .footer { border-top:1px solid var(--rule); padding-top:8px; margin-top:20px; font-family:'IBM Plex Mono',monospace; font-size:9px; color:var(--muted); display:flex; justify-content:space-between; }
+
+  /* HOW TO USE BOX */
+  .how-to {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 10px 16px;
+    margin-bottom: 22px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-size: 11px;
+  }
+  .how-to strong {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--gold);
+    white-space: nowrap;
+  }
+</style>
+</head>
+<body>
+
+<!-- MASTHEAD -->
+<div class="masthead">
+  <div class="masthead-title">Approaches to Regulation — Health &amp; Care Insurance</div>
+  <span class="masthead-sub">SA1 Ch.10 · IFE 2024</span>
+  <span class="masthead-tag">REVISION NAVIGATOR</span>
+</div>
+
+<!-- HOW TO USE -->
+<div class="how-to">
+  <strong>How to use</strong>
+  <span>Each numbered block here maps exactly to a section in the <strong>Detailed Study Matrix</strong>. Same number · Same colour · Same name. Use this page to rehearse the architecture before drilling into detail. Every sub-item is a distinct testable concept.</span>
+</div>
+
+<div class="flow">
+
+  <!-- ① REGULATORY OBJECTIVES -->
+  <div class="block b1">
+    <div class="num">①</div>
+    <div class="block-content">
+      <div class="block-title">Regulatory Objectives</div>
+      <div class="sub-items">
+        <span class="sub key">Why Regulate?</span>
+        <span class="sub">Advance payment → trust · Insurer may collapse · Unscrupulous operators · Difficulty monitoring solvency</span>
+        <span class="sub key">Regulator Goals</span>
+        <span class="sub">Safety &amp; soundness · Consumer protection · Appropriate outcomes · Fair competition · Financial system integrity · Industry development</span>
+        <span class="sub key">Balancing Act</span>
+        <span class="sub">Too little → risk &amp; loss · Too much → ↑ premiums, ↓ competition, ↓ coverage</span>
+        <span class="sub key">Drivers of Change</span>
+        <span class="sub">Economic environment (2008 crisis) · Harmonisation desire (Solvency II) · Risk management advances</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="arrow">↓</div>
+
+  <!-- ② REGULATORY RESPONSIBILITIES OVERVIEW -->
+  <div class="block b2">
+    <div class="num">②</div>
+    <div class="block-content">
+      <div class="block-title">Types of Regulatory Responsibilities</div>
+      <div class="sub-items">
+        <span class="sub key">Authorisation</span>
+        <span class="sub">Permission to write specific classes · Pre-approval in some jurisdictions · EU passporting</span>
+        <span class="sub key">Business Standards</span>
+        <span class="sub">Senior mgmt systems &amp; controls · Market conduct · Treating Customers Fairly (TCF)</span>
+        <span class="sub key">Supervisory Reporting</span>
+        <span class="sub">Standardised templates · Balance sheet · Revenue account · Business plan projections · Stress tests</span>
+        <span class="sub key">Monitoring</span>
+        <span class="sub">Assessment visits · Governance review · Supervisory reviews (scrutiny ∝ risk)</span>
+        <span class="sub key">Valuation &amp; Capital</span>
+        <span class="sub">Asset valuation rules · Liability types &amp; options · Assumptions · Reinsurance · Capital requirements</span>
+        <span class="sub key">Fit &amp; Proper + Statutory Actuary</span>
+        <span class="sub">Integrity · Competence · Qualifications · Chief Actuary / AFH / Appointed Actuary</span>
+        <span class="sub key">Actions by Regulators</span>
+        <span class="sub">Fines · Public censure · Revoke permission · Merger requirement · Criminal prosecution</span>
+        <span class="sub key">Transfers &amp; Groups</span>
+        <span class="sub">Liability transfers · Surplus transfers · G-SIIs · IAIS holistic framework</span>
+      </div>
+      <div class="note">Rulebook = primary vehicle · Supplementary guidance notes also relevant but not regulations per se</div>
+    </div>
+  </div>
+
+  <div class="arrow">↓</div>
+
+  <!-- ③ AUTHORISATION & BUSINESS STANDARDS -->
+  <div class="block b3">
+    <div class="num">③</div>
+    <div class="block-content">
+      <div class="block-title">Authorisation &amp; Business Standards Detail</div>
+      <div class="sub-items">
+        <span class="sub key">Authorisation</span>
+        <span class="sub">By class of business · Separate application per class · EU: authorised in one state → passport across EU</span>
+        <span class="sub key">Product Pre-Approval</span>
+        <span class="sub">Some jurisdictions require upfront sign-off · Others expect discussion of high-risk / novel products</span>
+        <span class="sub key">Senior Mgmt Controls</span>
+        <span class="sub">Compliance · Risk mgmt · Systems &amp; controls · Outsourcing · Fit &amp; proper appointment</span>
+        <span class="sub key">TCF — Market Conduct</span>
+        <span class="sub">Communications: clear, fair, not misleading · Info &amp; remuneration disclosure · Product info at point of sale · Compensation rules</span>
+        <span class="sub key">Other Rules</span>
+        <span class="sub">Suitability assessment · Record-keeping · Right to cancel · Claims handling · Unit-linked assets</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="arrow">↓</div>
+
+  <!-- ④ VALUATION, CAPITAL & ACTIONS -->
+  <div class="block b4">
+    <div class="num">④</div>
+    <div class="block-content">
+      <div class="block-title">Valuation, Capital Requirements &amp; Regulator Actions</div>
+      <div class="sub-items">
+        <span class="sub key">Asset Valuation</span>
+        <span class="sub">Market vs book · Unlisted assets · Admissibility limits</span>
+        <span class="sub key">Liabilities</span>
+        <span class="sub">Types of business · Discretionary increases · Options &amp; guarantees</span>
+        <span class="sub key">Assumptions</span>
+        <span class="sub">Discount rates · Demographic derivation · Persistency · Options/guarantees valuation</span>
+        <span class="sub key">Capital Requirements</span>
+        <span class="sub">Minimum levels · Supervisory intervention triggers · Long-term fund vs shareholder fund</span>
+        <span class="sub key">Regulator Powers</span>
+        <span class="sub">Remedy situation · Public censure · Fines · Req. reinsurance/capital · Revoke permission · Merger · Criminal prosecution</span>
+        <span class="sub accent">Proportionality</span>
+        <span class="sub">Actions ∝ nature, scale &amp; complexity of risk · Discretion vs rule-based triggers vary by jurisdiction</span>
+        <span class="sub key">Transfers of Surplus</span>
+        <span class="sub">LT insurance fund → shareholder fund · Restricted to disclosed surplus · Liquidity adequacy post-transfer</span>
+      </div>
+      <div class="note">G-SII framework discontinued 2023 → replaced by IAIS Holistic Framework for systemic risk assessment</div>
+    </div>
+  </div>
+
+  <div class="arrow">↓</div>
+
+  <!-- ⑤ FIT & PROPER + STATUTORY ACTUARIAL ROLES -->
+  <div class="block b5">
+    <div class="num">⑤</div>
+    <div class="block-content">
+      <div class="block-title">Fit &amp; Proper Persons &amp; Statutory Actuarial Roles</div>
+      <div class="sub-items">
+        <span class="sub key">Fit &amp; Proper Criteria</span>
+        <span class="sub">Personal characteristics (integrity) · Competence &amp; experience · Qualifications &amp; training</span>
+        <span class="sub key">Statutory Actuarial Roles</span>
+        <span class="sub">Solvency II: Chief Actuary + AFH · Others: Appropriate Actuary / Appointed Actuary</span>
+        <span class="sub key">Responsibilities</span>
+        <span class="sub">Technical provisions adequacy · Methodology &amp; assumptions · Data sufficiency · Reinsurance opinion</span>
+        <span class="sub key">Firm's Obligations</span>
+        <span class="sub">Inform actuary of business plans · Pay due regard to advice · Provide adequate resources &amp; data</span>
+        <span class="sub key">Conflicts of Interest</span>
+        <span class="sub">Cannot hold conflicting roles without disclosure to regulator</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="arrow">↓</div>
+
+  <!-- ⑥ OTHER LEGISLATION & PROFESSIONAL GUIDANCE -->
+  <div class="block b6">
+    <div class="num">⑥</div>
+    <div class="block-content">
+      <div class="block-title">Other Legislation &amp; Professional Guidance</div>
+      <div class="sub-items">
+        <span class="sub key">Professional Guidance (IFoA)</span>
+        <span class="sub">APS L1: Life assurance actuary duties · APS L2: FSMA communications · APS X1: Applying standards · APS X2: Review · APS X3: Expert witness</span>
+        <span class="sub key">APS L2 Triggers</span>
+        <span class="sub">Legislation contravention · Assets may be insufficient · Policyholder interests ignored · Insurer–actuary relationship inadequate</span>
+        <span class="sub key">Consumer Legislation</span>
+        <span class="sub">Fair contracts: clear terms, no unfair penalties, cancellation rights, defined charges, variation rights</span>
+        <span class="sub key">Unfair Terms Examples</span>
+        <span class="sub">Co. can vary characteristics post-sale · Customer pays for unused services · Disproportionate charges · Discretion over price after binding</span>
+        <span class="sub key">Climate Change</span>
+        <span class="sub">ESG in investment · Scenario analysis · Disclose climate risks · PRA Stress Test 2019: physical + transition channels</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="arrow">↓</div>
+
+  <!-- ⑦ EQUALITY LEGISLATION -->
+  <div class="block b7">
+    <div class="num">⑦</div>
+    <div class="block-content">
+      <div class="block-title">Equality Legislation</div>
+      <div class="sub-items">
+        <span class="sub key">Protected Characteristics</span>
+        <span class="sub">Age · Disability · Gender · Gender reassignment · Marriage &amp; civil partnership · Pregnancy &amp; maternity · Race · Religion &amp; belief · Sexual orientation</span>
+        <span class="sub key">Direct vs Indirect</span>
+        <span class="sub">Direct: less favourable treatment · Indirect: neutral policy with disproportionate impact</span>
+        <span class="sub key">Age</span>
+        <span class="sub">Age bands OK if based on risk data · Age limits permitted via signposting · Maternity cost differences unlawful</span>
+        <span class="sub key">Disability</span>
+        <span class="sub">Special terms OK if based on relevant, reliable data · Physical/mental impairment with long-term substantial effect</span>
+        <span class="sub blue">Gender (EU)</span>
+        <span class="sub">EU Gender Directive: no gender rating for new business from Dec 2012 · Proxy factors (correlated to gender) also not permitted · Contingency loadings needed for uncertain gender mix</span>
+      </div>
+      <div class="note">Proportionate means to a legitimate aim = justification test for differential treatment</div>
+    </div>
+  </div>
+
+  <div class="arrow">↓</div>
+
+  <!-- ⑧ REGULATORY APPROACH BY JURISDICTION -->
+  <div class="block b8">
+    <div class="num">⑧</div>
+    <div class="block-content">
+      <div class="block-title">Regulatory Approach by Jurisdiction</div>
+      <div class="sub-items">
+        <span class="sub key">UK</span>
+        <span class="sub">PRA (prudential) + FCA (conduct) · Twin peaks · 14 principles · Solvency II (currently under review post-Brexit)</span>
+        <span class="sub key">USA</span>
+        <span class="sub">State-level regulation · NAIC coordination · Prescriptive rules + principles · FIO (monitoring) + Fed Reserve (systemic)</span>
+        <span class="sub key">China</span>
+        <span class="sub">CBIRC (est. 2018) · C-ROSS framework (similar to SII but China-specific)</span>
+        <span class="sub key">Australia</span>
+        <span class="sub">APRA (prudential, est. 1998) · LAGIC framework (3-pillar, SII parallels) · Risk-based supervision</span>
+        <span class="sub key">South Africa</span>
+        <span class="sub">PA (prudential) + FSCA (conduct) · SAM framework (SII-based) · Twin peaks from Apr 2018</span>
+      </div>
+      <div class="note" style="color:#a0a8b8;">Common ideas: ideas transfer across jurisdictions · Take away concepts not country-specific details</div>
+    </div>
+  </div>
+
+</div><!-- end flow -->
+
+<div class="footer">
+  <span>SA1 Ch.10 · IFE 2024</span>
+  <span>REVISION NAVIGATOR</span>
+  <span>Approaches to Regulation</span>
+</div>
+
+</body>
+</html>
