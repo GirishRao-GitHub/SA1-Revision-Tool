@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SP1 Ch21 — Reserves &amp; Embedded Value · Detail Reference</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0f1117;
+    --paper: #f5f0e8;
+    --cream: #ede7d6;
+    --accent: #c0392b;
+    --accent-text: #a83226;
+    --gold: #b8860b;
+    --gold-text: #7a5c00;
+    --blue: #1a3a5c;
+    --green: #1e5f3f;
+    --purple: #5c3d7a;
+    --teal: #1a5c5c;
+    --brown: #5c3d1a;
+    --muted: #6b6560;
+    --rule: #c8bfaf;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--paper); color:var(--ink); font-family:'IBM Plex Sans',sans-serif; font-size:12px; line-height:1.5; padding:28px 22px; max-width:1140px; margin:0 auto; }
+
+  /* MASTHEAD */
+  .masthead { border-top:4px solid var(--ink); border-bottom:2px solid var(--ink); padding:12px 0 10px; margin-bottom:22px; display:flex; align-items:baseline; gap:16px; }
+  .masthead-title { font-family:'Playfair Display',serif; font-size:26px; font-weight:900; flex:1; }
+  .masthead-sub { font-family:'IBM Plex Mono',monospace; font-size:9.5px; color:var(--muted); text-transform:uppercase; letter-spacing:1.5px; }
+  .masthead-tag { font-family:'IBM Plex Mono',monospace; font-size:9.5px; background:var(--accent); color:#fff; padding:3px 8px; letter-spacing:1px; }
+
+  /* SECTION LABEL */
+  .sl { font-family:'IBM Plex Mono',monospace; font-size:9px; text-transform:uppercase; letter-spacing:2px; color:var(--muted); margin-bottom:6px; margin-top:4px; border-left:3px solid var(--accent); padding-left:7px; }
+
+  /* GRIDS */
+  .g2 { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:16px; }
+  .g3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px; margin-bottom:16px; }
+  .g7 { display:grid; grid-template-columns:repeat(7,1fr); gap:10px; margin-bottom:16px; }
+
+  /* CARD */
+  .card { background:var(--cream); border:1px solid var(--rule); padding:12px 14px; }
+  .ct { font-family:'Playfair Display',serif; font-size:13.5px; font-weight:700; margin-bottom:8px; padding-bottom:5px; border-bottom:1px solid var(--rule); }
+  .ct.r { color:var(--accent-text); }
+  .ct.b { color:var(--blue); }
+  .ct.g { color:var(--green); }
+  .ct.p { color:var(--purple); }
+  .ct.t { color:var(--teal); }
+  .ct.br { color:var(--brown); }
+
+  /* PLAIN LIST */
+  .pl { list-style:none; display:flex; flex-direction:column; gap:4px; }
+  .pl li { background:white; border-left:3px solid var(--rule); padding:4px 8px; font-size:11.5px; line-height:1.4; }
+  .pl li.r { border-left-color:var(--accent); }
+  .pl li.b { border-left-color:var(--blue); }
+  .pl li.g { border-left-color:var(--green); }
+  .pl li.t { border-left-color:var(--teal); }
+  .pl li.p { border-left-color:var(--purple); }
+  .pl li.br { border-left-color:var(--brown); }
+
+  /* TABLE */
+  table.mx { width:100%; border-collapse:collapse; font-size:11px; margin-bottom:0; }
+  table.mx thead th { background:var(--ink); color:var(--paper); font-family:'IBM Plex Mono',monospace; font-size:9px; text-transform:uppercase; letter-spacing:.8px; padding:6px 8px; text-align:left; }
+  table.mx thead th:first-child { background:var(--accent); }
+  table.mx tbody tr:nth-child(even) { background:var(--cream); }
+  table.mx tbody tr:nth-child(odd) { background:white; }
+  table.mx tbody td { padding:6px 8px; border:1px solid var(--rule); vertical-align:top; line-height:1.4; font-size:11px; }
+  table.mx tbody td:first-child { font-family:'IBM Plex Mono',monospace; font-size:10px; font-weight:600; background:#e8e2d4; border-right:2px solid var(--ink); white-space:nowrap; }
+
+  /* FORMULA BOX */
+  .formula { background:var(--ink); color:var(--paper); font-family:'IBM Plex Mono',monospace; font-size:11.5px; padding:9px 14px; margin:8px 0; line-height:1.7; }
+  .formula .label { font-size:9px; color:var(--gold); text-transform:uppercase; letter-spacing:1px; display:block; margin-bottom:3px; }
+
+  /* SPLIT PANEL */
+  .split-wrap { border:1px solid var(--rule); margin-bottom:16px; }
+  .split-header { background:var(--ink); color:var(--paper); padding:8px 14px; font-family:'Playfair Display',serif; font-size:15px; font-weight:700; }
+  .split-cols { display:grid; grid-template-columns:1fr 1fr; }
+  .sc { padding:12px 14px; }
+  .sc.lt { background:#eef2f7; border-right:2px solid var(--ink); }
+  .sc.st { background:#eef7f2; }
+  .basis-head { display:flex; align-items:center; gap:8px; margin-bottom:8px; padding-bottom:6px; border-bottom:2px solid; }
+  .basis-head.lt { border-color:var(--blue); }
+  .basis-head.st { border-color:var(--green); }
+  .basis-badge { font-family:'IBM Plex Mono',monospace; font-size:9px; font-weight:600; text-transform:uppercase; letter-spacing:1px; padding:2px 8px; color:white; }
+  .basis-badge.lt { background:var(--blue); }
+  .basis-badge.st { background:var(--green); }
+
+  /* COMPARISON: CASE VS STATISTICAL */
+  .method-wrap { border:1px solid var(--rule); margin-bottom:16px; }
+  .method-header { background:var(--teal); color:white; padding:8px 14px; font-family:'Playfair Display',serif; font-size:15px; font-weight:700; }
+  .method-cols { display:grid; grid-template-columns:1fr 1fr; }
+  .mc { padding:12px 14px; }
+  .mc.case { background:#eef6f6; border-right:2px solid var(--teal); }
+  .mc.stat { background:#f8f4fc; }
+  .mc-head { font-family:'IBM Plex Mono',monospace; font-size:9px; font-weight:600; text-transform:uppercase; letter-spacing:1px; padding:2px 8px; color:white; display:inline-block; margin-bottom:8px; }
+  .mc-head.case { background:var(--blue); }
+  .mc-head.stat { background:var(--purple); }
+
+  /* EV PANEL */
+  .ev-wrap { border:1px solid var(--rule); margin-bottom:16px; }
+  .ev-header { background:var(--brown); color:white; padding:8px 14px; display:flex; align-items:center; gap:12px; }
+  .ev-header-title { font-family:'Playfair Display',serif; font-size:16px; font-weight:700; flex:1; }
+  .ev-cols { display:grid; grid-template-columns:1fr 1fr; border-top:none; }
+  .ec { padding:12px 14px; }
+  .ec.net { background:#fdf5ea; border-right:2px solid var(--brown); }
+  .ec.pvfp { background:var(--cream); }
+  .ec-head { font-family:'IBM Plex Mono',monospace; font-size:9px; font-weight:600; text-transform:uppercase; letter-spacing:1px; padding:2px 8px; color:white; display:inline-block; margin-bottom:8px; }
+  .ec-head.net { background:var(--brown); }
+  .ec-head.pvfp { background:var(--purple); }
+
+  /* PURPOSES PILL BAR */
+  .pill-bar { background:#f0f4f0; border:1px solid var(--rule); border-top:2px solid var(--green); padding:10px 14px; margin-bottom:16px; }
+  .pill-bar-title { font-family:'IBM Plex Mono',monospace; font-size:9px; text-transform:uppercase; letter-spacing:1.5px; color:var(--green); margin-bottom:7px; }
+  .pills { display:flex; flex-wrap:wrap; gap:5px; }
+  .pill { background:white; border:1px solid var(--rule); padding:3px 10px; font-size:11px; }
+  .pill.k { background:var(--brown); color:white; border-color:var(--brown); font-weight:500; }
+  .pill.g { background:var(--green); color:white; border-color:var(--green); font-weight:500; }
+
+  /* FOOTER */
+  .footer { border-top:1px solid var(--rule); padding-top:8px; margin-top:18px; font-family:'IBM Plex Mono',monospace; font-size:9px; color:var(--muted); display:flex; justify-content:space-between; }
+</style>
+</head>
+<body>
+
+<!-- MASTHEAD -->
+<div class="masthead">
+  <div class="masthead-title">Reserves &amp; Embedded Value</div>
+  <span class="masthead-sub">SP1 Ch.21</span>
+  <span class="masthead-tag">DETAIL REFERENCE</span>
+</div>
+
+<!-- ① PURPOSES OF RESERVES -->
+<div class="sl">① Why Hold Reserves? — Purposes &amp; Basis Choice</div>
+<table class="mx" style="margin-bottom:16px;">
+  <thead>
+    <tr>
+      <th>Purpose</th>
+      <th>Appropriate Basis</th>
+      <th>Key Rationale</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>Published Accounts</td><td>Best estimate or slightly prudent</td><td>True and fair view; consistent with accounting principles</td></tr>
+    <tr><td>Supervisory / Solvency</td><td>Most prudent — or best estimate with explicit risk allowance elsewhere</td><td>Protect policyholders; overall level must be prudent</td></tr>
+    <tr><td>Internal Management</td><td>Best estimate (very small margin for parameter error)</td><td>Realistic view of financial condition; sensitivity testing uses other bases</td></tr>
+    <tr><td>Premium Rating</td><td>Best estimate, possibly slightly prudent under uncertainty</td><td>Estimate unsettled / unreported claims as base for future pricing</td></tr>
+    <tr><td>M&amp;A Valuation</td><td>Close to best estimate: optimistic for seller, prudent for buyer</td><td>Starting point is EV; goodwill added to get appraisal value</td></tr>
+    <tr><td>Investment Strategy</td><td>Best estimate</td><td>Select assets to match liabilities appropriately</td></tr>
+    <tr><td>Reinsurance Assessment</td><td>Best estimate</td><td>Realistic view of appropriate reinsurance options</td></tr>
+  </tbody>
+</table>
+
+<!-- ② & ③ RESERVE TYPES — SPLIT PANEL -->
+<div class="sl">② Long-Term · ③ Short-Term — Types of Reserve</div>
+<div class="split-wrap">
+  <div class="split-header">Reserve Types by Contract Duration</div>
+  <div class="split-cols">
+
+    <div class="sc lt">
+      <div class="basis-head lt"><span class="basis-badge lt">Long-Term Insurance</span><span style="font-size:10.5px;color:var(--muted);font-style:italic;">CI · IP · LTCI · Group LT</span></div>
+      <ul class="pl" style="gap:5px;">
+        <li class="b"><strong>Policy Reserve (Active Life Reserve)</strong><br>
+          EPV future claims + expenses − EPV future premiums.<br>
+          Held for instances when future outgo &gt; future income.</li>
+        <li class="b"><strong>IBNR — Incurred But Not Reported</strong><br>
+          Claims arising but not yet notified. Special risk for CI: policyholders may learn of cover <em>years</em> after the disability event (late notification increasingly common as conditions have expanded and brokers more involved).</li>
+        <li class="b"><strong>Reported But Not Settled (RBNS)</strong><br>
+          Claims notified, in assessment or in payment (e.g. IP claims in deferred period, CI in assessment).</li>
+        <li class="b"><strong>Option Reserve</strong><br>
+          Set aside for the event an option "comes into the money." Example: guaranteed conversion options on CI policies.</li>
+        <li style="border-left-color:var(--muted);"><strong>Group Context:</strong> UPR + URR also apply (as defined under short-term).</li>
+        <li style="border-left-color:var(--muted);"><strong>Investment Mismatching Reserve:</strong> Required in some territories where assets don't match liabilities.</li>
+      </ul>
+      <div style="font-size:10.5px;color:var(--muted);margin-top:7px;font-style:italic;">Active life reserves = reserves for policyholders not yet claiming. Disabled life reserves = reserves for those currently claiming.</div>
+    </div>
+
+    <div class="sc st">
+      <div class="basis-head st"><span class="basis-badge st">Short-Term Insurance</span><span style="font-size:10.5px;color:var(--muted);font-style:italic;">PMI · Annual Group</span></div>
+      <ul class="pl" style="gap:5px;">
+        <li class="g"><strong>UPR — Unearned Premium Reserve</strong><br>
+          <em>Retrospective.</em> Balance of premiums received for unexpired risk. = (100−m)% × risk-related premium, where m% of risk falls before year-end. Risk-related premium excludes initial expenses (commission etc.) which are earned at inception.</li>
+        <li class="g"><strong>URR — Unexpired Risk Reserve</strong><br>
+          <em>Prospective.</em> Held when UPR &lt; expected future claims + expenses for unexpired period. Estimated via projected future loss ratio applied to unexpired premium proportion.</li>
+        <li class="g"><strong>IBNR</strong><br>
+          As per long-term. Usually small for PMI. Calculated via statistical methods (e.g. chain ladder).</li>
+        <li class="g"><strong>Claims in Transit</strong><br>
+          Reported but not yet assessed or recorded ("pipeline claims"). Statistical or crude % adjustment.</li>
+        <li class="g"><strong>Outstanding Claims Reserve</strong><br>
+          Notified, not yet fully settled. Statistical methods or individual case estimates.</li>
+        <li class="g"><strong>IBNER — Incurred But Not Enough Reported</strong><br>
+          Adjustment (+ or −) to outstanding claims reserve where past case estimates have shown systematic bias. Separate identification aids management insight, may receive different tax treatment.</li>
+        <li style="border-left-color:var(--muted);"><strong>Equalisation / Catastrophe Reserve:</strong> Atypical years. Equalisation smooths profits across years. Cat reserve for future catastrophe events. Legislation and tax treatment vary by territory.</li>
+      </ul>
+      <div style="font-size:10.5px;color:var(--muted);margin-top:7px;font-style:italic;">Short-term: premium and terms reset at each renewal → no need for policy reserve beyond next renewal date.</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ④ RESERVING METHODS -->
+<div class="sl">④ Reserving Methods — Case Estimates vs Statistical Estimation</div>
+<div class="method-wrap">
+  <div class="method-header">The Two Primary Methods</div>
+  <div class="method-cols">
+
+    <div class="mc case">
+      <span class="mc-head case">Case Estimates</span>
+      <div style="font-size:11.5px;margin-bottom:8px;">Experienced claims manager inspects each claim file and estimates ultimate outgo individually.</div>
+      <div style="font-size:11px;font-family:'IBM Plex Mono',monospace;color:var(--teal);text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px;">Factors considered (PMI / indemnity)</div>
+      <ul class="pl" style="margin-bottom:8px;">
+        <li class="t">Procedure type → cost + likely in-patient duration</li>
+        <li class="t">Hospital / medical centre to be used</li>
+        <li class="t">Surgeon / consultant / medical principal</li>
+        <li class="t">Policy coverage (full indemnity, excess, limits, recuperation benefit)</li>
+        <li class="t">Age, gender, past claims history of claimant</li>
+        <li class="t">Current levels of medical inflation</li>
+      </ul>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px;font-size:11px;">
+        <div style="background:#eaf5ea;border-left:3px solid var(--green);padding:5px 7px;"><strong>Advantages</strong><br>Uses all known data · qualitative factors · applicable when stats unreliable</div>
+        <div style="background:#fdecea;border-left:3px solid var(--accent);padding:5px 7px;"><strong>Disadvantages</strong><br>Skill-dependent · potential bias (conservative/optimistic/negotiation) · expensive · hard to check · cannot do IBNR by case · inconsistent inflation rates</div>
+      </div>
+    </div>
+
+    <div class="mc stat">
+      <span class="mc-head stat">Statistical Estimation</span>
+      <div style="font-size:11.5px;margin-bottom:8px;">Aggregate outstanding claims assessed in homogeneous cohorts using historical trends, adjusting for known future changes.</div>
+      <div style="font-size:11px;font-family:'IBM Plex Mono',monospace;color:var(--purple);text-transform:uppercase;letter-spacing:.8px;margin-bottom:4px;">Conditions for use</div>
+      <ul class="pl" style="margin-bottom:8px;">
+        <li class="p">Homogeneous claims portfolio</li>
+        <li class="p">Portfolio large enough for credible data</li>
+        <li class="p">Experience deemed stable</li>
+      </ul>
+      <div style="font-size:11px;background:white;border-left:3px solid var(--purple);padding:5px 8px;margin-bottom:6px;">Segment by contract type · distribution type · geographical region. Fit statistical distribution to past experience. Apply earned premium as exposure base.</div>
+      <div style="font-size:11px;background:#f3eef9;border-left:3px solid var(--purple);padding:5px 8px;margin-bottom:6px;"><strong>Run-off triangles (chain ladder)</strong> — main technique from CS2. If IBNR claims included separately in historic data compilation, model automatically captures IBNR.</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:5px;font-size:11px;">
+        <div style="background:#eaf5ea;border-left:3px solid var(--green);padding:5px 7px;"><strong>LT Insurance:</strong> Benefit amount known for CI once submitted. IP/LTCI income duration unknown → statistical or deterministic/stochastic models for future claims outgo.</div>
+        <div style="background:#eef2f7;border-left:3px solid var(--blue);padding:5px 7px;"><strong>PMI Hybrid:</strong> Statistical for bulk + case estimates for large/unusual individual claims (which distort average cost). More important to use case estimates for smaller PMI insurers.</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ⑤ EMBEDDED VALUE PANEL -->
+<div class="sl">⑤ Embedded Value — Calculation in Detail</div>
+<div class="ev-wrap">
+  <div class="ev-header">
+    <div class="ev-header-title">Embedded Value = Net Assets + PVFP</div>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:#e8c88a;text-transform:uppercase;letter-spacing:1px;">PV of future shareholder profits · existing business only</span>
+  </div>
+  <div class="ev-cols">
+
+    <div class="ec net">
+      <span class="ec-head net">Component 1 — Net Assets</span>
+      <ul class="pl">
+        <li class="br">Excess of assets held over those required to meet liabilities (shareholder-owned share).</li>
+        <li class="br">May be valued at market value, <em>but</em> locked-in capital is worth less than market value to shareholders.</li>
+        <li class="br"><strong>Lock-in discount:</strong> Required capital must be invested cautiously (to meet SCR) → expected return &lt; unconstrained return → discount by risk discount rate.</li>
+      </ul>
+      <div class="formula">
+        <span class="label">Lock-in example</span>
+        Capital = 100 · invested at 4% · RDR = 5% · 10yr lock-in<br>
+        Discounted value = 100 × (1.04/1.05)¹⁰ = <strong>90.874</strong>
+      </div>
+    </div>
+
+    <div class="ec pvfp">
+      <span class="ec-head pvfp">Component 2 — PVFP (Present Value of Future Profits)</span>
+      <ul class="pl" style="margin-bottom:8px;">
+        <li class="p">Project expected future cashflows on existing in-force business.</li>
+        <li class="p">Discount at risk discount rate (RDR) to get PV.</li>
+        <li class="p">Source of profit = gap between realistic EV assumptions and prudent reserving basis.</li>
+        <li class="p"><strong>Key insight:</strong> If EV basis = reserving basis exactly → PVFP = 0.</li>
+      </ul>
+      <table class="mx">
+        <thead><tr><th>Business Type</th><th>PVFP Cashflows</th></tr></thead>
+        <tbody>
+          <tr><td>Without-profits</td><td>PV(premiums + investment income − claims − expenses + reserve release)</td></tr>
+          <tr><td>Unit-linked</td><td>PV(charges inc. surrender penalties − expenses − benefits in excess of unit fund + non-unit reserve release)</td></tr>
+        </tbody>
+      </table>
+      <div style="font-size:10.5px;background:#fdf5ea;border-left:3px solid var(--brown);padding:5px 8px;margin-top:7px;">Tax is allowed for within the calculation as appropriate. Reserves used for net assets must be <em>consistent</em> with those used in PVFP projection.</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ⑥ PURPOSES OF EV + ⑦ APPRAISAL VALUE -->
+<div class="sl">⑥ Purposes of EV · ⑦ Appraisal Value &amp; Key Relationships</div>
+<div class="g2">
+
+  <div class="card" style="border-top:3px solid var(--brown);">
+    <div class="ct br">⑥ Purposes of Embedded Value</div>
+    <ul class="pl">
+      <li class="br"><strong>Internal management accounts:</strong> Realistic assessment of business value and management information.</li>
+      <li class="br"><strong>Published financial statements:</strong> Included in external reporting.</li>
+      <li class="br"><strong>M&amp;A — appraisal value:</strong> EV is the major component; goodwill is added to arrive at appraisal value.</li>
+      <li class="br"><strong>EV financing (financial reinsurance):</strong> Reinsurer advances a loan (expressed as commission) to insurer, repaid from future surplus stream from in-force business. Reflects prudence in valuation basis.</li>
+      <li class="br"><strong>Staff / salesperson bonuses:</strong> Growth in EV used to assess and pay bonuses.</li>
+    </ul>
+  </div>
+
+  <div class="card" style="border-top:3px solid var(--purple);">
+    <div class="ct p">⑦ Appraisal Value &amp; Key Relationships</div>
+    <div class="formula" style="margin-bottom:10px;">
+      <span class="label">Core relationship</span>
+      Appraisal Value = EV + Goodwill<br>
+      EV = Net Assets + PVFP (in-force only)<br>
+      Goodwill = PV of profits from <em>future</em> new business
+    </div>
+    <ul class="pl">
+      <li class="p"><strong>EV scope:</strong> Existing (in-force) business only. Does not include value of future new business.</li>
+      <li class="p"><strong>Goodwill:</strong> Brand + expertise → capacity to write profitable future new business. Valuation is subjective; beyond scope of SP1.</li>
+      <li class="p"><strong>Basis gap is the engine:</strong> Prudent reserves → realistic EV → margin = PVFP. Wider gap → higher EV (but regulators watch).</li>
+    </ul>
+    <table class="mx" style="margin-top:8px;">
+      <thead><tr><th>Purpose</th><th>Bias</th></tr></thead>
+      <tbody>
+        <tr><td>Solvency reporting</td><td>Most prudent</td></tr>
+        <tr><td>Internal management</td><td>Best estimate</td></tr>
+        <tr><td>Seller (M&amp;A)</td><td>Optimistic best estimate</td></tr>
+        <tr><td>Buyer (M&amp;A)</td><td>Prudent best estimate</td></tr>
+        <tr><td>Investment strategy</td><td>Best estimate</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<!-- GLOSSARY BAR -->
+<div class="sl">Glossary — Key Terms from Ch.21</div>
+<div class="pill-bar">
+  <div class="pill-bar-title">Terms you should be able to define</div>
+  <div class="pills">
+    <span class="pill k">IBNR</span>
+    <span class="pill k">IBNER</span>
+    <span class="pill k">UPR</span>
+    <span class="pill k">URR</span>
+    <span class="pill k">RBNS</span>
+    <span class="pill">Asset Share</span>
+    <span class="pill">Claims Paid vs Claims Incurred</span>
+    <span class="pill">Combined Ratio</span>
+    <span class="pill">Earned Premium</span>
+    <span class="pill">Loss Ratio</span>
+    <span class="pill">Operating Ratio</span>
+    <span class="pill">Written Premiums</span>
+    <span class="pill g">Embedded Value</span>
+    <span class="pill g">Appraisal Value</span>
+    <span class="pill g">PVFP</span>
+    <span class="pill g">Active Life Reserve</span>
+    <span class="pill g">Disabled Life Reserve</span>
+    <span class="pill">EV Financing</span>
+  </div>
+</div>
+
+<div class="footer">
+  <span>SP1 Ch.21 · IFE 2019</span>
+  <span>RESERVES &amp; EMBEDDED VALUE — DETAIL REFERENCE</span>
+  <span>Pair 1 of 3</span>
+</div>
+
+</body>
+</html>
