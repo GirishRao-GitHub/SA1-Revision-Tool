@@ -1,0 +1,187 @@
+
+<style>
+.ev-wrap{padding:1rem 0;font-family:var(--font-sans);}
+.sec-lbl{font-size:11px;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px;font-weight:500;}
+.card{background:var(--color-background-primary);border:.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.25rem;margin-bottom:1rem;}
+.m-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:1rem;}
+.mc{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px 14px;}
+.mc-lbl{font-size:11px;color:var(--color-text-secondary);margin:0 0 4px;}
+.mc-val{font-size:19px;font-weight:500;color:var(--color-text-primary);margin:0;}
+.mc-sub{font-size:10px;color:var(--color-text-tertiary);margin:2px 0 0;}
+.sr{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+.sl{font-size:12px;color:var(--color-text-secondary);min-width:185px;}
+.sv{font-size:12px;font-weight:500;min-width:58px;text-align:right;color:var(--color-text-primary);}
+table{width:100%;border-collapse:collapse;font-size:12px;}
+th{font-weight:500;color:var(--color-text-secondary);text-align:right;padding:5px 7px;border-bottom:.5px solid var(--color-border-tertiary);}
+th:first-child{text-align:left;}
+td{text-align:right;padding:5px 7px;color:var(--color-text-primary);border-bottom:.5px solid var(--color-border-tertiary);}
+td:first-child{text-align:left;color:var(--color-text-secondary);}
+.tr-bold td{font-weight:500;color:var(--color-text-primary);}
+.tr-total td{font-weight:500;border-top:1px solid var(--color-border-primary);border-bottom:none;color:var(--color-text-primary);}
+.note{font-size:11px;color:var(--color-text-tertiary);margin-top:8px;}
+</style>
+
+<div class="ev-wrap">
+
+<div class="card">
+<div class="sec-lbl">Portfolio & financial assumptions</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:0 28px;">
+<div>
+<div style="font-size:12px;font-weight:500;color:var(--color-text-primary);margin-bottom:8px;">Portfolio</div>
+<div class="sr"><span class="sl">Policies in-force</span><input type="range" min="10000" max="500000" step="10000" value="100000" id="s-pol" style="flex:1;" oninput="recalc()"><span class="sv" id="v-pol">1,00,000</span></div>
+<div class="sr"><span class="sl">Avg annual premium (₹)</span><input type="range" min="3000" max="30000" step="500" value="8000" id="s-prem" style="flex:1;" oninput="recalc()"><span class="sv" id="v-prem">₹8,000</span></div>
+<div class="sr"><span class="sl">Non-renewal rate</span><input type="range" min="5" max="40" step="1" value="15" id="s-lps" style="flex:1;" oninput="recalc()"><span class="sv" id="v-lps">15%</span></div>
+<div class="sr"><span class="sl">Claims ratio</span><input type="range" min="45" max="90" step="1" value="70" id="s-clm" style="flex:1;" oninput="recalc()"><span class="sv" id="v-clm">70%</span></div>
+<div class="sr"><span class="sl">Expense ratio</span><input type="range" min="5" max="30" step="1" value="15" id="s-exp" style="flex:1;" oninput="recalc()"><span class="sv" id="v-exp">15%</span></div>
+<div class="sr"><span class="sl">Commission ratio</span><input type="range" min="0" max="15" step="0.5" value="5" id="s-com" style="flex:1;" oninput="recalc()"><span class="sv" id="v-com">5.0%</span></div>
+</div>
+<div>
+<div style="font-size:12px;font-weight:500;color:var(--color-text-primary);margin-bottom:8px;">Financial</div>
+<div class="sr"><span class="sl">Investment yield</span><input type="range" min="4" max="12" step="0.5" value="7" id="s-yld" style="flex:1;" oninput="recalc()"><span class="sv" id="v-yld">7.0%</span></div>
+<div class="sr"><span class="sl">Reserve ratio (% of prem)</span><input type="range" min="20" max="100" step="5" value="50" id="s-res" style="flex:1;" oninput="recalc()"><span class="sv" id="v-res">50%</span></div>
+<div class="sr"><span class="sl">Risk discount rate</span><input type="range" min="8" max="20" step="0.5" value="12" id="s-rdr" style="flex:1;" oninput="recalc()"><span class="sv" id="v-rdr">12.0%</span></div>
+<div class="sr"><span class="sl">Tax rate</span><input type="range" min="10" max="35" step="5" value="25" id="s-tax" style="flex:1;" oninput="recalc()"><span class="sv" id="v-tax">25%</span></div>
+<div class="sr"><span class="sl">Reqd capital (% of prem)</span><input type="range" min="10" max="60" step="5" value="30" id="s-rc" style="flex:1;" oninput="recalc()"><span class="sv" id="v-rc">30%</span></div>
+<div class="sr"><span class="sl">Shareholder net assets (₹ Cr)</span><input type="range" min="10" max="300" step="5" value="50" id="s-anw" style="flex:1;" oninput="recalc()"><span class="sv" id="v-anw">₹50 Cr</span></div>
+</div>
+</div>
+</div>
+
+<div class="m-grid">
+<div class="mc"><p class="mc-lbl">Adjusted net worth (ANW)</p><p class="mc-val" id="m-anw">—</p><p class="mc-sub">Shareholder funds</p></div>
+<div class="mc"><p class="mc-lbl">Value of in-force (VIF)</p><p class="mc-val" id="m-vif">—</p><p class="mc-sub">PVFP less cost of capital</p></div>
+<div class="mc" style="border:1.5px solid var(--color-border-info);"><p class="mc-lbl">Embedded value (EV)</p><p class="mc-val" id="m-ev">—</p><p class="mc-sub">ANW + VIF</p></div>
+</div>
+
+<div class="card">
+<div class="sec-lbl">VIF build-up — run-off of current in-force cohort (₹ crore)</div>
+<div style="overflow-x:auto;"><table><thead><tr><th>Item</th><th>Yr 1</th><th>Yr 2</th><th>Yr 3</th><th>Yr 4</th><th>Yr 5</th><th>PV total</th></tr></thead><tbody id="vif-body"></tbody></table></div>
+<p class="note">All monetary figures in ₹ crore. Policies shown at start of each year before lapses.</p>
+</div>
+
+<div class="card">
+<div class="sec-lbl">Embedded value waterfall (₹ crore)</div>
+<div style="position:relative;height:220px;"><canvas id="evchart"></canvas></div>
+</div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+let evChart=null;
+const g=id=>document.getElementById(id);
+const f1=v=>v.toFixed(1);
+const f2=v=>v.toFixed(2);
+const fmtCr=v=>'₹'+f1(v)+' Cr';
+
+function recalc(){
+  const pol=+g('s-pol').value;
+  const prem=+g('s-prem').value;
+  const lps=+g('s-lps').value/100;
+  const clm=+g('s-clm').value/100;
+  const exp=+g('s-exp').value/100;
+  const com=+g('s-com').value/100;
+  const yld=+g('s-yld').value/100;
+  const res=+g('s-res').value/100;
+  const rdr=+g('s-rdr').value/100;
+  const tax=+g('s-tax').value/100;
+  const rcp=+g('s-rc').value/100;
+  const anw=+g('s-anw').value;
+
+  g('v-pol').textContent=pol.toLocaleString('en-IN');
+  g('v-prem').textContent='₹'+prem.toLocaleString('en-IN');
+  g('v-lps').textContent=+g('s-lps').value+'%';
+  g('v-clm').textContent=+g('s-clm').value+'%';
+  g('v-exp').textContent=+g('s-exp').value+'%';
+  g('v-com').textContent=(+g('s-com').value).toFixed(1)+'%';
+  g('v-yld').textContent=(+g('s-yld').value).toFixed(1)+'%';
+  g('v-res').textContent=+g('s-res').value+'%';
+  g('v-rdr').textContent=(+g('s-rdr').value).toFixed(1)+'%';
+  g('v-tax').textContent=+g('s-tax').value+'%';
+  g('v-rc').textContent=+g('s-rc').value+'%';
+  g('v-anw').textContent='₹'+anw+' Cr';
+
+  const N=5; const CR=1e7;
+  const rows={gp:[],cl:[],ex:[],co:[],inv:[],pbt:[],tx:[],pat:[],df:[],pvpat:[],rc:[],corc:[],pvcorc:[]};
+
+  for(let t=1;t<=N;t++){
+    const p=pol*Math.pow(1-lps,t-1);
+    const gp=p*prem/CR;
+    const cl=gp*clm; const ex2=gp*exp; const co=gp*com;
+    const inv=gp*res*yld;
+    const pbt=gp-cl-ex2-co+inv;
+    const txv=Math.max(0,pbt*tax);
+    const pat=pbt-txv;
+    const rc=gp*rcp;
+    const yldNet=yld*(1-tax);
+    const corc=rc*(rdr-yldNet);
+    const df=Math.pow(1+rdr,-t);
+    rows.gp.push(gp); rows.cl.push(cl); rows.ex.push(ex2); rows.co.push(co);
+    rows.inv.push(inv); rows.pbt.push(pbt); rows.tx.push(txv); rows.pat.push(pat);
+    rows.df.push(df); rows.pvpat.push(pat*df);
+    rows.rc.push(rc); rows.corc.push(corc); rows.pvcorc.push(corc*df);
+  }
+
+  const pvfp=rows.pvpat.reduce((a,b)=>a+b,0);
+  const totCorc=rows.pvcorc.reduce((a,b)=>a+b,0);
+  const vif=pvfp-totCorc;
+  const ev=anw+vif;
+
+  g('m-anw').textContent=fmtCr(anw);
+  g('m-vif').textContent=fmtCr(vif);
+  g('m-ev').textContent=fmtCr(ev);
+
+  const polsRow=Array.from({length:N},(_,i)=>Math.round(pol*Math.pow(1-lps,i)).toLocaleString('en-IN'));
+  const def='—';
+  const tableRows=[
+    {lbl:'Policies (start of yr)',vals:polsRow,tot:def,bold:false},
+    {lbl:'Gross premium',vals:rows.gp.map(f2),tot:def,bold:false},
+    {lbl:'Claims',vals:rows.cl.map(v=>'('+f2(v)+')'),tot:def,bold:false},
+    {lbl:'Expenses',vals:rows.ex.map(v=>'('+f2(v)+')'),tot:def,bold:false},
+    {lbl:'Commission',vals:rows.co.map(v=>'('+f2(v)+')'),tot:def,bold:false},
+    {lbl:'Investment income',vals:rows.inv.map(f2),tot:def,bold:false},
+    {lbl:'Profit before tax',vals:rows.pbt.map(f2),tot:def,bold:true},
+    {lbl:'Tax',vals:rows.tx.map(v=>'('+f2(v)+')'),tot:def,bold:false},
+    {lbl:'Profit after tax',vals:rows.pat.map(f2),tot:def,bold:true},
+    {lbl:'Discount factor',vals:rows.df.map(v=>v.toFixed(4)),tot:def,bold:false},
+    {lbl:'PV of PAT (= PVFP)',vals:rows.pvpat.map(f2),tot:f2(pvfp),bold:true},
+    {lbl:'Required capital',vals:rows.rc.map(f2),tot:def,bold:false},
+    {lbl:'Cost of reqd capital',vals:rows.corc.map(v=>'('+f2(v)+')'),tot:def,bold:false},
+    {lbl:'PV of CoRC',vals:rows.pvcorc.map(v=>'('+f2(v)+')'),tot:'('+f2(totCorc)+')',bold:true},
+    {lbl:'VIF = PVFP − CoRC',vals:Array(N).fill(def),tot:f2(vif),bold:true,isTotal:true},
+  ];
+
+  const tbody=g('vif-body'); tbody.innerHTML='';
+  tableRows.forEach(r=>{
+    const tr=document.createElement('tr');
+    if(r.isTotal) tr.className='tr-total';
+    else if(r.bold) tr.className='tr-bold';
+    let h=`<td>${r.lbl}</td>`;
+    r.vals.forEach(v=>{h+=`<td>${v}</td>`;});
+    h+=`<td style="font-weight:500;">${r.tot}</td>`;
+    tr.innerHTML=h; tbody.appendChild(tr);
+  });
+
+  if(evChart){evChart.destroy();}
+  evChart=new Chart(g('evchart'),{
+    type:'bar',
+    data:{
+      labels:['ANW','PVFP','less CoRC','VIF','Embedded Value'],
+      datasets:[{
+        data:[anw,pvfp,-totCorc,vif,ev],
+        backgroundColor:['#378ADD','#1D9E75','#D85A30','#0F6E56','#534AB7'],
+        borderRadius:4,
+      }]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>'₹'+ctx.raw.toFixed(1)+' Cr'}}},
+      scales:{
+        y:{ticks:{callback:v=>'₹'+v.toFixed(0)+' Cr',color:'#888',font:{size:11}},grid:{color:'rgba(128,128,128,0.12)'}},
+        x:{ticks:{color:'#888',font:{size:11}},grid:{display:false}}
+      }
+    }
+  });
+}
+recalc();
+</script>
