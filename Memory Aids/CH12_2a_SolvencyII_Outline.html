@@ -1,10 +1,11 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Solvency II &amp; Capital Requirements · Outline Navigator</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&amp;family=IBM+Plex+Mono:wght@400;600&amp;family=IBM+Plex+Sans:wght@300;400;500&amp;display=swap" rel="stylesheet"/>
 <style>
   :root {
     --ink: #0f1117;
@@ -41,7 +42,7 @@
   .num { width:44px; height:44px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:'Playfair Display',serif; font-size:18px; font-weight:900; color:white; flex-shrink:0; border:3px solid var(--paper); box-shadow:0 0 0 2px currentColor; }
   .block-content { flex:1; border-left:3px solid; padding:10px 14px; background:var(--cream); }
   .block-title { font-family:'Playfair Display',serif; font-size:14px; font-weight:700; margin-bottom:6px; }
-  .sub-items { display:flex; flex-wrap:wrap; gap:5px; }
+  .sub-items { display:flex; flex-direction:column; gap:5px; }
   .sub { font-family:'IBM Plex Mono',monospace; font-size:10px; padding:3px 9px; border:1px solid; background:white; letter-spacing:0.3px; }
   .sub.key { color:white !important; background:var(--ink); border-color:transparent; font-weight:600; }
   .arrow { display:flex; align-items:center; padding-left:14px; margin:2px 0; color:var(--muted); font-size:16px; z-index:1; position:relative; }
@@ -108,216 +109,113 @@
   .b9 .sub.key { background:var(--accent); border-color:var(--accent); color:white; }
 
   .footer { border-top:1px solid var(--rule); padding-top:8px; margin-top:20px; font-family:'IBM Plex Mono',monospace; font-size:9px; color:var(--muted); display:flex; justify-content:space-between; }
+
+  .sub-row { display:flex; align-items:center; gap:5px; flex-wrap:wrap; }
+  .sub-row .sub.key, .sub-row .sub.accent, .sub-row .sub.blue,
+  .sub-row .sub.green, .sub-row .sub.purple, .sub-row .sub.teal { flex-shrink:0; white-space:nowrap; }
+  .sub-row .sub:not(.key):not(.accent):not(.blue):not(.green):not(.purple):not(.teal) { flex:1; min-width:0; }
 </style>
 </head>
 <body>
-
 <div class="masthead">
-  <div class="masthead-title">Solvency II &amp; Capital Requirements</div>
-  <span class="masthead-sub">SP1 Ch.22 · SA1 Ch.11–12</span>
-  <span class="masthead-tag">OUTLINE NAVIGATOR — HIGH LEVEL</span>
+<div class="masthead-title">Solvency II &amp; Capital Requirements</div>
+<span class="masthead-sub">SP1 Ch.22 · SA1 Ch.11–12</span>
+<span class="masthead-tag">OUTLINE NAVIGATOR — HIGH LEVEL</span>
 </div>
-
 <div class="how-to">
-  <strong>How to use</strong>
-  <span>Each numbered block maps exactly to a section in the <strong>Detail Reference</strong>. Same number · Same colour · Same name. Use this page to rehearse the architecture before drilling into detail.</span>
+<strong>How to use</strong>
+<span>Each numbered block maps exactly to a section in the <strong>Detail Reference</strong>. Same number · Same colour · Same name. Use this page to rehearse the architecture before drilling into detail.</span>
 </div>
-
 <div class="flow">
-
-  <!-- ① SII OVERVIEW -->
-  <div class="block b1">
-    <div class="num">①</div>
-    <div class="block-content">
-      <div class="block-title">Solvency II — Overview &amp; Scope</div>
-      <div class="sub-items">
-        <span class="sub key">Objective</span>
-        <span class="sub">Protect policyholders · risk-based harmonised EU approach · capital adequacy + risk management</span>
-        <span class="sub key">Scope</span>
-        <span class="sub">EU insurers · gross premium &gt;€5m or TPs &gt;€25m · operative 1 Jan 2016</span>
-        <span class="sub key">EIOPA</span>
-        <span class="sub">Technical advice to European Commission · UK rep = PRA</span>
-        <span class="sub key">Transitional</span>
-        <span class="sub">Up to 16 years for TPs and risk-free rates · formal application to national regulator</span>
-        <span class="sub key">Global Influence</span>
-        <span class="sub">Non-EU countries adopting SII-type requirements · Bermuda &amp; Switzerland = full equiv · USA, Japan, Australia = provisional</span>
-      </div>
-    </div>
-  </div>
-
-  <div class="arrow">↓</div>
-
-  <!-- ② THREE PILLARS -->
-  <div class="block b2">
-    <div class="num">②</div>
-    <div class="block-content">
-      <div class="block-title">The Three-Pillar Structure</div>
-      <div class="sub-items">
-        <span class="sub key">Pillar 1 — Quantitative</span>
-        <span class="sub">Market-consistent balance sheet · Technical Provisions (BEL + RM) · SCR · MCR</span>
-        <span class="sub p2">Pillar 2 — Qualitative</span>
-        <span class="sub">Governance · ORSA · Supervisory review · 4 key functions: Risk Mgmt · Actuarial · Compliance · Internal Audit</span>
-        <span class="sub p3">Pillar 3 — Disclosure</span>
-        <span class="sub">RSR (private, annual) · QRT (quantitative, annual + quarterly subset) · SFCR (public, annual within 3–4 months of year-end)</span>
-      </div>
-      <div class="note">Pillars 2 &amp; 3 sometimes called "Pillar 5" due to synergies. ORSA is both a Pillar 2 requirement and a Pillar 3 report.</div>
-    </div>
-  </div>
-
-  <div class="arrow">↓</div>
-
-  <!-- ③ PILLAR 1: BALANCE SHEET -->
-  <div class="block b3">
-    <div class="num">③</div>
-    <div class="block-content">
-      <div class="block-title">Pillar 1 — Solvency II Balance Sheet</div>
-      <div class="sub-items">
-        <span class="sub key">Assets</span>
-        <span class="sub">Market value (quoted) or mark-to-model · Prudent person principle · Reinsurance shown as asset (not net of liabilities)</span>
-        <span class="sub key">Technical Provisions</span>
-        <span class="sub">TP = BEL + Risk Margin · Transfer value to another insurer · Segmented by homogeneous product type</span>
-        <span class="sub key">BEL</span>
-        <span class="sub">PV of best estimate cashflows · risk-free yield curve (EIOPA monthly) · no prudential margins · negative BEL allowed</span>
-        <span class="sub key">Risk Margin</span>
-        <span class="sub">Cost of capital method · 6% p.a. on non-hedgeable SCR · discounted at risk-free rates</span>
-        <span class="sub key">Own Funds</span>
-        <span class="sub">Basic (already exists) + Ancillary (callable) · Tiered: Tier 1 (best) to Tier 3 (worst) · SCR: ≥50% T1, &lt;15% T3 · MCR: ≥80% T1, no T3</span>
-        <span class="sub key">SLT vs Non-SLT</span>
-        <span class="sub">SLT: IP, SACI, LTCI (life-like) · Non-SLT: PMI (non-life-like)</span>
-      </div>
-    </div>
-  </div>
-
-  <div class="arrow">↓</div>
-
-  <!-- ④ BEL DISCOUNT RATES -->
-  <div class="block b4">
-    <div class="num">④</div>
-    <div class="block-content">
-      <div class="block-title">Discount Rates — Matching &amp; Volatility Adjustments</div>
-      <div class="sub-items">
-        <span class="sub key">Base Risk-Free</span>
-        <span class="sub">Swap rates (deep/liquid market) or govt bond rates · credit risk adjustment applied downward · EIOPA publishes monthly</span>
-        <span class="sub key">Matching Adjustment (MA)</span>
-        <span class="sub">For LT predictable liabilities held to maturity (annuity-type) · add illiquidity premium to discount rate · reduces liabilities · regulator approval required · ring-fenced assets · no surrender risk</span>
-        <span class="sub key">Volatility Adjustment (VA)</span>
-        <span class="sub">Where MA not eligible · add % of spread to reduce forced-sale risk in crises · EIOPA publishes by currency/market · subject to liquidity plan + sensitivity analysis</span>
-      </div>
-      <div class="note">MA = insurer-specific (own assets). VA = currency/market-wide. Only one can apply at a time.</div>
-    </div>
-  </div>
-
-  <div class="arrow">↓</div>
-
-  <!-- ⑤ SCR -->
-  <div class="block b5">
-    <div class="num">⑤</div>
-    <div class="block-content">
-      <div class="block-title">Solvency Capital Requirement (SCR)</div>
-      <div class="sub-items">
-        <span class="sub key">Definition</span>
-        <span class="sub">VaR of basic own funds at 99.5% confidence over 1 year · held in addition to TPs</span>
-        <span class="sub key">Standard Formula</span>
-        <span class="sub">Prescribed stress tests per risk module → SCR_i = NAV(unstressed) − NAV(stressed) · modules combined via correlation matrix → BSCR · add SCR_op + Adj</span>
-        <span class="sub key">Health Risk Modules</span>
-        <span class="sub">SLT health: disability/morbidity · mortality · longevity · lapse · expenses · revision</span>
-        <span class="sub">Non-SLT: premium &amp; reserve risk · lapse risk</span>
-        <span class="sub">CAT: epidemics · pandemics · climate · antimicrobial resistance</span>
-        <span class="sub key">Internal Model</span>
-        <span class="sub">Full or partial · must pass: use test · statistical quality · calibration · P&amp;L attribution · validation · documentation · cannot revert to SF once approved</span>
-        <span class="sub key">Capital Add-on</span>
-        <span class="sub">Supervisor can impose if SF inadequate for risk profile · exceptional circumstances only</span>
-      </div>
-    </div>
-  </div>
-
-  <div class="arrow">↓</div>
-
-  <!-- ⑥ MCR -->
-  <div class="block b6">
-    <div class="num">⑥</div>
-    <div class="block-content">
-      <div class="block-title">Minimum Capital Requirement (MCR)</div>
-      <div class="sub-items">
-        <span class="sub key">Definition</span>
-        <span class="sub">VaR at 85% confidence over 1 year · ultimate supervisory intervention point · authorisation withdrawn if breached</span>
-        <span class="sub key">Formula</span>
-        <span class="sub">Simple linear factor formula · SLT: based on TPs + capital at risk on death/disability · Non-SLT: based on TPs + written premiums</span>
-        <span class="sub key">Floor &amp; Cap</span>
-        <span class="sub">MCR ≥ 25% SCR (floor) · MCR ≤ 45% SCR (cap) · Absolute min: €3.7m (LT) / €2.5m (ST)</span>
-        <span class="sub key">Reporting</span>
-        <span class="sub">Calculated and reported quarterly</span>
-      </div>
-    </div>
-  </div>
-
-  <div class="arrow">↓</div>
-
-  <!-- ⑦ SUPERVISORY INTERVENTION -->
-  <div class="block b7">
-    <div class="num">⑦</div>
-    <div class="block-content">
-      <div class="block-title">Supervisory Intervention Ladder</div>
-      <div class="sub-items">
-        <span class="sub key">SCR Breach</span>
-        <span class="sub">Notify immediately · recovery plan within 2 months · rectify within 6 months (extendable by 3 months or more in exceptional market conditions)</span>
-        <span class="sub key">MCR Breach</span>
-        <span class="sub">Notify immediately · short-term finance scheme within 1 month · rectify within 3 months · regulator can restrict asset disposal · authorisation withdrawn if unresolved</span>
-      </div>
-      <div class="note">SCR = first point of intervention. MCR = last resort. Ladder of increasingly severe actions.</div>
-    </div>
-  </div>
-
-  <div class="arrow">↓</div>
-
-  <!-- ⑧ VaR, RESERVES vs SCR INTERPLAY, ACTIVE vs PASSIVE -->
-  <div class="block b8">
-    <div class="num">⑧</div>
-    <div class="block-content">
-      <div class="block-title">Reserves–SCR Interplay · VaR · Active vs Passive</div>
-      <div class="sub-items">
-        <span class="sub key">Interplay</span>
-        <span class="sub">Strong reserves + small SCR (prudent basis) ↔ Weak reserves + large SCR (realistic basis + risk-based capital) · must be considered together</span>
-        <span class="sub key">VaR Approach</span>
-        <span class="sub">99.5% over 1yr · stress each risk factor separately · combine with correlation matrix (or copulas) · allows for diversification benefit</span>
-        <span class="sub key">Non-linearity &amp; Non-separability</span>
-        <span class="sub">Simple correlation matrix may understate capital · adjust upward for combined event effects</span>
-        <span class="sub key">Passive Valuation</span>
-        <span class="sub">Net premium valuation · locked-in assumptions · book value assets · stable but can give false security</span>
-        <span class="sub key">Active Valuation</span>
-        <span class="sub">Market-consistent · risk-based SCR · more informative but volatile · pro-cyclical risk in crises</span>
-      </div>
-      <div class="note">SII is an active approach. Passive = older national regimes. Combinations can create artificial volatility.</div>
-    </div>
-  </div>
-
-  <div class="arrow">↓</div>
-
-  <!-- ⑨ BUSINESS CULTURE & GROUP -->
-  <div class="block b9">
-    <div class="num">⑨</div>
-    <div class="block-content">
-      <div class="block-title">Business Culture, Group Reporting &amp; Chief Actuary</div>
-      <div class="sub-items">
-        <span class="sub key">SII Impact on Strategy</span>
-        <span class="sub">Risk mgmt framework · capital allocation · product mix &amp; design · asset mix · corporate structure · M&amp;A · management info · external disclosures</span>
-        <span class="sub key">Group Supervision</span>
-        <span class="sub">Group SCR (with diversification) + group solvency floor (sum of MCRs) · each subsidiary also covers own SCR/MCR · home country group supervisor</span>
-        <span class="sub key">Equivalence</span>
-        <span class="sub">Third country broadly SII-compliant = equivalent · Full / Temporary / Provisional · Bermuda, Switzerland = full</span>
-        <span class="sub key">Chief Actuary Role</span>
-        <span class="sub">Co-ordinate TP calculation · methodology &amp; assumptions · data quality · compare best estimate vs experience · opinion on UW policy &amp; reinsurance · contribute to risk modelling</span>
-      </div>
-    </div>
-  </div>
-
-</div><!-- end flow -->
-
-<div class="footer">
-  <span>SP1 Ch.22 · SA1 Ch.11–12 · IFE 2019/2024</span>
-  <span>SOLVENCY II &amp; CAPITAL REQUIREMENTS — OUTLINE NAVIGATOR</span>
-  <span>Pair 2 of 3</span>
+<!-- ① SII OVERVIEW -->
+<div class="block b1">
+<div class="num">①</div>
+<div class="block-content">
+<div class="block-title">Solvency II — Overview &amp; Scope</div>
+<div class="sub-items"><div class="sub-row"><span class="sub key">Objective</span><span class="sub">Protect policyholders · risk-based harmonised EU approach · capital adequacy + risk management</span></div><div class="sub-row"><span class="sub key">Scope</span><span class="sub">EU insurers · gross premium &gt;€5m or TPs &gt;€25m · operative 1 Jan 2016</span></div><div class="sub-row"><span class="sub key">EIOPA</span><span class="sub">Technical advice to European Commission · UK rep = PRA</span></div><div class="sub-row"><span class="sub key">Transitional</span><span class="sub">Up to 16 years for TPs and risk-free rates · formal application to national regulator</span></div><div class="sub-row"><span class="sub key">Global Influence</span><span class="sub">Non-EU countries adopting SII-type requirements · Bermuda &amp; Switzerland = full equiv · USA, Japan, Australia = provisional</span></div></div>
 </div>
-
+</div>
+<div class="arrow">↓</div>
+<!-- ② THREE PILLARS -->
+<div class="block b2">
+<div class="num">②</div>
+<div class="block-content">
+<div class="block-title">The Three-Pillar Structure</div>
+<div class="sub-items"><div class="sub-row"><span class="sub key">Pillar 1 — Quantitative</span><span class="sub">Market-consistent balance sheet · Technical Provisions (BEL + RM) · SCR · MCR</span><span class="sub p2">Pillar 2 — Qualitative</span><span class="sub">Governance · ORSA · Supervisory review · 4 key functions: Risk Mgmt · Actuarial · Compliance · Internal Audit</span><span class="sub p3">Pillar 3 — Disclosure</span><span class="sub">RSR (private, annual) · QRT (quantitative, annual + quarterly subset) · SFCR (public, annual within 3–4 months of year-end)</span></div></div>
+<div class="note">Pillars 2 &amp; 3 sometimes called "Pillar 5" due to synergies. ORSA is both a Pillar 2 requirement and a Pillar 3 report.</div>
+</div>
+</div>
+<div class="arrow">↓</div>
+<!-- ③ PILLAR 1: BALANCE SHEET -->
+<div class="block b3">
+<div class="num">③</div>
+<div class="block-content">
+<div class="block-title">Pillar 1 — Solvency II Balance Sheet</div>
+<div class="sub-items"><div class="sub-row"><span class="sub key">Assets</span><span class="sub">Market value (quoted) or mark-to-model · Prudent person principle · Reinsurance shown as asset (not net of liabilities)</span></div><div class="sub-row"><span class="sub key">Technical Provisions</span><span class="sub">TP = BEL + Risk Margin · Transfer value to another insurer · Segmented by homogeneous product type</span></div><div class="sub-row"><span class="sub key">BEL</span><span class="sub">PV of best estimate cashflows · risk-free yield curve (EIOPA monthly) · no prudential margins · negative BEL allowed</span></div><div class="sub-row"><span class="sub key">Risk Margin</span><span class="sub">Cost of capital method · 6% p.a. on non-hedgeable SCR · discounted at risk-free rates</span></div><div class="sub-row"><span class="sub key">Own Funds</span><span class="sub">Basic (already exists) + Ancillary (callable) · Tiered: Tier 1 (best) to Tier 3 (worst) · SCR: ≥50% T1, &lt;15% T3 · MCR: ≥80% T1, no T3</span></div><div class="sub-row"><span class="sub key">SLT vs Non-SLT</span><span class="sub">SLT: IP, SACI, LTCI (life-like) · Non-SLT: PMI (non-life-like)</span></div></div>
+</div>
+</div>
+<div class="arrow">↓</div>
+<!-- ④ BEL DISCOUNT RATES -->
+<div class="block b4">
+<div class="num">④</div>
+<div class="block-content">
+<div class="block-title">Discount Rates — Matching &amp; Volatility Adjustments</div>
+<div class="sub-items"><div class="sub-row"><span class="sub key">Base Risk-Free</span><span class="sub">Swap rates (deep/liquid market) or govt bond rates · credit risk adjustment applied downward · EIOPA publishes monthly</span></div><div class="sub-row"><span class="sub key">Matching Adjustment (MA)</span><span class="sub">For LT predictable liabilities held to maturity (annuity-type) · add illiquidity premium to discount rate · reduces liabilities · regulator approval required · ring-fenced assets · no surrender risk</span></div><div class="sub-row"><span class="sub key">Volatility Adjustment (VA)</span><span class="sub">Where MA not eligible · add % of spread to reduce forced-sale risk in crises · EIOPA publishes by currency/market · subject to liquidity plan + sensitivity analysis</span></div></div>
+<div class="note">MA = insurer-specific (own assets). VA = currency/market-wide. Only one can apply at a time.</div>
+</div>
+</div>
+<div class="arrow">↓</div>
+<!-- ⑤ SCR -->
+<div class="block b5">
+<div class="num">⑤</div>
+<div class="block-content">
+<div class="block-title">Solvency Capital Requirement (SCR)</div>
+<div class="sub-items"><div class="sub-row"><span class="sub key">Definition</span><span class="sub">VaR of basic own funds at 99.5% confidence over 1 year · held in addition to TPs</span></div><div class="sub-row"><span class="sub key">Standard Formula</span><span class="sub">Prescribed stress tests per risk module → SCR_i = NAV(unstressed) − NAV(stressed) · modules combined via correlation matrix → BSCR · add SCR_op + Adj</span></div><div class="sub-row"><span class="sub key">Health Risk Modules</span><span class="sub">SLT health: disability/morbidity · mortality · longevity · lapse · expenses · revision</span><span class="sub">Non-SLT: premium &amp; reserve risk · lapse risk</span><span class="sub">CAT: epidemics · pandemics · climate · antimicrobial resistance</span></div><div class="sub-row"><span class="sub key">Internal Model</span><span class="sub">Full or partial · must pass: use test · statistical quality · calibration · P&amp;L attribution · validation · documentation · cannot revert to SF once approved</span></div><div class="sub-row"><span class="sub key">Capital Add-on</span><span class="sub">Supervisor can impose if SF inadequate for risk profile · exceptional circumstances only</span></div></div>
+</div>
+</div>
+<div class="arrow">↓</div>
+<!-- ⑥ MCR -->
+<div class="block b6">
+<div class="num">⑥</div>
+<div class="block-content">
+<div class="block-title">Minimum Capital Requirement (MCR)</div>
+<div class="sub-items"><div class="sub-row"><span class="sub key">Definition</span><span class="sub">VaR at 85% confidence over 1 year · ultimate supervisory intervention point · authorisation withdrawn if breached</span></div><div class="sub-row"><span class="sub key">Formula</span><span class="sub">Simple linear factor formula · SLT: based on TPs + capital at risk on death/disability · Non-SLT: based on TPs + written premiums</span></div><div class="sub-row"><span class="sub key">Floor &amp; Cap</span><span class="sub">MCR ≥ 25% SCR (floor) · MCR ≤ 45% SCR (cap) · Absolute min: €3.7m (LT) / €2.5m (ST)</span></div><div class="sub-row"><span class="sub key">Reporting</span><span class="sub">Calculated and reported quarterly</span></div></div>
+</div>
+</div>
+<div class="arrow">↓</div>
+<!-- ⑦ SUPERVISORY INTERVENTION -->
+<div class="block b7">
+<div class="num">⑦</div>
+<div class="block-content">
+<div class="block-title">Supervisory Intervention Ladder</div>
+<div class="sub-items"><div class="sub-row"><span class="sub key">SCR Breach</span><span class="sub">Notify immediately · recovery plan within 2 months · rectify within 6 months (extendable by 3 months or more in exceptional market conditions)</span></div><div class="sub-row"><span class="sub key">MCR Breach</span><span class="sub">Notify immediately · short-term finance scheme within 1 month · rectify within 3 months · regulator can restrict asset disposal · authorisation withdrawn if unresolved</span></div></div>
+<div class="note">SCR = first point of intervention. MCR = last resort. Ladder of increasingly severe actions.</div>
+</div>
+</div>
+<div class="arrow">↓</div>
+<!-- ⑧ VaR, RESERVES vs SCR INTERPLAY, ACTIVE vs PASSIVE -->
+<div class="block b8">
+<div class="num">⑧</div>
+<div class="block-content">
+<div class="block-title">Reserves–SCR Interplay · VaR · Active vs Passive</div>
+<div class="sub-items"><div class="sub-row"><span class="sub key">Interplay</span><span class="sub">Strong reserves + small SCR (prudent basis) ↔ Weak reserves + large SCR (realistic basis + risk-based capital) · must be considered together</span></div><div class="sub-row"><span class="sub key">VaR Approach</span><span class="sub">99.5% over 1yr · stress each risk factor separately · combine with correlation matrix (or copulas) · allows for diversification benefit</span></div><div class="sub-row"><span class="sub key">Non-linearity &amp; Non-separability</span><span class="sub">Simple correlation matrix may understate capital · adjust upward for combined event effects</span></div><div class="sub-row"><span class="sub key">Passive Valuation</span><span class="sub">Net premium valuation · locked-in assumptions · book value assets · stable but can give false security</span></div><div class="sub-row"><span class="sub key">Active Valuation</span><span class="sub">Market-consistent · risk-based SCR · more informative but volatile · pro-cyclical risk in crises</span></div></div>
+<div class="note">SII is an active approach. Passive = older national regimes. Combinations can create artificial volatility.</div>
+</div>
+</div>
+<div class="arrow">↓</div>
+<!-- ⑨ BUSINESS CULTURE & GROUP -->
+<div class="block b9">
+<div class="num">⑨</div>
+<div class="block-content">
+<div class="block-title">Business Culture, Group Reporting &amp; Chief Actuary</div>
+<div class="sub-items"><div class="sub-row"><span class="sub key">SII Impact on Strategy</span><span class="sub">Risk mgmt framework · capital allocation · product mix &amp; design · asset mix · corporate structure · M&amp;A · management info · external disclosures</span></div><div class="sub-row"><span class="sub key">Group Supervision</span><span class="sub">Group SCR (with diversification) + group solvency floor (sum of MCRs) · each subsidiary also covers own SCR/MCR · home country group supervisor</span></div><div class="sub-row"><span class="sub key">Equivalence</span><span class="sub">Third country broadly SII-compliant = equivalent · Full / Temporary / Provisional · Bermuda, Switzerland = full</span></div><div class="sub-row"><span class="sub key">Chief Actuary Role</span><span class="sub">Co-ordinate TP calculation · methodology &amp; assumptions · data quality · compare best estimate vs experience · opinion on UW policy &amp; reinsurance · contribute to risk modelling</span></div></div>
+</div>
+</div>
+</div><!-- end flow -->
+<div class="footer">
+<span>SP1 Ch.22 · SA1 Ch.11–12 · IFE 2019/2024</span>
+<span>SOLVENCY II &amp; CAPITAL REQUIREMENTS — OUTLINE NAVIGATOR</span>
+<span>Pair 2 of 3</span>
+</div>
 </body>
 </html>

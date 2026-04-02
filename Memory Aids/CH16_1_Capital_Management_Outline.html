@@ -1,10 +1,11 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Capital Management — Outline Navigator</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&amp;family=IBM+Plex+Mono:wght@400;600&amp;family=IBM+Plex+Sans:wght@300;400;500&amp;display=swap" rel="stylesheet"/>
 <style>
   :root {
     --ink: #0f1117;
@@ -102,11 +103,7 @@
     margin-bottom: 6px;
   }
 
-  .sub-items {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 5px;
-  }
+  .sub-items { display:flex; flex-direction:column; gap:5px; }
 
   .sub {
     font-family: 'IBM Plex Mono', monospace;
@@ -212,213 +209,102 @@
 
   /* FOOTER */
   .footer { border-top:1px solid var(--rule); padding-top:8px; font-family:'IBM Plex Mono',monospace; font-size:9px; color:var(--muted); display:flex; justify-content:space-between; margin-top:18px; }
+
+  .sub-row { display:flex; align-items:center; gap:5px; flex-wrap:wrap; }
+  .sub-row .sub.key, .sub-row .sub.accent, .sub-row .sub.blue,
+  .sub-row .sub.green, .sub-row .sub.purple, .sub-row .sub.teal { flex-shrink:0; white-space:nowrap; }
+  .sub-row .sub:not(.key):not(.accent):not(.blue):not(.green):not(.purple):not(.teal) { flex:1; min-width:0; }
 </style>
 </head>
 <body>
-
 <!-- MASTHEAD -->
 <div class="masthead">
-  <div class="masthead-title">Capital Management</div>
-  <span class="masthead-sub">SA1 Ch.16 · Syllabus 4.2.1–4.2.5</span>
-  <span class="masthead-tag">OUTLINE NAVIGATOR</span>
+<div class="masthead-title">Capital Management</div>
+<span class="masthead-sub">SA1 Ch.16 · Syllabus 4.2.1–4.2.5</span>
+<span class="masthead-tag">OUTLINE NAVIGATOR</span>
 </div>
-
 <div class="flow">
-
-  <!-- ① CAPITAL PERSPECTIVES & REQUIRED CAPITAL TYPES -->
-  <div class="block b1">
-    <div class="num">①</div>
-    <div class="block-content">
-      <div class="block-title">Capital Requirements — Three Perspectives</div>
-      <div class="sub-items">
-        <span class="sub eco">Economic Capital</span>
-        <span class="sub">Internal · Risk profile &amp; appetite · Ongoing business strategy · Most onerous for some companies</span>
-        <span class="sub reg">Regulatory Capital</span>
-        <span class="sub">Prescribed solvency rules · Defines asset/liability values · All companies must meet · Most onerous for others</span>
-        <span class="sub rat">Rating Agency Capital</span>
-        <span class="sub">Credit rating standards · Drives cost of raising capital · Market willingness to deal</span>
-        <span class="sub key">Available Capital</span>
-        <span class="sub">Assets − Liabilities · Definition of both must be clarified (BEL vs TP vs prudential)</span>
-        <span class="sub key">Required Capital</span>
-        <span class="sub">Assets in excess of liabilities → claims met with high certainty</span>
-      </div>
-      <div class="note">All three perspectives link policyholder protection to the company's broader risk appetite. Most onerous varies by company.</div>
-    </div>
-  </div>
-
-  <div class="arrow">↓</div>
-
-  <!-- ② RISK CAPITAL vs WORKING CAPITAL -->
-  <div class="block b2">
-    <div class="num">②</div>
-    <div class="block-content">
-      <div class="block-title">Why Capital Is Required — Two Categories</div>
-      <div class="sub-items">
-        <span class="sub key">Risk Capital</span>
-        <span class="sub">Cover day-to-day risks: Market · Credit · Insurance (mortality, persistency, expenses) · Operational (outsourcing, terrorism, systems) · Liquidity · Group</span>
-        <span class="sub wk">Working Capital</span>
-        <span class="sub">Fund new business · Attract intermediaries · Overheads &amp; organic expansion (hardware, software, product dev, premises, overseas) · Acquire companies/blocks</span>
-        <span class="sub key">Exacerbated by</span>
-        <span class="sub">Mis-selling fines · Flat charging caps · Low investment returns · Adverse demographics (↑longevity → ↑LTCI) · TCF implications · Changing distribution (internet)</span>
-        <span class="sub key">ORSA</span>
-        <span class="sub">Solvency II / similar regimes require all risks assessed → companies increasingly aware of capital employed &amp; return on it</span>
-      </div>
-    </div>
-  </div>
-
-  <div class="arrow">↓</div>
-
-  <!-- ③ REASONS FOR PROJECTING SOLVENCY -->
-  <div class="block b3">
-    <div class="num">③</div>
-    <div class="block-content">
-      <div class="block-title">Reasons for Projecting Solvency</div>
-      <div class="sub-items">
-        <span class="sub key">Monitor Risk Profile</span>
-        <span class="sub">Understand &amp; track evolution of risk profile over time</span>
-        <span class="sub key">Strategy Decisions</span>
-        <span class="sub">Assess impact of key decisions · Show new business strain · Determine supportable NB volume</span>
-        <span class="sub key">Capital Releases</span>
-        <span class="sub">Estimate pattern of releases · Assess return on capital · Calculate cost of holding capital for embedded value</span>
-        <span class="sub key">Statutory Requirement</span>
-        <span class="sub">Solvency II Pillar 2 ORSA · Determine risk margin (Pillar 1) · May feed internal model SCR</span>
-        <span class="sub key">Risk Management</span>
-        <span class="sub">Stress testing · Reverse stress testing (known outcome → identify causes) · Effective risk measurement</span>
-      </div>
-      <div class="note">Projections are not just about the probability of insolvency — they support capital planning, embedded value and regulatory compliance.</div>
-    </div>
-  </div>
-
-  <div class="arrow">↓</div>
-
-  <!-- ④ AVAILABLE CAPITAL — SOURCES & REALISTIC CAPITAL -->
-  <div class="block b4">
-    <div class="num">④</div>
-    <div class="block-content">
-      <div class="block-title">Available Capital — Sources &amp; Market-Consistent Assessment</div>
-      <div class="sub-items">
-        <span class="sub prop">Proprietary</span>
-        <span class="sub">Initial + subsequent shareholder capital · Retained profits (incl. 100% with-profits surplus) · Reduced by dividends &amp; losses</span>
-        <span class="sub mut">Mutual</span>
-        <span class="sub">Initial capital injections · Historic under-distribution of with-profits surplus · 'Entity' approach — not earmarked for current policyholders</span>
-        <span class="sub key">Market-Consistent Valuation</span>
-        <span class="sub">Assets = market value (directly observed) · Liabilities valued in line with traded assets they resemble (zero-coupon bonds, options)</span>
-        <span class="sub key">Realistic Capital</span>
-        <span class="sub">Market value assets − market-consistent liabilities · Best measure from policyholder &amp; shareholder perspectives · Captures asset-liability interactions</span>
-        <span class="sub key">No-Arbitrage Condition</span>
-        <span class="sub">Choice of backing assets must not affect liability value · Option pricing + interpolation/extrapolation used</span>
-        <span class="sub key">Non-Market Risk</span>
-        <span class="sub">Mortality/lapse risks use best estimate + risk margin (compensation for uncertainty) → higher liability than BEA alone</span>
-      </div>
-      <div class="note">Approaches: certainty equivalent · risk-neutral valuation · state-price deflators (SPD = stochastic discount factors, real-world presentation)</div>
-    </div>
-  </div>
-
-  <div class="arrow">↓</div>
-
-  <!-- ⑤ ECONOMIC CAPITAL — STOCHASTIC & STRESS -->
-  <div class="block b5">
-    <div class="num">⑤</div>
-    <div class="block-content">
-      <div class="block-title">Assessing Ongoing Solvency — Economic Capital</div>
-      <div class="sub-items">
-        <span class="sub key">Definition</span>
-        <span class="sub">Internal assessment: assets required in excess of liabilities, allowing for all risks &amp; ongoing business strategy, so claims met with high certainty</span>
-        <span class="sub stoch">Stochastic Modelling</span>
-        <span class="sub">Realistic capital across many real-world economic scenarios · Used for market &amp; credit risks · Also for insurance risks where distribution available (stochastic morbidity models for CI · multi-state models for IP)</span>
-        <span class="sub stress">Stress Tests</span>
-        <span class="sub">Used where risk distribution is less well understood · Applied to realistic capital · Inter-dependencies between risks must be assessed</span>
-        <span class="sub key">Time Horizon</span>
-        <span class="sub">One-year period OR full run-off of in-force book · Shorter if risks can be hedged via capital markets · Longer if risks cannot be hedged · Calibration must be consistent with chosen horizon</span>
-        <span class="sub key">ORSA Requirement</span>
-        <span class="sub">Solvency II companies must assess economic capital via ORSA · Many jurisdictions outside EU also require ORSA</span>
-      </div>
-    </div>
-  </div>
-
-  <div class="arrow">↓</div>
-
-  <!-- ⑥ REGULATORY, RATING AGENCY & PROXY MODELS -->
-  <div class="block b6">
-    <div class="num">⑥</div>
-    <div class="block-content">
-      <div class="block-title">Regulatory &amp; Rating Agency Capital · Modelling Practicalities</div>
-      <div class="sub-items">
-        <span class="sub key">Regulatory Floor</span>
-        <span class="sub">Must meet regardless of economic capital result · May target different policyholder security level · ORSA may overlap with economic capital assessment</span>
-        <span class="sub key">Rating Agency</span>
-        <span class="sub">Financial strength rating drives cost of raising capital &amp; market willingness · Standards moving toward economic capital &amp; ORSA · Understand agencies' frameworks</span>
-        <span class="sub key">Nested Calculations Problem</span>
-        <span class="sub">Outer model = real-world stochastic (investment, rates, inflation, claims) · Inner model = market-consistent (value options/guarantees at future date) · 10,000 × 10,000 = enormous computation</span>
-        <span class="sub proxy">Proxy Models (Light Models)</span>
-        <span class="sub">Simplification of full 'heavy' model · Techniques: polynomial/curve-fitting · kriging (Gaussian multi-dim interpolation) · replicating portfolios</span>
-        <span class="sub key">Closed-Form Alternative</span>
-        <span class="sub">Black-Scholes for options/guarantees instead of stochastic inner model</span>
-        <span class="sub key">Calibration</span>
-        <span class="sub">Expert judgement scenarios → heavy model run → least-squares or optimisation fit · Validate on out-of-sample scenarios · Re-calibrate periodically (goodness-of-fit deteriorates)</span>
-        <span class="sub key">Overfitting Warning</span>
-        <span class="sub">Too many factors → poor out-of-sample performance · Tail fit critical for SCR/VaR · Re-calibration required regularly</span>
-      </div>
-      <div class="note">Polynomial example with 2 risk factors x, y: f(x) = a₁x + a₂x² + a₃y + a₄y² + a₅xy + … · In practice 10–20 risk factors, up to 4th order</div>
-    </div>
-  </div>
-
-  <div class="arrow">↓</div>
-
-  <!-- ⑦ RISK, CAPITAL & ECONOMIC VALUE -->
-  <div class="block b7">
-    <div class="num">⑦</div>
-    <div class="block-content">
-      <div class="block-title">The Relationship Between Capital, Risk &amp; Economic Value</div>
-      <div class="sub-items">
-        <span class="sub key">Inextricably Linked</span>
-        <span class="sub">Risk → determines capital needs (function of tail of risk distribution) → value creation affected by frictional cost of holding capital</span>
-        <span class="sub key">Risk Drives Capital</span>
-        <span class="sub">Higher risk requires more capital if policyholders are to remain attracted · Risk also drives shareholders' required return directly</span>
-        <span class="sub key">Frictional Cost</span>
-        <span class="sub">Capital locked into H&amp;C company may not be tax-efficient · Reduces shareholder value creation · Holding less capital (if adequate) increases value</span>
-        <span class="sub key">Optimise Portfolio of Risks</span>
-        <span class="sub">Economic capital analysis helps identify opportunities to release capital without compromising policyholder risk tolerance</span>
-        <span class="sub key">Concentration Reduction</span>
-        <span class="sub">High morbidity concentration → reinsurance → ↓economic capital but ↑credit risk &amp; ↓morbidity profits · Expense risk → outsource → ↑operational &amp; counterparty risk</span>
-        <span class="sub key">Key Principle</span>
-        <span class="sub">Optimising capital ≠ minimising capital · Must also consider how risk decisions affect economic value creation overall</span>
-      </div>
-    </div>
-  </div>
-
-  <div class="arrow">↓</div>
-
-  <!-- ⑧ METHODS OF MANAGING CAPITAL -->
-  <div class="block b8">
-    <div class="num">⑧</div>
-    <div class="block-content">
-      <div class="block-title">Methods of Managing the Capital Position</div>
-      <div class="sub-items">
-        <span class="sub eq">Equity</span>
-        <span class="sub">Proprietary: external share issue (needs credible business plan) · Mutual: demutualisation (merger/sale or stock exchange float) · Group: reallocate group capital · Lowest ranking → highest cost</span>
-        <span class="sub sub">Subordinated Debt</span>
-        <span class="sub">Capital markets · Repaid after policyholder claims (TCF) · ↑free assets (PH view) but liability (SH view) · Counts as 'own funds' under Solvency II</span>
-        <span class="sub sec">Securitisation</span>
-        <span class="sub">Convert EV of a block into tradable instrument · Payment now; repay as surplus emerges (contingent loan) · Most useful in regimes not crediting future profits · Less effective under Solvency II</span>
-        <span class="sub rei">Reinsurance</span>
-        <span class="sub">Financial RI: crystallise future profits (less effective under SII) · Traditional RI: ↓insurance risk SCR (offset by ↑credit risk) · Regulatory arbitrage if reinsurer in lower-SCR regime</span>
-        <span class="sub der">Derivatives</span>
-        <span class="sub">Reduce SCR · Put options on equity index (domestic &amp; foreign) · OTC for long-dated liability guarantees (price = market risk + bank cost of capital + profit) · Static hedge</span>
-        <span class="sub alm">ALM</span>
-        <span class="sub">Review asset-liability matching → smaller reserves and/or capital requirements · Reduce cost of options/guarantees · Reduce interest rate risk</span>
-      </div>
-      <div class="note">Two broad strategies: (1) Raise additional available capital · (2) Reduce liabilities and/or required capital. Securitisation &amp; financial RI are most effective in regimes that do NOT credit future profits in the balance sheet.</div>
-    </div>
-  </div>
-
-</div><!-- end flow -->
-
-<div class="footer">
-  <span>SA1 Ch.16 · IFE 2024 Examinations</span>
-  <span>CAPITAL MANAGEMENT — OUTLINE NAVIGATOR</span>
-  <span>Syllabus 4.2.1–4.2.5</span>
+<!-- ① CAPITAL PERSPECTIVES & REQUIRED CAPITAL TYPES -->
+<div class="block b1">
+<div class="num">①</div>
+<div class="block-content">
+<div class="block-title">Capital Requirements — Three Perspectives</div>
+<div class="sub-items"><div class="sub-row"><span class="sub eco">Economic Capital</span><span class="sub">Internal · Risk profile &amp; appetite · Ongoing business strategy · Most onerous for some companies</span><span class="sub reg">Regulatory Capital</span><span class="sub">Prescribed solvency rules · Defines asset/liability values · All companies must meet · Most onerous for others</span><span class="sub rat">Rating Agency Capital</span><span class="sub">Credit rating standards · Drives cost of raising capital · Market willingness to deal</span></div><div class="sub-row"><span class="sub key">Available Capital</span><span class="sub">Assets − Liabilities · Definition of both must be clarified (BEL vs TP vs prudential)</span></div><div class="sub-row"><span class="sub key">Required Capital</span><span class="sub">Assets in excess of liabilities → claims met with high certainty</span></div></div>
+<div class="note">All three perspectives link policyholder protection to the company's broader risk appetite. Most onerous varies by company.</div>
 </div>
-
+</div>
+<div class="arrow">↓</div>
+<!-- ② RISK CAPITAL vs WORKING CAPITAL -->
+<div class="block b2">
+<div class="num">②</div>
+<div class="block-content">
+<div class="block-title">Why Capital Is Required — Two Categories</div>
+<div class="sub-items"><div class="sub-row"><span class="sub key">Risk Capital</span><span class="sub">Cover day-to-day risks: Market · Credit · Insurance (mortality, persistency, expenses) · Operational (outsourcing, terrorism, systems) · Liquidity · Group</span><span class="sub wk">Working Capital</span><span class="sub">Fund new business · Attract intermediaries · Overheads &amp; organic expansion (hardware, software, product dev, premises, overseas) · Acquire companies/blocks</span></div><div class="sub-row"><span class="sub key">Exacerbated by</span><span class="sub">Mis-selling fines · Flat charging caps · Low investment returns · Adverse demographics (↑longevity → ↑LTCI) · TCF implications · Changing distribution (internet)</span></div><div class="sub-row"><span class="sub key">ORSA</span><span class="sub">Solvency II / similar regimes require all risks assessed → companies increasingly aware of capital employed &amp; return on it</span></div></div>
+</div>
+</div>
+<div class="arrow">↓</div>
+<!-- ③ REASONS FOR PROJECTING SOLVENCY -->
+<div class="block b3">
+<div class="num">③</div>
+<div class="block-content">
+<div class="block-title">Reasons for Projecting Solvency</div>
+<div class="sub-items"><div class="sub-row"><span class="sub key">Monitor Risk Profile</span><span class="sub">Understand &amp; track evolution of risk profile over time</span></div><div class="sub-row"><span class="sub key">Strategy Decisions</span><span class="sub">Assess impact of key decisions · Show new business strain · Determine supportable NB volume</span></div><div class="sub-row"><span class="sub key">Capital Releases</span><span class="sub">Estimate pattern of releases · Assess return on capital · Calculate cost of holding capital for embedded value</span></div><div class="sub-row"><span class="sub key">Statutory Requirement</span><span class="sub">Solvency II Pillar 2 ORSA · Determine risk margin (Pillar 1) · May feed internal model SCR</span></div><div class="sub-row"><span class="sub key">Risk Management</span><span class="sub">Stress testing · Reverse stress testing (known outcome → identify causes) · Effective risk measurement</span></div></div>
+<div class="note">Projections are not just about the probability of insolvency — they support capital planning, embedded value and regulatory compliance.</div>
+</div>
+</div>
+<div class="arrow">↓</div>
+<!-- ④ AVAILABLE CAPITAL — SOURCES & REALISTIC CAPITAL -->
+<div class="block b4">
+<div class="num">④</div>
+<div class="block-content">
+<div class="block-title">Available Capital — Sources &amp; Market-Consistent Assessment</div>
+<div class="sub-items"><div class="sub-row"><span class="sub prop">Proprietary</span><span class="sub">Initial + subsequent shareholder capital · Retained profits (incl. 100% with-profits surplus) · Reduced by dividends &amp; losses</span><span class="sub mut">Mutual</span><span class="sub">Initial capital injections · Historic under-distribution of with-profits surplus · 'Entity' approach — not earmarked for current policyholders</span></div><div class="sub-row"><span class="sub key">Market-Consistent Valuation</span><span class="sub">Assets = market value (directly observed) · Liabilities valued in line with traded assets they resemble (zero-coupon bonds, options)</span></div><div class="sub-row"><span class="sub key">Realistic Capital</span><span class="sub">Market value assets − market-consistent liabilities · Best measure from policyholder &amp; shareholder perspectives · Captures asset-liability interactions</span></div><div class="sub-row"><span class="sub key">No-Arbitrage Condition</span><span class="sub">Choice of backing assets must not affect liability value · Option pricing + interpolation/extrapolation used</span></div><div class="sub-row"><span class="sub key">Non-Market Risk</span><span class="sub">Mortality/lapse risks use best estimate + risk margin (compensation for uncertainty) → higher liability than BEA alone</span></div></div>
+<div class="note">Approaches: certainty equivalent · risk-neutral valuation · state-price deflators (SPD = stochastic discount factors, real-world presentation)</div>
+</div>
+</div>
+<div class="arrow">↓</div>
+<!-- ⑤ ECONOMIC CAPITAL — STOCHASTIC & STRESS -->
+<div class="block b5">
+<div class="num">⑤</div>
+<div class="block-content">
+<div class="block-title">Assessing Ongoing Solvency — Economic Capital</div>
+<div class="sub-items"><div class="sub-row"><span class="sub key">Definition</span><span class="sub">Internal assessment: assets required in excess of liabilities, allowing for all risks &amp; ongoing business strategy, so claims met with high certainty</span><span class="sub stoch">Stochastic Modelling</span><span class="sub">Realistic capital across many real-world economic scenarios · Used for market &amp; credit risks · Also for insurance risks where distribution available (stochastic morbidity models for CI · multi-state models for IP)</span><span class="sub stress">Stress Tests</span><span class="sub">Used where risk distribution is less well understood · Applied to realistic capital · Inter-dependencies between risks must be assessed</span></div><div class="sub-row"><span class="sub key">Time Horizon</span><span class="sub">One-year period OR full run-off of in-force book · Shorter if risks can be hedged via capital markets · Longer if risks cannot be hedged · Calibration must be consistent with chosen horizon</span></div><div class="sub-row"><span class="sub key">ORSA Requirement</span><span class="sub">Solvency II companies must assess economic capital via ORSA · Many jurisdictions outside EU also require ORSA</span></div></div>
+</div>
+</div>
+<div class="arrow">↓</div>
+<!-- ⑥ REGULATORY, RATING AGENCY & PROXY MODELS -->
+<div class="block b6">
+<div class="num">⑥</div>
+<div class="block-content">
+<div class="block-title">Regulatory &amp; Rating Agency Capital · Modelling Practicalities</div>
+<div class="sub-items"><div class="sub-row"><span class="sub key">Regulatory Floor</span><span class="sub">Must meet regardless of economic capital result · May target different policyholder security level · ORSA may overlap with economic capital assessment</span></div><div class="sub-row"><span class="sub key">Rating Agency</span><span class="sub">Financial strength rating drives cost of raising capital &amp; market willingness · Standards moving toward economic capital &amp; ORSA · Understand agencies' frameworks</span></div><div class="sub-row"><span class="sub key">Nested Calculations Problem</span><span class="sub">Outer model = real-world stochastic (investment, rates, inflation, claims) · Inner model = market-consistent (value options/guarantees at future date) · 10,000 × 10,000 = enormous computation</span><span class="sub proxy">Proxy Models (Light Models)</span><span class="sub">Simplification of full 'heavy' model · Techniques: polynomial/curve-fitting · kriging (Gaussian multi-dim interpolation) · replicating portfolios</span></div><div class="sub-row"><span class="sub key">Closed-Form Alternative</span><span class="sub">Black-Scholes for options/guarantees instead of stochastic inner model</span></div><div class="sub-row"><span class="sub key">Calibration</span><span class="sub">Expert judgement scenarios → heavy model run → least-squares or optimisation fit · Validate on out-of-sample scenarios · Re-calibrate periodically (goodness-of-fit deteriorates)</span></div><div class="sub-row"><span class="sub key">Overfitting Warning</span><span class="sub">Too many factors → poor out-of-sample performance · Tail fit critical for SCR/VaR · Re-calibration required regularly</span></div></div>
+<div class="note">Polynomial example with 2 risk factors x, y: f(x) = a₁x + a₂x² + a₃y + a₄y² + a₅xy + … · In practice 10–20 risk factors, up to 4th order</div>
+</div>
+</div>
+<div class="arrow">↓</div>
+<!-- ⑦ RISK, CAPITAL & ECONOMIC VALUE -->
+<div class="block b7">
+<div class="num">⑦</div>
+<div class="block-content">
+<div class="block-title">The Relationship Between Capital, Risk &amp; Economic Value</div>
+<div class="sub-items"><div class="sub-row"><span class="sub key">Inextricably Linked</span><span class="sub">Risk → determines capital needs (function of tail of risk distribution) → value creation affected by frictional cost of holding capital</span></div><div class="sub-row"><span class="sub key">Risk Drives Capital</span><span class="sub">Higher risk requires more capital if policyholders are to remain attracted · Risk also drives shareholders' required return directly</span></div><div class="sub-row"><span class="sub key">Frictional Cost</span><span class="sub">Capital locked into H&amp;C company may not be tax-efficient · Reduces shareholder value creation · Holding less capital (if adequate) increases value</span></div><div class="sub-row"><span class="sub key">Optimise Portfolio of Risks</span><span class="sub">Economic capital analysis helps identify opportunities to release capital without compromising policyholder risk tolerance</span></div><div class="sub-row"><span class="sub key">Concentration Reduction</span><span class="sub">High morbidity concentration → reinsurance → ↓economic capital but ↑credit risk &amp; ↓morbidity profits · Expense risk → outsource → ↑operational &amp; counterparty risk</span></div><div class="sub-row"><span class="sub key">Key Principle</span><span class="sub">Optimising capital ≠ minimising capital · Must also consider how risk decisions affect economic value creation overall</span></div></div>
+</div>
+</div>
+<div class="arrow">↓</div>
+<!-- ⑧ METHODS OF MANAGING CAPITAL -->
+<div class="block b8">
+<div class="num">⑧</div>
+<div class="block-content">
+<div class="block-title">Methods of Managing the Capital Position</div>
+<div class="sub-items"><div class="sub-row"><span class="sub eq">Equity</span><span class="sub">Proprietary: external share issue (needs credible business plan) · Mutual: demutualisation (merger/sale or stock exchange float) · Group: reallocate group capital · Lowest ranking → highest cost</span><span class="sub sub">Subordinated Debt</span><span class="sub">Capital markets · Repaid after policyholder claims (TCF) · ↑free assets (PH view) but liability (SH view) · Counts as 'own funds' under Solvency II</span><span class="sub sec">Securitisation</span><span class="sub">Convert EV of a block into tradable instrument · Payment now; repay as surplus emerges (contingent loan) · Most useful in regimes not crediting future profits · Less effective under Solvency II</span><span class="sub rei">Reinsurance</span><span class="sub">Financial RI: crystallise future profits (less effective under SII) · Traditional RI: ↓insurance risk SCR (offset by ↑credit risk) · Regulatory arbitrage if reinsurer in lower-SCR regime</span><span class="sub der">Derivatives</span><span class="sub">Reduce SCR · Put options on equity index (domestic &amp; foreign) · OTC for long-dated liability guarantees (price = market risk + bank cost of capital + profit) · Static hedge</span><span class="sub alm">ALM</span><span class="sub">Review asset-liability matching → smaller reserves and/or capital requirements · Reduce cost of options/guarantees · Reduce interest rate risk</span></div></div>
+<div class="note">Two broad strategies: (1) Raise additional available capital · (2) Reduce liabilities and/or required capital. Securitisation &amp; financial RI are most effective in regimes that do NOT credit future profits in the balance sheet.</div>
+</div>
+</div>
+</div><!-- end flow -->
+<div class="footer">
+<span>SA1 Ch.16 · IFE 2024 Examinations</span>
+<span>CAPITAL MANAGEMENT — OUTLINE NAVIGATOR</span>
+<span>Syllabus 4.2.1–4.2.5</span>
+</div>
 </body>
 </html>

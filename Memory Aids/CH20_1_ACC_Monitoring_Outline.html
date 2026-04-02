@@ -1,10 +1,11 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>ACC Monitoring Stage — Outline Navigator</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&amp;family=IBM+Plex+Mono:wght@400;600&amp;family=IBM+Plex+Sans:wght@300;400;500&amp;display=swap" rel="stylesheet"/>
 <style>
   :root {
     --ink: #0f1117;
@@ -102,11 +103,7 @@
     margin-bottom: 6px;
   }
 
-  .sub-items {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 5px;
-  }
+  .sub-items { display:flex; flex-direction:column; gap:5px; }
 
   .sub {
     font-family: 'IBM Plex Mono', monospace;
@@ -225,234 +222,114 @@
     color: var(--gold);
     white-space: nowrap;
   }
+
+  .sub-row { display:flex; align-items:center; gap:5px; flex-wrap:wrap; }
+  .sub-row .sub.key, .sub-row .sub.accent, .sub-row .sub.blue,
+  .sub-row .sub.green, .sub-row .sub.purple, .sub-row .sub.teal { flex-shrink:0; white-space:nowrap; }
+  .sub-row .sub:not(.key):not(.accent):not(.blue):not(.green):not(.purple):not(.teal) { flex:1; min-width:0; }
 </style>
 </head>
 <body>
-
 <!-- MASTHEAD -->
 <div class="masthead">
-  <div class="masthead-title">Monitoring Stage of the Actuarial Control Cycle</div>
-  <span class="masthead-sub">SP1 Ch.29 · SA1 Ch.19–20</span>
-  <span class="masthead-tag">CONSOLIDATED STUDY MATRIX — NAVIGATOR</span>
+<div class="masthead-title">Monitoring Stage of the Actuarial Control Cycle</div>
+<span class="masthead-sub">SP1 Ch.29 · SA1 Ch.19–20</span>
+<span class="masthead-tag">CONSOLIDATED STUDY MATRIX — NAVIGATOR</span>
 </div>
-
 <!-- HOW TO USE -->
 <div class="how-to">
-  <strong>How to use</strong>
-  <span>Each numbered block here maps exactly to a section in the <strong>Consolidated Study Matrix</strong>. Same number · Same colour · Same name. Use this page to rehearse the architecture before drilling into detail. Every sub-item is a distinct testable concept.</span>
+<strong>How to use</strong>
+<span>Each numbered block here maps exactly to a section in the <strong>Consolidated Study Matrix</strong>. Same number · Same colour · Same name. Use this page to rehearse the architecture before drilling into detail. Every sub-item is a distinct testable concept.</span>
 </div>
-
 <div class="flow">
-
-  <!-- ① THREE PILLARS -->
-  <div class="block b1">
-    <div class="num">①</div>
-    <div class="block-content">
-      <div class="block-title">The Three Pillars of Monitoring</div>
-      <div class="sub-items">
-        <span class="sub key">Why Monitor?</span>
-        <span class="sub">Update assumptions · Monitor trends · A vs E corrective action · Management info · Pricing &amp; reserving · Underwriting check · Reinsurance · Identify profitable areas</span>
-        <span class="sub key">What is Monitored?</span>
-        <span class="sub">NB volumes &amp; mix · Mortality &amp; morbidity · Claims amounts · Persistency · Expenses · Investment · Renewals · Options · Solvency</span>
-        <span class="sub key">How? Data Requirements</span>
-        <span class="sub">Volume, stability, consistency · Homogeneous groups · Period length · Own + market + reinsurer data · Two strands: direct A vs E · Analysis of Surplus</span>
-      </div>
-    </div>
-  </div>
-
-  <div class="arrow">↓</div>
-
-  <!-- ② EXPERIENCE INVESTIGATIONS -->
-  <div class="block b2">
-    <div class="num">②</div>
-    <div class="block-content">
-      <div class="block-title">Experience Investigations — by Type</div>
-      <div class="sub-items">
-        <span class="sub key">New Business</span>
-        <span class="sub">NB strain · Mix vs pricing basis · Staffing · Commission</span>
-        <span class="sub key">Mortality &amp; Morbidity</span>
-        <span class="sub">Transition rates · Exposed to risk · Data splits by age/gender/duration/deferred period</span>
-        <span class="sub key">Claims Amounts</span>
-        <span class="sub">Indemnity: trend &amp; inflation · Fixed: anti-selection by sum insured</span>
-        <span class="sub key">Persistency</span>
-        <span class="sub">Lapse rates · Channel ranking · Recouping initial costs</span>
-        <span class="sub key">Expenses</span>
-        <span class="sub">Initial / Renewal / Termination / Claims / Investment · Direct vs Overhead · Expense drivers</span>
-        <span class="sub key">Investment</span>
-        <span class="sub">Return by asset class · Market vs book value</span>
-      </div>
-    </div>
-  </div>
-
-  <div class="arrow">↓</div>
-
-  <!-- ③ ANALYSIS OF SURPLUS -->
-  <div class="block b3">
-    <div class="num">③</div>
-    <div class="block-content">
-      <div class="block-title">Analysis of Surplus / Profit — The Two Bases</div>
-      <div class="sub-items">
-        <span class="sub key">Statutory Basis</span>
-        <span class="sub">Liabilities = prudential reserves · Margin release expected · Alarm if negative</span>
-        <span class="sub key">Sources (both bases)</span>
-        <span class="sub">Opening adjustments · Return on opening surplus · Economic variances · Non-economic variances · Assumption changes · New business · Other · Unexplained</span>
-        <span class="sub solv">Solvency II Basis</span>
-        <span class="sub">Liabilities = BEL + Risk Margin · No margin release · +Risk margin changes · +SCR changes · +MA/VA impact · P&amp;L attribution regulatory requirement</span>
-        <span class="sub key">Process</span>
-        <span class="sub">Roll-forward balance sheet · One change at a time · Order matters · Consistent year-to-year</span>
-        <span class="sub key">Uses</span>
-        <span class="sub">Reprice · Revise reserving · Expose significant assumptions · NB strategy · De-risk B/S · New risk identification · Regulatory compliance</span>
-      </div>
-      <div class="note">Statutory vs Solvency II: same sources except SII additionally requires risk margin, SCR &amp; MA/VA items</div>
-    </div>
-  </div>
-
-  <div class="arrow">↓</div>
-
-  <!-- ④ SHORT-TERM PROFIT -->
-  <div class="block b4">
-    <div class="num">④</div>
-    <div class="block-content">
-      <div class="block-title">Analysis of Profit — Short-Term Insurance (PMI)</div>
-      <div class="sub-items">
-        <span class="sub key">3 Key Indices</span>
-        <span class="sub">Rate of Incidence = claims ÷ exposed to risk</span>
-        <span class="sub">Avg Cost Per Claim = incurred cost ÷ no. claims</span>
-        <span class="sub">Loss Ratio = incurred cost ÷ earned premium</span>
-        <span class="sub key">Incurred Claims</span>
-        <span class="sub">Paid + Outstanding + IBNR</span>
-        <span class="sub key">PMI Specifics</span>
-        <span class="sub">Yearly cohort · Quarterly analyses · Duration-based cohorts (selection effect) · NCD system · Group PMI: claims vs premiums + expenses</span>
-      </div>
-      <div class="note">No reserving basis involved · Opportunity to reprice at each renewal · Loss ratio quick but hides frequency/severity split</div>
-    </div>
-  </div>
-
-  <div class="arrow">↓</div>
-
-  <!-- ⑤ EV ANALYSIS -->
-  <div class="block b5">
-    <div class="num">⑤</div>
-    <div class="block-content">
-      <div class="block-title">Analysis of Change in Embedded Value (Long-Term only)</div>
-      <div class="sub-items">
-        <span class="sub key">EV = Net Assets + PVIF</span>
-        <span class="sub">Net assets = Free surplus + Required capital (less cost of holding)</span>
-        <span class="sub key">6 Components of Change</span>
-        <span class="sub">① Return on net assets</span>
-        <span class="sub">② Expected return on in-force (PVIF unwind)</span>
-        <span class="sub">③ Experience variances (economic + non-economic)</span>
-        <span class="sub">④ Operating assumption changes</span>
-        <span class="sub">⑤ New business contribution</span>
-        <span class="sub">⑥ Other items</span>
-        <span class="sub key">Solvency II</span>
-        <span class="sub">PVIF often zero → AoE ≈ AoS · Many EU insurers no longer report EV</span>
-        <span class="sub key">Uses</span>
-        <span class="sub">Validate assumptions · Reconcile years · Mgmt info · Executive remuneration · Publication in accounts · Customer-level profit drivers</span>
-      </div>
-    </div>
-  </div>
-
-  <div class="arrow">↓</div>
-
-  <!-- ⑥ PRODUCT NUANCES -->
-  <div class="block b6">
-    <div class="num">⑥</div>
-    <div class="block-content">
-      <div class="block-title">Product-Type Nuances</div>
-      <div class="sub-items">
-        <span class="sub key">IP</span>
-        <span class="sub">Deferred period · Claim duration · Recovery rates · Fixed benefit · LT surplus + EV</span>
-        <span class="sub key">CI</span>
-        <span class="sub">By illness type · Anti-selection on lapse → ↓PVIF · LT surplus + EV</span>
-        <span class="sub key">LTCI</span>
-        <span class="sub">Care needs level · Cost trend critical · LT surplus + EV</span>
-        <span class="sub key">PMI</span>
-        <span class="sub">Procedure/hospital/NCD/excess · Annual renewal · IBNR material · ST profit ratios only</span>
-        <span class="sub key">Group</span>
-        <span class="sub">Industry/occupation · Group size · Member turnover · Mixed LT/ST depending on term</span>
-      </div>
-    </div>
-  </div>
-
-  <div class="arrow">↓</div>
-
-  <!-- ⑦ BEHAVIOURAL & MARKET FACTORS -->
-  <div class="block b7">
-    <div class="num">⑦</div>
-    <div class="block-content">
-      <div class="block-title">Behavioural, Market &amp; Structural Factors</div>
-      <div class="sub-items">
-        <span class="sub key">Data Sub-Divisions</span>
-        <span class="sub">14 splits: class · age/gender · smoker · occupation · duration · UW status · benefit level · deferred period · channel · geography · cause · calendar yr · group size · benefit conditions</span>
-        <span class="sub accent">Anti-selection &amp; Non-disclosure</span>
-        <span class="sub">Year 1–2 concentrated · Durational select tables · Review UW triggers &amp; proposal questions</span>
-        <span class="sub key">Economic Conditions</span>
-        <span class="sub">Recession → ↑IP claims · Inflation → ↑PMI amounts · Interest rates → economic variance in AoS</span>
-        <span class="sub purple">Insurance Cycle</span>
-        <span class="sub">4 phases: High profits → Competition → Losses → Upswing · Mainly affects short-term group risks</span>
-        <span class="sub key">Portfolio Analysis</span>
-        <span class="sub">By class · By risk group · One-way · Multi-factor tables · Volume, mix, concentration</span>
-        <span class="sub key">Movement Analysis</span>
-        <span class="sub">Delay methodology · Development table · Lapse rate = lapses ÷ renewals invited · Portfolio expanding vs contracting signal</span>
-      </div>
-    </div>
-  </div>
-
-  <div class="arrow">↓</div>
-
-  <!-- ⑧ CUSTOMER VALUE -->
-  <div class="block b8">
-    <div class="num">⑧</div>
-    <div class="block-content">
-      <div class="block-title">Customer Value</div>
-      <div class="sub-items">
-        <span class="sub key">Measurement</span>
-        <span class="sub">Persistency-based · EV-based · Cross-selling profits · Changing needs over lifetime</span>
-        <span class="sub key">Analysis</span>
-        <span class="sub">EV techniques at customer level · Simulation/scenario approach · Impact of business decisions on CV</span>
-        <span class="sub key">Legacy Portfolios</span>
-        <span class="sub">Maximise profit from closed block · Outsource admin/claims → ↓costs · Monitor lapse impact</span>
-      </div>
-    </div>
-  </div>
-
-  <div class="arrow">↓</div>
-
-  <!-- ⑨ RISK CONTROL & FEEDBACK -->
-  <div class="block b9">
-    <div class="num">⑨</div>
-    <div class="block-content">
-      <div class="block-title">Using Results to Control Risks — Feedback into ACC</div>
-      <div class="sub-items">
-        <span class="sub key">Reprice / Redesign</span>
-        <span class="sub key">Revise Reserving Basis</span>
-        <span class="sub key">Update Valuation Assumptions</span>
-        <span class="sub key">Improve Policy Wording</span>
-        <span class="sub">Improve Marketing</span>
-        <span class="sub">Revise Sales &amp; Commission</span>
-        <span class="sub">Staffing adequacy</span>
-        <span class="sub">Revise Underwriting</span>
-        <span class="sub">Revise Claims Handling</span>
-        <span class="sub">Capital Allocation</span>
-        <span class="sub">Systems &amp; Data Recording</span>
-        <span class="sub">Revise Policy Design</span>
-        <span class="sub">Reinsurance Strategy</span>
-        <span class="sub">Investment Strategy</span>
-        <span class="sub">De-risk Balance Sheet</span>
-        <span class="sub">New Risk Identification</span>
-      </div>
-      <div class="note" style="color:#a0a8b8;">Iterative &amp; continuous — assumptions never fully converge on reality. Margins for model error always required.</div>
-    </div>
-  </div>
-
-</div><!-- end flow -->
-
-<div class="footer">
-  <span>SP1 Ch.29 · SA1 Ch.19–20 · IFE 2019 / 2024</span>
-  <span>CONSOLIDATED STUDY MATRIX — NAVIGATOR</span>
-  <span>Monitoring Stage · ACC</span>
+<!-- ① THREE PILLARS -->
+<div class="block b1">
+<div class="num">①</div>
+<div class="block-content">
+<div class="block-title">The Three Pillars of Monitoring</div>
+<div class="sub-items"><div class="sub-row"><span class="sub key">Why Monitor?</span><span class="sub">Update assumptions · Monitor trends · A vs E corrective action · Management info · Pricing &amp; reserving · Underwriting check · Reinsurance · Identify profitable areas</span></div><div class="sub-row"><span class="sub key">What is Monitored?</span><span class="sub">NB volumes &amp; mix · Mortality &amp; morbidity · Claims amounts · Persistency · Expenses · Investment · Renewals · Options · Solvency</span></div><div class="sub-row"><span class="sub key">How? Data Requirements</span><span class="sub">Volume, stability, consistency · Homogeneous groups · Period length · Own + market + reinsurer data · Two strands: direct A vs E · Analysis of Surplus</span></div></div>
 </div>
-
+</div>
+<div class="arrow">↓</div>
+<!-- ② EXPERIENCE INVESTIGATIONS -->
+<div class="block b2">
+<div class="num">②</div>
+<div class="block-content">
+<div class="block-title">Experience Investigations — by Type</div>
+<div class="sub-items"><div class="sub-row"><span class="sub key">New Business</span><span class="sub">NB strain · Mix vs pricing basis · Staffing · Commission</span></div><div class="sub-row"><span class="sub key">Mortality &amp; Morbidity</span><span class="sub">Transition rates · Exposed to risk · Data splits by age/gender/duration/deferred period</span></div><div class="sub-row"><span class="sub key">Claims Amounts</span><span class="sub">Indemnity: trend &amp; inflation · Fixed: anti-selection by sum insured</span></div><div class="sub-row"><span class="sub key">Persistency</span><span class="sub">Lapse rates · Channel ranking · Recouping initial costs</span></div><div class="sub-row"><span class="sub key">Expenses</span><span class="sub">Initial / Renewal / Termination / Claims / Investment · Direct vs Overhead · Expense drivers</span></div><div class="sub-row"><span class="sub key">Investment</span><span class="sub">Return by asset class · Market vs book value</span></div></div>
+</div>
+</div>
+<div class="arrow">↓</div>
+<!-- ③ ANALYSIS OF SURPLUS -->
+<div class="block b3">
+<div class="num">③</div>
+<div class="block-content">
+<div class="block-title">Analysis of Surplus / Profit — The Two Bases</div>
+<div class="sub-items"><div class="sub-row"><span class="sub key">Statutory Basis</span><span class="sub">Liabilities = prudential reserves · Margin release expected · Alarm if negative</span></div><div class="sub-row"><span class="sub key">Sources (both bases)</span><span class="sub">Opening adjustments · Return on opening surplus · Economic variances · Non-economic variances · Assumption changes · New business · Other · Unexplained</span><span class="sub solv">Solvency II Basis</span><span class="sub">Liabilities = BEL + Risk Margin · No margin release · +Risk margin changes · +SCR changes · +MA/VA impact · P&amp;L attribution regulatory requirement</span></div><div class="sub-row"><span class="sub key">Process</span><span class="sub">Roll-forward balance sheet · One change at a time · Order matters · Consistent year-to-year</span></div><div class="sub-row"><span class="sub key">Uses</span><span class="sub">Reprice · Revise reserving · Expose significant assumptions · NB strategy · De-risk B/S · New risk identification · Regulatory compliance</span></div></div>
+<div class="note">Statutory vs Solvency II: same sources except SII additionally requires risk margin, SCR &amp; MA/VA items</div>
+</div>
+</div>
+<div class="arrow">↓</div>
+<!-- ④ SHORT-TERM PROFIT -->
+<div class="block b4">
+<div class="num">④</div>
+<div class="block-content">
+<div class="block-title">Analysis of Profit — Short-Term Insurance (PMI)</div>
+<div class="sub-items"><div class="sub-row"><span class="sub key">3 Key Indices</span><span class="sub">Rate of Incidence = claims ÷ exposed to risk</span><span class="sub">Avg Cost Per Claim = incurred cost ÷ no. claims</span><span class="sub">Loss Ratio = incurred cost ÷ earned premium</span></div><div class="sub-row"><span class="sub key">Incurred Claims</span><span class="sub">Paid + Outstanding + IBNR</span></div><div class="sub-row"><span class="sub key">PMI Specifics</span><span class="sub">Yearly cohort · Quarterly analyses · Duration-based cohorts (selection effect) · NCD system · Group PMI: claims vs premiums + expenses</span></div></div>
+<div class="note">No reserving basis involved · Opportunity to reprice at each renewal · Loss ratio quick but hides frequency/severity split</div>
+</div>
+</div>
+<div class="arrow">↓</div>
+<!-- ⑤ EV ANALYSIS -->
+<div class="block b5">
+<div class="num">⑤</div>
+<div class="block-content">
+<div class="block-title">Analysis of Change in Embedded Value (Long-Term only)</div>
+<div class="sub-items"><div class="sub-row"><span class="sub key">EV = Net Assets + PVIF</span><span class="sub">Net assets = Free surplus + Required capital (less cost of holding)</span></div><div class="sub-row"><span class="sub key">6 Components of Change</span><span class="sub">① Return on net assets</span><span class="sub">② Expected return on in-force (PVIF unwind)</span><span class="sub">③ Experience variances (economic + non-economic)</span><span class="sub">④ Operating assumption changes</span><span class="sub">⑤ New business contribution</span><span class="sub">⑥ Other items</span></div><div class="sub-row"><span class="sub key">Solvency II</span><span class="sub">PVIF often zero → AoE ≈ AoS · Many EU insurers no longer report EV</span></div><div class="sub-row"><span class="sub key">Uses</span><span class="sub">Validate assumptions · Reconcile years · Mgmt info · Executive remuneration · Publication in accounts · Customer-level profit drivers</span></div></div>
+</div>
+</div>
+<div class="arrow">↓</div>
+<!-- ⑥ PRODUCT NUANCES -->
+<div class="block b6">
+<div class="num">⑥</div>
+<div class="block-content">
+<div class="block-title">Product-Type Nuances</div>
+<div class="sub-items"><div class="sub-row"><span class="sub key">IP</span><span class="sub">Deferred period · Claim duration · Recovery rates · Fixed benefit · LT surplus + EV</span></div><div class="sub-row"><span class="sub key">CI</span><span class="sub">By illness type · Anti-selection on lapse → ↓PVIF · LT surplus + EV</span></div><div class="sub-row"><span class="sub key">LTCI</span><span class="sub">Care needs level · Cost trend critical · LT surplus + EV</span></div><div class="sub-row"><span class="sub key">PMI</span><span class="sub">Procedure/hospital/NCD/excess · Annual renewal · IBNR material · ST profit ratios only</span></div><div class="sub-row"><span class="sub key">Group</span><span class="sub">Industry/occupation · Group size · Member turnover · Mixed LT/ST depending on term</span></div></div>
+</div>
+</div>
+<div class="arrow">↓</div>
+<!-- ⑦ BEHAVIOURAL & MARKET FACTORS -->
+<div class="block b7">
+<div class="num">⑦</div>
+<div class="block-content">
+<div class="block-title">Behavioural, Market &amp; Structural Factors</div>
+<div class="sub-items"><div class="sub-row"><span class="sub key">Data Sub-Divisions</span><span class="sub">14 splits: class · age/gender · smoker · occupation · duration · UW status · benefit level · deferred period · channel · geography · cause · calendar yr · group size · benefit conditions</span></div><div class="sub-row"><span class="sub accent">Anti-selection &amp; Non-disclosure</span><span class="sub">Year 1–2 concentrated · Durational select tables · Review UW triggers &amp; proposal questions</span></div><div class="sub-row"><span class="sub key">Economic Conditions</span><span class="sub">Recession → ↑IP claims · Inflation → ↑PMI amounts · Interest rates → economic variance in AoS</span></div><div class="sub-row"><span class="sub purple">Insurance Cycle</span><span class="sub">4 phases: High profits → Competition → Losses → Upswing · Mainly affects short-term group risks</span></div><div class="sub-row"><span class="sub key">Portfolio Analysis</span><span class="sub">By class · By risk group · One-way · Multi-factor tables · Volume, mix, concentration</span></div><div class="sub-row"><span class="sub key">Movement Analysis</span><span class="sub">Delay methodology · Development table · Lapse rate = lapses ÷ renewals invited · Portfolio expanding vs contracting signal</span></div></div>
+</div>
+</div>
+<div class="arrow">↓</div>
+<!-- ⑧ CUSTOMER VALUE -->
+<div class="block b8">
+<div class="num">⑧</div>
+<div class="block-content">
+<div class="block-title">Customer Value</div>
+<div class="sub-items"><div class="sub-row"><span class="sub key">Measurement</span><span class="sub">Persistency-based · EV-based · Cross-selling profits · Changing needs over lifetime</span></div><div class="sub-row"><span class="sub key">Analysis</span><span class="sub">EV techniques at customer level · Simulation/scenario approach · Impact of business decisions on CV</span></div><div class="sub-row"><span class="sub key">Legacy Portfolios</span><span class="sub">Maximise profit from closed block · Outsource admin/claims → ↓costs · Monitor lapse impact</span></div></div>
+</div>
+</div>
+<div class="arrow">↓</div>
+<!-- ⑨ RISK CONTROL & FEEDBACK -->
+<div class="block b9">
+<div class="num">⑨</div>
+<div class="block-content">
+<div class="block-title">Using Results to Control Risks — Feedback into ACC</div>
+<div class="sub-items"><div class="sub-row"><span class="sub key">Reprice / Redesign</span></div><div class="sub-row"><span class="sub key">Revise Reserving Basis</span></div><div class="sub-row"><span class="sub key">Update Valuation Assumptions</span></div><div class="sub-row"><span class="sub key">Improve Policy Wording</span><span class="sub">Improve Marketing</span><span class="sub">Revise Sales &amp; Commission</span><span class="sub">Staffing adequacy</span><span class="sub">Revise Underwriting</span><span class="sub">Revise Claims Handling</span><span class="sub">Capital Allocation</span><span class="sub">Systems &amp; Data Recording</span><span class="sub">Revise Policy Design</span><span class="sub">Reinsurance Strategy</span><span class="sub">Investment Strategy</span><span class="sub">De-risk Balance Sheet</span><span class="sub">New Risk Identification</span></div></div>
+<div class="note" style="color:#a0a8b8;">Iterative &amp; continuous — assumptions never fully converge on reality. Margins for model error always required.</div>
+</div>
+</div>
+</div><!-- end flow -->
+<div class="footer">
+<span>SP1 Ch.29 · SA1 Ch.19–20 · IFE 2019 / 2024</span>
+<span>CONSOLIDATED STUDY MATRIX — NAVIGATOR</span>
+<span>Monitoring Stage · ACC</span>
+</div>
 </body>
 </html>

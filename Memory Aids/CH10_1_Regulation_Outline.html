@@ -104,8 +104,25 @@
 
   .sub-items {
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
     gap: 5px;
+  }
+
+  .sub-row {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    flex-wrap: wrap;
+  }
+
+  .sub-row .sub.key {
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+
+  .sub-row .sub:not(.key) {
+    flex: 1;
+    min-width: 0;
   }
 
   .sub {
@@ -243,14 +260,22 @@
     <div class="block-content">
       <div class="block-title">Regulatory Objectives</div>
       <div class="sub-items">
-        <span class="sub key">Why Regulate?</span>
-        <span class="sub">Advance payment → trust · Insurer may collapse · Unscrupulous operators · Difficulty monitoring solvency</span>
-        <span class="sub key">Regulator Goals</span>
-        <span class="sub">Safety &amp; soundness · Consumer protection · Appropriate outcomes · Fair competition · Financial system integrity · Industry development</span>
-        <span class="sub key">Balancing Act</span>
-        <span class="sub">Too little → risk &amp; loss · Too much → ↑ premiums, ↓ competition, ↓ coverage</span>
-        <span class="sub key">Drivers of Change</span>
-        <span class="sub">Economic environment (2008 crisis) · Harmonisation desire (Solvency II) · Risk management advances</span>
+        <div class="sub-row">
+          <span class="sub key">Why Regulate?</span>
+          <span class="sub">Advance payment → trust · Insurer may collapse · Unscrupulous operators · Difficulty monitoring solvency</span>
+        </div>
+        <div class="sub-row">
+          <span class="sub key">Regulator Goals</span>
+          <span class="sub">Safety &amp; soundness · Consumer protection · Appropriate outcomes · Fair competition · Financial system integrity · Industry development</span>
+        </div>
+        <div class="sub-row">
+          <span class="sub key">Balancing Act</span>
+          <span class="sub">Too little → risk &amp; loss · Too much → ↑ premiums, ↓ competition, ↓ coverage</span>
+        </div>
+        <div class="sub-row">
+          <span class="sub key">Drivers of Change</span>
+          <span class="sub">Economic environment (2008 crisis) · Harmonisation desire (Solvency II) · Risk management advances</span>
+        </div>
       </div>
     </div>
   </div>
@@ -263,22 +288,38 @@
     <div class="block-content">
       <div class="block-title">Types of Regulatory Responsibilities</div>
       <div class="sub-items">
-        <span class="sub key">Authorisation</span>
-        <span class="sub">Permission to write specific classes · Pre-approval in some jurisdictions · EU passporting</span>
-        <span class="sub key">Business Standards</span>
-        <span class="sub">Senior mgmt systems &amp; controls · Market conduct · Treating Customers Fairly (TCF)</span>
-        <span class="sub key">Supervisory Reporting</span>
-        <span class="sub">Standardised templates · Balance sheet · Revenue account · Business plan projections · Stress tests</span>
-        <span class="sub key">Monitoring</span>
-        <span class="sub">Assessment visits · Governance review · Supervisory reviews (scrutiny ∝ risk)</span>
-        <span class="sub key">Valuation &amp; Capital</span>
-        <span class="sub">Asset valuation rules · Liability types &amp; options · Assumptions · Reinsurance · Capital requirements</span>
-        <span class="sub key">Fit &amp; Proper + Statutory Actuary</span>
-        <span class="sub">Integrity · Competence · Qualifications · Chief Actuary / AFH / Appointed Actuary</span>
-        <span class="sub key">Actions by Regulators</span>
-        <span class="sub">Fines · Public censure · Revoke permission · Merger requirement · Criminal prosecution</span>
-        <span class="sub key">Transfers &amp; Groups</span>
-        <span class="sub">Liability transfers · Surplus transfers · G-SIIs · IAIS holistic framework</span>
+        <div class="sub-row">
+          <span class="sub key">Authorisation</span>
+          <span class="sub">Permission to write specific classes · Pre-approval in some jurisdictions · EU passporting</span>
+        </div>
+        <div class="sub-row">
+          <span class="sub key">Business Standards</span>
+          <span class="sub">Senior mgmt systems &amp; controls · Market conduct · Treating Customers Fairly (TCF)</span>
+        </div>
+        <div class="sub-row">
+          <span class="sub key">Supervisory Reporting</span>
+          <span class="sub">Standardised templates · Balance sheet · Revenue account · Business plan projections · Stress tests</span>
+        </div>
+        <div class="sub-row">
+          <span class="sub key">Monitoring</span>
+          <span class="sub">Assessment visits · Governance review · Supervisory reviews (scrutiny ∝ risk)</span>
+        </div>
+        <div class="sub-row">
+          <span class="sub key">Valuation &amp; Capital</span>
+          <span class="sub">Asset valuation rules · Liability types &amp; options · Assumptions · Reinsurance · Capital requirements</span>
+        </div>
+        <div class="sub-row">
+          <span class="sub key">Fit &amp; Proper + Statutory Actuary</span>
+          <span class="sub">Integrity · Competence · Qualifications · Chief Actuary / AFH / Appointed Actuary</span>
+        </div>
+        <div class="sub-row">
+          <span class="sub key">Actions by Regulators</span>
+          <span class="sub">Fines · Public censure · Revoke permission · Merger requirement · Criminal prosecution</span>
+        </div>
+        <div class="sub-row">
+          <span class="sub key">Transfers &amp; Groups</span>
+          <span class="sub">Liability transfers · Surplus transfers · G-SIIs · IAIS holistic framework</span>
+        </div>
       </div>
       <div class="note">Rulebook = primary vehicle · Supplementary guidance notes also relevant but not regulations per se</div>
     </div>
@@ -292,16 +333,26 @@
     <div class="block-content">
       <div class="block-title">Authorisation &amp; Business Standards Detail</div>
       <div class="sub-items">
-        <span class="sub key">Authorisation</span>
-        <span class="sub">By class of business · Separate application per class · EU: authorised in one state → passport across EU</span>
-        <span class="sub key">Product Pre-Approval</span>
-        <span class="sub">Some jurisdictions require upfront sign-off · Others expect discussion of high-risk / novel products</span>
-        <span class="sub key">Senior Mgmt Controls</span>
-        <span class="sub">Compliance · Risk mgmt · Systems &amp; controls · Outsourcing · Fit &amp; proper appointment</span>
-        <span class="sub key">TCF — Market Conduct</span>
-        <span class="sub">Communications: clear, fair, not misleading · Info &amp; remuneration disclosure · Product info at point of sale · Compensation rules</span>
-        <span class="sub key">Other Rules</span>
-        <span class="sub">Suitability assessment · Record-keeping · Right to cancel · Claims handling · Unit-linked assets</span>
+        <div class="sub-row">
+          <span class="sub key">Authorisation</span>
+          <span class="sub">By class of business · Separate application per class · EU: authorised in one state → passport across EU</span>
+        </div>
+        <div class="sub-row">
+          <span class="sub key">Product Pre-Approval</span>
+          <span class="sub">Some jurisdictions require upfront sign-off · Others expect discussion of high-risk / novel products</span>
+        </div>
+        <div class="sub-row">
+          <span class="sub key">Senior Mgmt Controls</span>
+          <span class="sub">Compliance · Risk mgmt · Systems &amp; controls · Outsourcing · Fit &amp; proper appointment</span>
+        </div>
+        <div class="sub-row">
+          <span class="sub key">TCF — Market Conduct</span>
+          <span class="sub">Communications: clear, fair, not misleading · Info &amp; remuneration disclosure · Product info at point of sale · Compensation rules</span>
+        </div>
+        <div class="sub-row">
+          <span class="sub key">Other Rules</span>
+          <span class="sub">Suitability assessment · Record-keeping · Right to cancel · Claims handling · Unit-linked assets</span>
+        </div>
       </div>
     </div>
   </div>
@@ -314,20 +365,34 @@
     <div class="block-content">
       <div class="block-title">Valuation, Capital Requirements &amp; Regulator Actions</div>
       <div class="sub-items">
-        <span class="sub key">Asset Valuation</span>
-        <span class="sub">Market vs book · Unlisted assets · Admissibility limits</span>
-        <span class="sub key">Liabilities</span>
-        <span class="sub">Types of business · Discretionary increases · Options &amp; guarantees</span>
-        <span class="sub key">Assumptions</span>
-        <span class="sub">Discount rates · Demographic derivation · Persistency · Options/guarantees valuation</span>
-        <span class="sub key">Capital Requirements</span>
-        <span class="sub">Minimum levels · Supervisory intervention triggers · Long-term fund vs shareholder fund</span>
-        <span class="sub key">Regulator Powers</span>
-        <span class="sub">Remedy situation · Public censure · Fines · Req. reinsurance/capital · Revoke permission · Merger · Criminal prosecution</span>
-        <span class="sub accent">Proportionality</span>
-        <span class="sub">Actions ∝ nature, scale &amp; complexity of risk · Discretion vs rule-based triggers vary by jurisdiction</span>
-        <span class="sub key">Transfers of Surplus</span>
-        <span class="sub">LT insurance fund → shareholder fund · Restricted to disclosed surplus · Liquidity adequacy post-transfer</span>
+        <div class="sub-row">
+          <span class="sub key">Asset Valuation</span>
+          <span class="sub">Market vs book · Unlisted assets · Admissibility limits</span>
+        </div>
+        <div class="sub-row">
+          <span class="sub key">Liabilities</span>
+          <span class="sub">Types of business · Discretionary increases · Options &amp; guarantees</span>
+        </div>
+        <div class="sub-row">
+          <span class="sub key">Assumptions</span>
+          <span class="sub">Discount rates · Demographic derivation · Persistency · Options/guarantees valuation</span>
+        </div>
+        <div class="sub-row">
+          <span class="sub key">Capital Requirements</span>
+          <span class="sub">Minimum levels · Supervisory intervention triggers · Long-term fund vs shareholder fund</span>
+        </div>
+        <div class="sub-row">
+          <span class="sub key">Regulator Powers</span>
+          <span class="sub">Remedy situation · Public censure · Fines · Req. reinsurance/capital · Revoke permission · Merger · Criminal prosecution</span>
+        </div>
+        <div class="sub-row">
+          <span class="sub accent">Proportionality</span>
+          <span class="sub">Actions ∝ nature, scale &amp; complexity of risk · Discretion vs rule-based triggers vary by jurisdiction</span>
+        </div>
+        <div class="sub-row">
+          <span class="sub key">Transfers of Surplus</span>
+          <span class="sub">LT insurance fund → shareholder fund · Restricted to disclosed surplus · Liquidity adequacy post-transfer</span>
+        </div>
       </div>
       <div class="note">G-SII framework discontinued 2023 → replaced by IAIS Holistic Framework for systemic risk assessment</div>
     </div>
@@ -341,16 +406,26 @@
     <div class="block-content">
       <div class="block-title">Fit &amp; Proper Persons &amp; Statutory Actuarial Roles</div>
       <div class="sub-items">
-        <span class="sub key">Fit &amp; Proper Criteria</span>
-        <span class="sub">Personal characteristics (integrity) · Competence &amp; experience · Qualifications &amp; training</span>
-        <span class="sub key">Statutory Actuarial Roles</span>
-        <span class="sub">Solvency II: Chief Actuary + AFH · Others: Appropriate Actuary / Appointed Actuary</span>
-        <span class="sub key">Responsibilities</span>
-        <span class="sub">Technical provisions adequacy · Methodology &amp; assumptions · Data sufficiency · Reinsurance opinion</span>
-        <span class="sub key">Firm's Obligations</span>
-        <span class="sub">Inform actuary of business plans · Pay due regard to advice · Provide adequate resources &amp; data</span>
-        <span class="sub key">Conflicts of Interest</span>
-        <span class="sub">Cannot hold conflicting roles without disclosure to regulator</span>
+        <div class="sub-row">
+          <span class="sub key">Fit &amp; Proper Criteria</span>
+          <span class="sub">Personal characteristics (integrity) · Competence &amp; experience · Qualifications &amp; training</span>
+        </div>
+        <div class="sub-row">
+          <span class="sub key">Statutory Actuarial Roles</span>
+          <span class="sub">Solvency II: Chief Actuary + AFH · Others: Appropriate Actuary / Appointed Actuary</span>
+        </div>
+        <div class="sub-row">
+          <span class="sub key">Responsibilities</span>
+          <span class="sub">Technical provisions adequacy · Methodology &amp; assumptions · Data sufficiency · Reinsurance opinion</span>
+        </div>
+        <div class="sub-row">
+          <span class="sub key">Firm's Obligations</span>
+          <span class="sub">Inform actuary of business plans · Pay due regard to advice · Provide adequate resources &amp; data</span>
+        </div>
+        <div class="sub-row">
+          <span class="sub key">Conflicts of Interest</span>
+          <span class="sub">Cannot hold conflicting roles without disclosure to regulator</span>
+        </div>
       </div>
     </div>
   </div>
@@ -363,16 +438,26 @@
     <div class="block-content">
       <div class="block-title">Other Legislation &amp; Professional Guidance</div>
       <div class="sub-items">
-        <span class="sub key">Professional Guidance (IFoA)</span>
-        <span class="sub">APS L1: Life assurance actuary duties · APS L2: FSMA communications · APS X1: Applying standards · APS X2: Review · APS X3: Expert witness</span>
-        <span class="sub key">APS L2 Triggers</span>
-        <span class="sub">Legislation contravention · Assets may be insufficient · Policyholder interests ignored · Insurer–actuary relationship inadequate</span>
-        <span class="sub key">Consumer Legislation</span>
-        <span class="sub">Fair contracts: clear terms, no unfair penalties, cancellation rights, defined charges, variation rights</span>
-        <span class="sub key">Unfair Terms Examples</span>
-        <span class="sub">Co. can vary characteristics post-sale · Customer pays for unused services · Disproportionate charges · Discretion over price after binding</span>
-        <span class="sub key">Climate Change</span>
-        <span class="sub">ESG in investment · Scenario analysis · Disclose climate risks · PRA Stress Test 2019: physical + transition channels</span>
+        <div class="sub-row">
+          <span class="sub key">Professional Guidance (IFoA)</span>
+          <span class="sub">APS L1: Life assurance actuary duties · APS L2: FSMA communications · APS X1: Applying standards · APS X2: Review · APS X3: Expert witness</span>
+        </div>
+        <div class="sub-row">
+          <span class="sub key">APS L2 Triggers</span>
+          <span class="sub">Legislation contravention · Assets may be insufficient · Policyholder interests ignored · Insurer–actuary relationship inadequate</span>
+        </div>
+        <div class="sub-row">
+          <span class="sub key">Consumer Legislation</span>
+          <span class="sub">Fair contracts: clear terms, no unfair penalties, cancellation rights, defined charges, variation rights</span>
+        </div>
+        <div class="sub-row">
+          <span class="sub key">Unfair Terms Examples</span>
+          <span class="sub">Co. can vary characteristics post-sale · Customer pays for unused services · Disproportionate charges · Discretion over price after binding</span>
+        </div>
+        <div class="sub-row">
+          <span class="sub key">Climate Change</span>
+          <span class="sub">ESG in investment · Scenario analysis · Disclose climate risks · PRA Stress Test 2019: physical + transition channels</span>
+        </div>
       </div>
     </div>
   </div>
@@ -385,16 +470,26 @@
     <div class="block-content">
       <div class="block-title">Equality Legislation</div>
       <div class="sub-items">
-        <span class="sub key">Protected Characteristics</span>
-        <span class="sub">Age · Disability · Gender · Gender reassignment · Marriage &amp; civil partnership · Pregnancy &amp; maternity · Race · Religion &amp; belief · Sexual orientation</span>
-        <span class="sub key">Direct vs Indirect</span>
-        <span class="sub">Direct: less favourable treatment · Indirect: neutral policy with disproportionate impact</span>
-        <span class="sub key">Age</span>
-        <span class="sub">Age bands OK if based on risk data · Age limits permitted via signposting · Maternity cost differences unlawful</span>
-        <span class="sub key">Disability</span>
-        <span class="sub">Special terms OK if based on relevant, reliable data · Physical/mental impairment with long-term substantial effect</span>
-        <span class="sub blue">Gender (EU)</span>
-        <span class="sub">EU Gender Directive: no gender rating for new business from Dec 2012 · Proxy factors (correlated to gender) also not permitted · Contingency loadings needed for uncertain gender mix</span>
+        <div class="sub-row">
+          <span class="sub key">Protected Characteristics</span>
+          <span class="sub">Age · Disability · Gender · Gender reassignment · Marriage &amp; civil partnership · Pregnancy &amp; maternity · Race · Religion &amp; belief · Sexual orientation</span>
+        </div>
+        <div class="sub-row">
+          <span class="sub key">Direct vs Indirect</span>
+          <span class="sub">Direct: less favourable treatment · Indirect: neutral policy with disproportionate impact</span>
+        </div>
+        <div class="sub-row">
+          <span class="sub key">Age</span>
+          <span class="sub">Age bands OK if based on risk data · Age limits permitted via signposting · Maternity cost differences unlawful</span>
+        </div>
+        <div class="sub-row">
+          <span class="sub key">Disability</span>
+          <span class="sub">Special terms OK if based on relevant, reliable data · Physical/mental impairment with long-term substantial effect</span>
+        </div>
+        <div class="sub-row">
+          <span class="sub blue">Gender (EU)</span>
+          <span class="sub">EU Gender Directive: no gender rating for new business from Dec 2012 · Proxy factors (correlated to gender) also not permitted · Contingency loadings needed for uncertain gender mix</span>
+        </div>
       </div>
       <div class="note">Proportionate means to a legitimate aim = justification test for differential treatment</div>
     </div>
@@ -408,16 +503,26 @@
     <div class="block-content">
       <div class="block-title">Regulatory Approach by Jurisdiction</div>
       <div class="sub-items">
-        <span class="sub key">UK</span>
-        <span class="sub">PRA (prudential) + FCA (conduct) · Twin peaks · 14 principles · Solvency II (currently under review post-Brexit)</span>
-        <span class="sub key">USA</span>
-        <span class="sub">State-level regulation · NAIC coordination · Prescriptive rules + principles · FIO (monitoring) + Fed Reserve (systemic)</span>
-        <span class="sub key">China</span>
-        <span class="sub">CBIRC (est. 2018) · C-ROSS framework (similar to SII but China-specific)</span>
-        <span class="sub key">Australia</span>
-        <span class="sub">APRA (prudential, est. 1998) · LAGIC framework (3-pillar, SII parallels) · Risk-based supervision</span>
-        <span class="sub key">South Africa</span>
-        <span class="sub">PA (prudential) + FSCA (conduct) · SAM framework (SII-based) · Twin peaks from Apr 2018</span>
+        <div class="sub-row">
+          <span class="sub key">UK</span>
+          <span class="sub">PRA (prudential) + FCA (conduct) · Twin peaks · 14 principles · Solvency II (currently under review post-Brexit)</span>
+        </div>
+        <div class="sub-row">
+          <span class="sub key">USA</span>
+          <span class="sub">State-level regulation · NAIC coordination · Prescriptive rules + principles · FIO (monitoring) + Fed Reserve (systemic)</span>
+        </div>
+        <div class="sub-row">
+          <span class="sub key">China</span>
+          <span class="sub">CBIRC (est. 2018) · C-ROSS framework (similar to SII but China-specific)</span>
+        </div>
+        <div class="sub-row">
+          <span class="sub key">Australia</span>
+          <span class="sub">APRA (prudential, est. 1998) · LAGIC framework (3-pillar, SII parallels) · Risk-based supervision</span>
+        </div>
+        <div class="sub-row">
+          <span class="sub key">South Africa</span>
+          <span class="sub">PA (prudential) + FSCA (conduct) · SAM framework (SII-based) · Twin peaks from Apr 2018</span>
+        </div>
       </div>
       <div class="note" style="color:#a0a8b8;">Common ideas: ideas transfer across jurisdictions · Take away concepts not country-specific details</div>
     </div>
