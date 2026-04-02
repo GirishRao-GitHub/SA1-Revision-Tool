@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Solvency II &amp; Capital Requirements · Detail Reference</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0f1117;
+    --paper: #f5f0e8;
+    --cream: #ede7d6;
+    --accent: #c0392b;
+    --accent-text: #a83226;
+    --gold: #b8860b;
+    --gold-text: #7a5c00;
+    --blue: #1a3a5c;
+    --green: #1e5f3f;
+    --purple: #5c3d7a;
+    --teal: #1a5c5c;
+    --brown: #5c3d1a;
+    --slate: #3d4f5c;
+    --muted: #6b6560;
+    --rule: #c8bfaf;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--paper); color:var(--ink); font-family:'IBM Plex Sans',sans-serif; font-size:12px; line-height:1.5; padding:28px 22px; max-width:1140px; margin:0 auto; }
+
+  .masthead { border-top:4px solid var(--ink); border-bottom:2px solid var(--ink); padding:12px 0 10px; margin-bottom:22px; display:flex; align-items:baseline; gap:16px; }
+  .masthead-title { font-family:'Playfair Display',serif; font-size:26px; font-weight:900; flex:1; }
+  .masthead-sub { font-family:'IBM Plex Mono',monospace; font-size:9.5px; color:var(--muted); text-transform:uppercase; letter-spacing:1.5px; }
+  .masthead-tag { font-family:'IBM Plex Mono',monospace; font-size:9.5px; background:var(--accent); color:#fff; padding:3px 8px; letter-spacing:1px; }
+
+  .sl { font-family:'IBM Plex Mono',monospace; font-size:9px; text-transform:uppercase; letter-spacing:2px; color:var(--muted); margin-bottom:6px; margin-top:4px; border-left:3px solid var(--accent); padding-left:7px; }
+
+  .g2 { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:16px; }
+  .g3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px; margin-bottom:16px; }
+
+  .card { background:var(--cream); border:1px solid var(--rule); padding:12px 14px; }
+  .ct { font-family:'Playfair Display',serif; font-size:13px; font-weight:700; margin-bottom:8px; padding-bottom:5px; border-bottom:1px solid var(--rule); }
+  .ct.b { color:var(--blue); } .ct.r { color:var(--accent-text); } .ct.g { color:var(--green); }
+  .ct.p { color:var(--purple); } .ct.t { color:var(--teal); } .ct.br { color:var(--brown); }
+  .ct.sl { color:var(--slate); } .ct.go { color:var(--gold-text); }
+
+  .pl { list-style:none; display:flex; flex-direction:column; gap:4px; }
+  .pl li { background:white; border-left:3px solid var(--rule); padding:4px 8px; font-size:11.5px; line-height:1.4; }
+  .pl li.b { border-left-color:var(--blue); } .pl li.r { border-left-color:var(--accent); }
+  .pl li.g { border-left-color:var(--green); } .pl li.p { border-left-color:var(--purple); }
+  .pl li.t { border-left-color:var(--teal); } .pl li.br { border-left-color:var(--brown); }
+  .pl li.sl { border-left-color:var(--slate); }
+
+  table.mx { width:100%; border-collapse:collapse; font-size:11px; margin-bottom:0; }
+  table.mx thead th { background:var(--ink); color:var(--paper); font-family:'IBM Plex Mono',monospace; font-size:9px; text-transform:uppercase; letter-spacing:.8px; padding:6px 8px; text-align:left; }
+  table.mx thead th:first-child { background:var(--accent); }
+  table.mx tbody tr:nth-child(even) { background:var(--cream); }
+  table.mx tbody tr:nth-child(odd) { background:white; }
+  table.mx tbody td { padding:6px 8px; border:1px solid var(--rule); vertical-align:top; line-height:1.4; font-size:11px; }
+  table.mx tbody td:first-child { font-family:'IBM Plex Mono',monospace; font-size:10px; font-weight:600; background:#e8e2d4; border-right:2px solid var(--ink); white-space:nowrap; }
+
+  /* 3-PILLAR PANEL */
+  .pillar-wrap { border:1px solid var(--rule); margin-bottom:16px; }
+  .pillar-header { background:var(--ink); color:var(--paper); padding:9px 14px; font-family:'Playfair Display',serif; font-size:16px; font-weight:700; }
+  .pillar-cols { display:grid; grid-template-columns:1fr 1fr 1fr; }
+  .pc { padding:12px 14px; }
+  .pc.p1 { background:#eef2f7; border-right:1px solid var(--rule); }
+  .pc.p2 { background:#f8f4fc; border-right:1px solid var(--rule); }
+  .pc.p3 { background:#eef6f6; }
+  .pc-head { font-family:'IBM Plex Mono',monospace; font-size:9px; font-weight:600; text-transform:uppercase; letter-spacing:1px; padding:2px 8px; color:white; display:inline-block; margin-bottom:8px; }
+  .pc-head.p1 { background:var(--blue); }
+  .pc-head.p2 { background:var(--purple); }
+  .pc-head.p3 { background:var(--teal); }
+
+  /* BALANCE SHEET */
+  .bs-wrap { border:1px solid var(--rule); margin-bottom:16px; }
+  .bs-header { background:var(--teal); color:white; padding:9px 14px; font-family:'Playfair Display',serif; font-size:15px; font-weight:700; }
+  .bs-cols { display:grid; grid-template-columns:1fr 1fr; }
+  .bsc { padding:12px 14px; }
+  .bsc.assets { background:#eef2f7; border-right:2px solid var(--teal); }
+  .bsc.liabs { background:#eef6f6; }
+
+  /* SCR MODULE BOX */
+  .scr-wrap { border:1px solid var(--rule); margin-bottom:16px; }
+  .scr-header { background:var(--purple); color:white; padding:9px 14px; font-family:'Playfair Display',serif; font-size:15px; font-weight:700; display:flex; align-items:center; gap:12px; }
+  .scr-cols { display:grid; grid-template-columns:1fr 1fr; }
+  .scrc { padding:12px 14px; }
+  .scrc.sf { background:#f8f4fc; border-right:2px solid var(--purple); }
+  .scrc.im { background:var(--cream); }
+
+  /* FORMULA BOX */
+  .formula { background:var(--ink); color:var(--paper); font-family:'IBM Plex Mono',monospace; font-size:11px; padding:8px 14px; margin:6px 0; line-height:1.8; }
+  .formula .label { font-size:9px; color:var(--gold); text-transform:uppercase; letter-spacing:1px; display:block; margin-bottom:2px; }
+
+  /* ACTIVE vs PASSIVE */
+  .avp-wrap { border:1px solid var(--rule); margin-bottom:16px; }
+  .avp-header { background:var(--brown); color:white; padding:8px 14px; font-family:'Playfair Display',serif; font-size:15px; font-weight:700; }
+  .avp-cols { display:grid; grid-template-columns:1fr 1fr; }
+  .avpc { padding:12px 14px; }
+  .avpc.pas { background:#fffdf0; border-right:2px solid var(--brown); }
+  .avpc.act { background:#eef7f2; }
+  .avpc-head { font-family:'IBM Plex Mono',monospace; font-size:9px; font-weight:600; text-transform:uppercase; letter-spacing:1px; padding:2px 8px; color:white; display:inline-block; margin-bottom:8px; }
+  .avpc-head.pas { background:var(--brown); }
+  .avpc-head.act { background:var(--green); }
+
+  /* ACRONYM BAR */
+  .acr-bar { background:#f0f4f0; border:1px solid var(--rule); border-top:2px solid var(--green); padding:10px 14px; margin-bottom:16px; }
+  .acr-bar-title { font-family:'IBM Plex Mono',monospace; font-size:9px; text-transform:uppercase; letter-spacing:1.5px; color:var(--green); margin-bottom:7px; }
+  .acrs { display:flex; flex-wrap:wrap; gap:5px; }
+  .acr { background:white; border:1px solid var(--rule); padding:3px 10px; font-size:10.5px; font-family:'IBM Plex Mono',monospace; }
+  .acr strong { color:var(--blue); }
+
+  .footer { border-top:1px solid var(--rule); padding-top:8px; margin-top:18px; font-family:'IBM Plex Mono',monospace; font-size:9px; color:var(--muted); display:flex; justify-content:space-between; }
+</style>
+</head>
+<body>
+
+<div class="masthead">
+  <div class="masthead-title">Solvency II &amp; Capital Requirements</div>
+  <span class="masthead-sub">SP1 Ch.22 · SA1 Ch.11–12</span>
+  <span class="masthead-tag">DETAIL REFERENCE</span>
+</div>
+
+<!-- ① OVERVIEW -->
+<div class="sl">① Solvency II — Overview &amp; Scope</div>
+<div class="g2" style="margin-bottom:16px;">
+  <div class="card" style="border-top:3px solid var(--blue);">
+    <div class="ct b">Background &amp; Scope</div>
+    <ul class="pl">
+      <li class="b"><strong>Objective:</strong> Adequate protection of policyholders; risk-based, harmonised EU-wide approach to capital adequacy, risk management and reporting.</li>
+      <li class="b"><strong>Applies to:</strong> EU insurance and reinsurance companies with gross premium &gt;€5m <em>or</em> gross TPs &gt;€25m. Operative from 1 January 2016.</li>
+      <li class="b"><strong>EIOPA:</strong> Provides technical advice to the European Commission. PRA is the UK representative.</li>
+      <li class="b"><strong>Transitional arrangements:</strong> Up to 16 years for TPs and risk-free rates; formal application to national regulator required in some countries.</li>
+      <li class="b"><strong>Global influence:</strong> Non-EU countries adopting SII-type requirements. Bermuda &amp; Switzerland = full equivalence. USA, Japan, Australia, Brazil, Canada, Mexico = provisional equivalence.</li>
+    </ul>
+  </div>
+  <div class="card" style="border-top:3px solid var(--accent);">
+    <div class="ct r">Business Culture Impact (SA1 Ch.11 §4.2)</div>
+    <ul class="pl">
+      <li class="r">Not just a reporting framework — a <strong>risk management framework</strong> affecting capital allocation, risk mitigation and performance management.</li>
+      <li class="r">Influences optimal <strong>product mix and design</strong>.</li>
+      <li class="r">Affects optimal <strong>asset mix</strong> — some asset classes more attractive due to lower capital requirements.</li>
+      <li class="r"><strong>Corporate structures</strong> and M&amp;A activity influenced by availability of diversification benefits.</li>
+      <li class="r"><strong>Management information</strong> aligned to SII metrics. External disclosures affect market perception.</li>
+      <li class="r">Board and senior management fully engaged — not just compliance teams.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ② THREE PILLARS -->
+<div class="sl">② The Three-Pillar Structure</div>
+<div class="pillar-wrap">
+  <div class="pillar-header">Solvency II Framework — Three Pillars</div>
+  <div class="pillar-cols">
+    <div class="pc p1">
+      <span class="pc-head p1">Pillar 1 — Quantitative</span>
+      <ul class="pl">
+        <li class="b">Market-consistent balance sheet</li>
+        <li class="b">Technical Provisions = BEL + Risk Margin</li>
+        <li class="b">SCR — Solvency Capital Requirement</li>
+        <li class="b">MCR — Minimum Capital Requirement</li>
+        <li class="b">Valuation of assets, liabilities, own funds</li>
+      </ul>
+      <div style="font-size:10.5px;color:var(--muted);margin-top:6px;font-style:italic;">Covered in detail in SA1 Ch.12</div>
+    </div>
+    <div class="pc p2">
+      <span class="pc-head p2">Pillar 2 — Qualitative</span>
+      <ul class="pl">
+        <li class="p">Governance: Board responsible for SII compliance</li>
+        <li class="p"><strong>4 key functions:</strong> Risk Management · Actuarial · Compliance · Internal Audit (clear segregation required)</li>
+        <li class="p"><strong>ORSA</strong> — Own Risk &amp; Solvency Assessment: identify all risks, risk management processes, quantify ongoing MCR/SCR ability over 3–5yr horizon</li>
+        <li class="p">ORSA must be used by senior management in strategic decisions — "embeddedness" required</li>
+        <li class="p">Capital add-on if ORSA reveals SF inadequacy (exceptional circumstances)</li>
+      </ul>
+    </div>
+    <div class="pc p3">
+      <span class="pc-head p3">Pillar 3 — Disclosure</span>
+      <ul class="pl">
+        <li class="t"><strong>RSR</strong> (Regular Supervisory Report): private to supervisor · annual (summary acceptable under certain conditions) · contains ORSA + QRT</li>
+        <li class="t"><strong>QRT</strong> (Quantitative Reporting Templates): annual full + quarterly subset (MCR/SCR/assets/TPs/own funds)</li>
+        <li class="t"><strong>SFCR</strong> (Solvency &amp; Financial Condition Report): public disclosure · annual · published within 3–4 months of year-end</li>
+        <li class="t">Local regulators may impose national specific templates in addition</li>
+      </ul>
+      <div style="font-size:10.5px;color:var(--muted);margin-top:6px;font-style:italic;">Pillars 2 &amp; 3 sometimes called "Pillar 5" due to synergies between governance and disclosure.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ③ BALANCE SHEET + BEL + RISK MARGIN -->
+<div class="sl">③ Pillar 1 — Balance Sheet: Assets, BEL &amp; Risk Margin</div>
+<div class="bs-wrap">
+  <div class="bs-header">Solvency II Balance Sheet</div>
+  <div class="bs-cols">
+    <div class="bsc assets">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:600;text-transform:uppercase;color:var(--blue);margin-bottom:8px;">Assets</div>
+      <ul class="pl">
+        <li class="b"><strong>3 components:</strong> Investments (equities, bonds, property) · Reinsurance recoveries · Participations (≥20% voting rights)</li>
+        <li class="b"><strong>Valuation:</strong> Market value (quoted markets) or mark-to-model (unquoted equities, derivatives, property). Fair value = arm's length between knowledgeable willing parties.</li>
+        <li class="b"><strong>Prudent person principle:</strong> Assets appropriate to nature/term of liabilities · best interests of policyholders · derivatives only for risk reduction / efficient portfolio management · properly diversified · own key risk indicators (not just rating agencies)</li>
+        <li class="b"><strong>Reinsurance:</strong> Shown as asset (not net of gross liabilities). Adjusted for counterparty default risk (PV of expected losses). Usually small.</li>
+      </ul>
+    </div>
+    <div class="bsc liabs">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:600;text-transform:uppercase;color:var(--teal);margin-bottom:8px;">Technical Provisions = BEL + Risk Margin</div>
+      <ul class="pl" style="margin-bottom:8px;">
+        <li class="t"><strong>BEL (Best Estimate Liability):</strong> PV of expected future cashflows (benefits + expenses − premiums) discounted at risk-free yield curve. Best estimate assumptions — no prudential margins. Policy-by-policy or grouped. No floor of zero (BEL can be negative). Contract boundary: up to maturity/expiry for LT; end of policy year for annually renewable ST.</li>
+        <li class="t"><strong>Risk Margin:</strong> Additional amount to make TP = transfer value. Cost of capital method: project non-hedgeable SCR subset over run-off; multiply by 6% p.a.; discount at risk-free rates. Risk margin must be disclosed separately per line of business (but can allow for diversification benefit).</li>
+        <li class="t"><strong>Hedgeable cashflows:</strong> TP = market value of replicating portfolio. No separate BEL/RM needed.</li>
+        <li class="t"><strong>SLT health:</strong> IP, SACI, LTCI → life-like basis. <strong>Non-SLT:</strong> PMI → non-life basis. Unbundle where feasible. Accelerated CI likely life obligation.</li>
+      </ul>
+      <div class="formula">
+        <span class="label">Own funds structure</span>
+        Own Funds = Assets − TPs − Other Liabilities<br>
+        = Basic Own Funds + Ancillary Own Funds<br>
+        Tiered: T1 (paid-up share capital) → T3 (subordinated debt)<br>
+        SCR: ≥50% T1, &lt;15% T3 · MCR: ≥80% T1, no T3
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ④ DISCOUNT RATES -->
+<div class="sl">④ Discount Rates — Matching Adjustment &amp; Volatility Adjustment</div>
+<div class="g3" style="margin-bottom:16px;">
+  <div class="card" style="border-top:3px solid var(--blue);">
+    <div class="ct b">Base Risk-Free Rate</div>
+    <ul class="pl">
+      <li class="b">Swap rates where deep &amp; liquid market exists; otherwise government bond rates.</li>
+      <li class="b">Credit risk adjustment applied as downward shift to observed yields.</li>
+      <li class="b">EIOPA publishes monthly for 53 countries (all EEA + key non-EEA).</li>
+      <li class="b">Zero-coupon spot rates with annual maturities; shortest = 1yr, longest = 150yr.</li>
+      <li class="b">Long maturities extrapolated using Smith-Wilson method to a long-term equilibrium rate.</li>
+    </ul>
+  </div>
+  <div class="card" style="border-top:3px solid var(--green);">
+    <div class="ct g">Matching Adjustment (MA)</div>
+    <ul class="pl">
+      <li class="g">For LT predictable liabilities where matching assets held to maturity (annuity-type, no surrender risk).</li>
+      <li class="g">Discount rate = risk-free rate + MA, where MA = spread on matching assets less fundamental spread (EIOPA publishes).</li>
+      <li class="g">MA = illiquidity premium (credit risk excluded via fundamental spread deduction).</li>
+      <li class="g">Assets ring-fenced, bond-like, held to redemption. Key liability risks: longevity + expenses only.</li>
+      <li class="g">Regulator approval required. Lose right to use for 24 months if eligibility requirements breached (unless restored within 2 months).</li>
+    </ul>
+  </div>
+  <div class="card" style="border-top:3px solid var(--teal);">
+    <div class="ct t">Volatility Adjustment (VA)</div>
+    <ul class="pl">
+      <li class="t">For liabilities not eligible for MA.</li>
+      <li class="t">Purpose: reduce risk of forced asset sales during extreme bond spread movements (pro-cyclical risk).</li>
+      <li class="t">Adds portion of spread (not attributable to credit risk) to risk-free discount rate → reduces liability value in stress.</li>
+      <li class="t">EIOPA publishes VA by currency and by national insurance market (where under particular stress).</li>
+      <li class="t">Subject to liquidity plan and sensitivity analysis. Prior supervisory approval in some EU states.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ⑤ SCR -->
+<div class="sl">⑤ Solvency Capital Requirement (SCR)</div>
+<div class="scr-wrap">
+  <div class="scr-header">SCR = VaR of Basic Own Funds at 99.5% confidence over 1 year</div>
+  <div class="scr-cols">
+    <div class="scrc sf">
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:600;text-transform:uppercase;color:white;background:var(--purple);padding:2px 8px;display:inline-block;margin-bottom:8px;">Standard Formula</span>
+      <div style="font-size:11.5px;margin-bottom:7px;">Prescribed stress tests per risk module. SCR<sub>i</sub> = NAV(best estimate) − NAV(stressed). Subject to floor of 0.</div>
+      <div class="formula" style="margin-bottom:8px;">
+        <span class="label">Module SCR aggregation</span>
+        Module SCR = √(ΣΣ Corr_ij × SCR_i × SCR_j)<br>
+        BSCR = √(ΣΣ Corr_ij × SCR_i × SCR_j) + SCR_int<br>
+        Overall SCR = BSCR + SCR_op + Adj
+      </div>
+      <div style="font-size:11px;font-family:'IBM Plex Mono',monospace;color:var(--purple);text-transform:uppercase;letter-spacing:.8px;margin-bottom:5px;">Health Insurance Risk Sub-modules</div>
+      <table class="mx" style="margin-bottom:8px;">
+        <thead><tr><th>Module</th><th>Components</th></tr></thead>
+        <tbody>
+          <tr><td>SLT Health</td><td>Disability/morbidity · Mortality · Longevity · Lapse · Expenses · Revision (IP income annuity changes)</td></tr>
+          <tr><td>Non-SLT Health</td><td>Premium &amp; reserve risk (timing, frequency, severity) · Lapse risk</td></tr>
+          <tr><td>CAT</td><td>Epidemics · Pandemics · Climate change · Anti-microbial resistance</td></tr>
+        </tbody>
+      </table>
+      <div style="font-size:11px;background:#f3eef9;border-left:3px solid var(--purple);padding:5px 8px;margin-bottom:5px;"><strong>BSCR correlation matrix (top-level):</strong> Market/Default/Life/Health all 25%. Health vs Non-life = 0%.</div>
+      <div style="font-size:11px;background:white;border-left:3px solid var(--muted);padding:5px 8px;"><strong>SCR_op:</strong> Based on % of earned premiums and TPs. Added to BSCR with no diversification credit.<br><strong>Adj:</strong> Loss-absorbing capacity of TPs (discretionary benefits) and deferred taxes under stress.</div>
+    </div>
+    <div class="scrc im">
+      <span style="font-family:'IBM Plex Mono',monospace;font-size:9px;font-weight:600;text-transform:uppercase;color:white;background:var(--slate);padding:2px 8px;display:inline-block;margin-bottom:8px;">Internal Model</span>
+      <div style="font-size:11.5px;margin-bottom:8px;">Full or partial alternative to standard formula. Must be approved by supervisory authority. Cannot revert to SF once approved (except with justification).</div>
+      <div style="font-size:11px;font-family:'IBM Plex Mono',monospace;color:var(--slate);text-transform:uppercase;letter-spacing:.8px;margin-bottom:5px;">Approval Tests</div>
+      <ul class="pl">
+        <li class="sl"><strong>Use test:</strong> Widely used throughout business; significant role in internal governance, risk management, decision-making, ORSA, capital allocation.</li>
+        <li class="sl"><strong>Statistical quality:</strong> Assumptions + data meet minimum quality standards; probability distribution forecasting; expert judgement; materiality; methods of aggregation.</li>
+        <li class="sl"><strong>Calibration:</strong> SCR must be equivalent to VaR at 99.5% over 1 year. Can use different confidence levels/periods if equivalent policyholder protection demonstrated.</li>
+        <li class="sl"><strong>P&amp;L attribution:</strong> Categorisation of risk in model explains causes and sources of actual P&amp;L.</li>
+        <li class="sl"><strong>Validation:</strong> Fully validated by company; regular control cycle review; test against emerging experience.</li>
+        <li class="sl"><strong>Documentation:</strong> Theory, assumptions and limitations clearly documented.</li>
+      </ul>
+      <div style="font-size:11px;background:#f0f4f7;border-left:3px solid var(--slate);padding:5px 8px;margin-top:7px;">Use test is most challenging. Internal model may be structured freely (e.g. stochastic simulations with copulas rather than stress tests + correlation matrices) provided tests are met.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ⑥ MCR + ⑦ INTERVENTION LADDER -->
+<div class="sl">⑥ MCR &amp; ⑦ Supervisory Intervention Ladder</div>
+<div class="g2" style="margin-bottom:16px;">
+  <div class="card" style="border-top:3px solid var(--gold);">
+    <div class="ct go">⑥ Minimum Capital Requirement (MCR)</div>
+    <ul class="pl" style="margin-bottom:8px;">
+      <li style="border-left-color:var(--gold);background:white;padding:4px 8px;font-size:11.5px;"><strong>Definition:</strong> VaR at 85% confidence over 1 year. Simple linear factor formula (companies don't run VaR — they apply the formula).</li>
+      <li style="border-left-color:var(--gold);background:white;padding:4px 8px;font-size:11.5px;"><strong>SLT health / life:</strong> Formula based on TPs + capital at risk on death/disability × specified factors (vary by with-profits / unit-linked / conventional without-profits).</li>
+      <li style="border-left-color:var(--gold);background:white;padding:4px 8px;font-size:11.5px;"><strong>Non-SLT health / non-life:</strong> Formula based on TPs + written premiums × factors by product type.</li>
+    </ul>
+    <div class="formula">
+      <span class="label">MCR constraints</span>
+      Floor: MCR ≥ 25% SCR<br>
+      Cap:   MCR ≤ 45% SCR<br>
+      Absolute min: €3.7m (LT) · €2.5m (ST)<br>
+      Reported quarterly to regulator
+    </div>
+  </div>
+  <div class="card" style="border-top:3px solid var(--accent);">
+    <div class="ct r">⑦ Supervisory Intervention Ladder</div>
+    <table class="mx">
+      <thead><tr><th>Breach</th><th>Trigger</th><th>Actions &amp; Timelines</th></tr></thead>
+      <tbody>
+        <tr><td>SCR</td><td>First point of intervention</td><td>Notify immediately · Recovery plan within 2 months · Rectify within 6 months (extendable by 3 months; further extension in exceptional market falls)</td></tr>
+        <tr><td>MCR</td><td>Ultimate point — authorisation at risk</td><td>Notify immediately · Short-term finance scheme within 1 month · Rectify within 3 months · Regulator may restrict/prohibit asset disposal · Authorisation withdrawn if unresolved</td></tr>
+      </tbody>
+    </table>
+    <div style="font-size:10.5px;color:var(--muted);margin-top:6px;font-style:italic;">Breaching SCR: increase own funds or reduce risk profile (reduce SCR). Breaching MCR: last resort — withdrawal of authorisation to write new business.</div>
+  </div>
+</div>
+
+<!-- ⑧ VaR, INTERPLAY, ACTIVE vs PASSIVE -->
+<div class="sl">⑧ Reserves–SCR Interplay · VaR · Active vs Passive Valuation</div>
+<div class="g2" style="margin-bottom:16px;">
+  <div class="card" style="border-top:3px solid var(--blue);">
+    <div class="ct b">Reserves–SCR Interplay &amp; VaR (SP1 Ch.22)</div>
+    <table class="mx" style="margin-bottom:8px;">
+      <thead><tr><th>Approach</th><th>Reserves</th><th>SCR</th></tr></thead>
+      <tbody>
+        <tr><td>Prudent reserves</td><td>Large margins over best estimate</td><td>Small (not risk-specific)</td></tr>
+        <tr><td>Realistic reserves</td><td>Close to best estimate</td><td>Large risk-based capital requirement</td></tr>
+      </tbody>
+    </table>
+    <div style="font-size:11.5px;margin-bottom:6px;">Must be assessed together — adequacy of one cannot be judged without the other.</div>
+    <div style="font-size:11px;background:white;border-left:3px solid var(--blue);padding:5px 8px;margin-bottom:5px;"><strong>VaR approach:</strong> Stress each risk factor separately → SCR_i per risk. Combine via correlation matrix: Agg. req. = √(ΣΣ Corr_ij × Cap_i × Cap_j). Diversification benefit = sum of SCR_i minus aggregated SCR.</div>
+    <div style="font-size:11px;background:#fdecea;border-left:3px solid var(--accent);padding:5px 8px;"><strong>Non-linearity:</strong> Capital required is not a linear function of risk drivers (e.g. guaranteed annuity options). <strong>Non-separability:</strong> Combined events worse than sum of parts (e.g. longevity + expense risk on annuities). Both mean correlation matrix may understate true capital requirement.</div>
+  </div>
+  <div class="avp-wrap" style="border-top:none;margin-bottom:0;">
+    <div class="avp-header">Active vs Passive Valuation</div>
+    <div class="avp-cols">
+      <div class="avpc pas">
+        <span class="avpc-head pas">Passive</span>
+        <ul class="pl">
+          <li class="br">Net premium valuation for liabilities (insensitive to yield changes — net premium recalculated).</li>
+          <li class="br">Assumptions "locked in" from policy inception. Non-economic assumptions (e.g. morbidity) updated if experience deteriorates.</li>
+          <li class="br">Assets at book/historic value.</li>
+          <li class="br">SCR as % of best estimate liabilities (simple formula).</li>
+          <li class="br"><strong>+</strong> Simple, less subjective, stable profit emergence.</li>
+          <li class="br"><strong>−</strong> Can give false sense of security. Slow to react to market changes. May mask emerging problems.</li>
+        </ul>
+      </div>
+      <div class="avpc act">
+        <span class="avpc-head act">Active</span>
+        <ul class="pl">
+          <li class="g">Market-consistent valuation for both assets and liabilities.</li>
+          <li class="g">Assumptions updated frequently; reflect current market conditions.</li>
+          <li class="g">Risk-based SCR (e.g. SII standard formula or internal model).</li>
+          <li class="g"><strong>+</strong> More informative; better captures impact on financial guarantees and options.</li>
+          <li class="g"><strong>−</strong> Volatile results. Pro-cyclical risk: falling asset values → higher SCR → forced asset sales → further price falls. Regulators may include amendments (e.g. VA) to dampen this.</li>
+        </ul>
+        <div style="font-size:10.5px;font-style:italic;color:var(--muted);margin-top:5px;">Combination of active assets + passive liabilities (or vice versa) can create artificial solvency volatility even when the insurer's true position is unchanged.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ⑨ GROUP + CHIEF ACTUARY -->
+<div class="sl">⑨ Group Reporting, Equivalence &amp; Chief Actuary Role</div>
+<div class="g2" style="margin-bottom:16px;">
+  <div class="card" style="border-top:3px solid var(--teal);">
+    <div class="ct t">Group Reporting &amp; Equivalence</div>
+    <ul class="pl">
+      <li class="t"><strong>Group SCR:</strong> Covers group-wide risks including diversification benefits across subsidiaries.</li>
+      <li class="t"><strong>Group solvency floor:</strong> Sum of MCRs of all individual insurance/reinsurance entities within the group.</li>
+      <li class="t"><strong>Each subsidiary:</strong> Must independently cover its own SCR and MCR.</li>
+      <li class="t"><strong>Group supervisor:</strong> Home country top-level company; co-operates with national supervisors. Addresses double use of capital and double leverage.</li>
+      <li class="t"><strong>Third country parents:</strong> EEA supervisors assess whether equivalent group supervision applies. May require an EEA holding company.</li>
+      <li class="t"><strong>Equivalence:</strong> Third country regime broadly SII-compliant = equivalent. Full (indefinite) · Temporary (until 31/12/2020 + 1yr extension) · Provisional (10yr periods). Bermuda &amp; Switzerland = full. USA, Japan, Australia, Brazil, Canada, Mexico = provisional.</li>
+    </ul>
+  </div>
+  <div class="card" style="border-top:3px solid var(--slate);">
+    <div class="ct sl">Chief Actuary Responsibilities under SII (SA1 Ch.11 §4.3)</div>
+    <ul class="pl">
+      <li class="sl">Co-ordinate the calculation of technical provisions.</li>
+      <li class="sl">Ensure appropriateness of methodologies and models used, and assumptions made in TP calculations.</li>
+      <li class="sl">Assess sufficiency and quality of data used in TP calculations.</li>
+      <li class="sl">Compare best estimate against experience.</li>
+      <li class="sl">Inform governing body of reliability and adequacy of TP calculations.</li>
+      <li class="sl">Express an opinion on the overall underwriting policy.</li>
+      <li class="sl">Express an opinion on the adequacy of reinsurance arrangements.</li>
+      <li class="sl">Contribute to effective implementation of the risk management system, with particular regard to risk modelling by the firm.</li>
+    </ul>
+    <div style="font-size:10.5px;color:var(--muted);margin-top:6px;font-style:italic;">Note: if internal model is used for SCR, responsibility for detailed implementation lies with the risk management function, not the actuarial function.</div>
+  </div>
+</div>
+
+<!-- ACRONYM BAR -->
+<div class="sl">Key Acronyms — Define &amp; Know</div>
+<div class="acr-bar">
+  <div class="acr-bar-title">All key Solvency II acronyms</div>
+  <div class="acrs">
+    <span class="acr"><strong>EIOPA</strong> European Insurance &amp; Occupational Pensions Authority</span>
+    <span class="acr"><strong>SCR</strong> Solvency Capital Requirement — VaR 99.5%, 1yr</span>
+    <span class="acr"><strong>MCR</strong> Minimum Capital Requirement — VaR 85%, 1yr; floor 25%·cap 45% of SCR</span>
+    <span class="acr"><strong>BSCR</strong> Basic SCR — pre-operational risk, pre-Adj</span>
+    <span class="acr"><strong>BEL</strong> Best Estimate Liability</span>
+    <span class="acr"><strong>TP</strong> Technical Provisions = BEL + Risk Margin</span>
+    <span class="acr"><strong>RM</strong> Risk Margin — cost of capital method, 6% p.a.</span>
+    <span class="acr"><strong>ORSA</strong> Own Risk &amp; Solvency Assessment</span>
+    <span class="acr"><strong>RSR</strong> Regular Supervisory Report (private, annual)</span>
+    <span class="acr"><strong>QRT</strong> Quantitative Reporting Templates (annual + quarterly subset)</span>
+    <span class="acr"><strong>SFCR</strong> Solvency &amp; Financial Condition Report (public, annual)</span>
+    <span class="acr"><strong>MA</strong> Matching Adjustment — illiquidity premium on discount rate</span>
+    <span class="acr"><strong>VA</strong> Volatility Adjustment — spread-based add to discount rate</span>
+    <span class="acr"><strong>SLT</strong> Similar to Life Techniques — IP, SACI, LTCI</span>
+    <span class="acr"><strong>USP</strong> Undertaking Specific Parameters (in underwriting risk modules)</span>
+    <span class="acr"><strong>CAT</strong> Catastrophe health risk sub-module</span>
+  </div>
+</div>
+
+<div class="footer">
+  <span>SP1 Ch.22 · SA1 Ch.11–12 · IFE 2019/2024</span>
+  <span>SOLVENCY II &amp; CAPITAL REQUIREMENTS — DETAIL REFERENCE</span>
+  <span>Pair 2 of 3</span>
+</div>
+
+</body>
+</html>
