@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Assumptions (Ch.13–16) — Navigator</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --ink:    #0f1117;
+    --paper:  #f5f0e8;
+    --cream:  #ede7d6;
+    --accent: #c0392b;
+    --gold:   #b8860b;
+    --blue:   #1a3a5c;
+    --green:  #1e5f3f;
+    --purple: #5c3d7a;
+    --muted:  #6b6560;
+    --rule:   #c8bfaf;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    background:var(--paper); color:var(--ink);
+    font-family:'IBM Plex Sans',sans-serif;
+    font-size:12px; line-height:1.5;
+    padding:28px 24px; max-width:1140px; margin:0 auto;
+  }
+
+  /* MASTHEAD */
+  .masthead { border-top:4px solid var(--ink); border-bottom:2px solid var(--ink); padding:12px 0 10px; margin-bottom:28px; display:flex; align-items:baseline; gap:16px; }
+  .masthead-title { font-family:'Playfair Display',serif; font-size:26px; font-weight:900; flex:1; }
+  .masthead-sub { font-family:'IBM Plex Mono',monospace; font-size:9.5px; color:var(--muted); text-transform:uppercase; letter-spacing:1.5px; }
+  .masthead-tag { font-family:'IBM Plex Mono',monospace; font-size:9.5px; background:var(--ink); color:#fff; padding:3px 8px; letter-spacing:1px; }
+
+  /* HOW TO USE */
+  .how-to { background:var(--ink); color:var(--paper); padding:10px 16px; margin-bottom:22px; display:flex; align-items:center; gap:16px; font-size:11px; }
+  .how-to strong { font-family:'IBM Plex Mono',monospace; font-size:9px; text-transform:uppercase; letter-spacing:1px; color:var(--gold); white-space:nowrap; }
+
+  /* FLOW */
+  .flow { display:flex; flex-direction:column; gap:0; position:relative; }
+  .flow::before {
+    content:''; position:absolute; left:22px; top:0; bottom:0; width:2px;
+    background:linear-gradient(to bottom, var(--accent), var(--blue), var(--green), var(--purple));
+    z-index:0;
+  }
+
+  /* BLOCK */
+  .block { display:flex; gap:16px; align-items:flex-start; margin-bottom:6px; position:relative; z-index:1; }
+
+  /* NUMBER BADGE */
+  .num {
+    width:44px; height:44px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Playfair Display',serif; font-size:16px; font-weight:900;
+    color:white; flex-shrink:0;
+    border:3px solid var(--paper); box-shadow:0 0 0 2px currentColor;
+  }
+
+  /* BLOCK CONTENT */
+  .block-content { flex:1; border-left:3px solid; padding:10px 14px; background:var(--cream); }
+  .block-title { font-family:'Playfair Display',serif; font-size:14px; font-weight:700; margin-bottom:6px; }
+  .ch-tag { font-family:'IBM Plex Mono',monospace; font-size:8.5px; text-transform:uppercase; letter-spacing:1.5px; opacity:.7; margin-bottom:4px; }
+  .sub-items { display:flex; flex-direction:column; gap:5px; }
+
+  .sub-row { display:flex; align-items:flex-start; gap:5px; flex-wrap:wrap; }
+  .sub {
+    font-family:'IBM Plex Mono',monospace; font-size:10px;
+    padding:3px 9px; border:1px solid; background:white; letter-spacing:0.3px;
+    flex-shrink:0;
+  }
+  .sub.key { color:white !important; background:var(--ink); border-color:transparent; font-weight:600; white-space:nowrap; }
+  .sub.desc { flex:1; min-width:0; border-color:var(--rule); color:var(--ink); }
+
+  /* PER-CHAPTER COLOUR SCHEMES */
+  .b1 .num { background:var(--accent); box-shadow:0 0 0 2px var(--accent); }
+  .b1 .block-content { border-color:var(--accent); }
+  .b1 .sub.key { background:var(--accent); }
+
+  .b2 .num { background:var(--blue); box-shadow:0 0 0 2px var(--blue); }
+  .b2 .block-content { border-color:var(--blue); }
+  .b2 .sub.key { background:var(--blue); }
+
+  .b3 .num { background:var(--green); box-shadow:0 0 0 2px var(--green); }
+  .b3 .block-content { border-color:var(--green); }
+  .b3 .sub.key { background:var(--green); }
+
+  .b4 .num { background:var(--purple); box-shadow:0 0 0 2px var(--purple); }
+  .b4 .block-content { border-color:var(--purple); }
+  .b4 .sub.key { background:var(--purple); }
+
+  /* ARROW */
+  .arrow { display:flex; align-items:center; padding-left:14px; margin:2px 0; color:var(--muted); font-size:16px; z-index:1; position:relative; }
+
+  /* NOTE */
+  .note { font-family:'IBM Plex Mono',monospace; font-size:9.5px; color:var(--muted); margin-top:7px; font-style:italic; }
+
+  /* FOOTER */
+  .footer { border-top:1px solid var(--rule); padding-top:8px; margin-top:20px; font-family:'IBM Plex Mono',monospace; font-size:9px; color:var(--muted); display:flex; justify-content:space-between; }
+</style>
+</head>
+<body>
+
+<!-- MASTHEAD -->
+<div class="masthead">
+  <div class="masthead-title">Setting Assumptions — Chapters 13 to 16</div>
+  <span class="masthead-sub">SP1 Ch.13–16 · Syllabus Obj. 5.1</span>
+  <span class="masthead-tag">ASSUMPTIONS — NAVIGATOR</span>
+</div>
+
+<!-- HOW TO USE -->
+<div class="how-to">
+  <strong>How to use</strong>
+  <span>Each numbered block maps exactly to one chapter in the <strong>Consolidated Study Matrix</strong>. Same number · Same colour · Same name. Use this page to rehearse the architecture before drilling into detail. Every sub-item is a distinct testable concept.</span>
+</div>
+
+<div class="flow">
+
+<!-- ① CH13 GENERAL CONSIDERATIONS -->
+<div class="block b1">
+  <div class="num">①</div>
+  <div class="block-content">
+    <div class="ch-tag">Chapter 13 — Assumptions (1)</div>
+    <div class="block-title">General Considerations — Principles, Purpose &amp; Basis Types</div>
+    <div class="sub-items">
+      <div class="sub-row">
+        <span class="sub key">8 Principles</span>
+        <span class="sub desc">Purpose of use · Financial significance · Consistency · Regulatory constraints · Client needs · Parameter accuracy from data · Data relevance to insured lives · Flexibility to reflect changing risk</span>
+      </div>
+      <div class="sub-row">
+        <span class="sub key">4-Step Process</span>
+        <span class="sub desc">① Investigate historical experience → ② Assess future conditions → ③ Derive best estimates → ④ Apply margins for risk (size depends on purpose &amp; risk degree)</span>
+      </div>
+      <div class="sub-row">
+        <span class="sub key">Pricing Basis</span>
+        <span class="sub desc">Best estimate + margins · 3 methods to allow for risk: margins in parameters / stochastic / higher RDR · 5 factors determining price: competitiveness · USP · risk appetite · data quality · free assets</span>
+      </div>
+      <div class="sub-row">
+        <span class="sub key">Reserving Basis</span>
+        <span class="sub desc">Best estimate + margins · Published accounts (going concern / true &amp; fair) vs Solvency accounts (run-off / break-up) · Two approaches: prudent assumptions OR best estimate + explicit risk margin / SCR</span>
+      </div>
+      <div class="sub-row">
+        <span class="sub key">EV / Profitability Basis</span>
+        <span class="sub desc">Needs TWO bases: reserving basis (for net assets &amp; reserve changes) + projection basis (for future profits) · Realistic unless purpose demands prudence (sale/purchase, EV financing, bonuses) · Lower RDR than pricing (volume uncertainty removed)</span>
+      </div>
+    </div>
+    <div class="note">Consistency principle: pairs to watch — morbidity &amp; lapses · morbidity &amp; expenses · morbidity &amp; investment return · NB volumes &amp; fixed expenses · lapses &amp; investment return · investment return &amp; inflation</div>
+  </div>
+</div>
+<div class="arrow">↓</div>
+
+<!-- ② CH14 DEMOGRAPHIC ASSUMPTIONS -->
+<div class="block b2">
+  <div class="num">②</div>
+  <div class="block-content">
+    <div class="ch-tag">Chapter 14 — Assumptions (2)</div>
+    <div class="block-title">Demographic Assumptions — Morbidity, Mortality &amp; Lapses</div>
+    <div class="sub-items">
+      <div class="sub-row">
+        <span class="sub key">Process (all demos)</span>
+        <span class="sub desc">Collect data (adequate volume, limited heterogeneity, ~3–4 yrs) → Group into homogeneous risk cells → Calculate rates (standard table adjustments: i_x = a·i_x(S) + b) → Adjust for target market / UW / claim controls / trends</span>
+      </div>
+      <div class="sub-row">
+        <span class="sub key">Claim Incidence</span>
+        <span class="sub desc">IP: inception &amp; recovery rates · CI: by illness type (cancer/HA/stroke/CABS/TPD) — project each separately before combining · LTCI: transitions able→claiming, lower→higher benefit · PMI: by benefit category · Social/economic factors: state welfare · economy/unemployment · inflation</span>
+      </div>
+      <div class="sub-row">
+        <span class="sub key">Rating Factors</span>
+        <span class="sub desc">Age · gender (may be prohibited) · smoker · occupation · benefit size · product class · individual vs group · distribution channel · region · duration since entry · UW status</span>
+      </div>
+      <div class="sub-row">
+        <span class="sub key">Recovery Rates (IP)</span>
+        <span class="sub desc">Crucial for IP; generally ignored for LTCI · Factors: keenness to return to work · economic environment · claim conditions / income ratio · insurer rehabilitation · cause of claim · large benefits → longer claims · medical advances (opposing effects on cost)</span>
+      </div>
+      <div class="sub-row">
+        <span class="sub key">Mortality</span>
+        <span class="sub desc">Separate rates: non-claiming healthy vs claiming sick · CI survivorship: mortality during survival period = adjustment to incidence rate (illness-specific) · For non-death-benefit products: do NOT over-estimate mortality (reduces exposure, under-prices risk)</span>
+      </div>
+      <div class="sub-row">
+        <span class="sub key">Lapses</span>
+        <span class="sub desc">Based on own data (market data less useful — heterogeneity / human choice) · Drivers: economic · political · commercial · awareness · Effect: early lapse = loss (NB strain unrecouped); late lapse = gain; selective lapsing = worsening morbidity in remaining pool · Lapse &amp; re-entry risk when premiums fall</span>
+      </div>
+    </div>
+    <div class="note">PMI renewal rates most sensitive to inflation (annual renewal, conscious decision) vs long-term products (guaranteed renewal, inertia). Market data poor for lapses — no population equivalent.</div>
+  </div>
+</div>
+<div class="arrow">↓</div>
+
+<!-- ③ CH15 FINANCIAL ASSUMPTIONS -->
+<div class="block b3">
+  <div class="num">③</div>
+  <div class="block-content">
+    <div class="ch-tag">Chapter 15 — Assumptions (3)</div>
+    <div class="block-title">Financial Assumptions — Benefits, Expenses, Commission &amp; Investment</div>
+    <div class="sub-items">
+      <div class="sub-row">
+        <span class="sub key">Benefit Amount</span>
+        <span class="sub desc">LT (IP/CI/LTCI): pre-determined; priced per unit of benefit; large cases may need adjusted assumptions · PMI: must forecast average claim amount; own experience adjusted for policy conditions + hospital deals + future provider capacity trends</span>
+      </div>
+      <div class="sub-row">
+        <span class="sub key">Benefit Inflation</span>
+        <span class="sub desc">IP → earnings index · CI → fixed or mixed · LTCI → care costs index · PMI → medical inflation + treatment protocol changes + hospital charging + age profile of portfolio · Fixed-% avoids unknown future index; ceiling common for LTCI</span>
+      </div>
+      <div class="sub-row">
+        <span class="sub key">Expenses (9 types)</span>
+        <span class="sub desc">Initial acquisition · initial UW · initial admin · renewal admin · renewal commission · investment · withdrawal · claims admin · termination · PMI: investment &amp; withdrawal not important · Loading: policy fee / sum insured differential / individual calc · Cross-subsidy risk between small &amp; large policies</span>
+      </div>
+      <div class="sub-row">
+        <span class="sub key">Expense Inflation</span>
+        <span class="sub desc">Mix of price inflation + earnings inflation (majority = staff costs) · Consider: current rates · expected future rates · ILG vs nominal bond yield differential · recent company/industry experience · Apply to renewal, claims, termination loadings</span>
+      </div>
+      <div class="sub-row">
+        <span class="sub key">Commission &amp; Clawback</span>
+        <span class="sub desc">Based on rates actually paid (market + legislation) · Higher for H&amp;C than life (complexity + UW effort) · Clawback: credit risk on unearned commission — assume lapse rates &amp; partial non-recovery · Loading: % of premium / % of SI / fixed sum</span>
+      </div>
+      <div class="sub-row">
+        <span class="sub key">Investment Return</span>
+        <span class="sub desc">Must be consistent with inflation · Significance ↑ with larger reserves + longer duration + heavier guarantees · PMI: unimportant · Single premium pre-funded LTCI: most critical · Asset mix: fixed interest (fixed benefit) / ILGs (real benefit) / equity (care cost inflation) · Market-consistent: risk-free rate</span>
+      </div>
+      <div class="sub-row">
+        <span class="sub key">Taxes</span>
+        <span class="sub desc">Profits tax: multiply future profit by (1 − tax rate) · I–E basis: investment income less allowable expenses, taxed net · Premium tax: neutral to insurer but reduces consumer demand → affects lapse &amp; NB volume assumptions</span>
+      </div>
+    </div>
+    <div class="note">Higher expenses vs life insurance: lower non-medical limits → more UW effort; product must be sold; claims management more intensive; claims in payment require ongoing monitoring &amp; rehabilitation.</div>
+  </div>
+</div>
+<div class="arrow">↓</div>
+
+<!-- ④ CH16 OTHER ASSUMPTIONS -->
+<div class="block b4">
+  <div class="num">④</div>
+  <div class="block-content">
+    <div class="ch-tag">Chapter 16 — Assumptions (4)</div>
+    <div class="block-title">Other Assumptions — New Business &amp; Risk Discount Rate</div>
+    <div class="sub-items">
+      <div class="sub-row">
+        <span class="sub key">NB Volume</span>
+        <span class="sub desc">Needed for: (i) allocation of fixed expenses per policy · (ii) assessing capital adequacy to support NB strain · Based on past experience + market projections + competitive position</span>
+      </div>
+      <div class="sub-row">
+        <span class="sub key">NB Mix</span>
+        <span class="sub desc">Average policy size · By product · By distribution channel · By territory · By gender · By occupation · Cross-subsidy risk: if actual mix skews to higher-risk lives → anti-selection → monitor continuously · Required when uniform premiums charged to heterogeneous groups</span>
+      </div>
+      <div class="sub-row">
+        <span class="sub key">Risk Discount Rate</span>
+        <span class="sub desc">Two components: (1) Shareholders' required return = risk-free rate + market risk premium (via CAPM: E_i = r + β·[E_m − r]) · (2) Product-specific statistical risk: less/more risky than company average → lower/higher than E_i</span>
+      </div>
+      <div class="sub-row">
+        <span class="sub key">6 Risk Factors ↑ RDR</span>
+        <span class="sub desc">Lack of historical data · High guarantees · Policyholder options · Overhead costs · Complexity of design · Untested market · Statistical risk assessed by: analytical variance / sensitivity analysis / stochastic simulation / market comparison</span>
+      </div>
+      <div class="sub-row">
+        <span class="sub key">Market Consistency</span>
+        <span class="sub desc">Alternative approach: discount at risk-free rate (term-dependent, from swap curves / govt bonds) · Risk margins included in other parameters (morbidity, expenses) to reflect estimation uncertainty · Useful reasonableness check on traditional RDR approach</span>
+      </div>
+    </div>
+    <div class="note">RDR must always exceed risk-free rate. CAPM gives company-level return; product-level adjustment for relative riskiness. Margins in parameters vs margins in RDR give equivalent result but express risk differently.</div>
+  </div>
+</div>
+
+</div><!-- end flow -->
+
+<div class="footer">
+  <span>SP1 Ch.13–16 · IFE 2019 · Syllabus Obj. 5.1.1–5.1.4</span>
+  <span>ASSUMPTIONS — NAVIGATOR</span>
+  <span>Setting Assumptions · Pricing · Reserving · EV</span>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Assumptions (Ch.13–16) — Consolidated Study Matrix</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink:    #0f1117;
+    --paper:  #f5f0e8;
+    --cream:  #ede7d6;
+    --accent: #c0392b;
+    --accent-text: #a83226;
+    --gold:   #b8860b;
+    --gold-text: #7a5c00;
+    --blue:   #1a3a5c;
+    --green:  #1e5f3f;
+    --purple: #5c3d7a;
+    --muted:  #6b6560;
+    --rule:   #c8bfaf;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--paper); color:var(--ink); font-family:'IBM Plex Sans',sans-serif; font-size:12.5px; line-height:1.5; padding:28px 22px; max-width:1140px; margin:0 auto; }
+
+  /* MASTHEAD */
+  .masthead { border-top:4px solid var(--ink); border-bottom:2px solid var(--ink); padding:12px 0 10px; margin-bottom:22px; display:flex; align-items:baseline; gap:16px; }
+  .masthead-title { font-family:'Playfair Display',serif; font-size:26px; font-weight:900; flex:1; }
+  .masthead-sub { font-family:'IBM Plex Mono',monospace; font-size:9.5px; color:var(--muted); text-transform:uppercase; letter-spacing:1.5px; }
+  .masthead-tag { font-family:'IBM Plex Mono',monospace; font-size:9.5px; background:var(--accent); color:#fff; padding:3px 8px; letter-spacing:1px; }
+
+  /* SECTION LABEL */
+  .sl { font-family:'IBM Plex Mono',monospace; font-size:9px; text-transform:uppercase; letter-spacing:2px; color:var(--muted); margin-bottom:5px; border-left:3px solid var(--accent); padding-left:7px; }
+  .sl.b { border-color:var(--blue); }
+  .sl.g { border-color:var(--green); }
+  .sl.p { border-color:var(--purple); }
+
+  /* GRIDS */
+  .g3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px; margin-bottom:18px; }
+  .g2 { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:18px; }
+  .g4 { display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:14px; margin-bottom:18px; }
+
+  /* CARD */
+  .card { background:var(--cream); border:1px solid var(--rule); padding:12px 14px; }
+  .ct { font-family:'Playfair Display',serif; font-size:13.5px; font-weight:700; margin-bottom:8px; padding-bottom:5px; border-bottom:1px solid var(--rule); }
+  .ct.r { color:var(--accent-text); }
+  .ct.b { color:var(--blue); }
+  .ct.g { color:var(--green); }
+  .ct.p { color:var(--purple); }
+  .ct.gold { color:var(--gold-text); }
+
+  /* PLAIN LIST */
+  .pl { list-style:none; display:flex; flex-direction:column; gap:4px; }
+  .pl li { background:white; border-left:3px solid var(--rule); padding:4px 7px; font-size:11.5px; line-height:1.4; }
+  .pl li.r { border-left-color:var(--accent); }
+  .pl li.b { border-left-color:var(--blue); }
+  .pl li.g { border-left-color:var(--green); }
+  .pl li.p { border-left-color:var(--purple); }
+  .pl li.gold { border-left-color:var(--gold); }
+
+  /* FULL-WIDTH CARD */
+  .fw-card { background:var(--cream); border:1px solid var(--rule); padding:12px 14px; margin-bottom:18px; }
+
+  /* MATRIX TABLE */
+  table.mx { width:100%; border-collapse:collapse; font-size:11px; margin-bottom:18px; }
+  table.mx thead th { background:var(--ink); color:var(--paper); font-family:'IBM Plex Mono',monospace; font-size:9.5px; text-transform:uppercase; letter-spacing:.8px; padding:7px 9px; text-align:left; border-right:1px solid #2a2d38; }
+  table.mx thead th:first-child { background:var(--accent); width:120px; }
+  table.mx thead th.b { background:var(--blue); }
+  table.mx thead th.g { background:var(--green); }
+  table.mx thead th.p { background:var(--purple); }
+  table.mx tbody tr:nth-child(even) { background:var(--cream); }
+  table.mx tbody tr:nth-child(odd)  { background:white; }
+  table.mx tbody td { padding:7px 9px; border:1px solid var(--rule); vertical-align:top; line-height:1.4; font-size:11.5px; }
+  table.mx tbody td:first-child { font-family:'IBM Plex Mono',monospace; font-size:10px; font-weight:600; background:#e8e2d4; border-right:2px solid var(--ink); }
+
+  /* CHAPTER HEADER BAR */
+  .ch-bar { color:white; padding:10px 16px; margin-bottom:14px; display:flex; align-items:center; gap:14px; }
+  .ch-bar.r { background:var(--accent); }
+  .ch-bar.b { background:var(--blue); }
+  .ch-bar.g { background:var(--green); }
+  .ch-bar.p { background:var(--purple); }
+  .ch-bar-num { font-family:'Playfair Display',serif; font-size:30px; font-weight:900; line-height:1; opacity:.6; }
+  .ch-bar-title { font-family:'Playfair Display',serif; font-size:18px; font-weight:700; flex:1; }
+  .ch-bar-tag { font-family:'IBM Plex Mono',monospace; font-size:9px; text-transform:uppercase; letter-spacing:1px; opacity:.8; border:1px solid rgba(255,255,255,.4); padding:2px 8px; white-space:nowrap; }
+
+  /* PRINCIPLE STRIP */
+  .principle-strip { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-bottom:18px; }
+  .pr { background:white; border-top:3px solid var(--accent); padding:8px 10px; }
+  .pr-num { font-family:'IBM Plex Mono',monospace; font-size:9px; color:var(--accent); font-weight:600; margin-bottom:3px; }
+  .pr span { font-size:11.5px; line-height:1.4; }
+
+  /* PURPOSE COMPARISON */
+  .purpose-wrap { margin-bottom:18px; }
+  .purpose-header { display:grid; grid-template-columns:110px 1fr 1fr 1fr; background:var(--ink); color:var(--paper); font-family:'IBM Plex Mono',monospace; font-size:9.5px; text-transform:uppercase; letter-spacing:.7px; }
+  .purpose-header div { padding:7px 10px; border-right:1px solid rgba(255,255,255,.15); }
+  .purpose-header div:nth-child(2) { background:var(--accent); }
+  .purpose-header div:nth-child(3) { background:var(--blue); }
+  .purpose-header div:nth-child(4) { background:var(--green); }
+  .purpose-row { display:grid; grid-template-columns:110px 1fr 1fr 1fr; border-bottom:1px solid var(--rule); }
+  .purpose-row:nth-child(even) { background:var(--cream); }
+  .purpose-row:nth-child(odd) { background:white; }
+  .purpose-row div { padding:6px 10px; font-size:11.5px; border-right:1px solid var(--rule); vertical-align:top; line-height:1.4; }
+  .purpose-row div:first-child { font-family:'IBM Plex Mono',monospace; font-size:10px; font-weight:600; background:#e8e2d4; border-right:2px solid var(--ink); }
+
+  /* FACTOR PILLS */
+  .factor-bar { background:var(--ink); color:var(--paper); padding:10px 16px; display:flex; gap:14px; align-items:flex-start; margin-bottom:18px; }
+  .factor-label { font-family:'Playfair Display',serif; font-size:13px; font-weight:700; white-space:nowrap; flex-shrink:0; margin-top:2px; }
+  .factor-pills { display:flex; flex-wrap:wrap; gap:5px; }
+  .fp { background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.25); padding:3px 9px; font-size:10.5px; font-family:'IBM Plex Mono',monospace; }
+  .fp.k { background:var(--accent); border-color:var(--accent); }
+  .fp.b { background:var(--blue); border-color:var(--blue); }
+  .fp.g { background:var(--green); border-color:var(--green); }
+  .fp.p { background:var(--purple); border-color:var(--purple); }
+
+  /* HIGHLIGHT BOX */
+  .hbox { border-left:4px solid; padding:8px 12px; margin-bottom:7px; font-size:11.5px; line-height:1.4; background:white; }
+  .hbox.r { border-color:var(--accent); }
+  .hbox.b { border-color:var(--blue); }
+  .hbox.g { border-color:var(--green); }
+  .hbox.p { border-color:var(--purple); }
+  .hbox.gold { border-color:var(--gold); background:#fffbf0; }
+
+  /* RDR SECTION */
+  .rdr-wrap { border:1px solid var(--rule); margin-bottom:18px; }
+  .rdr-header { background:var(--purple); color:white; padding:10px 16px; font-family:'Playfair Display',serif; font-size:16px; font-weight:700; }
+  .rdr-body { padding:13px 14px; background:#faf8fd; }
+  .rdr-cols { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:10px; }
+  .rdr-col { background:white; border:1px solid var(--rule); padding:10px 12px; }
+  .rdr-col-head { font-family:'IBM Plex Mono',monospace; font-size:9.5px; text-transform:uppercase; letter-spacing:1px; color:var(--purple); margin-bottom:7px; font-weight:600; }
+  .capm-box { background:#f3eef9; border:1px solid #d4c8e8; padding:9px 12px; margin:8px 0; font-size:11.5px; }
+  .capm-formula { font-family:'IBM Plex Mono',monospace; font-size:11.5px; background:var(--ink); color:var(--paper); padding:5px 10px; display:inline-block; margin:5px 0; }
+
+  /* INVESTMENT TABLE */
+  .inv-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-bottom:10px; }
+  .inv-card { border:1px solid var(--rule); padding:8px 10px; background:white; }
+  .inv-name { font-family:'IBM Plex Mono',monospace; font-size:9px; text-transform:uppercase; letter-spacing:.5px; color:var(--green); margin-bottom:4px; font-weight:600; }
+  .inv-sig { font-size:12px; font-weight:700; margin-bottom:3px; }
+  .inv-note { font-size:11px; color:var(--muted); line-height:1.35; }
+
+  /* FOOTER */
+  .footer { border-top:1px solid var(--rule); padding-top:8px; margin-top:10px; font-family:'IBM Plex Mono',monospace; font-size:9px; color:var(--muted); display:flex; justify-content:space-between; }
+
+  @media print { body { padding:10px; font-size:11px; } }
+</style>
+</head>
+<body>
+
+<!-- MASTHEAD -->
+<div class="masthead">
+  <div class="masthead-title">Setting Assumptions — Chapters 13 to 16</div>
+  <span class="masthead-sub">SP1 Ch.13–16 · Syllabus Obj. 5.1</span>
+  <span class="masthead-tag">CONSOLIDATED STUDY MATRIX — OVERVIEW</span>
+</div>
+
+<!-- ════════════════════════════════════════════════════════ -->
+<!-- CHAPTER 13 -->
+<!-- ════════════════════════════════════════════════════════ -->
+<div class="ch-bar r">
+  <div class="ch-bar-num">①</div>
+  <div class="ch-bar-title">CH13 — Assumptions (1): General Considerations</div>
+  <div class="ch-bar-tag">Principles · Process · Purpose Comparison</div>
+</div>
+
+<!-- 8 Principles -->
+<div class="sl">8 Core Principles When Setting Any Assumption</div>
+<div class="principle-strip">
+  <div class="pr"><div class="pr-num">P1</div><span>Consider the <strong>purpose</strong> — pricing, reserving, EV etc.</span></div>
+  <div class="pr"><div class="pr-num">P2</div><span>Take extra care over <strong>financially significant</strong> assumptions</span></div>
+  <div class="pr"><div class="pr-num">P3</div><span>Ensure <strong>consistency</strong> between all assumptions (correlations)</span></div>
+  <div class="pr"><div class="pr-num">P4</div><span>Consider <strong>legislative &amp; regulatory</strong> constraints</span></div>
+  <div class="pr"><div class="pr-num">P5</div><span>Consider the <strong>needs of the client</strong></span></div>
+  <div class="pr"><div class="pr-num">P6</div><span>Derive parameters as <strong>accurately as data permits</strong></span></div>
+  <div class="pr"><div class="pr-num">P7</div><span>Ensure data <strong>relevant to insured lives</strong> (target market)</span></div>
+  <div class="pr"><div class="pr-num">P8</div><span>Keep bases <strong>flexible</strong> to reflect changing risk circumstances</span></div>
+</div>
+
+<!-- 4-step process + consistency -->
+<div class="g2">
+  <div class="card">
+    <div class="ct r">4-Step Assumption-Setting Process</div>
+    <ul class="pl">
+      <li class="r"><strong>Step 1 — Historical:</strong> Investigate past experience; best estimates of parameters from data</li>
+      <li class="r"><strong>Step 2 — Future Conditions:</strong> Assess commercial &amp; economic environment that will apply</li>
+      <li class="r"><strong>Step 3 — Best Estimates:</strong> Derive best estimates for the future period</li>
+      <li class="r"><strong>Step 4 — Margins:</strong> Adjust for prudence; size depends on purpose &amp; degree of risk of each parameter</li>
+    </ul>
+  </div>
+  <div class="card">
+    <div class="ct r">Consistency — Correlated Pairs to Watch</div>
+    <ul class="pl">
+      <li>Morbidity ↔ Lapse rates (selective lapsing → worsening pool)</li>
+      <li>Morbidity ↔ Claims expenses (claim volume drives cost)</li>
+      <li>Morbidity ↔ Investment return (economic climate links both)</li>
+      <li>NB volumes ↔ Fixed expenses (per-policy loading)</li>
+      <li>NB volumes ↔ Lapse/non-renewal rates</li>
+      <li>Lapse rates ↔ Investment return (economic climate)</li>
+      <li>Investment return ↔ Expense inflation (long-run real return must be consistent)</li>
+      <li class="r">Also: consistency across related products (e.g. stand-alone CI vs accelerated CI as starting point)</li>
+    </ul>
+  </div>
+</div>
+
+<!-- Purpose comparison table -->
+<div class="sl">Basis by Purpose — Pricing vs Reserving vs EV</div>
+<div class="purpose-wrap">
+  <div class="purpose-header">
+    <div>Factor</div>
+    <div>Pricing</div>
+    <div>Reserving</div>
+    <div>EV / Profitability</div>
+  </div>
+  <div class="purpose-row">
+    <div>Starting point</div>
+    <div>Best estimate of future experience</div>
+    <div>Best estimate of future experience</div>
+    <div>Best estimate (realistic)</div>
+  </div>
+  <div class="purpose-row">
+    <div>Margins</div>
+    <div>Yes — guard against adverse experience; also competitive constraint</div>
+    <div>Yes — prudent; adequacy of probability that reserves suffice</div>
+    <div>Lower than pricing; volume &amp; mix uncertainty removed</div>
+  </div>
+  <div class="purpose-row">
+    <div>Risk allowance methods</div>
+    <div>① Margins in parameters ② Stochastic ③ Risk element in RDR</div>
+    <div>Prudent assumptions OR best estimate + separate risk margin / SCR</div>
+    <div>Higher RDR (stochastic / market-consistent) or margins in parameters</div>
+  </div>
+  <div class="purpose-row">
+    <div>Account types</div>
+    <div>Book rate vs experience rate; long-term judgements vs short-term (PMI/reviewable CI)</div>
+    <div>Published accounts (true &amp; fair, going concern / break-up) · Solvency accounts (run-off basis) · Internal mgmt (best estimate, no margins)</div>
+    <div>Reserving basis (net assets + reserve changes) + Projection basis (future profits)</div>
+  </div>
+  <div class="purpose-row">
+    <div>Key constraint</div>
+    <div>Competitiveness — under-price: large loss; over-price: no sales (under-pricing worse)</div>
+    <div>Regulatory: must meet supervisory solvency; legislation constrains assumptions</div>
+    <div>Purpose-specific: sale/purchase uses realistic (seller) vs cautious (buyer); EV financing uses prudent; bonuses use slightly prudent</div>
+  </div>
+  <div class="purpose-row">
+    <div>5 Factors → size of margin</div>
+    <div colspan="3">Competitive nature of market · Company's USP · Company's risk appetite · Credibility/accuracy/relevance of data · Size of free assets or parental guarantee</div>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════ -->
+<!-- CHAPTER 14 -->
+<!-- ════════════════════════════════════════════════════════ -->
+<div class="ch-bar b">
+  <div class="ch-bar-num">②</div>
+  <div class="ch-bar-title">CH14 — Assumptions (2): Demographic Assumptions</div>
+  <div class="ch-bar-tag">Morbidity · Recovery · Mortality · Lapses</div>
+</div>
+
+<!-- General Process -->
+<div class="sl b">General Derivation Process (All Demographic Assumptions)</div>
+<div class="fw-card" style="margin-bottom:14px; border-top:3px solid var(--blue);">
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;">
+    <div style="background:white;border-left:4px solid var(--blue);padding:8px 10px;">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--blue);font-weight:600;margin-bottom:4px;">STEP 1 — COLLECT</div>
+      <div style="font-size:11.5px;">Choose appropriate database · ~3–4 years of data (volume vs heterogeneity tension) · Own + reinsurer + market + population sources · Standard tables where own data insufficient</div>
+    </div>
+    <div style="background:white;border-left:4px solid var(--blue);padding:8px 10px;">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--blue);font-weight:600;margin-bottom:4px;">STEP 2 — GROUP</div>
+      <div style="font-size:11.5px;">Divide into homogeneous risk cells · Balance credibility (large groups) vs heterogeneity (meaningful cells) · Trial &amp; error combinations to find best groupings for pricing</div>
+    </div>
+    <div style="background:white;border-left:4px solid var(--blue);padding:8px 10px;">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--blue);font-weight:600;margin-bottom:4px;">STEP 3 — CALCULATE</div>
+      <div style="font-size:11.5px;">Adjust standard table rates: <code style="background:#f0f4f8;padding:1px 4px;">i_x = a · i_x(S) + b</code> · Exposed-to-risk techniques where no standard table · CI: project each illness separately then combine (watch double-counting)</div>
+    </div>
+    <div style="background:white;border-left:4px solid var(--blue);padding:8px 10px;">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--blue);font-weight:600;margin-bottom:4px;">STEP 4 — ADJUST</div>
+      <div style="font-size:11.5px;">Allow for trends (improving &amp; worsening) · Changes in target market, distribution channel, UW basis · Adjust for future social/economic conditions · Note: future lives almost always different from historical data cohort</div>
+    </div>
+  </div>
+</div>
+
+<!-- Incidence by product + rating factors -->
+<div class="g2">
+  <div class="card">
+    <div class="ct b">Claim Incidence — by Product Type</div>
+    <ul class="pl">
+      <li class="b"><strong>IP:</strong> Inception rates (healthy→sick) + recovery rates (sick→healthy) — both crucial</li>
+      <li class="b"><strong>CI:</strong> Per illness type: cancer · heart attack · stroke · CABS · TPD · others proportionately · Project each separately (different trends) then combine (adjust for double-counting)</li>
+      <li class="b"><strong>LTCI:</strong> Inception rates (able→claiming) + transitions to higher benefit levels · Recovery generally ignored (unlikely given age &amp; claim conditions)</li>
+      <li class="b"><strong>PMI:</strong> By benefit category separately · Annual renewal → projections shorter horizon · Claim amounts also required (see Ch15)</li>
+      <li>Sophisticated IP/PMI: may load for higher re-incidence among past claimants</li>
+    </ul>
+    <div style="margin-top:8px;background:white;border-left:3px solid var(--gold);padding:6px 8px;font-size:11.5px;">
+      <strong>Social/Economic influences:</strong> State welfare generosity · unemployment / economic conditions (↑IP incidence; PMI utilisation) · inflation (↑PMI renewal lapse risk; selective lapsing)
+    </div>
+  </div>
+  <div class="card">
+    <div class="ct b">Rating Factors (Data Sub-Divisions)</div>
+    <ul class="pl">
+      <li class="b">Age</li>
+      <li class="b">Gender (may be prohibited in EU; monitored internally)</li>
+      <li class="b">Smoker status</li>
+      <li class="b">Occupation / occupational class</li>
+      <li class="b">Benefit size / sum insured</li>
+      <li>Product class (stand-alone vs rider; length of deferred period)</li>
+      <li>Individual vs group</li>
+      <li>Distribution channel / source</li>
+      <li>Region / territory</li>
+      <li>Duration since policy entry</li>
+      <li>Duration since start of current benefit (LTCI transitions)</li>
+      <li>Underwriting status (standard / special terms)</li>
+      <li style="border-left-color:var(--muted);color:var(--muted);font-size:10.5px;">PMI: age (band), maybe not gender; smoker not yet widespread as rating factor</li>
+    </ul>
+  </div>
+</div>
+
+<!-- Recovery + Mortality -->
+<div class="g2">
+  <div class="card">
+    <div class="ct b">Recovery Rates — Income Protection Focus</div>
+    <ul class="pl">
+      <li class="b">Crucial for IP (benefit is income annuity until recovery / death / expiry)</li>
+      <li class="b">LTCI: generally ignored in pricing (recovery unlikely given age &amp; conditions)</li>
+      <li><strong>Key recovery drivers:</strong></li>
+      <li>Keenness to return to work — economic availability of work</li>
+      <li>Policy income ratio: total post-disability income must be &lt; pre-disability earnings (insurer controls via policy conditions)</li>
+      <li>Insurer involvement in rehabilitation — significant impact</li>
+      <li>Cause of claim — very influential</li>
+      <li>Medical advances: aid recovery but also extend life in disability → <em>net effect on claim cost is unclear</em></li>
+      <li class="b">Large benefit amounts → claims continue significantly longer than small amounts</li>
+    </ul>
+  </div>
+  <div class="card">
+    <div class="ct b">Mortality — Significance by Context</div>
+    <ul class="pl">
+      <li class="b"><strong>Non-claiming policyholders:</strong> Standard insured lives table + future improvement adjustment; least research needed</li>
+      <li class="b"><strong>IP &amp; LTCI claimants in payment:</strong> More effort required — mortality of sick lives far less predictable; has large financial impact (claim termination)</li>
+      <li class="b"><strong>CI survivorship period:</strong> Probability of dying within e.g. 28 days post-diagnosis → adjust CI incidence rate (illness-specific; post-diagnosis survival differs markedly by illness)</li>
+      <li><strong>Policies without death benefit:</strong> Do NOT over-estimate mortality — reduces exposure → under-prices the risk</li>
+      <li style="color:var(--muted);font-size:11px;border-left-color:var(--muted);">10% fall in healthy-life mortality → &lt;0.5% increase in CI exposure. But 10% fall in claiming-life mortality → very large increase in IP/LTCI claim cost.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- Lapses full width table -->
+<div class="sl b">Lapses — Key Dimensions</div>
+<table class="mx" style="margin-bottom:18px;">
+  <thead>
+    <tr>
+      <th>Dimension</th>
+      <th class="b">Income Protection / CI / LTCI (Long-term)</th>
+      <th class="b">PMI (Short-term)</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Definition</td>
+      <td>Policyholder stops paying premiums; no surrender value (usually); policy terminates with no benefit</td>
+      <td>Failure to renew at renewal date; policy simply terminates</td>
+    </tr>
+    <tr>
+      <td>Data source</td>
+      <td>Own data first; similar contracts second; industry data if available. <em>Market data much less useful</em> — high heterogeneity; human choice; no population equivalent</td>
+      <td>Own data; after-sales service a major factor → competitor data less relevant</td>
+    </tr>
+    <tr>
+      <td>Influencing factors</td>
+      <td>Economic (affordability) · Political (state benefits) · Commercial (competitor products) · Awareness (perceived need)</td>
+      <td>Rate of premium increase · Perceived quality of state provision (waiting lists) · Economic confidence</td>
+    </tr>
+    <tr>
+      <td>Financial effect — early lapse</td>
+      <td>Loss — accumulated asset share negative (NB strain unrecouped)</td>
+      <td>Generally unprofitable in first 2–3 years</td>
+    </tr>
+    <tr>
+      <td>Financial effect — late lapse</td>
+      <td>Gain — no surrender value paid; accumulated asset share retained (if positive)</td>
+      <td>N/A</td>
+    </tr>
+    <tr>
+      <td>Selective lapsing</td>
+      <td>Healthier lives more likely to lapse → morbidity of remaining pool deteriorates → more &amp; larger claims</td>
+      <td>Lowest-claiming members have highest lapse rates → concentration of high claimers → adverse experience</td>
+    </tr>
+    <tr>
+      <td>Lapse &amp; re-entry</td>
+      <td>Problem when premiums falling (e.g. CI UK 1990s) — only healthy lives can benefit; insurer pays double acquisition costs; portfolio may become loss-making</td>
+      <td>N/A (annual renewable — no "re-entry" concept)</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- ════════════════════════════════════════════════════════ -->
+<!-- CHAPTER 15 -->
+<!-- ════════════════════════════════════════════════════════ -->
+<div class="ch-bar g">
+  <div class="ch-bar-num">③</div>
+  <div class="ch-bar-title">CH15 — Assumptions (3): Financial Assumptions</div>
+  <div class="ch-bar-tag">Benefits · Expenses · Commission · Investment · Taxes</div>
+</div>
+
+<!-- Benefit amount + inflation -->
+<div class="sl g">Benefit Amount &amp; Benefit Inflation</div>
+<div class="g2">
+  <div class="card">
+    <div class="ct g">Benefit Amount</div>
+    <div class="hbox g" style="margin-bottom:6px;"><strong>Long-term (IP/CI/LTCI):</strong> Benefits pre-determined; premium expressed as rate per unit of benefit (e.g. £3 per £100 p.a. benefit). Large cases only: adjust for stricter UW + higher socio-economic group (better experience). Per-policy expenses → priced at average policy size.</div>
+    <div class="hbox g"><strong>PMI:</strong> Must forecast average claim amount per benefit category. Starting point: own experience (or similar insurer). Adjust for: differences in policy conditions · hospital deal arrangements (predictability + cost control) · future provider capacity &amp; charges · treatment price lists as alternative source.</div>
+  </div>
+  <div class="card">
+    <div class="ct g">Benefit Inflation</div>
+    <ul class="pl">
+      <li class="g"><strong>IP:</strong> Earnings index (benefit replaces lost income)</li>
+      <li class="g"><strong>CI:</strong> Purpose-dependent — care costs / debt repayment / earnings / price inflation; sum insured usually fixed in practice</li>
+      <li class="g"><strong>LTCI:</strong> Index of nursing &amp; residential home care costs; ceiling common to contain insurer exposure</li>
+      <li class="g"><strong>PMI:</strong> Medical inflation + changes in treatment protocols + hospital charging structure + future age profile of portfolio + provider capacity trends</li>
+      <li>Fixed % avoids unknown index — explicitly modelled like level-premium contract (initial funding)</li>
+      <li style="color:var(--muted);font-size:11px;border-left-color:var(--muted);">CPI often used but understates medical costs (salary inflation in medical staff; modern technology)</li>
+    </ul>
+  </div>
+</div>
+
+<!-- Expenses -->
+<div class="sl g">Expenses — Types, Loading &amp; Comparison with Life</div>
+<div class="g2">
+  <div class="card">
+    <div class="ct g">9 Expense Types (by Function)</div>
+    <ul class="pl">
+      <li class="g">Initial acquisition (commission + marketing + sales)</li>
+      <li class="g">Initial medical underwriting</li>
+      <li class="g">Initial administration</li>
+      <li class="g">Renewal administration <em>(PMI: highest — full re-pricing of each policy)</em></li>
+      <li class="g">Renewal commission / channel reward</li>
+      <li>Investment expenses <em>(PMI: not important — small reserves)</em></li>
+      <li>Withdrawal / cancellation <em>(PMI: swamped by renewal costs)</em></li>
+      <li class="g">Claims administration (validity check; ongoing monitoring; rehabilitation)</li>
+      <li class="g">Termination</li>
+    </ul>
+    <div style="margin-top:7px;background:white;border-left:3px solid var(--muted);padding:5px 8px;font-size:11px;">Direct (class-specific) vs Indirect (overheads). Fixed vs Variable. Per-policy vs per-premium vs per-benefit.</div>
+  </div>
+  <div class="card">
+    <div class="ct g">Loading Per-Policy Expenses into Premiums</div>
+    <div class="hbox g" style="margin-bottom:5px;"><strong>Problem:</strong> premium rate expressed per unit of benefit → per-policy expense loading varies by policy size → large policies subsidise small ones.</div>
+    <div style="display:flex;flex-direction:column;gap:5px;margin-bottom:6px;">
+      <div style="background:white;border-left:3px solid var(--green);padding:5px 8px;font-size:11.5px;"><strong>Method 1 — Individual calculation:</strong> Calc premium for each policy explicitly. Only practical for large cases (small policies: implausibly large % expense loading).</div>
+      <div style="background:white;border-left:3px solid var(--green);padding:5px 8px;font-size:11.5px;"><strong>Method 2 — Policy fee:</strong> Most common. Separate flat fee covers per-policy costs; premium rate covers proportionate costs. Fee may be reduced for competitiveness → must compensate via higher % loading; risk if actual mix skews small.</div>
+      <div style="background:white;border-left:3px solid var(--green);padding:5px 8px;font-size:11.5px;"><strong>Method 3 — Sum insured differential:</strong> Different premium rates per benefit band. Requires volume projection per band. Often combined with a policy fee.</div>
+    </div>
+    <div style="background:#fff8e8;border:1px solid var(--gold);padding:6px 9px;font-size:11.5px;"><strong>Higher than life insurance because:</strong> Lower non-medical limits → more UW effort · Product must be sold (not demand-led) · Claims validation more time-intensive · Ongoing claims management (IP, LTCI) · Rehabilitation effort</div>
+  </div>
+</div>
+
+<!-- Expense inflation + commission -->
+<div class="g2">
+  <div class="card">
+    <div class="ct g">Expense Inflation</div>
+    <ul class="pl">
+      <li class="g">Always needed for long-term products; also for reviewable contracts</li>
+      <li class="g">Mix of <strong>price inflation</strong> (minority) + <strong>earnings inflation</strong> (majority — staff costs dominate)</li>
+      <li>Analyse company's own recent expense inflation; if absent, use industry</li>
+      <li>Consider: current price &amp; earnings rates · expected future rates · ILG vs nominal govt bond yield differential (market-implied inflation) · company/industry recent actual experience</li>
+      <li>Apply to: renewal admin · claims admin · termination expense loadings</li>
+      <li class="g">Two horizons: inflation during policy term <em>and</em> inflation between now and when new policies are issued</li>
+    </ul>
+  </div>
+  <div class="card">
+    <div class="ct g">Commission &amp; Clawback</div>
+    <ul class="pl">
+      <li class="g">Based on rates <em>actually paid</em> (market levels + legislation)</li>
+      <li class="g">Higher than life: extra product explanation + extra UW information collection</li>
+      <li>Initial commission usually higher than renewal commission (reflects sales effort)</li>
+      <li>Weighted average if multiple distribution channels have different commission structures</li>
+      <li class="g"><strong>Clawback credit risk:</strong> If early lapse AND intermediary defaults → commission not recovered. Assume partial non-recovery in pricing basis.</li>
+      <li>Analysis: early lapses vs policies exposed at each duration subject to clawback; split by product type and channel</li>
+      <li style="font-size:11px;border-left-color:var(--muted);color:var(--muted);">Example: 10% lapse rate · 50% clawback · 5% non-recovery rate → expected clawback = 10% × 50% × 95% = 4.75% of initial commission</li>
+    </ul>
+  </div>
+</div>
+
+<!-- Investment return -->
+<div class="sl g">Investment Return — Significance by Product</div>
+<div class="inv-grid">
+  <div class="inv-card" style="border-top:3px solid var(--green);">
+    <div class="inv-name">Pre-funded single premium LTCI</div>
+    <div class="inv-sig" style="color:var(--green);">CRITICAL</div>
+    <div class="inv-note">Very large reserves for very long period. Possible to match with assets → lock in yield at outset. Reinvestment risk from uncertainty of claim timing still remains.</div>
+  </div>
+  <div class="inv-card" style="border-top:3px solid #2a6b40;">
+    <div class="inv-name">Regular premium pre-funded LTCI</div>
+    <div class="inv-sig" style="color:#2a6b40;">IMPORTANT</div>
+    <div class="inv-note">Large reserves; cannot match most liabilities until late in term → high reinvestment risk throughout policy.</div>
+  </div>
+  <div class="inv-card" style="border-top:3px solid var(--muted);">
+    <div class="inv-name">Regular premium CI / IP</div>
+    <div class="inv-sig" style="color:var(--muted);">LIMITED</div>
+    <div class="inv-note">Relatively small reserves; profits insensitive to investment return changes. Limited reinvestment risk.</div>
+  </div>
+  <div class="inv-card" style="border-top:3px solid var(--rule);">
+    <div class="inv-name">PMI</div>
+    <div class="inv-sig" style="color:var(--muted);">NEGLIGIBLE</div>
+    <div class="inv-note">One-year policies; claims settled within the year or shortly after; reserves tiny. Investment expense also not important.</div>
+  </div>
+</div>
+<div class="g2" style="margin-bottom:18px;">
+  <div class="card" style="border-top:3px solid var(--green);">
+    <div class="ct g">Asset Mix Considerations</div>
+    <ul class="pl">
+      <li class="g"><strong>Fixed monetary benefits (IP/CI):</strong> Fixed interest bonds / gilts to match</li>
+      <li class="g"><strong>Real / inflation-linked benefits:</strong> Index-linked government bonds</li>
+      <li class="g"><strong>Care cost inflation (LTCI):</strong> Some equity — mirrors real increases in care costs; long investment period supports equity risk</li>
+      <li>Unit-linked products: managed fund return (mix of equity + bonds) for unit fund; separate return for non-unit reserves</li>
+      <li>Market-consistent (risk-neutral): set return = risk-free rate regardless of actual assets held; investment return volatility/correlation still depends on actual assets</li>
+      <li style="font-size:11px;color:var(--muted);border-left-color:var(--muted);">Must be consistent with inflation assumption (implied real return must be realistic)</li>
+    </ul>
+  </div>
+  <div class="card" style="border-top:3px solid var(--green);">
+    <div class="ct g">Taxes — Three Approaches</div>
+    <ul class="pl">
+      <li class="g"><strong>Profits tax:</strong> Insurance company taxed on contract profits. Multiply future profits by (1 − tax rate). Tax authorities typically restrict prudence in reserves allowed for tax purposes.</li>
+      <li class="g"><strong>I–E basis:</strong> Tax on investment income less allowable expenses. Model all flows net of tax rate. Staggered expense relief in some territories (spread over 3–7 years).</li>
+      <li class="g"><strong>Premium tax:</strong> Insurer neutral financially (collects on behalf of state). BUT: increases consumer cost → reduce NB volume + increase lapse/non-renewal rates → must feed into those assumptions (consistency).</li>
+      <li>Best approach: use current rates, adjusted for any known future changes</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════ -->
+<!-- CHAPTER 16 -->
+<!-- ════════════════════════════════════════════════════════ -->
+<div class="ch-bar p">
+  <div class="ch-bar-num">④</div>
+  <div class="ch-bar-title">CH16 — Assumptions (4): Other Assumptions</div>
+  <div class="ch-bar-tag">New Business · Risk Discount Rate · Market Consistency</div>
+</div>
+
+<!-- NB Volume + Mix -->
+<div class="sl p">New Business Volume &amp; Mix</div>
+<div class="g2">
+  <div class="card">
+    <div class="ct p">New Business Volume</div>
+    <ul class="pl">
+      <li class="p">Needed primarily for <strong>pricing</strong> (for reserving/EV: actual volume known)</li>
+      <li class="p"><strong>Purpose 1:</strong> Allocation of fixed expenses per policy in pricing basis</li>
+      <li class="p"><strong>Purpose 2:</strong> Assess capital adequacy to support NB strain at launch</li>
+      <li>Based on: own past experience + market data + competitive position of product</li>
+      <li>Circularity risk: volume depends on price; price depends on expense loading; loading depends on volume — resolve by assuming volume insensitive across a band of prices</li>
+    </ul>
+  </div>
+  <div class="card">
+    <div class="ct p">New Business Mix — 6 Dimensions</div>
+    <ul class="pl">
+      <li class="p"><strong>Average policy size:</strong> Linked to socio-economic profile of target market; inflation and consumer demand trends</li>
+      <li class="p"><strong>By product:</strong> Allocate indirect expenses accurately to each product line</li>
+      <li class="p"><strong>By distribution channel:</strong> Commission rates may differ; volumes needed if uniform pricing across channels</li>
+      <li class="p"><strong>By territory / region:</strong> Risk varies substantially; needed if region not a rating factor</li>
+      <li class="p"><strong>By gender:</strong> Required for unisex pricing (EU legislation); morbidity significantly different</li>
+      <li class="p"><strong>By occupation:</strong> Material impact on claim propensity; needed where broad groupings used</li>
+      <li class="p">Anti-selection risk: uniform premiums → higher-risk lives attracted → monitor mix continuously; competitors with finer subdivisions win the lighter risks</li>
+    </ul>
+  </div>
+</div>
+
+<!-- Risk Discount Rate -->
+<div class="sl p">Risk Discount Rate</div>
+<div class="rdr-wrap">
+  <div class="rdr-header">Risk Discount Rate — CAPM + Product-Specific Risk</div>
+  <div class="rdr-body">
+    <div class="rdr-cols">
+      <div class="rdr-col">
+        <div class="rdr-col-head">Component 1 — Shareholders' Required Return (Company-level)</div>
+        <div style="font-size:11.5px;margin-bottom:7px;">Investors compare returns across companies relative to risk. They require: <strong>risk-free rate</strong> (e.g. short-term stable-government bonds) + <strong>risk premium</strong> for investing in an insurance company.</div>
+        <div class="capm-box">
+          <strong>Capital Asset Pricing Model (CAPM):</strong><br>
+          <div class="capm-formula">E(i) = r + β · [E(m) − r]</div><br>
+          E(i) = expected return on company's shares<br>
+          r = risk-free rate<br>
+          E(m) = expected market return (e.g. equity index)<br>
+          β = beta = covariance(r_i, r_m) / variance(r_m)<br><br>
+          β &gt; 1: more volatile than market · β &lt; 1: less volatile<br>
+          CAPM captures <strong>systematic (market) risk only</strong> — diversifiable risk eliminated.
+        </div>
+        <div style="font-size:11.5px;color:var(--muted);">Market is the final judge of required return — actuary makes assumptions but cannot dictate what shareholders demand.</div>
+      </div>
+      <div class="rdr-col">
+        <div class="rdr-col-head">Component 2 — Product-Specific Statistical Risk</div>
+        <div style="font-size:11.5px;margin-bottom:7px;">E(i) is the company-wide required return. Individual products are priced with a <strong>project-specific RDR</strong> that adjusts for relative riskiness vs company average:</div>
+        <div style="background:white;border:1px solid var(--rule);padding:8px 10px;margin-bottom:7px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--purple);margin-bottom:5px;font-weight:600;">6 FACTORS INCREASING PRODUCT RISK → ↑ RDR</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;font-size:11.5px;">
+            <div style="background:#f3eef9;padding:4px 7px;">Lack of historical data</div>
+            <div style="background:#f3eef9;padding:4px 7px;">High guarantees</div>
+            <div style="background:#f3eef9;padding:4px 7px;">Policyholder options</div>
+            <div style="background:#f3eef9;padding:4px 7px;">Overhead costs</div>
+            <div style="background:#f3eef9;padding:4px 7px;">Complexity of design</div>
+            <div style="background:#f3eef9;padding:4px 7px;">Untested market</div>
+          </div>
+        </div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;color:var(--purple);margin-bottom:5px;font-weight:600;">4 METHODS TO ASSESS STATISTICAL RISK</div>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:4px;font-size:11.5px;">
+          <li style="background:white;border-left:3px solid var(--purple);padding:4px 7px;">Analytically — via variances of individual parameter distributions</li>
+          <li style="background:white;border-left:3px solid var(--purple);padding:4px 7px;">Sensitivity analysis — deterministic range of plausible parameter changes</li>
+          <li style="background:white;border-left:3px solid var(--purple);padding:4px 7px;">Stochastic simulation — vary parameters by assumed distributions; 1,000+ scenarios → distribution of return on capital</li>
+          <li style="background:white;border-left:3px solid var(--purple);padding:4px 7px;">Market data comparison</li>
+        </ul>
+      </div>
+    </div>
+    <div style="background:white;border-left:4px solid var(--purple);padding:8px 12px;font-size:11.5px;">
+      <strong>Three key RDR conclusions:</strong> (1) RDR must always exceed risk-free rate — rises when market rates rise. (2) Margin above risk-free reflects ALL product risk sources; different products priced at different RDRs reflecting relative risk. (3) Overall return on company capital across all products must meet shareholders' required return (cost of capital). Margins in individual parameters and margins via RDR are alternative but equivalent ways of expressing the same risk.
+    </div>
+  </div>
+</div>
+
+<!-- Market Consistency -->
+<div class="sl p">Market Consistency (Alternative / Validation Approach)</div>
+<div class="g3" style="margin-bottom:18px;">
+  <div class="card" style="border-top:3px solid var(--purple);">
+    <div class="ct p">Risk-Neutral Valuation</div>
+    <ul class="pl">
+      <li class="p">Discount all cashflows at <strong>risk-free interest rates</strong> (term-dependent)</li>
+      <li class="p">Risk-free curve sourced from swap rates or government bond yield curves</li>
+      <li>Investments <em>assumed</em> to earn risk-free rate regardless of actual assets held</li>
+    </ul>
+  </div>
+  <div class="card" style="border-top:3px solid var(--purple);">
+    <div class="ct p">Risk Margin in Parameters</div>
+    <ul class="pl">
+      <li class="p">Because RDR = risk-free, risk must instead be reflected in <strong>parameter margins</strong> (morbidity, expenses)</li>
+      <li class="p">Risk margin compensates the "market" for taking on uncertain non-investment liability cashflows</li>
+      <li>Cost of capital approach (also used in Solvency II risk margin — see Ch22)</li>
+    </ul>
+  </div>
+  <div class="card" style="border-top:3px solid var(--purple);">
+    <div class="ct p">Use as Reasonableness Check</div>
+    <ul class="pl">
+      <li class="p">Even where traditional CAPM / RDR approach is primary, market-consistent valuation provides a useful <strong>cross-check</strong></li>
+      <li class="p">Ensures traditional approach produces defensible margins</li>
+      <li>Increasingly common in European / Solvency II environments</li>
+    </ul>
+  </div>
+</div>
+
+<div class="footer">
+  <span>SP1 Ch.13–16 · IFE 2019 · Syllabus Obj. 5.1.1–5.1.4</span>
+  <span>CONSOLIDATED STUDY MATRIX — OVERVIEW</span>
+  <span>Setting Assumptions · Pricing · Reserving · EV</span>
+</div>
+
+</body>
+</html>
