@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ACC Monitoring Stage — Outline Navigator</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0f1117;
+    --paper: #f5f0e8;
+    --cream: #ede7d6;
+    --accent: #c0392b;
+    --gold: #b8860b;
+    --blue: #1a3a5c;
+    --green: #1e5f3f;
+    --purple: #5c3d7a;
+    --stat: #1a3a5c;
+    --solv: #7a3d1a;
+    --muted: #6b6560;
+    --rule: #c8bfaf;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 12px;
+    line-height: 1.5;
+    padding: 28px 24px;
+    max-width: 1140px;
+    margin: 0 auto;
+  }
+
+  /* MASTHEAD */
+  .masthead { border-top:4px solid var(--ink); border-bottom:2px solid var(--ink); padding:12px 0 10px; margin-bottom:28px; display:flex; align-items:baseline; gap:16px; }
+  .masthead-title { font-family:'Playfair Display',serif; font-size:26px; font-weight:900; flex:1; }
+  .masthead-sub { font-family:'IBM Plex Mono',monospace; font-size:9.5px; color:var(--muted); text-transform:uppercase; letter-spacing:1.5px; }
+  .masthead-tag { font-family:'IBM Plex Mono',monospace; font-size:9.5px; background:var(--ink); color:#fff; padding:3px 8px; letter-spacing:1px; }
+
+  /* FLOW CONTAINER */
+  .flow {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    position: relative;
+  }
+
+  /* CONNECTOR LINE */
+  .flow::before {
+    content: '';
+    position: absolute;
+    left: 22px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--accent), var(--blue), var(--stat), var(--gold), var(--purple), var(--green), var(--purple), var(--green), var(--ink));
+    z-index: 0;
+  }
+
+  /* BLOCK */
+  .block {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    margin-bottom: 6px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* NUMBER BADGE */
+  .num {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 900;
+    color: white;
+    flex-shrink: 0;
+    border: 3px solid var(--paper);
+    box-shadow: 0 0 0 2px currentColor;
+  }
+
+  /* BLOCK CONTENT */
+  .block-content {
+    flex: 1;
+    border-left: 3px solid;
+    padding: 10px 14px;
+    background: var(--cream);
+  }
+
+  .block-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+
+  .sub-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+
+  .sub {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    padding: 3px 9px;
+    border: 1px solid;
+    background: white;
+    letter-spacing: 0.3px;
+  }
+
+  .sub.key {
+    color: white;
+    border-color: transparent;
+    font-weight: 600;
+  }
+
+  /* ARROW CONNECTOR BETWEEN BLOCKS */
+  .arrow {
+    display: flex;
+    align-items: center;
+    padding-left: 14px;
+    margin: 2px 0;
+    color: var(--muted);
+    font-size: 16px;
+    z-index: 1;
+    position: relative;
+  }
+
+  /* COLOR SCHEMES PER BLOCK */
+  .b1 .num { background: var(--accent); box-shadow: 0 0 0 2px var(--accent); }
+  .b1 .block-content { border-color: var(--accent); }
+  .b1 .block-title { color: var(--accent); }
+  .b1 .sub { color: var(--accent); border-color: #e8a09a; }
+  .b1 .sub.key { background: var(--accent); }
+
+  .b2 .num { background: var(--blue); box-shadow: 0 0 0 2px var(--blue); }
+  .b2 .block-content { border-color: var(--blue); }
+  .b2 .block-title { color: var(--blue); }
+  .b2 .sub { color: var(--blue); border-color: #a0b4c8; }
+  .b2 .sub.key { background: var(--blue); }
+
+  .b3 .num { background: var(--stat); box-shadow: 0 0 0 2px var(--stat); }
+  .b3 .block-content { border-color: var(--stat); background: #eef2f7; }
+  .b3 .block-title { color: var(--stat); }
+  .b3 .sub { color: var(--stat); border-color: #a0b4c8; }
+  .b3 .sub.key { background: var(--stat); }
+  .b3 .sub.solv { background: var(--solv); color: white; border-color: var(--solv); font-weight:600; }
+
+  .b4 .num { background: var(--gold); box-shadow: 0 0 0 2px var(--gold); }
+  .b4 .block-content { border-color: var(--gold); background: #fffdf0; }
+  .b4 .block-title { color: var(--gold); }
+  .b4 .sub { color: var(--gold); border-color: #d4b86a; }
+  .b4 .sub.key { background: var(--gold); }
+
+  .b5 .num { background: var(--purple); box-shadow: 0 0 0 2px var(--purple); }
+  .b5 .block-content { border-color: var(--purple); background: #f8f4fc; }
+  .b5 .block-title { color: var(--purple); }
+  .b5 .sub { color: var(--purple); border-color: #c4a8e0; }
+  .b5 .sub.key { background: var(--purple); }
+
+  .b6 .num { background: #5c3d1a; box-shadow: 0 0 0 2px #5c3d1a; }
+  .b6 .block-content { border-color: #5c3d1a; }
+  .b6 .block-title { color: #5c3d1a; }
+  .b6 .sub { color: #5c3d1a; border-color: #c4a888; }
+  .b6 .sub.key { background: #5c3d1a; }
+
+  .b7 .num { background: var(--gold); box-shadow: 0 0 0 2px var(--gold); }
+  .b7 .block-content { border-color: var(--gold); background: #fffdf0; }
+  .b7 .block-title { color: var(--gold); }
+  .b7 .sub { color: var(--gold); border-color: #d4b86a; }
+  .b7 .sub.key { background: var(--gold); }
+  .b7 .sub.purple { background: var(--purple); color:white; border-color:var(--purple); font-weight:600;}
+  .b7 .sub.accent { background: var(--accent); color:white; border-color:var(--accent); font-weight:600;}
+
+  .b8 .num { background: var(--green); box-shadow: 0 0 0 2px var(--green); }
+  .b8 .block-content { border-color: var(--green); background: #eef7f2; }
+  .b8 .block-title { color: var(--green); }
+  .b8 .sub { color: var(--green); border-color: #90c4a8; }
+  .b8 .sub.key { background: var(--green); }
+
+  .b9 .num { background: var(--ink); box-shadow: 0 0 0 2px var(--ink); }
+  .b9 .block-content { border-color: var(--ink); background: #1a1d24; color: var(--paper); }
+  .b9 .block-title { color: var(--paper); }
+  .b9 .sub { color: var(--paper); border-color: #444; background: #2a2d38; }
+  .b9 .sub.key { background: var(--accent); border-color: var(--accent); color:white; }
+
+  /* NOTE BOX */
+  .note {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9.5px;
+    color: var(--muted);
+    margin-top: 6px;
+    font-style: italic;
+  }
+
+  /* FOOTER */
+  .footer { border-top:1px solid var(--rule); padding-top:8px; margin-top:20px; font-family:'IBM Plex Mono',monospace; font-size:9px; color:var(--muted); display:flex; justify-content:space-between; }
+
+  /* HOW TO USE BOX */
+  .how-to {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 10px 16px;
+    margin-bottom: 22px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-size: 11px;
+  }
+  .how-to strong {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--gold);
+    white-space: nowrap;
+  }
+</style>
+</head>
+<body>
+
+<!-- MASTHEAD -->
+<div class="masthead">
+  <div class="masthead-title">Monitoring Stage of the Actuarial Control Cycle</div>
+  <span class="masthead-sub">SP1 Ch.29 · SA1 Ch.19–20</span>
+  <span class="masthead-tag">CONSOLIDATED STUDY MATRIX — NAVIGATOR</span>
+</div>
+
+<!-- HOW TO USE -->
+<div class="how-to">
+  <strong>How to use</strong>
+  <span>Each numbered block here maps exactly to a section in the <strong>Consolidated Study Matrix</strong>. Same number · Same colour · Same name. Use this page to rehearse the architecture before drilling into detail. Every sub-item is a distinct testable concept.</span>
+</div>
+
+<div class="flow">
+
+  <!-- ① THREE PILLARS -->
+  <div class="block b1">
+    <div class="num">①</div>
+    <div class="block-content">
+      <div class="block-title">The Three Pillars of Monitoring</div>
+      <div class="sub-items">
+        <span class="sub key">Why Monitor?</span>
+        <span class="sub">Update assumptions · Monitor trends · A vs E corrective action · Management info · Pricing &amp; reserving · Underwriting check · Reinsurance · Identify profitable areas</span>
+        <span class="sub key">What is Monitored?</span>
+        <span class="sub">NB volumes &amp; mix · Mortality &amp; morbidity · Claims amounts · Persistency · Expenses · Investment · Renewals · Options · Solvency</span>
+        <span class="sub key">How? Data Requirements</span>
+        <span class="sub">Volume, stability, consistency · Homogeneous groups · Period length · Own + market + reinsurer data · Two strands: direct A vs E · Analysis of Surplus</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="arrow">↓</div>
+
+  <!-- ② EXPERIENCE INVESTIGATIONS -->
+  <div class="block b2">
+    <div class="num">②</div>
+    <div class="block-content">
+      <div class="block-title">Experience Investigations — by Type</div>
+      <div class="sub-items">
+        <span class="sub key">New Business</span>
+        <span class="sub">NB strain · Mix vs pricing basis · Staffing · Commission</span>
+        <span class="sub key">Mortality &amp; Morbidity</span>
+        <span class="sub">Transition rates · Exposed to risk · Data splits by age/gender/duration/deferred period</span>
+        <span class="sub key">Claims Amounts</span>
+        <span class="sub">Indemnity: trend &amp; inflation · Fixed: anti-selection by sum insured</span>
+        <span class="sub key">Persistency</span>
+        <span class="sub">Lapse rates · Channel ranking · Recouping initial costs</span>
+        <span class="sub key">Expenses</span>
+        <span class="sub">Initial / Renewal / Termination / Claims / Investment · Direct vs Overhead · Expense drivers</span>
+        <span class="sub key">Investment</span>
+        <span class="sub">Return by asset class · Market vs book value</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="arrow">↓</div>
+
+  <!-- ③ ANALYSIS OF SURPLUS -->
+  <div class="block b3">
+    <div class="num">③</div>
+    <div class="block-content">
+      <div class="block-title">Analysis of Surplus / Profit — The Two Bases</div>
+      <div class="sub-items">
+        <span class="sub key">Statutory Basis</span>
+        <span class="sub">Liabilities = prudential reserves · Margin release expected · Alarm if negative</span>
+        <span class="sub key">Sources (both bases)</span>
+        <span class="sub">Opening adjustments · Return on opening surplus · Economic variances · Non-economic variances · Assumption changes · New business · Other · Unexplained</span>
+        <span class="sub solv">Solvency II Basis</span>
+        <span class="sub">Liabilities = BEL + Risk Margin · No margin release · +Risk margin changes · +SCR changes · +MA/VA impact · P&amp;L attribution regulatory requirement</span>
+        <span class="sub key">Process</span>
+        <span class="sub">Roll-forward balance sheet · One change at a time · Order matters · Consistent year-to-year</span>
+        <span class="sub key">Uses</span>
+        <span class="sub">Reprice · Revise reserving · Expose significant assumptions · NB strategy · De-risk B/S · New risk identification · Regulatory compliance</span>
+      </div>
+      <div class="note">Statutory vs Solvency II: same sources except SII additionally requires risk margin, SCR &amp; MA/VA items</div>
+    </div>
+  </div>
+
+  <div class="arrow">↓</div>
+
+  <!-- ④ SHORT-TERM PROFIT -->
+  <div class="block b4">
+    <div class="num">④</div>
+    <div class="block-content">
+      <div class="block-title">Analysis of Profit — Short-Term Insurance (PMI)</div>
+      <div class="sub-items">
+        <span class="sub key">3 Key Indices</span>
+        <span class="sub">Rate of Incidence = claims ÷ exposed to risk</span>
+        <span class="sub">Avg Cost Per Claim = incurred cost ÷ no. claims</span>
+        <span class="sub">Loss Ratio = incurred cost ÷ earned premium</span>
+        <span class="sub key">Incurred Claims</span>
+        <span class="sub">Paid + Outstanding + IBNR</span>
+        <span class="sub key">PMI Specifics</span>
+        <span class="sub">Yearly cohort · Quarterly analyses · Duration-based cohorts (selection effect) · NCD system · Group PMI: claims vs premiums + expenses</span>
+      </div>
+      <div class="note">No reserving basis involved · Opportunity to reprice at each renewal · Loss ratio quick but hides frequency/severity split</div>
+    </div>
+  </div>
+
+  <div class="arrow">↓</div>
+
+  <!-- ⑤ EV ANALYSIS -->
+  <div class="block b5">
+    <div class="num">⑤</div>
+    <div class="block-content">
+      <div class="block-title">Analysis of Change in Embedded Value (Long-Term only)</div>
+      <div class="sub-items">
+        <span class="sub key">EV = Net Assets + PVIF</span>
+        <span class="sub">Net assets = Free surplus + Required capital (less cost of holding)</span>
+        <span class="sub key">6 Components of Change</span>
+        <span class="sub">① Return on net assets</span>
+        <span class="sub">② Expected return on in-force (PVIF unwind)</span>
+        <span class="sub">③ Experience variances (economic + non-economic)</span>
+        <span class="sub">④ Operating assumption changes</span>
+        <span class="sub">⑤ New business contribution</span>
+        <span class="sub">⑥ Other items</span>
+        <span class="sub key">Solvency II</span>
+        <span class="sub">PVIF often zero → AoE ≈ AoS · Many EU insurers no longer report EV</span>
+        <span class="sub key">Uses</span>
+        <span class="sub">Validate assumptions · Reconcile years · Mgmt info · Executive remuneration · Publication in accounts · Customer-level profit drivers</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="arrow">↓</div>
+
+  <!-- ⑥ PRODUCT NUANCES -->
+  <div class="block b6">
+    <div class="num">⑥</div>
+    <div class="block-content">
+      <div class="block-title">Product-Type Nuances</div>
+      <div class="sub-items">
+        <span class="sub key">IP</span>
+        <span class="sub">Deferred period · Claim duration · Recovery rates · Fixed benefit · LT surplus + EV</span>
+        <span class="sub key">CI</span>
+        <span class="sub">By illness type · Anti-selection on lapse → ↓PVIF · LT surplus + EV</span>
+        <span class="sub key">LTCI</span>
+        <span class="sub">Care needs level · Cost trend critical · LT surplus + EV</span>
+        <span class="sub key">PMI</span>
+        <span class="sub">Procedure/hospital/NCD/excess · Annual renewal · IBNR material · ST profit ratios only</span>
+        <span class="sub key">Group</span>
+        <span class="sub">Industry/occupation · Group size · Member turnover · Mixed LT/ST depending on term</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="arrow">↓</div>
+
+  <!-- ⑦ BEHAVIOURAL & MARKET FACTORS -->
+  <div class="block b7">
+    <div class="num">⑦</div>
+    <div class="block-content">
+      <div class="block-title">Behavioural, Market &amp; Structural Factors</div>
+      <div class="sub-items">
+        <span class="sub key">Data Sub-Divisions</span>
+        <span class="sub">14 splits: class · age/gender · smoker · occupation · duration · UW status · benefit level · deferred period · channel · geography · cause · calendar yr · group size · benefit conditions</span>
+        <span class="sub accent">Anti-selection &amp; Non-disclosure</span>
+        <span class="sub">Year 1–2 concentrated · Durational select tables · Review UW triggers &amp; proposal questions</span>
+        <span class="sub key">Economic Conditions</span>
+        <span class="sub">Recession → ↑IP claims · Inflation → ↑PMI amounts · Interest rates → economic variance in AoS</span>
+        <span class="sub purple">Insurance Cycle</span>
+        <span class="sub">4 phases: High profits → Competition → Losses → Upswing · Mainly affects short-term group risks</span>
+        <span class="sub key">Portfolio Analysis</span>
+        <span class="sub">By class · By risk group · One-way · Multi-factor tables · Volume, mix, concentration</span>
+        <span class="sub key">Movement Analysis</span>
+        <span class="sub">Delay methodology · Development table · Lapse rate = lapses ÷ renewals invited · Portfolio expanding vs contracting signal</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="arrow">↓</div>
+
+  <!-- ⑧ CUSTOMER VALUE -->
+  <div class="block b8">
+    <div class="num">⑧</div>
+    <div class="block-content">
+      <div class="block-title">Customer Value</div>
+      <div class="sub-items">
+        <span class="sub key">Measurement</span>
+        <span class="sub">Persistency-based · EV-based · Cross-selling profits · Changing needs over lifetime</span>
+        <span class="sub key">Analysis</span>
+        <span class="sub">EV techniques at customer level · Simulation/scenario approach · Impact of business decisions on CV</span>
+        <span class="sub key">Legacy Portfolios</span>
+        <span class="sub">Maximise profit from closed block · Outsource admin/claims → ↓costs · Monitor lapse impact</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="arrow">↓</div>
+
+  <!-- ⑨ RISK CONTROL & FEEDBACK -->
+  <div class="block b9">
+    <div class="num">⑨</div>
+    <div class="block-content">
+      <div class="block-title">Using Results to Control Risks — Feedback into ACC</div>
+      <div class="sub-items">
+        <span class="sub key">Reprice / Redesign</span>
+        <span class="sub key">Revise Reserving Basis</span>
+        <span class="sub key">Update Valuation Assumptions</span>
+        <span class="sub key">Improve Policy Wording</span>
+        <span class="sub">Improve Marketing</span>
+        <span class="sub">Revise Sales &amp; Commission</span>
+        <span class="sub">Staffing adequacy</span>
+        <span class="sub">Revise Underwriting</span>
+        <span class="sub">Revise Claims Handling</span>
+        <span class="sub">Capital Allocation</span>
+        <span class="sub">Systems &amp; Data Recording</span>
+        <span class="sub">Revise Policy Design</span>
+        <span class="sub">Reinsurance Strategy</span>
+        <span class="sub">Investment Strategy</span>
+        <span class="sub">De-risk Balance Sheet</span>
+        <span class="sub">New Risk Identification</span>
+      </div>
+      <div class="note" style="color:#a0a8b8;">Iterative &amp; continuous — assumptions never fully converge on reality. Margins for model error always required.</div>
+    </div>
+  </div>
+
+</div><!-- end flow -->
+
+<div class="footer">
+  <span>SP1 Ch.29 · SA1 Ch.19–20 · IFE 2019 / 2024</span>
+  <span>CONSOLIDATED STUDY MATRIX — NAVIGATOR</span>
+  <span>Monitoring Stage · ACC</span>
+</div>
+
+</body>
+</html>
