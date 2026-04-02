@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reinsurance — Outline Navigator</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0f1117;
+    --paper: #f5f0e8;
+    --cream: #ede7d6;
+    --accent: #c0392b;
+    --gold: #b8860b;
+    --blue: #1a3a5c;
+    --green: #1e5f3f;
+    --purple: #5c3d7a;
+    --brown: #5c3d1a;
+    --teal: #1a5c5c;
+    --muted: #6b6560;
+    --rule: #c8bfaf;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 12px;
+    line-height: 1.5;
+    padding: 28px 24px;
+    max-width: 1140px;
+    margin: 0 auto;
+  }
+  .masthead { border-top:4px solid var(--ink); border-bottom:2px solid var(--ink); padding:12px 0 10px; margin-bottom:28px; display:flex; align-items:baseline; gap:16px; }
+  .masthead-title { font-family:'Playfair Display',serif; font-size:26px; font-weight:900; flex:1; }
+  .masthead-sub { font-family:'IBM Plex Mono',monospace; font-size:9.5px; color:var(--muted); text-transform:uppercase; letter-spacing:1.5px; }
+  .masthead-tag { font-family:'IBM Plex Mono',monospace; font-size:9.5px; background:var(--ink); color:#fff; padding:3px 8px; letter-spacing:1px; }
+
+  .flow { display:flex; flex-direction:column; gap:0; position:relative; }
+  .flow::before {
+    content:''; position:absolute; left:22px; top:0; bottom:0; width:2px;
+    background: linear-gradient(to bottom, var(--accent), var(--blue), var(--blue), var(--gold), var(--purple), var(--brown), var(--teal), var(--ink), var(--green), var(--accent));
+    z-index:0;
+  }
+  .block { display:flex; gap:16px; align-items:flex-start; margin-bottom:6px; position:relative; z-index:1; }
+  .num {
+    width:44px; height:44px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+    font-family:'Playfair Display',serif; font-size:18px; font-weight:900; color:white; flex-shrink:0;
+    border:3px solid var(--paper); box-shadow:0 0 0 2px currentColor;
+  }
+  .block-content { flex:1; border-left:3px solid; padding:10px 14px; background:var(--cream); }
+  .block-title { font-family:'Playfair Display',serif; font-size:14px; font-weight:700; margin-bottom:6px; }
+  .sub-items { display:flex; flex-wrap:wrap; gap:5px; }
+  .sub {
+    font-family:'IBM Plex Mono',monospace; font-size:10px; padding:3px 9px;
+    border:1px solid; background:white; letter-spacing:0.3px;
+  }
+  .sub.key { color:white !important; background:var(--ink); border-color:transparent; font-weight:600; }
+  .arrow { display:flex; align-items:center; padding-left:14px; margin:2px 0; color:var(--muted); font-size:16px; z-index:1; position:relative; }
+
+  /* PER-BLOCK COLOUR SCHEMES */
+  .b1 .num { background:var(--accent); box-shadow:0 0 0 2px var(--accent); }
+  .b1 .block-content { border-color:var(--accent); }
+  .b1 .block-title { color:var(--accent); }
+  .b1 .sub { color:var(--accent); border-color:#e8a09a; }
+  .b1 .sub.key { background:var(--accent); }
+
+  .b2 .num { background:var(--blue); box-shadow:0 0 0 2px var(--blue); }
+  .b2 .block-content { border-color:var(--blue); }
+  .b2 .block-title { color:var(--blue); }
+  .b2 .sub { color:var(--blue); border-color:#a0b4c8; }
+  .b2 .sub.key { background:var(--blue); }
+
+  .b3 .num { background:#1a5080; box-shadow:0 0 0 2px #1a5080; }
+  .b3 .block-content { border-color:#1a5080; background:#eef2f7; }
+  .b3 .block-title { color:#1a5080; }
+  .b3 .sub { color:#1a5080; border-color:#a0b4c8; }
+  .b3 .sub.key { background:#1a5080; }
+  .b3 .sub.alt { background:var(--teal); color:white; border-color:var(--teal); font-weight:600; }
+
+  .b4 .num { background:var(--gold); box-shadow:0 0 0 2px var(--gold); }
+  .b4 .block-content { border-color:var(--gold); background:#fffdf0; }
+  .b4 .block-title { color:var(--gold); }
+  .b4 .sub { color:#7a5c00; border-color:#d4b86a; }
+  .b4 .sub.key { background:var(--gold); color:white; }
+
+  .b5 .num { background:var(--purple); box-shadow:0 0 0 2px var(--purple); }
+  .b5 .block-content { border-color:var(--purple); background:#f8f4fc; }
+  .b5 .block-title { color:var(--purple); }
+  .b5 .sub { color:var(--purple); border-color:#c4a8e0; }
+  .b5 .sub.key { background:var(--purple); color:white; }
+
+  .b6 .num { background:var(--brown); box-shadow:0 0 0 2px var(--brown); }
+  .b6 .block-content { border-color:var(--brown); }
+  .b6 .block-title { color:var(--brown); }
+  .b6 .sub { color:var(--brown); border-color:#c4a888; }
+  .b6 .sub.key { background:var(--brown); color:white; }
+  .b6 .sub.warn { background:var(--accent); color:white; border-color:var(--accent); font-weight:600; }
+
+  .b7 .num { background:var(--teal); box-shadow:0 0 0 2px var(--teal); }
+  .b7 .block-content { border-color:var(--teal); background:#eef7f7; }
+  .b7 .block-title { color:var(--teal); }
+  .b7 .sub { color:var(--teal); border-color:#90c4c4; }
+  .b7 .sub.key { background:var(--teal); color:white; }
+
+  .b8 .num { background:var(--green); box-shadow:0 0 0 2px var(--green); }
+  .b8 .block-content { border-color:var(--green); background:#eef7f2; }
+  .b8 .block-title { color:var(--green); }
+  .b8 .sub { color:var(--green); border-color:#90c4a8; }
+  .b8 .sub.key { background:var(--green); color:white; }
+
+  .b9 .num { background:var(--ink); box-shadow:0 0 0 2px var(--ink); }
+  .b9 .block-content { border-color:var(--ink); background:#1a1d24; color:var(--paper); }
+  .b9 .block-title { color:#d4c8b8; }
+  .b9 .sub { color:#a0b8c8; border-color:#3a3d48; background:#2a2d38; }
+  .b9 .sub.key { background:#8bb0c8; color:var(--ink); border-color:transparent; font-weight:600; }
+
+  .b10 .num { background:var(--accent); box-shadow:0 0 0 2px var(--accent); }
+  .b10 .block-content { border-color:var(--accent); }
+  .b10 .block-title { color:var(--accent); }
+  .b10 .sub { color:var(--accent); border-color:#e8a09a; }
+  .b10 .sub.key { background:var(--accent); color:white; }
+
+  .note { font-size:10px; color:var(--muted); margin-top:7px; font-style:italic; border-top:1px solid var(--rule); padding-top:5px; }
+
+  .footer { border-top:2px solid var(--ink); margin-top:28px; padding-top:8px; display:flex; justify-content:space-between; font-family:'IBM Plex Mono',monospace; font-size:9px; color:var(--muted); text-transform:uppercase; letter-spacing:1px; }
+</style>
+</head>
+<body>
+
+<div class="masthead">
+  <div class="masthead-title">Reinsurance — Uses, Types &amp; Benefits</div>
+  <div class="masthead-sub">SP1 Ch.26 · SA1 Ch.17</div>
+  <div class="masthead-tag">OUTLINE NAVIGATOR</div>
+</div>
+
+<div class="flow">
+
+  <!-- ① REASONS -->
+  <div class="block b1">
+    <div class="num">①</div>
+    <div class="block-content">
+      <div class="block-title">Reasons for Reinsurance — LASE·CIA</div>
+      <div class="sub-items">
+        <span class="sub key">Limit exposure to risk</span>
+        <span class="sub">Uncertain future claims outgo; size of insurer, free assets, portfolio, predictability</span>
+        <span class="sub key">Avoid large single losses</span>
+        <span class="sub">PMI: individual claims can be huge; cap payout to protect free assets</span>
+        <span class="sub key">Smooth results</span>
+        <span class="sub">Reduce claims variance year-on-year; shareholder &amp; regulatory comfort</span>
+        <span class="sub key">Expertise / TA</span>
+        <span class="sub">New product/territory: product dev · data · training · underwriting · claims · IT</span>
+        <span class="sub key">Capacity to accept risk</span>
+        <span class="sub">Insufficient capital → cede to enable writing; solvency req'ts reduce ∝ ceded %</span>
+        <span class="sub key">Income / Financial assistance</span>
+        <span class="sub">New business strain · improving free assets · M&amp;A financing</span>
+        <span class="sub key">Arbitrage</span>
+        <span class="sub">Solvency capital arbitrage · Tax arbitrage</span>
+      </div>
+      <div class="note">Overriding driver: insurer's free assets + attitude to risk + value for money in reinsurance market</div>
+    </div>
+  </div>
+
+  <div class="arrow">↓</div>
+
+  <!-- ② FACULTATIVE vs TREATY -->
+  <div class="block b2">
+    <div class="num">②</div>
+    <div class="block-content">
+      <div class="block-title">Facultative vs Treaty — How Business is Placed</div>
+      <div class="sub-items">
+        <span class="sub key">Facultative</span>
+        <span class="sub">Each risk individually negotiated · Cedant &amp; reinsurer each free to accept/reject</span>
+        <span class="sub">✓ Flexibility · Covers risks outside treaty · Best terms per risk</span>
+        <span class="sub">✗ Time-consuming · No certainty of cover · Delay accepting business</span>
+        <span class="sub key">Treaty</span>
+        <span class="sub">Automatic placement within defined scope · Usually ob/ob · Terms pre-agreed</span>
+        <span class="sub">✓ Certain cover · Efficient admin · Helps control solvency &amp; growth</span>
+        <span class="sub">✗ Inflexible once set up · Terms may restrict insurer's freedom</span>
+        <span class="sub key">Fac / Fac</span><span class="sub">Fac / Ob</span><span class="sub">Ob / Ob</span>
+        <span class="sub">Cedant perspective first · Reinsurer perspective second · Bulk of business = ob/ob</span>
+      </div>
+      <div class="note">Treaty must be precise: coverage scope · financial arrangements · obligations of both parties</div>
+    </div>
+  </div>
+
+  <div class="arrow">↓</div>
+
+  <!-- ③ PROPORTIONAL BASIS -->
+  <div class="block b3">
+    <div class="num">③</div>
+    <div class="block-content">
+      <div class="block-title">Proportional Reinsurance — Basis (Original Terms vs Risk Premium)</div>
+      <div class="sub-items">
+        <span class="sub key">Original Terms (Coinsurance)</span>
+        <span class="sub">Reinsurer shares premium &amp; claims in same proportion · Commission from RI to cedant</span>
+        <span class="sub">Reinsurer sees cedant's premium rates (checks adequacy) · Deposit back possible</span>
+        <span class="sub alt">Risk Premium</span>
+        <span class="sub">Reinsurer sets its own rate independently of cedant's premium</span>
+        <span class="sub">Applied to SI or sum-at-risk · Can be level or yearly-increasing · Guaranteed or reviewable</span>
+        <span class="sub key">Sum-at-Risk variant</span>
+        <span class="sub">Reinsure only excess of benefit over reserve (SAR) · Mainly CI; not usually IP/LTCI</span>
+        <span class="sub key">Commission</span>
+        <span class="sub">Paid under proportional (original terms) only · May be profit commission · Rebate = deduction from RI premium</span>
+      </div>
+      <div class="note">Long-term: quota share or surplus on original terms or risk premium basis · Short-term: quota share on original terms only</div>
+    </div>
+  </div>
+
+  <div class="arrow">↓</div>
+
+  <!-- ④ QUOTA SHARE -->
+  <div class="block b4">
+    <div class="num">④</div>
+    <div class="block-content">
+      <div class="block-title">Quota Share — Same % for Every Risk</div>
+      <div class="sub-items">
+        <span class="sub key">Mechanism</span>
+        <span class="sub">Fixed R% of every risk ceded automatically · Simplest to administer · Always treaty</span>
+        <span class="sub key">Purposes</span>
+        <span class="sub">Spread / reduce parameter risk · Write larger portfolios · Reciprocal business</span>
+        <span class="sub">Improve solvency ratio (net WP ↓) · Satisfy statutory capital req'ts · Finance NBS</span>
+        <span class="sub key">Limitations</span>
+        <span class="sub">Same % regardless of risk size (less efficient than surplus for targeting large risks)</span>
+        <span class="sub">Cedes a share of profit · Proportion changes apply to NB only unless agreed otherwise</span>
+      </div>
+      <div class="note">Popular for new products, new territories, new insurers; also for financing (commission = disguised NBS loan)</div>
+    </div>
+  </div>
+
+  <div class="arrow">↓</div>
+
+  <!-- ⑤ SURPLUS -->
+  <div class="block b5">
+    <div class="num">⑤</div>
+    <div class="block-content">
+      <div class="block-title">Surplus — Variable % per Policy (Long-Term Only)</div>
+      <div class="sub-items">
+        <span class="sub key">Mechanism</span>
+        <span class="sub">Fixed monetary retention; cede excess SI above retention · % varies by policy size</span>
+        <span class="sub">Policies below retention: 0% ceded · Long-term fixed-SI products only (not PMI)</span>
+        <span class="sub key">Advantages</span>
+        <span class="sub">Accepts larger risks · Targets large risks precisely → reduces claims volatility</span>
+        <span class="sub key">Disadvantages</span>
+        <span class="sub">Less protection against parameter risk (net share ≠ constant) · Less suitable for financing</span>
+      </div>
+      <div class="note">Key contrast: Quota Share = uniform %; Surplus = targeted — reinsures exactly the slice above retention</div>
+    </div>
+  </div>
+
+  <div class="arrow">↓</div>
+
+  <!-- ⑥ NON-PROPORTIONAL -->
+  <div class="block b6">
+    <div class="num">⑥</div>
+    <div class="block-content">
+      <div class="block-title">Non-Proportional (XL) — Caps Claims Above Threshold</div>
+      <div class="sub-items">
+        <span class="sub key">Risk XL</span>
+        <span class="sub">Individual claims · PMI portfolios · Layer: £X in excess of £Y</span>
+        <span class="sub key">Aggregate XL / Stop Loss</span>
+        <span class="sub">Total account for 12 months · Excess point &amp; upper limit as % of earned premium</span>
+        <span class="sub">In health context aggregate XL = stop loss (morbidity = only peril)</span>
+        <span class="sub warn">Stop loss often unavailable at affordable price</span>
+        <span class="sub key">Catastrophe XL</span>
+        <span class="sub">Single event / pandemic · Covers aggregate from one cause · Rarely affordable for pandemic</span>
+        <span class="sub key">Indexed limits</span>
+        <span class="sub">Stability clause: excess point indexed to inflation · Extra premium payable if not indexed</span>
+        <span class="sub key">Proportional within XL</span>
+        <span class="sub">RI covers 90% of layer eg → insurer retains moral hazard interest in large-claim control</span>
+      </div>
+      <div class="note">Non-proportional only short-term &amp; group long-term · No commission (except possible profit commission)</div>
+    </div>
+  </div>
+
+  <div class="arrow">↓</div>
+
+  <!-- ⑦ FINANCIAL REINSURANCE -->
+  <div class="block b7">
+    <div class="num">⑦</div>
+    <div class="block-content">
+      <div class="block-title">Financial Reinsurance — Capital &amp; Financing Arrangements</div>
+      <div class="sub-items">
+        <span class="sub key">Risk Premium Fin Re</span>
+        <span class="sub">Commission = disguised loan · Repaid via higher future RI premiums · Lapse risk on reinsurer</span>
+        <span class="sub key">Contingent Loan (Surplus Relief)</span>
+        <span class="sub">Loan repaid from VIF profits · If VIF doesn't emerge → reinsurer absorbs loss · No reserving for repayment</span>
+        <span class="sub key">Uses</span>
+        <span class="sub">New business strain · Improving free assets · M&amp;A financing</span>
+        <span class="sub key">Limits</span>
+        <span class="sub">Little insurance risk transfer · Ineffective under Solvency II (realistic balance sheet)</span>
+        <span class="sub">Financial reinsurance ≠ reduce EV materially · Does reduce EV risk (VIF converted to cash)</span>
+      </div>
+      <div class="note">Normal method: quota share (original terms). Financial RI off-balance-sheet only under non-realistic regimes</div>
+    </div>
+  </div>
+
+  <div class="arrow">↓</div>
+
+  <!-- ⑧ TECHNICAL ASSISTANCE -->
+  <div class="block b8">
+    <div class="num">⑧</div>
+    <div class="block-content">
+      <div class="block-title">Technical Assistance (SA1) — Reinsurer as Expert Partner</div>
+      <div class="sub-items">
+        <span class="sub key">Product Dev &amp; Data</span>
+        <span class="sub">New products · Markets · Techniques · Data access · Risk sharing · Staff training · Future trend assessment</span>
+        <span class="sub key">Risk Management</span>
+        <span class="sub">Underwriting manuals + training · Claims control + monitoring · Policy wording reviews</span>
+        <span class="sub key">Overseas Markets</span>
+        <span class="sub">Local risks + contacts · Hospital/consultant networks · Legal/regulatory advice · Local data</span>
+        <span class="sub key">IT Software</span>
+        <span class="sub">Underwriting systems (80% straight-through) · Pricing software · Claims management · Reserving tools</span>
+      </div>
+      <div class="note">RI increasingly unwilling to offer training for free → trend toward consultancy fee vs risk-share trade-off</div>
+    </div>
+  </div>
+
+  <div class="arrow">↓</div>
+
+  <!-- ⑨ REINSURANCE IMPACT & BADGING -->
+  <div class="block b9">
+    <div class="num">⑨</div>
+    <div class="block-content">
+      <div class="block-title">Reinsurance Impact &amp; Badging (SA1)</div>
+      <div class="sub-items">
+        <span class="sub key">Tax Arbitrage</span>
+        <span class="sub">Different tax basis → improve after-tax result for both parties</span>
+        <span class="sub key">Capital Arbitrage</span>
+        <span class="sub">Reinsurer holds less solvency capital per unit risk → cheaper reinsurance rates</span>
+        <span class="sub key">New Markets</span>
+        <span class="sub">Insurer: gains experience · Reinsurer: gains profitable share + market credibility</span>
+        <span class="sub key">Difference of Interests</span>
+        <span class="sub">Insurer: quantity (write more) · Reinsurer: quality (profitable claims) · Conflict on large settlements</span>
+        <span class="sub key">Badging</span>
+        <span class="sub">Non-RI alternative: generalist fronts product; specialist health insurer issues &amp; administers</span>
+        <span class="sub">Specialist takes all risk · Generalist provides brand/distribution · Profit sharing arrangement</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="arrow">↓</div>
+
+  <!-- ⑩ RETENTION LEVEL -->
+  <div class="block b10">
+    <div class="num">⑩</div>
+    <div class="block-content">
+      <div class="block-title">Determining Retention Level</div>
+      <div class="sub-items">
+        <span class="sub key">Ruin Probability Approach</span>
+        <span class="sub">Stochastic model: simulate claims + assets → find retention s.t. P(insolvency) &lt; threshold (eg 0.5%)</span>
+        <span class="sub key">Cost Minimisation Approach</span>
+        <span class="sub">Retention ↑ → self-held fluctuation reserve cost ↑, reinsurance cost ↓ · Minimise (a)+(b)</span>
+        <span class="sub key">Key Drivers</span>
+        <span class="sub">Uncertainty of future claims · Acceptable P(ruin) · Variance of benefit levels · Size of free assets</span>
+        <span class="sub key">LT vs ST</span>
+        <span class="sub">LT fixed benefit (IP/CI): model claim incidence stochastically · ST indemnity (PMI): model both incidence &amp; amounts</span>
+      </div>
+      <div class="note">Large insurers with sufficient free assets may dispense with XL for normal policies; only reinsure catastrophes and exceptional SI</div>
+    </div>
+  </div>
+
+</div><!-- end flow -->
+
+<div class="footer">
+  <span>SP1 Ch.26 · SA1 Ch.17 · IFE 2019/2024</span>
+  <span>REINSURANCE — OUTLINE NAVIGATOR</span>
+  <span>Uses, Types &amp; Benefits</span>
+</div>
+
+</body>
+</html>
