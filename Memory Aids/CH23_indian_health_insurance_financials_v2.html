@@ -1,0 +1,325 @@
+
+<style>
+  .fin-nav{display:flex;gap:0;margin-bottom:1.5rem;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);overflow:hidden}
+  .fin-tab{flex:1;padding:10px 8px;font-size:13px;font-weight:500;background:var(--color-background-secondary);border:none;cursor:pointer;color:var(--color-text-secondary);border-right:0.5px solid var(--color-border-tertiary);transition:background 0.15s}
+  .fin-tab:last-child{border-right:none}
+  .fin-tab.active{background:var(--color-background-primary);color:var(--color-text-primary)}
+  .page{display:none}.page.active{display:block}
+  .sec-title{font-size:11px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:0.07em;padding:10px 0 4px;border-bottom:0.5px solid var(--color-border-tertiary);margin-bottom:2px}
+  .row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;border-bottom:0.5px solid var(--color-border-tertiary);font-size:13.5px}
+  .row:last-child{border-bottom:none}
+  .row .lbl{color:var(--color-text-primary)}
+  .row .sub{color:var(--color-text-secondary);font-size:12.5px;padding-left:12px}
+  .row .amt{font-weight:500;color:var(--color-text-primary);min-width:90px;text-align:right}
+  .row.total{font-weight:500;background:var(--color-background-secondary);margin:4px -4px;padding:7px 4px;border-radius:4px}
+  .row.grand{font-weight:500;font-size:14px;background:#e6f1fb;margin:6px -4px;padding:8px 4px;border-radius:4px;color:#042C53}
+  .row.profit{background:#eaf3de;margin:6px -4px;padding:8px 4px;border-radius:4px;font-weight:500;font-size:14px;color:#173404}
+  .col2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px}
+  .blk-title{font-size:12px;font-weight:500;padding:6px 8px;border-radius:var(--border-radius-md) var(--border-radius-md) 0 0;margin-bottom:0}
+  .blk-body{border:0.5px solid var(--color-border-tertiary);border-radius:0 0 var(--border-radius-md) var(--border-radius-md);padding:4px 10px 8px}
+  .assets .blk-title{background:#e6f1fb;color:#042C53}
+  .liab .blk-title{background:#FAEEDA;color:#412402}
+  .mrow{display:flex;gap:10px;margin-bottom:1rem;flex-wrap:wrap}
+  .metric{flex:1;min-width:100px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:10px 12px}
+  .metric .ml{font-size:11px;color:var(--color-text-secondary);margin-bottom:4px}
+  .metric .mv{font-size:18px;font-weight:500;color:var(--color-text-primary)}
+  .metric .ms{font-size:11px;color:var(--color-text-secondary);margin-top:2px}
+  .tip{font-size:12.5px;color:var(--color-text-secondary);background:var(--color-background-secondary);padding:10px 14px;border-radius:var(--border-radius-md);margin-top:12px;border-left:3px solid #378ADD;line-height:1.6}
+  .tip b{font-weight:500;color:var(--color-text-primary)}
+  .chart-wrap{position:relative;width:100%;height:220px;margin:12px 0}
+  h2.pt{font-size:16px;font-weight:500;margin:0 0 4px;color:var(--color-text-primary)}
+  .psub{font-size:12px;color:var(--color-text-secondary);margin:0 0 14px;line-height:1.5}
+  .badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:20px;margin-left:6px}
+  .badge.green{background:#eaf3de;color:#27500A}
+  .badge.blue{background:#e6f1fb;color:#0C447C}
+  .badge.amber{background:#FAEEDA;color:#633806}
+  hr.div{border:none;border-top:0.5px solid var(--color-border-tertiary);margin:12px 0}
+  .walkthrough{margin-top:16px;border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden}
+  .wt-header{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--color-background-secondary);cursor:pointer;user-select:none}
+  .wt-header-left{display:flex;align-items:center;gap:8px}
+  .wt-icon{width:18px;height:18px;border-radius:50%;background:#e6f1fb;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .wt-icon svg{width:10px;height:10px}
+  .wt-title{font-size:13px;font-weight:500;color:var(--color-text-primary)}
+  .wt-chevron{font-size:11px;color:var(--color-text-secondary);transition:transform 0.2s}
+  .wt-chevron.open{transform:rotate(180deg)}
+  .wt-body{padding:0 14px;max-height:0;overflow:hidden;transition:max-height 0.3s ease,padding 0.3s ease}
+  .wt-body.open{max-height:600px;padding:12px 14px}
+  .wt-steps{display:flex;flex-direction:column;gap:12px}
+  .wt-step{display:flex;gap:10px;align-items:flex-start}
+  .wt-num{width:22px;height:22px;border-radius:50%;background:#185FA5;color:#fff;font-size:11px;font-weight:500;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+  .wt-step-text{font-size:13px;color:var(--color-text-secondary);line-height:1.55}
+  .wt-step-text b{font-weight:500;color:var(--color-text-primary)}
+  .wt-connector{width:2px;height:10px;background:var(--color-border-tertiary);margin-left:10px}
+</style>
+
+<div style="padding:1rem 0">
+  <div style="display:flex;align-items:baseline;gap:10px;margin-bottom:4px">
+    <h1 style="font-size:20px;font-weight:500;margin:0;color:var(--color-text-primary)">ArogyaShield Insurance Ltd.</h1>
+    <span class="badge blue">FY 2024–25</span>
+  </div>
+  <p style="font-size:13px;color:var(--color-text-secondary);margin:0 0 18px">Hypothetical Indian standalone health insurer · Figures in ₹ Crore</p>
+
+  <div class="fin-nav">
+    <button class="fin-tab active" onclick="showPage('bs',this)">Balance Sheet</button>
+    <button class="fin-tab" onclick="showPage('rev',this)">Revenue Account</button>
+    <button class="fin-tab" onclick="showPage('pl',this)">P&L Account</button>
+  </div>
+
+  <!-- BALANCE SHEET -->
+  <div class="page active" id="page-bs">
+    <h2 class="pt">Balance Sheet <span class="badge blue">as at 31 Mar 2025</span></h2>
+    <p class="psub">A snapshot of what the company owns (assets) and owes (liabilities + equity) on a single date. Both sides must always be equal.</p>
+    <div class="mrow">
+      <div class="metric"><div class="ml">Total Assets</div><div class="mv">₹4,210 Cr</div></div>
+      <div class="metric"><div class="ml">Net Worth</div><div class="mv">₹1,060 Cr</div></div>
+      <div class="metric"><div class="ml">Solvency Ratio</div><div class="mv">2.1×</div><div class="ms">IRDAI min: 1.5×</div></div>
+      <div class="metric"><div class="ml">Investments</div><div class="mv">₹3,280 Cr</div></div>
+    </div>
+    <div class="col2">
+      <div class="assets">
+        <div class="blk-title">Assets — what the company owns</div>
+        <div class="blk-body">
+          <div class="sec-title">Investments (IRDAI-mandated)</div>
+          <div class="row"><span class="lbl sub">Govt. securities (G-Secs)</span><span class="amt">1,800</span></div>
+          <div class="row"><span class="lbl sub">Approved bonds / NCD</span><span class="amt">820</span></div>
+          <div class="row"><span class="lbl sub">Fixed deposits (banks)</span><span class="amt">460</span></div>
+          <div class="row"><span class="lbl sub">Equity (listed)</span><span class="amt">200</span></div>
+          <div class="row total"><span class="lbl">Total investments</span><span class="amt">3,280</span></div>
+          <div class="sec-title">Other assets</div>
+          <div class="row"><span class="lbl sub">Premiums receivable</span><span class="amt">310</span></div>
+          <div class="row"><span class="lbl sub">Reinsurance recoverable</span><span class="amt">240</span></div>
+          <div class="row"><span class="lbl sub">Fixed assets &amp; IT</span><span class="amt">210</span></div>
+          <div class="row"><span class="lbl sub">Cash &amp; bank</span><span class="amt">170</span></div>
+          <div class="row total"><span class="lbl">Total other assets</span><span class="amt">930</span></div>
+          <div class="row grand"><span class="lbl">Total assets</span><span class="amt">4,210</span></div>
+        </div>
+      </div>
+      <div class="liab">
+        <div class="blk-title">Liabilities + Equity — how it's funded</div>
+        <div class="blk-body">
+          <div class="sec-title">Shareholders' funds</div>
+          <div class="row"><span class="lbl sub">Share capital (paid-up)</span><span class="amt">350</span></div>
+          <div class="row"><span class="lbl sub">Reserves &amp; surplus</span><span class="amt">710</span></div>
+          <div class="row total"><span class="lbl">Net worth</span><span class="amt">1,060</span></div>
+          <div class="sec-title">Policy liabilities (policyholders' funds)</div>
+          <div class="row"><span class="lbl sub">Outstanding claims (IBNR)</span><span class="amt">1,420</span></div>
+          <div class="row"><span class="lbl sub">Unearned premium reserve</span><span class="amt">980</span></div>
+          <div class="row"><span class="lbl sub">Premium deficiency reserve</span><span class="amt">180</span></div>
+          <div class="row total"><span class="lbl">Total policy liabilities</span><span class="amt">2,580</span></div>
+          <div class="sec-title">Other liabilities</div>
+          <div class="row"><span class="lbl sub">Reinsurance payable</span><span class="amt">340</span></div>
+          <div class="row"><span class="lbl sub">Agents &amp; broker payables</span><span class="amt">130</span></div>
+          <div class="row"><span class="lbl sub">Tax &amp; other payables</span><span class="amt">100</span></div>
+          <div class="row total"><span class="lbl">Total other liabilities</span><span class="amt">570</span></div>
+          <div class="row grand"><span class="lbl">Total liabilities + equity</span><span class="amt">4,210</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="walkthrough">
+      <div class="wt-header" onclick="toggleWT('bs-wt')">
+        <div class="wt-header-left">
+          <div class="wt-icon"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" stroke="#185FA5" stroke-width="1"/><line x1="5" y1="3" x2="5" y2="5.5" stroke="#185FA5" stroke-width="1" stroke-linecap="round"/><circle cx="5" cy="7" r="0.6" fill="#185FA5"/></svg></div>
+          <span class="wt-title">How to read this balance sheet</span>
+        </div>
+        <span class="wt-chevron" id="chev-bs-wt">&#9660;</span>
+      </div>
+      <div class="wt-body" id="bs-wt">
+        <div class="wt-steps">
+          <div class="wt-step"><div class="wt-num">1</div><div class="wt-step-text"><b>Start with assets (left side).</b> The dominant asset is investments — ₹3,280 Cr out of ₹4,210 Cr total. IRDAI mandates that insurers park most policyholder money in safe instruments like G-Secs and bonds so claims can always be paid.</div></div>
+          <div class="wt-connector"></div>
+          <div class="wt-step"><div class="wt-num">2</div><div class="wt-step-text"><b>Look at the largest liability: policy liabilities (₹2,580 Cr).</b> This is money the company effectively "owes" policyholders — it includes IBNR (claims filed or incurred but not yet fully paid) and unearned premium (premium collected for future coverage periods).</div></div>
+          <div class="wt-connector"></div>
+          <div class="wt-step"><div class="wt-num">3</div><div class="wt-step-text"><b>Net worth = Assets − All liabilities.</b> At ₹1,060 Cr, this is the shareholders' cushion. A growing net worth year-on-year signals the business is generating and retaining profit.</div></div>
+          <div class="wt-connector"></div>
+          <div class="wt-step"><div class="wt-num">4</div><div class="wt-step-text"><b>Check the solvency ratio (2.1×).</b> IRDAI requires a minimum of 1.5×. This is the primary regulatory health check — if assets aren't comfortably above liabilities, the regulator can intervene.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- REVENUE ACCOUNT -->
+  <div class="page" id="page-rev">
+    <h2 class="pt">Revenue Account <span class="badge amber">FY 2024–25</span></h2>
+    <p class="psub">The "technical account" unique to insurers. Shows whether the core insurance business — collecting premiums and paying claims — is profitable on its own.</p>
+    <div class="mrow">
+      <div class="metric"><div class="ml">Gross Written Premium</div><div class="mv">₹2,840 Cr</div><div class="ms">+14% YoY</div></div>
+      <div class="metric"><div class="ml">Net Earned Premium</div><div class="mv">₹2,140 Cr</div></div>
+      <div class="metric"><div class="ml">Claims Ratio</div><div class="mv">65%</div><div class="ms">Industry avg ~68%</div></div>
+      <div class="metric"><div class="ml">Combined Ratio</div><div class="mv">97%</div><div class="ms">&lt;100% = underwriting profit</div></div>
+    </div>
+    <div class="sec-title">Premium income</div>
+    <div class="row"><span class="lbl sub">Gross written premium (GWP)</span><span class="amt">2,840</span></div>
+    <div class="row"><span class="lbl sub">Less: reinsurance ceded</span><span class="amt" style="color:#A32D2D">−620</span></div>
+    <div class="row"><span class="lbl sub">Change in unearned premium reserve</span><span class="amt" style="color:#A32D2D">−80</span></div>
+    <div class="row total"><span class="lbl">Net earned premium</span><span class="amt">2,140</span></div>
+    <div class="sec-title">Claims incurred</div>
+    <div class="row"><span class="lbl sub">Claims paid (hospitalisation, day-care, etc.)</span><span class="amt" style="color:#A32D2D">−1,540</span></div>
+    <div class="row"><span class="lbl sub">Change in outstanding claims (IBNR)</span><span class="amt" style="color:#A32D2D">−250</span></div>
+    <div class="row"><span class="lbl sub">Reinsurance recoveries</span><span class="amt">+200</span></div>
+    <div class="row total"><span class="lbl">Net claims incurred</span><span class="amt" style="color:#A32D2D">−1,590</span></div>
+    <div class="sec-title">Operating expenses</div>
+    <div class="row"><span class="lbl sub">Commissions &amp; brokerage</span><span class="amt" style="color:#A32D2D">−280</span></div>
+    <div class="row"><span class="lbl sub">Management expenses (staff, IT, admin)</span><span class="amt" style="color:#A32D2D">−200</span></div>
+    <div class="row total"><span class="lbl">Total operating expenses</span><span class="amt" style="color:#A32D2D">−480</span></div>
+    <hr class="div"/>
+    <div class="row profit"><span class="lbl">Underwriting result (surplus)</span><span class="amt">+70</span></div>
+    <div class="sec-title">Investment income</div>
+    <div class="row"><span class="lbl sub">Interest &amp; dividends on investments</span><span class="amt">+310</span></div>
+    <div class="row"><span class="lbl sub">Realised gains on investments</span><span class="amt">+40</span></div>
+    <div class="row total"><span class="lbl">Total investment income</span><span class="amt">+350</span></div>
+    <hr class="div"/>
+    <div class="row grand"><span class="lbl">Revenue account surplus (transferred to P&L)</span><span class="amt">+420</span></div>
+    <div class="chart-wrap"><canvas id="revChart"></canvas></div>
+    <div style="display:flex;flex-wrap:wrap;gap:12px;font-size:12px;color:var(--color-text-secondary);margin-top:6px">
+      <span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;border-radius:2px;background:#185FA5;display:inline-block"></span>Net Earned Premium 2,140</span>
+      <span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;border-radius:2px;background:#E24B4A;display:inline-block"></span>Net Claims 1,590</span>
+      <span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;border-radius:2px;background:#EF9F27;display:inline-block"></span>Expenses 480</span>
+      <span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;border-radius:2px;background:#639922;display:inline-block"></span>Underwriting surplus 70</span>
+    </div>
+    <div class="walkthrough">
+      <div class="wt-header" onclick="toggleWT('rev-wt')">
+        <div class="wt-header-left">
+          <div class="wt-icon"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" stroke="#185FA5" stroke-width="1"/><line x1="5" y1="3" x2="5" y2="5.5" stroke="#185FA5" stroke-width="1" stroke-linecap="round"/><circle cx="5" cy="7" r="0.6" fill="#185FA5"/></svg></div>
+          <span class="wt-title">How to read this revenue account</span>
+        </div>
+        <span class="wt-chevron" id="chev-rev-wt">&#9660;</span>
+      </div>
+      <div class="wt-body" id="rev-wt">
+        <div class="wt-steps">
+          <div class="wt-step"><div class="wt-num">1</div><div class="wt-step-text"><b>Start at Gross Written Premium (₹2,840 Cr).</b> This is the total premium billed to customers before sharing risk with reinsurers. It's the topline measure of how much insurance business the company wrote.</div></div>
+          <div class="wt-connector"></div>
+          <div class="wt-step"><div class="wt-num">2</div><div class="wt-step-text"><b>Subtract reinsurance ceded (₹620 Cr) to get net earned premium (₹2,140 Cr).</b> Reinsurance is like insurance-for-insurers — ArogyaShield shares a portion of large or catastrophic claim risk with global reinsurers like GIC Re, Munich Re, etc., paying them a share of premium in return.</div></div>
+          <div class="wt-connector"></div>
+          <div class="wt-step"><div class="wt-num">3</div><div class="wt-step-text"><b>Net claims (₹1,590 Cr) is the biggest cost.</b> The claims ratio is 65% — for every ₹100 of net premium, ₹65 goes to paying hospitalisation, day-care, and other health claims. IBNR adjustments account for claims incurred but not yet fully reported.</div></div>
+          <div class="wt-connector"></div>
+          <div class="wt-step"><div class="wt-num">4</div><div class="wt-step-text"><b>Combined ratio = (Claims + Expenses) / Net Earned Premium = 97%.</b> Below 100% means an underwriting profit of ₹70 Cr. Many Indian health insurers run above 100% and rely on investment income — ArogyaShield is in good shape here.</div></div>
+          <div class="wt-connector"></div>
+          <div class="wt-step"><div class="wt-num">5</div><div class="wt-step-text"><b>Investment income (₹350 Cr) is the real profit engine.</b> Returns from the large mandatory investment portfolio more than 5× the underwriting surplus, bringing the total revenue account surplus to ₹420 Cr — which flows into the P&L.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- P&L ACCOUNT -->
+  <div class="page" id="page-pl">
+    <h2 class="pt">Profit &amp; Loss Account <span class="badge green">FY 2024–25</span></h2>
+    <p class="psub">The non-technical account. Picks up the Revenue Account surplus, adds other income, deducts tax, and shows the final profit after tax (PAT) available to shareholders.</p>
+    <div class="mrow">
+      <div class="metric"><div class="ml">PAT (Net Profit)</div><div class="mv">₹298 Cr</div></div>
+      <div class="metric"><div class="ml">Return on Equity</div><div class="mv">28%</div><div class="ms">PAT / Net Worth</div></div>
+      <div class="metric"><div class="ml">EPS</div><div class="mv">₹8.5</div><div class="ms">per ₹10 share</div></div>
+      <div class="metric"><div class="ml">Effective Tax Rate</div><div class="mv">25.2%</div></div>
+    </div>
+    <div class="sec-title">Income</div>
+    <div class="row"><span class="lbl sub">Revenue account surplus (from Revenue A/c)</span><span class="amt">420</span></div>
+    <div class="row"><span class="lbl sub">Other income (interest on FD, misc.)</span><span class="amt">18</span></div>
+    <div class="row total"><span class="lbl">Total income</span><span class="amt">438</span></div>
+    <div class="sec-title">Expenses &amp; provisions</div>
+    <div class="row"><span class="lbl sub">Provisions for bad debts</span><span class="amt" style="color:#A32D2D">−22</span></div>
+    <div class="row"><span class="lbl sub">Depreciation (IT systems, fixed assets)</span><span class="amt" style="color:#A32D2D">−16</span></div>
+    <div class="row"><span class="lbl sub">Prior year adjustments</span><span class="amt" style="color:#A32D2D">−2</span></div>
+    <div class="row total"><span class="lbl">Total expenses</span><span class="amt" style="color:#A32D2D">−40</span></div>
+    <hr class="div"/>
+    <div class="row total"><span class="lbl">Profit before tax (PBT)</span><span class="amt">398</span></div>
+    <div class="sec-title">Taxation</div>
+    <div class="row"><span class="lbl sub">Current tax (25%)</span><span class="amt" style="color:#A32D2D">−90</span></div>
+    <div class="row"><span class="lbl sub">Deferred tax charge</span><span class="amt" style="color:#A32D2D">−10</span></div>
+    <div class="row total"><span class="lbl">Total tax</span><span class="amt" style="color:#A32D2D">−100</span></div>
+    <hr class="div"/>
+    <div class="row profit"><span class="lbl">Profit after tax (PAT)</span><span class="amt">+298</span></div>
+    <div class="sec-title">Appropriation of profit</div>
+    <div class="row"><span class="lbl sub">Dividend paid</span><span class="amt" style="color:#A32D2D">−60</span></div>
+    <div class="row"><span class="lbl sub">Transfer to catastrophe reserve</span><span class="amt" style="color:#A32D2D">−30</span></div>
+    <div class="row"><span class="lbl sub">Retained earnings (added to reserves)</span><span class="amt">+208</span></div>
+    <div class="chart-wrap" style="height:200px"><canvas id="plChart"></canvas></div>
+    <div style="display:flex;flex-wrap:wrap;gap:12px;font-size:12px;color:var(--color-text-secondary);margin-top:6px">
+      <span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;border-radius:2px;background:#185FA5;display:inline-block"></span>Underwriting surplus</span>
+      <span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;border-radius:2px;background:#639922;display:inline-block"></span>Investment income</span>
+      <span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;border-radius:2px;background:#E24B4A;display:inline-block"></span>Tax &amp; deductions</span>
+      <span style="display:flex;align-items:center;gap:4px"><span style="width:10px;height:10px;border-radius:2px;background:#1D9E75;display:inline-block"></span>PAT</span>
+    </div>
+    <div class="walkthrough">
+      <div class="wt-header" onclick="toggleWT('pl-wt')">
+        <div class="wt-header-left">
+          <div class="wt-icon"><svg viewBox="0 0 10 10" fill="none"><circle cx="5" cy="5" r="4" stroke="#185FA5" stroke-width="1"/><line x1="5" y1="3" x2="5" y2="5.5" stroke="#185FA5" stroke-width="1" stroke-linecap="round"/><circle cx="5" cy="7" r="0.6" fill="#185FA5"/></svg></div>
+          <span class="wt-title">How to read this P&L and how all 3 statements connect</span>
+        </div>
+        <span class="wt-chevron" id="chev-pl-wt">&#9660;</span>
+      </div>
+      <div class="wt-body" id="pl-wt">
+        <div class="wt-steps">
+          <div class="wt-step"><div class="wt-num">1</div><div class="wt-step-text"><b>The P&L starts where the Revenue Account ends.</b> The ₹420 Cr surplus flows in as the first line of income — the P&L doesn't repeat all the premium and claims detail; it just picks up the net result.</div></div>
+          <div class="wt-connector"></div>
+          <div class="wt-step"><div class="wt-num">2</div><div class="wt-step-text"><b>Non-operating items are small but real.</b> Depreciation on IT systems and provisions for uncollectable premiums are deducted here, not in the Revenue Account. They reduce PBT from ₹438 Cr to ₹398 Cr.</div></div>
+          <div class="wt-connector"></div>
+          <div class="wt-step"><div class="wt-num">3</div><div class="wt-step-text"><b>Tax at ~25% brings PAT to ₹298 Cr.</b> Indian insurers pay corporate tax like any other company. Deferred tax arises from timing differences between accounting and tax treatment of items like IBNR reserves.</div></div>
+          <div class="wt-connector"></div>
+          <div class="wt-step"><div class="wt-num">4</div><div class="wt-step-text"><b>How it links to the Balance Sheet:</b> Of the ₹298 Cr PAT, ₹60 Cr goes to shareholders as dividend, ₹30 Cr to a catastrophe reserve, and ₹208 Cr is retained. That ₹208 Cr is added to "Reserves &amp; Surplus" on the balance sheet — directly growing net worth year-on-year.</div></div>
+          <div class="wt-connector"></div>
+          <div class="wt-step"><div class="wt-num">5</div><div class="wt-step-text"><b>The three-statement loop:</b> Revenue Account viability → P&L bottom line → retained earnings → stronger Balance Sheet → more investment assets → more investment income → stronger Revenue Account. Regulators like IRDAI monitor all three together, not in isolation.</div></div>
+        </div>
+      </div>
+    </div>
+    <button style="margin-top:14px;width:100%" onclick="sendPrompt('Explain the relationship between these three financial statements for a health insurance company in India')">Ask a follow-up question ↗</button>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+function showPage(id, btn) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.fin-tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('page-' + id).classList.add('active');
+  btn.classList.add('active');
+  if (id === 'rev') drawRevChart();
+  if (id === 'pl') drawPLChart();
+}
+
+function toggleWT(id) {
+  var body = document.getElementById(id);
+  var chev = document.getElementById('chev-' + id);
+  var isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  chev.classList.toggle('open', !isOpen);
+}
+
+var revDrawn = false, plDrawn = false;
+
+function drawRevChart() {
+  if (revDrawn) return; revDrawn = true;
+  new Chart(document.getElementById('revChart'), {
+    type: 'bar',
+    data: {
+      labels: ['Net Earned\nPremium', 'Net Claims\nIncurred', 'Operating\nExpenses', 'Underwriting\nSurplus'],
+      datasets: [{ data: [2140, 1590, 480, 70], backgroundColor: ['#185FA5','#E24B4A','#EF9F27','#639922'], borderRadius: 4 }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: v => '₹' + v.raw + ' Cr' } } },
+      scales: {
+        x: { grid: { display: false }, ticks: { font: { size: 11 }, color: '#888780' } },
+        y: { grid: { color: 'rgba(128,128,128,0.15)' }, ticks: { font: { size: 11 }, color: '#888780', callback: v => '₹' + v } }
+      }
+    }
+  });
+}
+
+function drawPLChart() {
+  if (plDrawn) return; plDrawn = true;
+  new Chart(document.getElementById('plChart'), {
+    type: 'bar',
+    data: {
+      labels: ['Underwriting\nSurplus', 'Investment\nIncome', 'Tax &amp; other\ndeductions', 'PAT'],
+      datasets: [{ data: [70, 350, 100, 298], backgroundColor: ['#185FA5','#639922','#E24B4A','#1D9E75'], borderRadius: 4 }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false }, tooltip: { callbacks: { label: v => '₹' + v.raw + ' Cr' } } },
+      scales: {
+        x: { grid: { display: false }, ticks: { font: { size: 11 }, color: '#888780' } },
+        y: { grid: { color: 'rgba(128,128,128,0.15)' }, ticks: { font: { size: 11 }, color: '#888780', callback: v => '₹' + v } }
+      }
+    }
+  });
+}
+</script>
