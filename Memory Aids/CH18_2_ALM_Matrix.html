@@ -31,11 +31,22 @@
   .masthead-sub { font-family:'IBM Plex Mono',monospace; font-size:9.5px; color:var(--muted); text-transform:uppercase; letter-spacing:1.5px; }
   .masthead-tag { font-family:'IBM Plex Mono',monospace; font-size:9.5px; background:var(--accent); color:#fff; padding:3px 8px; letter-spacing:1px; }
 
+  /* SECTION LABEL */
   .sl { font-family:'IBM Plex Mono',monospace; font-size:9px; text-transform:uppercase; letter-spacing:2px; color:var(--muted); margin-bottom:5px; border-left:3px solid var(--accent); padding-left:7px; }
 
   /* GRID HELPERS */
   .g3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px; margin-bottom:18px; }
   .g2 { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:18px; }
+
+  /* PILLAR LABELS */
+  .pillar { font-family:'IBM Plex Mono',monospace; font-size:9px; font-weight:600; padding:2px 7px;
+    text-transform:uppercase; letter-spacing:.8px; color:white; margin-right:4px; display:inline-block; vertical-align:middle; }
+  .pillar.why    { background:var(--accent); }
+  .pillar.what   { background:var(--blue); }
+  .pillar.how    { background:var(--green); }
+  .pillar.cond   { background:var(--teal); }
+  .pillar.trade  { background:var(--purple); }
+  .pillar.nuance { background:var(--slate); }
 
   /* CARD */
   .card { background:var(--cream); border:1px solid var(--rule); padding:12px 14px; }
@@ -44,18 +55,14 @@
   .ct.t { color:var(--teal); } .ct.gold { color:var(--gold-text); } .ct.p { color:var(--purple); }
   .ct.sl2 { color:var(--slate); }
 
-  /* WHY / WHAT / HOW pillar label */
-  .pillar { font-family:'IBM Plex Mono',monospace; font-size:9px; font-weight:600; padding:1px 6px; text-transform:uppercase; letter-spacing:1px; color:white; margin-right:4px; display:inline-block; vertical-align:middle; }
-  .pillar.why  { background:var(--accent); }
-  .pillar.what { background:var(--blue); }
-  .pillar.how  { background:var(--green); }
-
   .pl { list-style:none; display:flex; flex-direction:column; gap:4px; }
   .pl li { background:white; border-left:3px solid var(--rule); padding:4px 7px; font-size:11.5px; line-height:1.4; }
-  .pl li.r { border-left-color:var(--accent); }
-  .pl li.b { border-left-color:var(--blue); }
-  .pl li.g { border-left-color:var(--green); }
-  .pl li.t { border-left-color:var(--teal); }
+  .pl li.r  { border-left-color:var(--accent); }
+  .pl li.b  { border-left-color:var(--blue); }
+  .pl li.g  { border-left-color:var(--green); }
+  .pl li.t  { border-left-color:var(--teal); }
+  .pl li.p  { border-left-color:var(--purple); }
+  .pl li.sl { border-left-color:var(--slate); }
   .pl li.gold { border-left-color:var(--gold); }
 
   /* MATRIX TABLE */
@@ -67,20 +74,16 @@
   table.mx tbody td { padding:7px 9px; border:1px solid var(--rule); vertical-align:top; line-height:1.4; }
   table.mx tbody td:first-child { font-family:'IBM Plex Mono',monospace; font-size:10px; font-weight:600; background:#e8e2d4; border-right:2px solid var(--ink); }
 
-  /* LIABILITY NATURE SECTION — centrepiece */
+  /* LIABILITY NATURE SECTION */
   .liab-wrap { margin-bottom:18px; }
   .liab-header { background:var(--teal); color:var(--paper); padding:9px 14px; display:flex; align-items:center; gap:12px; }
   .liab-header-title { font-family:'Playfair Display',serif; font-size:16px; font-weight:700; flex:1; }
-  .liab-cols { display:grid; grid-template-columns:1fr 1fr; border:1px solid var(--rule); border-top:none; }
-  .lc { padding:13px 14px; }
-  .lc.left  { background:#eef4f3; border-right:2px solid var(--ink); }
-  .lc.right { background:#f5f0e8; }
 
   .liab-type-grid { display:grid; grid-template-columns:1fr 1fr; gap:7px; margin-bottom:10px; }
   .lt { background:white; border:1px solid var(--rule); padding:8px 10px; }
   .lt-name { font-family:'IBM Plex Mono',monospace; font-size:9.5px; text-transform:uppercase; letter-spacing:.5px; margin-bottom:4px; font-weight:600; }
-  .lt-example { font-size:11px; color:var(--muted); margin-bottom:3px; font-style:italic; }
-  .lt-match { font-size:11px; line-height:1.4; }
+  .lt-example { font-size:11px; color:var(--muted); margin-bottom:5px; font-style:italic; }
+  .lt-match { font-size:11px; line-height:1.5; }
   .lt.monetary { border-top:3px solid var(--blue); }
   .lt.index    { border-top:3px solid var(--green); }
   .lt.indemn   { border-top:3px solid var(--gold); }
@@ -89,6 +92,9 @@
   .lt.index    .lt-name { color:var(--green); }
   .lt.indemn   .lt-name { color:var(--gold-text); }
   .lt.unitlk   .lt-name { color:var(--purple); }
+
+  .nuance-row { background:#f5f0e8; border:1px solid var(--rule); border-left:3px solid var(--slate); padding:9px 12px; font-size:11.5px; margin-top:0; }
+  .nuance-row strong { font-family:'IBM Plex Mono',monospace; font-size:9px; text-transform:uppercase; letter-spacing:.5px; color:var(--slate); display:block; margin-bottom:5px; }
 
   /* ALM PROCESS SECTION */
   .alm-wrap { margin-bottom:18px; }
@@ -109,7 +115,7 @@
   .dp-title { font-family:'IBM Plex Mono',monospace; font-size:9.5px; text-transform:uppercase; letter-spacing:.5px; color:var(--brown); margin-bottom:4px; }
   .dp-body { font-size:11px; line-height:1.4; }
 
-  /* VOLATILITY TABLE */
+  /* VOLATILITY / SUITABILITY TABLE */
   table.vol { width:100%; border-collapse:collapse; font-size:11px; margin-bottom:18px; }
   table.vol thead th { padding:7px 9px; font-family:'IBM Plex Mono',monospace; font-size:9px; text-transform:uppercase; letter-spacing:.7px; text-align:left; border-right:1px solid rgba(255,255,255,0.3); }
   table.vol thead th:nth-child(1) { background:var(--ink); color:var(--paper); width:120px; }
@@ -121,7 +127,6 @@
   table.vol tbody tr:nth-child(even) td { background:var(--cream); }
   table.vol tbody tr:nth-child(even) td:first-child { background:#ddd7c8; }
 
-  /* SUITABILITY MATRIX */
   table.suit { width:100%; border-collapse:collapse; font-size:11px; margin-bottom:18px; }
   table.suit thead th { padding:7px 9px; font-family:'IBM Plex Mono',monospace; font-size:9px; text-transform:uppercase; letter-spacing:.6px; text-align:left; border-right:1px solid rgba(255,255,255,0.3); }
   table.suit thead th:nth-child(1) { background:var(--ink); color:var(--paper); width:110px; }
@@ -129,7 +134,7 @@
   table.suit thead th:nth-child(3) { background:var(--green); color:white; }
   table.suit thead th:nth-child(4) { background:var(--gold-text); color:white; }
   table.suit thead th:nth-child(5) { background:var(--purple); color:white; }
-  table.suit thead th:nth-child(6) { background:var(--teal); color:white; }
+  table.suit thead th:nth-child(6) { background:var(--green); color:white; }
   table.suit tbody td { padding:6px 9px; border:1px solid var(--rule); vertical-align:top; line-height:1.4; background:white; font-size:11px; }
   table.suit tbody td:first-child { font-family:'IBM Plex Mono',monospace; font-size:9.5px; font-weight:600; background:#e8e2d4; border-right:2px solid var(--ink); }
   table.suit tbody tr:nth-child(even) td { background:var(--cream); }
@@ -139,24 +144,39 @@
   .cross { color:var(--accent); font-weight:700; }
   .part  { color:var(--gold-text); font-weight:700; }
 
-  /* FREE ASSETS & REGULATORY */
-  .fa-wrap { background:#eef7f2; border:1px solid var(--rule); border-top:3px solid var(--green); padding:12px 14px; margin-bottom:18px; display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px; }
-  .fa-item strong { display:block; font-family:'IBM Plex Mono',monospace; font-size:9px; text-transform:uppercase; letter-spacing:1px; color:var(--green); margin-bottom:5px; }
-  .fa-item { font-size:11.5px; }
+  /* FREE ASSETS */
+  .fa-wrap { border:1px solid var(--rule); border-top:none; margin-bottom:18px; }
+  .fa-header { background:var(--green); color:white; padding:9px 14px; font-family:'Playfair Display',serif; font-size:15px; font-weight:700; }
+  .fa-body { display:grid; grid-template-columns:1fr 1fr 1fr; gap:0; }
+  .fa-col { padding:13px 14px; font-size:11.5px; border-right:1px solid var(--rule); }
+  .fa-col:last-child { border-right:none; }
+  .fa-col strong { display:block; font-family:'IBM Plex Mono',monospace; font-size:9px; text-transform:uppercase; letter-spacing:1px; margin-bottom:6px; padding-bottom:4px; border-bottom:1px solid var(--rule); }
+  .fa-col strong.what   { color:var(--blue); }
+  .fa-col strong.cond   { color:var(--teal); }
+  .fa-col strong.trade  { color:var(--purple); }
+  .fa-col ul { list-style:none; display:flex; flex-direction:column; gap:4px; margin-top:4px; }
+  .fa-col ul li { background:white; border-left:3px solid var(--rule); padding:3px 7px; font-size:11px; line-height:1.4; }
+  .fa-col.what-col  ul li { border-left-color:var(--blue); }
+  .fa-col.cond-col  ul li { border-left-color:var(--teal); }
+  .fa-col.trade-col ul li { border-left-color:var(--purple); }
 
-  /* RISK CONTROL BAR */
+  /* INCOME TABLE — inline pillar labels in column headers */
+  .income-label { font-size:8.5px; display:block; opacity:.8; margin-top:2px; }
+
+  /* EXAM REMINDERS */
   .rc-bar { background:var(--ink); color:var(--paper); padding:12px 16px; margin-bottom:18px; }
   .rc-label { font-family:'Playfair Display',serif; font-size:13px; font-weight:700; margin-bottom:8px; }
   .rc-pills { display:flex; flex-wrap:wrap; gap:5px; }
   .rc-pill { background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.25); padding:3px 9px; font-size:10.5px; font-family:'IBM Plex Mono',monospace; }
   .rc-pill.k { background:var(--accent); border-color:var(--accent); }
 
-  .ev-note { background:#fdf8ff; border-left:3px solid var(--purple); padding:7px 10px; font-size:11px; margin-top:8px; }
+  .callout { background:#fdf8f0; border-left:3px solid var(--brown); padding:7px 10px; font-size:11px; margin:8px 0; }
 
   .footer { border-top:1px solid var(--rule); padding-top:8px; font-family:'IBM Plex Mono',monospace; font-size:9px; color:var(--muted); display:flex; justify-content:space-between; }
 
   .dot { display:inline-block; width:5px; height:5px; border-radius:50%; background:var(--muted); margin-right:4px; vertical-align:middle; }
-  .dot.r { background:var(--accent); } .dot.b { background:var(--blue); } .dot.g { background:var(--green); } .dot.t { background:var(--teal); }
+  .dot.r { background:var(--accent); } .dot.b { background:var(--blue); } .dot.g { background:var(--green); }
+  .dot.t { background:var(--teal); }   .dot.p { background:var(--purple); }
 
   @media print { body { padding:10px; font-size:11px; } }
 </style>
@@ -170,8 +190,8 @@
   <span class="masthead-tag">CONSOLIDATED STUDY MATRIX</span>
 </div>
 
-<!-- ① INVESTMENT PRINCIPLES -->
-<div class="sl">① Investment Principles</div>
+<!-- ① INVESTMENT PRINCIPLES — Why / What / How -->
+<div class="sl">① Investment Principles &nbsp;·&nbsp; Why / What / How</div>
 <div class="g3" style="margin-bottom:18px;">
   <div class="card">
     <div class="ct r"><span class="pillar why">Why</span> Invest?</div>
@@ -179,7 +199,7 @@
       <li class="r">Meet contractual benefit &amp; expense payments as they fall due</li>
       <li class="r">Generate returns to benefit SH (profits/dividends) and/or PH (lower premiums)</li>
       <li class="r">Support the insurer's commercial success, financial results and long-term security</li>
-      <li>Investment importance varies by product — critical for pre-funded LTCI; minor for PMI (low reserves, short-tail)</li>
+      <li>Investment importance varies by product — critical for pre-funded LTCI (high reserves); minor for PMI (low reserves, short-tail)</li>
       <li>Unit-linked PH benefit directly from good asset performance in the unit fund</li>
     </ul>
   </div>
@@ -187,353 +207,393 @@
     <div class="ct b"><span class="pillar what">What</span> is the Core Principle?</div>
     <ul class="pl">
       <li class="b" style="font-weight:600;">Maximise investment return, subject to meeting all contractual and TCF obligations, recognising uncertainties involved and the overall risk that SH, Reg and PH are prepared to tolerate</li>
-      <li class="b">High returns and low volatility conflict — higher expected return = higher variance</li>
+      <li class="b">High returns and low volatility conflict — higher expected return = higher variance of that return</li>
       <li>Available capital = MV(assets) − market-consistent value(liabilities)</li>
       <li>Solvency cover ratio (own funds ÷ SCR) — insurers typically target 150–200%</li>
-      <li>The insurer must balance return and security given the nature of its liabilities</li>
     </ul>
   </div>
   <div class="card">
-    <div class="ct g"><span class="pillar how">How</span> to Balance Risk and Return?</div>
+    <div class="ct g"><span class="pillar how">How</span> to Balance Risk &amp; Return?</div>
     <ul class="pl">
-      <li class="g">Closer matching of assets to liabilities (nature, term, currency) → lower investment risk</li>
-      <li class="g">Free assets provide a cushion allowing departure from a matched position</li>
+      <li class="g">Match assets to nature, term and currency of liabilities → reduces investment risk</li>
+      <li class="g">Free assets provide a cushion — allow departure from matched position in pursuit of higher return</li>
       <li>Greater free assets → greater freedom to invest in higher-returning (more volatile) assets</li>
-      <li>Appetite for risk depends on capital strength, diversification and regulatory environment</li>
+      <li>Risk appetite depends on capital strength, diversification and regulatory environment</li>
       <li>Extent of divergence from matched position = the company's "risk budget"</li>
     </ul>
   </div>
 </div>
 
-<!-- ② AIM OF ALM -->
-<div class="sl">② Aim of Asset-Liability Management</div>
-<div class="g2" style="margin-bottom:18px;">
+<!-- ② AIM OF ALM — What / Conditions / Trade-offs -->
+<div class="sl">② Aim of Asset-Liability Management &nbsp;·&nbsp; What / Conditions / Trade-offs</div>
+<div class="g3" style="margin-bottom:18px;">
   <div class="card">
-    <div class="ct r"><span class="pillar why">Why</span> ALM? &nbsp;<span class="pillar what">What</span> does it deliver?</div>
+    <div class="ct b"><span class="pillar what">What</span> does ALM deliver?</div>
     <ul class="pl">
-      <li class="r">Derive an investment strategy that reflects the insurer's attitude to <strong>market risk</strong> — the extent to which it is prepared to suffer losses due to adverse economic/investment market conditions</li>
-      <li class="r">Attitude to risk varies with size of available capital and level of diversification</li>
-      <li class="b">Sets the "risk budget" — how much to deviate from cashflow matching and how much capital to expose in doing so</li>
-      <li class="b">Examines alternative investment strategies (physical + derivative) for suitability and risk level</li>
-      <li class="b">Decide whether to hedge only best-estimate liabilities or to seek further balance sheet stabilisation</li>
-      <li>Even "perfect" cashflow matching doesn't necessarily stabilise the <em>reported</em> liabilities (e.g. Solvency II volatility adjustment based on representative portfolio, not actual holdings)</li>
-      <li>Solvency II: P&amp;L attribution is a regulatory requirement for internal model approval</li>
+      <li class="b">Investment strategy aligned to the insurer's attitude to <strong>market risk</strong> — willingness to suffer losses due to adverse economic/investment market conditions</li>
+      <li class="b">Sets the risk budget: how much to deviate from cashflow matching and how much capital to expose</li>
+      <li class="b">Examines alternative strategies (physical + derivative) for suitability and risk level</li>
+      <li class="b">Ongoing ALM risk management: measuring, monitoring and rebalancing positions</li>
+      <li>Model office projections: integral to ORSA under Solvency II; allow risks to be identified, explored and monitored</li>
     </ul>
   </div>
   <div class="card">
-    <div class="ct g"><span class="pillar how">How</span> is ALM Governed?</div>
+    <div class="ct t"><span class="pillar cond">Conditions</span> that shape ALM</div>
     <ul class="pl">
-      <li class="g">Choose a quantitative measure of success, e.g. probability that free capital drops below zero over the next 5 years</li>
-      <li class="g">Investment strategy not developed in isolation — optimised jointly with risk management strategy and new business strategy</li>
-      <li class="g">Model office projections are part of overall financial management — identify, explore and monitor risks; integral to ORSA under Solvency II</li>
-      <li>ALM team activities: strategic asset allocation + hedging strategy + ongoing risk management (measuring, monitoring, rebalancing)</li>
-      <li>Movements in full balance sheet can occur even with good cashflow matching — due to movements in SCR or risk margin</li>
+      <li class="t">Capital strength and diversification → determines risk tolerance</li>
+      <li class="t">SCR target typically 150–200%; internal model approval requires P&amp;L attribution</li>
+      <li class="t">Solvency II volatility adjustment based on representative portfolio not actual holdings → even perfect cashflow matching doesn't fully stabilise reported liabilities</li>
+      <li class="t">Movements in SCR or risk margin cause full balance sheet movements even with matched cashflows</li>
+      <li>Quantitative success measure needed: e.g. probability free capital &lt; 0 over 5 years</li>
+    </ul>
+  </div>
+  <div class="card">
+    <div class="ct p"><span class="pillar trade">Trade-offs</span></div>
+    <ul class="pl">
+      <li class="p">Hedge best-estimate liabilities only vs seek full balance sheet stabilisation (SCR + risk margin)</li>
+      <li class="p">Investment strategy not developed in isolation — optimised jointly with risk management strategy and new business strategy</li>
+      <li class="p">Return maximisation vs capital efficiency (lower SCR via derivatives)</li>
+      <li class="p">ALM hedging may avoid unpalatable management actions — but if those actions already built into projection model, need for matching may be masked</li>
     </ul>
   </div>
 </div>
 
-<!-- ③ LIABILITY NATURE — centrepiece -->
-<div class="sl">③ Effect of Liabilities on Asset Selection — The Four Liability Types</div>
+<!-- ③ LIABILITY TYPES — What / Key Nuances (centrepiece) -->
+<div class="sl">③ Effect of Liabilities on Asset Selection &nbsp;·&nbsp; What / Key Nuances</div>
 <div class="liab-wrap">
   <div class="liab-header">
-    <div class="liab-header-title">Liability Nature, Term &amp; Currency Drive Asset Choice</div>
-    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;opacity:.8;">Net liability outgo = benefit payments + expenses − premiums · Must match nature AND term AND currency</span>
+    <div class="liab-header-title">The Four Liability Types &amp; Their Matching Assets</div>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:10px;opacity:.8;">Net liability outgo = benefit payments + expenses − premiums &nbsp;·&nbsp; Match nature AND term AND currency — always all three</span>
   </div>
   <div style="border:1px solid var(--rule);border-top:none;padding:14px;">
+    <div style="font-size:11px;color:var(--muted);font-family:'IBM Plex Mono',monospace;margin-bottom:10px;">
+      <span class="pillar what">What</span> is each type, what matches it &nbsp;·&nbsp; <span class="pillar nuance">Key Nuances</span> — where matching breaks down
+    </div>
     <div class="liab-type-grid">
       <div class="lt monetary">
         <div class="lt-name">① Guaranteed in Monetary Terms</div>
-        <div class="lt-example">e.g. Fixed CI lump sum · fixed IP benefit · premiums (fixed)</div>
-        <div class="lt-match"><span class="dot b"></span><strong>Match with:</strong> Fixed-interest (govt) bonds, chosen to match term of outgo<br>
-        <span class="dot r"></span><strong>Problem:</strong> Available bond terms often shorter than liabilities; reinvestment rate risk; surplus premiums must be reinvested at unknown rates<br>
-        <span class="dot r"></span><strong>Alternative:</strong> Immunisation (second-best) — protects against small interest rate changes; zero-coupon bonds if available<br>
-        <span class="dot b"></span>With large numbers of policies, cashflows statistically predictable → best match approach feasible</div>
+        <div class="lt-example">e.g. Fixed CI lump sum · fixed IP benefit · fixed premiums</div>
+        <div class="lt-match">
+          <span class="dot b"></span><strong>Match:</strong> Fixed-interest government bonds, chosen to match term of outgo<br><br>
+          <span class="dot" style="background:var(--slate);"></span><strong>Nuances:</strong><br>
+          · Available bond terms often shorter than liabilities<br>
+          · Surplus premiums must be reinvested at unknown future rates<br>
+          · Net liability may be a cash inflow in early years — no asset can match that directly<br>
+          · Immunisation: second-best alternative; protects only against small rate changes<br>
+          · Zero-coupon bonds eliminate reinvestment risk but may not exist in the market
+        </div>
       </div>
       <div class="lt index">
         <div class="lt-name">② Guaranteed vs Index (Prices / Earnings)</div>
-        <div class="lt-example">e.g. IP benefit linked to RPI/CPI · expenses (move with wages/prices)</div>
-        <div class="lt-match"><span class="dot g"></span><strong>Match with:</strong> Index-linked government bonds (same index, matched term)<br>
-        <span class="dot t"></span><strong>If unavailable:</strong> Real assets (equities, property) — provide real return over long term but volatile short-term<br>
-        <span class="dot r"></span><strong>Equities limitation:</strong> Return not guaranteed; default risk; poor short-term match; better match for earnings indices than price indices<br>
-        <span class="dot r"></span><strong>NAE matching:</strong> No bonds linked to NAE; equities better long-term but short-term volatility problematic<br>
-        <span class="dot r"></span><strong>Inflation caps/floors:</strong> Particularly challenging — may use inflation-based derivatives</div>
+        <div class="lt-example">e.g. IP benefit linked to RPI/CPI or NAE · expenses (wages + prices)</div>
+        <div class="lt-match">
+          <span class="dot g"></span><strong>Match:</strong> Index-linked government bonds (same index, matched term)<br><br>
+          <span class="dot" style="background:var(--slate);"></span><strong>Nuances:</strong><br>
+          · IL gilts: time-lag in index used for coupon calculation prevents perfect match<br>
+          · If IL gilts unavailable: real assets (equities/property) — good long-term match, poor short-term<br>
+          · NAE matching: no bonds linked to NAE; equities better long-term but volatile short-term<br>
+          · Inflation caps/floors: particularly challenging — inflation-based derivatives may help<br>
+          · Expenses: link to earnings index broadly adequate even if not strictly comparable
+        </div>
       </div>
       <div class="lt indemn">
         <div class="lt-name">③ Indemnity</div>
         <div class="lt-example">e.g. PMI — amount depends on actual treatment costs incurred</div>
-        <div class="lt-match"><span class="dot gold"></span><strong>Match with:</strong> Cash and short-term fixed-interest bonds (short-tail business, minimal reserves)<br>
-        <span class="dot b"></span><strong>Rationale:</strong> Premium income broadly sufficient to pay claims → reserves very small → investment income negligible<br>
-        <span class="dot r"></span><strong>For persistent reserves:</strong> Amounts unknown at setting; costs escalate with medical inflation (often &gt; RPI) → index-linked bonds or real assets<br>
-        <span class="dot gold"></span>Medical inflation often exceeds general price inflation — monitor claims cost trends carefully</div>
+        <div class="lt-match">
+          <span class="dot gold"></span><strong>Match:</strong> Cash and short-term fixed-interest bonds<br><br>
+          <span class="dot" style="background:var(--slate);"></span><strong>Nuances:</strong><br>
+          · Rationale: PMI is short-tail; premium income broadly covers claims; reserves minimal → investment income negligible<br>
+          · Where persistent reserves exist: amounts unknown; costs escalate with medical inflation<br>
+          · Medical inflation often exceeds RPI — index-linked bonds only partially match<br>
+          · For longer-tail indemnity reserves: equities/property provide real return but volatility must be accepted
+        </div>
       </div>
       <div class="lt unitlk">
         <div class="lt-name">④ Investment-Linked</div>
         <div class="lt-example">e.g. Unit-linked LTCI · unit-linked with-profits health</div>
-        <div class="lt-match"><span class="dot" style="background:var(--purple);"></span><strong>Match with:</strong> The actual assets underlying the investment link / unit fund<br>
-        <span class="dot" style="background:var(--purple);"></span>In many markets legally required to hold the underlying assets exactly<br>
-        <span class="dot r"></span><strong>Deliberate mismatch:</strong> Only if insurer expects alternative assets to outperform — risk of loss falls entirely on insurer (not PH)<br>
-        <span class="dot b"></span>Matching requirements less of an issue — vast bulk of assets and liabilities exactly matched</div>
+        <div class="lt-match">
+          <span class="dot" style="background:var(--purple);"></span><strong>Match:</strong> The actual assets underlying the unit fund / investment link<br><br>
+          <span class="dot" style="background:var(--slate);"></span><strong>Nuances:</strong><br>
+          · Often a legal requirement to hold the underlying assets exactly<br>
+          · ALM matching requirements are less of an issue — assets and liabilities move together<br>
+          · Deliberate mismatch: only if insurer expects alternative assets to outperform — any underperformance falls entirely on insurer (not PH)<br>
+          · Sensitivity analysis / scenario testing still needed for charges, capital requirements
+        </div>
       </div>
     </div>
-    <div style="background:#f0f4f0;border:1px solid var(--rule);border-left:3px solid var(--teal);padding:9px 12px;font-size:11.5px;">
-      <strong style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;text-transform:uppercase;letter-spacing:.5px;color:var(--teal);">Term &amp; Currency Rules</strong><br>
-      <strong>Term:</strong> Match asset proceeds to when liability outgo falls due — assets too long = exposed to rising yields (capital loss); assets too short = exposed to falling yields (reinvestment risk).<br>
-      <strong>Currency:</strong> Liabilities in a given currency matched by assets in the same currency. Overseas assets can be held with currency options to hedge FX risk. Alternatively, invest overseas for diversification / attractive returns and hedge the currency mismatch.
+    <div class="nuance-row">
+      <strong><span class="pillar nuance">Key Nuances</span> — Term &amp; Currency Rules</strong>
+      <strong>Term:</strong> Match asset proceeds to when liability outgo falls due. Assets too long → exposed to rising yields (capital loss on sale). Assets too short → exposed to falling yields (reinvestment risk). Departure acceptable if: (a) large free assets; (b) new business premiums can bridge gap — but relying heavily on future premiums is dangerous.<br>
+      <strong>Currency:</strong> Match currency of assets to currency of liabilities. Currency options can hedge FX risk on overseas assets. Overseas investment also justified for diversification or access to assets unavailable domestically.
     </div>
   </div>
 </div>
 
-<!-- ④ MEAN TERM, INFLATION & LIQUIDITY -->
-<div class="sl">④ Mean Term, Inflation &amp; Liquidity — Matching Constraints</div>
+<!-- ④ MEAN TERM, INFLATION & LIQUIDITY — What / Conditions / Trade-offs -->
+<div class="sl">④ Mean Term, Inflation &amp; Liquidity &nbsp;·&nbsp; What / Conditions / Trade-offs</div>
 <div class="g3" style="margin-bottom:18px;">
   <div class="card">
-    <div class="ct b"><span class="pillar why">Why</span> Mean Term Matters</div>
+    <div class="ct b"><span class="pillar what">What</span> is Mean Term Mismatch?</div>
     <ul class="pl">
-      <li class="b"><strong>Assets too long:</strong> If long-term yields rise, MV of assets falls more than MV of liabilities → possible insolvency on paper (even if not actually insolvent until liability falls due)</li>
-      <li class="b"><strong>Assets too short:</strong> If interest rates fall, reinvestment at lower rates → insufficient income to meet long-term liabilities</li>
-      <li>Current solvency: statements only fully hold if liabilities discounted at market-responsive rates</li>
-      <li>Future solvency: threatened whether or not liabilities are discounted — depends on future investment returns</li>
-      <li>Insurer can depart from matched term if: (a) large free assets; (b) new business premiums expected to meet shorter liabilities — but relying on future premiums is dangerous</li>
+      <li class="b"><strong>Assets too long:</strong> Long-term yields rise → MV of assets falls by more than MV of liabilities → possible insolvency. Example: liabilities 1 week, assets 20 years — a 20%+ fall in asset values possible from yield spike</li>
+      <li class="b"><strong>Assets too short:</strong> Interest rates fall → reinvestment at lower rates → insufficient income to meet long-term liabilities. Example: cash at 15% pa → rates cut to 6% → insolvency over 2-year horizon</li>
+      <li>Current solvency statements fully hold only if liabilities discounted at market-responsive rates</li>
+      <li>Future solvency threatened whether or not liabilities are discounted — depends on future investment returns</li>
     </ul>
   </div>
   <div class="card">
-    <div class="ct gold"><span class="pillar what">What</span> Are the Inflation Risks?</div>
+    <div class="ct gold"><span class="pillar what">What</span> Are the Inflation Risks? &nbsp;<span class="pillar cond">Conditions</span></div>
     <ul class="pl">
-      <li class="gold">Benefits expressly linked to an inflationary index → must hold index-linked assets</li>
-      <li class="gold">Benefits that indemnify medical expense costs (PMI, LTCI care costs) → subject to medical/care inflation, often exceeding RPI</li>
-      <li class="gold">Expenses of settling claims → mainly wage inflation</li>
-      <li><strong>Short-term liabilities:</strong> Treat as fixed in monetary terms — not enough time for inflation to deviate materially</li>
-      <li><strong>Long-term liabilities:</strong> Inflation is a major consideration — assets should provide real return</li>
-      <li>National indices (RPI, CPI, NAE) relevant but imperfect matches for specific claim types</li>
+      <li class="gold">Benefits expressly linked to index → hold index-linked assets</li>
+      <li class="gold">Indemnity benefits (PMI, LTCI care costs) → subject to medical/care inflation, often exceeding RPI</li>
+      <li class="gold">Expenses → mainly wage inflation, linked to earnings index</li>
+      <li><strong>Short-term liabilities:</strong> Treat as fixed in monetary terms — not enough time for inflation to deviate materially; also unlikely to deviate much from expected</li>
+      <li><strong>Long-term liabilities:</strong> Inflation is a major consideration — assets must provide real return</li>
+      <li>National indices (RPI, CPI, NAE) are relevant benchmarks but imperfect matches for specific claim types</li>
     </ul>
   </div>
   <div class="card">
-    <div class="ct g"><span class="pillar how">How</span> to Manage Liquidity</div>
+    <div class="ct p"><span class="pillar what">What</span> Drives Liquidity Need? &nbsp;<span class="pillar trade">Trade-offs</span></div>
     <ul class="pl">
-      <li class="g">Writing classes with widely fluctuating claims levels → maintain access to liquid funds</li>
-      <li class="g">Portfolio contracting (closed to NB) → can't fund claims from incoming premiums → higher liquidity requirement</li>
-      <li class="g">Reinsurance reduces variability of claims outgo → indirect benefit to investment strategy (less liquid assets possible) — but gross claims paid far in advance of RI recoveries</li>
-      <li>Default of reinsurer or broker → sharp cashflow interruption; if shortfall not immediate, assets can be realised in orderly way</li>
-      <li>High claims variability → cautious strategy with higher proportion of liquid assets</li>
+      <li class="p">Writing classes with widely fluctuating claims → maintain liquid funds</li>
+      <li class="p">Portfolio contracting / run-off → cannot fund claims from incoming premiums → higher liquidity requirement</li>
+      <li>Reinsurance reduces claims variability (→ less liquid assets possible) but gross claims paid far in advance of RI recoveries (→ tension with matching)</li>
+      <li>Default of reinsurer/broker → sharp cashflow interruption; if shortfall not immediate, realise assets in orderly way to minimise loss</li>
+      <li><strong>Trade-off:</strong> Matching may suggest longer-term equities/property, but liquidity need may force shorter-term investments even if liability nature hasn't changed</li>
       <li><strong>Regulatory constraints:</strong> Restrictions on asset types, solvency admissibility, currency matching, exposure limits, mismatching reserves, valuation methods, custodianship</li>
     </ul>
   </div>
 </div>
 
-<!-- ⑤ ALM PROCESS -->
-<div class="sl">⑤ The ALM Process &amp; Modelling</div>
+<!-- ⑤ ALM PROCESS — Why / What / How -->
+<div class="sl">⑤ The ALM Process &amp; Modelling &nbsp;·&nbsp; Why / What / How</div>
 <div class="alm-wrap">
   <div class="alm-header">
-    <div class="alm-header-title">Asset-Liability Modelling Process &nbsp;·&nbsp; Steps &amp; Tools</div>
+    <div class="alm-header-title">Asset-Liability Modelling Process &nbsp;·&nbsp; Steps, Tools &amp; Model Types</div>
   </div>
   <div class="alm-body">
     <div style="font-size:11.5px;margin-bottom:10px;">
-      <strong><span class="pillar why">Why</span> Model?</strong> Projections of assets and liabilities become particularly useful when their relationship is examined together. Used to test investment strategies, estimate insolvency probability, determine free assets needed, and enable advance planning for condition changes.
+      <span class="pillar why">Why</span> <strong>Model?</strong> Test investment strategies · Estimate probability of insolvency · Determine free assets required to support a strategy · Enable advance planning for changes in conditions or strategies. Integral to ORSA under Solvency II.
     </div>
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:9px;text-transform:uppercase;letter-spacing:.8px;color:var(--purple);margin-bottom:6px;"><span class="pillar what">What</span> are the steps?</div>
     <div class="alm-steps">
-      <div class="alm-step"><strong>① Project Liability Outgo</strong><span>Model all relevant cashflows on a year-by-year basis for the entire policy lifetime. Liability projection system models benefits, expenses, premiums. Decide level of detail to incorporate.</span></div>
-      <div class="alm-step"><strong>② Project Asset Proceeds</strong><span>Separate asset projection model feeds into liability system, OR build single combined model. Stochastic investment models project future income and capital values.</span></div>
-      <div class="alm-step"><strong>③ Compare &amp; Assess</strong><span>Compare asset proceeds vs liability outgo each period. Excess of assets over liabilities must comfortably cover solvency capital required. Test at year-end or continuously.</span></div>
-      <div class="alm-step"><strong>④ Re-run Assumptions</strong><span>Run under different scenarios (sensitivity testing for deterministic; probability distributions for stochastic). Identify which assumptions are most critical.</span></div>
-      <div class="alm-step"><strong>⑤ Assess Appropriateness</strong><span>Statistical distribution of surplus each year → estimate probability of future insolvency for each strategy. Also calculate aggregate profitability measure (e.g. PV shareholder distributions).</span></div>
-      <div class="alm-step"><strong>⑥ Investigate Alternatives</strong><span>Repeat for different (more or less risky) strategies until target insolvency probability achieved. Identify strategy with equal insolvency risk and highest profitability.</span></div>
+      <div class="alm-step"><strong>① Project Liability Outgo</strong><span>Model all relevant cashflows year-by-year for entire policy lifetime. Decide level of detail to incorporate. Liability projection system models benefits, expenses, premiums.</span></div>
+      <div class="alm-step"><strong>② Project Asset Proceeds</strong><span>Separate asset projection model — feeds into liability system, or built as combined model. Stochastic investment models project future income and capital value changes.</span></div>
+      <div class="alm-step"><strong>③ Compare &amp; Assess</strong><span>Compare asset proceeds vs liability outgo per period. Excess of assets over liabilities must comfortably cover required solvency capital. Test at year-end or continuously.</span></div>
+      <div class="alm-step"><strong>④ Re-run Assumptions</strong><span>Run under different scenarios. Sensitivity testing (deterministic) or full probability distributions (stochastic). Identify which assumptions are most critical to results.</span></div>
+      <div class="alm-step"><strong>⑤ Assess Appropriateness</strong><span>Statistical distribution of surplus each year → estimate probability of future insolvency per strategy. Calculate aggregate profitability (e.g. PV shareholder distributions).</span></div>
+      <div class="alm-step"><strong>⑥ Investigate Alternatives</strong><span>Repeat for different strategies until target insolvency probability achieved. Identify strategy with equal insolvency risk and highest profitability. Repeat with different free asset allocations.</span></div>
     </div>
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:11px;">
       <div style="background:#f5f0f9;border:1px solid #d4c8e8;padding:8px 10px;">
-        <strong style="font-family:'IBM Plex Mono',monospace;font-size:9px;text-transform:uppercase;letter-spacing:.5px;color:var(--purple);">Deterministic vs Stochastic</strong><br><br>
-        <strong>Deterministic:</strong> Pre-set values for all variables based on a single set of assumptions. Run using different sets (sensitivity testing). Simpler but gives no probability distribution.<br><br>
-        <strong>Stochastic:</strong> Key parameters randomly selected from defined probability distributions. Generates distribution of outcomes — e.g. probability of free capital &lt; 0 over next 5 years. Requires more assumptions (ESG calibration, asset model choice).
+        <strong style="font-family:'IBM Plex Mono',monospace;font-size:9px;text-transform:uppercase;letter-spacing:.5px;color:var(--purple);display:block;margin-bottom:5px;"><span class="pillar how">How</span> — Deterministic vs Stochastic</strong>
+        <strong>Deterministic:</strong> Pre-set values for all variables. Run with different assumption sets (sensitivity testing). Simpler, no probability distribution output.<br><br>
+        <strong>Stochastic:</strong> Key parameters randomly selected from defined probability distributions. Hundreds/thousands of sample paths generated. Outputs: probability of insolvency, confidence intervals for surplus. Requires more assumptions — ESG calibration, asset model choice, parameter consistency critical.
       </div>
       <div style="background:#eef4f3;border:1px solid #90c4bc;padding:8px 10px;">
-        <strong style="font-family:'IBM Plex Mono',monospace;font-size:9px;text-transform:uppercase;letter-spacing:.5px;color:var(--teal);">Economic Scenario Generators (ESG)</strong><br><br>
-        <strong>What:</strong> Model producing numerous simulations of possible future economic outcomes (interest rates, inflation, equity/property/credit returns). Power comes from modelling <em>joint</em> behaviour of economic variables coherently.<br><br>
-        <strong>Calibrations:</strong> <em>Real-world</em> (for ALM — project asset returns, calculate insolvency probabilities) vs <em>Risk-neutral/market-consistent</em> (for liability valuation at future points). ALM needs both.<br><br>
-        <strong>Also:</strong> Time zero stress tests assess immediate risks; risk exposures change significantly as assets and liabilities mature.
+        <strong style="font-family:'IBM Plex Mono',monospace;font-size:9px;text-transform:uppercase;letter-spacing:.5px;color:var(--teal);display:block;margin-bottom:5px;"><span class="pillar how">How</span> — Economic Scenario Generators (ESG)</strong>
+        <strong>What:</strong> Model producing numerous simulations of future economic outcomes. Power comes from modelling <em>joint</em> behaviour of variables (interest rates, inflation, equity/property/credit) coherently.<br><br>
+        <strong>Calibrations:</strong> <em>Real-world</em> — for ALM: project actual asset returns, calculate insolvency probabilities. <em>Risk-neutral/market-consistent</em> — for liability valuation at future time points. ALM needs both.<br><br>
+        <strong>Also:</strong> Time zero stress tests assess immediate risk exposures. Risk exposures change significantly as assets and liabilities mature over time.
       </div>
-    </div>
-    <div class="ev-note" style="margin-top:10px;">
-      <strong>Allowing for solvency requirements:</strong> Model must incorporate regulatory asset values and liability values to assess solvency at each future period. Compare against SCR at each point. Insurer likely to place further, more stringent, class-specific solvency capital requirements on itself. Allowance for future new business needed to monitor ongoing progress.
     </div>
   </div>
 </div>
 
-<!-- ⑥ DERIVATIVES -->
-<div class="sl">⑥ Derivatives in ALM</div>
+<!-- ⑥ DERIVATIVES — Why / What / How -->
+<div class="sl">⑥ Derivatives in ALM &nbsp;·&nbsp; Why / What / How</div>
 <div class="deriv-wrap">
   <div class="deriv-header">Derivatives — Purposes, Types &amp; Risks</div>
   <div class="deriv-body">
-    <div style="font-size:11.5px;margin-bottom:10px;"><span class="pillar why">Why</span> Many health and care insurers now use derivatives as an integral part of their ALM strategies.</div>
+    <div style="font-size:11.5px;margin-bottom:10px;"><span class="pillar why">Why</span> Many health and care insurers now use derivatives as an integral part of their ALM strategies — held for the following distinct purposes:</div>
     <div class="deriv-purposes">
       <div class="dp">
-        <div class="dp-title">① Reduce Risk of Loss</div>
-        <div class="dp-body">Alternative to physical assets when unavailable/impractical. e.g. Equity put options limit loss from equity market fall where assets and liabilities unmatched. Futures on index gain exposure without buying every stock.</div>
+        <div class="dp-title"><span class="pillar why">Why</span> ① Reduce Risk of Loss</div>
+        <div class="dp-body">Alternative to physical assets when unavailable or impractical. e.g. Equity put options limit loss from equity market fall where assets and liabilities unmatched. Index futures provide exposure without buying every constituent stock.</div>
       </div>
       <div class="dp">
-        <div class="dp-title">② Increase Available Capital</div>
-        <div class="dp-body">Reducing regulatory capital requirements. e.g. Holding put options may reduce the SCR under Solvency II → frees up capital for deployment elsewhere.</div>
+        <div class="dp-title"><span class="pillar why">Why</span> ② Increase Available Capital</div>
+        <div class="dp-body">Reduce regulatory capital requirements. e.g. Holding equity put options may reduce the SCR under Solvency II → frees capital for other uses or reduces cost of holding capital.</div>
       </div>
       <div class="dp">
-        <div class="dp-title">③ Stabilise Balance Sheet</div>
-        <div class="dp-body">Hedge SCR or risk margin under Solvency II. Risk margin is sensitive to interest rate changes. Construct portfolio matching any movement in liability value from interest rate changes → reduces balance sheet volatility.</div>
+        <div class="dp-title"><span class="pillar why">Why</span> ③ Stabilise Balance Sheet</div>
+        <div class="dp-body">Hedge SCR or risk margin under Solvency II. Risk margin sensitive to interest rate changes. Construct portfolio matching any movement in liability value from rate changes → reduces balance sheet volatility.</div>
       </div>
       <div class="dp">
-        <div class="dp-title">④ Reduce Tax / Costs</div>
-        <div class="dp-body">Exchange-traded derivatives cheaper to deal than underlying physical assets. Particularly relevant for gaining broad market exposure.</div>
+        <div class="dp-title"><span class="pillar why">Why</span> ④ Reduce Tax / Costs</div>
+        <div class="dp-body">Exchange-traded derivatives cheaper to deal than underlying physical assets — particularly relevant for gaining broad market exposure quickly or at scale.</div>
       </div>
       <div class="dp">
-        <div class="dp-title">⑤ Efficient Acquisition / Disposal</div>
-        <div class="dp-body">Going short equity futures provides immediate reduction in equity exposure whilst selling actual assets more slowly when conditions are optimal. Avoids market impact of large physical transactions.</div>
+        <div class="dp-title"><span class="pillar why">Why</span> ⑤ Efficient Acquisition / Disposal</div>
+        <div class="dp-body">Going short equity futures: immediate reduction in equity exposure whilst selling actual assets more slowly when conditions are optimal. Avoids market impact of large physical transactions.</div>
       </div>
       <div class="dp">
-        <div class="dp-title">Static vs Dynamic Hedging</div>
-        <div class="dp-body"><strong>Static:</strong> Derivative held to protect against specific severe adverse scenario in limited circumstances. Set and forget.<br><strong>Dynamic:</strong> Portfolio of derivatives held and frequently rebalanced to continue matching liability risk sensitivities as conditions change.</div>
+        <div class="dp-title"><span class="pillar how">How</span> — Static vs Dynamic</div>
+        <div class="dp-body"><strong>Static:</strong> Held to protect against a specific severe adverse scenario; set and hold. <strong>Dynamic:</strong> Portfolio rebalanced frequently to continue matching liability risk sensitivities as conditions change — e.g. duration of liabilities changes as policies age.</div>
       </div>
     </div>
-    <div style="background:#f0ece0;border:1px solid var(--rule);padding:8px 12px;font-size:11.5px;">
-      <strong style="font-family:'IBM Plex Mono',monospace;font-size:9.5px;text-transform:uppercase;letter-spacing:.5px;color:var(--brown);">Residual Risks of Derivative Strategies</strong> &nbsp;
+    <div style="background:#f0ece0;border:1px solid var(--rule);border-left:3px solid var(--slate);padding:8px 12px;font-size:11.5px;">
+      <strong style="font-family:'IBM Plex Mono',monospace;font-size:9px;text-transform:uppercase;letter-spacing:.5px;color:var(--slate);"><span class="pillar nuance">Key Nuances</span> — Residual Risks</strong>&nbsp;
       <span style="background:white;border:1px solid var(--rule);padding:2px 8px;margin-right:4px;font-size:11px;">Counterparty risk</span>
       <span style="background:white;border:1px solid var(--rule);padding:2px 8px;margin-right:4px;font-size:11px;">Liquidity risk</span>
       <span style="background:white;border:1px solid var(--rule);padding:2px 8px;margin-right:4px;font-size:11px;">Operational risk</span>
-      <span style="background:white;border:1px solid var(--rule);padding:2px 8px;font-size:11px;">Basis risk (index ≠ actual portfolio)</span>
-      &nbsp;· Local regulatory restrictions on use of derivatives must also be considered.
+      <span style="background:white;border:1px solid var(--rule);padding:2px 8px;font-size:11px;">Basis risk — derivative based on index ≠ actual portfolio held</span>
+      &nbsp;· Local regulatory restrictions on use of derivatives must also be considered · Derivative strategies often imperfect by design.
     </div>
   </div>
 </div>
 
-<!-- ⑦ FREE ASSETS -->
-<div class="sl">⑦ Effect of Free Assets on Asset Selection</div>
-<div class="fa-wrap">
-  <div class="fa-item">
-    <strong><span class="pillar why">Why</span> Free Assets Matter</strong>
-    Free assets = excess of assets over liabilities. Enable insurer to depart from matching strategies to improve overall return — benefiting PH (lower premiums) and SH (higher dividends). Some must be held securely to cover minimum solvency capital; excess available for higher-returning assets. Freedom exercised depends on actual level relative to statutory solvency requirements.
-  </div>
-  <div class="fa-item">
-    <strong><span class="pillar what">What</span> Can Free Assets Back?</strong>
-    Minimum SCR portion: short-dated domestic government bonds (security + low capital volatility). Excess free assets: long-term equities (domestic + overseas), direct property (if portfolio large enough for diversification). Free assets measured relative to: supervisory reserves, premiums written in last year, ultimate liabilities from recent claims, absolute liability size, regulatory capital requirements.
-  </div>
-  <div class="fa-item">
-    <strong><span class="pillar how">How</span> Much Freedom?</strong>
-    Greater free assets → greater permissible mismatch and higher variance of return acceptable. Constrained by: acceptable risk level · regulatory restrictions on admissible assets · MCR requirements. Why hold above statutory minimum? (1) Buffer so minimum not breached after adverse movement; (2) Authorities expect it; (3) Appear financially strong to brokers/PH/SH; (4) Statutory minimum insufficient for inherent business risks.
+<!-- ⑦ FREE ASSETS — What / Conditions / Trade-offs -->
+<div class="sl">⑦ Effect of Free Assets on Asset Selection &nbsp;·&nbsp; What / Conditions / Trade-offs</div>
+<div style="border:1px solid var(--rule);margin-bottom:18px;">
+  <div class="fa-header">Free Assets — Definition, Conditions &amp; Trade-offs</div>
+  <div class="fa-body">
+    <div class="fa-col what-col">
+      <strong class="what"><span class="pillar what">What</span> are free assets?</strong>
+      Free assets = excess of assets over liabilities. An insurance company will have free assets (also termed "free reserves" in short-term companies).
+      <ul>
+        <li>Some must be held securely to cover <strong>minimum solvency capital requirements</strong> (MCR) — short-dated domestic government bonds: relative payment security (government guarantee) + low capital volatility (near maturity)</li>
+        <li>Excess available to invest for <strong>long-term return</strong> — equities (domestic + overseas), direct property (if portfolio large enough)</li>
+        <li>Free assets measured relative to: supervisory reserves · premiums written in last year · ultimate liabilities from recent claims · absolute liability size · regulatory capital requirements</li>
+      </ul>
+    </div>
+    <div class="fa-col cond-col">
+      <strong class="cond"><span class="pillar cond">Conditions</span> — when can you mismatch?</strong>
+      <ul>
+        <li>Greater free assets → greater permissible mismatch → higher variance of return acceptable</li>
+        <li>Extent of freedom constrained by: acceptable risk level · regulatory admissibility restrictions · MCR/SCR requirements</li>
+        <li><strong>Why hold above statutory minimum?</strong></li>
+        <li>Buffer so minimum not breached after adverse asset/liability movements</li>
+        <li>Regulatory authorities expect it (even if not legally required)</li>
+        <li>Appear financially strong to brokers, PH and SH — competitive signal</li>
+        <li>Statutory minimum may be insufficient for inherent risks of the lines written</li>
+      </ul>
+    </div>
+    <div class="fa-col trade-col">
+      <strong class="trade"><span class="pillar trade">Trade-offs</span></strong>
+      <ul>
+        <li>Using free assets to support mismatch means those assets are at risk of loss — SH may prefer to reserve free assets for NB strain or product development</li>
+        <li>Proprietary company: duty to PH (invest wisely; meet liabilities) AND to SH (sustain and enhance return on assets above MCR). These can pull in different directions</li>
+        <li>Greater freedom of investment = greater responsibility — TCF obligations limit how far from matching the insurer can stray on reviewable products</li>
+        <li>Unit-linked mismatch: any excess return accrues to insurer; any shortfall also borne by insurer — asymmetric risk profile</li>
+      </ul>
+    </div>
   </div>
 </div>
 
-<!-- ⑧ INVESTMENT INCOME BY ASSET CLASS -->
-<div class="sl">⑧ Estimating Investment Income in Future Time Periods</div>
+<!-- ⑧ INVESTMENT INCOME — What / Key Nuances -->
+<div class="sl">⑧ Estimating Investment Income by Asset Class &nbsp;·&nbsp; What / Key Nuances</div>
 <table class="mx" style="margin-bottom:18px;">
   <thead>
     <tr>
       <th>Asset Class</th>
-      <th><span class="pillar what">What</span> Income Stream</th>
-      <th>Estimation Approach</th>
-      <th>Key Nuances</th>
+      <th><span class="pillar what">What</span> — Income Stream &amp; Estimation</th>
+      <th><span class="pillar nuance">Key Nuances</span> — Where estimates get complicated</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <td>Fixed-Interest (Govt / Corp)</td>
-      <td>Known coupon + redemption proceeds if held to maturity</td>
-      <td>Income &amp; redemption proceeds known; adjust for default risk by reducing amounts progressively (e.g. ½% yr 1, 1% yr 2, 1½% yr 3...)</td>
-      <td>Default allowance depends on avg quality of non-gilt portfolio. Some gilts have spread of redemption dates at govt option. Possibility of sale introduces capital uncertainty.</td>
+      <td>Income and redemption proceeds known if held to maturity. Reduce for default risk progressively: e.g. ½% yr 1, 1% yr 2, 1½% yr 3 (reduction factor depends on average portfolio quality).</td>
+      <td>Possibility of sale introduces capital uncertainty. Some gilts have spread of redemption dates at government option. Reinvestment of proceeds at unknown future rates if bonds mature before liabilities.</td>
     </tr>
     <tr>
       <td>Index-Linked Securities</td>
-      <td>Coupon + redemption, both increased by index changes</td>
-      <td>Same as fixed-interest but increase payments by estimated future index changes (e.g. RPI forecast for index-linked gilts)</td>
-      <td>Income not as volatile as capital value. Capital value has more volatility than conventional gilts, especially long-dated, in both real and monetary terms.</td>
+      <td>Same as fixed-interest, but increase all payments by an estimate of future index changes (e.g. RPI forecast for index-linked gilts). Allow for default risk similarly.</td>
+      <td>Income is not volatile but not certain. Capital value more volatile than conventional gilts — especially long-dated — in both real and monetary terms. Time-lag in index used for payment calculations.</td>
     </tr>
     <tr>
       <td>Equities</td>
-      <td>Dividend income + capital growth</td>
-      <td>Take current income stream; assume annual increases linked to inflation + economic growth prospects. Directors smooth dividends; well-diversified portfolio = stable income stream despite individual company cuts.</td>
-      <td>Capital value potentially very volatile. If equities not ever to be realised: treat as infinite dividend stream. If to be sold: need assumptions about future market values at disposal dates. Input from economists/investment managers recommended.</td>
+      <td>Take current income stream (dividends); assume annual increases reflecting likely dividend growth — linked to inflation and economic growth prospects. Directors smooth dividends; diversified portfolio gives fairly stable income.</td>
+      <td>Capital value potentially very volatile. If equities are ever to be sold to meet liability outgo: need assumptions about future market values at disposal dates — input from economists/investment managers recommended. Treating as infinite stream only valid if equities back free assets entirely.</td>
     </tr>
     <tr>
       <td>Property</td>
-      <td>Rental income + capital growth</td>
-      <td>Project rental income + growth; allow for specific lease terms and rent review dates for individual properties. Very conservative capital value assumptions due to illiquidity.</td>
-      <td>Rental stream more certain than equities short-term (fixed for term of lease), but uncertainty post rent review. Diversified portfolio: low proportion with zero rent. Investment expenses much higher than equities; allow for obsolescence/refitting.</td>
+      <td>Project rental income and growth, allowing for specific lease terms and rent review dates. When allowing for realisation: very conservative capital value assumptions due to illiquidity and poor marketability.</td>
+      <td>Rental stream more certain short-term (fixed for lease term) but uncertain post rent-review. Diversified portfolio: low proportion with zero rent. Investment expenses much higher than equities (maintenance, management). Allow for obsolescence and periodic refitting.</td>
     </tr>
     <tr>
       <td>Cash &amp; Money-Market</td>
-      <td>Interest income at short-term rates</td>
-      <td><strong>Option A — Income stream:</strong> Current short-term rates + yield curve shape to project future rates. <strong>Option B — Lump sum now:</strong> Total cash available at maturity date (best if cash held to meet claims within months). <strong>Option C — Hybrid:</strong> Cash notionally used to meet immediate liability outgo; balance rolled up at short-term rates.</td>
-      <td>Capital value: virtually no volatility. Income: can change significantly year to year. Short-term interest rates can vary considerably over time.</td>
+      <td><strong>Option A — Income stream:</strong> Current short-term rates + yield curve to project future rates.<br><strong>Option B — Lump sum now:</strong> Total cash available at maturity (best if cash held to meet claims within months).<br><strong>Option C — Hybrid:</strong> Cash notionally meets immediate liability outgo; balance rolled up at short-term rates.</td>
+      <td>Capital value: virtually no volatility. Income: can change significantly year to year — short-term rates vary considerably. Option B most appropriate when cash held specifically for imminent claim payments. Option A suitable if cash forms a permanent "float" on the balance sheet.</td>
     </tr>
     <tr>
       <td>Overseas Investments</td>
-      <td>As equivalent domestic asset class</td>
-      <td>Treat like corresponding domestic assets but add assumptions about future exchange rates consistent with liability projections</td>
-      <td>All domestic asset volatility characteristics apply plus additional currency volatility. Greater default risk in some cases. Diversification benefit may justify holding despite FX risk.</td>
+      <td>Treat like corresponding domestic asset class. Add assumptions about future exchange rates consistent with those used in the liability outgo projections.</td>
+      <td>All domestic volatility characteristics apply plus additional currency volatility (extra volatility in sterling/domestic currency terms). Greater default risk in some cases. Diversification benefit may justify holding despite the FX complexity.</td>
     </tr>
   </tbody>
 </table>
 
-<!-- ⑨ VOLATILITY TABLE -->
-<div class="sl">⑨ Suitability of Assets — Volatility &amp; Matching Matrix</div>
-<table class="vol" style="margin-bottom:14px;">
+<!-- ⑨ ASSET SUITABILITY — What / Conditions / Trade-offs -->
+<div class="sl">⑨ Suitability of Assets for Matching &nbsp;·&nbsp; What / Conditions / Trade-offs</div>
+<div style="font-size:11px;color:var(--muted);font-family:'IBM Plex Mono',monospace;margin-bottom:6px;">
+  <span class="pillar what">What</span> features determine suitability: Term · Currency · Nature (real/fixed) · Expected return · Security · Volatility · Marketability · Expertise required · Portfolio size · Free asset size · Tax position · Admissibility
+</div>
+
+<table class="vol" style="margin-bottom:12px;">
   <thead>
     <tr>
       <th>Asset Class</th>
       <th>Income Volatility</th>
       <th>Capital Value Volatility</th>
-      <th>Best ALM Use</th>
+      <th><span class="pillar cond">Conditions</span> — Suitable when / for</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <td>Cash / Money-Market</td>
-      <td>Moderate — tracks short-term rates which can vary significantly year to year</td>
-      <td>Virtually nil — face value stable</td>
-      <td>PMI (short-tail indemnity) · Liquidity buffer · MCR backing</td>
+      <td>Moderate — tracks short-term rates, which can vary significantly year to year</td>
+      <td>Virtually nil</td>
+      <td>PMI (short-tail indemnity) · Liquidity buffer · MCR backing · Imminent claim payments</td>
     </tr>
     <tr>
       <td>Short-dated Govt Bonds</td>
-      <td>Nil (fixed) — unless default</td>
+      <td>Nil unless default</td>
       <td>Very low — near maturity limits price sensitivity</td>
-      <td>MCR/SCR backing · Short-term guaranteed monetary liabilities · PMI outstanding claims reserves</td>
+      <td>MCR / SCR backing · Short-term guaranteed monetary liabilities · PMI outstanding claims</td>
     </tr>
     <tr>
       <td>Long-dated Govt Bonds</td>
-      <td>Nil (fixed) — unless default</td>
-      <td>High — duration risk; 30% move possible if yields shift 3% on very long-dated</td>
-      <td>Long-term guaranteed monetary liabilities (CI/IP fixed benefit) · Without-profits long-term if available</td>
+      <td>Nil unless default</td>
+      <td>High — 30% move possible if yields shift 3% on very long-dated</td>
+      <td>Long-term guaranteed monetary liabilities (fixed CI/IP) · Without-profits long-term where available</td>
     </tr>
     <tr>
       <td>Index-Linked Gilts</td>
       <td>Low — varies gently with inflation outturns</td>
-      <td>Higher than conventional gilts — more volatile in both real and monetary terms for long-dated</td>
-      <td>Index-linked liabilities (IP escalating benefit) · Pre-funded LTCI (real liabilities) · Deferred annuities via swaps where deep market exists</td>
-    </tr>
-    <tr>
-      <td>Corporate Bonds</td>
-      <td>Nil (fixed) — unless default</td>
-      <td>Moderate to high — credit spread + duration risk; lower marketability</td>
-      <td>Enhance yield over gilts for long-term guaranteed liabilities · Requires diversification to manage default risk</td>
+      <td>Higher than conventional gilts — more volatile real and monetary terms for long-dated</td>
+      <td>Index-linked liabilities (escalating IP) · Pre-funded LTCI (real liabilities) · Deferred annuities where deep swap market exists</td>
     </tr>
     <tr>
       <td>Equities</td>
-      <td>Low — dividends fairly stable from well-diversified portfolio; directors smooth payments</td>
-      <td>Very high — market prices driven by supply/demand, investor sentiment; irrational moves possible</td>
-      <td>Free assets (long-term return) · Index-linked/real liabilities over long horizon · Not suitable for short-term or monetary guaranteed liabilities</td>
+      <td>Low — dividends fairly stable from well-diversified portfolio</td>
+      <td>Very high — driven by investor sentiment; irrational moves possible</td>
+      <td>Free assets (long-term return) · Index-linked / real liabilities over long horizon · Unit fund asset</td>
     </tr>
     <tr>
       <td>Direct Property</td>
-      <td>Low to moderate — rental fixed for lease term; uncertainty at review; diversified portfolio = low volatility</td>
-      <td>Low day-to-day (valued periodically); can be volatile over extended periods; very illiquid</td>
+      <td>Low to moderate — fixed for lease term; uncertain at rent review; diversified portfolio = low</td>
+      <td>Low day-to-day (periodic valuation); can be volatile extended periods; very illiquid</td>
       <td>Free assets (long-term real return) · Real liabilities if portfolio large enough to diversify · Only if expertise and scale available</td>
     </tr>
     <tr>
       <td>Overseas Assets</td>
       <td>As domestic equivalent + FX volatility</td>
       <td>As domestic equivalent + FX volatility</td>
-      <td>Diversification · Access to assets not available domestically · Currency hedge required if liabilities domestic</td>
+      <td>Diversification · Access to assets unavailable domestically · Currency hedge required if liabilities domestic</td>
+    </tr>
+    <tr>
+      <td>Interest Rate Swaps</td>
+      <td>Depends on structure</td>
+      <td>Depends on structure</td>
+      <td>Very long-duration monetary liabilities where bonds unavailable (LTCI, deferred annuities) · Deep and liquid swaps market needed</td>
     </tr>
   </tbody>
 </table>
 
-<!-- SUITABILITY MATCHING MATRIX -->
-<div style="font-family:'IBM Plex Mono',monospace;font-size:9px;text-transform:uppercase;letter-spacing:2px;color:var(--muted);margin-bottom:5px;border-left:3px solid var(--teal);padding-left:7px;">Asset Suitability by Liability Type · Key Features That Determine Suitability: Term · Currency · Nature (real/fixed) · Expected Return · Security · Volatility · Marketability · Expertise · Portfolio Size · Free Assets · Tax · Admissibility</div>
-<table class="suit">
+<div style="font-family:'IBM Plex Mono',monospace;font-size:9px;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:5px;border-left:3px solid var(--purple);padding-left:7px;"><span class="pillar trade">Trade-offs</span> — Matching difficulty by business type</div>
+<table class="suit" style="margin-bottom:18px;">
   <thead>
     <tr>
       <th>Asset</th>
@@ -548,14 +608,14 @@
     <tr>
       <td>Cash</td>
       <td><span class="part">~</span> Very short only; reinvestment risk long-term</td>
-      <td><span class="cross">✗</span> No real return; short-term inflation only</td>
+      <td><span class="cross">✗</span> No real return</td>
       <td><span class="tick">✓</span> Ideal — liquidity for imminent claims</td>
-      <td><span class="cross">✗</span> Not a fund asset</td>
+      <td><span class="cross">✗</span></td>
       <td><span class="cross">✗</span> Poor long-term return</td>
     </tr>
     <tr>
       <td>Short-dated Bonds</td>
-      <td><span class="tick">✓</span> Good for short-term monetary liabilities; MCR</td>
+      <td><span class="tick">✓</span> Short-term monetary; MCR backing</td>
       <td><span class="cross">✗</span> No index linkage</td>
       <td><span class="tick">✓</span> Suitable</td>
       <td><span class="cross">✗</span></td>
@@ -563,51 +623,43 @@
     </tr>
     <tr>
       <td>Long-dated Bonds</td>
-      <td><span class="tick">✓</span> Best match — fixed income matches fixed outgo; but availability limited</td>
+      <td><span class="tick">✓</span> Best match — but availability limited; reinvestment risk on surplus coupons</td>
       <td><span class="cross">✗</span> No real return</td>
-      <td><span class="cross">✗</span> Too long; capital volatility risk</td>
+      <td><span class="cross">✗</span> Too long; capital risk if sold early</td>
       <td><span class="cross">✗</span></td>
       <td><span class="part">~</span> Modest return; low risk</td>
     </tr>
     <tr>
       <td>Index-Linked Gilts</td>
       <td><span class="cross">✗</span> Real return ≠ fixed monetary outgo</td>
-      <td><span class="tick">✓</span> Best match — time-lag issue prevents perfection</td>
-      <td><span class="part">~</span> Partially — if medical inflation tracks RPI</td>
+      <td><span class="tick">✓</span> Best match — time-lag issue only imperfection</td>
+      <td><span class="part">~</span> Partial if medical inflation tracks RPI</td>
       <td><span class="cross">✗</span></td>
-      <td><span class="part">~</span> Real return but capital volatile</td>
+      <td><span class="part">~</span> Real return; capital volatile</td>
     </tr>
     <tr>
       <td>Equities</td>
       <td><span class="cross">✗</span> Too volatile for guaranteed liabilities</td>
-      <td><span class="part">~</span> Good long-term match; poor short-term; earnings link better than price link</td>
+      <td><span class="part">~</span> Good long-term; poor short-term; earnings link better than price</td>
       <td><span class="cross">✗</span> Too volatile; wrong term</td>
       <td><span class="tick">✓</span> Standard unit fund asset</td>
-      <td><span class="tick">✓</span> Best long-term return for free assets</td>
+      <td><span class="tick">✓</span> Best long-term return</td>
     </tr>
     <tr>
       <td>Direct Property</td>
       <td><span class="cross">✗</span> Illiquid; mismatch</td>
-      <td><span class="part">~</span> Real return long-term; illiquidity a concern at claim payment stage</td>
+      <td><span class="part">~</span> Real return long-term; illiquidity concern at claim payment</td>
       <td><span class="cross">✗</span> Illiquid; wrong term</td>
-      <td><span class="part">~</span> Possible if property fund</td>
-      <td><span class="tick">✓</span> Good if large enough portfolio; need expertise</td>
+      <td><span class="part">~</span> Possible via property fund</td>
+      <td><span class="tick">✓</span> Good if large portfolio; need expertise</td>
     </tr>
     <tr>
-      <td>Interest Rate Swaps</td>
-      <td><span class="tick">✓</span> Matching very long-duration monetary liabilities where bonds unavailable (LTCI, deferred annuities)</td>
-      <td><span class="part">~</span> Partial — swap real rate component</td>
+      <td>Swaps / Derivatives</td>
+      <td><span class="tick">✓</span> Matching very long-duration monetary liabilities where bonds unavailable</td>
+      <td><span class="part">~</span> Inflation derivatives can help; basis risk remains</td>
       <td><span class="cross">✗</span></td>
-      <td><span class="cross">✗</span></td>
-      <td><span class="cross">✗</span></td>
-    </tr>
-    <tr>
-      <td>Derivatives (other)</td>
-      <td><span class="part">~</span> Equity puts: limit downside on unmatched positions</td>
-      <td><span class="part">~</span> Inflation derivatives: hedge inflation risk</td>
-      <td><span class="cross">✗</span></td>
-      <td><span class="part">~</span> Index futures: exposure management</td>
-      <td><span class="part">~</span> Basis risk; residual counterparty &amp; operational risks</td>
+      <td><span class="part">~</span> Index futures for exposure management</td>
+      <td><span class="part">~</span> Basis risk; counterparty + operational risks</td>
     </tr>
   </tbody>
 </table>
@@ -621,17 +673,18 @@
     <span class="rc-pill k">Nature + Term + Currency — always all three</span>
     <span class="rc-pill k">Perfect matching rarely achievable OR desirable</span>
     <span class="rc-pill k">Free assets = licence to mismatch (degree = risk appetite)</span>
-    <span class="rc-pill">Mean term mismatch: too long = yield risk; too short = reinvestment risk</span>
+    <span class="rc-pill">Mean term: too long = yield risk; too short = reinvestment risk</span>
     <span class="rc-pill">Medical inflation often &gt; RPI — affects PMI/LTCI indemnity matching</span>
     <span class="rc-pill">Unit-linked: assets match liabilities directly — ALM not major issue</span>
-    <span class="rc-pill">Without-profits long-term: asset availability limits perfect matching</span>
-    <span class="rc-pill">NAE matching: no bonds; equities too volatile short-term</span>
+    <span class="rc-pill">Without-profits long-term: principle clear; asset availability limits practice</span>
+    <span class="rc-pill">NAE: no bonds; equities too volatile short-term — conditionality matters</span>
     <span class="rc-pill">Derivatives: 5 purposes · static vs dynamic · basis risk always present</span>
-    <span class="rc-pill">ESG: real-world calibration for ALM; risk-neutral for liability valuation</span>
+    <span class="rc-pill">ESG: real-world for ALM projections; risk-neutral for liability valuation</span>
     <span class="rc-pill">Solvency II: VA means perfect cashflow match ≠ perfect liability hedge</span>
-    <span class="rc-pill k">Capital requirements: MCR → short-dated govt bonds; excess free assets → equities/property</span>
+    <span class="rc-pill k">MCR → short-dated govt bonds; excess free assets → equities/property</span>
     <span class="rc-pill">Hold capital &gt; statutory minimum: buffer · regulatory expectation · competitive signal</span>
-    <span class="rc-pill">TCF: reviewable premium policyholders don't expect increases from investment underperformance</span>
+    <span class="rc-pill">TCF: reviewable premium PH don't expect increases from investment underperformance</span>
+    <span class="rc-pill">Reinsurance reduces variability but delays recoveries — tension with matching</span>
   </div>
 </div>
 
