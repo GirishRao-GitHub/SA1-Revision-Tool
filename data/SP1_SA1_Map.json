@@ -2,7 +2,7 @@
   "_meta": {
     "title": "SP1 ↔ SA1 Cross-Reference Map",
     "created": "2026-03-30",
-    "description": "Maps each SA1 chapter to the SP1 chapters and sections it builds upon. Used by the SA1 frontend to pull SP1 foundation content alongside SA1 application content. Both JSONs share identical schemas — sections/subsections from SP1_Revision_Notes.json are referenced by id.",
+    "description": "Maps each SA1 chapter to the SP1 chapters and sections it builds upon. Used by the SA1 frontend to pull SP1 foundation content alongside SA1 application content. Both JSONs share identical schemas — sections/subsections from SP1_Revision_Notes.json are referenced by id. sa1_chapter keys now match SA1_Revision_Notes.json keys (1-indexed).",
     "schema": {
       "sa1_chapters[].sp1_refs[].chapter": "Key in SP1_Revision_Notes.json",
       "sa1_chapters[].sp1_refs[].sections": "Section ids within that SP1 chapter (null = entire chapter)",
@@ -14,11 +14,12 @@
       "foundation": "SA1 chapter directly extends the SP1 chapter — SP1 is prerequisite reading",
       "partial": "Only specific SP1 sections are relevant",
       "extension": "SA1 goes significantly beyond SP1 on same topic (regulation, India-specific, strategy)"
-    }
+    },
+    "updated": "2026-04-02"
   },
   "sa1_chapters": [
     {
-      "sa1_chapter": "0",
+      "sa1_chapter": "1",
       "sa1_title": "Introduction",
       "sp1_refs": [
         {
@@ -31,7 +32,7 @@
       "section_map": []
     },
     {
-      "sa1_chapter": "1",
+      "sa1_chapter": "2",
       "sa1_title": "Long-term Health & Care Insurance Products",
       "sp1_refs": [
         {
@@ -56,7 +57,7 @@
       "section_map": []
     },
     {
-      "sa1_chapter": "2",
+      "sa1_chapter": "3",
       "sa1_title": "Short-term Health & Care Insurance Products",
       "sp1_refs": [
         {
@@ -67,7 +68,9 @@
         },
         {
           "chapter": "5",
-          "sections": ["1"],
+          "sections": [
+            "1"
+          ],
           "rel": "partial",
           "note": "Group business general principles are relevant context for short-term products; group-specific product sections covered in SA1 Ch3."
         }
@@ -79,7 +82,10 @@
           "sp1_chapter": "4",
           "sp1_section": "1",
           "sp1_title": "Private Medical Insurance",
-          "sp1_subsections": ["1.1", "1.2"]
+          "sp1_subsections": [
+            "1.1",
+            "1.2"
+          ]
         },
         {
           "sa1_section": "2",
@@ -87,7 +93,9 @@
           "sp1_chapter": "4",
           "sp1_section": "2",
           "sp1_title": "Related PMI Products",
-          "sp1_subsections": ["2.2"]
+          "sp1_subsections": [
+            "2.2"
+          ]
         },
         {
           "sa1_section": "3",
@@ -95,12 +103,14 @@
           "sp1_chapter": "4",
           "sp1_section": "2",
           "sp1_title": "Related PMI Products",
-          "sp1_subsections": ["2.1"]
+          "sp1_subsections": [
+            "2.1"
+          ]
         }
       ]
     },
     {
-      "sa1_chapter": "3",
+      "sa1_chapter": "4",
       "sa1_title": "Product Analysis",
       "sp1_refs": [
         {
@@ -125,18 +135,26 @@
       "section_map": []
     },
     {
-      "sa1_chapter": "4",
+      "sa1_chapter": "5",
       "sa1_title": "General Business Environment (1)",
       "sp1_refs": [
         {
           "chapter": "9",
-          "sections": ["1", "2", "4"],
+          "sections": [
+            "1",
+            "2",
+            "4"
+          ],
           "rel": "foundation",
           "note": "Propensity to buy, regulatory regime, economic influences — SA1 extends with Indian regulatory environment (IRDAI), health financing structures, and market-specific dynamics."
         },
         {
           "chapter": "10",
-          "sections": ["1", "2", "3"],
+          "sections": [
+            "1",
+            "2",
+            "3"
+          ],
           "rel": "foundation",
           "note": "State healthcare objectives, co-existence models, funding approaches — directly maps to Indian public healthcare system (Ayushman Bharat, ESIC, CGHS)."
         }
@@ -144,18 +162,26 @@
       "section_map": []
     },
     {
-      "sa1_chapter": "5",
+      "sa1_chapter": "6",
       "sa1_title": "General Business Environment (2)",
       "sp1_refs": [
         {
           "chapter": "9",
-          "sections": ["2", "3", "4"],
+          "sections": [
+            "2",
+            "3",
+            "4"
+          ],
           "rel": "extension",
           "note": "SA1 goes deeper on regulatory and taxation regimes in the Indian context — IRDAI regulations, Indian tax treatment of health premiums, economic drivers specific to India."
         },
         {
           "chapter": "10",
-          "sections": ["4", "5", "6"],
+          "sections": [
+            "4",
+            "5",
+            "6"
+          ],
           "rel": "extension",
           "note": "Funding approaches and incentives for self-provision — SA1 covers Indian government-funded schemes and private-public interaction in depth."
         }
@@ -163,7 +189,7 @@
       "section_map": []
     },
     {
-      "sa1_chapter": "6",
+      "sa1_chapter": "7",
       "sa1_title": "Product Design and Pricing (1)",
       "sp1_refs": [
         {
@@ -206,7 +232,7 @@
       "section_map": []
     },
     {
-      "sa1_chapter": "7",
+      "sa1_chapter": "8",
       "sa1_title": "Product Design and Pricing (2)",
       "sp1_refs": [
         {
@@ -237,12 +263,14 @@
       "section_map": []
     },
     {
-      "sa1_chapter": "8",
+      "sa1_chapter": "9",
       "sa1_title": "Taxation Environment",
       "sp1_refs": [
         {
           "chapter": "9",
-          "sections": ["3"],
+          "sections": [
+            "3"
+          ],
           "rel": "partial",
           "note": "SP1 covers taxation regime in general terms only. SA1 Ch8 is largely India-specific (Income Tax Act sections 80D, 10(10D), GST on premiums) with no direct SP1 equivalent for most content."
         }
@@ -250,12 +278,14 @@
       "section_map": []
     },
     {
-      "sa1_chapter": "9",
+      "sa1_chapter": "10",
       "sa1_title": "Approaches to Regulation",
       "sp1_refs": [
         {
           "chapter": "9",
-          "sections": ["2"],
+          "sections": [
+            "2"
+          ],
           "rel": "foundation",
           "note": "SP1 covers the regulatory regime in general. SA1 Ch9 extends extensively to IRDAI regulatory framework, product approval processes, and Indian health insurance regulation."
         }
@@ -263,12 +293,15 @@
       "section_map": []
     },
     {
-      "sa1_chapter": "10",
+      "sa1_chapter": "11",
       "sa1_title": "Solvency II (1)",
       "sp1_refs": [
         {
           "chapter": "22",
-          "sections": ["1", "2"],
+          "sections": [
+            "1",
+            "2"
+          ],
           "rel": "foundation",
           "note": "SP1 Ch22 covers solvency capital requirements and market-consistent valuation in general. SA1 Ch10 specifically covers Solvency II Pillar 1 framework, SCR and MCR formulae."
         }
@@ -276,12 +309,16 @@
       "section_map": []
     },
     {
-      "sa1_chapter": "11",
+      "sa1_chapter": "12",
       "sa1_title": "Solvency II (2)",
       "sp1_refs": [
         {
           "chapter": "22",
-          "sections": ["1", "2", "3"],
+          "sections": [
+            "1",
+            "2",
+            "3"
+          ],
           "rel": "extension",
           "note": "SA1 Ch11 covers Solvency II Pillars 2 and 3 (ORSA, governance, reporting) — well beyond SP1 Ch22 scope. SP1 provides the underlying valuation framework only."
         }
@@ -289,12 +326,14 @@
       "section_map": []
     },
     {
-      "sa1_chapter": "12",
+      "sa1_chapter": "13",
       "sa1_title": "Other Approaches to Solvency Regulation",
       "sp1_refs": [
         {
           "chapter": "22",
-          "sections": ["1"],
+          "sections": [
+            "1"
+          ],
           "rel": "extension",
           "note": "SP1 discusses formula-based vs VaR-based approaches in principle. SA1 Ch12 extends to IRDAI solvency framework, RBC approaches in Asia, and comparison of global regimes."
         }
@@ -302,18 +341,22 @@
       "section_map": []
     },
     {
-      "sa1_chapter": "13",
-      "sa1_title": "Profit and Value Reporting",
+      "sa1_chapter": "14",
+      "sa1_title": "Profit Reporting",
       "sp1_refs": [
         {
           "chapter": "21",
-          "sections": ["4"],
+          "sections": [
+            "4"
+          ],
           "rel": "foundation",
           "note": "SP1 Ch21 covers embedded value and appraisal value. SA1 Ch13 extends to EV reporting standards (EEV, MCEV), analysis of surplus, and profit reporting under Indian regulatory requirements."
         },
         {
           "chapter": "29",
-          "sections": ["3"],
+          "sections": [
+            "3"
+          ],
           "rel": "partial",
           "note": "Analysis of surplus from SP1 Ch29 is directly relevant to SA1 Ch13 profit reporting content."
         }
@@ -321,12 +364,14 @@
       "section_map": []
     },
     {
-      "sa1_chapter": "14",
+      "sa1_chapter": "15",
       "sa1_title": "Professional Standards and Guidance",
       "sp1_refs": [
         {
           "chapter": "9",
-          "sections": ["4"],
+          "sections": [
+            "4"
+          ],
           "rel": "partial",
           "note": "SP1 Ch9 Section 4 covers professional guidance and actuarial associations in general. SA1 Ch14 extends to IAI standards, ethical obligations, and Indian professional framework."
         }
@@ -334,7 +379,7 @@
       "section_map": []
     },
     {
-      "sa1_chapter": "15",
+      "sa1_chapter": "16",
       "sa1_title": "Capital Management",
       "sp1_refs": [
         {
@@ -347,8 +392,8 @@
       "section_map": []
     },
     {
-      "sa1_chapter": "16",
-      "sa1_title": "Reinsurance",
+      "sa1_chapter": "17",
+      "sa1_title": "Uses and Benefits of Reinsurance",
       "sp1_refs": [
         {
           "chapter": "26",
@@ -360,7 +405,7 @@
       "section_map": []
     },
     {
-      "sa1_chapter": "17",
+      "sa1_chapter": "18",
       "sa1_title": "Asset-Liability Management",
       "sp1_refs": [
         {
@@ -373,18 +418,24 @@
       "section_map": []
     },
     {
-      "sa1_chapter": "18",
+      "sa1_chapter": "19",
       "sa1_title": "Analysis of Experience",
       "sp1_refs": [
         {
           "chapter": "29",
-          "sections": ["1", "2"],
+          "sections": [
+            "1",
+            "2"
+          ],
           "rel": "foundation",
           "note": "SP1 Ch29 Sections 1 and 2 cover experience investigation framework and types. SA1 Ch18 applies these to Indian data, IRDAI reporting requirements, and health-specific experience analysis techniques."
         },
         {
           "chapter": "14",
-          "sections": ["1", "2"],
+          "sections": [
+            "1",
+            "2"
+          ],
           "rel": "partial",
           "note": "Demographic assumption process from SP1 Ch14 is the analytical foundation for SA1 experience investigations."
         }
@@ -392,18 +443,22 @@
       "section_map": []
     },
     {
-      "sa1_chapter": "19",
+      "sa1_chapter": "20",
       "sa1_title": "Analysis of Surplus, Embedded Value and Profit",
       "sp1_refs": [
         {
           "chapter": "21",
-          "sections": ["4"],
+          "sections": [
+            "4"
+          ],
           "rel": "foundation",
           "note": "SP1 Ch21 embedded value section is the technical foundation. SA1 Ch19 applies EV analysis in detail — source of profit, management information, investor reporting."
         },
         {
           "chapter": "29",
-          "sections": ["3"],
+          "sections": [
+            "3"
+          ],
           "rel": "foundation",
           "note": "SP1 Ch29 Section 3 on analysis of surplus directly maps to SA1 Ch19 surplus analysis techniques."
         }
@@ -411,7 +466,7 @@
       "section_map": []
     },
     {
-      "sa1_chapter": "20",
+      "sa1_chapter": "21",
       "sa1_title": "Assessing Strategies",
       "sp1_refs": [
         {
@@ -422,7 +477,10 @@
         },
         {
           "chapter": "30",
-          "sections": ["1", "4"],
+          "sections": [
+            "1",
+            "4"
+          ],
           "rel": "partial",
           "note": "SP1 Ch30 problem-solving frameworks and actuarial control cycle application are the methodological basis for SA1 strategy assessment."
         }
@@ -430,8 +488,8 @@
       "section_map": []
     },
     {
-      "sa1_chapter": "21",
-      "sa1_title": "Recommending Strategies",
+      "sa1_chapter": "22",
+      "sa1_title": "Recommending Strategies: Full Synthesis",
       "sp1_refs": [
         {
           "chapter": "25",
@@ -449,12 +507,14 @@
       "section_map": []
     },
     {
-      "sa1_chapter": "22",
+      "sa1_chapter": "23",
       "sa1_title": "Implications of Strategies",
       "sp1_refs": [
         {
           "chapter": "25",
-          "sections": ["2"],
+          "sections": [
+            "2"
+          ],
           "rel": "partial",
           "note": "SP1 Ch25 Section 2 on the 11 actuarial problem areas provides the framework for analysing second-order implications of strategic decisions."
         },
@@ -474,7 +534,7 @@
       "section_map": []
     },
     {
-      "sa1_chapter": "23",
+      "sa1_chapter": "24",
       "sa1_title": "National Healthcare Systems",
       "sp1_refs": [
         {
@@ -487,7 +547,7 @@
       "section_map": []
     },
     {
-      "sa1_chapter": "24",
+      "sa1_chapter": "25",
       "sa1_title": "Best Practice",
       "sp1_refs": [
         {
@@ -495,38 +555,6 @@
           "sections": null,
           "rel": "foundation",
           "note": "SP1 Ch27 on risk management techniques (underwriting, claims management, data controls, TCF, distribution management) is the operational foundation. SA1 Ch24 applies these as best practice frameworks with Indian regulatory context."
-        }
-      ],
-      "section_map": []
-    },
-    {
-      "sa1_chapter": "25",
-      "sa1_title": "Solving Complex Issues",
-      "sp1_refs": [
-        {
-          "chapter": "30",
-          "sections": null,
-          "rel": "foundation",
-          "note": "SP1 Ch30 problem-solving frameworks are directly applicable. SA1 Ch25 is an applied extension — constructing and communicating solutions to multi-part strategic problems."
-        },
-        {
-          "chapter": "25",
-          "sections": null,
-          "rel": "partial",
-          "note": "SP1 Ch25 on actuarial problem areas provides content for complex issue identification in SA1 exam questions."
-        }
-      ],
-      "section_map": []
-    },
-    {
-      "sa1_chapter": "26",
-      "sa1_title": "Glossary",
-      "sp1_refs": [
-        {
-          "chapter": "31",
-          "sections": null,
-          "rel": "foundation",
-          "note": "SP1 Ch31 glossary is the definitional foundation. SA1 Ch26 extends with SA1-specific terms, IRDAI regulatory terminology, and India-specific health insurance vocabulary."
         }
       ],
       "section_map": []
