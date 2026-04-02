@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Asset-Liability Management — Outline Navigator</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0f1117;
+    --paper: #f5f0e8;
+    --cream: #ede7d6;
+    --accent: #c0392b;
+    --gold: #b8860b;
+    --blue: #1a3a5c;
+    --green: #1e5f3f;
+    --purple: #5c3d7a;
+    --teal: #1a5c52;
+    --brown: #5c3d1a;
+    --slate: #3d4a5c;
+    --muted: #6b6560;
+    --rule: #c8bfaf;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 12px;
+    line-height: 1.5;
+    padding: 28px 24px;
+    max-width: 1140px;
+    margin: 0 auto;
+  }
+
+  .masthead { border-top:4px solid var(--ink); border-bottom:2px solid var(--ink); padding:12px 0 10px; margin-bottom:28px; display:flex; align-items:baseline; gap:16px; }
+  .masthead-title { font-family:'Playfair Display',serif; font-size:26px; font-weight:900; flex:1; }
+  .masthead-sub { font-family:'IBM Plex Mono',monospace; font-size:9.5px; color:var(--muted); text-transform:uppercase; letter-spacing:1.5px; }
+  .masthead-tag { font-family:'IBM Plex Mono',monospace; font-size:9.5px; background:var(--ink); color:#fff; padding:3px 8px; letter-spacing:1px; }
+
+  .how-to { background:var(--ink); color:var(--paper); padding:10px 16px; margin-bottom:22px; display:flex; align-items:center; gap:16px; font-size:11px; }
+  .how-to strong { font-family:'IBM Plex Mono',monospace; font-size:9px; text-transform:uppercase; letter-spacing:1px; color:var(--gold); white-space:nowrap; }
+
+  .flow { display:flex; flex-direction:column; gap:0; position:relative; }
+  .flow::before { content:''; position:absolute; left:22px; top:0; bottom:0; width:2px;
+    background: linear-gradient(to bottom, var(--blue), var(--accent), var(--teal), var(--gold), var(--purple), var(--brown), var(--green), var(--slate), var(--ink));
+    z-index:0; }
+
+  .block { display:flex; gap:16px; align-items:flex-start; margin-bottom:6px; position:relative; z-index:1; }
+
+  .num { width:44px; height:44px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+    font-family:'Playfair Display',serif; font-size:18px; font-weight:900; color:white; flex-shrink:0;
+    border:3px solid var(--paper); }
+
+  .block-content { flex:1; border-left:3px solid; padding:10px 14px; background:var(--cream); }
+  .block-title { font-family:'Playfair Display',serif; font-size:14px; font-weight:700; margin-bottom:6px; }
+
+  .sub-items { display:flex; flex-wrap:wrap; gap:5px; }
+
+  .sub { font-family:'IBM Plex Mono',monospace; font-size:10px; padding:3px 9px; border:1px solid; background:white; letter-spacing:0.3px; }
+  .sub.key { color:white !important; background:var(--ink); border-color:transparent; font-weight:600; }
+
+  /* Why / What / How pill labels */
+  .pillar { font-family:'IBM Plex Mono',monospace; font-size:9px; font-weight:600; padding:2px 7px; text-transform:uppercase; letter-spacing:1px; color:white; margin-right:2px; display:inline-block; }
+  .pillar.why  { background:var(--accent); }
+  .pillar.what { background:var(--blue); }
+  .pillar.how  { background:var(--green); }
+
+  .arrow { display:flex; align-items:center; padding-left:14px; margin:2px 0; color:var(--muted); font-size:16px; z-index:1; position:relative; }
+
+  .note { font-family:'IBM Plex Mono',monospace; font-size:9.5px; color:var(--muted); margin-top:6px; font-style:italic; }
+
+  /* Per-block colour schemes */
+  .b1 .num { background:var(--blue); }
+  .b1 .block-content { border-color:var(--blue); background:#eef2f7; }
+  .b1 .block-title { color:var(--blue); }
+  .b1 .sub { color:var(--blue); border-color:#a0b4c8; }
+  .b1 .sub.key { background:var(--blue); }
+
+  .b2 .num { background:var(--accent); }
+  .b2 .block-content { border-color:var(--accent); }
+  .b2 .block-title { color:var(--accent); }
+  .b2 .sub { color:var(--accent); border-color:#e8a09a; }
+  .b2 .sub.key { background:var(--accent); }
+
+  .b3 .num { background:var(--teal); }
+  .b3 .block-content { border-color:var(--teal); background:#eef4f3; }
+  .b3 .block-title { color:var(--teal); }
+  .b3 .sub { color:var(--teal); border-color:#90c4bc; }
+  .b3 .sub.key { background:var(--teal); }
+  .b3 .sub.accent { background:var(--accent); color:white; border-color:var(--accent); font-weight:600; }
+
+  .b4 .num { background:var(--gold); }
+  .b4 .block-content { border-color:var(--gold); background:#fffdf0; }
+  .b4 .block-title { color:#7a5c00; }
+  .b4 .sub { color:#7a5c00; border-color:#d4b86a; }
+  .b4 .sub.key { background:var(--gold); color:white; }
+
+  .b5 .num { background:var(--purple); }
+  .b5 .block-content { border-color:var(--purple); background:#f8f4fc; }
+  .b5 .block-title { color:var(--purple); }
+  .b5 .sub { color:var(--purple); border-color:#c4a8e0; }
+  .b5 .sub.key { background:var(--purple); }
+
+  .b6 .num { background:var(--brown); }
+  .b6 .block-content { border-color:var(--brown); }
+  .b6 .block-title { color:var(--brown); }
+  .b6 .sub { color:var(--brown); border-color:#c4a888; }
+  .b6 .sub.key { background:var(--brown); color:white; }
+
+  .b7 .num { background:var(--green); }
+  .b7 .block-content { border-color:var(--green); background:#eef7f2; }
+  .b7 .block-title { color:var(--green); }
+  .b7 .sub { color:var(--green); border-color:#90c4a8; }
+  .b7 .sub.key { background:var(--green); }
+
+  .b8 .num { background:var(--slate); }
+  .b8 .block-content { border-color:var(--slate); background:#f0f2f5; }
+  .b8 .block-title { color:var(--slate); }
+  .b8 .sub { color:var(--slate); border-color:#aab4c0; }
+  .b8 .sub.key { background:var(--slate); }
+
+  .b9 .num { background:var(--ink); }
+  .b9 .block-content { border-color:var(--ink); background:#1a1d24; color:var(--paper); }
+  .b9 .block-title { color:var(--paper); }
+  .b9 .sub { color:var(--paper); border-color:#444; background:#2a2d38; }
+  .b9 .sub.key { background:var(--accent); border-color:var(--accent); color:white; }
+
+  .footer { border-top:1px solid var(--rule); padding-top:8px; margin-top:20px; font-family:'IBM Plex Mono',monospace; font-size:9px; color:var(--muted); display:flex; justify-content:space-between; }
+</style>
+</head>
+<body>
+
+<div class="masthead">
+  <div class="masthead-title">Asset-Liability Management</div>
+  <span class="masthead-sub">SP1 Ch.28 · SA1 Ch.18</span>
+  <span class="masthead-tag">NAVIGATOR — OUTLINE</span>
+</div>
+
+<div class="how-to">
+  <strong>How to use</strong>
+  <span>Each numbered block maps exactly to a section in the <strong>Detailed Study Matrix</strong>. Same number · Same colour · Same name. Use this page to rehearse the architecture before drilling into detail. <strong>Why / What / How</strong> labels flag the three pillars within each block.</span>
+</div>
+
+<div class="flow">
+
+  <!-- ① INVESTMENT PRINCIPLES -->
+  <div class="block b1">
+    <div class="num">①</div>
+    <div class="block-content">
+      <div class="block-title">Investment Principles</div>
+      <div class="sub-items">
+        <span class="sub key"><span class="pillar why">Why</span> Invest?</span>
+        <span class="sub">Meet contractual liabilities · Generate returns for SH &amp; PH · Support commercial success &amp; security</span>
+        <span class="sub key"><span class="pillar what">What</span> is the Core Principle?</span>
+        <span class="sub">Maximise overall return subject to: meeting all contractual &amp; TCF obligations · recognising uncertainties · overall risk SH, Reg &amp; PH are prepared to tolerate</span>
+        <span class="sub key"><span class="pillar how">How</span> is Risk Balanced?</span>
+        <span class="sub">Closer matching → lower investment risk · Free assets allow departure from matched position · Appetite for risk depends on capital strength &amp; diversification</span>
+      </div>
+      <div class="note">Importance of investment varies by product — low for short-term protection (PMI); high for pre-funded LTCI</div>
+    </div>
+  </div>
+
+  <div class="arrow">↓</div>
+
+  <!-- ② AIM OF ALM -->
+  <div class="block b2">
+    <div class="num">②</div>
+    <div class="block-content">
+      <div class="block-title">Aim of Asset-Liability Management</div>
+      <div class="sub-items">
+        <span class="sub key"><span class="pillar why">Why</span> ALM?</span>
+        <span class="sub">Derive investment strategy aligned to market risk attitude · Manage required capital · Stabilise full balance sheet</span>
+        <span class="sub key"><span class="pillar what">What</span> does ALM Deliver?</span>
+        <span class="sub">Risk budget (how much to deviate from cashflow matching) · Solvency II: SCR reduction via matching · Hedge best-estimate liabilities or seek further BS stabilisation</span>
+        <span class="sub key"><span class="pillar how">How</span> is it Governed?</span>
+        <span class="sub">Quantitative metrics (e.g. prob free capital &lt; 0 over 5 yrs) · In conjunction with risk mgmt &amp; NB strategy · Measuring, monitoring &amp; rebalancing positions</span>
+      </div>
+      <div class="note">Available capital = MV assets less market-consistent liabilities · Solvency cover ratio (SCR) target typically 150–200%</div>
+    </div>
+  </div>
+
+  <div class="arrow">↓</div>
+
+  <!-- ③ EFFECT OF LIABILITIES ON ASSET SELECTION -->
+  <div class="block b3">
+    <div class="num">③</div>
+    <div class="block-content">
+      <div class="block-title">Effect of Liabilities on Asset Selection</div>
+      <div class="sub-items">
+        <span class="sub key"><span class="pillar why">Why</span> Does Liability Type Matter?</span>
+        <span class="sub">Nature determines matching asset · Term determines when proceeds needed · Currency determines asset currency</span>
+        <span class="sub key"><span class="pillar what">What</span> Are the Four Liability Types?</span>
+        <span class="sub">Guaranteed monetary</span>
+        <span class="sub">Index-linked (prices / earnings)</span>
+        <span class="sub">Indemnity (PMI)</span>
+        <span class="sub">Investment-linked (unit-linked)</span>
+        <span class="sub key"><span class="pillar how">How</span> to Match Each?</span>
+        <span class="sub">Monetary → fixed-interest bonds</span>
+        <span class="sub">Index → index-linked gilts / real assets</span>
+        <span class="sub">Indemnity → cash &amp; short bonds</span>
+        <span class="sub">Unit-linked → underlying fund assets</span>
+        <span class="sub accent">⚠ Perfect matching rarely achievable or desirable</span>
+      </div>
+      <div class="note">Also consider: free assets (allow mismatch) · regulatory constraints · mean term of assets vs liabilities · inflation · liquidity needs</div>
+    </div>
+  </div>
+
+  <div class="arrow">↓</div>
+
+  <!-- ④ MEAN TERM, INFLATION & LIQUIDITY -->
+  <div class="block b4">
+    <div class="num">④</div>
+    <div class="block-content">
+      <div class="block-title">Mean Term, Inflation &amp; Liquidity</div>
+      <div class="sub-items">
+        <span class="sub key"><span class="pillar why">Why</span> Mean Term Matters</span>
+        <span class="sub">Assets too long → exposed to rising yields (capital loss) · Assets too short → exposed to falling yields (reinvestment risk)</span>
+        <span class="sub key"><span class="pillar what">What</span> Are the Inflation Risks?</span>
+        <span class="sub">Benefits linked to index · Indemnity (PMI) costs · Expense settlements · Short-term: treat as fixed · Long-term: inflation is major consideration</span>
+        <span class="sub key"><span class="pillar how">How</span> to Manage Liquidity</span>
+        <span class="sub">Volatile claims → maintain liquid assets · Reinsurance reduces variability but delays recoveries · Contracting portfolio → can't fund claims from premiums</span>
+      </div>
+      <div class="note">Regulatory framework: restrictions on asset types, solvency admissibility, currency matching, mismatching reserves &amp; custodianship</div>
+    </div>
+  </div>
+
+  <div class="arrow">↓</div>
+
+  <!-- ⑤ ALM PROCESS & MODELLING -->
+  <div class="block b5">
+    <div class="num">⑤</div>
+    <div class="block-content">
+      <div class="block-title">The ALM Process &amp; Modelling</div>
+      <div class="sub-items">
+        <span class="sub key"><span class="pillar why">Why</span> Model?</span>
+        <span class="sub">Test investment strategies · Estimate insolvency probability · Determine free asset levels needed · Enable advance planning</span>
+        <span class="sub key"><span class="pillar what">What</span> Are the Steps?</span>
+        <span class="sub">① Project liability outgo · ② Project asset proceeds · ③ Compare per period · ④ Re-run with different assumptions · ⑤ Assess appropriateness · ⑥ Investigate alternatives</span>
+        <span class="sub key"><span class="pillar how">How</span>: Deterministic vs Stochastic?</span>
+        <span class="sub">Deterministic: pre-set values, sensitivity testing</span>
+        <span class="sub">Stochastic: parameters randomly drawn from distributions · ESG generates economic scenarios</span>
+        <span class="sub">Real-world calibration for ALM · Risk-neutral for valuation</span>
+      </div>
+      <div class="note">ESG outputs: interest rates, inflation, equity / property / credit returns · Liability projection system + separate asset model · Time zero stress tests also used</div>
+    </div>
+  </div>
+
+  <div class="arrow">↓</div>
+
+  <!-- ⑥ DERIVATIVES IN ALM -->
+  <div class="block b6">
+    <div class="num">⑥</div>
+    <div class="block-content">
+      <div class="block-title">Derivatives in ALM</div>
+      <div class="sub-items">
+        <span class="sub key"><span class="pillar why">Why</span> Use Derivatives?</span>
+        <span class="sub">Physical assets unavailable or impractical · Reduce regulatory capital · Stabilise balance sheet (hedge SCR / risk margin) · Lower tax &amp; dealing costs · Efficient acquisition / disposal</span>
+        <span class="sub key"><span class="pillar what">What</span> Types / Strategies?</span>
+        <span class="sub">Equity put options (limit downside) · Interest rate swaps (duration matching) · Currency options (FX hedging) · Inflation derivatives · Index futures (quick exposure)</span>
+        <span class="sub key"><span class="pillar how">How</span>: Static vs Dynamic Hedging?</span>
+        <span class="sub">Static: protect against specific severe scenario · Dynamic: portfolio held &amp; frequently rebalanced as conditions change</span>
+      </div>
+      <div class="note">Residual risks: counterparty risk · liquidity risk · operational risk · basis risk (index vs actual portfolio) · local regulatory restrictions</div>
+    </div>
+  </div>
+
+  <div class="arrow">↓</div>
+
+  <!-- ⑦ FREE ASSETS & ASSET SELECTION -->
+  <div class="block b7">
+    <div class="num">⑦</div>
+    <div class="block-content">
+      <div class="block-title">Effect of Free Assets on Asset Selection</div>
+      <div class="sub-items">
+        <span class="sub key"><span class="pillar why">Why</span> Free Assets Matter?</span>
+        <span class="sub">Enable departure from matching · Cushion against insolvency · Benefit PH (lower premiums) &amp; SH (higher dividends)</span>
+        <span class="sub key"><span class="pillar what">What</span> Can Free Assets Back?</span>
+        <span class="sub">Minimum solvency capital (secure assets) · Excess: invest for long-term return · Equities (domestic &amp; overseas) · Direct property · Benchmarked vs supervisory reserves, premiums written, liabilities, regulatory capital</span>
+        <span class="sub key"><span class="pillar how">How</span> Much Freedom?</span>
+        <span class="sub">Greater free assets → greater permissible mismatch · Constrained by acceptable risk level · Regulatory framework limits strategy</span>
+      </div>
+      <div class="note">Capital requirements effect: hold short-dated govt bonds for MCR backing (security + low volatility) · Insurers target well above statutory minimum</div>
+    </div>
+  </div>
+
+  <div class="arrow">↓</div>
+
+  <!-- ⑧ ESTIMATING INVESTMENT INCOME -->
+  <div class="block b8">
+    <div class="num">⑧</div>
+    <div class="block-content">
+      <div class="block-title">Estimating Investment Income by Asset Class</div>
+      <div class="sub-items">
+        <span class="sub key"><span class="pillar why">Why</span> Estimate Income?</span>
+        <span class="sub">Feed into liability projection model · Compare against liability outgo · Inform ALM strategy selection</span>
+        <span class="sub key"><span class="pillar what">What</span> Are the Key Approaches?</span>
+        <span class="sub">Fixed-interest: known stream (allow for default) · Index-linked: adjust by index estimate · Equities: current dividend + growth assumption · Property: rental + growth; allow for illiquidity &amp; expenses · Cash: rolling short-term rates · Overseas: + FX assumptions</span>
+        <span class="sub key"><span class="pillar how">How</span>: Volatility by Asset Class?</span>
+        <span class="sub">Cash: nil capital volatility · Short bonds: very low · Long bonds: high (duration risk) · Index-linked: high capital, low income · Equities: very high capital · Property: moderate income, low day-to-day capital · Overseas: + currency volatility</span>
+      </div>
+      <div class="note">Reinvestment rates important · Cash modelled as income stream OR lump sum now · Allow for investment expenses across all asset classes</div>
+    </div>
+  </div>
+
+  <div class="arrow">↓</div>
+
+  <!-- ⑨ SUITABILITY OF ASSETS -->
+  <div class="block b9">
+    <div class="num">⑨</div>
+    <div class="block-content">
+      <div class="block-title">Suitability of Assets for Matching</div>
+      <div class="sub-items">
+        <span class="sub key"><span class="pillar why">Why</span> Assess Suitability?</span>
+        <span class="sub" style="color:var(--paper);border-color:#555;">Match liability cashflows · Optimise risk/return within constraints · Regulatory admissibility</span>
+        <span class="sub key"><span class="pillar what">What</span> Features Determine Suitability?</span>
+        <span class="sub" style="color:var(--paper);border-color:#555;">Term · Currency · Nature (real/fixed) · Expected return · Security · Volatility · Marketability · Expertise required · Portfolio size · Free asset size · Tax · Admissibility</span>
+        <span class="sub key"><span class="pillar how">How</span>: Asset–Liability Pairs?</span>
+        <span class="sub" style="color:var(--paper);border-color:#555;">Govt bonds → monetary guaranteed · IL gilts → index-linked · Equities / property → long-term real · Cash / short bonds → PMI &amp; short-tail · Unit fund assets → investment-linked · Swaps → very long-term (LTCI / deferred annuities)</span>
+      </div>
+      <div class="note" style="color:#a0a8b8;">Matching difficulty: without-profits long-term (asset availability) · Unit-linked (straightforward) · Index-linked (time-lag problem) · NAE (no bond market; equities too volatile short-term)</div>
+    </div>
+  </div>
+
+</div><!-- end flow -->
+
+<div class="footer">
+  <span>SP1 Ch.28 · SA1 Ch.18 · IFE 2019 / 2024</span>
+  <span>NAVIGATOR — OUTLINE</span>
+  <span>Asset-Liability Management</span>
+</div>
+
+</body>
+</html>
