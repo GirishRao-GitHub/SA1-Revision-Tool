@@ -1,0 +1,541 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+.wrap{padding:1rem 0;font-family:var(--font-sans,sans-serif);}
+.top-bar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:1.25rem;}
+.co-name{font-size:18px;font-weight:500;color:var(--color-text-primary);}
+.co-sub{font-size:12px;color:var(--color-text-secondary);margin-top:2px;}
+.controls{display:flex;gap:8px;flex-wrap:wrap;}
+.year-btn{padding:4px 12px;font-size:12px;border:0.5px solid var(--color-border-secondary,#ccc);border-radius:var(--border-radius-md,8px);cursor:pointer;background:transparent;color:var(--color-text-secondary);}
+.year-btn.active{background:#1D9E75;color:#fff;border-color:#1D9E75;font-weight:500;}
+.nav-tabs{display:flex;gap:0;border-bottom:0.5px solid var(--color-border-tertiary);margin-bottom:1.25rem;}
+.nav-tab{padding:8px 18px;font-size:13px;cursor:pointer;color:var(--color-text-secondary);border-bottom:2px solid transparent;margin-bottom:-0.5px;}
+.nav-tab.active{color:#1D9E75;border-bottom-color:#1D9E75;font-weight:500;}
+.metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-bottom:1.25rem;}
+@media(max-width:580px){.metrics{grid-template-columns:repeat(2,minmax(0,1fr));}.two-col{grid-template-columns:1fr!important;}}
+.metric{background:var(--color-background-secondary);border-radius:var(--border-radius-md,8px);padding:12px 14px;}
+.metric-lbl{font-size:11px;color:var(--color-text-secondary);margin-bottom:3px;}
+.metric-val{font-size:19px;font-weight:500;color:var(--color-text-primary);}
+.metric-val.g{color:#0F6E56;}.metric-val.r{color:#A32D2D;}
+.metric-sub{font-size:11px;color:var(--color-text-secondary);margin-top:2px;}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg,12px);overflow:hidden;}
+.card-hd{padding:9px 16px;font-size:12px;font-weight:500;letter-spacing:.04em;text-transform:uppercase;}
+.card-hd.teal{background:#E1F5EE;color:#085041;}
+.card-hd.blue{background:#E6F1FB;color:#0C447C;}
+.card-hd.amber{background:#FAEEDA;color:#633806;}
+.card-hd.coral{background:#FAECE7;color:#712B13;}
+table{width:100%;border-collapse:collapse;font-size:13px;}
+.sec td{padding:7px 16px 3px;font-size:11px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.05em;border-top:0.5px solid var(--color-border-tertiary);}
+.item td{padding:5px 16px;color:var(--color-text-primary);cursor:pointer;}
+.item:hover td{background:var(--color-background-secondary);}
+.item td:last-child{text-align:right;font-variant-numeric:tabular-nums;}
+.sub-tot td{padding:7px 16px;font-weight:500;border-top:0.5px solid var(--color-border-secondary);border-bottom:0.5px solid var(--color-border-secondary);}
+.sub-tot td:last-child{text-align:right;}
+.grand td{padding:10px 16px;font-weight:500;font-size:13px;background:var(--color-background-secondary);}
+.grand td:last-child{text-align:right;}
+.detail-row{display:none;}
+.detail-row td{padding:0;}
+.detail-inner{padding:7px 16px;font-size:11px;color:var(--color-text-secondary);background:var(--color-background-secondary);}
+.badge{display:inline-block;font-size:10px;padding:1px 5px;border-radius:4px;margin-left:5px;vertical-align:middle;}
+.bu{background:#E1F5EE;color:#085041;}.bd{background:#FCEBEB;color:#791F1F;}
+.panel{display:none;}.panel.active{display:block;}
+.chart-wrap{position:relative;width:100%;height:220px;margin-top:14px;}
+.chart-legend{display:flex;flex-wrap:wrap;gap:12px;font-size:11px;color:var(--color-text-secondary);margin-bottom:8px;}
+.leg-dot{width:9px;height:9px;border-radius:2px;display:inline-block;margin-right:4px;}
+.note{font-size:11px;color:var(--color-text-secondary);margin-top:1rem;}
+.ratio-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:1.25rem;}
+@media(max-width:500px){.ratio-grid{grid-template-columns:repeat(2,minmax(0,1fr));}}
+.ratio-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:12px 14px;}
+.ratio-lbl{font-size:11px;color:var(--color-text-secondary);margin-bottom:2px;}
+.ratio-val{font-size:17px;font-weight:500;color:var(--color-text-primary);}
+.ratio-bar-bg{height:5px;border-radius:3px;background:var(--color-border-tertiary);margin-top:6px;overflow:hidden;}
+.ratio-bar-fill{height:5px;border-radius:3px;}
+</style>
+
+<div class="wrap">
+  <div class="top-bar">
+    <div><div class="co-name">IndiaHealth Insurance Ltd.</div><div class="co-sub">IRDAI-format financial statements &nbsp;|&nbsp; ₹ Crores &nbsp;|&nbsp; Standalone health insurer</div></div>
+    <div class="controls">
+      <button class="year-btn active" onclick="setYear('fy24',this)">FY 2024</button>
+      <button class="year-btn" onclick="setYear('fy23',this)">FY 2023</button>
+      <button class="year-btn" onclick="setYear('fy22',this)">FY 2022</button>
+    </div>
+  </div>
+
+  <div class="nav-tabs">
+    <div class="nav-tab active" onclick="setTab('pl',this)">Revenue account (P&L)</div>
+    <div class="nav-tab" onclick="setTab('bs',this)">Balance sheet</div>
+    <div class="nav-tab" onclick="setTab('ratios',this)">Key ratios</div>
+  </div>
+
+  <div id="tab-pl" class="panel active"></div>
+  <div id="tab-bs" class="panel"></div>
+  <div id="tab-ratios" class="panel"></div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+const D = {
+  fy24:{
+    pl:{
+      income:[
+        {n:"Net premium earned",v:8420,note:"Gross written premium less reinsurance ceded, adjusted for UPR movement"},
+        {n:"Income from investments",v:680,note:"Interest, dividends and realised gains on investment portfolio"},
+        {n:"Other income",v:52,note:"Miscellaneous operating income, co-insurance receipts"},
+      ],
+      claims:[
+        {n:"Claims paid (net)",v:5910,note:"Hospitalisation, day-care, OPD — net of reinsurance recovery"},
+        {n:"Change in claims reserves",v:260,note:"Increase in IBNR, IBNER and outstanding claims provisions"},
+      ],
+      commission:[
+        {n:"Commission paid",v:620,note:"To agents, brokers and corporate intermediaries"},
+        {n:"Commission received (reins.)",v:-95,note:"Commission earned from reinsurers on ceded business"},
+      ],
+      opex:[
+        {n:"Employee remuneration",v:410,note:"Salaries, PF, gratuity, ESOP charges"},
+        {n:"Management expenses",v:185,note:"Rent, IT, marketing, legal, admin overheads"},
+        {n:"Depreciation",v:48,note:"On IT infra, software and office premises"},
+        {n:"TPA charges",v:210,note:"Third-party administrator service fees for claims processing"},
+      ],
+    },
+    bs:{
+      investments:[
+        {n:"Government securities",v:4820,note:"SLR investments as per IRDAI mandate"},
+        {n:"Listed equity shares",v:610,note:"Market-valued equity portfolio"},
+        {n:"Fixed deposits (banks)",v:2140,note:"Short-term FDs with scheduled commercial banks"},
+        {n:"Mutual funds",v:980,note:"Debt MFs and liquid funds"},
+        {n:"Infrastructure bonds",v:520,note:"Long-term infra bonds per investment norms"},
+      ],
+      other_assets:[
+        {n:"Cash & bank balances",v:310,note:"Current accounts and settlement balances"},
+        {n:"Advances & deposits",v:195,note:"Advance tax, prepaid expenses, vendor deposits"},
+        {n:"Premiums receivable",v:420,note:"Outstanding premiums from agents/brokers/TPAs"},
+        {n:"Other receivables",v:88,note:"Sundry debtors, inter-company"},
+        {n:"Fixed assets (net)",v:215,note:"IT infra, office premises — net of depreciation"},
+        {n:"Deferred tax asset",v:47,note:"Timing differences on claims provisions"},
+      ],
+      equity:[
+        {n:"Share capital",v:650,note:"Paid-up equity; ₹10 face value"},
+        {n:"Reserves & surplus",v:1640,note:"Revenue reserve, general reserve, securities premium"},
+        {n:"Fair value change account",v:110,note:"Unrealised gains on equity and MF portfolio"},
+      ],
+      policy_liab:[
+        {n:"Premium deficiency reserve",v:320,note:"Provision where expected claims exceed unearned premium"},
+        {n:"Claims outstanding",v:1840,note:"IBNR + IBNER + reported-but-unpaid"},
+        {n:"Unearned premium reserve",v:2210,note:"Pro-rata unearned portion of in-force premiums"},
+        {n:"Catastrophe reserve",v:180,note:"Statutory buffer for catastrophic health events"},
+      ],
+      other_liab:[
+        {n:"Borrowings",v:0,note:"Nil — standalone health insurers carry no debt"},
+        {n:"Premium received in advance",v:290,note:"Multi-year policy premiums ahead of risk period"},
+        {n:"TPA & agent payables",v:175,note:"Amounts payable to TPAs, agents, reinsurers"},
+        {n:"Other payables & provisions",v:130,note:"Tax provisions, statutory dues, accruals"},
+      ],
+    }
+  },
+  fy23:{
+    pl:{
+      income:[
+        {n:"Net premium earned",v:7080,note:"Net of reinsurance and UPR adjustment"},
+        {n:"Income from investments",v:570,note:"Interest, dividends and realised gains"},
+        {n:"Other income",v:41,note:"Miscellaneous and co-insurance"},
+      ],
+      claims:[
+        {n:"Claims paid (net)",v:4980,note:"Net hospitalisation and day-care claims"},
+        {n:"Change in claims reserves",v:220,note:"IBNR and outstanding claims increase"},
+      ],
+      commission:[
+        {n:"Commission paid",v:520,note:"Agents, brokers, corporate intermediaries"},
+        {n:"Commission received (reins.)",v:-78,note:"Reinsurer commission on ceded business"},
+      ],
+      opex:[
+        {n:"Employee remuneration",v:355,note:"Salaries and benefits"},
+        {n:"Management expenses",v:162,note:"Rent, IT, marketing, admin"},
+        {n:"Depreciation",v:42,note:"IT and office assets"},
+        {n:"TPA charges",v:180,note:"TPA service fees"},
+      ],
+    },
+    bs:{
+      investments:[
+        {n:"Government securities",v:4120,note:"SLR investments"},
+        {n:"Listed equity shares",v:490,note:"Listed equities at market value"},
+        {n:"Fixed deposits (banks)",v:1880,note:"Bank FDs"},
+        {n:"Mutual funds",v:820,note:"Debt and liquid MFs"},
+        {n:"Infrastructure bonds",v:440,note:"Infra bonds"},
+      ],
+      other_assets:[
+        {n:"Cash & bank balances",v:275,note:"Current accounts"},
+        {n:"Advances & deposits",v:160,note:"Advance tax and prepaid"},
+        {n:"Premiums receivable",v:370,note:"Outstanding premiums"},
+        {n:"Other receivables",v:72,note:"Sundry debtors"},
+        {n:"Fixed assets (net)",v:190,note:"Net fixed assets"},
+        {n:"Deferred tax asset",v:38,note:"Timing differences"},
+      ],
+      equity:[
+        {n:"Share capital",v:650,note:"Paid-up equity"},
+        {n:"Reserves & surplus",v:1240,note:"Revenue and general reserve"},
+        {n:"Fair value change account",v:75,note:"Unrealised equity gains"},
+      ],
+      policy_liab:[
+        {n:"Premium deficiency reserve",v:280,note:"Expected claims buffer"},
+        {n:"Claims outstanding",v:1580,note:"IBNR + reported unpaid"},
+        {n:"Unearned premium reserve",v:1890,note:"Unearned premium portion"},
+        {n:"Catastrophe reserve",v:150,note:"Catastrophe buffer"},
+      ],
+      other_liab:[
+        {n:"Borrowings",v:0,note:"Nil"},
+        {n:"Premium received in advance",v:240,note:"Advance premiums"},
+        {n:"TPA & agent payables",v:148,note:"TPA and agent payables"},
+        {n:"Other payables & provisions",v:112,note:"Statutory dues"},
+      ],
+    }
+  },
+  fy22:{
+    pl:{
+      income:[
+        {n:"Net premium earned",v:5840,note:"Net of reinsurance and UPR"},
+        {n:"Income from investments",v:460,note:"Interest and realised gains"},
+        {n:"Other income",v:32,note:"Miscellaneous income"},
+      ],
+      claims:[
+        {n:"Claims paid (net)",v:4210,note:"Net health claims paid"},
+        {n:"Change in claims reserves",v:185,note:"Claims reserve increase"},
+      ],
+      commission:[
+        {n:"Commission paid",v:418,note:"Intermediary commissions"},
+        {n:"Commission received (reins.)",v:-60,note:"Reinsurer commission"},
+      ],
+      opex:[
+        {n:"Employee remuneration",v:295,note:"Salaries and benefits"},
+        {n:"Management expenses",v:138,note:"Overheads"},
+        {n:"Depreciation",v:35,note:"Depreciation"},
+        {n:"TPA charges",v:148,note:"TPA fees"},
+      ],
+    },
+    bs:{
+      investments:[
+        {n:"Government securities",v:3520,note:"SLR investments"},
+        {n:"Listed equity shares",v:380,note:"Listed equities"},
+        {n:"Fixed deposits (banks)",v:1530,note:"Bank FDs"},
+        {n:"Mutual funds",v:650,note:"Debt and liquid MFs"},
+        {n:"Infrastructure bonds",v:350,note:"Infra bonds"},
+      ],
+      other_assets:[
+        {n:"Cash & bank balances",v:230,note:"Current accounts"},
+        {n:"Advances & deposits",v:130,note:"Advance tax"},
+        {n:"Premiums receivable",v:305,note:"Outstanding premiums"},
+        {n:"Other receivables",v:60,note:"Sundry debtors"},
+        {n:"Fixed assets (net)",v:165,note:"Net fixed assets"},
+        {n:"Deferred tax asset",v:28,note:"Deferred tax"},
+      ],
+      equity:[
+        {n:"Share capital",v:600,note:"Paid-up equity"},
+        {n:"Reserves & surplus",v:900,note:"Revenue and general reserve"},
+        {n:"Fair value change account",v:42,note:"Unrealised gains"},
+      ],
+      policy_liab:[
+        {n:"Premium deficiency reserve",v:240,note:"Expected claims buffer"},
+        {n:"Claims outstanding",v:1320,note:"IBNR + reported unpaid"},
+        {n:"Unearned premium reserve",v:1570,note:"Unearned premiums"},
+        {n:"Catastrophe reserve",v:120,note:"Catastrophe reserve"},
+      ],
+      other_liab:[
+        {n:"Borrowings",v:0,note:"Nil"},
+        {n:"Premium received in advance",v:190,note:"Advance premiums"},
+        {n:"TPA & agent payables",v:118,note:"TPA payables"},
+        {n:"Other payables & provisions",v:88,note:"Provisions"},
+      ],
+    }
+  }
+};
+
+let yr='fy24';
+let chartInst=null;
+
+function s(id){return document.getElementById(id);}
+function fmt(n){return n===0?'—':Math.abs(n).toLocaleString('en-IN');}
+function fmts(n){return (n<0?'-':'')+fmt(n);}
+function sum(arr){return arr.reduce((a,b)=>a+b.v,0);}
+function pct(a,b){if(!b)return'';const d=((a-b)/b*100);return(d>=0?'+':'')+d.toFixed(1)+'%';}
+function prev(){return yr==='fy24'?'fy23':yr==='fy23'?'fy22':null;}
+function badge(curr,pval){
+  if(pval===null||pval===undefined)return'';
+  const d=curr-pval;
+  if(d===0)return'';
+  const cls=d>0?'bu':'bd';
+  return`<span class="badge ${cls}">${pct(curr,pval)}</span>`;
+}
+
+function toggleRow(id){
+  const r=s(id);
+  if(r)r.style.display=r.style.display==='none'?'':'none';
+}
+
+function buildTableRows(sections, prevSections){
+  let html='';let grand=0;
+  sections.forEach((sec,si)=>{
+    html+=`<tr class="sec"><td colspan="2">${sec.label}</td></tr>`;
+    const st=sum(sec.items);grand+=st;
+    sec.items.forEach((item,ii)=>{
+      const did=`dr-${si}-${ii}-${yr}`;
+      const pv=prevSections&&prevSections[si]&&prevSections[si].items[ii]?prevSections[si].items[ii].v:null;
+      html+=`<tr class="item" onclick="toggleRow('${did}')"><td>${item.n}${badge(item.v,pv)}</td><td>${fmts(item.v)}</td></tr>`;
+      html+=`<tr class="detail-row" id="${did}" style="display:none"><td colspan="2"><div class="detail-inner">${item.note}</div></td></tr>`;
+    });
+    html+=`<tr class="sub-tot"><td>Sub-total</td><td>${fmt(st)}</td></tr>`;
+  });
+  html+=`<tr class="grand"><td>Total</td><td>${fmt(grand)}</td></tr>`;
+  return{html,grand};
+}
+
+function renderPL(){
+  const d=D[yr].pl;
+  const py=prev()?D[prev()].pl:null;
+
+  const totalIncome=sum(d.income);
+  const totalClaims=sum(d.claims);
+  const totalComm=sum(d.commission);
+  const totalOpex=sum(d.opex);
+  const pnl=totalIncome-totalClaims-totalComm-totalOpex;
+  const gwp=d.income[0].v;
+  const claimsRatio=((totalClaims/gwp)*100).toFixed(1);
+  const expenseRatio=(((totalComm+totalOpex)/gwp)*100).toFixed(1);
+  const combinedRatio=((totalClaims+totalComm+totalOpex)/gwp*100).toFixed(1);
+
+  const pyGwp=py?py.income[0].v:null;
+  const pyPnl=py?sum(py.income)-sum(py.claims)-sum(py.commission)-sum(py.opex):null;
+
+  let m=`
+    <div class="metrics">
+      <div class="metric"><div class="metric-lbl">Net premium earned</div><div class="metric-val">${fmt(gwp)}</div><div class="metric-sub">${pyGwp?pct(gwp,pyGwp)+' vs prior year':'Base year'}</div></div>
+      <div class="metric"><div class="metric-lbl">Net claims incurred</div><div class="metric-val r">${fmt(totalClaims)}</div><div class="metric-sub">Loss ratio ${claimsRatio}%</div></div>
+      <div class="metric"><div class="metric-lbl">Operating expenses</div><div class="metric-val">${fmt(totalComm+totalOpex)}</div><div class="metric-sub">Expense ratio ${expenseRatio}%</div></div>
+      <div class="metric"><div class="metric-lbl">Profit / (loss)</div><div class="metric-val ${pnl>=0?'g':'r'}">${pnl>=0?'':'('}${fmt(Math.abs(pnl))}${pnl>=0?'':')'}</div><div class="metric-sub">${pyPnl!==null?badge(pnl,pyPnl)+' vs prior':''} Margin ${(pnl/gwp*100).toFixed(1)}%</div></div>
+    </div>`;
+
+  const pySecs=py?[
+    {items:py.income},{items:py.claims},{items:py.commission},{items:py.opex}
+  ]:null;
+
+  const incRes=buildTableRows([{label:'Income (Schedule F-1)',items:d.income}],pySecs?[pySecs[0]]:null);
+  const clRes=buildTableRows([{label:'Claims incurred (Schedule F-2)',items:d.claims}],pySecs?[pySecs[1]]:null);
+  const coRes=buildTableRows([{label:'Commission (Schedule F-3)',items:d.commission}],pySecs?[pySecs[2]]:null);
+  const opRes=buildTableRows([{label:'Operating expenses (Schedule F-4)',items:d.opex}],pySecs?[pySecs[3]]:null);
+
+  const profitRow=`<tr class="grand" style="border-top:2px solid #1D9E75"><td>Operating profit / (loss)</td><td style="color:${pnl>=0?'#0F6E56':'#A32D2D'};text-align:right;font-variant-numeric:tabular-nums;">${pnl>=0?'':'-'}${fmt(Math.abs(pnl))}</td></tr>`;
+
+  m+=`<div class="two-col">
+    <div>
+      <div class="card" style="margin-bottom:14px"><div class="card-hd teal">Income</div><table>${incRes.html}</table></div>
+      <div class="card"><div class="card-hd amber">Commission</div><table>${coRes.html}</table></div>
+    </div>
+    <div>
+      <div class="card" style="margin-bottom:14px"><div class="card-hd coral">Claims incurred</div><table>${clRes.html}</table></div>
+      <div class="card"><div class="card-hd blue">Operating expenses</div><table>${opRes.html}<tbody>${profitRow}</tbody></table></div>
+    </div>
+  </div>`;
+
+  m+=`<div style="margin-top:14px;">
+    <div class="chart-legend">
+      <span style="display:flex;align-items:center;gap:4px"><span class="leg-dot" style="background:#1D9E75"></span>Net premium earned</span>
+      <span style="display:flex;align-items:center;gap:4px"><span class="leg-dot" style="background:#D85A30"></span>Net claims paid</span>
+      <span style="display:flex;align-items:center;gap:4px"><span class="leg-dot" style="background:#378ADD"></span>Operating expenses</span>
+      <span style="display:flex;align-items:center;gap:4px"><span class="leg-dot" style="background:#888780"></span>Profit / (loss)</span>
+    </div>
+    <div class="chart-wrap"><canvas id="pl-chart"></canvas></div>
+  </div>`;
+
+  m+=`<div class="note">* Click any line item to view notes. Figures illustrative, modeled on a mid-size standalone health insurer.</div>`;
+
+  s('tab-pl').innerHTML=m;
+
+  setTimeout(()=>{
+    if(chartInst){chartInst.destroy();chartInst=null;}
+    const ctx=s('pl-chart');
+    if(!ctx)return;
+    const labels=['FY 2022','FY 2023','FY 2024'];
+    const calc=(y)=>{
+      const pd=D[y].pl;
+      const inc=sum(pd.income);const cl=sum(pd.claims);const co=sum(pd.commission)+sum(pd.opex);
+      return{inc,cl,co,pnl:inc-cl-co};
+    };
+    const fy22=calc('fy22'),fy23=calc('fy23'),fy24=calc('fy24');
+    chartInst=new Chart(ctx,{
+      type:'bar',
+      data:{
+        labels,
+        datasets:[
+          {label:'Net premium',data:[fy22.inc,fy23.inc,fy24.inc],backgroundColor:'#1D9E75',borderRadius:3},
+          {label:'Net claims',data:[fy22.cl,fy23.cl,fy24.cl],backgroundColor:'#D85A30',borderRadius:3},
+          {label:'Expenses',data:[fy22.co,fy23.co,fy24.co],backgroundColor:'#378ADD',borderRadius:3},
+          {label:'Profit',data:[fy22.pnl,fy23.pnl,fy24.pnl],backgroundColor:'#888780',borderRadius:3},
+        ]
+      },
+      options:{
+        responsive:true,maintainAspectRatio:false,
+        plugins:{legend:{display:false}},
+        scales:{
+          x:{grid:{display:false},ticks:{font:{size:11},autoSkip:false}},
+          y:{grid:{color:'rgba(128,128,128,0.1)'},ticks:{font:{size:11},callback:v=>'₹'+Math.round(v/100)/10+'K'}}
+        }
+      }
+    });
+  },100);
+}
+
+function renderBS(){
+  const d=D[yr].bs;
+  const py=prev()?D[prev()].bs:null;
+
+  const totalInv=sum(d.investments);
+  const totalOther=sum(d.other_assets);
+  const totalAssets=totalInv+totalOther;
+  const totalEq=sum(d.equity);
+  const totalPL=sum(d.policy_liab);
+  const totalOL=sum(d.other_liab);
+  const totalLiab=totalEq+totalPL+totalOL;
+
+  const pyTotalAssets=py?sum(py.investments)+sum(py.other_assets):null;
+  const pyEq=py?sum(py.equity):null;
+  const solvency=((totalEq/(totalPL*0.5))*100).toFixed(0);
+
+  let m=`<div class="metrics">
+    <div class="metric"><div class="metric-lbl">Total assets</div><div class="metric-val">${fmt(totalAssets)}</div><div class="metric-sub">${pyTotalAssets?pct(totalAssets,pyTotalAssets)+' vs prior':'Base year'}</div></div>
+    <div class="metric"><div class="metric-lbl">Investment book</div><div class="metric-val">${fmt(totalInv)}</div><div class="metric-sub">${(totalInv/totalAssets*100).toFixed(1)}% of total assets</div></div>
+    <div class="metric"><div class="metric-lbl">Shareholders' equity</div><div class="metric-val g">${fmt(totalEq)}</div><div class="metric-sub">${pyEq?pct(totalEq,pyEq)+' vs prior':'FY22 base'}</div></div>
+    <div class="metric"><div class="metric-lbl">Solvency ratio (est.)</div><div class="metric-val ${solvency>=150?'g':'r'}">${solvency}%</div><div class="metric-sub">IRDAI min: 150%</div></div>
+  </div>`;
+
+  const pyInv=py?[{items:py.investments}]:null;
+  const pyOa=py?[{items:py.other_assets}]:null;
+  const pyEqS=py?[{items:py.equity}]:null;
+  const pyPl=py?[{items:py.policy_liab}]:null;
+  const pyOl=py?[{items:py.other_liab}]:null;
+
+  const aRes=buildTableRows([{label:'Investments (Sch. 8)',items:d.investments},{label:'Other assets (Sch. 12)',items:d.other_assets}],py?[{items:py.investments},{items:py.other_assets}]:null);
+  const lRes=buildTableRows([{label:"Shareholders' funds",items:d.equity},{label:'Policyholder liabilities',items:d.policy_liab},{label:'Other liabilities (Sch. 14)',items:d.other_liab}],py?[{items:py.equity},{items:py.policy_liab},{items:py.other_liab}]:null);
+
+  m+=`<div class="two-col">
+    <div class="card"><div class="card-hd teal">Assets</div><table>${aRes.html}</table></div>
+    <div class="card"><div class="card-hd blue">Liabilities &amp; equity</div><table>${lRes.html}</table></div>
+  </div>`;
+  m+=`<div class="note">* Click any line item for notes. Figures illustrative. Total assets = total liabilities + equity by construction.</div>`;
+
+  s('tab-bs').innerHTML=m;
+}
+
+function renderRatios(){
+  const years=['fy22','fy23','fy24'];
+  const labels=['FY 2022','FY 2023','FY 2024'];
+
+  const calc=(y)=>{
+    const pl=D[y].pl;const bs=D[y].bs;
+    const gwp=pl.income[0].v;
+    const claims=sum(pl.claims);
+    const comm=sum(pl.commission);
+    const opex=sum(pl.opex);
+    const totalEq=sum(bs.equity);
+    const totalPL=sum(bs.policy_liab);
+    const totalAssets=sum(bs.investments)+sum(bs.other_assets);
+    const pnl=sum(pl.income)-claims-comm-opex;
+    return{
+      lossRatio:+(claims/gwp*100).toFixed(1),
+      expRatio:+((comm+opex)/gwp*100).toFixed(1),
+      combRatio:+((claims+comm+opex)/gwp*100).toFixed(1),
+      solvency:+(totalEq/(totalPL*0.5)*100).toFixed(0),
+      roe:+(pnl/totalEq*100).toFixed(1),
+      investYield:+(pl.income[1].v/sum(bs.investments)*100).toFixed(1),
+      gwp,pnl,totalAssets,totalEq
+    };
+  };
+
+  const stats=years.map(calc);
+  const cur=stats[2];const prv=stats[1];
+
+  const ratioCards=[
+    {lbl:'Claims / loss ratio',val:cur.lossRatio+'%',sub:'IRDAI benchmark ~70–80%',fill:Math.min(cur.lossRatio,100),color:'#D85A30',good:cur.lossRatio<80},
+    {lbl:'Expense ratio',val:cur.expRatio+'%',sub:'Commission + opex / GWP',fill:Math.min(cur.expRatio,60),color:'#378ADD',good:cur.expRatio<30},
+    {lbl:'Combined ratio',val:cur.combRatio+'%',sub:'<100% = underwriting profit',fill:Math.min(cur.combRatio,130),color:cur.combRatio<100?'#1D9E75':'#D85A30',good:cur.combRatio<100},
+    {lbl:'Solvency ratio',val:cur.solvency+'%',sub:'IRDAI min 150%',fill:Math.min(cur.solvency/3,100),color:'#1D9E75',good:cur.solvency>=150},
+    {lbl:'Return on equity',val:cur.roe+'%',sub:'PAT / avg shareholders equity',fill:Math.min(Math.max(cur.roe,0),40)*2.5,color:'#534AB7',good:cur.roe>10},
+    {lbl:'Investment yield',val:cur.investYield+'%',sub:'Inv. income / avg inv. book',fill:cur.investYield*10,color:'#BA7517',good:cur.investYield>6},
+  ];
+
+  let m=`<div class="ratio-grid">`;
+  ratioCards.forEach(r=>{
+    m+=`<div class="ratio-card">
+      <div class="ratio-lbl">${r.lbl}</div>
+      <div class="ratio-val" style="color:${r.good?'#0F6E56':'#A32D2D'}">${r.val}</div>
+      <div class="ratio-bar-bg"><div class="ratio-bar-fill" style="width:${Math.min(r.fill,100)}%;background:${r.color};"></div></div>
+      <div style="font-size:10px;color:var(--color-text-secondary);margin-top:4px;">${r.sub}</div>
+    </div>`;
+  });
+  m+=`</div>`;
+
+  m+=`<div class="chart-legend" style="margin-bottom:8px;">
+    <span style="display:flex;align-items:center;gap:4px"><span class="leg-dot" style="background:#D85A30"></span>Loss ratio</span>
+    <span style="display:flex;align-items:center;gap:4px"><span class="leg-dot" style="background:#378ADD"></span>Expense ratio</span>
+    <span style="display:flex;align-items:center;gap:4px"><span class="leg-dot" style="background:#888780"></span>Combined ratio</span>
+  </div>
+  <div class="chart-wrap" style="height:200px;"><canvas id="ratio-chart"></canvas></div>`;
+
+  m+=`<div class="note" style="margin-top:1rem;">* Click a ratio card to explore further. Combined ratio &lt;100% indicates underwriting profit; health insurers often supplement with investment income.</div>`;
+  m+=`<div style="margin-top:12px;"><button onclick="sendPrompt('Explain the combined ratio and what drives it for Indian health insurers')" style="font-size:12px;padding:5px 14px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);cursor:pointer;background:transparent;color:var(--color-text-secondary);">Explain combined ratio ↗</button> <button onclick="sendPrompt('What is a good solvency ratio for IRDAI-regulated insurers and how is it calculated?')" style="font-size:12px;padding:5px 14px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);cursor:pointer;background:transparent;color:var(--color-text-secondary);margin-left:8px;">Solvency ratio explained ↗</button></div>`;
+
+  s('tab-ratios').innerHTML=m;
+
+  setTimeout(()=>{
+    if(chartInst){chartInst.destroy();chartInst=null;}
+    const ctx=s('ratio-chart');if(!ctx)return;
+    chartInst=new Chart(ctx,{
+      type:'line',
+      data:{
+        labels,
+        datasets:[
+          {label:'Loss ratio',data:stats.map(x=>x.lossRatio),borderColor:'#D85A30',backgroundColor:'rgba(216,90,48,0.08)',tension:0.3,pointRadius:4,fill:false},
+          {label:'Expense ratio',data:stats.map(x=>x.expRatio),borderColor:'#378ADD',backgroundColor:'rgba(55,138,221,0.08)',tension:0.3,pointRadius:4,fill:false},
+          {label:'Combined ratio',data:stats.map(x=>x.combRatio),borderColor:'#888780',backgroundColor:'rgba(136,135,128,0.08)',tension:0.3,pointRadius:4,fill:false},
+        ]
+      },
+      options:{
+        responsive:true,maintainAspectRatio:false,
+        plugins:{legend:{display:false},annotation:{}},
+        scales:{
+          x:{grid:{display:false},ticks:{font:{size:11},autoSkip:false}},
+          y:{min:60,max:120,grid:{color:'rgba(128,128,128,0.1)'},ticks:{font:{size:11},callback:v=>v+'%'}}
+        }
+      }
+    });
+  },100);
+}
+
+function setYear(y,el){
+  yr=y;
+  document.querySelectorAll('.year-btn').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+  renderAll();
+}
+
+function setTab(tab,el){
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  el.classList.add('active');
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  s('tab-'+tab).classList.add('active');
+  if(chartInst){chartInst.destroy();chartInst=null;}
+  if(tab==='pl')renderPL();
+  else if(tab==='bs')renderBS();
+  else renderRatios();
+}
+
+function renderAll(){
+  const active=document.querySelector('.nav-tab.active');
+  const tab=active?active.getAttribute('onclick').match(/setTab\('(\w+)'/)[1]:'pl';
+  if(chartInst){chartInst.destroy();chartInst=null;}
+  if(tab==='pl')renderPL();
+  else if(tab==='bs')renderBS();
+  else renderRatios();
+}
+
+renderPL();
+</script>
