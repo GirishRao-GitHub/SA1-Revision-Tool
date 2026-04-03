@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>EV Assumptions — Deep Dive</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,600;0,800;1,300;1,600&family=Space+Grotesk:wght@300;400;500;600&family=Fira+Code:wght@400;500&display=swap');
+
+:root {
+  --bg: #090d0f;
+  --s1: #0f1518;
+  --s2: #161d22;
+  --s3: #1d262e;
+  --border: #253040;
+  --border2: #344560;
+  --text: #dce8f0;
+  --text2: #7d9ab0;
+  --text3: #3d5568;
+  --gold: #e8b84b;
+  --gold2: #b08020;
+  --goldbg: #1a1408;
+  --teal: #3dd4b0;
+  --tealbg: #081a16;
+  --rose: #e86060;
+  --rosebg: #1a0808;
+  --sky: #60b4e8;
+  --skybg: #081420;
+  --lime: #90d060;
+  --limebg: #0c1808;
+  --lavender: #a080e8;
+  --lavenderbg: #120c1e;
+  --serif: 'Fraunces', serif;
+  --sans: 'Space Grotesk', sans-serif;
+  --mono: 'Fira Code', monospace;
+  --r: 8px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: var(--sans); background: var(--bg); color: var(--text); min-height: 100vh; }
+
+.wrap { max-width: 1060px; margin: 0 auto; padding: 48px 20px 100px; }
+
+/* ── HEADER ── */
+.hdr { margin-bottom: 52px; }
+.hdr-pre { font-family: var(--mono); font-size: 11px; color: var(--teal); letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 14px; }
+.hdr h1 { font-family: var(--serif); font-size: clamp(34px, 5vw, 58px); font-weight: 800; line-height: 1.1; margin-bottom: 16px; color: var(--text); }
+.hdr h1 em { font-style: italic; color: var(--gold); }
+.hdr-sub { font-size: 15px; color: var(--text2); line-height: 1.75; max-width: 680px; }
+
+/* ── SECTION HEADERS ── */
+.sh { margin: 48px 0 20px; display: flex; align-items: center; gap: 16px; }
+.sh-num { font-family: var(--mono); font-size: 11px; color: var(--text3); background: var(--s2); border: 1px solid var(--border); border-radius: 4px; padding: 3px 8px; flex-shrink: 0; }
+.sh h2 { font-family: var(--serif); font-size: clamp(22px, 3.5vw, 32px); font-weight: 600; color: var(--text); }
+.sh h2 em { font-style: italic; color: var(--gold); }
+.sh-line { flex: 1; height: 1px; background: var(--border); }
+.sec-intro { font-size: 14px; color: var(--text2); line-height: 1.8; margin-bottom: 24px; max-width: 820px; }
+
+/* ── THE KEY INSIGHT BOX ── */
+.insight {
+  background: linear-gradient(135deg, var(--goldbg), var(--s2));
+  border: 1px solid var(--gold2);
+  border-radius: var(--r);
+  padding: 24px 28px;
+  margin-bottom: 28px;
+  position: relative;
+  overflow: hidden;
+}
+.insight::before {
+  content: '"';
+  font-family: var(--serif);
+  font-size: 120px;
+  color: rgba(184,128,32,0.1);
+  position: absolute;
+  top: -20px; left: 16px;
+  line-height: 1;
+  pointer-events: none;
+}
+.insight-tag { font-family: var(--mono); font-size: 10px; color: var(--gold); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 8px; }
+.insight p { font-size: 15px; color: var(--text); line-height: 1.8; position: relative; z-index: 1; }
+.insight strong { color: var(--gold); }
+
+/* ── CALLOUT BOXES ── */
+.callout { border-radius: var(--r); padding: 16px 20px; margin-bottom: 16px; }
+.callout.teal { background: var(--tealbg); border-left: 3px solid var(--teal); }
+.callout.rose { background: var(--rosebg); border-left: 3px solid var(--rose); }
+.callout.sky { background: var(--skybg); border-left: 3px solid var(--sky); }
+.callout.lime { background: var(--limebg); border-left: 3px solid var(--lime); }
+.callout.lav { background: var(--lavenderbg); border-left: 3px solid var(--lavender); }
+.callout-tag { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 6px; }
+.callout.teal .callout-tag { color: var(--teal); }
+.callout.rose .callout-tag { color: var(--rose); }
+.callout.sky .callout-tag { color: var(--sky); }
+.callout.lime .callout-tag { color: var(--lime); }
+.callout.lav .callout-tag { color: var(--lavender); }
+.callout p { font-size: 13.5px; color: var(--text); line-height: 1.75; }
+.callout p strong { color: inherit; }
+.callout.teal p strong { color: var(--teal); }
+.callout.rose p strong { color: var(--rose); }
+.callout.sky p strong { color: var(--sky); }
+.callout.lime p strong { color: var(--lime); }
+.callout.lav p strong { color: var(--lavender); }
+
+/* ── TWO-BASIS DIAGRAM ── */
+.two-basis { display: grid; grid-template-columns: 1fr 40px 1fr; gap: 0; margin-bottom: 28px; align-items: stretch; }
+@media(max-width:680px) { .two-basis { grid-template-columns: 1fr; } .tb-arrow { display: none; } }
+.tb-box { background: var(--s2); border: 1px solid var(--border); border-radius: var(--r); padding: 20px; }
+.tb-box h3 { font-family: var(--serif); font-size: 18px; margin-bottom: 10px; }
+.tb-box.res h3 { color: var(--gold); }
+.tb-box.proj h3 { color: var(--teal); }
+.tb-box p { font-size: 13px; color: var(--text2); line-height: 1.7; margin-bottom: 8px; }
+.tb-box ul { list-style: none; display: flex; flex-direction: column; gap: 5px; padding: 0; }
+.tb-box ul li { font-size: 12.5px; color: var(--text2); padding-left: 16px; position: relative; line-height: 1.55; }
+.tb-box ul li::before { content: '→'; position: absolute; left: 0; color: var(--text3); }
+.tb-box.res ul li::before { color: var(--gold2); }
+.tb-box.proj ul li::before { color: var(--teal); }
+.tb-arrow { display: flex; align-items: center; justify-content: center; color: var(--text3); font-size: 22px; }
+.tb-tag { font-family: var(--mono); font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 8px; padding: 2px 8px; border-radius: 3px; display: inline-block; }
+.tb-box.res .tb-tag { background: var(--goldbg); border: 1px solid var(--gold2); color: var(--gold); }
+.tb-box.proj .tb-tag { background: var(--tealbg); border: 1px solid var(--teal); color: var(--teal); }
+
+/* ── ASSUMPTION ACCORDION ── */
+.acc-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 24px; }
+.acc-item { background: var(--s1); border: 1px solid var(--border); border-radius: var(--r); overflow: hidden; }
+.acc-head {
+  display: flex; align-items: center; gap: 14px; padding: 14px 18px;
+  cursor: pointer; user-select: none; transition: background 0.2s;
+}
+.acc-head:hover { background: var(--s2); }
+.acc-icon { font-family: var(--mono); font-size: 12px; width: 32px; height: 32px; border-radius: 6px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-weight: 600; }
+.acc-head-text { flex: 1; }
+.acc-head-title { font-size: 14px; font-weight: 600; color: var(--text); }
+.acc-head-subtitle { font-size: 11px; color: var(--text3); margin-top: 2px; font-family: var(--mono); }
+.acc-arrow { color: var(--text3); font-size: 14px; transition: transform 0.25s; flex-shrink: 0; }
+.acc-item.open .acc-arrow { transform: rotate(90deg); }
+.acc-body { display: none; padding: 0 18px 18px; }
+.acc-item.open .acc-body { display: block; }
+
+.acc-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 12px; }
+@media(max-width:700px) { .acc-grid { grid-template-columns: 1fr; } }
+
+.acc-cell { border-radius: 6px; padding: 12px 14px; }
+.acc-cell h4 { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; font-family: var(--mono); }
+.acc-cell p { font-size: 12.5px; line-height: 1.65; color: var(--text); }
+.acc-cell.pricing { background: var(--limebg); border: 1px solid #2a4010; }
+.acc-cell.pricing h4 { color: var(--lime); }
+.acc-cell.reserving { background: var(--goldbg); border: 1px solid #3a2808; }
+.acc-cell.reserving h4 { color: var(--gold); }
+.acc-cell.ev { background: var(--tealbg); border: 1px solid #0a3028; }
+.acc-cell.ev h4 { color: var(--teal); }
+
+.acc-note { font-size: 12px; color: var(--text2); background: var(--s3); border-radius: 6px; padding: 10px 14px; margin-top: 12px; line-height: 1.65; border-left: 2px solid var(--border2); }
+.acc-note strong { color: var(--text); }
+
+/* ── RDR BUILDER ── */
+.rdr-builder { background: var(--s2); border: 1px solid var(--border); border-radius: var(--r); padding: 24px; margin-bottom: 24px; }
+.rdr-title { font-family: var(--mono); font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 20px; }
+.rdr-stack { display: flex; flex-direction: column; gap: 6px; margin-bottom: 20px; }
+.rdr-row { display: flex; align-items: center; gap: 12px; }
+.rdr-bar { flex: 1; height: 32px; border-radius: 5px; display: flex; align-items: center; padding: 0 12px; font-size: 12.5px; font-weight: 500; position: relative; transition: width 0.4s; }
+.rdr-bar.rf { background: linear-gradient(90deg, #082040, var(--sky)); color: #fff; }
+.rdr-bar.eq { background: linear-gradient(90deg, #0a2010, var(--lime)); color: #fff; }
+.rdr-bar.ps { background: linear-gradient(90deg, #1a1008, var(--gold)); color: #fff; }
+.rdr-bar.ms { background: linear-gradient(90deg, #180830, var(--lavender)); color: #fff; }
+.rdr-label-out { font-family: var(--mono); font-size: 11px; color: var(--text3); width: 220px; flex-shrink: 0; }
+.rdr-val { font-family: var(--mono); font-size: 12px; color: var(--text); width: 40px; text-align: right; flex-shrink: 0; }
+.rdr-total { display: flex; align-items: center; justify-content: space-between; border-top: 1px solid var(--border); padding-top: 14px; margin-top: 8px; }
+.rdr-total-label { font-size: 14px; font-weight: 600; color: var(--text); }
+.rdr-total-val { font-family: var(--serif); font-size: 28px; color: var(--gold); }
+.rdr-sliders { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+@media(max-width: 600px) { .rdr-sliders { grid-template-columns: 1fr; } }
+.rdr-sl { background: var(--s3); border-radius: 6px; padding: 10px 14px; }
+.rdr-sl label { font-size: 11px; color: var(--text2); display: flex; justify-content: space-between; margin-bottom: 8px; }
+.rdr-sl label span { font-family: var(--mono); color: var(--text); font-size: 12px; }
+input[type=range] { width: 100%; accent-color: var(--gold); cursor: pointer; }
+.rdr-hint { font-size: 11px; color: var(--text3); margin-top: 4px; line-height: 1.5; }
+
+/* ── PROFIT BRIDGE ── */
+.bridge { background: var(--s2); border: 1px solid var(--border); border-radius: var(--r); padding: 22px; margin-bottom: 24px; }
+.bridge-title { font-family: var(--mono); font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 18px; }
+.bridge-row { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+.bridge-label { font-size: 12.5px; color: var(--text2); width: 200px; flex-shrink: 0; }
+.bridge-bar-wrap { flex: 1; height: 26px; background: var(--s3); border-radius: 4px; overflow: hidden; position: relative; }
+.bridge-bar { height: 100%; border-radius: 4px; display: flex; align-items: center; padding: 0 8px; transition: width 0.5s cubic-bezier(0.4,0,0.2,1); }
+.bridge-bar span { font-family: var(--mono); font-size: 11px; color: rgba(255,255,255,0.9); white-space: nowrap; }
+.bridge-num { font-family: var(--mono); font-size: 12px; width: 80px; text-align: right; flex-shrink: 0; }
+.bridge-sep { border: none; border-top: 1px dashed var(--border); margin: 10px 0; }
+.bridge-row.total .bridge-label { font-weight: 700; color: var(--text); font-size: 13px; }
+.bridge-tag { font-size: 10px; font-family: var(--mono); background: var(--s3); border: 1px solid var(--border); border-radius: 3px; padding: 1px 5px; color: var(--text3); margin-left: 6px; }
+
+/* ── SENSITIVITY MATRIX ── */
+.matrix-wrap { overflow-x: auto; margin-bottom: 24px; }
+.matrix { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+.matrix th { background: var(--s3); color: var(--text2); font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; padding: 10px 14px; text-align: center; border: 1px solid var(--border); font-family: var(--mono); }
+.matrix th.row-head { text-align: left; }
+.matrix td { padding: 10px 14px; border: 1px solid var(--border); text-align: center; vertical-align: middle; color: var(--text); background: var(--s1); }
+.matrix td.row-head { text-align: left; color: var(--text2); background: var(--s2); font-weight: 500; white-space: nowrap; }
+.cell-up { background: rgba(60,212,176,0.15) !important; color: var(--teal) !important; font-family: var(--mono); font-weight: 600; }
+.cell-down { background: rgba(232,96,96,0.15) !important; color: var(--rose) !important; font-family: var(--mono); font-weight: 600; }
+.cell-neutral { background: rgba(96,180,232,0.1) !important; color: var(--sky) !important; font-family: var(--mono); font-weight: 600; }
+.cell-context { font-size: 11px; color: var(--text3); margin-top: 3px; }
+
+/* ── ANALYSIS OF SURPLUS ── */
+.aos-flow { display: flex; flex-direction: column; gap: 0; }
+.aos-row { display: grid; grid-template-columns: 220px 1fr 100px; gap: 12px; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border); }
+.aos-row:last-child { border-bottom: none; padding-top: 12px; border-top: 2px solid var(--border2); }
+.aos-row-label { font-size: 13px; color: var(--text2); }
+.aos-row-label .aos-sub { font-size: 11px; color: var(--text3); margin-top: 2px; font-family: var(--mono); }
+.aos-bar-wrap { height: 22px; background: var(--s3); border-radius: 4px; overflow: hidden; position: relative; }
+.aos-bar { height: 100%; border-radius: 4px; display: flex; align-items: center; padding: 0 8px; }
+.aos-bar span { font-family: var(--mono); font-size: 10px; color: rgba(255,255,255,0.9); }
+.aos-val { font-family: var(--mono); font-size: 13px; text-align: right; font-weight: 600; }
+
+/* ── CONSISTENCY WEB ── */
+.consist-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 24px; }
+@media(max-width:680px) { .consist-grid { grid-template-columns: 1fr 1fr; } }
+.consist-pair { background: var(--s2); border: 1px solid var(--border); border-radius: var(--r); padding: 14px; }
+.consist-pair h4 { font-size: 12px; font-weight: 700; margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
+.consist-pair p { font-size: 12px; color: var(--text2); line-height: 1.6; }
+.consist-pair .arr { color: var(--text3); font-size: 14px; }
+.ca { color: var(--gold); }
+.cb { color: var(--teal); }
+
+/* ── STICKY NAV ── */
+.sticky-nav {
+  position: sticky; top: 0; z-index: 100;
+  background: rgba(9,13,15,0.92);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 8px 20px;
+  display: flex; gap: 4px; overflow-x: auto;
+  margin: 0 -20px 40px;
+}
+.snav-btn { font-family: var(--sans); font-size: 12px; font-weight: 500; color: var(--text3); background: none; border: none; cursor: pointer; padding: 5px 12px; border-radius: 5px; white-space: nowrap; transition: all 0.2s; }
+.snav-btn:hover { color: var(--text); background: var(--s2); }
+.snav-btn.active { color: var(--gold); background: var(--goldbg); border: 1px solid var(--gold2); }
+
+/* ── FORMULA DISPLAY ── */
+.formula-strip { background: var(--s2); border: 1px solid var(--border2); border-radius: var(--r); padding: 22px; margin-bottom: 20px; text-align: center; }
+.fstrip-label { font-family: var(--mono); font-size: 10px; color: var(--text3); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 14px; }
+.fstrip-eq { font-family: var(--serif); font-size: clamp(16px,3vw,24px); color: var(--text); line-height: 1.8; }
+.ft { display: inline-block; padding: 4px 14px; border-radius: 5px; margin: 2px; }
+.ft.ev { background: var(--rosebg); border: 1px solid var(--rose); color: var(--rose); }
+.ft.anw { background: var(--goldbg); border: 1px solid var(--gold2); color: var(--gold); }
+.ft.vif { background: var(--tealbg); border: 1px solid var(--teal); color: var(--teal); }
+.ft.eq { color: var(--text3); padding: 0 8px; background: none; border: none; }
+
+/* ── SEPARATOR ── */
+hr.sep { border: none; border-top: 1px solid var(--border); margin: 36px 0; }
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<!-- HEADER -->
+<div class="hdr">
+  <div class="hdr-pre">SA1ity Check · P5 Valuation &amp; Data · Deep Dive</div>
+  <h1>How <em>Assumptions</em><br>Drive the EV Calculation</h1>
+  <p class="hdr-sub">A complete walkthrough of every assumption that enters the EV calculation, why each one is set differently from pricing and reserving, how the Risk Discount Rate is built up, and how assumption changes feed into the Analysis of EV Movement — using the SA1ity Check source material throughout.</p>
+</div>
+
+<!-- STICKY NAV -->
+<div class="sticky-nav">
+  <button class="snav-btn active" onclick="scrollTo('sec-start')">Overview</button>
+  <button class="snav-btn" onclick="scrollTo('sec-twobasis')">Two Bases</button>
+  <button class="snav-btn" onclick="scrollTo('sec-assumptions')">Each Assumption</button>
+  <button class="snav-btn" onclick="scrollTo('sec-rdr')">The RDR</button>
+  <button class="snav-btn" onclick="scrollTo('sec-profit')">Profit Bridge</button>
+  <button class="snav-btn" onclick="scrollTo('sec-sensitivity')">Sensitivity</button>
+  <button class="snav-btn" onclick="scrollTo('sec-aos')">AoS Movement</button>
+  <button class="snav-btn" onclick="scrollTo('sec-consistency')">Consistency</button>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- SECTION 0: THE BIG PICTURE -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div id="sec-start">
+  <div class="sh"><span class="sh-num">00</span><h2>The <em>Big Picture</em> First</h2><div class="sh-line"></div></div>
+  <p class="sec-intro">Before diving into individual assumptions, you need to fix one idea firmly in your mind. In an EV calculation, assumptions play a <em>fundamentally different role</em> than in pricing or reserving.</p>
+
+  <div class="insight">
+    <div class="insight-tag">Core Principle — from your SA1 material (Ch.12, Section 4.3)</div>
+    <p>In pricing and reserving, risk is captured by <strong>loading the assumptions themselves</strong> (e.g. using a higher morbidity rate than best estimate). In an EV calculation, assumptions are set at <strong>best estimate</strong>, and all the risk is instead captured in a single number: the <strong>Risk Discount Rate (RDR)</strong>. This is the master key to understanding why EV assumptions look the way they do.</p>
+  </div>
+
+  <div class="formula-strip">
+    <div class="fstrip-label">The EV Formula — and where assumptions live</div>
+    <div class="fstrip-eq">
+      <span class="ft ev">EV</span><span class="ft eq">=</span>
+      <span class="ft anw">ANW</span><span class="ft eq">+</span>
+      <span class="ft vif">VIF</span>
+    </div>
+    <div style="margin-top:12px;font-size:13px;color:var(--text2);line-height:1.8;">
+      <strong style="color:var(--gold);">ANW</strong> — uses the <em>supervisory reserving basis</em> to value current reserves. No projection assumptions needed here.<br>
+      <strong style="color:var(--teal);">VIF</strong> — uses the <em>projection basis</em> (best estimate assumptions + RDR) to project future shareholder profits. THIS is where all the assumption action is.
+    </div>
+  </div>
+
+  <div class="callout teal">
+    <div class="callout-tag">From your material — Ch.12 Section 4</div>
+    <p><strong>"The calculation of EV will actually require two different bases: (1) a reserving basis — the supervisory reserving basis, always used regardless of the purpose of the EV; and (2) a projection basis — the insurer may use a different projection basis depending on the purpose for which the EV is being calculated."</strong></p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- SECTION 1: THE TWO BASES -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div id="sec-twobasis">
+  <div class="sh"><span class="sh-num">01</span><h2>The <em>Two Bases</em> Inside Every EV</h2><div class="sh-line"></div></div>
+  <p class="sec-intro">This is the single most confusing thing about EV assumptions, and once you crack it, everything else falls into place. Every EV calculation uses <strong>two completely different sets of assumptions simultaneously</strong>.</p>
+
+  <div class="two-basis">
+    <div class="tb-box res">
+      <span class="tb-tag">Basis 1</span>
+      <h3>Supervisory Reserving Basis</h3>
+      <p>Used to calculate the <strong>current reserves</strong> and the <strong>future change in reserves</strong> year by year.</p>
+      <ul>
+        <li>Always the official IRDAI/regulatory basis</li>
+        <li>Includes prudence margins (MAD)</li>
+        <li>Sets the ANW (assets − reserves − required capital)</li>
+        <li>Also drives how reserves release into profit each future year</li>
+        <li>For Indian insurers: includes ASM ≥ 150% of RSM buffer</li>
+      </ul>
+    </div>
+    <div class="tb-arrow">⟷</div>
+    <div class="tb-box proj">
+      <span class="tb-tag">Basis 2</span>
+      <h3>Projection (EV) Basis</h3>
+      <p>Used to project <strong>future experience</strong> — premiums, claims, expenses, lapses, investment income.</p>
+      <ul>
+        <li>Best estimate assumptions — no prudence margins</li>
+        <li>Risk captured via the Risk Discount Rate</li>
+        <li>Used to project cashflows over remaining policy terms</li>
+        <li>May differ between internal management EV and published EV</li>
+        <li>For M&A: seller uses realistic; buyer uses cautious basis</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="callout rose">
+    <div class="callout-tag">Why does this matter?</div>
+    <p>The shareholder profit in each year = <strong>actual cashflow − increase in supervisory reserves</strong>. So you're taking future cashflows projected on <em>best estimate assumptions</em>, and deducting reserve movements calculated on a <em>prudent supervisory basis</em>. When supervisory reserves are more prudent than best estimate, they build up excess margin — and as those margins are released over time, <strong>hidden profit emerges</strong>. The VIF captures all of this.</p>
+  </div>
+
+  <div class="callout sky">
+    <div class="callout-tag">Indian context — IRDAI regime</div>
+    <p>Under the current Indian supervisory regime, reserves include explicit <strong>Margin for Adverse Deviation (MAD)</strong>. As IRDAI transitions towards Risk-Based Capital (RBC), the reserving basis will move closer to best estimate + explicit risk margin. This will change the split between ANW and VIF — the VIF will capture less hidden prudence margin, but the model will become more transparent. The EV concept becomes <strong>even more important</strong> in an RBC world.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- SECTION 2: EACH ASSUMPTION -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div id="sec-assumptions">
+  <div class="sh"><span class="sh-num">02</span><h2>Every <em>Assumption</em> — Compared Across Three Bases</h2><div class="sh-line"></div></div>
+  <p class="sec-intro">For each assumption, the EV projection basis will differ from pricing and reserving. Click each assumption to see exactly how and why — with Indian health insurer context throughout.</p>
+
+  <div class="acc-list">
+
+    <!-- MORBIDITY -->
+    <div class="acc-item" onclick="toggleAcc(this)">
+      <div class="acc-head">
+        <div class="acc-icon" style="background:#1a2010;border:1px solid var(--lime);color:var(--lime);">M</div>
+        <div class="acc-head-text">
+          <div class="acc-head-title">Morbidity / Claim Incidence Rates</div>
+          <div class="acc-head-subtitle">IP incidence · CI rates · LTCI ADL triggers · PMI frequency — the biggest driver of VIF</div>
+        </div>
+        <div class="acc-arrow">▶</div>
+      </div>
+      <div class="acc-body">
+        <div class="acc-grid">
+          <div class="acc-cell pricing"><h4>Pricing Basis</h4><p>Best estimate <strong>+ explicit margin</strong>. For Indian market where own data is sparse, margin can be substantial. CI: each illness valued separately. IP: incidence by occupation, age, deferred period. Data from reinsurers heavily used.</p></div>
+          <div class="acc-cell reserving"><h4>Supervisory (IRDAI)</h4><p><strong>Prudent / MAD added</strong>. For IP: higher inception rates assumed; lower recovery rates. For CI: no reduction for survival probability (conservative). For LTCI: higher ADL deterioration rates. Indian regime: explicit margin specified or actuarial judgment.</p></div>
+          <div class="acc-cell ev"><h4>EV Projection Basis</h4><p><strong>Best estimate only — no margin.</strong> The actuary's single best view of future claim experience. Any risk from uncertainty is captured in the RDR instead. Must be reviewed regularly as experience emerges.</p></div>
+        </div>
+        <div class="acc-note">
+          <strong>Why it matters for VIF:</strong> Morbidity is the single largest driver of claim costs for health products. A 5% higher morbidity rate reduces annual profit significantly, compounded over the remaining term. For a 15-year IP policy, a 10% morbidity worsening can reduce VIF by 15–25% depending on the RDR. In India, own-data scarcity means the gap between best estimate and prudent morbidity can be large — so the VIF contains substantial "hidden" margin from the reserve basis that emerges as profit.
+        </div>
+      </div>
+    </div>
+
+    <!-- LAPSE -->
+    <div class="acc-item" onclick="toggleAcc(this)">
+      <div class="acc-head">
+        <div class="acc-icon" style="background:#1a1008;border:1px solid var(--gold);color:var(--gold);">L</div>
+        <div class="acc-head-text">
+          <div class="acc-head-title">Lapse / Discontinuance Rates</div>
+          <div class="acc-head-subtitle">Selective withdrawal · early termination · impact on future premium income</div>
+        </div>
+        <div class="acc-arrow">▶</div>
+      </div>
+      <div class="acc-body">
+        <div class="acc-grid">
+          <div class="acc-cell pricing"><h4>Pricing Basis</h4><p>Best estimate + margin. Direction of margin depends on product: for IP, higher lapse means fewer future premiums AND selective withdrawal of healthy lives, leaving sicker pool → prudent to assume lower lapse.</p></div>
+          <div class="acc-cell reserving"><h4>Supervisory (IRDAI)</h4><p>For IP: typically <strong>lower lapse rates</strong> than best estimate (prudent = unhealthy lives stay). For CI: lower lapse = more claims exposure = conservative. Adverse direction varies by product.</p></div>
+          <div class="acc-cell ev"><h4>EV Projection Basis</h4><p><strong>Best estimate lapse rates</strong> from own experience. High lapses reduce VIF by cutting off future premium income. Selective withdrawal risk (healthy lives lapse) is a secondary effect captured in morbidity drift — the RDR should account for this uncertainty.</p></div>
+        </div>
+        <div class="acc-note">
+          <strong>Selective withdrawal problem:</strong> Your material flags: "morbidity &amp; lapse rates — The higher the level of lapses, the greater the opportunity for selective lapsing, where better risks leave, causing the morbidity experience for the business as a whole to deteriorate." In EV, this dynamic interaction is handled through the <em>consistency principle</em> — lapse and morbidity assumptions must be set together, not independently.
+        </div>
+      </div>
+    </div>
+
+    <!-- EXPENSES -->
+    <div class="acc-item" onclick="toggleAcc(this)">
+      <div class="acc-head">
+        <div class="acc-icon" style="background:#080818;border:1px solid var(--lavender);color:var(--lavender);">E</div>
+        <div class="acc-head-text">
+          <div class="acc-head-title">Expenses &amp; Expense Inflation</div>
+          <div class="acc-head-subtitle">Per-policy costs · claims handling · overhead allocation · commission structure</div>
+        </div>
+        <div class="acc-arrow">▶</div>
+      </div>
+      <div class="acc-body">
+        <div class="acc-grid">
+          <div class="acc-cell pricing"><h4>Pricing Basis</h4><p>Best estimate per-policy expenses amortised over expected policy lifetime. Initial expenses spread over renewal years. Commission — higher initial, lower renewal. Volume assumptions affect fixed-cost allocation.</p></div>
+          <div class="acc-cell reserving"><h4>Supervisory (IRDAI)</h4><p>Net premium valuation: <strong>expenses may be excluded entirely</strong> (only benefits valued). Gross premium valuation: best estimate expenses with margin. Future expense inflation added for long-term contracts.</p></div>
+          <div class="acc-cell ev"><h4>EV Projection Basis</h4><p><strong>Best estimate per-policy costs</strong> from expense investigation. No margin. Expense inflation must be consistent with the investment return assumption. Volume assumptions affect fixed-overhead per-policy costs — falling volumes hurt VIF.</p></div>
+        </div>
+        <div class="acc-note">
+          <strong>Key for VIF:</strong> Because EV uses best estimate expenses without margins, the VIF is <em>higher</em> than you might expect from the pricing profit test (which includes expense margins). The difference is one source of "embedded" profit. Expense inflation in India (~6–8% p.a.) must be consistent with the investment return assumption — your material states: "Investment return and inflation — the long-term relationship between expense inflation and rates of return on different types of assets must be consistent."
+        </div>
+      </div>
+    </div>
+
+    <!-- INVESTMENT RETURN & RDR -->
+    <div class="acc-item" onclick="toggleAcc(this)">
+      <div class="acc-head">
+        <div class="acc-icon" style="background:#081420;border:1px solid var(--sky);color:var(--sky);">I</div>
+        <div class="acc-head-text">
+          <div class="acc-head-title">Investment Return &amp; Risk Discount Rate</div>
+          <div class="acc-head-subtitle">The most technically complex assumption — see dedicated section below</div>
+        </div>
+        <div class="acc-arrow">▶</div>
+      </div>
+      <div class="acc-body">
+        <div class="acc-grid">
+          <div class="acc-cell pricing"><h4>Pricing Basis</h4><p>Expected return on assets backing the contract. For IP/CI: mostly fixed interest bonds. Investment return is a <em>minor</em> driver of pricing (premium paid and claims are the main cashflows). Must be consistent with inflation assumptions.</p></div>
+          <div class="acc-cell reserving"><h4>Supervisory (IRDAI)</h4><p>Often a <strong>locked-in or prescribed rate</strong> (passive basis). Under market-consistent approach: risk-free discount rate regardless of actual assets held. For LTCI: very sensitive as cashflows run for decades.</p></div>
+          <div class="acc-cell ev"><h4>EV Projection Basis</h4><p>Two distinct uses: (1) <strong>Asset projection</strong>: expected return on assets backing reserves (used in cashflow projection); (2) <strong>RDR</strong>: risk-free rate + risk premium (used to discount the profit stream). These are different rates — confusing them is a common error.</p></div>
+        </div>
+        <div class="acc-note">
+          <strong>The critical distinction:</strong> Investment income (earned on assets) flows <em>into</em> the numerator as part of the annual profit calculation. The RDR is used in the <em>denominator</em> to discount that profit stream back to today. For PMI, investment income is minimal (short-tail business, not much float). For LTCI, investment income can be the second largest income item after premiums, and it must be consistent with the inflation assumption on care costs.
+        </div>
+      </div>
+    </div>
+
+    <!-- MORTALITY -->
+    <div class="acc-item" onclick="toggleAcc(this)">
+      <div class="acc-head">
+        <div class="acc-icon" style="background:#1a0808;border:1px solid var(--rose);color:var(--rose);">Mo</div>
+        <div class="acc-head-text">
+          <div class="acc-head-title">Mortality &amp; Survival Rates</div>
+          <div class="acc-head-subtitle">Direction of prudence varies by product — this trips candidates in exams</div>
+        </div>
+        <div class="acc-arrow">▶</div>
+      </div>
+      <div class="acc-body">
+        <div class="acc-grid">
+          <div class="acc-cell pricing"><h4>Pricing Basis</h4><p>Separate rates for healthy lives and lives in claim. For CI: survival period assumption affects when (and whether) the lump sum is paid. For LTCI: lower mortality = policyholder in care longer = higher total claim cost.</p></div>
+          <div class="acc-cell reserving"><h4>Supervisory (IRDAI)</h4><p>Prudent direction depends entirely on the product: LTCI prudent = <strong>lower mortality</strong> (claimant lives longer, more care). IP prudent = <strong>lower mortality</strong> (more recovery possible but also longer claim). CI prudent = <strong>higher incidence</strong> more relevant than mortality.</p></div>
+          <div class="acc-cell ev"><h4>EV Projection Basis</h4><p><strong>Best estimate mortality</strong> for the specific product mix. Indian population data from IALM (Indian Assured Lives Mortality) tables adjusted for own experience. Particularly important for LTCI where mortality drives the run-off.</p></div>
+        </div>
+        <div class="acc-note">
+          <strong>Exam trap:</strong> Lower mortality is not always prudent for health insurers. It depends on the product: for LTCI (you're paying benefit <em>while the person is alive and in need of care</em>), lower mortality increases liability. For term assurance or CI, lower mortality means fewer deaths, but CI exposure remains. Always think about which direction of experience change increases the insurer's liability.
+        </div>
+      </div>
+    </div>
+
+    <!-- MEDICAL INFLATION -->
+    <div class="acc-item" onclick="toggleAcc(this)">
+      <div class="acc-head">
+        <div class="acc-icon" style="background:#0a1808;border:1px solid var(--lime);color:var(--lime);">MI</div>
+        <div class="acc-head-text">
+          <div class="acc-head-title">Medical / Benefit Inflation</div>
+          <div class="acc-head-subtitle">India-specific risk: 12–15% p.a. — critical for IP claim amounts and PMI costs</div>
+        </div>
+        <div class="acc-arrow">▶</div>
+      </div>
+      <div class="acc-body">
+        <div class="acc-grid">
+          <div class="acc-cell pricing"><h4>Pricing Basis</h4><p>Explicit assumption, especially for reviewable PMI. Medical inflation in India historically 12–15% p.a. For guaranteed IP benefits (indexed to earnings): must use earnings inflation consistently. Failure to allow for medical inflation is the most common cause of PMI portfolio deterioration in India.</p></div>
+          <div class="acc-cell reserving"><h4>Supervisory (IRDAI)</h4><p>For PMI: shorter tail so less sensitive. For long-term IP benefits that are inflation-linked: <strong>prudent upward revision</strong> to medical inflation assumption. IRDAI requires explicit actuarial certification of reserve adequacy.</p></div>
+          <div class="acc-cell ev"><h4>EV Projection Basis</h4><p><strong>Best estimate medical inflation</strong>. Must be consistent with the investment return assumption (key consistency principle). For IP: affects average claim amount each year. For PMI (not in VIF): affects short-term UPR adequacy only.</p></div>
+        </div>
+        <div class="acc-note">
+          <strong>Indian context:</strong> Medical inflation is the biggest assumption risk for Indian health insurers. If your EV projection basis uses 8% medical inflation but actual experience runs at 14%, the actual profits will be far below VIF projections. This creates large negative "experience variances" in the Analysis of EV Movement. Your material (Pillars &amp; Hooks, P2) flags: "Medical inflation ~12–15% p.a. in India; applying historical trend forward is essential — failure leads to rapid deterioration."
+        </div>
+      </div>
+    </div>
+
+    <!-- TAXATION -->
+    <div class="acc-item" onclick="toggleAcc(this)">
+      <div class="acc-head">
+        <div class="acc-icon" style="background:#0c0810;border:1px solid var(--lavender);color:var(--lavender);">T</div>
+        <div class="acc-head-text">
+          <div class="acc-head-title">Taxation</div>
+          <div class="acc-head-subtitle">Three types — often overlooked, always in the examiner's solution</div>
+        </div>
+        <div class="acc-arrow">▶</div>
+      </div>
+      <div class="acc-body">
+        <div class="acc-grid">
+          <div class="acc-cell pricing"><h4>Pricing Basis</h4><p>Taxes on premiums (GST in India, 18% on health insurance premiums). Taxes on profits (corporate tax). I–E basis (investment income less expenses). Tax timing differences affect profitability.</p></div>
+          <div class="acc-cell reserving"><h4>Supervisory (IRDAI)</h4><p>Tax position affects regulatory surplus. IRDAI may specify how deferred tax assets/liabilities are treated. Premium tax (GST) flows through as part of premium income — must be modelled consistently.</p></div>
+          <div class="acc-cell ev"><h4>EV Projection Basis</h4><p><strong>Best estimate current and future tax position</strong>. VIF is always expressed net of tax. The IAI 1222 solution explicitly states: "The current and likely future tax position of the company must also be allowed for." Tax changes (e.g. GST rate change) would trigger an assumption change in the EV analysis.</p></div>
+        </div>
+        <div class="acc-note">
+          <strong>For exams:</strong> When asked to describe the EV projection assumptions, always include taxation. Candidates frequently omit it. The after-tax shareholder profit must be projected — pre-tax EV would overstate shareholder value. In India, GST at 18% on health premiums is a material item.
+        </div>
+      </div>
+    </div>
+
+    <!-- NEW BUSINESS -->
+    <div class="acc-item" onclick="toggleAcc(this)">
+      <div class="acc-head">
+        <div class="acc-icon" style="background:#100808;border:1px solid var(--rose);color:var(--rose);">NB</div>
+        <div class="acc-head-text">
+          <div class="acc-head-title">New Business — <em>Not</em> in the VIF</div>
+          <div class="acc-head-subtitle">Crucial distinction: EV is in-force only; new business adds to Appraisal Value</div>
+        </div>
+        <div class="acc-arrow">▶</div>
+      </div>
+      <div class="acc-body">
+        <div class="acc-grid">
+          <div class="acc-cell pricing"><h4>Pricing Basis</h4><p>Critical — new business volume and mix assumptions affect fixed-cost allocation per policy. If fewer policies are sold, fixed costs spread over fewer units = higher unit cost = lower profitability.</p></div>
+          <div class="acc-cell reserving"><h4>Supervisory (IRDAI)</h4><p>Generally assumes run-off (no new business). Reserve calculations only cover existing policies. New business strain (extra capital needed for new policies) is separate from reserve adequacy.</p></div>
+          <div class="acc-cell ev"><h4>EV Projection Basis</h4><p><strong>VIF explicitly ignores new business.</strong> Only in-force policies are projected. Volume/mix uncertainty that affected pricing is no longer relevant — actual in-force book is known. This is why your material says: "Part of the uncertainty in pricing (volume/mix) does not exist for EV — actual volumes are known."</p></div>
+        </div>
+        <div class="acc-note">
+          <strong>Appraisal Value:</strong> To include the value of future new business, you move from EV to <strong>Appraisal Value = EV + Value of New Business (VNB)</strong>. VNB is the present value of future new business contributions. This is used in M&A. Your Pillars &amp; Hooks material states: "Appraisal value = EV + multiplier × VNB; used in M&amp;A; multiplier reflects franchise value, growth prospects, and execution risk."
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end acc-list -->
+</div>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- SECTION 3: THE RDR BUILDER -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div id="sec-rdr">
+  <div class="sh"><span class="sh-num">03</span><h2>Building the <em>Risk Discount Rate</em></h2><div class="sh-line"></div></div>
+  <p class="sec-intro">The RDR is the most technically subtle assumption in the EV calculation. It is not a market-observable rate — it is constructed from first principles using CAPM theory plus product-specific adjustments. From your material (Ch.15, Section 3): <em>"Investors will demand a return equal to the risk-free rate plus a risk premium. Such a rate of return is called the risk discount rate."</em></p>
+
+  <div class="rdr-builder">
+    <div class="rdr-title">RDR Build-Up — Interactive (adjust each component)</div>
+    <div class="rdr-stack">
+      <div class="rdr-row">
+        <div class="rdr-label-out">Risk-free rate<br><span style="font-size:10px;color:var(--text3);">India G-sec benchmark</span></div>
+        <div class="rdr-bar rf" id="bar-rf" style="width:60%"><span id="bar-rf-lbl">7.0%</span></div>
+        <div class="rdr-val" id="val-rf">7.0%</div>
+      </div>
+      <div class="rdr-row">
+        <div class="rdr-label-out">Equity risk premium<br><span style="font-size:10px;color:var(--text3);">CAPM — diversified portfolio premium</span></div>
+        <div class="rdr-bar eq" id="bar-eq" style="width:25%"><span id="bar-eq-lbl">3.0%</span></div>
+        <div class="rdr-val" id="val-eq">3.0%</div>
+      </div>
+      <div class="rdr-row">
+        <div class="rdr-label-out">Product-specific premium<br><span style="font-size:10px;color:var(--text3);">Statistical risk of this product</span></div>
+        <div class="rdr-bar ps" id="bar-ps" style="width:20%"><span id="bar-ps-lbl">2.5%</span></div>
+        <div class="rdr-val" id="val-ps">2.5%</div>
+      </div>
+      <div class="rdr-row">
+        <div class="rdr-label-out">Market/model uncertainty<br><span style="font-size:10px;color:var(--text3);">Indian market data scarcity, emerging risks</span></div>
+        <div class="rdr-bar ms" id="bar-ms" style="width:10%"><span id="bar-ms-lbl">1.0%</span></div>
+        <div class="rdr-val" id="val-ms">1.0%</div>
+      </div>
+    </div>
+    <div class="rdr-total">
+      <div class="rdr-total-label">Total Risk Discount Rate</div>
+      <div class="rdr-total-val" id="rdr-total">13.5%</div>
+    </div>
+    <hr style="border:none;border-top:1px solid var(--border);margin:16px 0;">
+    <div class="rdr-sliders">
+      <div class="rdr-sl">
+        <label>Risk-free rate <span id="sv-rf">7.0%</span></label>
+        <input type="range" min="4" max="10" step="0.5" value="7" id="sl-rf" oninput="updateRdr()">
+        <div class="rdr-hint">Indian 10yr G-sec yield. Rise in rates → higher RDR → lower VIF</div>
+      </div>
+      <div class="rdr-sl">
+        <label>Equity risk premium (CAPM) <span id="sv-eq">3.0%</span></label>
+        <input type="range" min="1" max="7" step="0.5" value="3" id="sl-eq" oninput="updateRdr()">
+        <div class="rdr-hint">Shareholders' return over risk-free. Higher for riskier insurers</div>
+      </div>
+      <div class="rdr-sl">
+        <label>Product-specific risk <span id="sv-ps">2.5%</span></label>
+        <input type="range" min="0" max="8" step="0.5" value="2.5" id="sl-ps" oninput="updateRdr()">
+        <div class="rdr-hint">LTCI: high (4–6%). IP: medium (2–4%). CI: medium (2–3%). PMI: N/A</div>
+      </div>
+      <div class="rdr-sl">
+        <label>Market uncertainty premium <span id="sv-ms">1.0%</span></label>
+        <input type="range" min="0" max="4" step="0.5" value="1" id="sl-ms" oninput="updateRdr()">
+        <div class="rdr-hint">Indian market: limited data, emerging products, untested long-term risks</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout sky">
+    <div class="callout-tag">From your material — Ch.15, Section 3.3 (product-specific risk factors)</div>
+    <p>Features that <strong>increase the product-specific RDR premium</strong> (from your SP1 study material):<br>
+    — Lack of historical data on the insured risk<br>
+    — High benefit guarantees or policyholder options (GIOs, reviewability)<br>
+    — Significant overhead cost allocation<br>
+    — Complex benefit design or definitions (e.g. CI illness definitions)<br>
+    — New or untested market (new Indian LTCI market)<br>
+    Features that <strong>reduce the product-specific RDR premium</strong>:<br>
+    — Simple benefit/definitions; well-established market; product is short-term (less long-run uncertainty)</p>
+  </div>
+
+  <div class="callout lav">
+    <div class="callout-tag">The key rule — never forget this</div>
+    <p>From your material: <strong>"The risk discount rate must be higher than the risk-free rate — hence changes in market rates of interest should cause risk discount rates to change."</strong> And: <strong>"The overall return earned on the whole capital of the company, generated from its entire business activities, needs to meet the required rate of return (cost of capital)."</strong> The RDR is not arbitrary — it is derived from the shareholders' opportunity cost of capital.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- SECTION 4: PROFIT BRIDGE -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div id="sec-profit">
+  <div class="sh"><span class="sh-num">04</span><h2>How Assumptions Feed the <em>Annual Profit</em></h2><div class="sh-line"></div></div>
+  <p class="sec-intro">The VIF is the discounted sum of annual shareholder profits. Every assumption feeds into one or more items in the annual profit calculation. Here's exactly where each assumption connects — using a stylised Indian IP policy.</p>
+
+  <div class="bridge">
+    <div class="bridge-title">Annual Shareholder Profit Build-Up — Year t of an IP Policy</div>
+
+    <div class="bridge-row">
+      <div class="bridge-label">+ Gross Premium income <span class="bridge-tag">Pricing/Lapse</span></div>
+      <div class="bridge-bar-wrap"><div class="bridge-bar" style="width:82%;background:linear-gradient(90deg,#0a2010,var(--lime));"><span>+ ₹8,200 p.p.a.</span></div></div>
+      <div class="bridge-num" style="color:var(--lime);">+8,200</div>
+    </div>
+    <div class="bridge-row">
+      <div class="bridge-label">+ Investment income <span class="bridge-tag">Investment Return</span></div>
+      <div class="bridge-bar-wrap"><div class="bridge-bar" style="width:18%;background:linear-gradient(90deg,#081420,var(--sky));"><span>+ ₹1,800</span></div></div>
+      <div class="bridge-num" style="color:var(--sky);">+1,800</div>
+    </div>
+    <div class="bridge-sep"></div>
+    <div class="bridge-row">
+      <div class="bridge-label">− Expected Claims <span class="bridge-tag">Morbidity + Med Inflation</span></div>
+      <div class="bridge-bar-wrap"><div class="bridge-bar" style="width:55%;background:linear-gradient(90deg,#1a0808,var(--rose));"><span>− ₹5,500</span></div></div>
+      <div class="bridge-num" style="color:var(--rose);">−5,500</div>
+    </div>
+    <div class="bridge-row">
+      <div class="bridge-label">− Renewal expenses <span class="bridge-tag">Expense Assumption</span></div>
+      <div class="bridge-bar-wrap"><div class="bridge-bar" style="width:12%;background:linear-gradient(90deg,#120c1e,var(--lavender));"><span>− ₹1,200</span></div></div>
+      <div class="bridge-num" style="color:var(--lavender);">−1,200</div>
+    </div>
+    <div class="bridge-row">
+      <div class="bridge-label">− Reinsurance premium <span class="bridge-tag">RI assumption</span></div>
+      <div class="bridge-bar-wrap"><div class="bridge-bar" style="width:9%;background:linear-gradient(90deg,#1a1008,var(--gold2));"><span>− ₹900</span></div></div>
+      <div class="bridge-num" style="color:var(--gold2);">−900</div>
+    </div>
+    <div class="bridge-sep"></div>
+    <div class="bridge-row">
+      <div class="bridge-label">= Pre-reserve profit</div>
+      <div class="bridge-bar-wrap"><div class="bridge-bar" style="width:24%;background:var(--s3);border:1px dashed var(--border2);"><span style="color:var(--text2);">₹2,400 gross</span></div></div>
+      <div class="bridge-num" style="color:var(--text2);">+2,400</div>
+    </div>
+    <div class="bridge-sep"></div>
+    <div class="bridge-row">
+      <div class="bridge-label">− Increase in reserves <span class="bridge-tag">Supervisory Basis</span></div>
+      <div class="bridge-bar-wrap"><div class="bridge-bar" style="width:16%;background:linear-gradient(90deg,#1a1008,var(--gold));"><span>− ₹1,600</span></div></div>
+      <div class="bridge-num" style="color:var(--gold);">−1,600</div>
+    </div>
+    <div class="bridge-sep"></div>
+    <div class="bridge-row">
+      <div class="bridge-label">= Pre-tax shareholder profit</div>
+      <div class="bridge-bar-wrap"><div class="bridge-bar" style="width:8%;background:linear-gradient(90deg,#0a1808,var(--teal));"><span>₹800</span></div></div>
+      <div class="bridge-num" style="color:var(--teal);">+800</div>
+    </div>
+    <div class="bridge-row">
+      <div class="bridge-label">− Tax <span class="bridge-tag">Tax Assumption</span></div>
+      <div class="bridge-bar-wrap"><div class="bridge-bar" style="width:6%;background:linear-gradient(90deg,#100808,var(--rose));"><span>− ₹200</span></div></div>
+      <div class="bridge-num" style="color:var(--rose);">−200</div>
+    </div>
+    <div class="bridge-row total">
+      <div class="bridge-label">= After-tax shareholder profit → discounted at RDR</div>
+      <div class="bridge-bar-wrap"><div class="bridge-bar" style="width:6%;background:linear-gradient(90deg,var(--gold2),var(--gold));"><span>₹600</span></div></div>
+      <div class="bridge-num" style="color:var(--gold);font-size:15px;">+600</div>
+    </div>
+  </div>
+
+  <div class="callout teal">
+    <div class="callout-tag">The reserve interaction — the most confusing part</div>
+    <p>Notice that the <strong>"Increase in reserves"</strong> row uses the <em>supervisory reserving basis</em> (prudent assumptions), while all the cashflows above it use the <em>projection basis</em> (best estimate). In Year 1, reserves build rapidly (high initial reserve strain), reducing profit. In later years, as the policy matures, reserves release back — increasing profit. The <strong>VIF captures the sum of all these future profits discounted at the RDR</strong>. The excess of the supervisory reserve over the best estimate reserve creates an implicit margin — which slowly "unlocks" as profit over the policy term.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- SECTION 5: SENSITIVITY MATRIX -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div id="sec-sensitivity">
+  <div class="sh"><span class="sh-num">05</span><h2>Assumption <em>Sensitivity</em> on VIF</h2><div class="sh-line"></div></div>
+  <p class="sec-intro">Not all assumptions are equally important. The relative sensitivity of VIF to each assumption varies significantly by product type. This matters for both the exam and for understanding which assumptions the Appointed Actuary should spend most time on.</p>
+
+  <div class="matrix-wrap">
+    <table class="matrix">
+      <thead>
+        <tr>
+          <th class="row-head">Assumption Change</th>
+          <th>Income Protection (IP)</th>
+          <th>Critical Illness (CI)</th>
+          <th>Long-Term Care (LTCI)</th>
+          <th>PMI / HCP</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="row-head">Morbidity +10%</td>
+          <td class="cell-down">−15 to −25% VIF<div class="cell-context">Claims persist for years — major impact</div></td>
+          <td class="cell-down">−10 to −20% VIF<div class="cell-context">Lump sum, so one-off but significant</div></td>
+          <td class="cell-down">−20 to −35% VIF<div class="cell-context">Higher ADL rates → much more care time</div></td>
+          <td class="cell-neutral">Not in VIF<div class="cell-context">Affects UPR & next year's pricing only</div></td>
+        </tr>
+        <tr>
+          <td class="row-head">RDR +2%</td>
+          <td class="cell-down">−12 to −20% VIF<div class="cell-context">Long-duration cashflows, very sensitive</div></td>
+          <td class="cell-down">−8 to −15% VIF<div class="cell-context">Moderate duration, medium sensitivity</div></td>
+          <td class="cell-down">−20 to −35% VIF<div class="cell-context">Longest duration of all — highest sensitivity</div></td>
+          <td class="cell-neutral">Not in VIF<div class="cell-context">N/A</div></td>
+        </tr>
+        <tr>
+          <td class="row-head">Lapse rate +5%</td>
+          <td class="cell-down">−8 to −15% VIF<div class="cell-context">Premium income lost + selective withdrawal risk</div></td>
+          <td class="cell-down">−5 to −10% VIF<div class="cell-context">Future premiums lost</div></td>
+          <td class="cell-down">−5 to −12% VIF<div class="cell-context">Can be complex if lapse = healthy lives exiting</div></td>
+          <td class="cell-neutral">Not in VIF<div class="cell-context">Affects non-renewal economics only</div></td>
+        </tr>
+        <tr>
+          <td class="row-head">Medical inflation +3%</td>
+          <td class="cell-down">−5 to −12% VIF<div class="cell-context">IP: benefit often inflation-linked</div></td>
+          <td class="cell-neutral">Minimal<div class="cell-context">CI is a fixed lump sum — not indexed</div></td>
+          <td class="cell-down">−10 to −20% VIF<div class="cell-context">Care costs rise with medical/care inflation</div></td>
+          <td class="cell-neutral">Not in VIF<div class="cell-context">Hits PMI pricing renewal but not VIF</div></td>
+        </tr>
+        <tr>
+          <td class="row-head">Expenses +10%</td>
+          <td class="cell-down">−3 to −6% VIF<div class="cell-context">Renewal expenses, ongoing admin</div></td>
+          <td class="cell-down">−2 to −5% VIF<div class="cell-context">Expenses smaller relative to claim sums</div></td>
+          <td class="cell-down">−4 to −8% VIF<div class="cell-context">Admin for complex ongoing claims</div></td>
+          <td class="cell-neutral">Not in VIF</td>
+        </tr>
+        <tr>
+          <td class="row-head">Mortality +10% (all-cause)</td>
+          <td class="cell-up">+2 to +4% VIF<div class="cell-context">Higher mortality → fewer policyholders in claim</div></td>
+          <td class="cell-up">Slightly positive<div class="cell-context">Fewer surviving to claim; but complex</div></td>
+          <td class="cell-up">+5 to +12% VIF<div class="cell-context">Higher mortality → shorter care periods</div></td>
+          <td class="cell-neutral">Not in VIF</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="callout rose">
+    <div class="callout-tag">Exam insight — what the Appointed Actuary focuses on</div>
+    <p>Your material states: <strong>"Take particular care over the assumptions that will have the most financial significance."</strong> From the matrix above, for an Indian health insurer: (1) <strong>Morbidity</strong> and (2) <strong>RDR</strong> are the two dominant drivers of VIF for all long-term products. For LTCI specifically, the RDR and medical/care inflation assumptions are <em>extremely</em> sensitive given the long cashflow duration. This is also why LTCI is rarely written in India — the actuarial uncertainty is very high.</p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- SECTION 6: ANALYSIS OF SURPLUS -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div id="sec-aos">
+  <div class="sh"><span class="sh-num">06</span><h2>Assumption Changes in the <em>Analysis of EV Movement</em></h2><div class="sh-line"></div></div>
+  <p class="sec-intro">This is how assumptions connect to the annual EV reporting. From your IAI 03/22 exam question: <em>"Write down the heads under which the analysis of EV movement should be presented."</em> — each head links directly to a specific type of assumption change.</p>
+
+  <div class="bridge">
+    <div class="bridge-title">Analysis of EV Movement — Year-on-Year (₹ Cr, illustrative)</div>
+
+    <div class="aos-flow">
+      <div class="bridge-row">
+        <div class="bridge-label" style="font-weight:700;color:var(--text);">Opening EV</div>
+        <div class="bridge-bar-wrap"><div class="bridge-bar" style="width:100%;background:var(--s3);border:1px solid var(--border2);justify-content:flex-start;padding-left:10px;"><span style="color:var(--text2);">₹580 Cr</span></div></div>
+        <div class="bridge-num" style="color:var(--text);">580</div>
+      </div>
+
+      <div class="bridge-row">
+        <div class="bridge-label">+ Expected unwind of discount <span class="bridge-tag">RDR assumption</span></div>
+        <div class="bridge-bar-wrap"><div class="bridge-bar" style="width:13%;background:linear-gradient(90deg,#081420,var(--sky));"><span>+75</span></div></div>
+        <div class="bridge-num" style="color:var(--sky);">+75</div>
+      </div>
+      <div style="font-size:11px;color:var(--text3);padding:2px 0 8px 200px;">VIF grows naturally each year as future profits move one year closer. This = Opening VIF × RDR. If actual EV growth < this, value has been destroyed.</div>
+
+      <div class="bridge-row">
+        <div class="bridge-label">+ New business contribution <span class="bridge-tag">New business</span></div>
+        <div class="bridge-bar-wrap"><div class="bridge-bar" style="width:7%;background:linear-gradient(90deg,#0a2010,var(--lime));"><span>+40</span></div></div>
+        <div class="bridge-num" style="color:var(--lime);">+40</div>
+      </div>
+      <div style="font-size:11px;color:var(--text3);padding:2px 0 8px 200px;">Value added by new policies written this year, net of acquisition costs. Can be negative if initial expenses dominate.</div>
+
+      <div class="bridge-row">
+        <div class="bridge-label">± Experience variances <span class="bridge-tag">All demographic &amp; financial assumptions</span></div>
+        <div class="bridge-bar-wrap"><div class="bridge-bar" style="width:10%;background:linear-gradient(90deg,#1a0808,var(--rose));"><span>−55</span></div></div>
+        <div class="bridge-num" style="color:var(--rose);">−55</div>
+      </div>
+      <div style="font-size:11px;color:var(--text3);padding:2px 0 8px 200px;">Actual experience (claims, lapses, expenses, investment) vs assumed best estimate. Negative here = morbidity worse than expected (medical inflation impact). This is your feedback loop.</div>
+
+      <div class="bridge-row">
+        <div class="bridge-label">± Operating assumption changes <span class="bridge-tag">Revised best estimates</span></div>
+        <div class="bridge-bar-wrap"><div class="bridge-bar" style="width:8%;background:linear-gradient(90deg,#1a0808,var(--rose));"><span>−45</span></div></div>
+        <div class="bridge-num" style="color:var(--rose);">−45</div>
+      </div>
+      <div style="font-size:11px;color:var(--text3);padding:2px 0 8px 200px;">The actuary has revised best estimate morbidity assumption upward (medical inflation running hotter than assumed). This immediately reduces VIF because future profits are now expected to be lower. This is the most direct link between assumption-setting and EV reporting.</div>
+
+      <div class="bridge-row">
+        <div class="bridge-label">± Economic assumption changes <span class="bridge-tag">RDR / risk-free rate</span></div>
+        <div class="bridge-bar-wrap"><div class="bridge-bar" style="width:4%;background:linear-gradient(90deg,#1a0808,var(--rose));"><span>−20</span></div></div>
+        <div class="bridge-num" style="color:var(--rose);">−20</div>
+      </div>
+      <div style="font-size:11px;color:var(--text3);padding:2px 0 8px 200px;">RDR has been revised upward due to rising Indian G-sec yields (+50bps). This reduces the PV of future profits — a direct economic assumption change to VIF.</div>
+
+      <div class="bridge-row">
+        <div class="bridge-label">± Capital flows / other</div>
+        <div class="bridge-bar-wrap"><div class="bridge-bar" style="width:3%;background:linear-gradient(90deg,#0a1808,var(--teal));"><span>+15</span></div></div>
+        <div class="bridge-num" style="color:var(--teal);">+15</div>
+      </div>
+
+      <div class="bridge-row total" style="margin-top:8px;">
+        <div class="bridge-label">= Closing EV</div>
+        <div class="bridge-bar-wrap"><div class="bridge-bar" style="width:100%;background:var(--s3);border:1px solid var(--border2);justify-content:flex-start;padding-left:10px;"><span style="color:var(--gold);">₹590 Cr (+₹10 Cr, +1.7%)</span></div></div>
+        <div class="bridge-num" style="color:var(--gold);">590</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="callout lime">
+    <div class="callout-tag">Key insight for exams</div>
+    <p><strong>"Operating assumption changes"</strong> in the AoS is where the actuary's annual assumption-setting review directly hits reported EV. If you update your morbidity assumption because experience investigations showed claims are worse than best estimate, the VIF drops immediately — you must book this as an assumption change in the AoS. This is why the monitoring and assumption-review cycle (P5 control cycle) is directly linked to EV reporting. Your material (Pillars &amp; Hooks, P5): <strong>"Actuarial control cycle: assumptions → model → results → experience analysis → revised assumptions; board-reported."</strong></p>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════ -->
+<!-- SECTION 7: CONSISTENCY PAIRS -->
+<!-- ══════════════════════════════════════════════════════════ -->
+<div id="sec-consistency">
+  <div class="sh"><span class="sh-num">07</span><h2>The <em>Consistency</em> Principle</h2><div class="sh-line"></div></div>
+  <p class="sec-intro">From your material: <em>"Assumptions must be considered in their totality, not in isolation. Key correlated pairs include..."</em> In an EV calculation, inconsistent assumptions can produce a result that is internally contradictory — and an examiner will spot this instantly.</p>
+
+  <div class="consist-grid">
+    <div class="consist-pair">
+      <h4><span class="ca">Morbidity</span> <span class="arr">⟷</span> <span class="cb">Lapse Rates</span></h4>
+      <p>Higher lapses → selective withdrawal of healthy lives → remaining pool is sicker → morbidity rate rises. If you assume high lapses but low morbidity, your VIF is overstated. They must move together in the same direction.</p>
+    </div>
+    <div class="consist-pair">
+      <h4><span class="ca">Investment Return</span> <span class="arr">⟷</span> <span class="cb">Inflation</span></h4>
+      <p>In India, if you assume 8% investment return, you cannot also assume only 4% medical inflation — real economic relationships imply they move together. Fisher equation: nominal return ≈ real return + inflation. Inconsistency overstates net profit.</p>
+    </div>
+    <div class="consist-pair">
+      <h4><span class="ca">Morbidity</span> <span class="arr">⟷</span> <span class="cb">Claims Expenses</span></h4>
+      <p>Higher claim volume → more claims admin expense. You cannot assume claims spike without also assuming claims handling costs rise proportionally. Per-claim expense assumption and incidence rate must be consistent.</p>
+    </div>
+    <div class="consist-pair">
+      <h4><span class="ca">Investment Return</span> <span class="arr">⟷</span> <span class="cb">RDR</span></h4>
+      <p>The RDR must be higher than the investment return assumed on risk assets. If projected investment return > RDR, you are assuming the business earns more than shareholders require — which may be temporarily true but not sustainable as a long-term assumption.</p>
+    </div>
+    <div class="consist-pair">
+      <h4><span class="ca">New Business Volume</span> <span class="arr">⟷</span> <span class="cb">Fixed Expenses</span></h4>
+      <p>Fixed overheads are allocated per-policy based on assumed volume. If volume falls (e.g. from higher lapses), per-policy fixed cost rises, reducing VIF. This is why EV is sensitive to persistency — not just from lost premiums but from expense spiral.</p>
+    </div>
+    <div class="consist-pair">
+      <h4><span class="ca">Morbidity</span> <span class="arr">⟷</span> <span class="cb">Investment Return</span></h4>
+      <p>Economic downturns affect both. In recessions: unemployment rises → IP claims spike AND investment returns fall simultaneously. A stressed EV scenario must shock both together, not in isolation. This is the tail-risk the RDR premium is partly pricing.</p>
+    </div>
+  </div>
+
+  <div class="callout teal">
+    <div class="callout-tag">Exam technique — the consistency trap</div>
+    <p>In any question asking you to "comment on the EV basis" or "identify weaknesses in the EV calculation", <strong>always check internal consistency of assumptions</strong>. Examiners frequently set up a scenario where, say, a high investment return is assumed alongside low inflation, or where morbidity and lapse assumptions are inconsistent. Spotting this and explaining <em>why</em> the inconsistency overstates or understates the VIF is a high-value technique.</p>
+  </div>
+
+  <hr class="sep">
+
+  <div class="callout sky">
+    <div class="callout-tag">Summary — what you now know</div>
+    <p>
+    1. EV requires <strong>two simultaneous bases</strong>: supervisory (for reserves) and projection (for experience). <br>
+    2. The projection basis uses <strong>best estimate assumptions — no margins</strong>. Risk lives entirely in the RDR. <br>
+    3. The <strong>RDR</strong> is built from: risk-free rate + CAPM equity risk premium + product-specific statistical risk premium. <br>
+    4. Every assumption (morbidity, lapse, expenses, investment, inflation, mortality, tax) feeds into the annual profit calculation that gets discounted to form VIF. <br>
+    5. When best estimate assumptions are <strong>revised</strong>, the change in VIF appears as "operating assumption changes" in the Analysis of EV Movement. <br>
+    6. <strong>Consistency</strong> between assumptions is non-negotiable — morbidity, lapses, expenses, investment return and inflation all interact. <br>
+    7. For <strong>short-term products</strong> (PMI, HCP), there is no VIF — assumptions only affect the ANW through current reserve adequacy.
+    </p>
+  </div>
+</div>
+
+</div><!-- wrap -->
+
+<script>
+function scrollTo(id) {
+  document.getElementById(id).scrollIntoView({behavior:'smooth', block:'start'});
+  document.querySelectorAll('.snav-btn').forEach(b => b.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+}
+
+function toggleAcc(el) {
+  el.classList.toggle('open');
+}
+
+function updateRdr() {
+  const rf = +document.getElementById('sl-rf').value;
+  const eq = +document.getElementById('sl-eq').value;
+  const ps = +document.getElementById('sl-ps').value;
+  const ms = +document.getElementById('sl-ms').value;
+  const total = rf + eq + ps + ms;
+
+  document.getElementById('sv-rf').textContent = rf.toFixed(1) + '%';
+  document.getElementById('sv-eq').textContent = eq.toFixed(1) + '%';
+  document.getElementById('sv-ps').textContent = ps.toFixed(1) + '%';
+  document.getElementById('sv-ms').textContent = ms.toFixed(1) + '%';
+
+  document.getElementById('val-rf').textContent = rf.toFixed(1) + '%';
+  document.getElementById('val-eq').textContent = eq.toFixed(1) + '%';
+  document.getElementById('val-ps').textContent = ps.toFixed(1) + '%';
+  document.getElementById('val-ms').textContent = ms.toFixed(1) + '%';
+
+  document.getElementById('bar-rf-lbl').textContent = rf.toFixed(1) + '%';
+  document.getElementById('bar-eq-lbl').textContent = eq.toFixed(1) + '%';
+  document.getElementById('bar-ps-lbl').textContent = ps.toFixed(1) + '%';
+  document.getElementById('bar-ms-lbl').textContent = ms.toFixed(1) + '%';
+
+  const maxW = 10; // 10% = 100% width
+  document.getElementById('bar-rf').style.width = Math.min(rf/maxW*100, 100) + '%';
+  document.getElementById('bar-eq').style.width = Math.min(eq/maxW*100, 100) + '%';
+  document.getElementById('bar-ps').style.width = Math.min(ps/maxW*100, 100) + '%';
+  document.getElementById('bar-ms').style.width = Math.min(ms/maxW*100, 100) + '%';
+
+  document.getElementById('rdr-total').textContent = total.toFixed(1) + '%';
+
+  // Colour based on level
+  const el = document.getElementById('rdr-total');
+  if (total < 10) el.style.color = 'var(--teal)';
+  else if (total < 14) el.style.color = 'var(--gold)';
+  else el.style.color = 'var(--rose)';
+}
+
+// Scroll tracking
+window.addEventListener('scroll', () => {
+  const sections = ['sec-start','sec-twobasis','sec-assumptions','sec-rdr','sec-profit','sec-sensitivity','sec-aos','sec-consistency'];
+  const btns = ['Overview','Two Bases','Each Assumption','The RDR','Profit Bridge','Sensitivity','AoS Movement','Consistency'];
+  let active = 0;
+  sections.forEach((id, i) => {
+    const el = document.getElementById(id);
+    if (el && el.getBoundingClientRect().top < 120) active = i;
+  });
+  document.querySelectorAll('.snav-btn').forEach((b,i) => b.classList.toggle('active', i === active));
+});
+</script>
+</body>
+</html>
