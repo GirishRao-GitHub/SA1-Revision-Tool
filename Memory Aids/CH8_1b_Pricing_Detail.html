@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pricing (Ch.17–20) — Consolidated Study Matrix</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink:    #0f1117;
+    --paper:  #f5f0e8;
+    --cream:  #ede7d6;
+    --accent: #c0392b;
+    --accent-text: #a83226;
+    --gold:   #b8860b;
+    --gold-text: #7a5c00;
+    --blue:   #1a3a5c;
+    --green:  #1e5f3f;
+    --purple: #5c3d7a;
+    --muted:  #6b6560;
+    --rule:   #c8bfaf;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--paper); color:var(--ink); font-family:'IBM Plex Sans',sans-serif; font-size:12.5px; line-height:1.5; padding:28px 22px; max-width:1140px; margin:0 auto; }
+
+  /* MASTHEAD */
+  .masthead { border-top:4px solid var(--ink); border-bottom:2px solid var(--ink); padding:12px 0 10px; margin-bottom:22px; display:flex; align-items:baseline; gap:16px; }
+  .masthead-title { font-family:'Playfair Display',serif; font-size:26px; font-weight:900; flex:1; }
+  .masthead-sub { font-family:'IBM Plex Mono',monospace; font-size:9.5px; color:var(--muted); text-transform:uppercase; letter-spacing:1.5px; }
+  .masthead-tag { font-family:'IBM Plex Mono',monospace; font-size:9.5px; background:var(--accent); color:#fff; padding:3px 8px; letter-spacing:1px; }
+
+  /* SECTION LABEL */
+  .sl { font-family:'IBM Plex Mono',monospace; font-size:9px; text-transform:uppercase; letter-spacing:2px; color:var(--muted); margin-bottom:5px; border-left:3px solid var(--accent); padding-left:7px; }
+  .sl.b { border-color:var(--blue); }
+  .sl.g { border-color:var(--green); }
+  .sl.p { border-color:var(--purple); }
+
+  /* GRIDS */
+  .g3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px; margin-bottom:18px; }
+  .g2 { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:18px; }
+  .g4 { display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:14px; margin-bottom:18px; }
+
+  /* CARD */
+  .card { background:var(--cream); border:1px solid var(--rule); padding:12px 14px; }
+  .ct { font-family:'Playfair Display',serif; font-size:13.5px; font-weight:700; margin-bottom:8px; padding-bottom:5px; border-bottom:1px solid var(--rule); }
+  .ct.r { color:var(--accent-text); }
+  .ct.b { color:var(--blue); }
+  .ct.g { color:var(--green); }
+  .ct.p { color:var(--purple); }
+  .ct.gold { color:var(--gold-text); }
+
+  /* PLAIN LIST */
+  .pl { list-style:none; display:flex; flex-direction:column; gap:4px; }
+  .pl li { background:white; border-left:3px solid var(--rule); padding:4px 7px; font-size:11.5px; line-height:1.4; }
+  .pl li.r { border-left-color:var(--accent); }
+  .pl li.b { border-left-color:var(--blue); }
+  .pl li.g { border-left-color:var(--green); }
+  .pl li.p { border-left-color:var(--purple); }
+  .pl li.gold { border-left-color:var(--gold); }
+
+  /* FULL-WIDTH CARD */
+  .fw-card { background:var(--cream); border:1px solid var(--rule); padding:12px 14px; margin-bottom:18px; }
+
+  /* MATRIX TABLE */
+  table.mx { width:100%; border-collapse:collapse; font-size:11px; margin-bottom:18px; }
+  table.mx thead th { background:var(--ink); color:var(--paper); font-family:'IBM Plex Mono',monospace; font-size:9.5px; text-transform:uppercase; letter-spacing:.8px; padding:7px 9px; text-align:left; border-right:1px solid #2a2d38; }
+  table.mx thead th:first-child { background:var(--accent); width:110px; }
+  table.mx thead th.b { background:var(--blue); }
+  table.mx thead th.g { background:var(--green); }
+  table.mx thead th.p { background:var(--purple); }
+  table.mx tbody tr:nth-child(even) { background:var(--cream); }
+  table.mx tbody tr:nth-child(odd)  { background:white; }
+  table.mx tbody td { padding:7px 9px; border:1px solid var(--rule); vertical-align:top; line-height:1.4; font-size:11.5px; }
+  table.mx tbody td:first-child { font-family:'IBM Plex Mono',monospace; font-size:10px; font-weight:600; background:#e8e2d4; border-right:2px solid var(--ink); }
+
+  /* CHAPTER HEADER BAR */
+  .ch-bar { color:white; padding:10px 16px; margin-bottom:14px; display:flex; align-items:center; gap:14px; }
+  .ch-bar.r { background:var(--accent); }
+  .ch-bar.b { background:var(--blue); }
+  .ch-bar.g { background:var(--green); }
+  .ch-bar.p { background:var(--purple); }
+  .ch-bar-num { font-family:'Playfair Display',serif; font-size:30px; font-weight:900; line-height:1; opacity:.6; }
+  .ch-bar-title { font-family:'Playfair Display',serif; font-size:18px; font-weight:700; flex:1; }
+  .ch-bar-tag { font-family:'IBM Plex Mono',monospace; font-size:9px; text-transform:uppercase; letter-spacing:1px; opacity:.8; border:1px solid rgba(255,255,255,.4); padding:2px 8px; white-space:nowrap; }
+
+  /* FORMULA BOX */
+  .formula-box { background:#0f1117; color:#f5f0e8; padding:10px 14px; font-family:'IBM Plex Mono',monospace; font-size:11px; margin-bottom:7px; border-left:4px solid; }
+  .formula-box.r { border-color:var(--accent); }
+  .formula-box.b { border-color:#5a9fd4; }
+  .formula-box.g { border-color:#6fcf97; }
+  .formula-box.p { border-color:#bb9fd4; }
+  .formula-label { font-size:8.5px; text-transform:uppercase; letter-spacing:1.2px; opacity:.6; margin-bottom:4px; }
+  .formula-expr { font-size:12.5px; color:#fff; font-weight:600; margin:4px 0; }
+
+  /* HIGHLIGHT BOX */
+  .hbox { border-left:4px solid; padding:8px 12px; margin-bottom:7px; font-size:11.5px; line-height:1.4; background:white; }
+  .hbox.r { border-color:var(--accent); }
+  .hbox.b { border-color:var(--blue); }
+  .hbox.g { border-color:var(--green); }
+  .hbox.p { border-color:var(--purple); }
+  .hbox.gold { border-color:var(--gold); background:#fffbf0; }
+
+  /* FACTOR PILLS */
+  .factor-bar { background:var(--ink); color:var(--paper); padding:10px 16px; display:flex; gap:14px; align-items:flex-start; margin-bottom:14px; }
+  .factor-label { font-family:'Playfair Display',serif; font-size:13px; font-weight:700; white-space:nowrap; flex-shrink:0; margin-top:2px; }
+  .factor-pills { display:flex; flex-wrap:wrap; gap:5px; }
+  .fp { background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.25); padding:3px 9px; font-size:10.5px; font-family:'IBM Plex Mono',monospace; }
+  .fp.r { background:var(--accent); border-color:var(--accent); }
+  .fp.b { background:var(--blue); border-color:var(--blue); }
+  .fp.g { background:var(--green); border-color:var(--green); }
+  .fp.p { background:var(--purple); border-color:var(--purple); }
+
+  /* COMPARE GRID */
+  .cmp-header { display:grid; grid-template-columns:100px 1fr 1fr; background:var(--ink); color:var(--paper); font-family:'IBM Plex Mono',monospace; font-size:9.5px; text-transform:uppercase; letter-spacing:.7px; margin-bottom:1px; }
+  .cmp-header div { padding:7px 10px; border-right:1px solid rgba(255,255,255,.15); }
+  .cmp-row { display:grid; grid-template-columns:100px 1fr 1fr; border-bottom:1px solid var(--rule); }
+  .cmp-row:nth-child(even) { background:var(--cream); }
+  .cmp-row:nth-child(odd) { background:white; }
+  .cmp-row div { padding:6px 10px; font-size:11.5px; border-right:1px solid var(--rule); line-height:1.4; }
+  .cmp-row div:first-child { font-family:'IBM Plex Mono',monospace; font-size:10px; font-weight:600; background:#e8e2d4; border-right:2px solid var(--ink); }
+  .cmp-wrap { margin-bottom:18px; }
+
+  /* PROFIT CRITERIA LAYOUT */
+  .pc-wrap { background:var(--cream); border:1px solid var(--rule); padding:12px 14px; margin-bottom:18px; }
+  .pc-header { display:grid; grid-template-columns:90px 1fr 1fr 1fr; background:var(--ink); color:var(--paper); font-family:'IBM Plex Mono',monospace; font-size:9px; text-transform:uppercase; letter-spacing:.7px; }
+  .pc-header div { padding:6px 9px; border-right:1px solid rgba(255,255,255,.15); }
+  .pc-header div:nth-child(2) { background:var(--green); }
+  .pc-header div:nth-child(3) { background:var(--gold); }
+  .pc-header div:nth-child(4) { background:var(--muted); }
+  .pc-row { display:grid; grid-template-columns:90px 1fr 1fr 1fr; border-bottom:1px solid var(--rule); }
+  .pc-row:nth-child(even) { background:var(--cream); }
+  .pc-row:nth-child(odd) { background:white; }
+  .pc-row div { padding:6px 9px; font-size:11.5px; border-right:1px solid var(--rule); line-height:1.4; }
+  .pc-row div:first-child { font-family:'IBM Plex Mono',monospace; font-size:10px; font-weight:600; background:#e8e2d4; border-right:2px solid var(--ink); }
+
+  /* FOOTER */
+  .footer { border-top:1px solid var(--rule); padding-top:8px; margin-top:20px; font-family:'IBM Plex Mono',monospace; font-size:9px; color:var(--muted); display:flex; justify-content:space-between; }
+</style>
+</head>
+<body>
+
+<!-- MASTHEAD -->
+<div class="masthead">
+  <div class="masthead-title">Pricing — Chapters 17 to 20</div>
+  <span class="masthead-sub">SP1 Ch.17–20 · IFE 2019 · Syllabus Obj. 4.1, 4.2</span>
+  <span class="masthead-tag">PRICING — CONSOLIDATED STUDY MATRIX</span>
+</div>
+
+<!-- ════════════════════════════════════════════════════════ -->
+<!-- CHAPTER 17 -->
+<!-- ════════════════════════════════════════════════════════ -->
+<div class="ch-bar r">
+  <div class="ch-bar-num">①</div>
+  <div class="ch-bar-title">CH17 — Pricing (1): Individual Business</div>
+  <div class="ch-bar-tag">IP · CI · LTCI · PMI · A&amp;S · Cash Plans</div>
+</div>
+
+<!-- IP Approaches -->
+<div class="sl">Income Protection — Two Pricing Approaches</div>
+<div class="g2">
+  <div class="card">
+    <div class="ct r">Approach 1: Inception / Disabled Life Annuity</div>
+    <ul class="pl">
+      <li class="r"><strong>What it ignores:</strong> recoveries (or treats death = recovery); no subsequent re-sickness modelling</li>
+      <li class="r"><strong>Claim inception rate (i_x^d):</strong> P(claim commences in year [x, x+1]) — i.e. after surviving deferred period. NOT the same as sickness inception rate.</li>
+      <li><strong>Sickness vs claim inception:</strong> equal only when deferred period = zero. Claim inception = sickness inception × P(staying sick through deferred period).</li>
+      <li class="r"><strong>Disabled life annuity:</strong> EPV at date of claim inception of all future benefit payments, allowing for death, recovery, benefit escalation and interest up to policy expiry.</li>
+    </ul>
+    <div class="formula-box r" style="margin-top:8px;">
+      <div class="formula-label">EPV of claims incepting in year t</div>
+      <div class="formula-expr">EPV = (1)·(2)·(3)·(4)·(5)</div>
+      <div style="font-size:10.5px;margin-top:5px;opacity:.85;">(1) Survival prob (eligible to claim) · (2) Claim inception rate · (3) Disabled life annuity · (4) Discount factor · (5) Annual benefit amount</div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="ct r">Approach 2: Multi-State Modelling</div>
+    <ul class="pl">
+      <li class="r">More general: tracks policyholder through <strong>all states</strong> simultaneously</li>
+      <li class="r"><strong>States tracked:</strong> Healthy premium payer → Sick (in deferred period) → Claimant → Recovered → Dead</li>
+      <li>Each sub-cohort has own transition probabilities (sickness inception, lapse, mortality, recovery, expiry)</li>
+      <li>Rates can vary by duration within state and number of previous sick spells</li>
+      <li class="r"><strong>Practical constraint:</strong> data volume may not justify full sophistication — sub-cohorts combined in practice</li>
+    </ul>
+    <div class="hbox r" style="margin-top:8px;">Inception/annuity is a simplification of multi-state. Both methods are used; multi-state is theoretically superior but more data-intensive.</div>
+  </div>
+</div>
+
+<!-- CI -->
+<div class="sl">Critical Illness — Formulae</div>
+<div class="g2">
+  <div class="card">
+    <div class="ct r">Stand-Alone CI</div>
+    <ul class="pl">
+      <li class="r">Overall CI incidence: <strong>i_x = i_x^hd + i_x^s + i_x^c + i_x^o</strong></li>
+      <li>Overlaps (same person has two CI conditions): allow for explicitly if using population medical records; automatically handled if from claims data (each claim attributed to one cause)</li>
+      <li class="r">Claim incidence = i_x × P(surviving the survival period)</li>
+      <li>Over-counting overlaps → over-estimates claim rates → uncompetitive pricing (but less dangerous than under-estimating)</li>
+    </ul>
+  </div>
+  <div class="card">
+    <div class="ct r">Accelerated CI (earlier of death or CI)</div>
+    <div class="formula-box r">
+      <div class="formula-label">Accelerated CI claim rate at age x</div>
+      <div class="formula-expr">i_x = i_x(CI) + (1 − k_x) · q_x</div>
+      <div style="font-size:10.5px;margin-top:5px;opacity:.85;">k_x = proportion of deaths in [x, x+1] caused by CI already in i_x(CI). Subtracts CI deaths from q_x to avoid double-counting.</div>
+    </div>
+    <ul class="pl">
+      <li class="r"><strong>Risk of over-counting k_x:</strong> understates claim cost → inadequate premiums / reserves (more dangerous than stand-alone)</li>
+      <li>Cost = claim incidence × CI sum insured</li>
+    </ul>
+  </div>
+</div>
+
+<!-- LTCI & PMI -->
+<div class="sl">LTCI, PMI, A&amp;S and Cash Plans</div>
+<div class="g2">
+  <div class="card">
+    <div class="ct r">Long-Term Care Insurance</div>
+    <ul class="pl">
+      <li class="r">Uses same two frameworks as IP: inception/annuity or multi-state</li>
+      <li class="r">Multiple benefit levels (eg home care / residential / nursing): value incremental benefit at each transition to higher level</li>
+      <li>Multi-state diagram: Healthy → Level 1 → Level 2 → Level 3 → Dead (no reverse transitions assumed in basic model)</li>
+      <li class="r">Transition rates may vary by duration in current state and cause of incapacity</li>
+      <li>Disability annuities: whole-life (payments cease only on death); include benefit inflation allowance</li>
+      <li>Three annuity tables needed: one per benefit level, by age at inception</li>
+    </ul>
+  </div>
+  <div class="card">
+    <div class="ct r">Private Medical Insurance</div>
+    <div class="formula-box r">
+      <div class="formula-label">PMI Risk Premium (age, gender)</div>
+      <div class="formula-expr">RP = Σ_k (i_k × AC_k)</div>
+      <div style="font-size:10.5px;margin-top:5px;opacity:.85;">i_k = incidence rate for benefit/procedure class k · AC_k = average claim cost for class k. Sum over all k.</div>
+    </div>
+    <ul class="pl">
+      <li class="r">Adjust for: excesses (reduce incidence + adjust avg cost); NCD structures (model long-term effect)</li>
+      <li>Unisex pricing: weight gender rates by expected gender mix → anti-selection risk if mix differs from assumed</li>
+      <li class="r">Multi-state modelling needed if premiums guaranteed for &gt;1 year</li>
+      <li>Rating factors: age, gender (if permitted), location, hospital band, smoker, occupation</li>
+    </ul>
+  </div>
+</div>
+<div class="g2">
+  <div class="card">
+    <div class="ct r">Accident &amp; Sickness Insurance</div>
+    <ul class="pl">
+      <li class="r">Short-term (typically &lt;5 year benefit); income protection of loan repayments</li>
+      <li>Uses inception/annuity approach</li>
+      <li class="r"><strong>Average rate per scheme:</strong> same premium per £ loan regardless of individual age/gender — pooled rate agreed with lender; brings extra pricing complexity</li>
+      <li>Large schemes → group pricing techniques (Chapter 18)</li>
+    </ul>
+  </div>
+  <div class="card">
+    <div class="ct r">Health Cash Plans</div>
+    <ul class="pl">
+      <li class="r">Premium = Σ (inception rate × average benefit) for each benefit category</li>
+      <li>Allow for excesses and coinsurance factors in average benefit calculation</li>
+      <li class="r"><strong>Inertia adjustment:</strong> reduce expected claims for under-claiming (forgotten cover + low benefit amounts + customer apathy)</li>
+      <li>Flat-rate premiums across broad age bands; if inertia already in own experience data, no further adjustment needed</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════ -->
+<!-- CHAPTER 18 -->
+<!-- ════════════════════════════════════════════════════════ -->
+<div class="ch-bar b">
+  <div class="ch-bar-num">②</div>
+  <div class="ch-bar-title">CH18 — Pricing (2): Group Business</div>
+  <div class="ch-bar-tag">Book Rate · Experience Rating · Credibility · Burning Cost</div>
+</div>
+
+<!-- Special Features -->
+<div class="sl b">Special Characteristics of Group Risks</div>
+<div class="g3">
+  <div class="card">
+    <div class="ct b">Free Cover</div>
+    <ul class="pl">
+      <li class="b">Cover up to the free cover limit without full underwriting</li>
+      <li>Basic proposal / health declaration (eg continuously at work for 3 months) only</li>
+      <li class="b">Terms of free cover = product design decision</li>
+    </ul>
+  </div>
+  <div class="card">
+    <div class="ct b">Broker / Intermediary Control</div>
+    <ul class="pl">
+      <li class="b">Broker channels information and revenues — data accuracy risk</li>
+      <li>Insurer may receive same (or less) detail as competitors quoting on same scheme</li>
+      <li class="b">Broker may resist "unpopular" requests (detailed membership data, risk assessments) to preserve client relationship</li>
+    </ul>
+  </div>
+  <div class="card">
+    <div class="ct b">Limited Insured Information</div>
+    <ul class="pl">
+      <li class="b">Exact membership details often unknown at policy start → <strong>deposit and adjustment premiums</strong></li>
+      <li>Deposit estimated; adjusted up/down at year end when details known</li>
+      <li class="b">Becoming less common — full info often supplied at quotation stage now; but retrospective adjustments still needed for staff changes</li>
+    </ul>
+  </div>
+</div>
+<div class="g2">
+  <div class="card">
+    <div class="ct b">Newcomers &amp; Leavers — Risk Profile Changes</div>
+    <ul class="pl">
+      <li class="b"><strong>Leavers:</strong> fitter lives more likely to change jobs (career progression) → remaining group higher risk on average</li>
+      <li>But: if most leavers are ill-health retirees → remaining workforce lower risk ("healthy worker" effect)</li>
+      <li class="b"><strong>Reduction in size:</strong> down-sizing → may prompt claims before leaving</li>
+      <li><strong>Increase in size:</strong> newcomers usually younger &amp; fitter — generally favourable; but check claims history if via merger/takeover</li>
+    </ul>
+  </div>
+  <div class="card">
+    <div class="ct b">Flexible Benefits</div>
+    <ul class="pl">
+      <li class="b">Employees choose their own cover mix (insurance + pension + holiday etc.)</li>
+      <li class="b"><strong>Anti-selection risk:</strong> sicker employees choose higher healthcare cover; healthier employees opt out</li>
+      <li>Mitigation: benefit limits + statements of good health + restricted switching windows</li>
+    </ul>
+  </div>
+</div>
+
+<!-- Book Rate -->
+<div class="sl b">Book Rate Calculation</div>
+<div class="fw-card">
+  <div class="ct b">Why Group Rates Are Lower Than Individual Rates</div>
+  <div class="g2" style="margin-top:10px;">
+    <div>
+      <ul class="pl">
+        <li class="b"><strong>Less anti-selection:</strong> compulsory membership means insurer doesn't face self-selection risk; lives can't opt in only when sick</li>
+        <li class="b"><strong>Lower expenses:</strong> less underwriting effort needed; economies of scale in admin</li>
+        <li>Book rates are consistent with individual rates — same risk-factor relationships; but absolute level may differ</li>
+      </ul>
+    </div>
+    <div>
+      <ul class="pl">
+        <li class="b"><strong>Individual-level rating factors:</strong> age, gender, smoker, occupation (same as individual business)</li>
+        <li class="b"><strong>Group-level rating factors:</strong> industry type, location, size of group, employer attitude to employee health</li>
+        <li>Larger scheme → experience rating carries more weight; individual risk factors carry less</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- Experience Rating & Credibility -->
+<div class="sl b">Experience Rating &amp; Credibility</div>
+<div class="g2">
+  <div class="card">
+    <div class="ct b">Experience Rating Formula</div>
+    <div class="formula-box b">
+      <div class="formula-label">Credibility-weighted risk premium</div>
+      <div class="formula-expr">RP = Z · A + (1 − Z) · E</div>
+      <div style="font-size:10.5px;margin-top:5px;opacity:.85;">Z = credibility factor (0 to 1) · A = group's own experience rate · E = book rate (insurer's standard rate)</div>
+    </div>
+    <ul class="pl">
+      <li class="b"><strong>Z = 0:</strong> pure book rate (new or tiny scheme)</li>
+      <li class="b"><strong>Z = 1:</strong> 100% experience-rated (large, data-rich scheme)</li>
+      <li>In practice, PMI given full credibility with &lt;100 man-years (commercial pressure); IP requires more data for full credibility</li>
+      <li class="b">Individual business: priced on community rate (book rate only — no experience element)</li>
+    </ul>
+  </div>
+  <div class="card">
+    <div class="ct b">Burning Cost</div>
+    <ul class="pl">
+      <li class="b"><strong>Definition:</strong> accumulation of past claims, adjusted for: changes in numbers insured · changes in cover · medical inflation</li>
+      <li class="b">Must include: IBNR (incurred but not reported) + RBNS (reported but not settled)</li>
+      <li>For IP: must capitalise (expected present value of future payments from past inceptions), because claims are paid over years not as lump sums</li>
+      <li class="b">Most applicable to group PMI and CI; used as adequacy check — compare burning cost vs risk premiums actually charged</li>
+      <li><strong>Purpose:</strong> earliest possible signal on whether current premium rates are adequate</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════ -->
+<!-- CHAPTER 19 -->
+<!-- ════════════════════════════════════════════════════════ -->
+<div class="ch-bar g">
+  <div class="ch-bar-num">③</div>
+  <div class="ch-bar-title">CH19 — Pricing (3): Other Considerations</div>
+  <div class="ch-bar-tag">Profit Criteria · Marketability · Competition · SCR · Reinsurance · Regulator · Reviews</div>
+</div>
+
+<!-- Profit Criteria Comparison Table -->
+<div class="sl g">Profit Criteria — Comparison</div>
+<div class="pc-wrap">
+  <div class="pc-header">
+    <div>Criterion</div>
+    <div>Net Present Value (NPV)</div>
+    <div>Internal Rate of Return (IRR)</div>
+    <div>Discounted Payback Period</div>
+  </div>
+  <div class="pc-row">
+    <div>Definition</div>
+    <div>Profit signature discounted at RDR → single £ value</div>
+    <div>Rate at which discounted cashflows = 0</div>
+    <div>Duration at which cumulative discounted profit = 0 (capital recovered)</div>
+  </div>
+  <div class="pc-row">
+    <div>Strengths</div>
+    <div>Theoretically optimal (economic theory); expressible as % of PV premiums or % initial commission; always exists; single unambiguous value</div>
+    <div>Easily understood concept; intuitive to non-actuaries</div>
+    <div>Useful for capital-constrained firms; clear capital management tool</div>
+  </div>
+  <div class="pc-row">
+    <div>Weaknesses</div>
+    <div>Says nothing about competition directly; subject to law of diminishing returns</div>
+    <div>Not unique if profit signature has &gt;1 sign change; may not exist if profits from outset; cannot be related to market share or premiums; IRR can conflict with NPV</div>
+    <div>Ignores all cashflows after payback date → not a complete profitability measure; rarely used alone</div>
+  </div>
+  <div class="pc-row">
+    <div>Best Use</div>
+    <div>Primary criterion; compare across products using % of initial commission or % PV premiums</div>
+    <div>Secondary or communication tool; do not use when NPV and IRR conflict</div>
+    <div>Secondary to NPV; use for product design comparison; favoured where capital is scarce</div>
+  </div>
+</div>
+<div class="hbox g">NPV positive (or zero) ⟹ product's rate of return meets (or exceeds) RDR target. NPV as % of PV premiums: ties profitability to market share — insurer can grow proportionally. Recommended approach: NPV primary, DPP secondary.</div>
+
+<!-- Marketability & Competitiveness -->
+<div class="sl g">Marketability &amp; Competitiveness</div>
+<div class="g3">
+  <div class="card">
+    <div class="ct g">Marketability Levers</div>
+    <ul class="pl">
+      <li class="g">If premiums uncompetitive: revisit <strong>product design</strong> (remove costly features; add differentiating features)</li>
+      <li class="g">Change <strong>distribution channel</strong> (may allow revised assumptions or support higher premium)</li>
+      <li class="g">Reduce <strong>profit requirement</strong></li>
+      <li class="g"><strong>Abandon product</strong> if no viable combination exists</li>
+      <li>Always re-examine: acquisition costs, marginal admin costs, fixed overhead contribution</li>
+    </ul>
+  </div>
+  <div class="card">
+    <div class="ct g">Anti-Selection from Competition</div>
+    <ul class="pl">
+      <li class="g">Competitor with finer rating factors: cherry-picks lighter risks by charging them less</li>
+      <li class="g">Broader pricer's assumptions are undermined: actual mix skews to heavier risks → average premiums too low</li>
+      <li>Market pressure pushes all insurers toward similar rating factor sets to avoid worst anti-selection</li>
+      <li class="g">Monitor: (1) level of overall premiums vs market · (2) number and accuracy of rating factors</li>
+    </ul>
+  </div>
+  <div class="card">
+    <div class="ct g">Loss Leaders &amp; Cross-Subsidy</div>
+    <ul class="pl">
+      <li class="g">Price below cost to gain market share ("loss leader") — margin subsidised from other profitable lines</li>
+      <li class="g"><strong>Risk:</strong> adverse mix — loss leader over-sold; subsidising product under-sold → aggregate profitability fails</li>
+      <li>Mitigation: reviewable premiums on loss leader; hold adequate free assets as buffer</li>
+      <li class="g">Over time: each product brought back to own contribution level; profits then immune from mix fluctuations</li>
+      <li>Fixed expenses → volume matters → economies of scale → incentive for mergers &amp; acquisitions</li>
+    </ul>
+  </div>
+</div>
+
+<!-- Reserves, Reinsurance, Regulator -->
+<div class="sl g">Reserves &amp; SCR · Reinsurance · Regulator</div>
+<div class="g3">
+  <div class="card">
+    <div class="ct g">Reserving &amp; Solvency Capital in Pricing</div>
+    <ul class="pl">
+      <li class="g">Locked-in capital has an <strong>opportunity cost</strong>: (IRR − asset yield) × SCR amount per annum</li>
+      <li class="g">Reserving assumptions in pricing model = assumptions insurer realistically expects to use in future (prudent if regulation demands prudence; best estimate if regulation demands best estimate)</li>
+      <li>SCR must also be allowed for in the model — can be substantial under best-estimate reserving</li>
+      <li class="g">Reinsurance reduces SCR: pure reinsurers hold less capital → total industry capital reduced → lower premiums possible</li>
+      <li>Some well-capitalised insurers omit SCR cost to compete on price — risk: misjudging relative profitability of product designs</li>
+    </ul>
+  </div>
+  <div class="card">
+    <div class="ct g">Reinsurance Impact on Pricing</div>
+    <ul class="pl">
+      <li class="g"><strong>7 roles of reinsurance:</strong> technical expertise · risk sharing · smoothing profits · NB strain financing · tax arbitrage · capital arbitrage · enabling larger risks</li>
+      <li class="g">If reinsurance cost &gt; benefit: net cost included as pricing item (EPV reinsurance premiums paid minus EPV reinsurance benefits received)</li>
+      <li class="g">If arbitrage available (tax or capital): price net of reinsurance for competitive advantage</li>
+      <li>Quota share: reinsurer often co-approves premium tables and retains right to vary commission if rates change</li>
+    </ul>
+  </div>
+  <div class="card">
+    <div class="ct g">Regulatory Impact</div>
+    <ul class="pl">
+      <li class="g"><strong>Pricing freedom restricted:</strong> community rating requirement · prescribed basis · prior approval needed before marketing</li>
+      <li class="g"><strong>Underwriting restrictions:</strong> ban on genetic test use; gender ban (EU) → anti-selection risk absorbed in pricing</li>
+      <li><strong>Asset investment rules:</strong> "local asset" requirement → lower investment return assumed in basis</li>
+      <li class="g"><strong>Premium tax:</strong> expense loading in basis; neutral to insurer but reduces consumer demand</li>
+      <li>Regulatory costs affect all market participants equally → no competitive distortion within the market</li>
+    </ul>
+  </div>
+</div>
+
+<!-- Reviews -->
+<div class="sl g">Premium Rate Reviews — 3 Types</div>
+<div class="g3">
+  <div class="card">
+    <div class="ct g">1 — New Business Basis Monitoring</div>
+    <ul class="pl">
+      <li class="g">Keep all assumption components under continuous review</li>
+      <li>When any assumption is no longer valid: test impact on existing tariff → decide if price change needed</li>
+      <li class="g">Not every assumption change forces a premium change — significance test first</li>
+      <li>Core part of the actuarial control cycle</li>
+    </ul>
+  </div>
+  <div class="card">
+    <div class="ct g">2 — Reviewable Premium Adequacy</div>
+    <ul class="pl">
+      <li class="g">Test whether current reviewable premiums are still adequate given emerging experience</li>
+      <li>Must allow for worsening morbidity in existing book (anti-selective lapsing)</li>
+      <li class="g">Sensitivity testing throughout: ensure adverse future scenarios don't cause financial distress</li>
+    </ul>
+  </div>
+  <div class="card">
+    <div class="ct g">3 — Loss-Leader Reserve Adequacy</div>
+    <ul class="pl">
+      <li class="g">Monitor that reserves set aside to cover losses from deliberately under-priced products remain adequate</li>
+      <li>Adjust as business mix emerges — if subsidising product volumes are below plan, increase loss-leader reserves</li>
+      <li class="g">Over time each line brought back to its own profit contribution</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════════ -->
+<!-- CHAPTER 20 -->
+<!-- ════════════════════════════════════════════════════════ -->
+<div class="ch-bar p">
+  <div class="ch-bar-num">④</div>
+  <div class="ch-bar-title">CH20 — Pricing (4): Options &amp; Guarantees</div>
+  <div class="ch-bar-tag">Health Options · Valuation · Assumptions · Stochastic · Guarantees</div>
+</div>
+
+<!-- Options Overview -->
+<div class="sl p">Mortality / Morbidity Options — Nature &amp; Cost</div>
+<div class="g2">
+  <div class="card">
+    <div class="ct p">Three Types of Health Options</div>
+    <ul class="pl">
+      <li class="p"><strong>Option 1 — Purchase additional cover</strong> without further medical evidence at normal premium rates for that age at exercise date</li>
+      <li class="p"><strong>Option 2 — Renew the policy</strong> at end of original term (eg a CI policy) without further evidence of health</li>
+      <li class="p"><strong>Option 3 — Buy-back option</strong> reinstate life (mortality) cover after an accelerated CI policy has paid out on a specified disease event</li>
+      <li>Health options differ from life options: cannot be exercised while currently claiming (or in deferred/linked-claim period) — someone recovering may be eligible again</li>
+      <li class="p">Terms restricting exercise timing (eg every 5 years, or on qualifying life event) reduce anti-selection risk</li>
+    </ul>
+  </div>
+  <div class="card">
+    <div class="ct p">Option Cost — Key Dynamics</div>
+    <ul class="pl">
+      <li class="p"><strong>Cost = P(exercising) × average health impairment of exercisers above standard</strong></li>
+      <li class="p">If <strong>only high-risk lives</strong> exercise: small number but very high average impairment</li>
+      <li class="p">If <strong>all lives</strong> exercise: larger number but average impairment diluted by healthy lives → lower cost per exercising policyholder</li>
+      <li>Select lives who exercise incur little extra cost to insurer (would have passed UW anyway)</li>
+      <li class="p"><strong>Constant monitoring essential</strong> — options can come "into the money" unexpectedly (eg widespread onset of a disease)</li>
+      <li>Remedies if option becomes onerous: remove from new business · increase standard premiums · stop issuing underlying policy type · reinsure · reduce reminders to exercise</li>
+    </ul>
+  </div>
+</div>
+
+<!-- Valuation Methods -->
+<div class="sl p">Valuation of Health Options — Two Methods</div>
+<div class="cmp-wrap">
+  <div class="cmp-header">
+    <div>Aspect</div>
+    <div>Conventional Method (100% take-up)</div>
+    <div>North American Method (realistic take-up)</div>
+  </div>
+  <div class="cmp-row">
+    <div>Take-up assumption</div>
+    <div>All eligible policyholders exercise at every possible date; maximum benefit always chosen</div>
+    <div>Realistic take-up rates varying by exercise date and option alternative; ideally from past data</div>
+  </div>
+  <div class="cmp-row">
+    <div>Morbidity of exercisers</div>
+    <div>Ultimate mortality/morbidity (consistent with 100% take-up — healthy and unhealthy mix)</div>
+    <div>Heavier than base — eg 150% of base table, or age-rated +5 years; linked to take-up rate assumption</div>
+  </div>
+  <div class="cmp-row">
+    <div>Morbidity of non-exercisers</div>
+    <div>Not applicable (all exercise)</div>
+    <div>Set so that weighted average of exercisers + non-exercisers = base expected level (lighter than base)</div>
+  </div>
+  <div class="cmp-row">
+    <div>Advantage</div>
+    <div>Simple; conservative; no data needed</div>
+    <div>More realistic; better for pricing and capital management</div>
+  </div>
+  <div class="cmp-row">
+    <div>Disadvantage</div>
+    <div>Over-states cost; may lead to uncompetitive option pricing</div>
+    <div>Data on take-up rates historically only available in North America; harder to implement</div>
+  </div>
+</div>
+
+<!-- Extra Assumptions -->
+<div class="sl p">Additional Assumptions Required for Option Valuation</div>
+<div class="factor-bar">
+  <div class="factor-label">5 Extra Inputs</div>
+  <div class="factor-pills">
+    <span class="fp p">P(option exercised) at each possible exercise date</span>
+    <span class="fp p">Additional benefit level chosen (if at policyholder discretion)</span>
+    <span class="fp p">Expected morbidity of lives who exercise (heavier than select)</span>
+    <span class="fp p">Expected morbidity of lives who do NOT exercise (set to maintain average = base)</span>
+    <span class="fp p">Additional admin expenses (reminders + processing)</span>
+  </div>
+</div>
+
+<div class="g2">
+  <div class="card">
+    <div class="ct p">Cashflow Valuation Mechanics</div>
+    <ul class="pl">
+      <li class="p">Extra benefits payable under option (to exercisers at assumed morbidity)</li>
+      <li class="p">Extra premiums received: at <strong>standard select rates</strong> at the exercise date (same as a new policyholder who just passed UW)</li>
+      <li>Additional expenses (notification, administration)</li>
+      <li class="p">Additional reserves: pre-exercise (option creates future liability now) and post-exercise (anti-selection not observable — reserve without knowing who exercised for health reasons)</li>
+      <li>Higher reserves required than equivalent policy without option, due to increased morbidity risk and additional uncertainty</li>
+    </ul>
+  </div>
+  <div class="card">
+    <div class="ct p">Stochastic Modelling of Options</div>
+    <ul class="pl">
+      <li class="p">Subdivide policyholders into risk sub-groups; model proportions in each and claim experience as stochastic variables</li>
+      <li class="p">Run 1,000+ simulations → distribution of option cost → choose premium at required statistical confidence level</li>
+      <li>For extreme events (eg sudden increase in disease prevalence): run deterministic "what-if" parameter shifts, re-run model — equivalent to sensitivity testing in stochastic context</li>
+      <li class="p">Cannot reliably model tail scenarios with standard probability distributions — stress scenarios used instead</li>
+    </ul>
+  </div>
+</div>
+
+<!-- Guarantees -->
+<div class="sl p">Guarantees — Resilience, Reserves &amp; Regulatory Approval</div>
+<div class="g3">
+  <div class="card">
+    <div class="ct p">Resilience Testing</div>
+    <ul class="pl">
+      <li class="p">Test whether guaranteed premium covers all outgoings under <strong>adverse (resilience) scenarios</strong> — essentially sensitivity testing applied to guaranteed contracts</li>
+      <li class="p">Requires building reserves in early years (when risk is lower and more predictable) to cushion later adverse experience</li>
+      <li>Investment guarantees rarely onerous in most H&amp;C (small reserves vs benefit); exception: pre-funded LTCI where reserves are large</li>
+    </ul>
+  </div>
+  <div class="card">
+    <div class="ct p">Adequacy of Reserves in Pricing</div>
+    <ul class="pl">
+      <li class="p">Include a loading for the <strong>cost of holding guarantee reserves</strong> (as well as the expected claim cost of the guarantee)</li>
+      <li class="p">If true cost is transparent in the premium, policyholders may prefer cheaper reviewable contracts</li>
+      <li>Pricing model must fully incorporate: supervisory reserves + solvency capital requirement + cost of holding that capital</li>
+    </ul>
+  </div>
+  <div class="card">
+    <div class="ct p">Regulatory Approval</div>
+    <ul class="pl">
+      <li class="p">Regulator typically requires evidence of techniques and outputs used to justify adequacy of premiums and reserves</li>
+      <li>Especially important for long-term guaranteed contracts where adverse experience cannot be corrected by premium review</li>
+      <li class="p">Submission of basis and calculations may be required before product can be marketed</li>
+    </ul>
+  </div>
+</div>
+
+<div class="footer">
+  <span>SP1 Ch.17–20 · IFE 2019 · Syllabus Obj. 4.1, 4.2</span>
+  <span>PRICING — CONSOLIDATED STUDY MATRIX</span>
+  <span>Individual · Group · Office Premium · Options &amp; Guarantees</span>
+</div>
+
+</body>
+</html>
