@@ -1,0 +1,1509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SA1 — Pricing Question Framework</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0f1117;
+    --paper: #f7f4ef;
+    --cream: #ede8df;
+    --gold: #b8860b;
+    --gold-light: #e8c84a;
+    --red: #c0392b;
+    --teal: #1a6b6b;
+    --teal-light: #e8f4f4;
+    --slate: #2c3e50;
+    --mid: #7f8c8d;
+    --border: #d4cfc6;
+    --mark-bg: #10, 25, 16;
+    --phase1: #2e4057;
+    --phase2: #1a6b6b;
+    --phase3: #6b2737;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── HEADER ── */
+  .site-header {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 2.5rem 3rem 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .site-header::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 260px; height: 260px;
+    border: 2px solid var(--gold);
+    border-radius: 50%;
+    opacity: 0.15;
+  }
+  .site-header::after {
+    content: '';
+    position: absolute;
+    bottom: -40px; left: 30%;
+    width: 140px; height: 140px;
+    border: 1px solid var(--gold-light);
+    border-radius: 50%;
+    opacity: 0.1;
+  }
+  .header-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.18em;
+    color: var(--gold-light);
+    text-transform: uppercase;
+    margin-bottom: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+  .header-badge::before {
+    content: '';
+    display: inline-block;
+    width: 28px; height: 1px;
+    background: var(--gold);
+  }
+  .site-header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 4vw, 3rem);
+    font-weight: 900;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.8rem;
+  }
+  .site-header h1 span { color: var(--gold-light); }
+  .header-sub {
+    font-size: 0.88rem;
+    color: #aaa;
+    max-width: 560px;
+    line-height: 1.6;
+  }
+
+  /* ── MARKS SELECTOR ── */
+  .marks-bar {
+    background: var(--cream);
+    border-bottom: 1px solid var(--border);
+    padding: 1.2rem 3rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  }
+  .marks-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--mid);
+    white-space: nowrap;
+  }
+  .marks-btn {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.8rem;
+    font-weight: 500;
+    border: 1.5px solid var(--border);
+    background: white;
+    color: var(--slate);
+    border-radius: 4px;
+    padding: 0.45rem 1.1rem;
+    cursor: pointer;
+    transition: all 0.18s;
+    position: relative;
+  }
+  .marks-btn:hover { border-color: var(--teal); color: var(--teal); }
+  .marks-btn.active {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: var(--gold-light);
+  }
+  .marks-btn .badge {
+    font-size: 0.6rem;
+    background: var(--gold);
+    color: white;
+    border-radius: 2px;
+    padding: 1px 4px;
+    margin-left: 4px;
+    vertical-align: middle;
+  }
+  .sep { color: var(--border); }
+
+  /* ── MAIN LAYOUT ── */
+  .main-wrap {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    min-height: calc(100vh - 140px);
+  }
+
+  /* ── LEFT SIDEBAR ── */
+  .sidebar {
+    background: white;
+    border-right: 1px solid var(--border);
+    padding: 1.5rem 0;
+    position: sticky;
+    top: 57px;
+    height: calc(100vh - 57px);
+    overflow-y: auto;
+  }
+  .sidebar-section-title {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--mid);
+    padding: 0.6rem 1.4rem;
+  }
+  .step-nav-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.7rem;
+    padding: 0.55rem 1.4rem;
+    cursor: pointer;
+    transition: background 0.15s;
+    border-left: 3px solid transparent;
+  }
+  .step-nav-item:hover { background: var(--teal-light); }
+  .step-nav-item.active {
+    background: var(--teal-light);
+    border-left-color: var(--teal);
+  }
+  .step-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    font-weight: 500;
+    color: var(--teal);
+    background: var(--teal-light);
+    border: 1px solid var(--teal);
+    border-radius: 3px;
+    padding: 1px 5px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .step-nav-item.active .step-num {
+    background: var(--teal);
+    color: white;
+  }
+  .step-nav-label {
+    font-size: 0.8rem;
+    line-height: 1.3;
+    color: var(--slate);
+  }
+  .step-nav-item.active .step-nav-label { color: var(--teal); font-weight: 600; }
+
+  /* Phase dividers in sidebar */
+  .phase-tag {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1.4rem;
+    margin-top: 0.4rem;
+  }
+  .phase-pill {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: 2px;
+    color: white;
+  }
+  .phase-pill.p1 { background: var(--phase1); }
+  .phase-pill.p2 { background: var(--phase2); }
+  .phase-pill.p3 { background: var(--phase3); }
+
+  /* ── CONTENT AREA ── */
+  .content {
+    padding: 2.5rem 3rem;
+    max-width: 900px;
+  }
+
+  /* ── MARKS CONTEXT BANNER ── */
+  .context-banner {
+    background: var(--ink);
+    color: var(--paper);
+    border-radius: 6px;
+    padding: 1.2rem 1.6rem;
+    margin-bottom: 2.5rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 1.2rem;
+  }
+  .context-marks {
+    font-family: 'Playfair Display', serif;
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: var(--gold-light);
+    line-height: 1;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .context-marks small {
+    display: block;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--mid);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 300;
+    margin-top: 2px;
+  }
+  .context-text { flex: 1; }
+  .context-text strong {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05rem;
+    display: block;
+    margin-bottom: 0.4rem;
+    color: var(--gold-light);
+  }
+  .context-text p {
+    font-size: 0.82rem;
+    color: #bbb;
+    line-height: 1.5;
+  }
+  .context-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 0.6rem;
+  }
+  .chip {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 2px;
+    padding: 2px 8px;
+    color: #bbb;
+  }
+  .chip.highlight { border-color: var(--gold); color: var(--gold-light); }
+
+  /* ── STEP CARDS ── */
+  .steps-grid { display: flex; flex-direction: column; gap: 1.5rem; }
+
+  .step-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+    transition: box-shadow 0.2s;
+  }
+  .step-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.07); }
+
+  /* dim steps that aren't relevant to current marks tier */
+  .step-card.dimmed {
+    opacity: 0.38;
+    pointer-events: none;
+  }
+  .step-card.optional {
+    border-style: dashed;
+  }
+
+  .step-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    padding: 1rem 1.4rem;
+    cursor: pointer;
+    user-select: none;
+  }
+  .step-header:hover { background: #fafafa; }
+
+  .step-icon {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    font-weight: 500;
+    background: var(--ink);
+    color: var(--gold-light);
+    border-radius: 3px;
+    padding: 3px 8px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .step-card.phase-build .step-icon { background: var(--phase2); }
+  .step-card.phase-validate .step-icon { background: var(--phase3); }
+
+  .step-title-block { flex: 1; }
+  .step-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.2;
+  }
+  .step-subtitle {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--mid);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-top: 3px;
+  }
+
+  .step-meta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 4px;
+    flex-shrink: 0;
+  }
+  .marks-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    border-radius: 2px;
+    padding: 2px 8px;
+    white-space: nowrap;
+  }
+  .marks-tag.always { background: #e8f4e8; color: #2d7a2d; border: 1px solid #b5d8b5; }
+  .marks-tag.medium { background: #fff3e0; color: #b36b00; border: 1px solid #f5c978; }
+  .marks-tag.high { background: #fdeaea; color: var(--red); border: 1px solid #f5b5b5; }
+
+  .chevron {
+    font-size: 0.9rem;
+    color: var(--mid);
+    transition: transform 0.2s;
+    margin-top: 2px;
+  }
+  .step-card.open .chevron { transform: rotate(180deg); }
+
+  /* ── STEP BODY ── */
+  .step-body {
+    display: none;
+    border-top: 1px solid var(--border);
+    padding: 1.2rem 1.4rem 1.4rem;
+    background: #fdfcfb;
+  }
+  .step-card.open .step-body { display: block; }
+
+  .sub-section {
+    margin-bottom: 1.4rem;
+  }
+  .sub-heading {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 0.6rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .sub-heading::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .bullet-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+  }
+  .bullet-list li {
+    font-size: 0.85rem;
+    line-height: 1.5;
+    color: var(--slate);
+    padding-left: 1.2rem;
+    position: relative;
+  }
+  .bullet-list li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--gold);
+    font-weight: 700;
+  }
+  .bullet-list li em {
+    font-style: normal;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.78em;
+    background: var(--cream);
+    padding: 1px 5px;
+    border-radius: 2px;
+    color: var(--teal);
+  }
+  .bullet-list li strong {
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  /* marks-conditional bullets */
+  .bullet-list li[data-min="15"] { display: none; }
+  .bullet-list li[data-min="20"] { display: none; }
+  .bullet-list li[data-min="25"] { display: none; }
+
+  body[data-marks="15"] .bullet-list li[data-min="15"] { display: list-item; }
+  body[data-marks="15"] .bullet-list li[data-min="20"] { display: none; }
+  body[data-marks="15"] .bullet-list li[data-min="25"] { display: none; }
+
+  body[data-marks="20"] .bullet-list li[data-min="15"] { display: list-item; }
+  body[data-marks="20"] .bullet-list li[data-min="20"] { display: list-item; }
+  body[data-marks="20"] .bullet-list li[data-min="25"] { display: none; }
+
+  body[data-marks="25"] .bullet-list li[data-min="15"] { display: list-item; }
+  body[data-marks="25"] .bullet-list li[data-min="20"] { display: list-item; }
+  body[data-marks="25"] .bullet-list li[data-min="25"] { display: list-item; }
+
+  /* Marks tier legend */
+  .tier-legend {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    margin-bottom: 1rem;
+    padding: 0.7rem 1rem;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    font-size: 0.75rem;
+  }
+  .tier-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--slate);
+  }
+  .tier-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+  }
+  .tier-dot.core { background: var(--teal); }
+  .tier-dot.ext { background: var(--gold); }
+  .tier-dot.deep { background: var(--red); }
+
+  /* ── EXAMINER TIPS ── */
+  .exam-tip {
+    background: #fffbf0;
+    border: 1px solid #e8d97a;
+    border-left: 3px solid var(--gold);
+    border-radius: 4px;
+    padding: 0.7rem 1rem;
+    font-size: 0.8rem;
+    line-height: 1.5;
+    color: #6b5500;
+    margin-top: 0.8rem;
+  }
+  .exam-tip::before {
+    content: '✦ Examiner note: ';
+    font-family: 'DM Mono', monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--gold);
+    display: block;
+    margin-bottom: 0.3rem;
+  }
+
+  .formula-box {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.78rem;
+    background: var(--ink);
+    color: var(--gold-light);
+    padding: 0.7rem 1rem;
+    border-radius: 4px;
+    margin-top: 0.6rem;
+    line-height: 1.7;
+  }
+
+  /* ── APPROACH OVERVIEW ── */
+  .approach-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+  .approach-block {
+    border-radius: 5px;
+    padding: 1.1rem;
+    color: white;
+  }
+  .approach-block.p1 { background: var(--phase1); }
+  .approach-block.p2 { background: var(--phase2); }
+  .approach-block.p3 { background: var(--phase3); }
+  .approach-block-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    opacity: 0.7;
+    margin-bottom: 0.4rem;
+  }
+  .approach-block-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 0.6rem;
+  }
+  .approach-block-steps {
+    font-size: 0.75rem;
+    opacity: 0.85;
+    line-height: 1.6;
+  }
+
+  /* ── MARKS GUIDE TABLE ── */
+  .guide-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.8rem;
+    margin-bottom: 2rem;
+  }
+  .guide-table th {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--mid);
+    text-align: left;
+    padding: 0.5rem 0.8rem;
+    background: var(--cream);
+    border-bottom: 1px solid var(--border);
+  }
+  .guide-table td {
+    padding: 0.55rem 0.8rem;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+    line-height: 1.4;
+    color: var(--slate);
+  }
+  .guide-table tr:last-child td { border-bottom: none; }
+  .guide-table .marks-col {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--ink);
+    white-space: nowrap;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    .main-wrap { grid-template-columns: 1fr; }
+    .sidebar { position: static; height: auto; border-right: none; border-bottom: 1px solid var(--border); }
+    .site-header { padding: 1.5rem; }
+    .marks-bar { padding: 1rem 1.5rem; }
+    .content { padding: 1.5rem; }
+    .approach-grid { grid-template-columns: 1fr; }
+  }
+
+  /* ── SCROLL ANIMATION ── */
+  .step-card {
+    animation: fadeIn 0.3s ease both;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* active step highlight from sidebar click */
+  .step-card.highlight-pulse {
+    animation: pulse 0.6s ease;
+  }
+  @keyframes pulse {
+    0%,100% { box-shadow: none; }
+    50% { box-shadow: 0 0 0 3px var(--teal); }
+  }
+
+  /* product filter */
+  .product-chips {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.2rem;
+  }
+  .product-chip {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    padding: 3px 12px;
+    cursor: pointer;
+    background: white;
+    color: var(--slate);
+    transition: all 0.15s;
+  }
+  .product-chip:hover { border-color: var(--teal); color: var(--teal); }
+  .product-chip.active { background: var(--teal); border-color: var(--teal); color: white; }
+
+  .step-body .product-note {
+    display: none;
+    font-size: 0.78rem;
+    background: var(--teal-light);
+    border: 1px solid #b5d8d8;
+    border-radius: 4px;
+    padding: 0.6rem 0.9rem;
+    margin-top: 0.8rem;
+    line-height: 1.5;
+    color: var(--teal);
+  }
+  .step-body .product-note.visible { display: block; }
+  .product-note-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    font-weight: 500;
+    margin-bottom: 0.3rem;
+    display: block;
+  }
+
+</style>
+</head>
+<body data-marks="10">
+
+<!-- ══════════════════════════════════════════════
+     HEADER
+═══════════════════════════════════════════════ -->
+<header class="site-header">
+  <div class="header-badge">SA1 Health &amp; Care Insurance · IFoA / IAI Exam Framework</div>
+  <h1>Pricing Question <span>Framework</span></h1>
+  <p class="header-sub">A structured approach to pricing questions from 10 to 25 marks — drawn exclusively from SA1 exam papers and model answers (2016–2025).</p>
+</header>
+
+<!-- ══════════════════════════════════════════════
+     MARKS BAR
+═══════════════════════════════════════════════ -->
+<div class="marks-bar">
+  <span class="marks-label">Question size →</span>
+  <button class="marks-btn active" data-marks="10" onclick="setMarks(10)">10 marks <span class="badge">core</span></button>
+  <button class="marks-btn" data-marks="15" onclick="setMarks(15)">15 marks</button>
+  <button class="marks-btn" data-marks="20" onclick="setMarks(20)">20 marks</button>
+  <button class="marks-btn" data-marks="25" onclick="setMarks(25)">25 marks <span class="badge">full</span></button>
+  <span class="sep">|</span>
+  <span class="marks-label" style="font-size:0.65rem; color:#aaa">Product filter:</span>
+  <button class="product-chip active" data-product="all" onclick="setProduct('all')">All products</button>
+  <button class="product-chip" data-product="pmi" onclick="setProduct('pmi')">PMI</button>
+  <button class="product-chip" data-product="ci" onclick="setProduct('ci')">CI</button>
+  <button class="product-chip" data-product="ip" onclick="setProduct('ip')">IP / Group</button>
+  <button class="product-chip" data-product="ltc" onclick="setProduct('ltc')">LTC</button>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     MAIN LAYOUT
+═══════════════════════════════════════════════ -->
+<div class="main-wrap">
+
+  <!-- SIDEBAR -->
+  <nav class="sidebar">
+    <div class="sidebar-section-title">Overview</div>
+    <div class="step-nav-item active" onclick="scrollToSection('overview')">
+      <span class="step-num">→</span>
+      <span class="step-nav-label">How to read this guide</span>
+    </div>
+
+    <div class="phase-tag"><span class="phase-pill p1">Phase 1 — Foundation</span></div>
+    <div class="sidebar-section-title" style="margin-top:0">Build the evidence base</div>
+    <div class="step-nav-item" onclick="openAndScroll('step1')">
+      <span class="step-num">S1</span>
+      <span class="step-nav-label">Define Benefit &amp; Scope</span>
+    </div>
+    <div class="step-nav-item" onclick="openAndScroll('step2')">
+      <span class="step-num">S2</span>
+      <span class="step-nav-label">Data Collection</span>
+    </div>
+    <div class="step-nav-item" onclick="openAndScroll('step3')">
+      <span class="step-num">S3</span>
+      <span class="step-nav-label">Data Analysis &amp; Credibility</span>
+    </div>
+    <div class="step-nav-item" onclick="openAndScroll('step4')">
+      <span class="step-num">S4</span>
+      <span class="step-nav-label">Assumption Setting</span>
+    </div>
+
+    <div class="phase-tag"><span class="phase-pill p2">Phase 2 — Price Build</span></div>
+    <div class="sidebar-section-title" style="margin-top:0">Construct the office premium</div>
+    <div class="step-nav-item" onclick="openAndScroll('step5')">
+      <span class="step-num">S5</span>
+      <span class="step-nav-label">Risk Premium Calculation</span>
+    </div>
+    <div class="step-nav-item" onclick="openAndScroll('step6')">
+      <span class="step-num">S6</span>
+      <span class="step-nav-label">Loadings</span>
+    </div>
+    <div class="step-nav-item" onclick="openAndScroll('step7')">
+      <span class="step-num">S7</span>
+      <span class="step-nav-label">Profit Testing</span>
+    </div>
+    <div class="step-nav-item" onclick="openAndScroll('step8')">
+      <span class="step-num">S8</span>
+      <span class="step-nav-label">Reinsurance</span>
+    </div>
+
+    <div class="phase-tag"><span class="phase-pill p3">Phase 3 — Validate</span></div>
+    <div class="sidebar-section-title" style="margin-top:0">Sustain &amp; monitor</div>
+    <div class="step-nav-item" onclick="openAndScroll('step9')">
+      <span class="step-num">S9</span>
+      <span class="step-nav-label">Reviewability &amp; Regulatory</span>
+    </div>
+    <div class="step-nav-item" onclick="openAndScroll('step10')">
+      <span class="step-num">S10</span>
+      <span class="step-nav-label">Competitiveness &amp; Market</span>
+    </div>
+    <div class="step-nav-item" onclick="openAndScroll('step11')">
+      <span class="step-num">S11</span>
+      <span class="step-nav-label">Ongoing Monitoring</span>
+    </div>
+    <div class="step-nav-item" onclick="openAndScroll('step12')">
+      <span class="step-num">S12</span>
+      <span class="step-nav-label">Options &amp; Guarantees</span>
+    </div>
+  </nav>
+
+  <!-- CONTENT -->
+  <main class="content">
+
+    <!-- OVERVIEW SECTION -->
+    <section id="overview">
+      <div class="context-banner" id="context-banner">
+        <div class="context-marks" id="ctx-marks">10<small>marks</small></div>
+        <div class="context-text">
+          <strong id="ctx-title">Core Pricing Process</strong>
+          <p id="ctx-desc">Focus on the risk premium formula for the specific product, key data sources, and main loadings. Cover 4–5 steps with clear structure. One well-labelled sub-heading per step earns a mark.</p>
+          <div class="context-chips" id="ctx-chips"></div>
+        </div>
+      </div>
+
+      <div class="approach-grid">
+        <div class="approach-block p1">
+          <div class="approach-block-label">Phase 1 · Steps 1–4</div>
+          <div class="approach-block-title">Foundation</div>
+          <div class="approach-block-steps">Define → Collect Data → Analyse → Set Assumptions</div>
+        </div>
+        <div class="approach-block p2">
+          <div class="approach-block-label">Phase 2 · Steps 5–8</div>
+          <div class="approach-block-title">Price Build</div>
+          <div class="approach-block-steps">Risk Premium → Loadings → Profit Test → Reinsurance</div>
+        </div>
+        <div class="approach-block p3">
+          <div class="approach-block-label">Phase 3 · Steps 9–12</div>
+          <div class="approach-block-title">Validate</div>
+          <div class="approach-block-steps">Reviewability → Market → Monitor → Options</div>
+        </div>
+      </div>
+
+      <table class="guide-table">
+        <thead>
+          <tr>
+            <th>Marks</th>
+            <th>Steps to cover</th>
+            <th>Depth expected</th>
+            <th>Key examiner focus</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="marks-col">10</td>
+            <td>S1 – S6 (core only)</td>
+            <td>1–2 bullets per sub-heading</td>
+            <td>Correct formula; product-specific data sources; main loadings named</td>
+          </tr>
+          <tr>
+            <td class="marks-col">15</td>
+            <td>S1 – S8</td>
+            <td>2–3 bullets per sub-heading</td>
+            <td>Credibility weighting explained; reinsurance role noted; profit criterion named</td>
+          </tr>
+          <tr>
+            <td class="marks-col">20</td>
+            <td>S1 – S10</td>
+            <td>3–4 bullets per key sub-heading</td>
+            <td>Anti-selection; group vs individual distinction; reviewable vs guaranteed; competitiveness</td>
+          </tr>
+          <tr>
+            <td class="marks-col">25</td>
+            <td>S1 – S12 (all phases)</td>
+            <td>Full treatment; scenario/sensitivity analysis; options pricing</td>
+            <td>Stochastic modelling of options; monitoring framework; regulatory nuance</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div style="display:flex;align-items:center;gap:0.7rem;margin-bottom:1rem;">
+        <span class="marks-label" style="color:var(--slate)">Bullet colour key:</span>
+        <div class="tier-legend" style="margin-bottom:0;border:none;padding:0;background:transparent;">
+          <div class="tier-legend-item"><div class="tier-dot core"></div> Always include (10+ marks)</div>
+          <div class="tier-legend-item"><div class="tier-dot ext"></div> Add at 15+ marks</div>
+          <div class="tier-legend-item"><div class="tier-dot deep"></div> Full treatment 20–25 marks</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════
+         STEP CARDS
+    ═══════════════════════════════ -->
+    <div class="steps-grid">
+
+      <!-- S1 -->
+      <div class="step-card open" id="step1">
+        <div class="step-header" onclick="toggleCard('step1')">
+          <div class="step-icon">S1</div>
+          <div class="step-title-block">
+            <div class="step-title">Define Benefit Design &amp; Scope</div>
+            <div class="step-subtitle">What exactly are we pricing?</div>
+          </div>
+          <div class="step-meta">
+            <span class="marks-tag always">Always include</span>
+          </div>
+          <span class="chevron">▾</span>
+        </div>
+        <div class="step-body">
+          <div class="sub-section">
+            <div class="sub-heading">Benefit boundaries</div>
+            <ul class="bullet-list">
+              <li>State precisely what the benefit covers — inpatient only, or IP + OP + day-care; lump-sum vs. income; full ADL or partial ADL trigger</li>
+              <li>Define exclusions, waiting periods, deferred periods, and survival periods — each one directly reduces the risk premium</li>
+              <li>Identify sub-limits, co-pays, excesses, and caps — these must be removed from the gross claim cost before loading</li>
+              <li data-min="15">Specify whether benefits are fixed-term or whole-of-life; indemnity or fixed benefit — affects the pricing framework chosen</li>
+              <li data-min="20">Clarify reinstatement features, floaters, and family floater design — these are separate pricing streams</li>
+            </ul>
+          </div>
+          <div class="sub-section">
+            <div class="sub-heading">Product-specific triggers</div>
+            <ul class="bullet-list">
+              <li><strong>PMI/Indemnity:</strong> IP vs. OP vs. day-care boundary; cashless vs. reimbursement; network tier</li>
+              <li><strong>CI:</strong> condition list, survival period, whether multi-pay or single; own-condition vs. accelerated definition</li>
+              <li><strong>IP:</strong> own-occupation vs. any-occupation definition; deferred period options (1, 3, 6, 12 months); salary definition</li>
+              <li><strong>LTC:</strong> ADL failure threshold (2 of 6 vs. 3 of 6); home care vs. residential vs. nursing — each is a separate state</li>
+              <li data-min="15"><strong>Group IP:</strong> whether cover is compulsory (removes anti-selection) or voluntary; link to employer sick-pay scheme</li>
+            </ul>
+          </div>
+          <div class="exam-tip">The examiner expects you to show the product design affects the risk premium formula — not just to list features. Always connect scope to pricing mechanics.</div>
+        </div>
+      </div>
+
+      <!-- S2 -->
+      <div class="step-card" id="step2">
+        <div class="step-header" onclick="toggleCard('step2')">
+          <div class="step-icon">S2</div>
+          <div class="step-title-block">
+            <div class="step-title">Data Collection &amp; Sources</div>
+            <div class="step-subtitle">Internal, industry, reinsurer, international</div>
+          </div>
+          <div class="step-meta">
+            <span class="marks-tag always">Always include</span>
+          </div>
+          <span class="chevron">▾</span>
+        </div>
+        <div class="step-body">
+          <div class="sub-section">
+            <div class="sub-heading">Internal data</div>
+            <ul class="bullet-list">
+              <li>Own claims experience — incidence rates, average claim amounts, claim duration by age/gender/occupation</li>
+              <li>Expense data — split by initial (acquisition), renewal (admin), and claims handling</li>
+              <li data-min="15">Lapse and persistency data by policy duration — critical for long-tail products (IP, LTC)</li>
+              <li data-min="20">Investment return on reserves — more material for long-tail (IP, LTC) than short-tail (PMI)</li>
+            </ul>
+          </div>
+          <div class="sub-section">
+            <div class="sub-heading">External &amp; industry data</div>
+            <ul class="bullet-list">
+              <li>IRDAI / GIC pooled industry statistics — aggregate claims rates, loss ratios by product class</li>
+              <li>Reinsurer morbidity tables (Swiss Re, Munich Re, RGA) — often most granular source available, especially for CI and IP in India</li>
+              <li data-min="15">International benchmarks (UK CMI, US SOA, Australian data) — adjusted for Indian demographics, healthcare cost level, and product design differences</li>
+              <li data-min="15">ICMR cancer/cardiac incidence data — cross-check for CI condition-specific rates</li>
+              <li data-min="20">Medical literature on disease progression, survival rates, improving outcomes — impacts trend assumptions</li>
+              <li data-min="25">Market research: consumer willingness to pay, take-up rate estimates, competitor pricing survey</li>
+            </ul>
+          </div>
+          <div class="sub-section">
+            <div class="sub-heading">New product / new market challenges</div>
+            <ul class="bullet-list">
+              <li data-min="15">If own experience is nil: rely entirely on reinsurer data and international benchmarks — apply conservative margins</li>
+              <li data-min="15">Adjust international data for: different disease prevalence, healthcare cost level, underwriting stringency, claim definition differences</li>
+              <li data-min="20">COVID-19 years (2020–21) should be excluded or treated carefully — utilisation was atypically suppressed then elevated</li>
+            </ul>
+          </div>
+          <div class="product-note" id="pn2-ip">
+            <span class="product-note-label">IP / Group note</span>
+            For group IP: employer's own absence records are a primary source. Sector-specific data (mining vs. white collar) materially changes the incidence rates. In a new IP market, reinsurer guidance is the only credible source — apply a higher risk margin.
+          </div>
+          <div class="product-note" id="pn2-ltc">
+            <span class="product-note-label">LTC note</span>
+            No meaningful India LTC experience data exists. Use UK, US, and Australian tables as a starting point; adjust for Indian longevity, cultural caregiving norms, and public provision. Data uncertainty is the single biggest pricing challenge for LTC.
+          </div>
+        </div>
+      </div>
+
+      <!-- S3 -->
+      <div class="step-card" id="step3">
+        <div class="step-header" onclick="toggleCard('step3')">
+          <div class="step-icon">S3</div>
+          <div class="step-title-block">
+            <div class="step-title">Data Analysis &amp; Credibility</div>
+            <div class="step-subtitle">Deriving rates from raw experience</div>
+          </div>
+          <div class="step-meta">
+            <span class="marks-tag always">Always include</span>
+          </div>
+          <span class="chevron">▾</span>
+        </div>
+        <div class="step-body">
+          <div class="sub-section">
+            <div class="sub-heading">Experience investigation</div>
+            <ul class="bullet-list">
+              <li>Derive claim incidence rates by age, gender, and key risk factor — actual-to-expected (A/E) analysis against pricing basis</li>
+              <li>Calculate average claim amounts / average claim duration — separately by cause/benefit class where possible</li>
+              <li>Identify medical cost inflation trends — India medical inflation running 10–15% p.a., significantly above CPI</li>
+              <li data-min="15">Stratify by underwriting method, duration from entry, NCD level, group size, industry — A/E varies significantly across these dimensions</li>
+              <li data-min="20">Investigate new procedures, drugs, and technology — these shift treatment patterns and claims costs (technology-led cost push)</li>
+            </ul>
+          </div>
+          <div class="sub-section">
+            <div class="sub-heading">Credibility weighting</div>
+            <ul class="bullet-list">
+              <li data-min="15">Credibility formula: <em>RP = Z·A + (1−Z)·E</em> — blend own experience (A) with book/market rate (E) using credibility factor Z</li>
+              <li data-min="15">Z = 0 for new/small schemes (100% book rate); Z → 1 as experience volume grows</li>
+              <li data-min="15">In practice, PMI group given full credibility at lower data volume than IP — commercial pressure</li>
+              <li data-min="20">Stochastic fitting of severity distribution — particularly important for high-cost top-up products and LTC tail</li>
+            </ul>
+          </div>
+          <div class="sub-section">
+            <div class="sub-heading">Burning cost</div>
+            <ul class="bullet-list">
+              <li data-min="15">Burning cost = accumulation of past claims adjusted for: changes in membership, changes in cover, medical inflation</li>
+              <li data-min="15">Must include IBNR (incurred but not reported) and RBNS (reported but not settled)</li>
+              <li data-min="20">For IP: capitalise future expected payments from past claim inceptions (EPV of in-force claims) — do not just use paid claims</li>
+            </ul>
+          </div>
+          <div class="exam-tip">Examiners reward candidates who note WHY data is limited (new product, new market, novel design) and what practical steps are taken (reinsurer data, conservative margins, frequent review).</div>
+        </div>
+      </div>
+
+      <!-- S4 -->
+      <div class="step-card" id="step4">
+        <div class="step-header" onclick="toggleCard('step4')">
+          <div class="step-icon">S4</div>
+          <div class="step-title-block">
+            <div class="step-title">Assumption Setting</div>
+            <div class="step-subtitle">Best estimate + margins for uncertainty</div>
+          </div>
+          <div class="step-meta">
+            <span class="marks-tag always">Always include</span>
+          </div>
+          <span class="chevron">▾</span>
+        </div>
+        <div class="step-body">
+          <div class="sub-section">
+            <div class="sub-heading">Core morbidity assumptions</div>
+            <ul class="bullet-list">
+              <li><strong>Incidence rate</strong> — by age, gender, occupation/deferred period; distinguish sickness inception from claim inception (= sickness inception × P(surviving deferred period))</li>
+              <li><strong>Termination rates</strong> — recovery rate and mortality rate by duration on claim; critical for IP and LTC average claim duration</li>
+              <li><strong>Medical cost / benefit inflation</strong> — separate from general CPI; must be projected forward explicitly (not assumed flat)</li>
+              <li data-min="15"><strong>Persistency / lapse rates</strong> — by policy duration; selective lapse (healthier lives lapse more) worsens remaining pool</li>
+              <li data-min="15"><strong>Selection effect</strong> — underwriting creates lighter early-year experience that grades to ultimate over ~5 years; avoid over-estimating</li>
+            </ul>
+          </div>
+          <div class="sub-section">
+            <div class="sub-heading">Other assumptions</div>
+            <ul class="bullet-list">
+              <li>Expense assumptions — initial (per-policy acquisition), renewal (per-policy p.a.), claims handling (per-claim or % of claims)</li>
+              <li>Investment return — more material for IP/LTC (long-dated reserves) than PMI (short-tail)</li>
+              <li data-min="15">New business volume assumption — drives expense per policy; volume shortfall kills digital / packaged product economics</li>
+              <li data-min="20">Anti-selection loading — explicit proportion assumed to purchase because of pre-existing impairment (individual voluntary product)</li>
+              <li data-min="20">Risk discount rate (RDR) — uplift for novel/uncertain products to reflect higher parameter uncertainty</li>
+            </ul>
+          </div>
+          <div class="sub-section">
+            <div class="sub-heading">Documentation &amp; sign-off</div>
+            <ul class="bullet-list">
+              <li data-min="15">All assumptions must be documented, with sources, justification, and sensitivity to adverse deviation stated</li>
+              <li data-min="20">Actuarial opinion / sign-off required; regulatory may require approval of assumptions (e.g. IRDAI product filing)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- S5 -->
+      <div class="step-card phase-build" id="step5">
+        <div class="step-header" onclick="toggleCard('step5')">
+          <div class="step-icon">S5</div>
+          <div class="step-title-block">
+            <div class="step-title">Risk Premium Calculation</div>
+            <div class="step-subtitle">Product-specific formulae</div>
+          </div>
+          <div class="step-meta">
+            <span class="marks-tag always">Always include</span>
+          </div>
+          <span class="chevron">▾</span>
+        </div>
+        <div class="step-body">
+          <div class="sub-section">
+            <div class="sub-heading">Formulae by product type</div>
+            <div class="formula-box">
+PMI / Indemnity:  RP = Σk (ik × ACk)   [incidence × avg claim cost by benefit class]
+CI (stand-alone): RP = ix × P(survive survival period) × SI
+CI (accelerated): RP = [ix(CI) + (1 − kx)·qx] × SI
+IP (inception/ann): RP = Σt [ survival · ix^d · ä_x · v^t · benefit ]
+IP (multi-state):  track: Healthy → Sick → Claimant → Recovered → Dead
+LTC:              RP = Σ care levels: inception × annuity per level × daily cost
+</div>
+          </div>
+          <div class="sub-section">
+            <div class="sub-heading">Adjustments to gross cost</div>
+            <ul class="bullet-list">
+              <li>Apply deductibles, co-pays, sub-limits — reduce gross incidence rate and/or average cost</li>
+              <li>Apply underwriting loading above free cover limit for group business</li>
+              <li>Apply NCD adjustment — model long-term portfolio effect, not just year-1 discount</li>
+              <li data-min="15"><strong>Unisex pricing (PMI):</strong> weight male/female rates by expected gender mix — anti-selection risk if actual mix differs</li>
+              <li data-min="15">Inertia adjustment for cash plans — reduce expected claims for under-claiming (customers forget to claim small amounts)</li>
+            </ul>
+          </div>
+          <div class="sub-section">
+            <div class="sub-heading">Group-specific adjustments</div>
+            <ul class="bullet-list">
+              <li data-min="15">Book rate lower than individual: less anti-selection (compulsory membership) + lower expenses (economies of scale)</li>
+              <li data-min="15">Rate cells by age, gender, occupation, group size — larger scheme → more weight on experience, less on individual factors</li>
+              <li data-min="20">Deposit and adjustment premiums for groups where exact membership is unknown at policy start</li>
+            </ul>
+          </div>
+          <div class="exam-tip">Always state which pricing approach you are using (inception/annuity vs multi-state) and why. IP and LTC use the same two frameworks — CI and PMI have product-specific formulae. Get the formula right for the product asked about.</div>
+        </div>
+      </div>
+
+      <!-- S6 -->
+      <div class="step-card phase-build" id="step6">
+        <div class="step-header" onclick="toggleCard('step6')">
+          <div class="step-icon">S6</div>
+          <div class="step-title-block">
+            <div class="step-title">Loadings — from Risk Premium to Office Premium</div>
+            <div class="step-subtitle">Expenses, contingency, capital, profit</div>
+          </div>
+          <div class="step-meta">
+            <span class="marks-tag always">Always include</span>
+          </div>
+          <span class="chevron">▾</span>
+        </div>
+        <div class="step-body">
+          <div class="sub-section">
+            <div class="sub-heading">Expense loadings</div>
+            <ul class="bullet-list">
+              <li><strong>Initial expenses:</strong> commission / acquisition cost, system setup, underwriting cost, policy issue</li>
+              <li><strong>Renewal expenses:</strong> policy admin, premium collection, regulatory reporting</li>
+              <li><strong>Claims handling:</strong> TPA cost (typically 3–5% of PMI premium); case management cost for IP/LTC; medical verification for CI</li>
+              <li data-min="15">Digital / new product: system development + mobile app maintenance = significant upfront cost to be amortised over expected in-force volume</li>
+              <li data-min="20">Fixed expenses create economies of scale — low volume → high per-policy cost → pricing pressure in early years</li>
+            </ul>
+          </div>
+          <div class="sub-section">
+            <div class="sub-heading">Risk &amp; contingency margin</div>
+            <ul class="bullet-list">
+              <li>Loading for adverse deviation — especially material where experience data is limited or product is novel</li>
+              <li data-min="15">Guaranteed premium structure: higher contingency margin required (no future repricing option to correct mispricing)</li>
+              <li data-min="20">Parameter uncertainty margin — reflect in higher RDR or explicit %-of-premium loading; document and justify the margin chosen</li>
+            </ul>
+          </div>
+          <div class="sub-section">
+            <div class="sub-heading">Profit &amp; capital loading</div>
+            <ul class="bullet-list">
+              <li>Target profit margin to meet required ROC / WACC — expressed as % of PV premiums or % of initial commission (NPV basis)</li>
+              <li>Capital (SCR) loading: opportunity cost = (IRR − asset yield) × SCR locked in per annum</li>
+              <li data-min="15">Long-tail products (IP, LTC) lock up capital for extended periods → cost of capital loading is significantly higher than for PMI</li>
+              <li data-min="20">Reinsurance reduces SCR — net capital cost loading reflects net-of-reinsurance capital requirement</li>
+            </ul>
+          </div>
+          <div class="sub-section">
+            <div class="sub-heading">Other loadings</div>
+            <ul class="bullet-list">
+              <li>Premium tax / GST — added as a regulatory requirement (not part of actuarial loading but must appear in final premium)</li>
+              <li data-min="15">Reinsurance cost (net of commission) as a separate loading — EPV of reinsurance premiums paid less EPV of recoveries</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- S7 -->
+      <div class="step-card phase-build" id="step7">
+        <div class="step-header" onclick="toggleCard('step7')">
+          <div class="step-icon">S7</div>
+          <div class="step-title-block">
+            <div class="step-title">Profit Testing &amp; Sensitivity Analysis</div>
+            <div class="step-subtitle">Validate profitability and resilience</div>
+          </div>
+          <div class="step-meta">
+            <span class="marks-tag medium">15+ marks</span>
+          </div>
+          <span class="chevron">▾</span>
+        </div>
+        <div class="step-body">
+          <div class="sub-section">
+            <div class="sub-heading">Profit criteria</div>
+            <ul class="bullet-list">
+              <li data-min="15"><strong>NPV (primary criterion):</strong> discounted profit signature at RDR; expressed as % of PV premiums or % of initial commission — allows comparison across products</li>
+              <li data-min="15"><strong>IRR (secondary):</strong> intuitive concept but not unique if profit signature changes sign; cannot be directly related to market share</li>
+              <li data-min="15"><strong>Discounted payback period (secondary):</strong> useful for capital-constrained firms; ignores cashflows after payback date — use alongside NPV</li>
+              <li data-min="20">NPV positive ⟹ product meets target RDR; NPV as % PV premiums ties profitability to volume — scalable benchmark</li>
+            </ul>
+          </div>
+          <div class="sub-section">
+            <div class="sub-heading">Sensitivity &amp; scenario testing</div>
+            <ul class="bullet-list">
+              <li data-min="15">Sensitivity on all key assumptions — identify which drives greatest profit impact (typically: morbidity for CI/IP, medical inflation for PMI)</li>
+              <li data-min="15">Stress scenario: medical inflation 2–3% above base; pandemic / mass hospitalisation event; economic recession → mental health / stress claims spike</li>
+              <li data-min="20">Maximum probable loss (MPL) scenario — confirm capital adequacy for worst-case year</li>
+              <li data-min="20">Low-volume scenario: if actual new business is 30–50% of projected, per-policy fixed costs rise sharply — test break-even volume</li>
+              <li data-min="25">Stochastic simulation for high-severity, low-frequency products (LTC tail, pandemic pool) — deterministic stress is insufficient</li>
+            </ul>
+          </div>
+          <div class="sub-section">
+            <div class="sub-heading">Iterative loop</div>
+            <ul class="bullet-list">
+              <li data-min="15">Profit test → if fails: revisit product design, distribution, profit requirement, or abandon product</li>
+              <li data-min="20">Rate adjustment → re-test → repeat until competitiveness and profitability are simultaneously achieved</li>
+            </ul>
+          </div>
+          <div class="exam-tip">NPV is the preferred primary criterion — always state this and explain why IRR is a secondary measure (not unique, cannot be related to market share). This is a common examiner catch point.</div>
+        </div>
+      </div>
+
+      <!-- S8 -->
+      <div class="step-card phase-build" id="step8">
+        <div class="step-header" onclick="toggleCard('step8')">
+          <div class="step-icon">S8</div>
+          <div class="step-title-block">
+            <div class="step-title">Reinsurance Considerations</div>
+            <div class="step-subtitle">Risk sharing, capital, expertise</div>
+          </div>
+          <div class="step-meta">
+            <span class="marks-tag medium">15+ marks</span>
+          </div>
+          <span class="chevron">▾</span>
+        </div>
+        <div class="step-body">
+          <div class="sub-section">
+            <div class="sub-heading">Seven roles of reinsurance (in pricing context)</div>
+            <ul class="bullet-list">
+              <li data-min="15">Technical expertise — reinsurer provides incidence tables, pricing benchmarks, and product design guidance</li>
+              <li data-min="15">Risk sharing / smoothing profits — reduces volatility of insurer's profit signature</li>
+              <li data-min="15">New business strain financing — quota share provides upfront commission to fund initial expenses</li>
+              <li data-min="20">Capital arbitrage — reinsurer holds less capital → lower total industry cost → lower net premium possible</li>
+              <li data-min="20">Tax arbitrage — may allow pricing net of reinsurance for competitive advantage</li>
+              <li data-min="20">Enabling larger risks — XL essential for large CI sum insured; makes individual large-risk cover viable</li>
+              <li data-min="25">Regulatory approval — quota share reinsurer often co-approves premium tables and retains right to vary commission if rates change</li>
+            </ul>
+          </div>
+          <div class="sub-section">
+            <div class="sub-heading">Pricing impact</div>
+            <ul class="bullet-list">
+              <li data-min="15">If reinsurance cost &gt; benefit: net cost (EPV premiums paid − EPV recoveries) is a loading in the office premium</li>
+              <li data-min="15">If arbitrage available: price net of reinsurance → competitive advantage</li>
+              <li data-min="20">Reinsurer benchmark rate vs internal model: material divergence signals a modelling error or data problem</li>
+              <li data-min="25">Very limited LTC reinsurance in India — insurer retains full long-tail risk; major constraint on product launch</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- S9 -->
+      <div class="step-card phase-validate" id="step9">
+        <div class="step-header" onclick="toggleCard('step9')">
+          <div class="step-icon">S9</div>
+          <div class="step-title-block">
+            <div class="step-title">Premium Reviewability &amp; Regulatory Filing</div>
+            <div class="step-subtitle">Guaranteed vs reviewable; IRDAI compliance</div>
+          </div>
+          <div class="step-meta">
+            <span class="marks-tag medium">15+ marks</span>
+          </div>
+          <span class="chevron">▾</span>
+        </div>
+        <div class="step-body">
+          <div class="sub-section">
+            <div class="sub-heading">Guaranteed vs reviewable premiums</div>
+            <ul class="bullet-list">
+              <li data-min="15"><strong>Reviewable:</strong> allows repricing as experience develops; lower initial premium (no cost-of-guarantee loading); better marketability for new products with uncertain experience</li>
+              <li data-min="15"><strong>Guaranteed:</strong> sales certainty; no reputational risk of increases; but requires heavier reserves, higher capital, and larger contingency margin — removes ability to reprice</li>
+              <li data-min="20">For new markets (e.g. IP Country B scenario): launch with premiums guaranteed for initial period (e.g. 5 years), then reviewable — balances marketability with repricing need</li>
+              <li data-min="20">Lapse risk on review: selective lapsation — high-risk lives retain cover on increase; healthy lives exit → adverse selection feedback loop must be modelled in profit test</li>
+              <li data-min="25">Basis for review must be set out clearly in product literature; customers must understand when and why premiums may change</li>
+            </ul>
+          </div>
+          <div class="sub-section">
+            <div class="sub-heading">Regulatory requirements</div>
+            <ul class="bullet-list">
+              <li data-min="15">File under IRDAI Use &amp; File or File &amp; Use procedure (IRDAI Insurance Products Regulations 2024) as applicable</li>
+              <li data-min="15">Guaranteed renewability rule — insurer cannot refuse renewal (IRDAI health product regulations)</li>
+              <li data-min="20">Over-insurance prevention: benefit-not-to-exceed-salary rule for group IP; insurer must verify against other income sources</li>
+              <li data-min="20">Rating factor restrictions — check whether gender discrimination is permitted; regulatory ban must be reflected in pricing (community rating)</li>
+              <li data-min="25">Novel products (packaged surgical, pandemic pool) — regulatory classification may be uncertain; IRDAI jurisdiction question must be resolved before launch</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- S10 -->
+      <div class="step-card phase-validate" id="step10">
+        <div class="step-header" onclick="toggleCard('step10')">
+          <div class="step-icon">S10</div>
+          <div class="step-title-block">
+            <div class="step-title">Competitiveness, Anti-selection &amp; Market Positioning</div>
+            <div class="step-subtitle">Market-rate benchmarking; anti-selection exposure</div>
+          </div>
+          <div class="step-meta">
+            <span class="marks-tag high">20+ marks</span>
+          </div>
+          <span class="chevron">▾</span>
+        </div>
+        <div class="step-body">
+          <div class="sub-section">
+            <div class="sub-heading">Competitiveness check</div>
+            <ul class="bullet-list">
+              <li data-min="20">Benchmark final rates against market — if uncompetitive: revisit product design, distribution, or profit requirement before abandoning</li>
+              <li data-min="20">Monitor competitors' rating factors — finer differentiation → cherry-picking of lighter risks → anti-selection against broader pricer</li>
+              <li data-min="20">Fixed expenses → volume matters → economies of scale → large players have cost advantage</li>
+              <li data-min="25">Loss leaders: pricing below cost to gain market share — risk is adverse mix (loss leader over-sold; subsidising product under-sold)</li>
+            </ul>
+          </div>
+          <div class="sub-section">
+            <div class="sub-heading">Anti-selection management in pricing</div>
+            <ul class="bullet-list">
+              <li data-min="20">Individual voluntary products: higher-risk individuals disproportionately purchase — price must explicitly reflect this loading</li>
+              <li data-min="20">Compulsory group cover: anti-selection at entry is eliminated — lower rate justified; compulsory participation assumption must hold</li>
+              <li data-min="20">Waiting periods, survival periods, at-work clauses — reduce adverse selection from imminent claimants at entry</li>
+              <li data-min="25">CI: individuals with family history or early symptoms more likely to buy; full medical underwriting for individual removes selection at entry</li>
+              <li data-min="25">LTC: adverse selection is highest of any H&amp;C product — those nearest to care need are most likely to buy; long waiting periods and full medical underwriting essential</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- S11 -->
+      <div class="step-card phase-validate" id="step11">
+        <div class="step-header" onclick="toggleCard('step11')">
+          <div class="step-icon">S11</div>
+          <div class="step-title-block">
+            <div class="step-title">Ongoing Monitoring &amp; Premium Review</div>
+            <div class="step-subtitle">Actuarial control cycle in operation</div>
+          </div>
+          <div class="step-meta">
+            <span class="marks-tag high">20+ marks</span>
+          </div>
+          <span class="chevron">▾</span>
+        </div>
+        <div class="step-body">
+          <div class="sub-section">
+            <div class="sub-heading">Monitoring framework</div>
+            <ul class="bullet-list">
+              <li data-min="20">Actual-to-expected (A/E) analysis for all key assumptions: morbidity incidence, average claim cost, medical inflation, lapses, expenses, new business mix</li>
+              <li data-min="20">Stratify monitoring: by age, gender, duration, NCD level, underwriting method, network, provider — focus on segments where A/E deviates most</li>
+              <li data-min="20">Watch for new procedures, drugs, or technology shifting claims costs (technology-led cost push)</li>
+              <li data-min="25">Expense monitoring: actual vs expected split by initial, renewal, and claims — adjusted for inflation and volume</li>
+              <li data-min="25">Three types of premium review: (1) new business basis monitoring, (2) reviewable premium adequacy testing, (3) loss-leader reserve adequacy check</li>
+            </ul>
+          </div>
+          <div class="sub-section">
+            <div class="sub-heading">Premium review process</div>
+            <ul class="bullet-list">
+              <li data-min="20">Collect experience since last pricing/review date; full experience investigation before deciding on any rate change</li>
+              <li data-min="20">Early-year distortions (underwriting selection effect) must be understood before acting — avoid premature rate increases</li>
+              <li data-min="25">Revise best-estimate assumptions; re-run profit test from review date; assess whether rate change is needed and at what level</li>
+              <li data-min="25">Model impact of rate change on future volume and overhead coverage — higher rate → some lapses → fewer policies absorbing fixed costs</li>
+              <li data-min="25">Assumption change need not force premium change — test significance first; communicate basis of review clearly with adequate notice</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- S12 -->
+      <div class="step-card phase-validate optional" id="step12">
+        <div class="step-header" onclick="toggleCard('step12')">
+          <div class="step-icon">S12</div>
+          <div class="step-title-block">
+            <div class="step-title">Options &amp; Guarantees Pricing</div>
+            <div class="step-subtitle">Additional benefit options; stochastic valuation</div>
+          </div>
+          <div class="step-meta">
+            <span class="marks-tag high">25 marks only</span>
+          </div>
+          <span class="chevron">▾</span>
+        </div>
+        <div class="step-body">
+          <div class="sub-section">
+            <div class="sub-heading">Types of option relevant to H&amp;C products</div>
+            <ul class="bullet-list">
+              <li data-min="25">Purchase additional cover without medical evidence (e.g. at marriage, birth of child)</li>
+              <li data-min="25">Renew policy at term end (e.g. CI at end of 10-year term) — guaranteed renewability</li>
+              <li data-min="25">Buy-back: reinstate life cover after accelerated CI payout</li>
+              <li data-min="25">All options: only exercisable when not currently claiming — to limit anti-selection</li>
+            </ul>
+          </div>
+          <div class="sub-section">
+            <div class="sub-heading">Option cost &amp; valuation</div>
+            <ul class="bullet-list">
+              <li data-min="25">Option cost = proportion exercising × average extra morbidity/mortality over standard rates at exercise date</li>
+              <li data-min="25">Higher take-up → lower average impairment of exercisers (healthier lives dilute); lower take-up → worse health of exercisers — monitoring essential</li>
+              <li data-min="25"><strong>Conventional method:</strong> assume 100% take-up → ultimate mortality (conservative; simple); extra benefit + extra premiums at standard select rates + admin + reserves pre/post exercise</li>
+              <li data-min="25"><strong>North American method:</strong> realistic take-up rates; harder to obtain data; more accurate but more assumptions needed</li>
+              <li data-min="25">Stochastic modelling: simulate proportions and claim experience in each risk sub-group → distribution of option cost → statistical adequacy level</li>
+            </ul>
+          </div>
+          <div class="sub-section">
+            <div class="sub-heading">Guarantee pricing</div>
+            <ul class="bullet-list">
+              <li data-min="25">Resilience testing: can the premium cover outgoings under adverse scenarios over the guarantee period?</li>
+              <li data-min="25">Additional reserves in early years (when risk is lower) to fund guaranteed rate through adverse periods</li>
+              <li data-min="25">Disclosure of guarantee cost may drive policyholders toward reviewable contracts — marketability trade-off</li>
+              <li data-min="25">Regulatory approval of the valuation technique and guarantee reserves required before launch</li>
+            </ul>
+          </div>
+          <div class="exam-tip">Options questions often ask for both the conventional and North American methods. Know the difference. Health options differ from financial options — some policies may always be "in the money" (e.g. someone with deteriorating health will always exercise). Restricting exercise dates reduces anti-selection.</div>
+        </div>
+      </div>
+
+    </div><!-- /steps-grid -->
+
+  </main>
+</div>
+
+<script>
+  // ── State ──
+  let currentMarks = 10;
+  let currentProduct = 'all';
+
+  const ctxMap = {
+    10: {
+      title: 'Core Pricing Process',
+      desc: 'Cover the risk premium formula for the specific product, key data sources, and main loadings. 4–5 steps with clear structure. One well-labelled sub-heading per step earns a mark.',
+      chips: ['Risk premium formula', 'Product-specific data', 'Expense loadings', '4–5 steps']
+    },
+    15: {
+      title: 'Extended Pricing Framework',
+      desc: 'Add credibility weighting and burning cost. Include reinsurance role and a named profit criterion. Group vs individual distinction expected. 7–8 steps treated briefly.',
+      chips: ['Credibility: Z·A+(1-Z)·E', 'Burning cost', 'Reinsurance role', 'NPV criterion', '7–8 steps']
+    },
+    20: {
+      title: 'Full Office Premium Build',
+      desc: 'Full treatment of all 10 steps. Examiners expect anti-selection analysis, reviewable vs guaranteed premium discussion, competitiveness, and a monitoring framework sketch.',
+      chips: ['Anti-selection', 'Reviewable vs guaranteed', 'Competitiveness', 'Monitoring', '10 steps']
+    },
+    25: {
+      title: 'Comprehensive Pricing Essay',
+      desc: 'All 12 steps including options/guarantees pricing. Stochastic modelling of the tail. Scenario analysis. Regulatory nuance. Product-specific formula derivation expected.',
+      chips: ['Options pricing', 'Stochastic modelling', 'Sensitivity analysis', 'Regulatory detail', 'All 12 steps']
+    }
+  };
+
+  const productNotes = {
+    'pmi': ['pn2-ip', 'pn2-ltc'],
+    'ip': ['pn2-ip'],
+    'ltc': ['pn2-ltc'],
+    'ci': [],
+    'all': []
+  };
+
+  function setMarks(m) {
+    currentMarks = m;
+    document.body.setAttribute('data-marks', m);
+
+    // Update button states
+    document.querySelectorAll('.marks-btn').forEach(btn => {
+      btn.classList.toggle('active', parseInt(btn.dataset.marks) === m);
+    });
+
+    // Update context banner
+    document.getElementById('ctx-marks').innerHTML = m + '<small>marks</small>';
+    const ctx = ctxMap[m];
+    document.getElementById('ctx-title').textContent = ctx.title;
+    document.getElementById('ctx-desc').textContent = ctx.desc;
+    const chipEl = document.getElementById('ctx-chips');
+    chipEl.innerHTML = ctx.chips.map((c, i) => `<span class="chip${i===0?' highlight':''}">${c}</span>`).join('');
+
+    // Dim/show step cards based on relevance
+    document.querySelectorAll('.step-card').forEach(card => {
+      const tag = card.querySelector('.marks-tag');
+      if (!tag) return;
+      const isOptional = card.classList.contains('optional');
+      if (tag.classList.contains('always')) {
+        card.classList.remove('dimmed');
+      } else if (tag.classList.contains('medium')) {
+        card.classList.toggle('dimmed', m < 15);
+      } else if (tag.classList.contains('high')) {
+        if (isOptional) {
+          card.classList.toggle('dimmed', m < 25);
+        } else {
+          card.classList.toggle('dimmed', m < 20);
+        }
+      }
+    });
+  }
+
+  function setProduct(p) {
+    currentProduct = p;
+    document.querySelectorAll('.product-chip').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.product === p);
+    });
+
+    // Show/hide product notes
+    document.querySelectorAll('.product-note').forEach(note => {
+      note.classList.remove('visible');
+    });
+    if (p !== 'all') {
+      const noteIds = {
+        pmi: [],
+        ci: [],
+        ip: ['pn2-ip'],
+        ltc: ['pn2-ltc']
+      };
+      (noteIds[p] || []).forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.classList.add('visible');
+      });
+    }
+  }
+
+  function toggleCard(id) {
+    const card = document.getElementById(id);
+    card.classList.toggle('open');
+    // Update sidebar active state
+    document.querySelectorAll('.step-nav-item').forEach(item => item.classList.remove('active'));
+  }
+
+  function openAndScroll(id) {
+    const card = document.getElementById(id);
+    if (!card.classList.contains('open')) {
+      card.classList.add('open');
+    }
+    card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    card.classList.add('highlight-pulse');
+    setTimeout(() => card.classList.remove('highlight-pulse'), 700);
+
+    // Update sidebar
+    document.querySelectorAll('.step-nav-item').forEach(item => item.classList.remove('active'));
+    const matchingItem = Array.from(document.querySelectorAll('.step-nav-item')).find(item => {
+      return item.getAttribute('onclick') && item.getAttribute('onclick').includes(id);
+    });
+    if (matchingItem) matchingItem.classList.add('active');
+  }
+
+  function scrollToSection(id) {
+    document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+  }
+
+  // Init
+  setMarks(10);
+</script>
+</body>
+</html>

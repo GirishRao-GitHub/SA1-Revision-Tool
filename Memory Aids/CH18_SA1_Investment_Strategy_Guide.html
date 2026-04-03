@@ -1,0 +1,1466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SA1 — Investment Strategy Framework</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600;700&family=Space+Mono:wght@400;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:        #0d1117;
+    --surface:   #161b22;
+    --surface2:  #1c2330;
+    --border:    #2d3748;
+    --border2:   #3a4a5c;
+    --text:      #e2e8f0;
+    --muted:     #8892a4;
+    --gold:      #d4a017;
+    --gold-soft: #f0c040;
+    --teal:      #0ea5b0;
+    --teal-soft: #7dd3d8;
+    --rose:      #e05c6a;
+    --rose-soft: #f4a0aa;
+    --violet:    #7c3aed;
+    --violet-soft:#c4b5fd;
+    --green:     #10b981;
+    --green-soft:#6ee7b7;
+    --phase1:    #1e3a5f;
+    --phase2:    #1a4a3a;
+    --phase3:    #3d1a4a;
+    --phase1-acc:#3b82f6;
+    --phase2-acc:#10b981;
+    --phase3-acc:#a855f7;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+    font-size: 14px;
+  }
+
+  /* ── HEADER ── */
+  .site-header {
+    background: linear-gradient(135deg, #0d1117 0%, #1a2035 50%, #0d1117 100%);
+    border-bottom: 1px solid var(--border);
+    padding: 2.5rem 3rem 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .header-grid {
+    position: absolute; inset: 0;
+    background-image: radial-gradient(circle at 70% 50%, rgba(212,160,23,0.06) 0%, transparent 60%),
+                      radial-gradient(circle at 20% 80%, rgba(14,165,176,0.05) 0%, transparent 50%);
+  }
+  .header-content { position: relative; z-index: 1; }
+  .header-badge {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    color: var(--teal);
+    text-transform: uppercase;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+  }
+  .header-badge::before {
+    content: '';
+    width: 32px; height: 1px;
+    background: var(--teal);
+  }
+  .site-header h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2rem, 4.5vw, 3.4rem);
+    font-weight: 700;
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    margin-bottom: 0.8rem;
+  }
+  .site-header h1 .accent { color: var(--gold-soft); }
+  .header-sub {
+    font-size: 0.82rem;
+    color: var(--muted);
+    max-width: 580px;
+    line-height: 1.65;
+    font-weight: 300;
+  }
+  .header-tags {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-top: 1.2rem;
+  }
+  .h-tag {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    border: 1px solid var(--border2);
+    border-radius: 3px;
+    padding: 3px 10px;
+    color: var(--muted);
+  }
+
+  /* ── MARKS BAR ── */
+  .marks-bar {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0.85rem 3rem;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    flex-wrap: wrap;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .marks-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+  .marks-btn {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.72rem;
+    border: 1px solid var(--border2);
+    background: transparent;
+    color: var(--muted);
+    border-radius: 4px;
+    padding: 0.38rem 0.9rem;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .marks-btn:hover { border-color: var(--gold); color: var(--gold-soft); }
+  .marks-btn.active {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: #000;
+    font-weight: 700;
+  }
+  .marks-btn .badge {
+    font-size: 0.55rem;
+    background: rgba(255,255,255,0.25);
+    border-radius: 2px;
+    padding: 1px 4px;
+    margin-left: 4px;
+  }
+  .bar-sep { width: 1px; height: 18px; background: var(--border); }
+  .product-chip {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    border: 1px solid var(--border2);
+    border-radius: 100px;
+    padding: 3px 12px;
+    cursor: pointer;
+    background: transparent;
+    color: var(--muted);
+    transition: all 0.15s;
+  }
+  .product-chip:hover { border-color: var(--teal); color: var(--teal-soft); }
+  .product-chip.active { background: var(--teal); border-color: var(--teal); color: #000; font-weight: 700; }
+
+  /* ── LAYOUT ── */
+  .main-wrap {
+    display: grid;
+    grid-template-columns: 240px 1fr;
+    min-height: calc(100vh - 120px);
+  }
+
+  /* ── SIDEBAR ── */
+  .sidebar {
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    padding: 1.2rem 0;
+    position: sticky;
+    top: 50px;
+    height: calc(100vh - 50px);
+    overflow-y: auto;
+  }
+  .sidebar::-webkit-scrollbar { width: 4px; }
+  .sidebar::-webkit-scrollbar-track { background: transparent; }
+  .sidebar::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+
+  .sb-section {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 0.4rem 1.2rem;
+    margin-top: 0.6rem;
+  }
+  .phase-row {
+    display: flex;
+    align-items: center;
+    padding: 0.45rem 1.2rem;
+    gap: 0.5rem;
+    margin-top: 0.3rem;
+  }
+  .phase-pill {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.5rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 2px 8px;
+    border-radius: 2px;
+    font-weight: 700;
+  }
+  .phase-pill.p1 { background: var(--phase1-acc); color: #000; }
+  .phase-pill.p2 { background: var(--phase2-acc); color: #000; }
+  .phase-pill.p3 { background: var(--phase3-acc); color: #fff; }
+
+  .sb-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+    padding: 0.45rem 1.2rem;
+    cursor: pointer;
+    transition: background 0.12s;
+    border-left: 2px solid transparent;
+  }
+  .sb-item:hover { background: var(--surface2); }
+  .sb-item.active {
+    background: rgba(14,165,176,0.08);
+    border-left-color: var(--teal);
+  }
+  .sb-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.58rem;
+    color: var(--teal-soft);
+    background: rgba(14,165,176,0.12);
+    border: 1px solid rgba(14,165,176,0.3);
+    border-radius: 3px;
+    padding: 1px 5px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+  .sb-item.active .sb-num { background: var(--teal); color: #000; border-color: var(--teal); }
+  .sb-label {
+    font-size: 0.76rem;
+    color: var(--muted);
+    line-height: 1.3;
+  }
+  .sb-item.active .sb-label { color: var(--teal-soft); font-weight: 500; }
+
+  /* ── CONTENT ── */
+  .content {
+    padding: 2rem 3rem 4rem;
+    max-width: 920px;
+  }
+
+  /* ── CONTEXT BANNER ── */
+  .ctx-banner {
+    background: linear-gradient(135deg, var(--surface) 0%, var(--surface2) 100%);
+    border: 1px solid var(--border2);
+    border-left: 3px solid var(--gold);
+    border-radius: 6px;
+    padding: 1.2rem 1.6rem;
+    margin-bottom: 2rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 1.4rem;
+  }
+  .ctx-marks {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 3rem;
+    font-weight: 700;
+    color: var(--gold-soft);
+    line-height: 1;
+    flex-shrink: 0;
+  }
+  .ctx-marks small {
+    display: block;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 0.12em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-top: 3px;
+  }
+  .ctx-body strong {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    color: var(--gold-soft);
+    display: block;
+    margin-bottom: 0.35rem;
+  }
+  .ctx-body p { font-size: 0.8rem; color: var(--muted); line-height: 1.55; }
+  .ctx-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 0.6rem;
+  }
+  .ctx-chip {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.56rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border: 1px solid var(--border2);
+    border-radius: 2px;
+    padding: 2px 8px;
+    color: var(--muted);
+  }
+  .ctx-chip.hi { border-color: var(--gold); color: var(--gold-soft); }
+
+  /* ── OVERVIEW GRID ── */
+  .overview-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+  .ov-block {
+    border-radius: 5px;
+    padding: 1.1rem 1.2rem;
+    border: 1px solid var(--border);
+  }
+  .ov-block.p1 { background: var(--phase1); border-color: var(--phase1-acc); }
+  .ov-block.p2 { background: var(--phase2); border-color: var(--phase2-acc); }
+  .ov-block.p3 { background: var(--phase3); border-color: var(--phase3-acc); }
+  .ov-phase {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    opacity: 0.65;
+    margin-bottom: 0.4rem;
+  }
+  .ov-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+  }
+  .ov-steps { font-size: 0.74rem; opacity: 0.8; line-height: 1.7; }
+
+  /* ── GUIDE TABLE ── */
+  .guide-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.78rem;
+    margin-bottom: 2rem;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    overflow: hidden;
+  }
+  .guide-table th {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-align: left;
+    padding: 0.55rem 0.9rem;
+    background: var(--surface2);
+    border-bottom: 1px solid var(--border);
+  }
+  .guide-table td {
+    padding: 0.6rem 0.9rem;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+    line-height: 1.45;
+    color: var(--muted);
+  }
+  .guide-table tr:last-child td { border-bottom: none; }
+  .guide-table tr:hover td { background: var(--surface2); }
+  .guide-table .mc {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--gold-soft);
+    white-space: nowrap;
+  }
+
+  /* ── STEP CARDS ── */
+  .steps-grid { display: flex; flex-direction: column; gap: 1.2rem; }
+
+  .step-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .step-card:hover { border-color: var(--border2); }
+  .step-card.dimmed { opacity: 0.28; pointer-events: none; }
+  .step-card.optional { border-style: dashed; }
+
+  .step-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.9rem;
+    padding: 0.9rem 1.2rem;
+    cursor: pointer;
+    user-select: none;
+  }
+  .step-header:hover { background: var(--surface2); }
+
+  .step-icon {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 3px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .step-icon.p1 { background: rgba(59,130,246,0.15); color: var(--phase1-acc); border: 1px solid rgba(59,130,246,0.3); }
+  .step-icon.p2 { background: rgba(16,185,129,0.15); color: var(--phase2-acc); border: 1px solid rgba(16,185,129,0.3); }
+  .step-icon.p3 { background: rgba(168,85,247,0.15); color: var(--phase3-acc); border: 1px solid rgba(168,85,247,0.3); }
+
+  .step-title-block { flex: 1; }
+  .step-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.2;
+  }
+  .step-sub {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.06em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-top: 3px;
+  }
+  .step-meta { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; flex-shrink: 0; }
+  .mtag {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    border-radius: 3px;
+    padding: 2px 8px;
+    white-space: nowrap;
+  }
+  .mtag.always { background: rgba(16,185,129,0.15); color: var(--green-soft); border: 1px solid rgba(16,185,129,0.3); }
+  .mtag.medium { background: rgba(212,160,23,0.15); color: var(--gold-soft); border: 1px solid rgba(212,160,23,0.3); }
+  .mtag.high   { background: rgba(224,92,106,0.15); color: var(--rose-soft); border: 1px solid rgba(224,92,106,0.3); }
+  .chevron { color: var(--muted); font-size: 0.85rem; transition: transform 0.2s; margin-top: 2px; }
+  .step-card.open .chevron { transform: rotate(180deg); }
+
+  /* ── STEP BODY ── */
+  .step-body {
+    display: none;
+    border-top: 1px solid var(--border);
+    padding: 1.1rem 1.2rem 1.4rem;
+    background: var(--surface2);
+  }
+  .step-card.open .step-body { display: block; }
+
+  .sub-section { margin-bottom: 1.3rem; }
+  .sub-heading {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--teal-soft);
+    margin-bottom: 0.6rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .sub-heading::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+  .blist {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.42rem;
+  }
+  .blist li {
+    font-size: 0.82rem;
+    line-height: 1.55;
+    color: var(--muted);
+    padding-left: 1.2rem;
+    position: relative;
+  }
+  .blist li::before {
+    content: '›';
+    position: absolute;
+    left: 0;
+    color: var(--gold);
+    font-weight: 700;
+    font-size: 1rem;
+    line-height: 1.2;
+  }
+  .blist li em {
+    font-style: normal;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.72em;
+    background: rgba(14,165,176,0.1);
+    padding: 1px 5px;
+    border-radius: 2px;
+    color: var(--teal-soft);
+  }
+  .blist li strong { color: var(--text); font-weight: 600; }
+  .blist li .india {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.66em;
+    background: rgba(212,160,23,0.12);
+    border: 1px solid rgba(212,160,23,0.25);
+    padding: 1px 6px;
+    border-radius: 2px;
+    color: var(--gold-soft);
+    margin-left: 4px;
+  }
+
+  /* conditional visibility */
+  .blist li[data-min="15"],
+  .blist li[data-min="20"],
+  .blist li[data-min="25"] { display: none; }
+
+  body[data-marks="15"] .blist li[data-min="15"] { display: list-item; }
+  body[data-marks="20"] .blist li[data-min="15"],
+  body[data-marks="20"] .blist li[data-min="20"] { display: list-item; }
+  body[data-marks="25"] .blist li[data-min="15"],
+  body[data-marks="25"] .blist li[data-min="20"],
+  body[data-marks="25"] .blist li[data-min="25"] { display: list-item; }
+
+  /* ── FORMULA BOX ── */
+  .formula {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.73rem;
+    background: #0a0f17;
+    border: 1px solid var(--border2);
+    border-left: 3px solid var(--teal);
+    color: var(--teal-soft);
+    padding: 0.8rem 1rem;
+    border-radius: 4px;
+    margin-top: 0.7rem;
+    line-height: 1.8;
+  }
+
+  /* ── EXAM TIP ── */
+  .exam-tip {
+    background: rgba(212,160,23,0.07);
+    border: 1px solid rgba(212,160,23,0.25);
+    border-left: 3px solid var(--gold);
+    border-radius: 4px;
+    padding: 0.65rem 0.9rem;
+    font-size: 0.78rem;
+    line-height: 1.55;
+    color: var(--muted);
+    margin-top: 0.9rem;
+  }
+  .exam-tip::before {
+    content: '⬡ EXAMINER NOTE — ';
+    font-family: 'Space Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    color: var(--gold);
+    display: block;
+    margin-bottom: 0.3rem;
+  }
+
+  /* ── INDIA CALLOUT ── */
+  .india-callout {
+    background: rgba(212,160,23,0.06);
+    border: 1px solid rgba(212,160,23,0.2);
+    border-radius: 4px;
+    padding: 0.7rem 0.9rem;
+    font-size: 0.78rem;
+    line-height: 1.55;
+    color: var(--muted);
+    margin-top: 0.9rem;
+    display: none;
+  }
+  .india-callout.visible { display: block; }
+  .india-callout-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.58rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold);
+    display: block;
+    margin-bottom: 0.35rem;
+  }
+
+  /* ── MATRIX TABLE ── */
+  .mini-matrix {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.72rem;
+    margin-top: 0.7rem;
+  }
+  .mini-matrix th {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.56rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 0.35rem 0.6rem;
+    text-align: left;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+  }
+  .mini-matrix td {
+    padding: 0.4rem 0.6rem;
+    border-bottom: 1px solid rgba(45,55,72,0.5);
+    color: var(--muted);
+    vertical-align: top;
+    line-height: 1.4;
+  }
+  .mini-matrix .asset-name { color: var(--text); font-weight: 500; }
+  .mini-matrix .tick { color: var(--green); }
+  .mini-matrix .cross { color: var(--rose); }
+  .mini-matrix .part  { color: var(--gold-soft); }
+
+  /* ── LEGEND ── */
+  .leg {
+    display: flex;
+    gap: 1.2rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.8rem;
+  }
+  .leg-item { display: flex; align-items: center; gap: 0.35rem; font-size: 0.72rem; color: var(--muted); }
+  .leg-dot { width: 9px; height: 9px; border-radius: 50%; }
+  .leg-dot.core { background: var(--green); }
+  .leg-dot.ext  { background: var(--gold); }
+  .leg-dot.deep { background: var(--rose); }
+
+  /* ── RESPONSIVE ── */
+  @media(max-width:768px) {
+    .main-wrap { grid-template-columns: 1fr; }
+    .sidebar { position: static; height: auto; border-right: none; border-bottom: 1px solid var(--border); }
+    .content { padding: 1.5rem; }
+    .overview-3 { grid-template-columns: 1fr; }
+    .marks-bar { padding: 0.7rem 1.2rem; }
+    .site-header { padding: 1.5rem; }
+  }
+
+  /* pulse animation */
+  @keyframes cardPulse {
+    0%,100% { box-shadow: none; }
+    50% { box-shadow: 0 0 0 2px var(--teal); }
+  }
+  .pulse { animation: cardPulse 0.5s ease; }
+
+  @keyframes fadeUp {
+    from { opacity:0; transform:translateY(6px); }
+    to   { opacity:1; transform:translateY(0); }
+  }
+  .step-card { animation: fadeUp 0.25s ease both; }
+</style>
+</head>
+<body data-marks="10">
+
+<!-- ═══════════════ HEADER ═══════════════ -->
+<header class="site-header">
+  <div class="header-grid"></div>
+  <div class="header-content">
+    <div class="header-badge">SA1 Health &amp; Care Insurance · IFoA / IAI Investment &amp; ALM</div>
+    <h1>Investment <span class="accent">Strategy</span><br>Framework</h1>
+    <p class="header-sub">A structured approach to investment strategy questions from 10 to 25 marks — built from IAI exam questions (2016–2025) with IFoA core principles for Health &amp; Care insurance.</p>
+    <div class="header-tags">
+      <span class="h-tag">IAI SA1 primary</span>
+      <span class="h-tag">IFoA SP1 Ch.28</span>
+      <span class="h-tag">IRDAI regulations</span>
+      <span class="h-tag">ALM · Solvency II</span>
+      <span class="h-tag">PMI · IP · LTC · ULIP</span>
+    </div>
+  </div>
+</header>
+
+<!-- ═══════════════ MARKS BAR ═══════════════ -->
+<div class="marks-bar">
+  <span class="marks-label">Marks →</span>
+  <button class="marks-btn active" data-marks="10" onclick="setMarks(10)">10 <span class="badge">core</span></button>
+  <button class="marks-btn" data-marks="15" onclick="setMarks(15)">15</button>
+  <button class="marks-btn" data-marks="20" onclick="setMarks(20)">20</button>
+  <button class="marks-btn" data-marks="25" onclick="setMarks(25)">25 <span class="badge">full</span></button>
+  <div class="bar-sep"></div>
+  <span class="marks-label">Product →</span>
+  <button class="product-chip active" data-product="all" onclick="setProduct('all')">All</button>
+  <button class="product-chip" data-product="pmi" onclick="setProduct('pmi')">PMI</button>
+  <button class="product-chip" data-product="ip" onclick="setProduct('ip')">IP / Group</button>
+  <button class="product-chip" data-product="ltc" onclick="setProduct('ltc')">LTC</button>
+  <button class="product-chip" data-product="ul" onclick="setProduct('ul')">Unit-linked</button>
+</div>
+
+<!-- ═══════════════ MAIN ═══════════════ -->
+<div class="main-wrap">
+
+  <!-- SIDEBAR -->
+  <nav class="sidebar">
+    <div class="sb-section">Overview</div>
+    <div class="sb-item active" onclick="scrollToId('overview')">
+      <span class="sb-num">→</span>
+      <span class="sb-label">How to use &amp; marks guide</span>
+    </div>
+
+    <div class="phase-row"><span class="phase-pill p1">Phase 1 · Principles &amp; Objectives</span></div>
+    <div class="sb-item" onclick="openAndScroll('s1')"><span class="sb-num">S1</span><span class="sb-label">Investment Objective &amp; Core Principle</span></div>
+    <div class="sb-item" onclick="openAndScroll('s2')"><span class="sb-num">S2</span><span class="sb-label">Nature of Liabilities → Asset Type</span></div>
+    <div class="sb-item" onclick="openAndScroll('s3')"><span class="sb-num">S3</span><span class="sb-label">Matching: Term, Currency, Nature</span></div>
+
+    <div class="phase-row"><span class="phase-pill p2">Phase 2 · Asset Selection</span></div>
+    <div class="sb-item" onclick="openAndScroll('s4')"><span class="sb-num">S4</span><span class="sb-label">Asset Classes &amp; Suitability</span></div>
+    <div class="sb-item" onclick="openAndScroll('s5')"><span class="sb-num">S5</span><span class="sb-label">Free Assets &amp; Risk Budget</span></div>
+    <div class="sb-item" onclick="openAndScroll('s6')"><span class="sb-num">S6</span><span class="sb-label">Liquidity &amp; Inflation Risk</span></div>
+    <div class="sb-item" onclick="openAndScroll('s7')"><span class="sb-num">S7</span><span class="sb-label">IRDAI / Regulatory Admissibility</span></div>
+
+    <div class="phase-row"><span class="phase-pill p3">Phase 3 · ALM Process &amp; Advanced</span></div>
+    <div class="sb-item" onclick="openAndScroll('s8')"><span class="sb-num">S8</span><span class="sb-label">ALM Modelling Process</span></div>
+    <div class="sb-item" onclick="openAndScroll('s9')"><span class="sb-num">S9</span><span class="sb-label">Derivatives in ALM</span></div>
+    <div class="sb-item" onclick="openAndScroll('s10')"><span class="sb-num">S10</span><span class="sb-label">Solvency II &amp; Capital Interaction</span></div>
+    <div class="sb-item" onclick="openAndScroll('s11')"><span class="sb-num">S11</span><span class="sb-label">Unit-linked Considerations</span></div>
+    <div class="sb-item" onclick="openAndScroll('s12')"><span class="sb-num">S12</span><span class="sb-label">Further Information Needed</span></div>
+  </nav>
+
+  <!-- CONTENT -->
+  <main class="content">
+
+    <!-- OVERVIEW -->
+    <section id="overview">
+      <div class="ctx-banner">
+        <div class="ctx-marks" id="ctx-marks">10<small>marks</small></div>
+        <div class="ctx-body">
+          <strong id="ctx-title">Investment Principles + Liability Classification</strong>
+          <p id="ctx-desc">State the core principle, classify the product liability into one of the four types, identify the primary matching asset class, and note the key constraint (IRDAI admissibility or term mismatch). 3–4 steps, concise bullets.</p>
+          <div class="ctx-chips" id="ctx-chips"></div>
+        </div>
+      </div>
+
+      <div class="overview-3">
+        <div class="ov-block p1">
+          <div class="ov-phase">Phase 1 · S1–S3</div>
+          <div class="ov-title">Principles &amp; Objectives</div>
+          <div class="ov-steps">Objective → Liability type → Match by nature, term, currency</div>
+        </div>
+        <div class="ov-block p2">
+          <div class="ov-phase">Phase 2 · S4–S7</div>
+          <div class="ov-title">Asset Selection</div>
+          <div class="ov-steps">Asset classes → Free assets → Liquidity → IRDAI rules</div>
+        </div>
+        <div class="ov-block p3">
+          <div class="ov-phase">Phase 3 · S8–S12</div>
+          <div class="ov-title">ALM &amp; Advanced</div>
+          <div class="ov-steps">ALM model → Derivatives → Solvency II → Unit-linked → Further info</div>
+        </div>
+      </div>
+
+      <table class="guide-table">
+        <thead>
+          <tr>
+            <th>Marks</th>
+            <th>Steps to cover</th>
+            <th>Depth</th>
+            <th>Examiner focus</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="mc">10</td>
+            <td>S1 – S4 (core only)</td>
+            <td>1–2 bullets per sub-heading</td>
+            <td>Classify liability type; name the matching asset; state IRDAI constraint; note mean term risk</td>
+          </tr>
+          <tr>
+            <td class="mc">15</td>
+            <td>S1 – S6</td>
+            <td>2–3 bullets per heading</td>
+            <td>Free assets vs matched position; liquidity; medical inflation vs RPI; product-specific nuance</td>
+          </tr>
+          <tr>
+            <td class="mc">20</td>
+            <td>S1 – S9</td>
+            <td>3–4 bullets on key sub-headings</td>
+            <td>ALM process steps; derivatives (5 purposes); Solvency II matching adjustment eligibility</td>
+          </tr>
+          <tr>
+            <td class="mc">25</td>
+            <td>S1 – S12 (all)</td>
+            <td>Full treatment; stochastic modelling; product-specific matrix</td>
+            <td>ESG calibration; unit-linked RSM/ASM balance; further information request; sensitivity scenarios</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="leg">
+        <div class="leg-item"><div class="leg-dot core"></div> Always include (10+ marks)</div>
+        <div class="leg-item"><div class="leg-dot ext"></div> Add at 15+ marks</div>
+        <div class="leg-item"><div class="leg-dot deep"></div> Full treatment at 20–25 marks</div>
+      </div>
+    </section>
+
+    <!-- ═══ STEP CARDS ═══ -->
+    <div class="steps-grid">
+
+      <!-- S1 -->
+      <div class="step-card open" id="s1">
+        <div class="step-header" onclick="toggleCard('s1')">
+          <div class="step-icon p1">S1</div>
+          <div class="step-title-block">
+            <div class="step-title">Investment Objective &amp; Core Principle</div>
+            <div class="step-sub">Why we invest · The guiding constraint</div>
+          </div>
+          <div class="step-meta"><span class="mtag always">Always include</span></div>
+          <span class="chevron">▾</span>
+        </div>
+        <div class="step-body">
+          <div class="sub-section">
+            <div class="sub-heading">Core investment objective</div>
+            <ul class="blist">
+              <li>Maximise overall investment return subject to: meeting all contractual and TCF obligations, recognising uncertainties, and the overall risk that shareholders, regulators, and policyholders are prepared to tolerate</li>
+              <li>Meet benefit payments and expenses as they fall due — the primary obligation; return maximisation is secondary</li>
+              <li>Generate returns for shareholders (profits/dividends) and/or policyholders (lower premiums or higher benefits)</li>
+              <li data-min="15">Support the insurer's commercial success, financial security, and long-term solvency — investment strategy is not developed in isolation from new business strategy and risk management strategy</li>
+            </ul>
+          </div>
+          <div class="sub-section">
+            <div class="sub-heading">Investment importance varies by product</div>
+            <ul class="blist">
+              <li><strong>High importance:</strong> Pre-funded LTC (large long-dated reserves; investment return drives liability adequacy over 20–40 year horizon)</li>
+              <li><strong>Medium importance:</strong> IP and CI (moderate reserves; income return on in-force business)</li>
+              <li><strong>Low importance:</strong> PMI (short-tail; low investment float; reserves minimal)</li>
+              <li><strong>Unit-linked:</strong> Policyholder bears investment risk in unit fund; insurer bears non-unit risk only</li>
+              <li data-min="15">The risk budget (permissible deviation from matched position) depends on the size of free assets relative to SCR and the risk appetite of shareholders and regulator</li>
+            </ul>
+          </div>
+          <div class="exam-tip">Always open with the core principle: "Maximise return subject to meeting all obligations..." — examiners award this statement. Then immediately connect importance to the specific product asked about.</div>
+        </div>
+      </div>
+
+      <!-- S2 -->
+      <div class="step-card open" id="s2">
+        <div class="step-header" onclick="toggleCard('s2')">
+          <div class="step-icon p1">S2</div>
+          <div class="step-title-block">
+            <div class="step-title">Nature of Liabilities → Asset Type</div>
+            <div class="step-sub">The Four Liability Types — the examiner's classification test</div>
+          </div>
+          <div class="step-meta"><span class="mtag always">Always include</span></div>
+          <span class="chevron">▾</span>
+        </div>
+        <div class="step-body">
+          <div class="sub-section">
+            <div class="sub-heading">The four liability types</div>
+            <table class="mini-matrix">
+              <thead>
+                <tr><th>Type</th><th>Examples (H&amp;C)</th><th>Primary matching asset</th><th>Key nuance</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="asset-name">① Fixed monetary</td>
+                  <td>Fixed CI lump sum · fixed IP benefit · fixed premiums</td>
+                  <td>Fixed-interest government bonds (matched term)</td>
+                  <td>Available terms often shorter than liabilities → reinvestment risk; zero-coupon bonds ideal but may not exist</td>
+                </tr>
+                <tr>
+                  <td class="asset-name">② Index-linked</td>
+                  <td>RPI/NAE-escalating IP · escalating LTCI benefit · expense inflation</td>
+                  <td>Index-linked gilts (IL gilts, same index, matched term)</td>
+                  <td>IL gilt time-lag issue; NAE: no bonds → equities better long-term but volatile short-term; medical inflation often &gt; RPI</td>
+                </tr>
+                <tr>
+                  <td class="asset-name">③ Indemnity</td>
+                  <td>PMI (actual treatment cost) · LTCI care costs</td>
+                  <td>Cash and short-term fixed-interest bonds</td>
+                  <td>Short-tail → investment income minimal; medical inflation often exceeds RPI → IL bonds only partial match</td>
+                </tr>
+                <tr>
+                  <td class="asset-name">④ Investment-linked</td>
+                  <td>Unit-linked LTCI · unit-linked hospital cash</td>
+                  <td>The actual underlying unit fund assets</td>
+                  <td>Often legally required to hold exactly; ALM matching is not a major issue — assets and liabilities move together</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="sub-section">
+            <div class="sub-heading">India-specific product mapping</div>
+            <ul class="blist">
+              <li><strong>Group IP (salary-linked benefit):</strong> index-linked or real assets preferred (equities, property for free surplus) <span class="india">IAI focus</span></li>
+              <li><strong>Group IP (level benefit):</strong> short-dated fixed-interest bonds and cash</li>
+              <li><strong>PMI individual/group:</strong> short-term bonds and money-market instruments — IRDAI admissibility rules constrain choices <span class="india">IAI focus</span></li>
+              <li><strong>Pre-funded LTC:</strong> index-linked / real assets for long horizon; immediate-needs LTC portfolio more conservative</li>
+              <li data-min="15">Net liability outgo = benefit payments + expenses − premiums — all three must be projected to determine the cashflow profile</li>
+              <li data-min="15">Perfect matching is rarely achievable or desirable — the objective is to get as close as practical, not to achieve a perfect match</li>
+            </ul>
+          </div>
+          <div class="exam-tip">Classify the product into one of the four liability types before recommending assets. Examiners deduct marks for recommending equities for a fixed CI benefit (type ①) without explicitly noting this is for free assets only, not matching.</div>
+
+          <div class="india-callout" id="ind-s2-pmi">
+            <span class="india-callout-label">🇮🇳 India — PMI context</span>
+            IRDAI regulations restrict eligible assets. Short-term G-Secs and money market instruments dominate the matching portfolio for health insurers. The investment float for PMI is small relative to GWP — investment income is a minor component of total return for standalone health insurers in India.
+          </div>
+          <div class="india-callout" id="ind-s2-ip">
+            <span class="india-callout-label">🇮🇳 India — Group IP context</span>
+            For group IP with salary-linked benefits, the theoretical match is index-linked instruments (linked to NAE). In India, no NAE-linked bonds exist — equities and real assets provide the closest long-term match but introduce short-term volatility. The insurer must consider whether the company is well-capitalised enough to bear this volatility.
+          </div>
+        </div>
+      </div>
+
+      <!-- S3 -->
+      <div class="step-card open" id="s3">
+        <div class="step-header" onclick="toggleCard('s3')">
+          <div class="step-icon p1">S3</div>
+          <div class="step-title-block">
+            <div class="step-title">Matching: Term, Currency &amp; Nature</div>
+            <div class="step-sub">The three dimensions of matching — always all three</div>
+          </div>
+          <div class="step-meta"><span class="mtag always">Always include</span></div>
+          <span class="chevron">▾</span>
+        </div>
+        <div class="step-body">
+          <div class="sub-section">
+            <div class="sub-heading">Term matching — mean term mismatch risk</div>
+            <ul class="blist">
+              <li><strong>Assets too long:</strong> long-term yields rise → MV of assets falls by more than MV of liabilities → potential insolvency (a 3% yield rise on 20-year bonds → ~30% capital loss)</li>
+              <li><strong>Assets too short:</strong> interest rates fall → reinvestment at lower rates → insufficient income to meet long-term liabilities (e.g. cash at 8% p.a. → rates cut to 5% → income shortfall)</li>
+              <li>Departure from matched term acceptable if: (a) large free assets provide a buffer; (b) future new business premiums can bridge the gap — but relying heavily on future premiums is dangerous</li>
+              <li data-min="15">Future solvency is threatened by term mismatch whether or not liabilities are discounted — the risk depends on future investment returns, not the accounting basis</li>
+            </ul>
+          </div>
+          <div class="sub-section">
+            <div class="sub-heading">Currency matching</div>
+            <ul class="blist">
+              <li>Assets must be in the same currency as the corresponding liabilities — mismatched currency creates FX risk that adds to, rather than reduces, investment volatility</li>
+              <li>If policies cover overseas employees or overseas treatments: match with overseas assets in the relevant currency (or use currency options to hedge) <span class="india">India: group IP with expat employees</span></li>
+              <li data-min="15">Overseas assets also justified for diversification or access to asset classes unavailable domestically — but FX complexity must be modelled explicitly</li>
+            </ul>
+          </div>
+          <div class="sub-section">
+            <div class="sub-heading">Nature matching — fixed vs real</div>
+            <ul class="blist">
+              <li>Fixed monetary liabilities → fixed-income assets (government bonds); real / index-linked liabilities → real assets or IL bonds</li>
+              <li>Immunisation is a second-best alternative to exact monetary matching — protects against small interest rate changes but not large ones; requires regular rebalancing</li>
+              <li data-min="15"><strong>Medical inflation:</strong> often exceeds RPI (India: 10–15% p.a.) — IL bonds only partially match PMI indemnity liabilities; the insurer bears residual medical cost inflation risk</li>
+              <li data-min="20"><strong>NAE matching (escalating IP):</strong> no bonds linked to NAE exist; equities are the best long-term fit but short-term volatility is problematic — only viable with large free assets</li>
+            </ul>
+          </div>
+          <div class="exam-tip">The phrase "match assets to the nature, term AND currency of liabilities" must appear in your answer — these are three separate dimensions and the examiner's mark scheme almost always explicitly tests all three.</div>
+        </div>
+      </div>
+
+      <!-- S4 -->
+      <div class="step-card" id="s4">
+        <div class="step-header" onclick="toggleCard('s4')">
+          <div class="step-icon p2">S4</div>
+          <div class="step-title-block">
+            <div class="step-title">Asset Classes &amp; Suitability Criteria</div>
+            <div class="step-sub">Which assets suit which liabilities, and why</div>
+          </div>
+          <div class="step-meta"><span class="mtag always">Always include</span></div>
+          <span class="chevron">▾</span>
+        </div>
+        <div class="step-body">
+          <div class="sub-section">
+            <div class="sub-heading">Suitability criteria (9 factors)</div>
+            <ul class="blist">
+              <li>Term · Currency · Nature (real vs fixed) — primary matching dimensions (see S3)</li>
+              <li>Security — default risk; government bonds lowest default risk; equities no contractual return</li>
+              <li>Volatility of income and capital value — fixed-interest: nil income volatility; equities: very high capital volatility</li>
+              <li>Marketability / liquidity — property: illiquid; equities: highly liquid; cash: immediate</li>
+              <li data-min="15">Expected return — trade-off against volatility; higher return = higher variance; equities highest long-run return</li>
+              <li data-min="15">Portfolio size — direct property only suitable if portfolio large enough to diversify; smaller insurers → listed property funds</li>
+              <li data-min="15">Expertise required — property management; overseas asset management; derivatives require specialist skills</li>
+              <li data-min="20">Tax position of the company — affects relative attractiveness of asset classes</li>
+              <li data-min="20">Regulatory admissibility — IRDAI rules constrain eligible asset classes and concentration limits <span class="india">Critical for India</span></li>
+            </ul>
+          </div>
+          <div class="sub-section">
+            <div class="sub-heading">Asset class summary</div>
+            <table class="mini-matrix">
+              <thead>
+                <tr><th>Asset</th><th>Income vol.</th><th>Capital vol.</th><th>Best match for</th><th>India note</th></tr>
+              </thead>
+              <tbody>
+                <tr><td class="asset-name">G-Secs / Gilt bonds</td><td>Nil</td><td>Low–High (by term)</td><td>Monetary guaranteed liabilities; MCR/SCR backing</td><td>Primary asset for health insurers; IRDAI mandated minimum</td></tr>
+                <tr><td class="asset-name">IL gilts</td><td>Low</td><td>Higher than conventional</td><td>Index-linked liabilities; pre-funded LTC</td><td>Limited IL bond market in India — limited availability</td></tr>
+                <tr><td class="asset-name">Cash / money market</td><td>Moderate (rate-dependent)</td><td>Virtually nil</td><td>PMI (short-tail); MCR; liquidity buffer</td><td>Treasury bills; liquid mutual funds; IRDAI approved</td></tr>
+                <tr><td class="asset-name">Equities</td><td>Low (dividends stable)</td><td>Very high</td><td>Free assets; long-horizon real liabilities; NAE proxy</td><td>Subject to IRDAI concentration limits; listed equities only</td></tr>
+                <tr><td class="asset-name">Property</td><td>Low–moderate</td><td>Low day-to-day; volatile long-run</td><td>Free assets; real liabilities (large portfolio)</td><td>Direct property illiquid; REITs available</td></tr>
+                <tr><td class="asset-name">Corporate bonds</td><td>Nil (above govt spread)</td><td>Low–medium</td><td>Monetary guaranteed; slightly higher yield than G-Secs</td><td>Investment-grade only per IRDAI; default allowance needed</td></tr>
+                <tr><td class="asset-name">Interest rate swaps</td><td>Variable</td><td>Variable</td><td>Very long-duration where bond market shallow</td><td>Growing swap market; regulatory approval required</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="sub-section">
+            <div class="sub-heading">Estimating investment income by asset class</div>
+            <ul class="blist">
+              <li data-min="15"><strong>Fixed-interest:</strong> known income stream and redemption proceeds if held to maturity; reduce for default risk progressively</li>
+              <li data-min="15"><strong>Equities:</strong> project current dividend stream + assumed growth rate (inflation + economic growth); capital value assumptions needed if equities are to be sold</li>
+              <li data-min="15"><strong>Property:</strong> project rental income and growth; allow for void periods, management costs (higher than equities), obsolescence, and refurbishment; very conservative on capital if realisation assumed</li>
+              <li data-min="20"><strong>Cash:</strong> Option A — income at short-term rates; Option B — lump sum now (for imminent claims); Option C — hybrid; choose based on how cash is held</li>
+              <li data-min="20"><strong>Overseas:</strong> treat as domestic equivalent class + exchange rate and default risk adjustments; all domestic volatility applies plus FX volatility</li>
+            </ul>
+          </div>
+          <div class="exam-tip">When asked about investment income modelling assumptions, state each asset class separately and note the key nuance. For equities — the "infinite dividend stream" treatment is only valid if equities back free assets entirely; otherwise, capital value assumptions at disposal dates are required.</div>
+
+          <div class="india-callout" id="ind-s4-pmi">
+            <span class="india-callout-label">🇮🇳 India — PMI portfolio</span>
+            Standalone health insurers in India (e.g. Star Health, Niva Bupa) hold predominantly G-Secs and money market instruments. IRDAI mandates minimum investment in government securities and approved securities. The investment float is small relative to GWP — investment yield is a modest ~6–7% p.a. and contributes meaningfully but not decisively to profitability.
+          </div>
+          <div class="india-callout" id="ind-s4-ltc">
+            <span class="india-callout-label">🇮🇳 India — LTC / long-horizon products</span>
+            For pre-funded LTC or long-duration IP, IRDAI regulations permit equities and property (through approved instruments) for the portion backing free surplus. However, the LTC market is nascent in India and most experience is with shorter-horizon products, so a conservative starting allocation is recommended with periodic review as experience develops.
+          </div>
+        </div>
+      </div>
+
+      <!-- S5 -->
+      <div class="step-card" id="s5">
+        <div class="step-header" onclick="toggleCard('s5')">
+          <div class="step-icon p2">S5</div>
+          <div class="step-title-block">
+            <div class="step-title">Free Assets &amp; Risk Budget</div>
+            <div class="step-sub">When and how to depart from the matched position</div>
+          </div>
+          <div class="step-meta"><span class="mtag always">Always include</span></div>
+          <span class="chevron">▾</span>
+        </div>
+        <div class="step-body">
+          <div class="sub-section">
+            <div class="sub-heading">What are free assets?</div>
+            <ul class="blist">
+              <li>Free assets = excess of market value of assets over market-consistent value of liabilities — the "risk budget" available to pursue higher return</li>
+              <li><strong>MCR-backing assets:</strong> short-dated domestic government bonds — payment security (government guarantee) + low capital volatility (near maturity)</li>
+              <li><strong>Excess free assets:</strong> domestic equities, overseas equities, direct property (if portfolio large enough) — higher expected return, higher volatility</li>
+              <li data-min="15">Greater free assets → greater permissible mismatch → higher variance of return acceptable — but constrained by regulatory admissibility and acceptable risk level</li>
+            </ul>
+          </div>
+          <div class="sub-section">
+            <div class="sub-heading">Why hold free assets above the statutory minimum?</div>
+            <ul class="blist">
+              <li>Buffer so that statutory minimum solvency is not breached after adverse asset/liability movements</li>
+              <li>Regulatory authorities expect it — even if not legally required above the MCR</li>
+              <li>Competitive signal — appear financially strong to brokers, policyholders, and shareholders</li>
+              <li data-min="15">Statutory minimum often insufficient for the inherent risks of health insurance lines written — especially for long-tail products</li>
+              <li data-min="15"><strong>India target:</strong> IRDAI requires minimum solvency ratio of 150% — insurers typically target 170–200% to provide buffer <span class="india">IAI focus</span></li>
+            </ul>
+          </div>
+          <div class="sub-section">
+            <div class="sub-heading">Trade-offs in using free assets</div>
+            <ul class="blist">
+              <li data-min="15">Using free assets to support mismatching means those assets are at risk of loss — shareholders may prefer to hold free assets for new business strain or product development</li>
+              <li data-min="15">Proprietary company has a dual duty: to policyholders (invest wisely; meet liabilities) AND to shareholders (sustain and enhance return on assets above MCR)</li>
+              <li data-min="20">TCF obligations limit how far from matching the insurer can stray — particularly for reviewable premium products where policyholders do not expect premium increases from investment underperformance</li>
+              <li data-min="20">Unit-linked mismatch: any excess return accrues to the insurer; any shortfall is also borne entirely by the insurer — asymmetric risk profile</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- S6 -->
+      <div class="step-card" id="s6">
+        <div class="step-header" onclick="toggleCard('s6')">
+          <div class="step-icon p2">S6</div>
+          <div class="step-title-block">
+            <div class="step-title">Liquidity &amp; Inflation Risk</div>
+            <div class="step-sub">Two constraints that cut across all asset decisions</div>
+          </div>
+          <div class="step-meta"><span class="mtag medium">15+ marks</span></div>
+          <span class="chevron">▾</span>
+        </div>
+        <div class="step-body">
+          <div class="sub-section">
+            <div class="sub-heading">Liquidity need — what drives it</div>
+            <ul class="blist">
+              <li data-min="15">Writing classes with widely fluctuating claims (e.g. catastrophic health events, pandemic) → maintain higher proportion of liquid assets</li>
+              <li data-min="15">Portfolio contracting or in run-off → cannot fund claims from incoming premiums → higher liquidity requirement than a growing book</li>
+              <li data-min="15">Reinsurance: reduces claims variability (→ less liquid assets needed), but gross claims are paid far in advance of RI recoveries (→ tension; must hold liquidity for gross claims first)</li>
+              <li data-min="20">Default of reinsurer or broker → sudden shortfall in expected cash inflow; if not immediately critical, assets can be realised in an orderly way — but liquidity buffer must cover the gap</li>
+              <li data-min="20">Growing company: incoming premiums can fund current claims — less need for liquid assets; but this reliance is dangerous if new business volume is uncertain</li>
+            </ul>
+          </div>
+          <div class="sub-section">
+            <div class="sub-heading">Medical inflation risk — unique to H&amp;C</div>
+            <ul class="blist">
+              <li data-min="15">Medical inflation in India running at 10–15% p.a. — materially above CPI and RPI — is a dominant investment risk for PMI and indemnity LTCI <span class="india">IAI focus</span></li>
+              <li data-min="15">IL bonds (linked to RPI/CPI) only partially hedge medical cost inflation — the residual (medical inflation above RPI) is a structural mismatch risk</li>
+              <li data-min="20">Technology-led medical cost push: new diagnostics, treatments, and drugs — this is partly a trend risk (increasing utilisation) and partly a severity risk (higher cost per event)</li>
+              <li data-min="20">For LTCI: care cost inflation (wages in care sector + cost of care equipment) inflates above general CPI — a 20–40 year projection of this risk requires scenario analysis</li>
+              <li data-min="25">Equities provide a partial real return that broadly tracks economic activity including medical cost — but short-term volatility makes them unsuitable for short-tail or underfunded positions</li>
+            </ul>
+          </div>
+          <div class="exam-tip">Medical inflation > RPI is a frequently examined nuance. Make the point that IL gilts are imperfect for indemnity PMI liabilities — not just because of the time-lag issue, but because medical cost inflation systematically exceeds general price indices.</div>
+        </div>
+      </div>
+
+      <!-- S7 -->
+      <div class="step-card" id="s7">
+        <div class="step-header" onclick="toggleCard('s7')">
+          <div class="step-icon p2">S7</div>
+          <div class="step-title-block">
+            <div class="step-title">IRDAI Regulatory Framework &amp; Admissibility</div>
+            <div class="step-sub">India-specific investment constraints — the IAI primary focus</div>
+          </div>
+          <div class="step-meta"><span class="mtag medium">15+ marks</span></div>
+          <span class="chevron">▾</span>
+        </div>
+        <div class="step-body">
+          <div class="sub-section">
+            <div class="sub-heading">IRDAI investment regulations (key principles)</div>
+            <ul class="blist">
+              <li data-min="15">IRDAI (Investment) Regulations prescribe minimum investment in government and approved securities — insurers must invest a prescribed minimum proportion of assets in G-Secs and approved assets <span class="india">IAI focus</span></li>
+              <li data-min="15">Asset admissibility rules: not all asset classes qualify to back regulatory liabilities — unapproved assets must be deducted from admissible assets for solvency purposes</li>
+              <li data-min="15">Concentration limits: restrictions on maximum exposure to a single issuer, sector, or asset class — prevents over-reliance on any single counterparty or market</li>
+              <li data-min="20">Custodianship requirements: assets must be held with an approved custodian and registered in the insurer's name — operational and legal control requirements</li>
+              <li data-min="20">Currency matching: foreign assets must correspond to foreign currency liabilities; domestic insurers predominantly hold INR assets to match INR liabilities</li>
+              <li data-min="25">Investment mismatching reserve: required where assets don't match liabilities — adds to solvency capital requirement and reduces investment freedom</li>
+            </ul>
+          </div>
+          <div class="sub-section">
+            <div class="sub-heading">Other regulatory constraints</div>
+            <ul class="blist">
+              <li data-min="15">Restrictions on asset types: derivatives, overseas assets, and alternative investments face additional regulatory scrutiny and approval requirements</li>
+              <li data-min="20">Tax implications: interest income, dividend income, and capital gains are taxed differently — affects relative attractiveness of asset classes in India context</li>
+              <li data-min="20">IRDAI ORSA requirements: insurers must demonstrate adequacy of investment strategy under stress scenarios — investment strategy must be tested under regulatory stress tests</li>
+              <li data-min="25">Solvency II comparison: unlike Solvency II (which uses market-consistent valuation), IRDAI uses prescribed valuation methods — investment strategy recommendations must be calibrated to the regulatory framework actually applicable</li>
+            </ul>
+          </div>
+          <div class="exam-tip">IAI exam questions almost always expect explicit reference to IRDAI constraints when recommending an investment strategy. Even if not asked directly, note that "the final asset mix must comply with IRDAI investment regulations" — this shows awareness of the Indian context.</div>
+        </div>
+      </div>
+
+      <!-- S8 -->
+      <div class="step-card" id="s8">
+        <div class="step-header" onclick="toggleCard('s8')">
+          <div class="step-icon p3">S8</div>
+          <div class="step-title-block">
+            <div class="step-title">ALM Modelling Process</div>
+            <div class="step-sub">Six steps · Deterministic vs stochastic · ESG</div>
+          </div>
+          <div class="step-meta"><span class="mtag high">20+ marks</span></div>
+          <span class="chevron">▾</span>
+        </div>
+        <div class="step-body">
+          <div class="sub-section">
+            <div class="sub-heading">The six ALM modelling steps</div>
+            <div class="formula">
+Step 1 → Project liability outgo: cashflows year-by-year for full policy lifetime
+Step 2 → Project asset proceeds: separate asset model; stochastic investment returns
+Step 3 → Compare: asset proceeds vs liability outgo per period; check solvency capital
+Step 4 → Re-run assumptions: sensitivity (deterministic) or full distributions (stochastic)
+Step 5 → Assess: probability distribution of surplus → estimate insolvency probability
+Step 6 → Investigate alternatives: repeat for different strategies → find optimal mix
+            </div>
+          </div>
+          <div class="sub-section">
+            <div class="sub-heading">Deterministic vs stochastic modelling</div>
+            <ul class="blist">
+              <li data-min="20"><strong>Deterministic:</strong> pre-set values for all variables; sensitivity testing with different assumption sets; simpler; no probability output; useful for scenario testing specific stress events</li>
+              <li data-min="20"><strong>Stochastic:</strong> parameters randomly drawn from distributions; hundreds/thousands of sample paths; outputs: probability of insolvency, confidence intervals for surplus; requires more assumptions and more computational resource</li>
+              <li data-min="20">Model points: used when individual policy modelling is impractical — select enough model points for accuracy, few enough for practical run times</li>
+              <li data-min="25">New business question: whether to include new business in the model (realistic without it; uncertain to predict) — typically include for strategic ALM but note the assumption</li>
+            </ul>
+          </div>
+          <div class="sub-section">
+            <div class="sub-heading">Economic Scenario Generators (ESG)</div>
+            <ul class="blist">
+              <li data-min="20">ESG models the joint behaviour of multiple economic variables coherently: interest rates, inflation, equity returns, property returns, credit spreads</li>
+              <li data-min="20"><strong>Real-world calibration:</strong> for ALM projections of actual asset returns and insolvency probabilities</li>
+              <li data-min="20"><strong>Risk-neutral calibration:</strong> for market-consistent liability valuation at future time points within the ALM model — ALM needs both calibrations</li>
+              <li data-min="25">Time zero stress tests: assess immediate risk exposures (not long-run projections); risk exposures change as assets and liabilities mature over time — both are needed</li>
+              <li data-min="25">Dynamic interactions: in a salary-linked IP model, lower economic growth → lower salary inflation → lower benefit costs (favourable) but also lower asset returns — these must be modelled jointly</li>
+            </ul>
+          </div>
+          <div class="sub-section">
+            <div class="sub-heading">ALM optimisation criteria</div>
+            <ul class="blist">
+              <li data-min="20">Maximise expected shareholder distributions (or NPV of future profits) subject to: probability of insolvency &lt; target (e.g. 0.5% over 5-year horizon)</li>
+              <li data-min="25">Scenarios tested: ±20% loss ratio, ±2% interest rate shift, ±20% volume change — mismatches beyond tolerance (e.g. ±5%) covered by reserves; extreme scenarios covered by SCR</li>
+            </ul>
+          </div>
+          <div class="exam-tip">If an ALM process question asks you to "describe the modelling process", go through all six steps explicitly. Examiners check for step 3 (comparison) and step 6 (iteration) — many candidates list steps 1 and 2 only and lose marks.</div>
+        </div>
+      </div>
+
+      <!-- S9 -->
+      <div class="step-card" id="s9">
+        <div class="step-header" onclick="toggleCard('s9')">
+          <div class="step-icon p3">S9</div>
+          <div class="step-title-block">
+            <div class="step-title">Derivatives in ALM</div>
+            <div class="step-sub">Five purposes · Static vs dynamic · Residual risks</div>
+          </div>
+          <div class="step-meta"><span class="mtag high">20+ marks</span></div>
+          <span class="chevron">▾</span>
+        </div>
+        <div class="step-body">
+          <div class="sub-section">
+            <div class="sub-heading">Five reasons to use derivatives</div>
+            <ul class="blist">
+              <li data-min="20"><strong>① Reduce risk of loss:</strong> alternative to physical assets when unavailable or impractical — e.g. equity put options limit loss from equity market fall; index futures provide broad exposure</li>
+              <li data-min="20"><strong>② Increase available capital:</strong> reduce SCR under Solvency II — holding equity put options may reduce the market risk SCR, freeing capital for other uses</li>
+              <li data-min="20"><strong>③ Stabilise balance sheet:</strong> hedge SCR or risk margin; risk margin is sensitive to interest rate changes — construct portfolio matching movements in liability value from rate changes</li>
+              <li data-min="20"><strong>④ Reduce tax and dealing costs:</strong> exchange-traded derivatives are cheaper to deal than the underlying physical assets — useful for gaining rapid broad market exposure</li>
+              <li data-min="20"><strong>⑤ Efficient acquisition/disposal:</strong> going short equity futures provides immediate reduction in equity exposure whilst selling physical assets more slowly — avoids market impact of large transactions</li>
+            </ul>
+          </div>
+          <div class="sub-section">
+            <div class="sub-heading">Static vs dynamic hedging</div>
+            <ul class="blist">
+              <li data-min="20"><strong>Static:</strong> protect against a specific severe adverse scenario; set and hold; simpler; but loses effectiveness as market conditions change</li>
+              <li data-min="20"><strong>Dynamic:</strong> portfolio rebalanced frequently to continue matching liability risk sensitivities as conditions change — more accurate but higher transaction costs and operational complexity</li>
+            </ul>
+          </div>
+          <div class="sub-section">
+            <div class="sub-heading">Residual risks — always present</div>
+            <ul class="blist">
+              <li data-min="20"><strong>Counterparty risk:</strong> OTC derivatives expose the insurer to default by the counterparty (typically a bank)</li>
+              <li data-min="20"><strong>Basis risk:</strong> derivative based on an index (e.g. Nifty) rather than the actual portfolio held — imperfect match</li>
+              <li data-min="25"><strong>Liquidity risk:</strong> margin calls on derivatives may require cash that is not immediately available</li>
+              <li data-min="25"><strong>Operational risk:</strong> complex strategies require specialist expertise and robust systems; errors can create unintended exposures</li>
+              <li data-min="25">Local regulatory restrictions (IRDAI): use of derivatives by insurers in India is subject to regulatory approval — not all derivative strategies available to UK/European insurers are permitted in India <span class="india">IAI focus</span></li>
+            </ul>
+          </div>
+          <div class="exam-tip">Always state that "basis risk and counterparty risk are always present in any derivative strategy — derivative hedges are imperfect by design." Examiners consistently reward this caveat.</div>
+        </div>
+      </div>
+
+      <!-- S10 -->
+      <div class="step-card" id="s10">
+        <div class="step-header" onclick="toggleCard('s10')">
+          <div class="step-icon p3">S10</div>
+          <div class="step-title-block">
+            <div class="step-title">Solvency II / Regulatory Capital Interaction</div>
+            <div class="step-sub">Matching adjustment · Volatility adjustment · SCR impact</div>
+          </div>
+          <div class="step-meta"><span class="mtag high">20+ marks</span></div>
+          <span class="chevron">▾</span>
+        </div>
+        <div class="step-body">
+          <div class="sub-section">
+            <div class="sub-heading">Solvency II investment implications (IFoA context)</div>
+            <ul class="blist">
+              <li data-min="20">BEL (best estimate liability) discounted using risk-free rate term structure — market-consistent approach; investment return on backing assets does not directly enter the BEL discount rate (unless MA or VA applied)</li>
+              <li data-min="20">SCR for market risk reflects the insurer's actual asset portfolio and its sensitivity to market shocks — the investment strategy directly determines the SCR</li>
+              <li data-min="20">Available capital = MV(assets) − market-consistent value(liabilities) — moves with asset prices and liability valuations simultaneously; investment strategy affects both</li>
+            </ul>
+          </div>
+          <div class="sub-section">
+            <div class="sub-heading">Matching Adjustment (MA)</div>
+            <ul class="blist">
+              <li data-min="20">MA allows the BEL discount rate to be uplifted by the spread on backing assets less a fundamental spread (default allowance) — reduces BEL and increases net assets</li>
+              <li data-min="20"><strong>Eligibility conditions:</strong> liabilities must be long-term and predictable (no surrender risk); assets must be ring-fenced and matched by nature, term, and currency; regulator must approve</li>
+              <li data-min="20"><strong>LTC liabilities:</strong> may qualify for MA — long-term, predictable; key risks are longevity and expense, not market risk</li>
+              <li data-min="25"><strong>PMI / short-tail:</strong> typically ineligible for MA — liabilities not long-term or sufficiently predictable</li>
+              <li data-min="25">MA example: 50% of assets yield +1.50% over risk-free; fundamental spread (default allowance) = 0.50% → MA = 0.50% p.a. added to discount rate</li>
+            </ul>
+          </div>
+          <div class="sub-section">
+            <div class="sub-heading">Volatility Adjustment (VA)</div>
+            <ul class="blist">
+              <li data-min="25">VA added to risk-free rate for BEL discounting where MA is not eligible — designed to prevent forced asset sales during periods of extreme spread widening</li>
+              <li data-min="25">VA subject to supervisory approval and risk management conditions — insurer must have a liquidity plan and demonstrate the portfolio matches the representative portfolio used to calculate VA</li>
+              <li data-min="25">Solvency II nuance: even perfect cashflow matching does not fully stabilise BEL if VA is based on a representative portfolio — the insurer's actual holdings may diverge from the representative portfolio</li>
+            </ul>
+          </div>
+          <div class="india-callout" id="ind-s10">
+            <span class="india-callout-label">🇮🇳 India vs Solvency II</span>
+            IRDAI uses prescribed regulatory methods rather than market-consistent Solvency II valuation. Matching adjustment and volatility adjustment concepts do not directly apply in India. However, the underlying principle — that investment in higher-yielding but admissible assets can improve solvency — is relevant. IAI candidates should note the Solvency II framework as the IFoA benchmark while acknowledging the Indian regulatory framework differs.
+          </div>
+        </div>
+      </div>
+
+      <!-- S11 -->
+      <div class="step-card optional" id="s11">
+        <div class="step-header" onclick="toggleCard('s11')">
+          <div class="step-icon p3">S11</div>
+          <div class="step-title-block">
+            <div class="step-title">Unit-linked Specific Considerations</div>
+            <div class="step-sub">RSM/ASM balance · Non-unit fund · Policyholder fund design</div>
+          </div>
+          <div class="step-meta"><span class="mtag high">20–25 marks</span></div>
+          <span class="chevron">▾</span>
+        </div>
+        <div class="step-body">
+          <div class="sub-section">
+            <div class="sub-heading">Unit fund — policyholder risk</div>
+            <ul class="blist">
+              <li data-min="20">Investment risk in the unit fund is borne by the policyholder — the insurer's exposure is to the non-unit risk charges and the charges deducted from the unit fund</li>
+              <li data-min="20">Unit fund assets: policyholder's chosen fund (equity, balanced, debt, or liquid) — insurer holds exactly those assets; no discretion in matching within the fund</li>
+              <li data-min="20">Poor recent equity performance may depress demand for unit-linked products — insurer should consider promoting fixed-interest or balanced fund options</li>
+            </ul>
+          </div>
+          <div class="sub-section">
+            <div class="sub-heading">RSM / ASM balance — the key solvency constraint</div>
+            <ul class="blist">
+              <li data-min="20">RSM (Required Solvency Margin) moves with unit fund market values — if equities fall, unit fund value falls, and RSM also falls (it is a % of unit fund)</li>
+              <li data-min="20">ASM (Available Solvency Margin) must include equity in the same proportion as the ULIP equity fund — if unit fund holds equities but shareholder fund holds only bonds, RSM falls faster than ASM when equities fall → solvency deteriorates</li>
+              <li data-min="25">When solvency is marginally above minimum: hold excess ASM assets in cash — no equity risk</li>
+              <li data-min="25">When solvency is well above minimum: excess ASM may include equity, bonds, and property for higher return — investment decision depends on solvency headroom</li>
+            </ul>
+          </div>
+          <div class="sub-section">
+            <div class="sub-heading">Non-unit fund</div>
+            <ul class="blist">
+              <li data-min="20">Non-unit fund backs risk charges, expense charges, and the insurer's mortality/morbidity risk — conventional short-term fixed income is appropriate</li>
+              <li data-min="25">Risk premium reinsurance is appropriate for unit-linked health (not investment-linked reinsurance — insurer does not bear investment risk)</li>
+              <li data-min="25">Capital requirements are low if policyholder bears the investment risk; charging structure determines the extent of insurer's residual exposure</li>
+            </ul>
+          </div>
+          <div class="exam-tip">The RSM/ASM balance question is a recurring IAI exam theme. Make the explicit point: "If the ULIP equity fund rises and the shareholder fund contains no equity, RSM increases without a corresponding increase in ASM — solvency ratio falls." This is the core mechanism examiners test.</div>
+        </div>
+      </div>
+
+      <!-- S12 -->
+      <div class="step-card optional" id="s12">
+        <div class="step-header" onclick="toggleCard('s12')">
+          <div class="step-icon p3">S12</div>
+          <div class="step-title-block">
+            <div class="step-title">Further Information Needed</div>
+            <div class="step-sub">What you need to know before finalising the asset mix</div>
+          </div>
+          <div class="step-meta"><span class="mtag high">15–25 marks</span></div>
+          <span class="chevron">▾</span>
+        </div>
+        <div class="step-body">
+          <div class="sub-section">
+            <div class="sub-heading">Product and liability profile</div>
+            <ul class="blist">
+              <li data-min="15">Mix of business — exact split of benefit types (level vs salary-linked vs indemnity vs investment-linked) and associated liability profiles</li>
+              <li data-min="15">Whether benefits are guaranteed or reviewable — guaranteed benefits require closer matching; reviewable benefits allow more flexibility</li>
+              <li data-min="15">Whether policies cover overseas employees or overseas treatments — determines currency exposure and matching requirements</li>
+              <li data-min="20">Duration profile of in-force liabilities — term structure of expected outgo year-by-year (needed to match asset maturities)</li>
+            </ul>
+          </div>
+          <div class="sub-section">
+            <div class="sub-heading">Insurer profile and capacity</div>
+            <ul class="blist">
+              <li data-min="15">Size and investment expertise of the insurer — small or inexperienced insurers should avoid large proportions of volatile assets</li>
+              <li data-min="15">Size of free surplus relative to SCR — determines risk budget and permissible departure from matching</li>
+              <li data-min="15">Recent claims experience and variability — volatile claims history → higher liquidity requirement → more conservative asset mix</li>
+              <li data-min="20">Tax position of the company — affects relative attractiveness of asset classes</li>
+              <li data-min="20">Results of any existing ALM exercise — may already have a target asset allocation; investment strategy question may be about refinement, not design from scratch</li>
+            </ul>
+          </div>
+          <div class="sub-section">
+            <div class="sub-heading">Regulatory and market context</div>
+            <ul class="blist">
+              <li data-min="15">IRDAI admissibility rules for specific asset classes — may rule out certain options regardless of financial logic <span class="india">IAI focus</span></li>
+              <li data-min="20">Legislative restrictions on asset types, concentration limits, and currency matching requirements</li>
+              <li data-min="20">Availability of IL bonds, long-dated government bonds, and swap markets in the target investment universe — India has limited IL bond market; long-dated G-Secs are available but illiquid at very long maturities</li>
+              <li data-min="25">Reinsurance arrangements — reinsurance reduces claims volatility (→ less liquidity needed) but delays recoveries (→ gross claims must still be funded promptly)</li>
+              <li data-min="25">Whether any ESG (environmental, social, governance) constraints apply to the investment mandate — increasingly relevant for institutional portfolios; IRDAI has begun signalling ESG expectations for insurers</li>
+            </ul>
+          </div>
+          <div class="exam-tip">Questions that ask "what further information would you need to advise on an investment strategy?" are asking you to demonstrate that investment strategy is specific to a company's circumstances. Hit: (1) liability profile, (2) insurer size/expertise, (3) regulatory constraints, (4) existing ALM results. This shows structured thinking rather than generic points.</div>
+        </div>
+      </div>
+
+    </div><!-- /steps-grid -->
+  </main>
+</div>
+
+<script>
+  const ctxMap = {
+    10: {
+      title: 'Investment Principles + Liability Classification',
+      desc: 'State the core principle. Classify the product into one of the four liability types. Name the primary matching asset. Note the key constraint (IRDAI admissibility, term mismatch, or medical inflation). 3–4 steps, concise bullets.',
+      chips: ['Core principle', 'Four liability types', 'Matching asset', 'IRDAI constraint', '3–4 steps']
+    },
+    15: {
+      title: 'Asset Selection + Free Assets + Liquidity',
+      desc: 'Add free assets/risk budget discussion. Address liquidity needs specific to the product. Note medical inflation vs RPI mismatch. Mention IRDAI regulatory constraints explicitly.',
+      chips: ['Free assets = risk budget', 'Liquidity need', 'Medical inflation > RPI', 'IRDAI admissibility', '6–7 steps']
+    },
+    20: {
+      title: 'Full Investment Strategy + ALM Process',
+      desc: 'Cover all asset selection steps plus ALM modelling process (6 steps). Address derivatives (5 purposes). For Solvency II questions: matching adjustment eligibility. Product-specific depth required.',
+      chips: ['6 ALM steps', 'Derivatives: 5 purposes', 'Static vs dynamic hedging', 'Matching adjustment', '9–10 steps']
+    },
+    25: {
+      title: 'Comprehensive ALM Essay',
+      desc: 'All 12 steps. Stochastic modelling with ESG detail. Unit-linked RSM/ASM balance. Solvency II VA vs MA. Further information framework. India-specific regulatory nuance throughout.',
+      chips: ['ESG: real-world + risk-neutral', 'RSM/ASM balance', 'VA vs MA', 'Further information', 'All 12 steps']
+    }
+  };
+
+  let currentMarks = 10;
+  let currentProduct = 'all';
+
+  function setMarks(m) {
+    currentMarks = m;
+    document.body.setAttribute('data-marks', m);
+    document.querySelectorAll('.marks-btn').forEach(btn => {
+      btn.classList.toggle('active', parseInt(btn.dataset.marks) === m);
+    });
+    document.getElementById('ctx-marks').innerHTML = m + '<small>marks</small>';
+    const ctx = ctxMap[m];
+    document.getElementById('ctx-title').textContent = ctx.title;
+    document.getElementById('ctx-desc').textContent = ctx.desc;
+    const chipEl = document.getElementById('ctx-chips');
+    chipEl.innerHTML = ctx.chips.map((c, i) => `<span class="ctx-chip${i===0?' hi':''}">${c}</span>`).join('');
+
+    document.querySelectorAll('.step-card').forEach(card => {
+      const tag = card.querySelector('.mtag');
+      if (!tag) return;
+      const isOpt = card.classList.contains('optional');
+      if (tag.classList.contains('always')) {
+        card.classList.remove('dimmed');
+      } else if (tag.classList.contains('medium')) {
+        card.classList.toggle('dimmed', m < 15);
+      } else if (tag.classList.contains('high')) {
+        if (isOpt) card.classList.toggle('dimmed', m < 20);
+        else card.classList.toggle('dimmed', m < 20);
+      }
+    });
+  }
+
+  const productCallouts = {
+    pmi: ['ind-s2-pmi', 'ind-s4-pmi'],
+    ip:  ['ind-s2-ip'],
+    ltc: ['ind-s4-ltc'],
+    ul:  [],
+    all: ['ind-s10']
+  };
+
+  function setProduct(p) {
+    currentProduct = p;
+    document.querySelectorAll('.product-chip').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.product === p);
+    });
+    // Hide all callouts first
+    document.querySelectorAll('.india-callout').forEach(el => el.classList.remove('visible'));
+    // Show relevant ones
+    const show = p === 'all'
+      ? ['ind-s10']
+      : (productCallouts[p] || []);
+    show.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.classList.add('visible');
+    });
+  }
+
+  function toggleCard(id) {
+    document.getElementById(id).classList.toggle('open');
+  }
+
+  function openAndScroll(id) {
+    const card = document.getElementById(id);
+    card.classList.add('open');
+    card.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    card.classList.add('pulse');
+    setTimeout(() => card.classList.remove('pulse'), 600);
+    document.querySelectorAll('.sb-item').forEach(item => {
+      item.classList.toggle('active', item.getAttribute('onclick') && item.getAttribute('onclick').includes(`'${id}'`));
+    });
+  }
+
+  function scrollToId(id) {
+    document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+  }
+
+  // init
+  setMarks(10);
+  setProduct('all');
+</script>
+</body>
+</html>
