@@ -1,0 +1,1960 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SA1 · Capital & Solvency · Revision Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --surface2: #1c2330;
+    --border: #2a3442;
+    --border-bright: #3d4f63;
+    --teal: #2dd4bf;
+    --teal-dim: rgba(45,212,191,0.12);
+    --teal-glow: rgba(45,212,191,0.25);
+    --amber: #f59e0b;
+    --amber-dim: rgba(245,158,11,0.12);
+    --red: #f87171;
+    --red-dim: rgba(248,113,113,0.12);
+    --green: #4ade80;
+    --green-dim: rgba(74,222,128,0.10);
+    --blue: #60a5fa;
+    --blue-dim: rgba(96,165,250,0.12);
+    --text: #e2e8f0;
+    --text-muted: #8b9ab0;
+    --text-dim: #5a6b80;
+    --serif: 'DM Serif Display', Georgia, serif;
+    --sans: 'DM Sans', system-ui, sans-serif;
+    --mono: 'DM Mono', monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 14px;
+    line-height: 1.65;
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  .site-header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 20px 28px 16px;
+    position: sticky; top: 0; z-index: 100;
+    display: flex; align-items: baseline; gap: 16px; flex-wrap: wrap;
+  }
+  .site-header h1 {
+    font-family: var(--serif);
+    font-size: 22px;
+    color: var(--teal);
+    letter-spacing: -0.3px;
+  }
+  .site-header .subtitle {
+    color: var(--text-muted);
+    font-size: 12px;
+    font-weight: 300;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+  .badge {
+    margin-left: auto;
+    background: var(--amber-dim);
+    border: 1px solid var(--amber);
+    color: var(--amber);
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    letter-spacing: 0.5px;
+  }
+
+  /* NAV TABS */
+  .nav-strip {
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+    background: var(--surface2);
+    border-bottom: 1px solid var(--border);
+    padding: 0 28px;
+    scrollbar-width: none;
+  }
+  .nav-strip::-webkit-scrollbar { display: none; }
+  .nav-tab {
+    padding: 11px 18px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-muted);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    white-space: nowrap;
+    transition: all 0.2s;
+    letter-spacing: 0.3px;
+    user-select: none;
+  }
+  .nav-tab:hover { color: var(--text); }
+  .nav-tab.active {
+    color: var(--teal);
+    border-bottom-color: var(--teal);
+  }
+  .nav-tab .tab-num {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-dim);
+    margin-right: 6px;
+  }
+
+  /* MAIN LAYOUT */
+  .main { max-width: 900px; margin: 0 auto; padding: 32px 24px 60px; }
+
+  /* SECTION (TAB PANE) */
+  .section { display: none; }
+  .section.active { display: block; }
+
+  /* SECTION HEADER */
+  .section-head {
+    display: flex; align-items: flex-start; gap: 16px;
+    margin-bottom: 28px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-icon {
+    font-size: 28px; flex-shrink: 0; margin-top: 2px;
+  }
+  .section-head h2 {
+    font-family: var(--serif);
+    font-size: 26px;
+    color: var(--text);
+    letter-spacing: -0.4px;
+    line-height: 1.2;
+  }
+  .section-head p {
+    color: var(--text-muted);
+    font-size: 13px;
+    font-weight: 300;
+    margin-top: 4px;
+  }
+
+  /* EXAM WEIGHT PILL */
+  .exam-weight {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: var(--amber-dim);
+    border: 1px solid rgba(245,158,11,0.3);
+    color: var(--amber);
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 4px 10px;
+    border-radius: 4px;
+    margin-top: 8px;
+    letter-spacing: 0.4px;
+  }
+  .exam-weight::before { content: '⚡'; }
+
+  /* CONCEPT GRID */
+  .concept-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+  .concept-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 18px;
+    transition: border-color 0.2s;
+  }
+  .concept-card:hover { border-color: var(--border-bright); }
+  .concept-card .card-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+  }
+  .concept-card h3 {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 10px;
+    line-height: 1.3;
+  }
+  .concept-card p, .concept-card li {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+  .concept-card ul { padding-left: 16px; }
+  .concept-card ul li { margin-bottom: 4px; }
+  .concept-card.teal { border-left: 3px solid var(--teal); }
+  .concept-card.amber { border-left: 3px solid var(--amber); }
+  .concept-card.red { border-left: 3px solid var(--red); }
+  .concept-card.blue { border-left: 3px solid var(--blue); }
+  .concept-card.green { border-left: 3px solid var(--green); }
+
+  /* HIGHLIGHT CALLOUT */
+  .callout {
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-bottom: 20px;
+    font-size: 13px;
+    border-left: 3px solid;
+  }
+  .callout.teal { background: var(--teal-dim); border-color: var(--teal); color: #9be8df; }
+  .callout.amber { background: var(--amber-dim); border-color: var(--amber); color: #fcd34d; }
+  .callout.red { background: var(--red-dim); border-color: var(--red); color: #fca5a5; }
+  .callout.blue { background: var(--blue-dim); border-color: var(--blue); color: #93c5fd; }
+  .callout strong { color: inherit; }
+
+  /* ACCORDION */
+  .accordion { margin-bottom: 8px; }
+  .acc-header {
+    display: flex; align-items: center; justify-content: space-between;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 14px 18px;
+    cursor: pointer;
+    transition: all 0.2s;
+    user-select: none;
+  }
+  .acc-header:hover { background: var(--surface2); border-color: var(--border-bright); }
+  .acc-header.open {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+    border-color: var(--border-bright);
+    background: var(--surface2);
+  }
+  .acc-title {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .acc-tag {
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 2px 7px;
+    border-radius: 3px;
+    color: var(--text-dim);
+    background: var(--bg);
+    border: 1px solid var(--border);
+  }
+  .acc-arrow {
+    color: var(--text-dim);
+    font-size: 12px;
+    transition: transform 0.2s;
+    flex-shrink: 0;
+  }
+  .acc-header.open .acc-arrow { transform: rotate(180deg); color: var(--teal); }
+  .acc-body {
+    display: none;
+    background: var(--bg);
+    border: 1px solid var(--border-bright);
+    border-top: none;
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+    padding: 18px 20px;
+  }
+  .acc-body.open { display: block; }
+  .acc-body p, .acc-body li { font-size: 13px; color: var(--text-muted); line-height: 1.7; }
+  .acc-body ul { padding-left: 18px; margin-top: 6px; }
+  .acc-body ul li { margin-bottom: 5px; }
+  .acc-body h4 {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--teal);
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin: 14px 0 6px;
+  }
+  .acc-body h4:first-child { margin-top: 0; }
+
+  /* PILLAR LAYOUT */
+  .pillar-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .pillar-card {
+    border-radius: 8px;
+    padding: 18px 16px;
+    border: 1px solid var(--border);
+  }
+  .pillar-card.p1 { background: linear-gradient(160deg, rgba(45,212,191,0.08), var(--surface)); border-color: rgba(45,212,191,0.3); }
+  .pillar-card.p2 { background: linear-gradient(160deg, rgba(245,158,11,0.08), var(--surface)); border-color: rgba(245,158,11,0.3); }
+  .pillar-card.p3 { background: linear-gradient(160deg, rgba(96,165,250,0.08), var(--surface)); border-color: rgba(96,165,250,0.3); }
+  .pillar-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 500;
+    margin-bottom: 6px;
+    letter-spacing: 0.5px;
+  }
+  .p1 .pillar-label { color: var(--teal); }
+  .p2 .pillar-label { color: var(--amber); }
+  .p3 .pillar-label { color: var(--blue); }
+  .pillar-card h3 {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 10px;
+  }
+  .pillar-card ul {
+    list-style: none;
+    padding: 0;
+  }
+  .pillar-card ul li {
+    font-size: 12px;
+    color: var(--text-muted);
+    padding: 4px 0;
+    border-bottom: 1px solid var(--border);
+    line-height: 1.4;
+  }
+  .pillar-card ul li:last-child { border-bottom: none; }
+
+  /* TABLE */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    font-size: 12.5px;
+  }
+  .data-table th {
+    background: var(--surface2);
+    color: var(--text-muted);
+    font-weight: 500;
+    text-align: left;
+    padding: 10px 14px;
+    border: 1px solid var(--border);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .data-table td {
+    padding: 10px 14px;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    vertical-align: top;
+    line-height: 1.5;
+  }
+  .data-table tr:nth-child(even) td { background: rgba(255,255,255,0.02); }
+  .data-table td strong { color: var(--text); font-weight: 500; }
+  .data-table td .mono { font-family: var(--mono); font-size: 11px; color: var(--teal); }
+
+  /* EXAM QUESTION BLOCKS */
+  .exam-section-label {
+    display: flex; align-items: center; gap: 10px;
+    margin: 32px 0 16px;
+  }
+  .exam-section-label::before {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+  .exam-section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+  .exam-section-label span {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .exam-q {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin-bottom: 14px;
+    overflow: hidden;
+  }
+  .exam-q-header {
+    padding: 14px 18px;
+    display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .exam-q-header:hover { background: var(--surface2); }
+  .exam-meta {
+    display: flex; gap: 8px; align-items: center; flex-shrink: 0; flex-wrap: wrap;
+    margin-bottom: 6px;
+  }
+  .exam-sitting {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-dim);
+  }
+  .exam-marks {
+    font-family: var(--mono);
+    font-size: 10px;
+    background: var(--amber-dim);
+    border: 1px solid rgba(245,158,11,0.3);
+    color: var(--amber);
+    padding: 1px 7px;
+    border-radius: 3px;
+  }
+  .exam-q-text {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1.5;
+  }
+  .reveal-btn {
+    flex-shrink: 0;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    font-family: var(--mono);
+    font-size: 10px;
+    padding: 5px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 2px;
+    white-space: nowrap;
+  }
+  .reveal-btn:hover {
+    border-color: var(--teal);
+    color: var(--teal);
+  }
+  .reveal-btn.revealed {
+    background: var(--teal-dim);
+    border-color: var(--teal);
+    color: var(--teal);
+  }
+  .exam-answer {
+    display: none;
+    padding: 0 18px 16px;
+    border-top: 1px solid var(--border);
+    margin-top: 0;
+  }
+  .exam-answer.open { display: block; }
+  .answer-section {
+    margin-top: 12px;
+  }
+  .answer-section-title {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--teal);
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+  }
+  .answer-section:first-child .answer-section-title { border-top: none; padding-top: 0; }
+  .answer-section ul {
+    list-style: none;
+    padding: 0;
+  }
+  .answer-section ul li {
+    font-size: 13px;
+    color: var(--text-muted);
+    padding: 5px 0 5px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    position: relative;
+    line-height: 1.55;
+  }
+  .answer-section ul li:last-child { border-bottom: none; }
+  .answer-section ul li::before {
+    content: '›';
+    position: absolute;
+    left: 0;
+    color: var(--teal);
+    font-size: 14px;
+    line-height: 1.4;
+  }
+
+  /* FORMULA BOX */
+  .formula-box {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 16px 20px;
+    margin: 16px 0;
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--teal);
+    line-height: 1.9;
+  }
+  .formula-box .f-label {
+    font-size: 10px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 8px;
+  }
+  .formula-box span { color: var(--text-muted); font-size: 12px; }
+
+  /* MNEMONIC */
+  .mnemonic-box {
+    background: var(--amber-dim);
+    border: 1px solid rgba(245,158,11,0.3);
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin: 16px 0;
+  }
+  .mnemonic-box .m-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--amber);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .mnemonic-letters {
+    display: flex; flex-wrap: wrap; gap: 8px;
+  }
+  .m-letter {
+    display: flex; align-items: baseline; gap: 6px;
+  }
+  .m-letter .letter {
+    font-family: var(--serif);
+    font-size: 22px;
+    color: var(--amber);
+    line-height: 1;
+  }
+  .m-letter .word {
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  /* TWO-COL */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+  .two-col-wide {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+
+  /* VS CARD */
+  .vs-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .vs-card .vs-head {
+    padding: 10px 16px;
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+  }
+  .vs-card.left .vs-head { background: var(--teal-dim); color: var(--teal); }
+  .vs-card.right .vs-head { background: var(--red-dim); color: var(--red); }
+  .vs-card .vs-body {
+    padding: 14px 16px;
+  }
+  .vs-card .vs-body li {
+    font-size: 12.5px;
+    color: var(--text-muted);
+    padding: 4px 0;
+    list-style: none;
+    padding-left: 14px;
+    position: relative;
+    line-height: 1.5;
+  }
+  .vs-card.left .vs-body li::before { content: '+'; position: absolute; left: 0; color: var(--teal); }
+  .vs-card.right .vs-body li::before { content: '−'; position: absolute; left: 0; color: var(--red); }
+
+  /* PROGRESS */
+  .progress-bar-wrap {
+    display: flex; align-items: center; gap: 10px; margin-bottom: 6px;
+  }
+  .progress-label { font-size: 12px; color: var(--text-muted); width: 120px; flex-shrink: 0; }
+  .progress-bar {
+    flex: 1;
+    height: 6px;
+    background: var(--border);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    border-radius: 3px;
+    background: var(--teal);
+    transition: width 1s ease;
+  }
+  .progress-num {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--teal);
+    width: 40px;
+    text-align: right;
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 640px) {
+    .pillar-row { grid-template-columns: 1fr; }
+    .two-col { grid-template-columns: 1fr; }
+    .two-col-wide { grid-template-columns: 1fr; }
+    .concept-grid { grid-template-columns: 1fr; }
+    .main { padding: 20px 16px 40px; }
+    .site-header { padding: 16px 16px 12px; }
+    .nav-strip { padding: 0 8px; }
+  }
+
+  /* SECTION TITLE (sub-heading within pane) */
+  .sub-title {
+    font-family: var(--sans);
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-dim);
+    margin: 28px 0 14px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border);
+  }
+  .sub-title:first-of-type { margin-top: 0; }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <h1>SA1 · Capital &amp; Solvency</h1>
+  <span class="subtitle">Interactive Revision Guide</span>
+  <span class="badge">IAI exam-grounded</span>
+</header>
+
+<nav class="nav-strip">
+  <div class="nav-tab active" onclick="showTab('why')"><span class="tab-num">01</span> Why Capital?</div>
+  <div class="nav-tab" onclick="showTab('reserves')"><span class="tab-num">02</span> Reserves</div>
+  <div class="nav-tab" onclick="showTab('solvency2')"><span class="tab-num">03</span> Solvency II</div>
+  <div class="nav-tab" onclick="showTab('global')"><span class="tab-num">04</span> Global Frameworks</div>
+  <div class="nav-tab" onclick="showTab('ev')"><span class="tab-num">05</span> Embedded Value</div>
+  <div class="nav-tab" onclick="showTab('exam')"><span class="tab-num">06</span> Exam Questions</div>
+</nav>
+
+<main class="main">
+
+<!-- ============================================================ -->
+<!-- TAB 1: WHY CAPITAL -->
+<!-- ============================================================ -->
+<section id="tab-why" class="section active">
+  <div class="section-head">
+    <div class="section-icon">⚖️</div>
+    <div>
+      <h2>Why Capital is Required</h2>
+      <p>Three perspectives on capital assessment + two categories of need.</p>
+      <div class="exam-weight">Tested in: March 2022 Q2i–v · March 2021 Q2ii · April 2016 Q3i</div>
+    </div>
+  </div>
+
+  <p class="sub-title">Three Perspectives on Capital</p>
+  <div class="concept-grid">
+    <div class="concept-card teal">
+      <div class="card-label">Internal</div>
+      <h3>Economic Capital</h3>
+      <p>Internal determination based on the company's own <strong>risk profile, risk appetite</strong> and ongoing business strategy. Assessed via stochastic modelling and/or stress tests. Most onerous for companies with high risk appetite or aggressive strategies.</p>
+    </div>
+    <div class="concept-card amber">
+      <div class="card-label">Regulatory Floor</div>
+      <h3>Regulatory Capital</h3>
+      <p>Solvency requirements set by the regulator. Defines regulatory values of assets, liabilities and required capital (e.g. Solvency II SCR = VaR 99.5% over 1 year). All companies must calculate and comply. ORSA is a key tool.</p>
+    </div>
+    <div class="concept-card blue">
+      <div class="card-label">Market Access</div>
+      <h3>Rating Agency Capital</h3>
+      <p>Capital adequacy standard required by agencies (S&P, Moody's, AM Best) for a target credit rating. Drives <strong>cost of raising capital</strong> and market's willingness to transact. Agencies increasingly moving toward economic capital measures.</p>
+    </div>
+  </div>
+
+  <div class="callout teal"><strong>Key exam point:</strong> The most onerous perspective varies by company. A company with an aggressive growth strategy may find economic capital most binding; a less sophisticated insurer may be bound by regulatory capital.</div>
+
+  <p class="sub-title">Two Categories of Capital Need</p>
+  <div class="two-col">
+    <div class="concept-card red">
+      <div class="card-label">Category 1</div>
+      <h3>Risk Capital</h3>
+      <ul>
+        <li><strong>Market risk</strong> — adverse asset/interest rate movements</li>
+        <li><strong>Credit risk</strong> — counterparty default</li>
+        <li><strong>Insurance risk</strong> — mortality, morbidity, persistency, expenses</li>
+        <li><strong>Operational risk</strong> — outsourcing, terrorism, systems failures</li>
+        <li><strong>Liquidity risk</strong> — inability to meet obligations as due</li>
+        <li><strong>Group risk</strong> — contagion from group entities</li>
+      </ul>
+    </div>
+    <div class="concept-card green">
+      <div class="card-label">Category 2</div>
+      <h3>Working Capital</h3>
+      <ul>
+        <li>Fund new business strain</li>
+        <li>Attract intermediaries (demonstrate solvency)</li>
+        <li>Organic expansion — hardware, software, premises, overseas</li>
+        <li>Acquisitions of companies or blocks of business</li>
+      </ul>
+      <p style="margin-top:10px; font-size:12px; color:var(--text-dim)">Exacerbated by: mis-selling fines · flat charging caps · low investment returns · adverse demographics · changing distribution</p>
+    </div>
+  </div>
+
+  <p class="sub-title">Solvency Ratio — Definition &amp; Drivers</p>
+
+  <div class="formula-box">
+    <div class="f-label">Solvency Ratio</div>
+    Solvency Ratio = Available Capital ÷ Required Capital <span>× 100%</span><br>
+    <span>A ratio &lt;100% implies insolvency. Regulators typically set thresholds (e.g. 120%) — interventions kick in below these.</span>
+  </div>
+
+  <div class="two-col">
+    <div class="accordion">
+      <div class="acc-header" onclick="toggleAcc(this)">
+        <span class="acc-title">Drivers of Available Capital</span>
+        <span class="acc-arrow">▾</span>
+      </div>
+      <div class="acc-body">
+        <ul>
+          <li>Shareholder equity and retained profits</li>
+          <li>Investment return on free assets</li>
+          <li>Profitability of in-force business and new business</li>
+          <li>Capital injections / subordinated debt</li>
+          <li>Dividends reduce; losses reduce</li>
+        </ul>
+        <h4>Depleted by</h4>
+        <ul>
+          <li>New business strain (capital consumed at point of sale)</li>
+          <li>Adverse claims experience</li>
+          <li>Asset write-downs / fall in investment values</li>
+          <li>Regulatory penalties / mis-selling fines</li>
+        </ul>
+      </div>
+    </div>
+    <div class="accordion">
+      <div class="acc-header" onclick="toggleAcc(this)">
+        <span class="acc-title">Drivers of Required Capital</span>
+        <span class="acc-arrow">▾</span>
+      </div>
+      <div class="acc-body">
+        <ul>
+          <li>Biometric risks: mortality, morbidity, longevity</li>
+          <li>Investment risk: volatility + credit risk</li>
+          <li>Expense risk (incl. expense inflation)</li>
+          <li>Lapse / persistency risk</li>
+          <li>Operational risk</li>
+          <li>Catastrophe / pandemic risk</li>
+        </ul>
+        <h4>Reduced by</h4>
+        <ul>
+          <li>Diversification across risks / geographies</li>
+          <li>Reinsurance (reduces net exposure)</li>
+          <li>Matching assets to liabilities (reduces market risk)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <p class="sub-title">Implications of Borderline Solvency <span style="font-family:var(--mono);font-size:10px;color:var(--amber);background:var(--amber-dim);padding:2px 7px;border-radius:3px;margin-left:8px;">March 2022 Q2ii</span></p>
+  <div class="concept-grid">
+    <div class="concept-card red">
+      <h3>Regulatory Actions</h3>
+      <ul>
+        <li>Restriction / closure to new business</li>
+        <li>Immediate capital injection demand</li>
+        <li>Supervisory intervention / monitoring</li>
+        <li>Potential licence revocation if MCR breached</li>
+      </ul>
+    </div>
+    <div class="concept-card red">
+      <h3>Commercial Impact</h3>
+      <ul>
+        <li>Bad publicity → lower sales</li>
+        <li>Brokers not promoting company products</li>
+        <li>Credit rating downgrade → higher cost of capital</li>
+        <li>Drop in share price if listed</li>
+        <li>Expansion plans stalled</li>
+      </ul>
+    </div>
+  </div>
+
+  <p class="sub-title">Why Expense Management Matters for Solvency <span style="font-family:var(--mono);font-size:10px;color:var(--amber);background:var(--amber-dim);padding:2px 7px;border-radius:3px;margin-left:8px;">March 2022 Q2v</span></p>
+  <div class="callout amber">
+    <strong>CFO fallacy:</strong> "Expenses are irrelevant to solvency — it's just a claims problem."<br><br>
+    Why this is wrong: (1) Expense overruns directly eat into available capital. (2) Risk-based capital frameworks explicitly include <strong>expense risk and expense inflation</strong> as a driver of required capital (SCR expense sub-module). (3) Expense management is a key driver of profitability, which feeds available capital.
+  </div>
+
+  <p class="sub-title">Reasons for Projecting Solvency</p>
+  <div class="accordion">
+    <div class="acc-header" onclick="toggleAcc(this)">
+      <span class="acc-title"><span class="acc-tag">Monitor &amp; Plan</span> Understand risk profile evolution</span>
+      <span class="acc-arrow">▾</span>
+    </div>
+    <div class="acc-body">
+      <ul>
+        <li>Track evolution of the risk profile over time</li>
+        <li>Assess impact of key business strategy decisions</li>
+        <li>Show new business strain; determine supportable NB volume</li>
+      </ul>
+    </div>
+  </div>
+  <div class="accordion">
+    <div class="acc-header" onclick="toggleAcc(this)">
+      <span class="acc-title"><span class="acc-tag">Regulatory</span> ORSA and Solvency II requirements</span>
+      <span class="acc-arrow">▾</span>
+    </div>
+    <div class="acc-body">
+      <ul>
+        <li>Statutory requirement under Solvency II Pillar 2 ORSA</li>
+        <li>Determine risk margin (Pillar 1)</li>
+        <li>May feed into internal model SCR calculations</li>
+        <li>Stress testing and reverse stress testing</li>
+      </ul>
+    </div>
+  </div>
+  <div class="accordion">
+    <div class="acc-header" onclick="toggleAcc(this)">
+      <span class="acc-title"><span class="acc-tag">Reporting &amp; Value</span> Capital releases, ROC, EV</span>
+      <span class="acc-arrow">▾</span>
+    </div>
+    <div class="acc-body">
+      <ul>
+        <li>Estimate pattern of capital releases to shareholders</li>
+        <li>Assess return on capital deployed</li>
+        <li>Calculate the cost of holding required capital — used in embedded value</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- TAB 2: RESERVES -->
+<!-- ============================================================ -->
+<section id="tab-reserves" class="section">
+  <div class="section-head">
+    <div class="section-icon">📋</div>
+    <div>
+      <h2>Reserves</h2>
+      <p>Types, purposes, bases, and key exam-tested distinctions for long-term and short-term business.</p>
+      <div class="exam-weight">Tested across multiple sittings · Especially March 2022 Q2iii, March 2021 Q2iii</div>
+    </div>
+  </div>
+
+  <p class="sub-title">Why Hold Reserves? — Basis Choice Depends on Purpose</p>
+  <table class="data-table">
+    <thead>
+      <tr><th>Purpose</th><th>Appropriate Basis</th><th>Key Rationale</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Published Accounts</strong></td>
+        <td>Best estimate or slightly prudent</td>
+        <td>True and fair view; consistent with accounting principles</td>
+      </tr>
+      <tr>
+        <td><strong>Supervisory / Solvency</strong></td>
+        <td>Most prudent <em>or</em> BEL + explicit risk allowance</td>
+        <td>Protect policyholders; overall level must be prudent</td>
+      </tr>
+      <tr>
+        <td><strong>Internal Management</strong></td>
+        <td>Best estimate (very small margin)</td>
+        <td>Realistic view; sensitivity testing uses other bases</td>
+      </tr>
+      <tr>
+        <td><strong>Premium Rating</strong></td>
+        <td>Best estimate (slightly prudent under uncertainty)</td>
+        <td>Estimate unsettled/unreported claims as base for pricing</td>
+      </tr>
+      <tr>
+        <td><strong>M&amp;A Valuation</strong></td>
+        <td>Close to best estimate</td>
+        <td>Starting point is EV; goodwill added to get appraisal value</td>
+      </tr>
+      <tr>
+        <td><strong>Investment Strategy</strong></td>
+        <td>Best estimate</td>
+        <td>Select assets to match liabilities appropriately</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p class="sub-title">Reserve Types — Long-Term Business (CI, IP, LTCI, Group LT)</p>
+  <div class="concept-grid">
+    <div class="concept-card teal">
+      <div class="card-label">ALR / Policy Reserve</div>
+      <h3>Active Life Reserve</h3>
+      <p><span class="formula-box" style="display:inline;padding:2px 6px;font-size:12px;">EPV(future claims + expenses) − EPV(future premiums)</span></p>
+      <p style="margin-top:8px;">Held when future outgo exceeds future income. Separate from <em>disabled life reserves</em> (for policyholders already claiming).</p>
+    </div>
+    <div class="concept-card amber">
+      <div class="card-label">IBNR</div>
+      <h3>Incurred But Not Reported</h3>
+      <p>Claims arising but not yet notified. <strong>Special CI risk:</strong> policyholders may learn of cover <em>years</em> after the disability event — late notification is increasingly common as brokers become more involved.</p>
+    </div>
+    <div class="concept-card blue">
+      <div class="card-label">RBNS</div>
+      <h3>Reported But Not Settled</h3>
+      <p>Claims notified, in assessment or in payment. Example: IP claims in deferred period; CI claims in assessment period.</p>
+    </div>
+    <div class="concept-card green">
+      <div class="card-label">Option Reserve</div>
+      <h3>Option Reserve</h3>
+      <p>Set aside when an option "comes into the money." Example: guaranteed conversion options on CI policies; guaranteed renewability options.</p>
+    </div>
+  </div>
+
+  <p class="sub-title">Reserve Types — Short-Term Business (PMI, Annual Group)</p>
+  <div class="accordion">
+    <div class="acc-header" onclick="toggleAcc(this)">
+      <span class="acc-title"><span class="acc-tag">Retrospective</span> Unearned Premium Reserve (UPR)</span>
+      <span class="acc-arrow">▾</span>
+    </div>
+    <div class="acc-body">
+      <p>Balance of premiums received for unexpired risk. = <strong>(100 − m)% × risk-related premium</strong>, where m% of risk falls before year-end. Risk-related premium <em>excludes</em> initial expenses (commission etc.) which are earned at inception.</p>
+    </div>
+  </div>
+  <div class="accordion">
+    <div class="acc-header" onclick="toggleAcc(this)">
+      <span class="acc-title"><span class="acc-tag">Prospective</span> Unexpired Risk Reserve (URR)</span>
+      <span class="acc-arrow">▾</span>
+    </div>
+    <div class="acc-body">
+      <p>Held when <strong>UPR &lt; expected future claims + expenses</strong> for the unexpired period. Estimated via projected future loss ratio applied to unexpired premium proportion. URR replaces UPR when UPR is inadequate — never held simultaneously as an addition.</p>
+    </div>
+  </div>
+  <div class="accordion">
+    <div class="acc-header" onclick="toggleAcc(this)">
+      <span class="acc-title"><span class="acc-tag">Statistical</span> IBNR, IBNER &amp; Outstanding Claims Reserve</span>
+      <span class="acc-arrow">▾</span>
+    </div>
+    <div class="acc-body">
+      <h4>IBNR</h4>
+      <p>Incurred but not reported. Usually <strong>small for PMI</strong> (short delay between claim event and notification). Calculated via statistical methods (chain ladder triangles).</p>
+      <h4>IBNER</h4>
+      <p>Incurred But Not Enough Reported — adjustment (+ or −) where past case estimates show systematic bias. Separate identification provides management insight and may attract different tax treatment.</p>
+      <h4>Outstanding Claims Reserve</h4>
+      <p>Notified but not yet fully settled. Statistical methods or case estimates per claim.</p>
+    </div>
+  </div>
+  <div class="accordion">
+    <div class="acc-header" onclick="toggleAcc(this)">
+      <span class="acc-title"><span class="acc-tag">Smoothing</span> Equalisation / Catastrophe Reserve</span>
+      <span class="acc-arrow">▾</span>
+    </div>
+    <div class="acc-body">
+      <p>Equalisation reserve smooths profits across atypical years. Catastrophe reserve covers future catastrophe events. Legislation and <strong>tax treatment vary by territory</strong>. May attract favourable tax treatment in some jurisdictions.</p>
+    </div>
+  </div>
+
+  <p class="sub-title">Reserving Methods — Case Estimates vs Statistical</p>
+  <div class="two-col">
+    <div class="vs-card left">
+      <div class="vs-head">Case Estimates — When to Use</div>
+      <div class="vs-body">
+        <ul>
+          <li>Small volumes or large/unusual individual claims</li>
+          <li>Low-data situations (new product, new market)</li>
+          <li>Experienced claims manager reviews each file individually</li>
+          <li>Considers: procedure type, hospital, surgeon, age/gender, past history, medical inflation</li>
+        </ul>
+      </div>
+    </div>
+    <div class="vs-card right">
+      <div class="vs-head">Statistical — When to Use</div>
+      <div class="vs-body">
+        <ul>
+          <li>Large stable portfolio (majority of PMI claims)</li>
+          <li>Homogeneous cohorts; chain ladder run-off triangles</li>
+          <li>Segment by contract / distribution / geography</li>
+          <li>Long-term: stochastic or deterministic models for income duration</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="callout teal"><strong>In practice:</strong> Statistical methods for the bulk of claims + case estimates for large, unusual or outlier claims. The combination is standard.</div>
+</section>
+
+<!-- ============================================================ -->
+<!-- TAB 3: SOLVENCY II -->
+<!-- ============================================================ -->
+<section id="tab-solvency2" class="section">
+  <div class="section-head">
+    <div class="section-icon">🏛️</div>
+    <div>
+      <h2>Solvency II Framework</h2>
+      <p>The three-pillar structure, SCR, MCR, BEL, Risk Margin — with exam-focused depth.</p>
+      <div class="exam-weight">Tested in: March 2022 Q1i–v · March 2021 Q2v · March 2022 Q2i–viii</div>
+    </div>
+  </div>
+
+  <p class="sub-title">Overview</p>
+  <div class="callout blue">
+    <strong>Objective:</strong> Adequate protection of policyholders; risk-based, harmonised EU-wide approach to capital adequacy, risk management and reporting. Operative from <strong>1 January 2016</strong>. Applies to EU insurers with gross premium &gt;€5m <em>or</em> gross TPs &gt;€25m.
+    <br><br>
+    <strong>Not just a compliance framework</strong> — affects capital allocation, product mix, asset mix, corporate structure and M&A decisions. Board-level engagement required.
+  </div>
+
+  <p class="sub-title">The Three Pillars</p>
+  <div class="pillar-row">
+    <div class="pillar-card p1">
+      <div class="pillar-label">Pillar 1 — Quantitative</div>
+      <h3>Capital Requirements</h3>
+      <ul>
+        <li>Market-consistent balance sheet</li>
+        <li>Technical Provisions = BEL + Risk Margin</li>
+        <li>SCR — Solvency Capital Requirement</li>
+        <li>MCR — Minimum Capital Requirement</li>
+        <li>Own Funds (Tier 1, 2, 3)</li>
+      </ul>
+    </div>
+    <div class="pillar-card p2">
+      <div class="pillar-label">Pillar 2 — Qualitative</div>
+      <h3>Governance &amp; ORSA</h3>
+      <ul>
+        <li>Board responsible for SII compliance</li>
+        <li>4 key functions: Risk Mgmt · Actuarial · Compliance · Internal Audit</li>
+        <li>ORSA — own risk & solvency assessment</li>
+        <li>3–5yr forward-looking solvency projection</li>
+        <li>"Embeddedness" in strategic decisions required</li>
+      </ul>
+    </div>
+    <div class="pillar-card p3">
+      <div class="pillar-label">Pillar 3 — Disclosure</div>
+      <h3>Reporting</h3>
+      <ul>
+        <li>RSR — private to supervisor, annual</li>
+        <li>QRT — quantitative templates, annual + quarterly subset</li>
+        <li>SFCR — public disclosure, annual, within 3–4 months of year-end</li>
+        <li>Contains ORSA summary</li>
+      </ul>
+    </div>
+  </div>
+
+  <p class="sub-title">Technical Provisions = BEL + Risk Margin</p>
+  <div class="two-col">
+    <div class="concept-card teal">
+      <div class="card-label">Best Estimate Liability (BEL)</div>
+      <h3>BEL</h3>
+      <ul>
+        <li>PV of expected future cashflows (benefits + expenses − premiums)</li>
+        <li>Discounted at <strong>risk-free yield curve</strong> (EIOPA publishes monthly)</li>
+        <li>Best estimate assumptions — <strong>no prudential margins</strong></li>
+        <li>Policy-by-policy or grouped by homogeneous product type</li>
+        <li><strong>Can be negative</strong> (no floor of zero)</li>
+        <li>SLT (IP, LTCI) and Non-SLT (PMI) treated differently</li>
+      </ul>
+    </div>
+    <div class="concept-card amber">
+      <div class="card-label">Risk Margin (RM)</div>
+      <h3>Risk Margin</h3>
+      <ul>
+        <li>Additional amount so TP = transfer value to another insurer</li>
+        <li><strong>Cost of Capital method:</strong> 6% p.a. on projected non-hedgeable SCR, discounted at risk-free rates</li>
+        <li>Covers: insurance risk, operational risk, residual market risk</li>
+        <li><em>Not</em> a prudence margin — it is a market-consistent transfer price element</li>
+      </ul>
+    </div>
+  </div>
+
+  <p class="sub-title">SCR vs MCR — Critical Distinction</p>
+  <table class="data-table">
+    <thead>
+      <tr><th></th><th>SCR</th><th>MCR</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Confidence Level</strong></td>
+        <td>VaR 99.5% over 1 year</td>
+        <td>VaR 85% over 1 year</td>
+      </tr>
+      <tr>
+        <td><strong>Formula</strong></td>
+        <td>Standard formula (stress tests by risk module, correlation matrix → BSCR + SCR_op + Adj) <em>or</em> internal model</td>
+        <td>Simple linear factor formula based on TPs + premiums/capital at risk</td>
+      </tr>
+      <tr>
+        <td><strong>Floor / Cap</strong></td>
+        <td>—</td>
+        <td>Floor: 25% SCR · Cap: 45% SCR · Absolute min: €3.7m (LT) / €2.5m (ST)</td>
+      </tr>
+      <tr>
+        <td><strong>Breach consequences</strong></td>
+        <td>Intervention: submit recovery plan within 6 months</td>
+        <td>Ultimate intervention: authorisation may be withdrawn</td>
+      </tr>
+      <tr>
+        <td><strong>Capital tier requirements</strong></td>
+        <td>≥50% Tier 1; &lt;15% Tier 3</td>
+        <td>≥80% Tier 1; no Tier 3 allowed</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p class="sub-title">Health Risk Modules under Standard Formula</p>
+  <div class="concept-grid">
+    <div class="concept-card teal">
+      <div class="card-label">SLT Health (life-like)</div>
+      <h3>IP · SACI · LTCI</h3>
+      <ul>
+        <li>Disability / morbidity risk</li>
+        <li>Mortality risk</li>
+        <li>Longevity risk</li>
+        <li>Lapse risk</li>
+        <li>Expense risk</li>
+        <li>Revision risk</li>
+      </ul>
+    </div>
+    <div class="concept-card amber">
+      <div class="card-label">Non-SLT Health (non-life-like)</div>
+      <h3>PMI · Annual Products</h3>
+      <ul>
+        <li>Premium &amp; reserve risk</li>
+        <li>Lapse risk</li>
+      </ul>
+    </div>
+    <div class="concept-card red">
+      <div class="card-label">CAT Risk (both)</div>
+      <h3>Catastrophe Module</h3>
+      <ul>
+        <li>Epidemic / pandemic scenarios</li>
+        <li>Climate-related events</li>
+        <li>Antimicrobial resistance</li>
+        <li>Mass accident scenarios</li>
+      </ul>
+    </div>
+  </div>
+
+  <p class="sub-title">Discount Rates — MA vs VA</p>
+  <div class="two-col">
+    <div class="concept-card teal">
+      <div class="card-label">Matching Adjustment (MA)</div>
+      <h3>Matching Adjustment</h3>
+      <ul>
+        <li>For LT predictable liabilities held to maturity (annuity-type)</li>
+        <li>Add illiquidity premium to discount rate → reduces BEL</li>
+        <li>Requires regulator approval; ring-fenced assets</li>
+        <li>No surrender risk; assets cannot be sold before maturity</li>
+        <li>MA = <strong>insurer-specific</strong> (own assets)</li>
+      </ul>
+    </div>
+    <div class="concept-card amber">
+      <div class="card-label">Volatility Adjustment (VA)</div>
+      <h3>Volatility Adjustment</h3>
+      <ul>
+        <li>Where MA not eligible</li>
+        <li>Add % of spread to reduce forced-sale risk in market crises</li>
+        <li>EIOPA publishes by currency/market</li>
+        <li>Subject to liquidity plan + sensitivity analysis</li>
+        <li>VA = <strong>market-wide</strong> (same for all insurers in that market)</li>
+      </ul>
+    </div>
+  </div>
+  <div class="callout amber"><strong>Only one of MA or VA can apply at a time</strong> to a given portfolio. MA is insurer-specific; VA is currency/market-wide.</div>
+
+  <p class="sub-title">Financial Reinsurance — As a Solvency Tool <span style="font-family:var(--mono);font-size:10px;color:var(--amber);background:var(--amber-dim);padding:2px 7px;border-radius:3px;margin-left:8px;">March 2022 Q2viii</span></p>
+  <div class="accordion">
+    <div class="acc-header" onclick="toggleAcc(this)">
+      <span class="acc-title">When is FinRe suitable? Key structures</span>
+      <span class="acc-arrow">▾</span>
+    </div>
+    <div class="acc-body">
+      <p>Suitability depends on the <strong>nature of the solvency problem</strong> and whether genuine risk transfer occurs (for regulatory capital credit).</p>
+      <h4>Lump-sum fund / Surplus relief</h4>
+      <ul>
+        <li>Reinsurer advances funds → creates assets; insurer repays from future profits</li>
+        <li>Works if the company is profitable and just needs capital timing relief</li>
+      </ul>
+      <h4>VIF Monetisation</h4>
+      <ul>
+        <li>Recognise profit embedded in in-force business through reinsurance</li>
+        <li>Works when there is a large valuable in-force block</li>
+      </ul>
+      <h4>Key caveats</h4>
+      <ul>
+        <li>True risk transfer must occur to get regulatory capital credit</li>
+        <li>Regulator approval may be required</li>
+        <li>FinRe does not fix structural solvency problems — only provides temporary relief</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="exam-section-label"><span>Investigating a Low Solvency Ratio — March 2022 Q2iii</span></div>
+  <div class="callout blue"><strong>Question:</strong> A company's solvency ratio has deteriorated. Outline the areas a Chief Actuary should investigate to understand causes and identify actions. [9 marks]</div>
+  <div class="concept-grid">
+    <div class="concept-card teal">
+      <div class="card-label">Available Capital Side</div>
+      <h3>Asset / Admissibility Issues</h3>
+      <ul>
+        <li>Domiciling of assets / type of assets — admissibility restrictions</li>
+        <li>Fall in investment values (market downturn)</li>
+        <li>Reallocation of assets to more eligible types</li>
+        <li>Unrealised losses on asset portfolio</li>
+      </ul>
+    </div>
+    <div class="concept-card red">
+      <div class="card-label">Liability / Claims Side</div>
+      <h3>Reserve &amp; Claims Issues</h3>
+      <ul>
+        <li>Reserving assumptions more prudent than required</li>
+        <li>Large claims / catastrophe / pandemic experience</li>
+        <li>Is the adverse claims experience one-off or recurring?</li>
+        <li>IBNR development — late-emerging claims (esp. CI)</li>
+      </ul>
+    </div>
+    <div class="concept-card amber">
+      <div class="card-label">Required Capital Side</div>
+      <h3>SCR Movement</h3>
+      <ul>
+        <li>Has risk profile changed (new products, market expansion)?</li>
+        <li>Have correlation assumptions changed in standard formula?</li>
+        <li>Change in business mix → different SCR modules weighted</li>
+        <li>Capital add-on imposed by regulator?</li>
+      </ul>
+    </div>
+    <div class="concept-card blue">
+      <div class="card-label">Structural / Operational</div>
+      <h3>Expenses &amp; Operations</h3>
+      <ul>
+        <li>Expense overruns eating into available capital</li>
+        <li>New business strain too high — unsustainable growth rate</li>
+        <li>Mismatching of assets and liabilities</li>
+        <li>Reinsurance counterparty failure</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- TAB 4: GLOBAL FRAMEWORKS -->
+<!-- ============================================================ -->
+<section id="tab-global" class="section">
+  <div class="section-head">
+    <div class="section-icon">🌐</div>
+    <div>
+      <h2>Global Solvency Frameworks</h2>
+      <p>Key jurisdictions compared — with emphasis on exam-testable differences from Solvency II.</p>
+      <div class="exam-weight">Tested in: April 2016 Q3i · March 2017 Q2i · March 2021 Q2ii</div>
+    </div>
+  </div>
+
+  <p class="sub-title">Sophistication Spectrum</p>
+  <div class="callout teal">Global trend: countries moving from minimum capital formulas → risk-based capital → full economic capital + ORSA. Solvency II has been highly influential globally.</div>
+
+  <div style="margin-bottom:20px;">
+    <div class="progress-bar-wrap"><span class="progress-label">Myanmar</span><div class="progress-bar"><div class="progress-fill" style="width:5%"></div></div><span class="progress-num">Min ₹</span></div>
+    <div class="progress-bar-wrap"><span class="progress-label">India (IRDAI)</span><div class="progress-bar"><div class="progress-fill" style="width:25%"></div></div><span class="progress-num">Formula</span></div>
+    <div class="progress-bar-wrap"><span class="progress-label">USA (RBC)</span><div class="progress-bar"><div class="progress-fill" style="width:50%"></div></div><span class="progress-num">RBC+</span></div>
+    <div class="progress-bar-wrap"><span class="progress-label">China (C-ROSS)</span><div class="progress-bar"><div class="progress-fill" style="width:70%"></div></div><span class="progress-num">3-Pillar</span></div>
+    <div class="progress-bar-wrap"><span class="progress-label">Australia (LAGIC)</span><div class="progress-bar"><div class="progress-fill" style="width:85%"></div></div><span class="progress-num">EC+ORSA</span></div>
+    <div class="progress-bar-wrap"><span class="progress-label">EU (Solvency II)</span><div class="progress-bar"><div class="progress-fill" style="width:100%"></div></div><span class="progress-num">Full</span></div>
+  </div>
+
+  <p class="sub-title">Framework Summaries</p>
+
+  <div class="accordion">
+    <div class="acc-header" onclick="toggleAcc(this)">
+      <span class="acc-title"><span class="acc-tag">UK</span> Post-Brexit Position</span>
+      <span class="acc-arrow">▾</span>
+    </div>
+    <div class="acc-body">
+      <ul>
+        <li>Left EU 1 January 2021. At exit, aligned with Solvency II.</li>
+        <li>UK insurers now <strong>third-country undertakings</strong> in the EU — cannot passport services.</li>
+        <li>PRA considering reform — potential <strong>reduction in capital requirements</strong> post-Brexit.</li>
+        <li>Third-country equivalence rules apply. Future alignment with EU uncertain.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="accordion">
+    <div class="acc-header" onclick="toggleAcc(this)">
+      <span class="acc-title"><span class="acc-tag">USA</span> State-Based System, RBC &amp; PBR</span>
+      <span class="acc-arrow">▾</span>
+    </div>
+    <div class="acc-body">
+      <h4>Structure</h4>
+      <ul>
+        <li>50 states + DC + 5 territories — each state has own regulator and commissioner</li>
+        <li>NAIC coordinates model laws, standards, and uniformity of reporting</li>
+        <li>Federal Insurance Office (FIO): monitors, no supervisory role</li>
+        <li>Federal Reserve Board (FRB): consolidated oversight of systemically important insurers</li>
+      </ul>
+      <h4>Capital: Risk-Based Capital (RBC)</h4>
+      <ul>
+        <li>Standard formula applied to statutory financial statement balances</li>
+        <li>Covers: asset risk · insurance risk · business risk</li>
+        <li>Designed to identify <strong>weakly capitalised companies</strong> — closer to MCR than SCR in concept</li>
+      </ul>
+      <h4>Reserves: PBR (from 2017)</h4>
+      <ul>
+        <li>Principle-Based Reserving replaces 150+ years of formula-driven reserves</li>
+        <li>Hold highest of: (a) net premium reserve · (b) deterministic reserve · (c) stochastic reserve</li>
+        <li>Reflects own morbidity, lapses, expenses, option costs</li>
+      </ul>
+      <h4>Key Differences from Solvency II</h4>
+      <ul>
+        <li>RBC ≈ MCR (identifies weak capitalisation); SII also includes SCR for firm-specific risk</li>
+        <li>US reserves historically formulaic + prudential; SII uses market-consistent BEL + explicit RM</li>
+        <li>ORSA is annual but less embedded in strategic decision-making than SII ORSA</li>
+      </ul>
+    </div>
+  </div>
+  <div class="accordion">
+    <div class="acc-header" onclick="toggleAcc(this)">
+      <span class="acc-title"><span class="acc-tag">China</span> C-ROSS Framework</span>
+      <span class="acc-arrow">▾</span>
+    </div>
+    <div class="acc-body">
+      <h4>Regulator</h4>
+      <ul><li>CBIRC (China Banking and Insurance Regulatory Commission)</li></ul>
+      <h4>Three Pillars (similar to SII)</h4>
+      <ul>
+        <li><strong>Pillar I:</strong> Quantitative capital — insurance risk, market risk, credit risk</li>
+        <li><strong>Pillar II:</strong> Qualitative: rating system + ORSA equivalent + liquidity indicators</li>
+        <li><strong>Pillar III:</strong> Transparency, disclosure, systemic risk monitoring</li>
+      </ul>
+      <h4>Key Differences from Solvency II</h4>
+      <ul>
+        <li>Assets valued at <strong>GAAP value</strong>, not mark-to-market</li>
+        <li>Discount yield ≈ GAAP liability yield, not risk-free curve</li>
+        <li><strong>No internal models allowed</strong> — all insurers use same rules</li>
+        <li>Reflects China's younger, developing insurance market</li>
+      </ul>
+    </div>
+  </div>
+  <div class="accordion">
+    <div class="acc-header" onclick="toggleAcc(this)">
+      <span class="acc-title"><span class="acc-tag">Australia</span> LAGIC Framework (APRA)</span>
+      <span class="acc-arrow">▾</span>
+    </div>
+    <div class="acc-body">
+      <h4>Structure</h4>
+      <ul>
+        <li>LAGIC (Life &amp; General Insurance Capital) — operative from January 2013</li>
+        <li>Three pillars with strong parallels to Solvency II</li>
+      </ul>
+      <h4>Pillar I: PCA (Prescribed Capital Amount)</h4>
+      <ul>
+        <li>99.5% VaR over 1 year — same confidence level as SCR</li>
+        <li>Standard method or internal model</li>
+        <li>Covers: insurance + asset + concentration + operational risk</li>
+        <li>APRA can increase or decrease required capital (≈ capital add-on)</li>
+      </ul>
+      <h4>Equivalence</h4>
+      <ul><li>Provisional equivalence with Solvency II (10-year periods)</li></ul>
+    </div>
+  </div>
+  <div class="accordion">
+    <div class="acc-header" onclick="toggleAcc(this)">
+      <span class="acc-title"><span class="acc-tag">South Africa</span> SAM Framework</span>
+      <span class="acc-arrow">▾</span>
+    </div>
+    <div class="acc-body">
+      <h4>Regulators</h4>
+      <ul>
+        <li>PA (Prudential Authority) — licensing, supervision, enforcement</li>
+        <li>FSCA — market conduct, consumer protection, financial literacy</li>
+      </ul>
+      <h4>SAM (from July 2018)</h4>
+      <ul>
+        <li>Solvency Assessment &amp; Management — <strong>largely based on Solvency II</strong></li>
+        <li>Three pillars: Pillar I (quantitative), Pillar II (governance/ORSA), Pillar III (reporting/disclosure)</li>
+        <li>1-in-200 year loss event (99.5% VaR) — same as SCR</li>
+        <li>Standardised formula or internal model</li>
+        <li>SA adaptations: own risk-free rates; market risk calibrated to SA markets</li>
+        <li>Microinsurance: reduced MCR to widen access for lower-income segments</li>
+      </ul>
+    </div>
+  </div>
+  <div class="accordion">
+    <div class="acc-header" onclick="toggleAcc(this)">
+      <span class="acc-title"><span class="acc-tag">India / IRDAI</span> Indian Framework Context</span>
+      <span class="acc-arrow">▾</span>
+    </div>
+    <div class="acc-body">
+      <h4>Regulatory Structure</h4>
+      <ul>
+        <li>IRDAI (Insurance Regulatory and Development Authority of India) — sole insurance regulator</li>
+        <li>Formula-based capital requirements (risk-based evolution underway)</li>
+        <li>Solvency margin typically expressed as a required solvency margin (RSM) based on premiums/claims</li>
+        <li>Appointed Actuary (AA) has statutory responsibilities including capital adequacy certification</li>
+      </ul>
+      <h4>Statutory Role of Appointed Actuary</h4>
+      <ul>
+        <li>Products designed, priced and compliant with applicable regulations</li>
+        <li>Policyholder reasonable expectations considered</li>
+        <li>Capital management — insurer remains solvent under stressed scenarios</li>
+        <li>Periodic regulatory reporting of financial condition</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- TAB 5: EMBEDDED VALUE -->
+<!-- ============================================================ -->
+<section id="tab-ev" class="section">
+  <div class="section-head">
+    <div class="section-icon">💡</div>
+    <div>
+      <h2>Embedded Value</h2>
+      <p>Concept, PVFP, analysis of movement — a major tested area in the March 2022 paper.</p>
+      <div class="exam-weight">Tested: March 2022 Q1i–v (35 marks combined)</div>
+    </div>
+  </div>
+
+  <p class="sub-title">EV Concept</p>
+  <div class="formula-box">
+    <div class="f-label">Embedded Value Formula</div>
+    EV = Shareholder Net Assets + PVFP<br>
+    <span>Where:</span><br>
+    Shareholder Net Assets = <span>Market value of assets − Regulatory reserves − SCR (less capital held for other purposes)</span><br>
+    PVFP = <span>Present Value of Future (shareholder) Profits on in-force business</span>
+  </div>
+
+  <div class="callout teal">
+    <strong>Key logic:</strong> EV basis is more realistic than the reserving basis → margins release as profit over time. If the EV basis and reserving basis were identical, PVFP = 0. The difference in bases creates the VIF (Value of In-Force).
+  </div>
+
+  <div class="two-col">
+    <div class="concept-card teal">
+      <div class="card-label">Without-Profits (IP/CI/LTC)</div>
+      <h3>PVFP Components</h3>
+      <ul>
+        <li>PV(premiums + investment income − claims − expenses + reserve release)</li>
+        <li>Discounted at risk discount rate reflecting risk profile</li>
+      </ul>
+    </div>
+    <div class="concept-card amber">
+      <div class="card-label">Unit-Linked</div>
+      <h3>PVFP Components</h3>
+      <ul>
+        <li>PV(charges − expenses − excess benefits + non-unit reserve release)</li>
+        <li>Unit funds pass through → shareholder profit comes from charges</li>
+      </ul>
+    </div>
+  </div>
+
+  <p class="sub-title">Analysis of EV Movement — 7 Heads <span style="font-family:var(--mono);font-size:10px;color:var(--amber);background:var(--amber-dim);padding:2px 7px;border-radius:3px;margin-left:8px;">March 2022 Q1i–ii</span></p>
+  <table class="data-table">
+    <thead>
+      <tr><th>#</th><th>Head</th><th>What it represents</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="mono">a</td>
+        <td><strong>Expected return on free surplus</strong></td>
+        <td>Risk-free rate applied to free surplus (= assets − statutory reserve − SCR) at start of year</td>
+      </tr>
+      <tr>
+        <td class="mono">b</td>
+        <td><strong>Return on in-force — expected return</strong></td>
+        <td>Risk-free rate applied to opening VIF. Called "unwind of discount rate" — profits becoming closer in time, so discounted less.</td>
+      </tr>
+      <tr>
+        <td class="mono">c</td>
+        <td><strong>Return on in-force — experience variances</strong></td>
+        <td>Actual vs expected experience (claims, lapses, expenses) rolled forward. Separate line per item. Also captures impact on future capital releases.</td>
+      </tr>
+      <tr>
+        <td class="mono">d</td>
+        <td><strong>Return on in-force — operating assumption changes</strong></td>
+        <td>Best estimate assumptions revised → change in VIF. Includes changes to RM or SCR correlation assumptions; change in cost-of-capital factor.</td>
+      </tr>
+      <tr>
+        <td class="mono">e</td>
+        <td><strong>New business contribution</strong></td>
+        <td>Increase in VIF + change in net assets at point of sale. Can be negative if new business is loss-making on EV basis.</td>
+      </tr>
+      <tr>
+        <td class="mono">f</td>
+        <td><strong>Investment return variance</strong></td>
+        <td>Actual investment return vs risk-free assumed return. Includes asset-liability mismatch impact; effect on cost of holding RM and capital.</td>
+      </tr>
+      <tr>
+        <td class="mono">g</td>
+        <td><strong>Effect of economic assumption changes</strong></td>
+        <td>Change in discount rate / risk-free yield curve. Similar to (f) but forward-looking. Often combined with investment return variance.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p class="sub-title">EV Movement vs Surplus Analysis <span style="font-family:var(--mono);font-size:10px;color:var(--amber);background:var(--amber-dim);padding:2px 7px;border-radius:3px;margin-left:8px;">March 2022 Q1v</span></p>
+  <div class="two-col">
+    <div class="vs-card left">
+      <div class="vs-head">EV Movement Analysis</div>
+      <div class="vs-body">
+        <ul>
+          <li>Shows net impact on current surplus AND future profitability (VIF)</li>
+          <li>Takes account of how today's experience changes expected future profits</li>
+          <li>A rise in lapses might show a <em>positive</em> EV impact (removes unprofitable business)</li>
+          <li>Forward-looking view</li>
+        </ul>
+      </div>
+    </div>
+    <div class="vs-card right">
+      <div class="vs-head">Analysis of Surplus</div>
+      <div class="vs-body">
+        <ul>
+          <li>Shows financial effect of divergence from valuation basis in current year only</li>
+          <li>Does not reflect impact on future profits</li>
+          <li>A rise in lapses would show a <em>negative</em> surplus impact (future premium income lost)</li>
+          <li>Backward-looking view</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="callout amber"><strong>Exam trap:</strong> A single experience item can have opposite signs in EV movement analysis vs surplus analysis. Lapses are the classic example. Make sure you explain why.</div>
+
+  <p class="sub-title">Sale Price vs Published EV <span style="font-family:var(--mono);font-size:10px;color:var(--amber);background:var(--amber-dim);padding:2px 7px;border-radius:3px;margin-left:8px;">March 2022 Q1iv</span></p>
+  <div class="accordion">
+    <div class="acc-header" onclick="toggleAcc(this)">
+      <span class="acc-title">Factors that could push sale price above or below published EV</span>
+      <span class="acc-arrow">▾</span>
+    </div>
+    <div class="acc-body">
+      <h4>Could push price ABOVE EV</h4>
+      <ul>
+        <li>Seller is not in a weak position (not a forced sale) — can negotiate</li>
+        <li>Goodwill / franchise value from expected new business not in EV</li>
+        <li>Synergies that buyer can extract — diversification benefits, expense savings</li>
+        <li>Seller uses more optimistic basis than published EV</li>
+        <li>Competitive bidding process drives price up</li>
+      </ul>
+      <h4>Could push price BELOW EV</h4>
+      <ul>
+        <li>Buyer uses more conservative (prudent) basis</li>
+        <li>Buyer identifies risks not reflected in published EV (adverse experience, model risk)</li>
+        <li>Liquidity premium demanded by buyer</li>
+        <li>Regulatory / capital constraints on buyer → discount for integration costs</li>
+        <li>If EV is based on different asset allocation than buyer intends to hold</li>
+      </ul>
+      <h4>Process notes</h4>
+      <ul>
+        <li>Both parties likely to agree to use EV as starting point</li>
+        <li>Basis for calculations is a negotiation question</li>
+        <li>Independent actuarial review of EV common in M&A transactions</li>
+      </ul>
+    </div>
+  </div>
+
+  <p class="sub-title">Impact of New Business Strategy on EV <span style="font-family:var(--mono);font-size:10px;color:var(--amber);background:var(--amber-dim);padding:2px 7px;border-radius:3px;margin-left:8px;">March 2022 Q1iii</span></p>
+  <div class="callout blue">
+    <strong>Scenario:</strong> Company decides to focus IP marketing heavily. How does this impact EV and each head of the EV movement analysis?
+    <br><br>
+    Key principle: <strong>Current EV is unaffected</strong> — it does not include future new business. Only future EVs are impacted. Assuming IP is profitable on best estimate basis: future PVFP rises · new business contribution line increases · in-force experience may be affected if growth is so large it creates expense volatility · capital strain from NB strain should be considered.
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- TAB 6: EXAM QUESTIONS -->
+<!-- ============================================================ -->
+<section id="tab-exam" class="section">
+  <div class="section-head">
+    <div class="section-icon">📝</div>
+    <div>
+      <h2>Exam Questions — Practice &amp; Model Answers</h2>
+      <p>Real IAI exam questions with full model answers. Try writing your answer before revealing.</p>
+      <div class="exam-weight">All questions from IAI SA1 exam data</div>
+    </div>
+  </div>
+
+  <p class="sub-title">Solvency Ratio &amp; Capital</p>
+
+  <div class="exam-q">
+    <div class="exam-q-header" onclick="toggleExam(this)">
+      <div>
+        <div class="exam-meta">
+          <span class="exam-sitting">March 2022 · Q2i</span>
+          <span class="exam-marks">5 marks · ½ per point</span>
+        </div>
+        <div class="exam-q-text">Briefly explain what is meant by solvency ratio and its drivers.</div>
+      </div>
+      <button class="reveal-btn" onclick="event.stopPropagation();revealAnswer(this)">Reveal Answer</button>
+    </div>
+    <div class="exam-answer">
+      <div class="answer-section">
+        <div class="answer-section-title">Definition</div>
+        <ul>
+          <li>Solvency ratio = Available capital ÷ Required capital × 100%. Regulators require insurers to always maintain a ratio above a minimum threshold.</li>
+          <li>A ratio &lt;100% implies insolvency. There is typically a supervisory threshold (e.g. 120%) — interventions begin below this before outright insolvency.</li>
+          <li>Both available capital and required capital are determined under the applicable regulatory regime. Required capital tends to be more formula-driven; available capital is the market-consistent surplus.</li>
+        </ul>
+      </div>
+      <div class="answer-section">
+        <div class="answer-section-title">Drivers of Required Capital (Risk Profile)</div>
+        <ul>
+          <li>Biometric risks: mortality, morbidity, longevity</li>
+          <li>Investment risk: both in absolute terms and relative to liabilities (mismatch)</li>
+          <li>Expense risk including expense inflation</li>
+          <li>Lapse / persistency risk</li>
+          <li>Operational risk</li>
+          <li>Catastrophe / pandemic risk</li>
+          <li>Counterparty (credit) risk on reinsurance and investments</li>
+        </ul>
+      </div>
+      <div class="answer-section">
+        <div class="answer-section-title">Drivers of Available Capital</div>
+        <ul>
+          <li>Investment return on backing assets</li>
+          <li>Profitability of in-force book and new business written</li>
+          <li>Capital injections from shareholders</li>
+          <li>Asset values (market movements affect the balance sheet)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="exam-q">
+    <div class="exam-q-header" onclick="toggleExam(this)">
+      <div>
+        <div class="exam-meta">
+          <span class="exam-sitting">March 2022 · Q2ii</span>
+          <span class="exam-marks">5 marks · ½ per point</span>
+        </div>
+        <div class="exam-q-text">Outline the implications of a borderline solvency ratio to the business of the company.</div>
+      </div>
+      <button class="reveal-btn" onclick="event.stopPropagation();revealAnswer(this)">Reveal Answer</button>
+    </div>
+    <div class="exam-answer">
+      <div class="answer-section">
+        <div class="answer-section-title">Regulatory Implications</div>
+        <ul>
+          <li>Regulatory intervention — likely to include limiting or closing to new business</li>
+          <li>Immediate demand for capital injection; submission of a recovery plan</li>
+          <li>Increased supervisory oversight and monitoring requirements</li>
+          <li>Risk of licence revocation if MCR is breached</li>
+        </ul>
+      </div>
+      <div class="answer-section">
+        <div class="answer-section-title">Commercial / Market Implications</div>
+        <ul>
+          <li>Bad publicity → negative customer sentiment → lower sales</li>
+          <li>Brokers may stop promoting the company's products</li>
+          <li>Credit rating downgrade → higher cost of raising future capital</li>
+          <li>Drop in share price if publicly listed</li>
+          <li>Any expansion plans likely to be stalled</li>
+          <li>Counterparties (reinsurers, banks) may demand additional collateral</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="exam-q">
+    <div class="exam-q-header" onclick="toggleExam(this)">
+      <div>
+        <div class="exam-meta">
+          <span class="exam-sitting">March 2022 · Q2viii</span>
+          <span class="exam-marks">7 marks · ½ per point</span>
+        </div>
+        <div class="exam-q-text">Discuss the suitability of financial reinsurance as a solution to a low solvency ratio.</div>
+      </div>
+      <button class="reveal-btn" onclick="event.stopPropagation();revealAnswer(this)">Reveal Answer</button>
+    </div>
+    <div class="exam-answer">
+      <div class="answer-section">
+        <div class="answer-section-title">Assessing Suitability</div>
+        <ul>
+          <li>Suitability depends on the <em>nature</em> of the solvency problem — what drives the low ratio</li>
+          <li>Also depends on whether genuine risk transfer occurs — required for regulatory capital credit</li>
+          <li>Regulator may need to approve the structure</li>
+        </ul>
+      </div>
+      <div class="answer-section">
+        <div class="answer-section-title">Lump-Sum Fund / Surplus Relief</div>
+        <ul>
+          <li>Reinsurer advances a lump sum → creates assets for the insurer</li>
+          <li>Insurer repays from future profits on the reinsured block</li>
+          <li>Works if the company is profitable but has a capital timing problem</li>
+          <li>Does not work if insolvency is structural / losses are ongoing</li>
+        </ul>
+      </div>
+      <div class="answer-section">
+        <div class="answer-section-title">VIF Monetisation</div>
+        <ul>
+          <li>Recognise profit embedded in in-force business through reinsurance</li>
+          <li>Reinsurer pays for a share of future profits in exchange for assuming the risk</li>
+          <li>Works when there is a large, clearly profitable in-force block with credible experience</li>
+        </ul>
+      </div>
+      <div class="answer-section">
+        <div class="answer-section-title">Key Limitations</div>
+        <ul>
+          <li>FinRe does not fix structural solvency problems — only provides temporary relief</li>
+          <li>If solvency is low due to recurring adverse experience, FinRe is inappropriate</li>
+          <li>True risk transfer must be demonstrable to satisfy regulators</li>
+          <li>FinRe may be expensive (reinsurer requires return for capital deployed)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <p class="sub-title">Embedded Value</p>
+
+  <div class="exam-q">
+    <div class="exam-q-header" onclick="toggleExam(this)">
+      <div>
+        <div class="exam-meta">
+          <span class="exam-sitting">March 2022 · Q1i</span>
+          <span class="exam-marks">5 marks</span>
+        </div>
+        <div class="exam-q-text">Write down the heads under which the analysis of EV movement should be presented.</div>
+      </div>
+      <button class="reveal-btn" onclick="event.stopPropagation();revealAnswer(this)">Reveal Answer</button>
+    </div>
+    <div class="exam-answer">
+      <div class="answer-section">
+        <div class="answer-section-title">The Seven Heads</div>
+        <ul>
+          <li>Opening Embedded Value</li>
+          <li>a) Expected return on free surplus</li>
+          <li>b) Return on in-force business — Expected return (unwind of discount rate)</li>
+          <li>c) Return on in-force business — Experience variances</li>
+          <li>d) Return on in-force business — Operating assumption changes</li>
+          <li>e) New business contribution (less development costs) = Operating Return</li>
+          <li>f) Investment return variances</li>
+          <li>g) Effect of economic assumption changes</li>
+          <li>Closing Embedded Value</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="exam-q">
+    <div class="exam-q-header" onclick="toggleExam(this)">
+      <div>
+        <div class="exam-meta">
+          <span class="exam-sitting">March 2022 · Q1v</span>
+          <span class="exam-marks">5 marks</span>
+        </div>
+        <div class="exam-q-text">Explain the difference between the EV movement analysis and the analysis of surplus.</div>
+      </div>
+      <button class="reveal-btn" onclick="event.stopPropagation();revealAnswer(this)">Reveal Answer</button>
+    </div>
+    <div class="exam-answer">
+      <div class="answer-section">
+        <div class="answer-section-title">Core Distinction</div>
+        <ul>
+          <li>EV movement shows the net impact on current surplus <em>and</em> future profitability (VIF); surplus analysis only shows divergences in current-year experience from the valuation basis.</li>
+          <li>A single experience item can have opposite signs in the two analyses — this is a critical exam point.</li>
+        </ul>
+      </div>
+      <div class="answer-section">
+        <div class="answer-section-title">Classic Example: Increase in Lapses</div>
+        <ul>
+          <li><strong>Surplus analysis:</strong> Negative impact — future premium income is lost; reserve releases may not compensate.</li>
+          <li><strong>EV movement:</strong> Positive impact — if the business is unprofitable on EV basis, removing lapsing lives increases VIF (removes negative-VIF policies).</li>
+          <li>Conversely, if business is profitable, higher lapses reduce EV.</li>
+        </ul>
+      </div>
+      <div class="answer-section">
+        <div class="answer-section-title">What the Surplus Analysis Shows</div>
+        <ul>
+          <li>Financial effect of divergences between actual experience and valuation basis (current period only)</li>
+          <li>Financial effect of writing new business in the period</li>
+          <li>If carried out independently of the valuation, it shows the contribution of new business to statutory surplus</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <p class="sub-title">Appointed Actuary &amp; Capital</p>
+
+  <div class="exam-q">
+    <div class="exam-q-header" onclick="toggleExam(this)">
+      <div>
+        <div class="exam-meta">
+          <span class="exam-sitting">March 2021 · Q2v</span>
+          <span class="exam-marks">11 marks</span>
+        </div>
+        <div class="exam-q-text">Outline the statutory responsibilities of the Appointed Actuary and describe how a virtual insurer set-up creates additional challenges for those responsibilities.</div>
+      </div>
+      <button class="reveal-btn" onclick="event.stopPropagation();revealAnswer(this)">Reveal Answer</button>
+    </div>
+    <div class="exam-answer">
+      <div class="answer-section">
+        <div class="answer-section-title">Statutory Responsibilities of the AA</div>
+        <ul>
+          <li>Products are designed and priced correctly and comply with applicable regulations</li>
+          <li>Policyholder reasonable expectations are considered in all aspects of business</li>
+          <li>Capital management — ensure the insurer remains solvent in reasonably stressed scenarios</li>
+          <li>Periodic regulatory reporting of the insurer's financial condition</li>
+          <li>Certification of solvency returns / financial condition reports to the regulator</li>
+        </ul>
+      </div>
+      <div class="answer-section">
+        <div class="answer-section-title">Additional Challenges in a Virtual Set-Up</div>
+        <ul>
+          <li>AA needs strong data governance — virtual systems create unclear data lineage and accessibility issues</li>
+          <li>Fully virtual operations mean processes are tweaked for digital workflows — AA must understand the controls</li>
+          <li>System upgrades and process changes carry data and control implications that must be assessed beforehand</li>
+          <li>Technology limitations could impact completeness and accuracy of data feeding actuarial models</li>
+          <li>AA and team must understand technology constraints — not just actuarial ones</li>
+          <li>Remote working can impair information flows and sign-off procedures for regulatory submissions</li>
+          <li>Cybersecurity risk affects data integrity — directly relevant to reserving and solvency calculations</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="exam-q">
+    <div class="exam-q-header" onclick="toggleExam(this)">
+      <div>
+        <div class="exam-meta">
+          <span class="exam-sitting">March 2021 · Q1v</span>
+          <span class="exam-marks">12 marks</span>
+        </div>
+        <div class="exam-q-text">Describe the asset-liability modelling process for a group IP product.</div>
+      </div>
+      <button class="reveal-btn" onclick="event.stopPropagation();revealAnswer(this)">Reveal Answer</button>
+    </div>
+    <div class="exam-answer">
+      <div class="answer-section">
+        <div class="answer-section-title">Model Office &amp; Liability Projection</div>
+        <ul>
+          <li>Project liabilities using a model office — select representative model points from the portfolio</li>
+          <li>Liabilities for IP typically projected deterministically; stochastic inflation rate may be used for expenses</li>
+          <li>Decision needed: include new business or not — excluding NB is simpler but produces an unrealistic run-off picture</li>
+          <li>Multiple claim states modelled: active / sick / recovered / dead using multi-state (disability) models</li>
+          <li>Key assumptions: inception rates, termination rates (recovery + death), deferred periods, benefit escalation, expenses</li>
+        </ul>
+      </div>
+      <div class="answer-section">
+        <div class="answer-section-title">Asset Modelling</div>
+        <ul>
+          <li>Model the return on assets backing liabilities — fixed income, equities, property as applicable</li>
+          <li>Asset model calibrated to market data (yield curve, volatility surfaces)</li>
+          <li>Stochastic scenarios may be used for equity/property components</li>
+          <li>Typically 1,000 to 10,000 simulations for stochastic runs; time horizon 5–10 years or full run-off</li>
+        </ul>
+      </div>
+      <div class="answer-section">
+        <div class="answer-section-title">Scenario Testing</div>
+        <ul>
+          <li>Duration / term matching tested under key stress scenarios</li>
+          <li>Interest rate stress: parallel shifts up/down in yield curve</li>
+          <li>Morbidity stress: step change in inception rates or termination rates</li>
+          <li>Expense inflation stress</li>
+          <li>Reverse stress testing: identify scenarios that cause insolvency → inform risk management</li>
+        </ul>
+      </div>
+      <div class="answer-section">
+        <div class="answer-section-title">Output</div>
+        <ul>
+          <li>Projected solvency ratio over time — feeds ORSA</li>
+          <li>Assessment of capital needed to support business plan</li>
+          <li>Optimal asset strategy — which asset classes minimise mismatch risk</li>
+          <li>Basis for calculating cost of holding capital for EV purposes</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="exam-section-label"><span>Quick Fire — 2–3 mark questions</span></div>
+
+  <div class="exam-q">
+    <div class="exam-q-header" onclick="toggleExam(this)">
+      <div>
+        <div class="exam-meta">
+          <span class="exam-sitting">March 2022 · Q2v</span>
+          <span class="exam-marks">3 marks</span>
+        </div>
+        <div class="exam-q-text">The CFO argues that expense management is irrelevant to solvency — solvency is purely a claims issue. Explain why the CFO is wrong.</div>
+      </div>
+      <button class="reveal-btn" onclick="event.stopPropagation();revealAnswer(this)">Reveal Answer</button>
+    </div>
+    <div class="exam-answer">
+      <div class="answer-section">
+        <div class="answer-section-title">Three Reasons Expenses Do Matter for Solvency</div>
+        <ul>
+          <li><strong>Direct capital drain:</strong> Expense overruns are an outgo item — they directly reduce available capital, exactly as a claim would.</li>
+          <li><strong>Required capital includes expense risk:</strong> Risk-based capital frameworks (including Solvency II SCR) explicitly include an expense risk sub-module covering expense levels and expense inflation. Higher uncertainty in expenses → higher SCR → solvency ratio falls from both sides.</li>
+          <li><strong>Profitability link:</strong> Expense management is a key driver of profitability. Lower profitability → lower retained earnings → lower available capital over time. Sustainable solvency requires profitable operations, not just claims management.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="exam-q">
+    <div class="exam-q-header" onclick="toggleExam(this)">
+      <div>
+        <div class="exam-meta">
+          <span class="exam-sitting">March 2022 · Q1i</span>
+          <span class="exam-marks">5 marks</span>
+        </div>
+        <div class="exam-q-text">Explain what "expected return on in-force business" means in the EV movement analysis and why it appears even when there is no change in experience.</div>
+      </div>
+      <button class="reveal-btn" onclick="event.stopPropagation();revealAnswer(this)">Reveal Answer</button>
+    </div>
+    <div class="exam-answer">
+      <div class="answer-section">
+        <div class="answer-section-title">Explanation</div>
+        <ul>
+          <li>The expected return on in-force (also called "unwind of the discount rate") = risk-free rate × opening VIF.</li>
+          <li>At the start of the year, future profits are discounted to present value using the risk discount rate. At the end of the year, those same profits are one year closer to being received, so they are discounted by one year less.</li>
+          <li>This mechanical unwinding creates a gain in VIF even if nothing changes in the portfolio — it is the expected "passage of time" return built into any discounted value calculation.</li>
+          <li>It is analogous to interest income on a bond — the investor earns the yield simply by holding the bond, without any outperformance.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+</main>
+
+<script>
+  function showTab(id) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById('tab-' + id).classList.add('active');
+    event.currentTarget.classList.add('active');
+    window.scrollTo({top: 0, behavior: 'smooth'});
+  }
+
+  function toggleAcc(header) {
+    const body = header.nextElementSibling;
+    const isOpen = header.classList.contains('open');
+    // Close all in this section
+    header.parentElement.parentElement.querySelectorAll('.acc-header').forEach(h => {
+      h.classList.remove('open');
+      h.nextElementSibling.classList.remove('open');
+    });
+    if (!isOpen) {
+      header.classList.add('open');
+      body.classList.add('open');
+    }
+  }
+
+  function toggleExam(header) {
+    const answer = header.nextElementSibling;
+    const isOpen = answer.classList.contains('open');
+    answer.classList.toggle('open', !isOpen);
+    const btn = header.querySelector('.reveal-btn');
+    if (btn) {
+      btn.textContent = isOpen ? 'Reveal Answer' : 'Hide Answer';
+      btn.classList.toggle('revealed', !isOpen);
+    }
+  }
+
+  function revealAnswer(btn) {
+    const header = btn.closest('.exam-q-header');
+    const answer = header.nextElementSibling;
+    const isOpen = answer.classList.contains('open');
+    answer.classList.toggle('open', !isOpen);
+    btn.textContent = isOpen ? 'Reveal Answer' : 'Hide Answer';
+    btn.classList.toggle('revealed', !isOpen);
+  }
+</script>
+</body>
+</html>
