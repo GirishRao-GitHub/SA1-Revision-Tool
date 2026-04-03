@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>General Business Environment — Consolidated Study Matrix</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0f1117;
+    --paper: #f5f0e8;
+    --cream: #ede7d6;
+    --accent: #c0392b;
+    --accent-lt: #fdf0ef;
+    --gold: #b8860b;
+    --gold-lt: #fdf8ea;
+    --blue: #1a3a5c;
+    --blue-lt: #eef2f7;
+    --green: #1e5f3f;
+    --green-lt: #edf7f2;
+    --purple: #5c3d7a;
+    --purple-lt: #f4f0f8;
+    --teal: #1a5c5a;
+    --teal-lt: #edf6f5;
+    --rust: #8b3a1a;
+    --rust-lt: #fdf2ec;
+    --muted: #6b6560;
+    --rule: #c8bfaf;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--paper); color:var(--ink); font-family:'IBM Plex Sans',sans-serif; font-size:12px; line-height:1.5; padding:28px 22px; max-width:1200px; margin:0 auto; }
+
+  /* MASTHEAD */
+  .masthead { border-top:4px solid var(--ink); border-bottom:2px solid var(--ink); padding:12px 0 10px; margin-bottom:20px; display:flex; align-items:baseline; gap:16px; flex-wrap:wrap; }
+  .masthead-title { font-family:'Playfair Display',serif; font-size:26px; font-weight:900; flex:1; }
+  .masthead-sub { font-family:'IBM Plex Mono',monospace; font-size:9.5px; color:var(--muted); text-transform:uppercase; letter-spacing:1.5px; }
+  .masthead-tag { font-family:'IBM Plex Mono',monospace; font-size:9.5px; background:var(--accent); color:#fff; padding:3px 8px; letter-spacing:1px; }
+
+  /* SECTION LABEL */
+  .sl { font-family:'IBM Plex Mono',monospace; font-size:9px; text-transform:uppercase; letter-spacing:2px; color:var(--muted); margin-bottom:6px; padding-left:7px; }
+
+  /* SECTION HEADER BAND */
+  .sec-band { display:flex; align-items:center; gap:12px; padding:9px 14px; margin-bottom:12px; margin-top:22px; }
+  .sec-band:first-child { margin-top:0; }
+  .sec-num { font-family:'Playfair Display',serif; font-size:20px; font-weight:900; color:white; width:36px; height:36px; display:flex; align-items:center; justify-content:center; border-radius:50%; flex-shrink:0; }
+  .sec-title { font-family:'Playfair Display',serif; font-size:16px; font-weight:700; flex:1; color:white; }
+  .sec-ref { font-family:'IBM Plex Mono',monospace; font-size:9px; text-transform:uppercase; letter-spacing:1px; color:rgba(255,255,255,0.7); }
+
+  .s1 .sec-band { background:var(--accent); }
+  .s2 .sec-band { background:var(--blue); }
+  .s3 .sec-band { background:var(--teal); }
+  .s4 .sec-band { background:var(--gold); }
+  .s5 .sec-band { background:var(--purple); }
+  .s6 .sec-band { background:var(--green); }
+  .s7 .sec-band { background:var(--rust); }
+  .s8 .sec-band { background:var(--blue); }
+  .s9 .sec-band { background:var(--green); }
+
+  /* GRID HELPERS */
+  .g2 { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-bottom:12px; }
+  .g3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px; margin-bottom:12px; }
+  .g4 { display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:12px; margin-bottom:12px; }
+  .g32 { display:grid; grid-template-columns:3fr 2fr; gap:12px; margin-bottom:12px; }
+  .g23 { display:grid; grid-template-columns:2fr 3fr; gap:12px; margin-bottom:12px; }
+
+  /* CARD */
+  .card { background:var(--cream); border:1px solid var(--rule); padding:11px 13px; }
+  .ct { font-family:'Playfair Display',serif; font-size:13px; font-weight:700; margin-bottom:8px; padding-bottom:5px; border-bottom:1px solid var(--rule); }
+  .ct.r { color:var(--accent); border-color:var(--accent); }
+  .ct.b { color:var(--blue); border-color:var(--blue); }
+  .ct.g { color:var(--green); border-color:var(--green); }
+  .ct.p { color:var(--purple); border-color:var(--purple); }
+  .ct.t { color:var(--teal); border-color:var(--teal); }
+  .ct.go { color:var(--gold); border-color:var(--gold); }
+  .ct.ru { color:var(--rust); border-color:var(--rust); }
+  .ct.k { color:var(--ink); border-color:var(--ink); }
+
+  .pl { list-style:none; display:flex; flex-direction:column; gap:3px; }
+  .pl li { background:white; border-left:3px solid var(--rule); padding:4px 7px; font-size:11.5px; line-height:1.4; }
+  .pl li.r { border-left-color:var(--accent); }
+  .pl li.b { border-left-color:var(--blue); }
+  .pl li.g { border-left-color:var(--green); }
+  .pl li.go { border-left-color:var(--gold); }
+  .pl li.p { border-left-color:var(--purple); }
+  .pl li.t { border-left-color:var(--teal); }
+  .pl li.ru { border-left-color:var(--rust); }
+
+  .pl li strong { font-family:'IBM Plex Mono',monospace; font-size:10px; display:inline; text-transform:uppercase; letter-spacing:0.3px; }
+  .pl li em { color:var(--muted); font-style:italic; }
+
+  /* HIGHLIGHT BOX */
+  .hbox { padding:8px 12px; margin-bottom:12px; border-left:4px solid; }
+  .hbox.r { background:var(--accent-lt); border-color:var(--accent); }
+  .hbox.b { background:var(--blue-lt); border-color:var(--blue); }
+  .hbox.g { background:var(--green-lt); border-color:var(--green); }
+  .hbox.go { background:var(--gold-lt); border-color:var(--gold); }
+  .hbox.p { background:var(--purple-lt); border-color:var(--purple); }
+  .hbox.t { background:var(--teal-lt); border-color:var(--teal); }
+  .hbox-label { font-family:'IBM Plex Mono',monospace; font-size:8.5px; text-transform:uppercase; letter-spacing:1.5px; color:var(--muted); margin-bottom:3px; }
+  .hbox p { font-size:11.5px; line-height:1.5; }
+
+  /* MATRIX TABLE */
+  table.mx { width:100%; border-collapse:collapse; font-size:11px; margin-bottom:12px; }
+  table.mx thead th { background:var(--ink); color:var(--paper); font-family:'IBM Plex Mono',monospace; font-size:9px; text-transform:uppercase; letter-spacing:.8px; padding:6px 9px; text-align:left; border-right:1px solid #2a2d38; }
+  table.mx thead th:first-child { width:100px; }
+  table.mx tbody tr:nth-child(even) { background:var(--cream); }
+  table.mx tbody tr:nth-child(odd)  { background:white; }
+  table.mx tbody td { padding:6px 9px; border:1px solid var(--rule); vertical-align:top; line-height:1.4; font-size:11px; }
+  table.mx tbody td:first-child { font-family:'IBM Plex Mono',monospace; font-size:10px; font-weight:600; background:#e8e2d4; border-right:2px solid var(--ink); }
+
+  /* PRODUCT BAND */
+  .prod-band { display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:8px; margin-bottom:12px; }
+  .prod-cell { padding:10px 12px; border:2px solid; }
+  .prod-cell.ip   { border-color:var(--blue);   background:var(--blue-lt); }
+  .prod-cell.ci   { border-color:var(--accent); background:var(--accent-lt); }
+  .prod-cell.ltci { border-color:var(--green);  background:var(--green-lt); }
+  .prod-cell.pmi  { border-color:var(--gold);   background:var(--gold-lt); }
+  .prod-tag { font-family:'IBM Plex Mono',monospace; font-size:9px; font-weight:600; text-transform:uppercase; letter-spacing:1px; margin-bottom:5px; }
+  .prod-tag.ip   { color:var(--blue); }
+  .prod-tag.ci   { color:var(--accent); }
+  .prod-tag.ltci { color:var(--green); }
+  .prod-tag.pmi  { color:var(--gold); }
+  .prod-body { font-size:11px; line-height:1.4; }
+
+  /* PILL ROW */
+  .pill-row { display:flex; flex-wrap:wrap; gap:5px; margin-bottom:10px; }
+  .pill { font-family:'IBM Plex Mono',monospace; font-size:10px; padding:3px 9px; border:1px solid; background:white; }
+  .pill.k { background:var(--ink); color:white; border-color:var(--ink); }
+  .pill.r { background:var(--accent); color:white; border-color:var(--accent); }
+  .pill.b { background:var(--blue); color:white; border-color:var(--blue); }
+  .pill.g { background:var(--green); color:white; border-color:var(--green); }
+  .pill.go { background:var(--gold); color:white; border-color:var(--gold); }
+  .pill.p { background:var(--purple); color:white; border-color:var(--purple); }
+  .pill.t { background:var(--teal); color:white; border-color:var(--teal); }
+
+  /* TWO-COL COMPARE */
+  .cmp-wrap { border:1px solid var(--rule); margin-bottom:12px; }
+  .cmp-head { display:grid; grid-template-columns:1fr 1fr; }
+  .cmp-head div { padding:7px 12px; font-family:'IBM Plex Mono',monospace; font-size:9.5px; text-transform:uppercase; letter-spacing:1px; color:white; font-weight:600; }
+  .cmp-head div:first-child { background:var(--blue); }
+  .cmp-head div:last-child  { background:var(--rust); }
+  .cmp-body { display:grid; grid-template-columns:1fr 1fr; }
+  .cmp-col { padding:10px 12px; font-size:11.5px; }
+  .cmp-col:first-child { background:var(--blue-lt); border-right:2px solid var(--ink); }
+  .cmp-col:last-child  { background:var(--rust-lt); }
+  .cmp-col ul { padding-left:14px; display:flex; flex-direction:column; gap:3px; }
+
+  /* ASIDE NOTE */
+  .aside { background:var(--ink); color:var(--paper); padding:8px 12px; font-size:11px; margin-bottom:12px; }
+  .aside-label { font-family:'IBM Plex Mono',monospace; font-size:8.5px; text-transform:uppercase; letter-spacing:1.5px; color:var(--gold); margin-bottom:3px; }
+
+  /* FOOTER */
+  .footer { border-top:1px solid var(--rule); padding-top:8px; margin-top:24px; font-family:'IBM Plex Mono',monospace; font-size:9px; color:var(--muted); display:flex; justify-content:space-between; flex-wrap:wrap; gap:4px; }
+
+  /* SECTION WRAPPER */
+  .section { margin-bottom:6px; }
+</style>
+</head>
+<body>
+
+<!-- MASTHEAD -->
+<div class="masthead">
+  <div class="masthead-title">General Business Environment</div>
+  <span class="masthead-sub">SA1 Ch.5 &amp; Ch.6 · SP1 Ch.9</span>
+  <span class="masthead-tag">CONSOLIDATED STUDY MATRIX — DETAIL</span>
+</div>
+
+<!-- ═══════════════════════════════════ SECTION 1 ═══════════════════════════════════ -->
+<div class="section s1">
+<div class="sec-band">
+  <div class="sec-num">①</div>
+  <div class="sec-title">Healthcare Market &amp; Key Demand Drivers</div>
+  <div class="sec-ref">SA1 Ch.5 §1.1–1.3</div>
+</div>
+
+<div class="g2">
+  <div class="card">
+    <div class="ct r">Six Key Drivers of Demand</div>
+    <ul class="pl">
+      <li class="r"><strong>Wealth &amp; sophistication</strong> — richer populations expect and pay more for better healthcare</li>
+      <li class="r"><strong>Demographics</strong> — aging populations, longer lives, comorbidity; more chronic conditions</li>
+      <li class="r"><strong>Economic conditions</strong> — low interest rates ↓ investment-type products; health products benefit. Demand tracks economic cycle.</li>
+      <li class="r"><strong>State provision level</strong> — UK NHS (comprehensive) suppresses demand vs USA (limited State) which creates demand</li>
+      <li class="r"><strong>Employer-provided benefits</strong> — major market driver in many territories for IP and PMI</li>
+      <li class="r"><strong>Technology</strong> — aggregator sites, wearables, AI — change how products are bought and priced</li>
+    </ul>
+  </div>
+  <div class="card">
+    <div class="ct r">Other Factors Influencing Demand</div>
+    <ul class="pl">
+      <li><strong>Competition level</strong> and range of products available</li>
+      <li><strong>Pricing &amp; perceived value</strong> — influenced by competition, required profitability, capital requirements</li>
+      <li><strong>Public attitude to risk</strong> and awareness of health issues</li>
+      <li><strong>Overall perception</strong> of insurance industry (scandals, mis-selling)</li>
+      <li><strong>Quality of customer service</strong> — sales, administration, claims</li>
+      <li><strong>Willingness of brokers</strong> to sell products</li>
+      <li><strong>Political drivers</strong> — uncertainty over State long-term care or legislative changes</li>
+      <li><strong>State healthcare perception</strong> — publicised failures raise demand for private cover</li>
+    </ul>
+  </div>
+</div>
+
+<div class="prod-band">
+  <div class="prod-cell ip">
+    <div class="prod-tag ip">IP Insurance</div>
+    <div class="prod-body">Covers lost income due to illness/injury. Over 100 years old. Purchasers: self-employed + informed middle-earners. <em>Must be sold, not bought.</em> UK: 75% of IP cover via group employer schemes.</div>
+  </div>
+  <div class="prod-cell ci">
+    <div class="prod-tag ci">CI Insurance</div>
+    <div class="prod-body">Lump sum on diagnosis of listed condition. Demand &gt; IP in individual markets: more flexible, easier to sell alongside mortgage, fear of critical illness &gt; fear of inability to work, higher broker commission.</div>
+  </div>
+  <div class="prod-cell ltci">
+    <div class="prod-tag ltci">LTCI</div>
+    <div class="prod-body">Product everyone needs but few buy. UK immediate needs annuity market: ~£100m premium p.a. USA: 7.2m covered in 2014; fallen to &lt;12 providers by 2020. Pension benefit legislation affects demand at retirement.</div>
+  </div>
+  <div class="prod-cell pmi">
+    <div class="prod-tag pmi">PMI</div>
+    <div class="prod-body">Heavily influenced by national healthcare system &amp; State policy. UK: "double pay" perception. USA: natural large market. China: growing rapidly as public systems become inadequate for aging urban population.</div>
+  </div>
+</div>
+
+<div class="hbox b">
+  <div class="hbox-label">Key Principle — Anti-selection &amp; Non-Disclosure</div>
+  <p><strong>Non-disclosure:</strong> customers fail to correctly answer underwriting questions (deliberate or innocent). Insurer pays unless wilful non-disclosure proven. <strong>Anti-selection:</strong> customers with higher expected claims self-select into buying — the "buy when you think you'll claim" effect. Both inflate claims above pricing basis. Careful underwriting is the control for both.</p>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════ SECTION 2 ═══════════════════════════════════ -->
+<div class="section s2">
+<div class="sec-band">
+  <div class="sec-num">②</div>
+  <div class="sec-title">Customer Perception, Competition &amp; Lessons from Other Markets</div>
+  <div class="sec-ref">SA1 Ch.5 §1.4–1.6</div>
+</div>
+
+<div class="g3">
+  <div class="card">
+    <div class="ct b">Customer Perception Factors</div>
+    <ul class="pl">
+      <li class="b"><strong>Public understanding</strong> of financial products — socio-economic &amp; geographic divides exist; emerging markets have little experience</li>
+      <li class="b"><strong>Tax incentives:</strong> UK PMI attracts 12% IPT (Insurance Premium Tax) — not tax-deductible. Ireland &amp; Germany offer partial relief. Tax relief increases attractiveness.</li>
+      <li class="b"><strong>Adverse media coverage:</strong> corporate failures, mis-selling scandals, compliance breaches, poor investment returns, credit crunch association — all damage industry perception</li>
+      <li class="b"><strong>Financial literacy</strong> — government campaigns and media exposure matter; Rwanda example (teenagers teaching younger children)</li>
+    </ul>
+  </div>
+  <div class="card">
+    <div class="ct b">Competition Dynamics</div>
+    <ul class="pl">
+      <li class="b"><strong>Developed markets:</strong> small number of specialist insurers — competition exists but consolidation risk is real</li>
+      <li class="b"><strong>State-sponsored insurers</strong> in some markets create barrier to entry for commercial insurers</li>
+      <li class="b"><strong>Local legislation</strong> may require foreign insurers to partner with local company</li>
+      <li class="b"><strong>UK PMI market:</strong> dominated by few insurers → CMA investigation 2012 found high barriers to entry for private hospitals, weak competitive constraints in local markets → higher prices for self-pay patients</li>
+      <li class="b"><strong>Leading PMI players</strong> require: appropriate systems, effective distribution, experienced staff, third-party relationships, trusted brand</li>
+    </ul>
+  </div>
+  <div class="card">
+    <div class="ct b">Lessons from Other Markets</div>
+    <ul class="pl">
+      <li class="b"><strong>Products travel:</strong> CI insurance originated in South Africa as "dread disease" product (lump sum for fund treatment or deal with financial consequences). Now global.</li>
+      <li class="b"><strong>Major Medical Expenses (MME)</strong> — also from South Africa — less successful because: no indemnity cover gap, customers don't appreciate medical cost levels</li>
+      <li class="b"><strong>Dovetailing:</strong> products must complement local State benefits — know the territory's welfare system</li>
+      <li class="b"><strong>Regulatory changes</strong> in one country → lessons for others (e.g. USA ACA/Affordable Care Act)</li>
+      <li class="b"><strong>China example:</strong> three largest domestic insurers dominate; international groups have acquired stakes. Most plans are supplementary to public insurance.</li>
+    </ul>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════ SECTION 3 ═══════════════════════════════════ -->
+<div class="section s3">
+<div class="sec-band">
+  <div class="sec-num">③</div>
+  <div class="sec-title">Technology, Data Science &amp; Climate Change</div>
+  <div class="sec-ref">SA1 Ch.5 §1.7–1.9</div>
+</div>
+
+<div class="g2">
+  <div class="card">
+    <div class="ct t">Technology Applications Across the Value Chain</div>
+    <ul class="pl">
+      <li class="t"><strong>New business:</strong> AI qualifies leads, targets on-demand products online, tailors adverts by age group</li>
+      <li class="t"><strong>Underwriting:</strong> new third-party data sources, telematics (motor analogy — activity monitoring), mobile device data</li>
+      <li class="t"><strong>Claims:</strong> machine learning reads handwritten forms, voice risk analysis detects potentially false claims, mobile platforms for microinsurance</li>
+      <li class="t"><strong>Customer:</strong> price comparison sites (most active in UK; growing in Europe, Asia, LatAm), online self-service, fund switching, policy amendments, renewal quotes</li>
+      <li class="t"><strong>Wearables:</strong> consumers share activity data for premium discounts. Evidence on claims impact mixed — may attract already-healthy lives (selection effect)</li>
+    </ul>
+  </div>
+  <div class="card">
+    <div class="ct t">Data Science — EIOPA 2018 Review Findings</div>
+    <ul class="pl">
+      <li class="t">Strong trend toward <strong>data-driven business models</strong> across insurance value chain</li>
+      <li class="t"><strong>Traditional sources</strong> (demographic, exposure data) combined with new (social media, telematics) → finer granularity on consumer behaviour &amp; lifestyles</li>
+      <li class="t"><strong>Biggest area:</strong> pricing and underwriting stage</li>
+      <li><strong>Advantages:</strong> step-change in risk analysis, new products, reduce market friction, fairer outcomes, inclusivity</li>
+      <li class="r"><strong>Potential issues — Data:</strong> quality, completeness, consent (personal sensitive data), harmonisation of sources, growing dataset → harder to maintain quality</li>
+      <li class="r"><strong>Mis-selling:</strong> "nudging" techniques to push unwanted products</li>
+      <li class="r"><strong>Data security:</strong> cyber-attack costs (lost data, reputational damage, business interruption); 91m records stolen from 3 US healthcare providers May 2017</li>
+      <li class="r"><strong>Legacy systems:</strong> poor quality historic data; high update costs</li>
+      <li class="r"><strong>Ethics:</strong> cross-subsidy declines as risk segmentation increases → unhealthy lives priced out. Views on "ethical" data use will evolve.</li>
+    </ul>
+  </div>
+</div>
+
+<div class="g3">
+  <div class="card">
+    <div class="ct t">Climate Risk — Physical</div>
+    <ul class="pl">
+      <li class="t">↑ Morbidity from wildfires, air pollution → ↑ health insurance claims</li>
+      <li class="t">Heat waves → excess mortality (cardiovascular strain in elderly) → early LTCI termination</li>
+      <li class="t">Extreme weather → ↑ claims, post-event morbidity from loss of housing/water</li>
+      <li class="t">Vector-borne diseases (malaria, dengue) spreading geographically via ↑ temperature &amp; humidity</li>
+      <li class="t">Sea level rise → ↑ morbidity/mortality</li>
+      <li class="t">Crop failure → food insecurity → ↑ ill health</li>
+    </ul>
+  </div>
+  <div class="card">
+    <div class="ct t">Climate Risk — Transition</div>
+    <ul class="pl">
+      <li class="t">Policy changes reducing fossil fuels → investments in carbon-intensive industries losing value</li>
+      <li class="t">Consumer preference for "greener" products &amp; companies</li>
+      <li class="t">Investment in carbon-intensive industries → reputational damage → harder to attract customers &amp; staff</li>
+      <li class="t">For health &amp; care insurer: mainly affects <em>asset values</em> and changes in demand for certain products</li>
+      <li class="t">Transition to low-carbon economy may reduce demand for occupational pension plans where employer base is carbon-intensive</li>
+    </ul>
+  </div>
+  <div class="card">
+    <div class="ct t">Climate Risk — Liability &amp; IFoA Guidance</div>
+    <ul class="pl">
+      <li class="t">Injured parties seek compensation for climate change impacts (first-order physical or second-order transition)</li>
+      <li class="t">New links between air pollution and health conditions → latent claims class</li>
+      <li class="t">Firms not accounting for investment decision impact on climate → direct claims for damages</li>
+      <li><strong>IFoA Risk Alert 2017a:</strong> actuaries must communicate the extent to which climate risks are taken into account in relevant decisions, calculations or advice</li>
+      <li>Insurers should: evaluate impact of changing temperature &amp; disease patterns on mortality; consider climate risk implications on invested assets; consider alterations to pricing/morbidity assumptions</li>
+    </ul>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════ SECTION 4 ═══════════════════════════════════ -->
+<div class="section s4">
+<div class="sec-band">
+  <div class="sec-num">④</div>
+  <div class="sec-title">Methods of Sale, Remuneration &amp; Regulation</div>
+  <div class="sec-ref">SA1 Ch.5 §2 · SP1 Ch.9</div>
+</div>
+
+<table class="mx">
+  <thead>
+    <tr>
+      <th style="background:var(--gold)">Channel</th>
+      <th>Who / How</th>
+      <th>Remuneration</th>
+      <th>Key Characteristic</th>
+      <th>Experience Variation</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>Brokers (Intermediaries)</td><td>Independent of insurer; act for client</td><td>Commission from insurer + / or fees from client</td><td>No representational risk to insurer. Brokers' balances = credit risk. May bring insurer into disrepute.</td><td>Wider demographic; financial sophistication of client varies</td></tr>
+    <tr><td>Tied Agents (ARs)</td><td>Agents of one or small number of insurers</td><td>Commission from tied insurer(s)</td><td>Representational risk to insurer. Bank bancassurance is a common model (especially Continental Europe).</td><td>Targeted demographic per bank/agent type</td></tr>
+    <tr><td>Own Salesforce (DSF)</td><td>Employed directly by insurer</td><td>Salary + commission</td><td>Most control for insurer. High fixed cost. Can target specific segments.</td><td>Reflects insurer's target market</td></tr>
+    <tr><td>Direct Marketing</td><td>Mailshots, telephone, press, internet, price comparison</td><td>No intermediary remuneration</td><td>Lower cost. Suits simple products. Consumer self-selects → higher anti-selection risk. Comparison sites increase price competition.</td><td>Lower sophistication; self-directed purchasers</td></tr>
+    <tr><td>Worksite Marketing</td><td>Broker or insurer rep approaches employer's workforce</td><td>Depends on whether broker or insurer rep</td><td>Access to employed workforce. Employer endorsement helps sales. Convenient payroll deduction.</td><td>Occupation homogeneity affects experience</td></tr>
+  </tbody>
+</table>
+
+<div class="g2">
+  <div class="card">
+    <div class="ct go">Commission vs Fee-Based Remuneration</div>
+    <ul class="pl">
+      <li class="go"><strong>Commission concern:</strong> product bias — advisers recommend products with higher commission rather than best-fit for client</li>
+      <li class="go"><strong>Fee-based:</strong> more transparent, demonstrates independence. Initial commission "rebated" to client → effectively reduces premium</li>
+      <li class="go"><strong>Practical limit:</strong> fees only viable for corporate clients and high net worth individuals</li>
+      <li class="go"><strong>UK precedent:</strong> commission banned for savings products in 2013 (Retail Distribution Review)</li>
+      <li class="go"><strong>Commission still dominates</strong> in most jurisdictions for health products</li>
+    </ul>
+  </div>
+  <div class="card">
+    <div class="ct go">Regulation — Areas of Impact on Distribution</div>
+    <ul class="pl">
+      <li class="go">Types of products that can be sold by insurers</li>
+      <li class="go">How advice is provided and paid for</li>
+      <li class="go">Level and form of charges on products</li>
+      <li class="go">Caps on product charges</li>
+      <li class="go">Requirements for distributors — certain products only via certain channels</li>
+      <li class="go">Extent to which market is open to external competition</li>
+      <li class="go">How mis-selling issues are dealt with</li>
+      <li><em>Brokers additionally provide for corporate clients: market research, administration of client records, employee assistance programmes</em></li>
+    </ul>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════ SECTION 5 ═══════════════════════════════════ -->
+<div class="section s5">
+<div class="sec-band">
+  <div class="sec-num">⑤</div>
+  <div class="sec-title">Mis-selling Risks by Product</div>
+  <div class="sec-ref">SA1 Ch.5 §3</div>
+</div>
+
+<div class="hbox r">
+  <div class="hbox-label">Regulatory Context</div>
+  <p>Consumer protection is a primary concern for insurance regulators globally. Poor practice can include inappropriate advice or selling unsuitable products. Consequences: <strong>fines</strong>, required compensation to policyholders, substantial operational costs, and proactive regulatory changes to prevent future recurrence.</p>
+</div>
+
+<div class="prod-band">
+  <div class="prod-cell ip">
+    <div class="prod-tag ip">IP — Mis-selling Risks</div>
+    <div class="prod-body">
+      <ul style="padding-left:12px; font-size:11px; line-height:1.5;">
+        <li>Replacement ratio intentionally &lt;100% (to maintain return-to-work incentive) — not always understood</li>
+        <li>Benefits may not keep pace with income growth over time</li>
+        <li>Name "Income Protection" implies full &amp; total cover — doesn't cover unemployment</li>
+        <li>Insurer can restrict benefits if income drops (e.g. career change to lower pay) — ABI Statement of Best Practice governs</li>
+        <li>Benefit escalation capped — may fall short if salary grows faster</li>
+      </ul>
+    </div>
+  </div>
+  <div class="prod-cell ci">
+    <div class="prod-tag ci">CI — Mis-selling Risks</div>
+    <div class="prod-body">
+      <ul style="padding-left:12px; font-size:11px; line-height:1.5;">
+        <li>Only listed conditions covered — consumer may assume "any critical illness" is covered</li>
+        <li>Insurer's policy definition may be more restrictive than medical definition (e.g. "severe" heart attack)</li>
+        <li>Different insurers use different definitions — hard to compare without standardisation</li>
+        <li>UK move to simplified definitions (cardiologist diagnosis = pay) — but some insurers moving away from ABI standard</li>
+        <li>UK 2001 survey: significant number of CI policyholders believed they had IP insurance</li>
+        <li>CI prohibited in some US States due to regulatory concern about consumer understanding</li>
+      </ul>
+    </div>
+  </div>
+  <div class="prod-cell ltci">
+    <div class="prod-tag ltci">LTCI — Mis-selling Risks</div>
+    <div class="prod-body">
+      <ul style="padding-left:12px; font-size:11px; line-height:1.5;">
+        <li>LTCI is a misnomer — provides <strong>cash</strong>, not care. Fixed benefit may not cover actual care costs.</li>
+        <li>ADL-triggered cash payment → misperception that costs will be fully covered</li>
+        <li>Unit-linked LTCI: poor investment performance forces additional contributions at worst time</li>
+        <li>If care costs exceed benefit limits — litigation risk arises</li>
+        <li>Inflation risk — indexed benefit may still fall short of real care cost growth</li>
+        <li><strong>Solution:</strong> ensure selling process makes cash-not-care nature explicit; or redesign as indemnity (expensive)</li>
+      </ul>
+    </div>
+  </div>
+  <div class="prod-cell pmi">
+    <div class="prod-tag pmi">PMI — Mis-selling Risks</div>
+    <div class="prod-body">
+      <ul style="padding-left:12px; font-size:11px; line-height:1.5;">
+        <li>Restricted products (e.g. NHS waiting list trigger) vs comprehensive — buyer may not appreciate limitations</li>
+        <li><strong>Acute vs chronic confusion:</strong> PMI covers acute (treatable) conditions; cover ceases when condition becomes chronic — extremely upsetting for customer</li>
+        <li>Industry-agreed definitions for acute/chronic help but not perfect</li>
+        <li>Some insurers pay for chronic conditions on moral grounds — but must allow for financial implications</li>
+        <li>Restrictions on indemnification / approved hospital lists not always understood at sale</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="ct p">Insurtech &amp; Technology Distribution Risk (§3.6)</div>
+  <ul class="pl">
+    <li class="p">Consumers increasingly self-directed — using multiple digital sources for research and purchase</li>
+    <li class="p"><strong>Insurtech:</strong> tech start-ups partnering with existing insurers — AI-driven underwriting decisions online up to a maximum sum assured for CI</li>
+    <li class="p">Examples: policy recommendations from social media profile; digital broker/insurer management tools bypassing legacy systems</li>
+    <li class="p"><strong>Risk:</strong> complex products sold without adequate advice → product confusion → complaints, claims disputes, regulatory action</li>
+    <li class="p">Developing markets: digital mobile channels reach unbanked/unconnected populations (mobile microinsurance)</li>
+    <li><em>Insurtech = derived from "insurance" + "technology"</em></li>
+  </ul>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════ SECTION 6 ═══════════════════════════════════ -->
+<div class="section s6">
+<div class="sec-band">
+  <div class="sec-num">⑥</div>
+  <div class="sec-title">Role of the State &amp; Role of Employers</div>
+  <div class="sec-ref">SA1 Ch.5 §4–5</div>
+</div>
+
+<div class="g2">
+  <div class="card">
+    <div class="ct g">State–Insurer Complementarity by Product</div>
+    <ul class="pl">
+      <li class="g"><strong>IP:</strong> State provides subsistence-level disability income. IP augments this. UK group schemes = ~75% of IP coverage. State benefits are time-limited or definition-changing. Clear role for insurance.</li>
+      <li class="g"><strong>CI:</strong> No State lump-sum benefit on disability. CI insurance solely fills this gap in UK and most markets.</li>
+      <li class="g"><strong>LTCI:</strong> State means-tested — England threshold: assets ≤ £14,250 (fully covered), £14,250–£23,250 (partial), &gt;£23,250 (full self-funding). LTCI targets those above threshold. May be forced to sell family home.</li>
+      <li class="g"><strong>PMI:</strong> UK NHS provides free comprehensive care but with waiting times. PMI value proposition: faster access, choice of consultant, private rooms, convenience. "Double payment" accepted by financially aware customers.</li>
+    </ul>
+  </div>
+  <div class="card">
+    <div class="ct g">Future Role of State — Key Considerations</div>
+    <ul class="pl">
+      <li class="g"><strong>IP:</strong> Government may invest in prevention (vaccination, anti-obesity) rather than benefits. Stricter qualification rules to reduce claimants — UK 2008 benefit restructure.</li>
+      <li class="g"><strong>CI:</strong> No State lump-sum likely — private sector expected to continue providing.</li>
+      <li class="g"><strong>LTCI:</strong> Major debate globally. Increasing longevity and care demand → public funding strain. Some countries publicly fund significant portion. Countries with heavy public funding find it very difficult to shift to private LTCI.</li>
+      <li class="g"><strong>PMI:</strong> Ageing population + rising costs → government may: prioritise spending, raise taxes, target resources by group. Private care fills any emerging gaps.</li>
+      <li><strong>Government tools:</strong> legislation &amp; regulation · taxation (premiums, benefits, investments) · State benefit changes · national health system changes · public communication criticising insurers</li>
+    </ul>
+  </div>
+</div>
+
+<table class="mx">
+  <thead>
+    <tr>
+      <th style="background:var(--green)">Employer Benefit Feature</th>
+      <th>Detail &amp; Implications</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>Valued Benefits</td><td>PMI aids early return to work; IP demonstrates continuing financial responsibility during prolonged sickness. Both used to attract, retain and reward staff. Dependants sometimes covered (though this has become less common due to cost).</td></tr>
+    <tr><td>Tax Efficiency</td><td>Premiums can be a business expense (varies by jurisdiction). IP benefits often paid gross to employer, then through payroll — taxed as earned income. PMI can be tax-efficient for employer. Tax efficiency for employees affects voluntary take-up rates.</td></tr>
+    <tr><td>Relative Cost</td><td>Group cover cheaper per person due to: economies of scale, experience rating, less underwriting, lower commission, less anti-selection (compulsory membership preferred by insurer), employer takes active claims management role. However not always cheaper — elderly workforce or single unit rate schemes may be exceptions.</td></tr>
+    <tr><td>MHD (Medical History Disregarded) Basis</td><td>Large group PMI schemes can offer cover for pre-existing conditions that would be excluded individually. Usually heavily experience-rated or cost-plus (self-insured) — most/all risk borne by employer.</td></tr>
+    <tr><td>Free Cover Level</td><td>IP group schemes: cover up to free limit without individual UW ("once only" UW approach). Employees in poor health can access cover they may not obtain individually.</td></tr>
+  </tbody>
+</table>
+</div>
+
+<!-- ═══════════════════════════════════ SECTION 7 ═══════════════════════════════════ -->
+<div class="section s7">
+<div class="sec-band">
+  <div class="sec-num">⑦</div>
+  <div class="sec-title">Medical Underwriting &amp; Genetics</div>
+  <div class="sec-ref">SA1 Ch.6 §1–2</div>
+</div>
+
+<div class="hbox go">
+  <div class="hbox-label">Six Ways Medical Underwriting Manages Risk</div>
+  <p>① Protects against severe anti-selection (unquantifiable risks) · ② Identifies substandard risks for special terms · ③ Determines appropriate special terms for substandard risks · ④ Ensures all risks rated fairly (classification) · ⑤ Ensures actual morbidity does not depart far from pricing basis · ⑥ Financial underwriting reduces over-insurance risk</p>
+</div>
+
+<div class="cmp-wrap">
+  <div class="cmp-head">
+    <div>Front-End Underwriting</div>
+    <div>Back-End (Moratorium) Underwriting</div>
+  </div>
+  <div class="cmp-body">
+    <div class="cmp-col">
+      <ul>
+        <li>Full medical info gathered at proposal stage</li>
+        <li>Applicant allocated to risk class; specific exclusions applied upfront</li>
+        <li>Insured knows exactly what is and is not covered</li>
+        <li>Additional sources: doctor's reports, medical examination, specialist tests, supplementary questionnaires (asthma, epilepsy, anxiety)</li>
+        <li>Non-medical limits in UK IP: age 40 → £10k report required; £20k exam required</li>
+        <li><strong>Advantage:</strong> certainty for both parties</li>
+        <li><strong>Disadvantage:</strong> lengthy forms, personal disclosure burden, can deter applicants</li>
+      </ul>
+    </div>
+    <div class="cmp-col">
+      <ul>
+        <li>Immediate cover on all new conditions (arising post-application)</li>
+        <li>No medical history check at entry; no specific exclusions applied</li>
+        <li>PEC check performed at claim stage — if condition (or related condition) pre-dated application → claim refused</li>
+        <li>Moratorium period: typically disallow claims from conditions in past 5 years; covered after 2 years treatment-free</li>
+        <li>Predominant in UK PMI, ASU, group CI</li>
+        <li><strong>Advantage:</strong> immediate, simple entry — no disclosure burden</li>
+        <li><strong>Disadvantage:</strong> uncertainty about what is covered; harder to establish pre-existence at claim; ombudsman concerns in UK 1990s</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="g2">
+  <div class="card">
+    <div class="ct ru">Psychosocial Factors in IP Underwriting (§1.6)</div>
+    <ul class="pl">
+      <li class="ru"><strong>Back pain &amp; stress-related incapacity</strong> remain largest IP claim causes; underlying psychosocial factors are as important as the medical condition itself</li>
+      <li class="ru"><strong>Predictive flags for long-term disability:</strong> GP attendance rate inconsistent with known problems · poor work attendance record · changes in personal circumstances · adverse reactions to normal stressful life events</li>
+      <li class="ru">New UW approach: ask "how much time did you take off work for this illness?" rather than just listing diagnoses</li>
+      <li class="ru">Applicants demonstrating <strong>resilience to diagnosed conditions</strong> may get better terms than those who only list diseases without context</li>
+    </ul>
+  </div>
+  <div class="card">
+    <div class="ct ru">Genetics — Key Issues (§2)</div>
+    <ul class="pl">
+      <li class="ru"><strong>Anti-selection:</strong> tested individual knows predisposition → seeks higher cover → insurer premium shortfall. BRCA1/2 gene → CI premium ~40× standard.</li>
+      <li class="ru"><strong>Information imbalance:</strong> one principle of insurance = all material facts disclosed. Genetic info creates imbalance — many argue insurer has no right to it.</li>
+      <li class="ru"><strong>Regulatory position:</strong><br>— UK: no use of genetic info for IP, CI, LTCI. Exception: Huntington's for high-value life insurance only.<br>— USA: health/care insurers cannot use predictive genetic tests.<br>— NZ/Australia: insurers can ask for disclosure of known test results and use them.<br>— Many countries treat any use as discriminatory/illegal.</li>
+      <li class="ru"><strong>Insurance most at risk from genetics:</strong> CI (cancer/heart genetically linked) → then LTCI (dementia gene) → then IP → least: PMI (annual renewable premiums)</li>
+      <li class="ru"><strong>Future scenario:</strong> If genetic tests widespread → government may need to provide social insurance on compulsory basis → end of private insurance as known</li>
+    </ul>
+  </div>
+</div>
+</div>
+
+<!-- ═══════════════════════════════════ SECTION 8 ═══════════════════════════════════ -->
+<div class="section s8">
+<div class="sec-band">
+  <div class="sec-num">⑧</div>
+  <div class="sec-title">Counterparties &amp; External Influences</div>
+  <div class="sec-ref">SA1 Ch.6 §3–4</div>
+</div>
+
+<div class="g2">
+  <div class="card">
+    <div class="ct b">Key Counterparties &amp; Their Risks</div>
+    <ul class="pl">
+      <li class="b"><strong>Outsourcers (SLA governs):</strong> SLA must specify: validity dates · party contacts &amp; responsibilities · service details &amp; frequency · payment terms &amp; conditions · other obligations · service monitoring method · failure penalties · cancellation ("get out") clauses · dispute resolution · governing jurisdiction</li>
+      <li class="b"><strong>Brokers' balances:</strong> premiums held by intermediary in transit to insurer → credit risk + lost investment return. Insurer may hold capital against this risk.</li>
+      <li class="b"><strong>Hospitals &amp; consultants:</strong> PMI insurers have semi-official fee scales ("usual &amp; customary"). Pre-authorisation required before treatment. Challenge to hospital if &gt;10% above scale — but usually pays in full to avoid customer shortfall. "Blacklisted" providers warned to customer.</li>
+      <li class="b"><strong>Independent investigators / assessors:</strong> used in IP to validate claim and monitor health periodically. Reputational risk — perceived as "hard-nosed detective". Should be presented as rehabilitation help, not surveillance.</li>
+      <li class="b"><strong>Medical evidence gatherers:</strong> at underwriting (doctor's report, exam) and at claim (degree of impairment). Reputational risk if not sensitive — full references required before employing.</li>
+    </ul>
+  </div>
+  <div class="card">
+    <div class="ct b">Demographic External Influences (§4.1)</div>
+    <ul class="pl">
+      <li class="b"><strong>Aging population:</strong> fewer working-age taxpayers → State strain → ↑ demand for private health products. China: 15.5% over 60 now; 25% by 2050.</li>
+      <li class="b"><strong>Living longer:</strong> medical advances reduce incidence (IP/CI ↓) but survivors live longer in disability (IP/LTCI ↑). PMI: more claims as people live longer with multiple health issues.</li>
+      <li class="b"><strong>Fewer children:</strong> lower fertility raises individual wealth but accelerates aging. Key life event (having children) that triggers insurance purchase becomes less common → smaller future policyholder base. UK fertility falling since 2012.</li>
+      <li class="b"><strong>Medical advances impact by product:</strong><br>— IP: net ↓ incidence expected but longer survival in disability<br>— LTCI: surviving at older ages ↑ claim cost<br>— CI: early detection via screening may ↑ claim incidence (claim before former death)<br>— PMI: new expensive treatments ↑ cost per claim; faster recovery ↓ hospital stay</li>
+    </ul>
+  </div>
+</div>
+
+<table class="mx">
+  <thead>
+    <tr>
+      <th style="background:var(--blue)">External Influence</th>
+      <th>Mechanism</th>
+      <th>Product Impacts</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>Economic — Business Optimism</td><td>Willingness of employers to introduce/expand group schemes tracked to economic cycle. In downturns: optional staff benefits (PMI, IP) first to be cut. In upswings: new schemes introduced.</td><td>Group PMI &amp; IP: volumes cyclical. Pension scheme deficits may force reduction in group medical benefits.</td></tr>
+    <tr><td>Economic — Employment Security</td><td>Threat of redundancy → "claim whilst you still can" (PMI: elective consultations &amp; procedures). IP: presenteeism or ↑ stress claims. Rates of recovery ↓ as claimants persuade doctors to extend sick notes.</td><td>PMI: ↑ elective claims before redundancy. IP: ↑ claim inception, ↓ recovery rates. Active disability counsellors can mitigate.</td></tr>
+    <tr><td>Political</td><td>Change of government → uncertainty in State healthcare provision. USA: ACA threatened repeatedly. UK: NHS means testing introduced for some elderly benefits.</td><td>All products affected. Change in State disability benefits directly affects IP offset amounts. Change in NHS funding → PMI demand.</td></tr>
+    <tr><td>Social — Claim Consciousness</td><td>Policyholders more aware of cover. Less stigma to sickness. Greater financial awareness. Attentive brokers encourage claims. More litigious society (USA influence). In-drawer policies now studied and remembered.</td><td>All products: ↑ claim rates. Previously unclaimed valid claims now submitted. Also ↑ invalid disputed claims → legal costs.</td></tr>
+    <tr><td>Pandemics (§4.6)</td><td>COVID-19: WHO pandemic declared March 2020. ~7m deaths globally (May 2023). Long COVID: 1.9m self-reported UK (Mar 2023). Historical: Spanish flu 1918 (50m+ deaths), HIV/AIDS (30m+ deaths).</td><td>All products: excess mortality &amp; morbidity. Economic disruption (↓ asset values, ↓ new business). Operational (staff sickness). Regulators require pandemic stress testing for capital adequacy.</td></tr>
+    <tr><td>Mental Health (§4.9)</td><td>1 in 4 adults annually affected. UK 2017: mental health was #1 cause of IP claims. Depression, anxiety, stress, ADHD, eating disorders, addiction all included. Often comorbid with other conditions.</td><td>IP: major claims driver — must be reflected in UW and pricing. PMI: accessibility barriers must be removed (multiple communication channels, staff training, ABI Mental Health Standards). All products: transparent UW decisions required.</td></tr>
+  </tbody>
+</table>
+</div>
+
+<!-- ═══════════════════════════════════ SECTION 9 ═══════════════════════════════════ -->
+<div class="section s9">
+<div class="sec-band">
+  <div class="sec-num">⑨</div>
+  <div class="sec-title">Key Medical Conditions — Mortality, Morbidity &amp; Regional Variation</div>
+  <div class="sec-ref">SA1 Ch.6 §5</div>
+</div>
+
+<div class="g2">
+  <div class="card">
+    <div class="ct g">Global Mortality — Top Causes (WHO 2019)</div>
+    <ul class="pl">
+      <li class="g"><strong>Heart disease:</strong> #1 globally, 16% of all deaths. Combined CVD (heart + stroke) = 15m deaths. Leading cause for 20 years.</li>
+      <li class="g"><strong>Stroke:</strong> #2 in CVD group. Leading cause of disability in UK. Risk factors: high BP, diabetes, heart disease, smoking, age, gender.</li>
+      <li class="g"><strong>COPD:</strong> 3.3m deaths. UK premature deaths ~2× EU average in 2008. Main cause: smoking (also work-related fumes). Asthma premature mortality 1.5× higher in UK vs EU.</li>
+      <li class="g"><strong>Lung cancer:</strong> 1.8m deaths (6th leading cause). Preventable — smoking, diet, alcohol, obesity account for ~1/3 of all cancers.</li>
+      <li class="g"><strong>Diabetes:</strong> 1.7m deaths (true burden higher — complications &amp; underreporting). Type 2 significantly underdiagnosed. Kidney disease (#10, 1.3m deaths) is a main complication of poorly controlled diabetes.</li>
+      <li class="g"><strong>Dementia:</strong> 7th leading cause globally. Deaths doubled between 2000 and 2019. Alzheimer's gene test already exists.</li>
+      <li class="g"><strong>Life expectancy:</strong> 66.8 years (2000) → 73.4 years (2019) globally. UK improving due to falls in coronary heart disease, lung disease, some cancers.</li>
+    </ul>
+  </div>
+  <div class="card">
+    <div class="ct g">Specific Diseases — Insurance Implications</div>
+    <ul class="pl">
+      <li class="g"><strong>Cancer:</strong> survival rates improving significantly. UK prostate cancer: 25% 10-year survival (1971–72) → ~80% (2023). Breast cancer: 40% → ~75%. Impact: policyholders survive CI claim, may pay premiums longer than priced for. PMI: more treatable cancers → ↑ cost per claim. Early diagnosis via screening can ↑ CI claim incidence (claim on policy that would have lapsed before diagnosis previously).</li>
+      <li class="g"><strong>Heart disease risk factors:</strong> smoking, overweight/obesity, high BP (primary). Secondary: high cholesterol, physical inactivity, diabetes, family history, ethnic background, age &amp; gender.</li>
+      <li class="g"><strong>Liver disease:</strong> only major cause of mortality <em>increasing</em> in England while declining in European peers. All three causes — obesity, undiagnosed infection, alcohol — are preventable. Scotland minimum unit alcohol pricing introduced May 2018.</li>
+      <li class="g"><strong>Respiratory (COPD &amp; asthma):</strong> work-related exposure an important cause alongside smoking. Early identification, diagnosis and intervention is UK government focus.</li>
+    </ul>
+  </div>
+</div>
+
+<table class="mx">
+  <thead>
+    <tr>
+      <th style="background:var(--green)">Region</th>
+      <th>Leading Causes of Disability (DALY burden)</th>
+      <th>Key Characteristic</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>World (overall)</td><td>Cardiovascular · Neoplasms · Maternal &amp; neonatal · Other NCDs · Respiratory infections &amp; TB</td><td>NCDs caused 70% of global deaths. High-income: 88% NCD. Low-income: communicable still leading but declining.</td></tr>
+    <tr><td>High income (incl. UK)</td><td>Neoplasms (#1) · Cardiovascular (#2) · Musculoskeletal (#3) · Mental disorders (#4) · Neurological (#5)</td><td>Cancer now #1 cause of disability. Mental disorders in top 5. All causes NCDs (except respiratory infections).</td></tr>
+    <tr><td>Africa</td><td>HIV/AIDS · Lower respiratory infections · Diarrhoeal disease leading</td><td>Communicable disease remains dominant. Contrast with global trend.</td></tr>
+    <tr><td>Eastern Mediterranean &amp; South-East Asia</td><td>Respiratory infections · Diarrhoeal disease top two</td><td>Infectious disease driven — different product implications.</td></tr>
+    <tr><td>Americas</td><td>Violence = 2nd leading cause of disease burden</td><td>Distinct risk profile — affects underwriting and pricing of IP/PMI.</td></tr>
+    <tr><td>Western Pacific</td><td>Heart disease = 3rd leading cause</td><td>Depression in top 3 in Americas, Europe &amp; Western Pacific.</td></tr>
+  </tbody>
+</table>
+
+<div class="aside">
+  <div class="aside-label">Insurer Data Challenge — Key Takeaway</div>
+  <p>Changing longevity and morbidity rates make historic experience data less credible. Insurers need better data via: wearable technology, big data analytics, cohort studies, expert medical advice, reinsurer data, international comparisons. IADLs (Instrumental Activities of Daily Living) — shopping, cooking, laundry — serve as early indicators of disability progression before standard ADL failures occur. LTCI particularly data-poor in UK given small market size.</p>
+</div>
+</div>
+
+<div class="footer">
+  <span>SA1 Ch.5–6 · SP1 Ch.9 · IFE 2024 Examinations</span>
+  <span>GENERAL BUSINESS ENVIRONMENT — CONSOLIDATED STUDY MATRIX</span>
+  <span>Pair with the Outline Navigator for rapid-recall revision</span>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>General Business Environment — Outline Navigator</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --ink: #0f1117;
+    --paper: #f5f0e8;
+    --cream: #ede7d6;
+    --accent: #c0392b;
+    --gold: #b8860b;
+    --blue: #1a3a5c;
+    --green: #1e5f3f;
+    --purple: #5c3d7a;
+    --teal: #1a5c5a;
+    --rust: #8b3a1a;
+    --muted: #6b6560;
+    --rule: #c8bfaf;
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 12px;
+    line-height: 1.5;
+    padding: 28px 24px;
+    max-width: 1140px;
+    margin: 0 auto;
+  }
+
+  /* MASTHEAD */
+  .masthead { border-top:4px solid var(--ink); border-bottom:2px solid var(--ink); padding:12px 0 10px; margin-bottom:20px; display:flex; align-items:baseline; gap:16px; flex-wrap:wrap; }
+  .masthead-title { font-family:'Playfair Display',serif; font-size:26px; font-weight:900; flex:1; }
+  .masthead-sub { font-family:'IBM Plex Mono',monospace; font-size:9.5px; color:var(--muted); text-transform:uppercase; letter-spacing:1.5px; }
+  .masthead-tag { font-family:'IBM Plex Mono',monospace; font-size:9.5px; background:var(--ink); color:#fff; padding:3px 8px; letter-spacing:1px; }
+
+  /* HOW TO USE */
+  .how-to { background:var(--ink); color:var(--paper); padding:10px 16px; margin-bottom:22px; display:flex; align-items:center; gap:16px; font-size:11px; }
+  .how-to strong { font-family:'IBM Plex Mono',monospace; font-size:9px; text-transform:uppercase; letter-spacing:1px; color:var(--gold); white-space:nowrap; }
+
+  /* CHAPTER DIVIDER */
+  .ch-divider { display:flex; align-items:center; gap:12px; margin:18px 0 10px; }
+  .ch-label { font-family:'IBM Plex Mono',monospace; font-size:9px; text-transform:uppercase; letter-spacing:2px; background:var(--ink); color:var(--paper); padding:3px 10px; white-space:nowrap; }
+  .ch-line { flex:1; height:1px; background:var(--ink); }
+
+  /* FLOW */
+  .flow { display:flex; flex-direction:column; gap:0; position:relative; }
+  .flow::before { content:''; position:absolute; left:22px; top:0; bottom:0; width:2px; background:linear-gradient(to bottom, var(--accent), var(--blue), var(--teal), var(--gold), var(--purple), var(--green), var(--rust), var(--blue), var(--green)); z-index:0; }
+
+  /* BLOCK */
+  .block { display:flex; gap:16px; align-items:flex-start; margin-bottom:6px; position:relative; z-index:1; }
+
+  /* NUMBER BADGE */
+  .num { width:44px; height:44px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:'Playfair Display',serif; font-size:18px; font-weight:900; color:white; flex-shrink:0; border:3px solid var(--paper); }
+
+  /* BLOCK CONTENT */
+  .block-content { flex:1; border-left:3px solid; padding:10px 14px; background:var(--cream); }
+  .block-title { font-family:'Playfair Display',serif; font-size:14px; font-weight:700; margin-bottom:7px; }
+  .block-chapter { font-family:'IBM Plex Mono',monospace; font-size:8.5px; text-transform:uppercase; letter-spacing:1px; color:var(--muted); margin-bottom:6px; }
+
+  .sub-items { display:flex; flex-direction:column; gap:5px; }
+  .sub-row { display:flex; align-items:flex-start; gap:5px; flex-wrap:wrap; }
+
+  .sub {
+    font-family:'IBM Plex Mono',monospace;
+    font-size:10px;
+    padding:3px 9px;
+    border:1px solid;
+    background:white;
+    letter-spacing:0.3px;
+    line-height:1.4;
+  }
+  .sub.key { color:white !important; background:var(--ink); border-color:transparent; font-weight:600; }
+  .sub.flex { flex:1; min-width:120px; }
+
+  /* PRODUCT PILLS ROW */
+  .product-row { display:flex; gap:5px; flex-wrap:wrap; margin-top:4px; }
+  .pill { font-family:'IBM Plex Mono',monospace; font-size:9.5px; padding:2px 8px; border:1px solid; }
+  .pill.ip  { border-color:var(--blue);   color:var(--blue);   background:#eef2f7; }
+  .pill.ci  { border-color:var(--accent); color:var(--accent); background:#fdf0ef; }
+  .pill.ltci{ border-color:var(--green);  color:var(--green);  background:#edf7f2; }
+  .pill.pmi { border-color:var(--gold);   color:var(--gold);   background:#fdf8ea; }
+
+  /* ARROW */
+  .arrow { display:flex; align-items:center; padding-left:14px; margin:2px 0; color:var(--muted); font-size:16px; z-index:1; position:relative; }
+
+  /* NOTE */
+  .note { font-family:'IBM Plex Sans',sans-serif; font-size:10px; color:var(--muted); margin-top:6px; font-style:italic; }
+
+  /* COLOR SCHEMES */
+  .b1 .num { background:var(--accent); }   .b1 .block-content { border-color:var(--accent); }
+  .b2 .num { background:var(--blue); }     .b2 .block-content { border-color:var(--blue); }
+  .b3 .num { background:var(--teal); }     .b3 .block-content { border-color:var(--teal); }
+  .b4 .num { background:var(--gold); }     .b4 .block-content { border-color:var(--gold); }
+  .b5 .num { background:var(--purple); }   .b5 .block-content { border-color:var(--purple); }
+  .b6 .num { background:var(--green); }    .b6 .block-content { border-color:var(--green); }
+  .b7 .num { background:var(--rust); }     .b7 .block-content { border-color:var(--rust); }
+  .b8 .num { background:var(--blue); }     .b8 .block-content { border-color:var(--blue); }
+  .b9 .num { background:var(--green); }    .b9 .block-content { border-color:var(--green); }
+
+  .sub.accent { background:var(--accent); color:white; border-color:transparent; }
+  .sub.blue   { background:var(--blue);   color:white; border-color:transparent; }
+  .sub.teal   { background:var(--teal);   color:white; border-color:transparent; }
+  .sub.gold   { background:var(--gold);   color:white; border-color:transparent; }
+  .sub.purple { background:var(--purple); color:white; border-color:transparent; }
+  .sub.green  { background:var(--green);  color:white; border-color:transparent; }
+  .sub.rust   { background:var(--rust);   color:white; border-color:transparent; }
+
+  /* FOOTER */
+  .footer { border-top:1px solid var(--rule); padding-top:8px; margin-top:20px; font-family:'IBM Plex Mono',monospace; font-size:9px; color:var(--muted); display:flex; justify-content:space-between; flex-wrap:wrap; gap:4px; }
+</style>
+</head>
+<body>
+
+<!-- MASTHEAD -->
+<div class="masthead">
+  <div class="masthead-title">General Business Environment</div>
+  <span class="masthead-sub">SA1 Ch.5 &amp; Ch.6 · SP1 Ch.9</span>
+  <span class="masthead-tag">OUTLINE NAVIGATOR — HIGH LEVEL</span>
+</div>
+
+<!-- HOW TO USE -->
+<div class="how-to">
+  <strong>How to use</strong>
+  <span>Nine blocks cover the full architecture of both chapters. Each block maps exactly to a section in the <strong>Consolidated Study Matrix</strong>. Same number · Same colour · Same name. Rehearse the structure here before drilling into detail. Every sub-item is a distinct testable concept.</span>
+</div>
+
+<div class="flow">
+
+<!-- ① MARKET & DEMAND DRIVERS -->
+<div class="block b1">
+  <div class="num">①</div>
+  <div class="block-content">
+    <div class="block-chapter">SA1 Ch.5 §1 · Market Overview</div>
+    <div class="block-title">Healthcare Market &amp; Key Demand Drivers</div>
+    <div class="sub-items">
+      <div class="sub-row">
+        <span class="sub key">Six Key Drivers</span>
+        <span class="sub flex">Wealth &amp; sophistication · Demographics (aging, comorbidity) · Economic conditions · State provision level · Employer-provided benefits · Technology trends</span>
+      </div>
+      <div class="sub-row">
+        <span class="sub key">Demand by Product</span>
+        <span class="pill ip">IP</span><span class="pill ci">CI</span><span class="pill ltci">LTCI</span><span class="pill pmi">PMI</span>
+        <span class="sub flex">Each has distinct demand drivers, purchaser profiles &amp; state interaction</span>
+      </div>
+      <div class="sub-row">
+        <span class="sub key">Anti-selection Risk</span>
+        <span class="sub flex">Products must be sold not bought — those who buy expect to claim · Non-disclosure + anti-selection inflate claims</span>
+      </div>
+    </div>
+    <div class="note">State provision is the dominant external suppressor of demand. Economic cycle tightly linked to sales volumes.</div>
+  </div>
+</div>
+<div class="arrow">↓</div>
+
+<!-- ② CUSTOMER PERCEPTION & COMPETITION -->
+<div class="block b2">
+  <div class="num">②</div>
+  <div class="block-content">
+    <div class="block-chapter">SA1 Ch.5 §1 · Perception &amp; Competition</div>
+    <div class="block-title">Customer Perception, Competition &amp; Lessons from Other Markets</div>
+    <div class="sub-items">
+      <div class="sub-row">
+        <span class="sub key">Perception Factors</span>
+        <span class="sub flex">Public understanding of products · Tax incentives for policyholders · Adverse media coverage (scandals, mis-selling, corporate failures)</span>
+      </div>
+      <div class="sub-row">
+        <span class="sub key">Competition</span>
+        <span class="sub flex">Small number of specialists in developed markets · Consolidation risk · State-sponsored insurers as barriers · Local legislation restricts foreign entrants</span>
+      </div>
+      <div class="sub-row">
+        <span class="sub key">Lessons from Other Markets</span>
+        <span class="sub flex">Products travel across borders (CI from South Africa) · Dovetail with local State benefits · Regulatory environment changes — watch other territories</span>
+      </div>
+    </div>
+    <div class="note">Most successful insurers identify true market problems and deal with them effectively.</div>
+  </div>
+</div>
+<div class="arrow">↓</div>
+
+<!-- ③ TECHNOLOGY, DATA SCIENCE & CLIMATE -->
+<div class="block b3">
+  <div class="num">③</div>
+  <div class="block-content">
+    <div class="block-chapter">SA1 Ch.5 §1 · Technology &amp; Climate</div>
+    <div class="block-title">Technology, Data Science &amp; Climate Change</div>
+    <div class="sub-items">
+      <div class="sub-row">
+        <span class="sub key">Technology Applications</span>
+        <span class="sub flex">New business: AI lead qualification · Underwriting: new data sources · Claims: machine learning on forms · Customer: price comparison sites, online self-service, wearables</span>
+      </div>
+      <div class="sub-row">
+        <span class="sub key">Data Science</span>
+        <span class="sub accent">Advantages</span><span class="sub flex">Finer risk insight · New products · Reduce market frictions · Fairer consumer outcomes · Inclusivity</span>
+      </div>
+      <div class="sub-row">
+        <span class="sub teal">Potential Issues</span><span class="sub flex">Data quality &amp; consent · Mis-selling via nudging · Cyber security · Legacy systems · Staff skills · Ethical use · Regulatory scrutiny</span>
+      </div>
+      <div class="sub-row">
+        <span class="sub key">Climate Change</span>
+        <span class="sub flex">Physical risks · Transition risks · Liability risks · Impacts: product design, pricing, reserving, capital, risk mgmt, investment</span>
+      </div>
+    </div>
+    <div class="note">EIOPA 2018 review: data science used most in pricing &amp; underwriting. IFoA Risk Alert 2017a requires actuaries to account for climate risks in all relevant decisions.</div>
+  </div>
+</div>
+<div class="arrow">↓</div>
+
+<!-- ④ METHODS OF SALE -->
+<div class="block b4">
+  <div class="num">④</div>
+  <div class="block-content">
+    <div class="block-chapter">SA1 Ch.5 §2 · Distribution</div>
+    <div class="block-title">Methods of Sale, Remuneration &amp; Regulation</div>
+    <div class="sub-items">
+      <div class="sub-row">
+        <span class="sub key">5 Main Channels</span>
+        <span class="sub flex">① Brokers (commission/fee) · ② Tied agents / ARs (commission) · ③ Own salesforce / DSF (salary+commission) · ④ Direct marketing (no remuneration) · ⑤ Worksite marketing</span>
+      </div>
+      <div class="sub-row">
+        <span class="sub key">Remuneration Shift</span>
+        <span class="sub flex">Commission → Fee-based (more transparent, avoids product bias) · Fee practical only for corporate &amp; HNW clients · Commission ban on savings products: UK 2013</span>
+      </div>
+      <div class="sub-row">
+        <span class="sub key">Regulation Impacts</span>
+        <span class="sub flex">Types of products · How advice is given &amp; paid · Charge caps · Distributor requirements · Market access · Mis-selling remedies</span>
+      </div>
+    </div>
+    <div class="note">Channel affects: demographic experience · product pricing · withdrawal rates. Complex products suit advised channels; simple products suit direct/online.</div>
+  </div>
+</div>
+<div class="arrow">↓</div>
+
+<!-- ⑤ MIS-SELLING RISKS -->
+<div class="block b5">
+  <div class="num">⑤</div>
+  <div class="block-content">
+    <div class="block-chapter">SA1 Ch.5 §3 · Consumer Protection</div>
+    <div class="block-title">Mis-selling Risks by Product</div>
+    <div class="sub-items">
+      <div class="sub-row">
+        <span class="sub key">IP Issues</span>
+        <span class="sub flex">Income replacement &lt;100% · Benefit may not keep pace with income growth · No cover for unemployment · Benefits reduced if income drops (ABI Best Practice)</span>
+      </div>
+      <div class="sub-row">
+        <span class="sub key">CI Issues</span>
+        <span class="sub flex">Only listed conditions covered · Insurer definitions more restrictive than medical · Perceived as covering "all critical illness" · Confusion between CI and IP</span>
+      </div>
+      <div class="sub-row">
+        <span class="sub key">LTCI Issues</span>
+        <span class="sub flex">Cash not care — fixed benefits may not cover actual care costs · Poor investment performance on unit-linked policies · Misnomer "long-term care insurance"</span>
+      </div>
+      <div class="sub-row">
+        <span class="sub key">PMI Issues</span>
+        <span class="sub flex">Restricted vs comprehensive — NHS waiting list trigger not understood · Acute vs chronic confusion — cover ceases when condition becomes chronic</span>
+      </div>
+      <div class="sub-row">
+        <span class="sub key">Tech Distribution Risk</span>
+        <span class="sub flex">Insurtech: online sale without advice → higher product confusion risk · Algorithm-driven "nudging" toward unsuitable products</span>
+      </div>
+    </div>
+    <div class="note">Poor practice → fines, compensation, operational costs, regulatory change. Quality of selling process is the primary defence.</div>
+  </div>
+</div>
+<div class="arrow">↓</div>
+
+<!-- ⑥ ROLE OF STATE & EMPLOYERS -->
+<div class="block b6">
+  <div class="num">⑥</div>
+  <div class="block-content">
+    <div class="block-chapter">SA1 Ch.5 §4–5 · Stakeholders</div>
+    <div class="block-title">Role of the State &amp; Role of Employers</div>
+    <div class="sub-items">
+      <div class="sub-row">
+        <span class="sub key">State–Insurer Interplay</span>
+        <span class="pill ip">IP</span><span class="sub">Augments subsistence benefits</span>
+        <span class="pill ci">CI</span><span class="sub">No State counterpart — private fills gap</span>
+        <span class="pill ltci">LTCI</span><span class="sub">Means-tested — insurer targets assets above threshold</span>
+        <span class="pill pmi">PMI</span><span class="sub">Complements NHS; reduces waiting times</span>
+      </div>
+      <div class="sub-row">
+        <span class="sub key">Means Testing</span>
+        <span class="sub flex">Targeted State spending on those most in need · Introduction driven by: demographic change, low-tax environment, competing public expenditure demands</span>
+      </div>
+      <div class="sub-row">
+        <span class="sub key">Future State Role</span>
+        <span class="sub flex">Political party changes create uncertainty · Government can affect products via: legislation, taxation, State benefit changes, national health system changes, communication</span>
+      </div>
+      <div class="sub-row">
+        <span class="sub key">Employer Benefits</span>
+        <span class="sub flex">Attract &amp; retain staff · Tax efficient (premium as business expense) · Group cheaper per head than individual · Economies of scale + experience rating · MHD basis for PMI</span>
+      </div>
+    </div>
+    <div class="note">Future State role is crucial to insurance strategy planning. Group schemes often compulsory — reduces anti-selection for insurer.</div>
+  </div>
+</div>
+<div class="arrow">↓</div>
+
+<!-- ⑦ MEDICAL UNDERWRITING & GENETICS -->
+<div class="block b7">
+  <div class="num">⑦</div>
+  <div class="block-content">
+    <div class="block-chapter">SA1 Ch.6 §1–2 · Underwriting</div>
+    <div class="block-title">Medical Underwriting &amp; Genetics</div>
+    <div class="sub-items">
+      <div class="sub-row">
+        <span class="sub key">Front-End UW</span>
+        <span class="sub flex">Full medical info at proposal stage · Exact exclusions known upfront · Disadvantage: long forms, personal disclosure deterrent · Responses: loaded premium, deferral, decline, PEC exclusion, different product, reinsure, facultative</span>
+      </div>
+      <div class="sub-row">
+        <span class="sub key">Back-End UW</span>
+        <span class="sub flex">Moratorium approach — immediate cover, check at claim · No UW at entry, PEC excluded · Moratorium period typically 5 yrs pre-entry; covered after 2 yrs treatment-free · UK PMI &amp; ASU predominant use</span>
+      </div>
+      <div class="sub-row">
+        <span class="sub key">Psychosocial Factors</span>
+        <span class="sub flex">IP claims driven by non-medical factors: poor work attendance, life events, stress · Predictive flags: GP visit frequency, work attendance record, personal circumstance changes</span>
+      </div>
+      <div class="sub-row">
+        <span class="sub key">Genetics</span>
+        <span class="sub flex">Anti-selection: tested individuals seek higher cover → insurer premium shortfall · Information asymmetry: insurers want test results; many countries prohibit use · UK: no genetic UW for IP/CI/LTCI (exception: Huntington's for high-value life)</span>
+      </div>
+    </div>
+    <div class="note">CI most at risk from genetic testing (cancer &amp; heart disease genetically influenced). PMI least at risk (annual reviewable premiums). "Once only" group IP UW: full evidence upfront, no re-UW on benefit increases.</div>
+  </div>
+</div>
+<div class="arrow">↓</div>
+
+<!-- ⑧ COUNTERPARTIES & EXTERNAL INFLUENCES -->
+<div class="block b8">
+  <div class="num">⑧</div>
+  <div class="block-content">
+    <div class="block-chapter">SA1 Ch.6 §3–4 · Environment</div>
+    <div class="block-title">Counterparties &amp; External Influences</div>
+    <div class="sub-items">
+      <div class="sub-row">
+        <span class="sub key">Key Counterparties</span>
+        <span class="sub flex">Outsourcers (SLA governs) · Brokers (brokers' balances = credit risk) · Hospitals &amp; consultants (usual &amp; customary fees) · Independent investigators (IP claim validation) · Medical evidence gatherers</span>
+      </div>
+      <div class="sub-row">
+        <span class="sub key">Demographic</span>
+        <span class="sub flex">Aging population → fewer taxpayers, State strain, demand for LTCI/PMI · Living longer → more PMI claims, longer IP claims, LTCI cost rise · Fewer children → aging accelerated, fewer new policyholders</span>
+      </div>
+      <div class="sub-row">
+        <span class="sub key">Medical &amp; Economic</span>
+        <span class="sub flex">Medical advances: ↓CI incidence but ↑early detection claims · New diseases · PMI: new expensive treatments · Business optimism drives group scheme uptake · Employment security affects claim rates (presenteeism / claim whilst you can)</span>
+      </div>
+      <div class="sub-row">
+        <span class="sub key">Political, Social &amp; Pandemics</span>
+        <span class="sub flex">Govt changes → uncertainty in State provision · ↑Claim consciousness (less stigma, aware of cover) · ↑Litigation · COVID-19: excess mortality, Long COVID morbidity impact · Pandemics affect capital adequacy — stress testing required</span>
+      </div>
+    </div>
+    <div class="note">Mental health: 1 in 4 adults affected annually. Was UK's top IP claim cause in 2017. Climate physical/transition/liability risks all relevant to health insurer balance sheets.</div>
+  </div>
+</div>
+<div class="arrow">↓</div>
+
+<!-- ⑨ KEY MEDICAL CONDITIONS -->
+<div class="block b9">
+  <div class="num">⑨</div>
+  <div class="block-content">
+    <div class="block-chapter">SA1 Ch.6 §5 · Medical Conditions</div>
+    <div class="block-title">Key Medical Conditions — Mortality, Morbidity &amp; Regional Variation</div>
+    <div class="sub-items">
+      <div class="sub-row">
+        <span class="sub key">Top Mortality Causes (Global 2019)</span>
+        <span class="sub flex">Heart disease (16%) · Stroke (combined CVD = 15m deaths) · COPD (3.3m) · Lung cancer (1.8m) · Diabetes (1.7m) · Dementia (7th, doubled since 2000) · Life expectancy rose 66.8→73.4 yrs (2000–2019)</span>
+      </div>
+      <div class="sub-row">
+        <span class="sub key">Specific Diseases — Insurance Impact</span>
+        <span class="sub flex">Heart disease: risk factors (smoking, obesity, BP) · Cancer: improving survival → longer CI/PMI claims · Stroke: leading disability cause in UK · COPD: UK premature deaths 2× EU avg · Liver disease: only rising cause in England — preventable</span>
+      </div>
+      <div class="sub-row">
+        <span class="sub key">Regional Variations</span>
+        <span class="sub flex">Africa: HIV/AIDS &amp; respiratory infections lead · Americas: violence 2nd · High-income: neoplasms &amp; CVD dominate · Low-income: communicable diseases still leading but declining · Mental disorders top 4 in high/high-middle income</span>
+      </div>
+      <div class="sub-row">
+        <span class="sub key">Insurer Implications</span>
+        <span class="sub flex">Changing survival → historic data less credible · Need better / more data: wearables, big data, cohort studies · IADLs as early disability indicators · Long-term care cost prediction increasingly difficult</span>
+      </div>
+    </div>
+    <div class="note">Non-communicable diseases caused 70% of global deaths. NCDs rising in low-income countries. 78% of absolute NCD deaths in low- and middle-income countries.</div>
+  </div>
+</div>
+
+</div><!-- end flow -->
+
+<div class="footer">
+  <span>SA1 Ch.5–6 · SP1 Ch.9 · IFE 2024 Examinations</span>
+  <span>GENERAL BUSINESS ENVIRONMENT — OUTLINE NAVIGATOR</span>
+  <span>Pair with the Consolidated Study Matrix for detail</span>
+</div>
+
+</body>
+</html>
