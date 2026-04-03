@@ -1,0 +1,1575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SA1 · Reinsurance Mastery Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0d0f14;
+  --surface: #13161e;
+  --surface2: #1a1e28;
+  --surface3: #21263300;
+  --border: #2a2f3d;
+  --border2: #363c4e;
+  --text: #e2e6f0;
+  --muted: #7a8299;
+  --accent: #4f9cf9;
+  --accent2: #7c6af7;
+  --green: #3ecf8e;
+  --amber: #f5a623;
+  --red: #f56565;
+  --teal: #38c4c4;
+  --pink: #e879a0;
+  --tag-bg: #1e2535;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  line-height: 1.65;
+  min-height: 100vh;
+}
+
+/* ─── HEADER ─── */
+.header {
+  background: linear-gradient(135deg, #0d0f14 0%, #131826 50%, #0f1420 100%);
+  border-bottom: 1px solid var(--border);
+  padding: 28px 32px 20px;
+  position: sticky; top: 0; z-index: 100;
+  backdrop-filter: blur(12px);
+}
+.header-top { display: flex; align-items: baseline; gap: 12px; margin-bottom: 16px; }
+.header-badge {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  background: var(--accent2);
+  color: white;
+  padding: 3px 8px;
+  border-radius: 4px;
+  letter-spacing: 0.5px;
+}
+.header h1 {
+  font-family: 'Syne', sans-serif;
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--text);
+  letter-spacing: -0.3px;
+}
+.header-sub { font-size: 12px; color: var(--muted); margin-top: 2px; }
+
+/* ─── NAV TABS ─── */
+.nav-tabs {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+.tab-btn {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  padding: 6px 12px;
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  background: transparent;
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.15s;
+  letter-spacing: 0.3px;
+  white-space: nowrap;
+}
+.tab-btn:hover { border-color: var(--accent); color: var(--accent); }
+.tab-btn.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
+
+/* ─── MAIN LAYOUT ─── */
+.main { max-width: 1100px; margin: 0 auto; padding: 24px 24px 60px; }
+.section { display: none; }
+.section.active { display: block; }
+
+/* ─── SECTION HEADER ─── */
+.sec-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.sec-title .ico { font-size: 20px; }
+
+/* ─── CARDS ─── */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 16px 20px;
+  margin-bottom: 14px;
+}
+.card-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+@media (max-width: 700px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
+
+/* ─── BULLETS ─── */
+ul.bullets { list-style: none; }
+ul.bullets li {
+  padding: 4px 0 4px 16px;
+  position: relative;
+  color: var(--text);
+  font-size: 13.5px;
+}
+ul.bullets li::before {
+  content: '›';
+  position: absolute; left: 0;
+  color: var(--accent);
+  font-weight: 700;
+}
+ul.bullets li.sub { padding-left: 28px; color: var(--muted); font-size: 13px; }
+ul.bullets li.sub::before { content: '·'; left: 16px; color: var(--border2); }
+
+/* ─── TAGS ─── */
+.tag {
+  display: inline-block;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  padding: 2px 7px;
+  border-radius: 4px;
+  letter-spacing: 0.3px;
+  font-weight: 500;
+}
+.tag-iai { background: #1a2840; color: var(--accent); border: 1px solid #1f3860; }
+.tag-ifoa { background: #201a3a; color: var(--accent2); border: 1px solid #2e2050; }
+.tag-marks { background: #1a2c1a; color: var(--green); border: 1px solid #1e3820; }
+.tag-warn { background: #2c1a1a; color: var(--red); border: 1px solid #3d2020; }
+.tag-tip { background: #2c2210; color: var(--amber); border: 1px solid #3d3010; }
+
+/* ─── EXAM Q&A ACCORDION ─── */
+.qa-block { margin-bottom: 10px; }
+.qa-q {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 12px 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  transition: border-color 0.15s;
+}
+.qa-q:hover { border-color: var(--accent); }
+.qa-q.open { border-color: var(--accent); border-bottom-radius: 0; }
+.qa-arrow {
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 2px;
+  transition: transform 0.2s;
+  flex-shrink: 0;
+}
+.qa-q.open .qa-arrow { transform: rotate(90deg); color: var(--accent); }
+.qa-qtext { font-size: 13px; flex: 1; }
+.qa-a {
+  display: none;
+  background: #0e1a0e;
+  border: 1px solid var(--green);
+  border-top: none;
+  border-radius: 0 0 6px 6px;
+  padding: 14px 16px;
+  font-size: 13px;
+}
+.qa-a.open { display: block; }
+.qa-a ul { list-style: none; }
+.qa-a ul li { padding: 3px 0 3px 14px; position: relative; }
+.qa-a ul li::before { content: '✓'; position: absolute; left: 0; color: var(--green); font-size: 11px; top: 4px; }
+
+/* ─── COMPARISON TABLE ─── */
+.cmp-table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 10px 0; }
+.cmp-table th {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  padding: 9px 12px;
+  font-family: 'Syne', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--accent);
+  text-align: left;
+}
+.cmp-table td {
+  border: 1px solid var(--border);
+  padding: 8px 12px;
+  vertical-align: top;
+}
+.cmp-table tr:hover td { background: var(--surface2); }
+.cmp-table td:first-child { font-weight: 500; color: var(--accent2); font-family: 'DM Mono', monospace; font-size: 12px; }
+
+/* ─── EXAM LANDSCAPE ─── */
+.exam-row {
+  display: grid;
+  grid-template-columns: 90px 60px 1fr 100px;
+  gap: 12px;
+  align-items: center;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+.exam-row:last-child { border-bottom: none; }
+.exam-row:hover { background: var(--surface2); }
+.exam-sitting { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--muted); }
+.exam-marks-bar { height: 6px; background: var(--border); border-radius: 3px; margin-top: 4px; }
+.exam-marks-bar-fill { height: 100%; border-radius: 3px; background: var(--accent); }
+
+/* ─── HIGHLIGHT BOX ─── */
+.highlight {
+  border-left: 3px solid var(--amber);
+  background: #1c1a0f;
+  padding: 12px 16px;
+  border-radius: 0 6px 6px 0;
+  margin: 12px 0;
+  font-size: 13px;
+}
+.highlight.green { border-color: var(--green); background: #0e1a0e; }
+.highlight.red { border-color: var(--red); background: #1a0e0e; }
+.highlight.blue { border-color: var(--accent); background: #0e1320; }
+.highlight.purple { border-color: var(--accent2); background: #100e1a; }
+
+/* ─── PRODUCT MATRIX ─── */
+.prod-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+.prod-table th {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  padding: 8px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted);
+  text-align: center;
+}
+.prod-table th:first-child { text-align: left; color: var(--accent); }
+.prod-table td {
+  border: 1px solid var(--border);
+  padding: 7px 10px;
+  text-align: center;
+  vertical-align: middle;
+}
+.prod-table td:first-child { text-align: left; font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text); }
+.prod-table tr:hover td { background: var(--surface2); }
+.dot-yes { color: var(--green); font-size: 16px; }
+.dot-no { color: var(--border2); font-size: 14px; }
+.dot-maybe { color: var(--amber); font-size: 14px; }
+
+/* ─── NUMERIC EXAMPLE ─── */
+.num-box {
+  background: #080c10;
+  border: 1px solid var(--accent);
+  border-radius: 6px;
+  padding: 14px 18px;
+  font-family: 'DM Mono', monospace;
+  font-size: 12.5px;
+  margin: 12px 0;
+  line-height: 1.9;
+}
+.num-box .num-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 12px;
+  color: var(--accent);
+  font-weight: 700;
+  margin-bottom: 8px;
+  letter-spacing: 0.5px;
+}
+.num-box .calc { color: var(--green); }
+.num-box .note { color: var(--muted); font-size: 11.5px; }
+
+/* ─── MNEMONIC ─── */
+.mnemonic {
+  background: var(--surface2);
+  border: 1px solid var(--accent2);
+  border-radius: 8px;
+  padding: 16px 20px;
+  margin: 12px 0;
+}
+.mnemonic-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--accent2);
+  margin-bottom: 10px;
+}
+.mnemonic-row { display: flex; gap: 10px; margin: 5px 0; }
+.mnemonic-letter {
+  font-family: 'Syne', sans-serif;
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--accent2);
+  width: 22px;
+  flex-shrink: 0;
+}
+.mnemonic-text { font-size: 13px; }
+
+/* ─── MARK PILL ─── */
+.mark-pill {
+  display: inline-block;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  padding: 2px 8px;
+  background: #1a2c1a;
+  color: var(--green);
+  border-radius: 10px;
+  border: 1px solid #253525;
+}
+
+/* ─── SECTION INTRO ─── */
+.sec-intro { color: var(--muted); font-size: 13px; margin-bottom: 20px; padding: 12px 16px; background: var(--surface); border-radius: 6px; border-left: 3px solid var(--accent); }
+
+/* ─── COLLAPSIBLE ─── */
+.collapsible { margin-bottom: 10px; }
+.coll-header {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 11px 16px;
+  cursor: pointer;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  transition: border-color 0.15s;
+  font-size: 13.5px;
+  font-weight: 500;
+}
+.coll-header:hover { border-color: var(--accent); }
+.coll-header.open { border-color: var(--border2); border-bottom-left-radius: 0; border-bottom-right-radius: 0; }
+.coll-body {
+  display: none;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-top: none;
+  border-radius: 0 0 6px 6px;
+  padding: 14px 18px;
+}
+.coll-body.open { display: block; }
+.coll-arrow { font-size: 12px; color: var(--muted); transition: transform 0.2s; }
+.coll-header.open .coll-arrow { transform: rotate(180deg); }
+
+/* scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-top">
+    <span class="header-badge">SA1</span>
+    <h1>Reinsurance — Mastery Guide</h1>
+  </div>
+  <div class="header-sub">IAI &amp; IFoA · All content from JSON files only · May 2026 Sitting</div>
+  <div class="nav-tabs" style="margin-top:14px;">
+    <button class="tab-btn active" onclick="showTab('landscape')">📊 Exam Landscape</button>
+    <button class="tab-btn" onclick="showTab('reasons')">💡 Why Reinsure?</button>
+    <button class="tab-btn" onclick="showTab('types')">🏗 Types</button>
+    <button class="tab-btn" onclick="showTab('mechanics')">🔢 Mechanics &amp; Numerics</button>
+    <button class="tab-btn" onclick="showTab('retention')">⚖️ Retention Level</button>
+    <button class="tab-btn" onclick="showTab('impact')">📈 Financial Impact</button>
+    <button class="tab-btn" onclick="showTab('products')">💊 By Product</button>
+    <button class="tab-btn" onclick="showTab('contexts')">🌐 Contextual Q&amp;As</button>
+    <button class="tab-btn" onclick="showTab('badging')">🏷 Badging</button>
+    <button class="tab-btn" onclick="showTab('inwards')">📋 Inwards Reserving</button>
+    <button class="tab-btn" onclick="showTab('technique')">✍️ Exam Technique</button>
+  </div>
+</div>
+
+<div class="main">
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- TAB 1: EXAM LANDSCAPE -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div id="tab-landscape" class="section active">
+  <div class="sec-title"><span class="ico">📊</span> Exam Landscape: How Reinsurance is Tested</div>
+  <div class="sec-intro">Reinsurance is a cross-cutting theme — it appears in pricing, product design, capital, solvency and risk management questions. IAI tests it more directly and numerically than IFoA, which embeds it in broader scenarios.</div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title" style="color:var(--accent)">IAI — Reinsurance Question Patterns</div>
+      <ul class="bullets">
+        <li><strong>Reasons to reinsure</strong> in a product/company context <span class="mark-pill">4–6 marks</span></li>
+        <li><strong>Assess suitability</strong> of each RI type for a scenario <span class="mark-pill">15 marks</span></li>
+        <li><strong>Stop-loss pricing</strong> — ranking, burning cost, ideal approach <span class="mark-pill">8–18 marks</span></li>
+        <li><strong>Financial reinsurance</strong> for solvency — suitability <span class="mark-pill">7 marks</span></li>
+        <li><strong>XL vs Quota share</strong> — compare/comment on switch <span class="mark-pill">5 marks</span></li>
+        <li><strong>RI as part of new product launch</strong> (underwriting / reinsurance / distribution / costs) <span class="mark-pill">4–5 per sub-part</span></li>
+        <li><strong>Reinsurance credit</strong> in valuation — pattern over policy term <span class="mark-pill">12–15 marks</span></li>
+        <li><strong>Recapture decision</strong> — validate recapture fee <span class="mark-pill">4–5 marks</span></li>
+        <li><strong>Inwards reinsurance reserving</strong> (new — 2025) <span class="mark-pill">2–5 per sub</span></li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-title" style="color:var(--accent2)">IFoA — Reinsurance Patterns</div>
+      <ul class="bullets">
+        <li>Usually <strong>embedded</strong> in product design / market entry / capital questions</li>
+        <li><strong>Indemnity vs assumption</strong> reinsurance for portfolio transfer <span class="mark-pill">2–4 marks</span></li>
+        <li>Reinsurance as a <strong>risk management tool</strong> (inflation, pandemic, lapse) <span class="mark-pill">2–3 marks</span></li>
+        <li>Regulators <strong>requiring</strong> additional reinsurance <span class="mark-pill">3 marks</span></li>
+        <li>Reinsurance for <strong>new product / new territory</strong> entry <span class="mark-pill">3–5 marks</span></li>
+        <li>Counterparty risk / <strong>reinsurer default</strong> in inflation context</li>
+        <li>OP cover — quota share vs XL appropriateness <span class="mark-pill">5 marks</span></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:6px;">
+    <div class="card-title">🗓 Notable IAI Sittings — Reinsurance Focus</div>
+    <div style="border: 1px solid var(--border); border-radius:6px; overflow:hidden;">
+      <div class="exam-row" style="background:var(--surface2); font-size:11px; font-weight:600; color:var(--muted);">
+        <div>SITTING</div><div>MARKS</div><div>TOPIC</div><div>TYPE</div>
+      </div>
+      <div class="exam-row"><div class="exam-sitting">IAI 0525</div><div><span class="mark-pill">13</span></div><div>Inwards reinsurance IBNR reserving — grouping, data issues, chain ladder, calculation</div><div><span class="tag tag-iai">NUMERIC+DISC</span></div></div>
+      <div class="exam-row"><div class="exam-sitting">IAI 1222</div><div><span class="mark-pill">32</span></div><div>Stop-loss pricing — rank products, burning cost, ideal rating approach</div><div><span class="tag tag-iai">NUMERIC+DISC</span></div></div>
+      <div class="exam-row"><div class="exam-sitting">IAI 0921</div><div><span class="mark-pill">15</span></div><div>Assess 5 RI types for pandemic catastrophe; alternate risk transfer</div><div><span class="tag tag-iai">ASSESS</span></div></div>
+      <div class="exam-row"><div class="exam-sitting">IAI 0524</div><div><span class="mark-pill">10+</span></div><div>RI for new products: Impaired Life Annuity, Group IP, Unit-linked H&amp;C</div><div><span class="tag tag-iai">PRODUCT</span></div></div>
+      <div class="exam-row"><div class="exam-sitting">IAI 0523</div><div><span class="mark-pill">26</span></div><div>Reasons for RI; RI credit pattern; RI impact on reserves/EV/investment income</div><div><span class="tag tag-iai">MULTI</span></div></div>
+      <div class="exam-row"><div class="exam-sitting">IAI 0722</div><div><span class="mark-pill">5</span></div><div>RI for OP cover — quota share vs XL assessment</div><div><span class="tag tag-iai">ASSESS</span></div></div>
+      <div class="exam-row"><div class="exam-sitting">IAI 1120</div><div><span class="mark-pill">5</span></div><div>XL → Quota Share switch: comment on suitability</div><div><span class="tag tag-iai">COMPARE</span></div></div>
+      <div class="exam-row"><div class="exam-sitting">IAI 0619</div><div><span class="mark-pill">8</span></div><div>CFO proposal to reduce reinsurance substantially — critique</div><div><span class="tag tag-iai">CRITIQUE</span></div></div>
+      <div class="exam-row"><div class="exam-sitting">IAI 0916</div><div><span class="mark-pill">8</span></div><div>Recapture clause — validate recapture fee; implications</div><div><span class="tag tag-iai">RECAPTURE</span></div></div>
+      <div class="exam-row"><div class="exam-sitting">IAI 0322</div><div><span class="mark-pill">7</span></div><div>Financial reinsurance for solvency — suitability for SAHI</div><div><span class="tag tag-iai">FIN RE</span></div></div>
+    </div>
+  </div>
+
+  <div class="highlight">
+    <strong>⚡ Examiner Pattern:</strong> IAI always provides a scenario (product / company / situation) and asks about reinsurance within that context. Never memorise lists in isolation — practise applying each reason/type to a specific product and company profile.
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- TAB 2: REASONS -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div id="tab-reasons" class="section">
+  <div class="sec-title"><span class="ico">💡</span> Why Reinsure? — The Full Framework</div>
+  <div class="sec-intro">The seven reasons are always the starting point. But in the exam you must frame each reason in the specific scenario given. A reason unsupported by context earns ½ mark at most.</div>
+
+  <div class="mnemonic">
+    <div class="mnemonic-title">📌 Mnemonic: "SCALEFT" (from your Topic_Frameworks)</div>
+    <div class="mnemonic-row"><span class="mnemonic-letter">S</span><span class="mnemonic-text"><strong>Smooth profits / reduce variance</strong> — stop loss directly; all types indirectly</span></div>
+    <div class="mnemonic-row"><span class="mnemonic-letter">C</span><span class="mnemonic-text"><strong>Capital / solvency relief</strong> — SCR reduced in proportion to cession</span></div>
+    <div class="mnemonic-row"><span class="mnemonic-letter">A</span><span class="mnemonic-text"><strong>Arbitrage</strong> — tax arbitrage; capital arbitrage</span></div>
+    <div class="mnemonic-row"><span class="mnemonic-letter">L</span><span class="mnemonic-text"><strong>Large risks / new risks</strong> — XL for PMI; quota share for new territory</span></div>
+    <div class="mnemonic-row"><span class="mnemonic-letter">E</span><span class="mnemonic-text"><strong>Expertise / technical assistance</strong> — underwriting, pricing, IT software, data</span></div>
+    <div class="mnemonic-row"><span class="mnemonic-letter">F</span><span class="mnemonic-text"><strong>Finance</strong> — new business strain; takeovers; free asset improvement</span></div>
+    <div class="mnemonic-row"><span class="mnemonic-letter">T</span><span class="mnemonic-text"><strong>Treaty check on premium rates</strong> — regulatory validation; co-approval of tables</span></div>
+  </div>
+
+  <!-- Reason 1 -->
+  <div class="collapsible">
+    <div class="coll-header" onclick="toggleColl(this)">
+      <span>1. Control of Risk — Limit Exposure &amp; Smooth Profits</span>
+      <span class="coll-arrow">▼</span>
+    </div>
+    <div class="coll-body">
+      <ul class="bullets">
+        <li>Despite statistical analysis and experienced underwriters, future claims outgo cannot be predicted with certainty — this uncertainty is the essence of insurance.</li>
+        <li>Factors governing reinsurance appetite: <strong>size of insurer</strong>; <strong>marketplace experience</strong>; <strong>available free assets</strong>; <strong>portfolio size</strong> (credibility factor); <strong>predictability</strong> of business outcomes.</li>
+        <li>Larger free assets and larger portfolio reduce the need for RI — but a large insurer writing unusual/large risks may still need substantial RI.</li>
+        <li>For <strong>large individual risks</strong> (CI, IP, specialist LTCI for younger policyholders with large funds): XL or surplus treaty to stabilise emerging profits.</li>
+        <li>For <strong>group schemes</strong>: more prone to accumulation risk — catastrophe XL for simultaneous events (epidemic, legal risk, group screening programme).</li>
+        <li>For <strong>portfolio concentration</strong> (by product, geography, industry): reinsurer can organise retrocession to diversify across its own portfolio.</li>
+        <li>For <strong>new products / territories</strong>: quota share with low initial retention; reduces as insurer's confidence grows.</li>
+        <li>Reinsurance reduces variance of experience relative to mean — directly improves year-on-year account stability, especially for immature portfolios.</li>
+      </ul>
+      <div class="highlight green" style="margin-top:10px;">
+        <strong>IAI 0523 Examiner Answer:</strong> "It can protect the actual solvency of the company. This may be especially welcome given uncertainty about future trends in the incidence of claims and duration of illness, e.g. the impact of screening. Can iron out experience fluctuations — even for an established insurer, it protects against unwanted 'blips' in the emergence of surplus."
+      </div>
+    </div>
+  </div>
+
+  <!-- Reason 2 -->
+  <div class="collapsible">
+    <div class="coll-header" onclick="toggleColl(this)">
+      <span>2. Capital &amp; Solvency Relief</span>
+      <span class="coll-arrow">▼</span>
+    </div>
+    <div class="coll-body">
+      <ul class="bullets">
+        <li>Solvency capital requirements are <strong>normally reduced in proportion to the amount ceded</strong> — but subject to an upper limit.</li>
+        <li>Upper limit reason: cedant remains legally liable to policyholders even if 100% reinsured. A <strong>minimum capital level must always be held</strong> regardless of RI cover.</li>
+        <li>RI also reduces the Solvency II SCR: morbidity risk decreases (though counterparty default risk increases), which reduces the risk margin and reduces volatility of the realistic balance sheet.</li>
+        <li>Deposit back arrangements mitigate (but do not eliminate) reinsurer default risk.</li>
+      </ul>
+      <div class="highlight red" style="margin-top:10px;">
+        <strong>⚠ Reinsurer Default Risk:</strong> Cedant remains liable to policyholders even if fully reinsured. Consequences of reinsurer failure: cedant liable for reinsurer's share of all claims; solvency position worsens; must seek replacement cover (likely more expensive); premium rate increases likely.
+      </div>
+    </div>
+  </div>
+
+  <!-- Reason 3 -->
+  <div class="collapsible">
+    <div class="coll-header" onclick="toggleColl(this)">
+      <span>3. Financial Assistance — New Business Strain, Solvency, Takeovers</span>
+      <span class="coll-arrow">▼</span>
+    </div>
+    <div class="coll-body">
+      <ul class="bullets">
+        <li><strong>(i) New business strain financing:</strong> Quota share commission "factors" future surplus streams — effectively an advance loan repaid via higher future RI premiums. Reinsurer takes lapse risk. Commission clawback if policy lapses.</li>
+        <li><strong>(ii) Free asset improvement:</strong> Reinsurer pays initial commission in exchange for a share of future surpluses. Can be off-balance-sheet if contingent (but this benefit largely eliminated under Solvency II / realistic reporting regimes).</li>
+        <li><strong>(iii) Takeover / M&amp;A financing:</strong> Reinsurer advances funds against anticipated future profits of the acquired portfolio. Same structure as NB strain but applied to acquisitions.</li>
+        <li><strong>(iv) Securitisation:</strong> Insurance cash flows converted into tradeable financial instruments; effectiveness also reduced under Solvency II.</li>
+        <li>Effectiveness of financial RI under Solvency II is much reduced — any funding provided is offset by the liability to repay it in future; net effect on available capital ≈ zero.</li>
+      </ul>
+      <div class="highlight" style="margin-top:10px;">
+        <strong>IAI 0322 — FinRe Suitability for SAHI (7 marks):</strong> "Suitability depends on what drives the low solvency. VIF monetisation works for large blocks of profitable long-term business — which is less applicable to a medium-size health insurer. Commission financing helps reduce NB strain — again, works for long-term products with high initial acquisition costs. Overall, given the nature (SAHI), FinRe solutions are less likely to help here."
+      </div>
+    </div>
+  </div>
+
+  <!-- Reason 4 -->
+  <div class="collapsible">
+    <div class="coll-header" onclick="toggleColl(this)">
+      <span>4. Technical Assistance — The Most Underestimated Reason</span>
+      <span class="coll-arrow">▼</span>
+    </div>
+    <div class="coll-body">
+      <div class="grid-2">
+        <div>
+          <div class="card-title" style="color:var(--teal)">Product Development &amp; Data</div>
+          <ul class="bullets">
+            <li>Reinsurer data aggregated from many cedants — particularly valuable for new product launches where the insurer has no own experience</li>
+            <li>Data adjustments needed before use: mix of business, UW level, product terms, claim conditions, geography, credibility, time period, inflation, currency etc.</li>
+            <li>Reinsurers drove CI insurance development in the 1980s using data from other markets weighted by local population data</li>
+            <li>Access to national and international databases — reinsurers typically will not release data on individual cedants but can provide aggregate "no-names" results</li>
+          </ul>
+        </div>
+        <div>
+          <div class="card-title" style="color:var(--teal)">Risk Management Support</div>
+          <ul class="bullets">
+            <li><strong>Underwriting manual:</strong> rules on acceptance; evidence requirements; exclusions; unusual risk loadings; referral procedures; medical section</li>
+            <li>Increasingly, reinsurers will audit the cedant's underwriting practice rather than accepting underwriting risk directly</li>
+            <li><strong>Claims control:</strong> training, initial assessment, monitoring experience — critical because health claims can recur, are hard to verify, and long-term policies are at fixed rates</li>
+            <li><strong>Policy wording &amp; product design:</strong> identify defects in wording leading to unintended claims</li>
+            <li><strong>IT software:</strong> automates proposal processing (up to 80% of cases); assists claims acceptance; supports reserving</li>
+            <li><strong>Overseas operations:</strong> local data, contacts, legal/regulatory guidance, translation of forms</li>
+          </ul>
+        </div>
+      </div>
+      <div class="highlight blue" style="margin-top:10px;">
+        <strong>Key exam point:</strong> When the insurer enters a new market / launches a new product, technical assistance is the primary reason for RI — not risk transfer. The reinsurer aligns its incentives by taking a risk share rather than charging a fee (so both parties want the product to succeed). In some markets, fees are rare.
+      </div>
+    </div>
+  </div>
+
+  <!-- Reason 5: Tax/Capital Arbitrage -->
+  <div class="collapsible">
+    <div class="coll-header" onclick="toggleColl(this)">
+      <span>5. Tax Arbitrage &amp; Capital (Regulatory) Arbitrage</span>
+      <span class="coll-arrow">▼</span>
+    </div>
+    <div class="coll-body">
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title" style="color:var(--amber)">Tax Arbitrage</div>
+          <ul class="bullets">
+            <li>Reinsurance should theoretically be self-balancing — what insurer pays out = what reinsurer receives</li>
+            <li>If <strong>basis of taxation differs</strong> for reinsurer vs cedant, it may be possible to improve the after-tax bottom line for both parties via a treaty</li>
+            <li>Example: if insurer is taxed on investment returns but reinsurer is taxed only on profits → passing income through the reinsurer reduces overall tax bill</li>
+            <li>Savings shared between both parties → insurer can price more competitively</li>
+            <li><strong>Risk:</strong> rules may change in the future, destroying the arbitrage</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="card-title" style="color:var(--amber)">Capital Arbitrage</div>
+          <ul class="bullets">
+            <li>Reinsurer may be required to hold <strong>less capital per unit of risk</strong> than the insurer under their respective regulatory regimes</li>
+            <li>Lower cost of capital in reinsurer's hands → savings can be shared with insurer via cheaper reinsurance premiums or higher commission</li>
+            <li>Makes both parties better off — win-win arrangement</li>
+            <li>Quota share is popular for both arbitrage types (though it also cedes profit, so the arbitrage must outweigh the profit ceded)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Reason 6 -->
+  <div class="collapsible">
+    <div class="coll-header" onclick="toggleColl(this)">
+      <span>6. Treaty as Regulatory Check / Premium Validation</span>
+      <span class="coll-arrow">▼</span>
+    </div>
+    <div class="coll-body">
+      <ul class="bullets">
+        <li>The terms on which the reinsurer accepts business provide a check on the insurer's premium rates</li>
+        <li>Reinsurer co-approves premium tables under quota share; retains the right to vary commission if insurer changes premium rates</li>
+        <li>For a new company, the presence of a reinsurance treaty may be a <strong>regulatory requirement</strong></li>
+        <li>Regulator can require additional reinsurance to limit exposure to adverse experience — protecting policyholders from insolvency risk; however, availability on acceptable terms cannot be guaranteed</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Difference of interests -->
+  <div class="card" style="border-color: var(--red); margin-top:6px;">
+    <div class="card-title" style="color:var(--red)">⚡ Difference of Interests (often examined)</div>
+    <div class="grid-2">
+      <div>
+        <div style="font-size:12px; color:var(--muted); margin-bottom:6px;">INSURER prefers:</div>
+        <ul class="bullets">
+          <li>Quantity of business</li>
+          <li>Quick claims settlement (bears small retention)</li>
+          <li>Volume growth</li>
+        </ul>
+      </div>
+      <div>
+        <div style="font-size:12px; color:var(--muted); margin-bottom:6px;">REINSURER prefers:</div>
+        <ul class="bullets">
+          <li>Quality of business</li>
+          <li>Careful claims consideration (bears large share)</li>
+          <li>Underwriting discipline</li>
+        </ul>
+      </div>
+    </div>
+    <div class="highlight red" style="margin-top:10px;">
+      Why does insurer handle large XL claims prudently even if 100% reinsured above excess? <strong>(1)</strong> Long-term reinsurer relationship; <strong>(2)</strong> profit commission at stake; <strong>(3)</strong> future premiums are experience-rated.
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- TAB 3: TYPES -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div id="tab-types" class="section">
+  <div class="sec-title"><span class="ico">🏗</span> Types of Reinsurance</div>
+
+  <!-- Treaty vs Fac -->
+  <div class="card">
+    <div class="card-title">Treaty vs Facultative</div>
+    <table class="cmp-table">
+      <tr><th></th><th>Facultative</th><th>Treaty (Ob/Ob)</th><th>Fac/Ob</th></tr>
+      <tr><td>Cedant obligation</td><td>Free to choose reinsurer</td><td>Must cede in-scope risks</td><td>Free to cede or retain</td></tr>
+      <tr><td>Reinsurer obligation</td><td>Free to accept/decline</td><td>Must accept in-scope risks</td><td>Must accept if offered</td></tr>
+      <tr><td>Use case</td><td>Atypical large individual risks outside treaty range</td><td>Standard portfolio — most common</td><td>Rare; gives cedant flexibility</td></tr>
+      <tr><td>Cost</td><td>Expensive (per-risk negotiation)</td><td>Cheaper (automated)</td><td>Moderate</td></tr>
+      <tr><td>Certainty</td><td>No guarantee of cover</td><td>Cover guaranteed within terms</td><td>Cover guaranteed if offered</td></tr>
+      <tr><td>Drawback</td><td>Time-consuming; may delay acceptance; damages market standing</td><td>Inflexible once set up</td><td>Reinsurer exposed to adverse selection</td></tr>
+    </table>
+  </div>
+
+  <!-- Proportional -->
+  <div class="card" style="border-color:var(--accent);">
+    <div class="card-title" style="color:var(--accent)">Proportional Reinsurance</div>
+    <div class="grid-2">
+      <div>
+        <div style="font-size:13px; font-weight:600; margin-bottom:8px; color:var(--teal)">Quota Share</div>
+        <ul class="bullets">
+          <li>Fixed R% of <em>every</em> risk in treaty ceded</li>
+          <li>Always treaty basis; short-term health = original terms only</li>
+          <li>Reinsurer receives R% premiums, pays R% claims</li>
+          <li>Reinsurance commission paid to cedant (covers initial expenses)</li>
+          <li><strong>Deposits back:</strong> reinsurer deposits its reserve share with cedant — cedant retains full investment income; mitigates default risk</li>
+          <li><strong>Profit commission:</strong> reinsurer repays share of profits if portfolio performs well</li>
+          <li><strong>Advantages:</strong> simple; reduces solvency capital; financing; reciprocal business; parameter risk reduction</li>
+          <li><strong>Disadvantage:</strong> inflexible — same % regardless of risk size; cedes profit on all policies including small risks</li>
+        </ul>
+      </div>
+      <div>
+        <div style="font-size:13px; font-weight:600; margin-bottom:8px; color:var(--teal)">Surplus Reinsurance</div>
+        <ul class="bullets">
+          <li>Cedant sets a <strong>monetary retention</strong> per risk</li>
+          <li>Cedes only the excess above retention → proportion varies by policy</li>
+          <li>Long-term only; fixed sum insured required at outset</li>
+          <li><strong>Not applicable:</strong> PMI (indemnity basis, claim unknown at outset); short-term health</li>
+          <li><strong>Example (retention £75k):</strong></li>
+          <li class="sub">Policy A SI=£150k → 50% ceded</li>
+          <li class="sub">Policy B SI=£100k → 25% ceded</li>
+          <li class="sub">Policy C SI=£50k → 0% ceded</li>
+          <li><strong>Advantage:</strong> efficiently targets large risks; doesn't cede profit on small risks</li>
+          <li><strong>Disadvantage:</strong> less effective for parameter risk; unsuitable for financing</li>
+        </ul>
+      </div>
+    </div>
+    <div style="margin-top:12px;">
+      <div style="font-size:13px; font-weight:600; margin-bottom:8px; color:var(--teal)">Original Terms vs Risk Premium Basis</div>
+      <table class="cmp-table">
+        <tr><th></th><th>Original Terms (Coinsurance)</th><th>Risk Premium</th></tr>
+        <tr><td>Premium basis</td><td>Same proportion of office premium as benefit share</td><td>Reinsurer independently sets own rate</td></tr>
+        <tr><td>Commission</td><td>Yes — reinsurer pays commission to cedant</td><td>No commission (reinsurer absorbs own expenses in rate)</td></tr>
+        <tr><td>Repricing impact</td><td>Reinsurer's rate changes with cedant's premium → may trigger right to vary commission</td><td>Cedant free to reprice without affecting RI rate</td></tr>
+        <tr><td>Risk sharing</td><td>Reinsurer shares all risks: morbidity, investment, lapse</td><td>Reinsurer shares morbidity risk only</td></tr>
+        <tr><td>Short-term health</td><td>✓ (only option)</td><td>✗</td></tr>
+        <tr><td>Rate types</td><td>n/a</td><td>Level (NLP) or yearly increasing; guaranteed or reviewable</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- Non-proportional -->
+  <div class="card" style="border-color:var(--accent2);">
+    <div class="card-title" style="color:var(--accent2)">Non-Proportional (Excess of Loss) Reinsurance</div>
+    <div class="grid-3">
+      <div>
+        <div style="font-size:12px; font-weight:700; color:var(--pink); margin-bottom:6px;">Risk XL</div>
+        <ul class="bullets">
+          <li>Operates on <strong>individual claims</strong></li>
+          <li>Reinsurer pays excess of each claim above retention up to upper limit</li>
+          <li>Layers must be contiguous — no gaps</li>
+          <li>Main use: PMI portfolios (large individual treatment costs)</li>
+          <li>Proportional co-participation within layer (e.g. 90%) to deter moral hazard</li>
+          <li>No RI commission; profit commission possible on lower layers</li>
+        </ul>
+      </div>
+      <div>
+        <div style="font-size:12px; font-weight:700; color:var(--pink); margin-bottom:6px;">Aggregate XL / Stop Loss</div>
+        <ul class="bullets">
+          <li>Covers <strong>total claims</strong> for the whole account over 12 months above excess point</li>
+          <li>Limits expressed as <strong>% of earned premiums</strong> — prevents insurer expanding volume to trigger fixed monetary limits</li>
+          <li>In H&amp;C: aggregate XL and stop loss are interchangeable (only one peril: morbidity)</li>
+          <li>Reinsurers reluctant: limited control over underwriting/claims; historically loss-making</li>
+          <li>Rarely used for individual long-term insurance</li>
+        </ul>
+      </div>
+      <div>
+        <div style="font-size:12px; font-weight:700; color:var(--pink); margin-bottom:6px;">Catastrophe XL</div>
+        <ul class="bullets">
+          <li>Triggered by <strong>single common event</strong> (epidemic, workplace explosion) exceeding retention on aggregate basis</li>
+          <li>Pandemic risk generally <strong>not available</strong> at affordable premiums — extreme uncertainty</li>
+          <li>If treaty defines pandemic as single occurrence → could attach; but definitions matter critically</li>
+          <li>Government backstop may be the only realistic solution for pandemic</li>
+        </ul>
+      </div>
+    </div>
+    <div class="highlight" style="margin-top:10px;">
+      <strong>Stability clause:</strong> Indexes XL retention and upper limit to inflation — preserves real value of cover over time. Cedant pays additional premium if retention not indexed. Important for PMI where medical cost inflation can be significant.
+    </div>
+    <div class="highlight red" style="margin-top:8px;">
+      <strong>Key Rule:</strong> Non-proportional reinsurance is generally <em>only appropriate</em> for short-term contracts (PMI) and possibly group long-term contracts. <em>Not</em> appropriate for individual long-term contracts with fixed sums insured (CI, IP) — because claim size is already capped at the sum insured, so XL is unlikely to attach.
+    </div>
+  </div>
+
+  <!-- Financial RI -->
+  <div class="card" style="border-color:var(--amber);">
+    <div class="card-title" style="color:var(--amber)">Financial Reinsurance (Fin Re)</div>
+    <div class="grid-2">
+      <div>
+        <div style="font-size:12px; color:var(--muted); margin-bottom:8px;">Structure 1: Risk Premium RI with Financing</div>
+        <ul class="bullets">
+          <li>RI commission acts as an upfront loan</li>
+          <li>Repaid via inflated future RI premiums over remaining policy term</li>
+          <li>Lapse risk factored into repayment schedule</li>
+        </ul>
+        <div style="font-size:12px; color:var(--muted); margin-top:10px; margin-bottom:8px;">Structure 2: Contingent Loan (Surplus Relief)</div>
+        <ul class="bullets">
+          <li>Reinsurer advances loan repayable only from future VIF profits</li>
+          <li>If VIF does not emerge, reinsurer has made a capital gift</li>
+          <li>May be off-balance-sheet under some regimes (not under Solvency II)</li>
+          <li>Contingent repayments &gt; non-contingent (priced for default risk)</li>
+        </ul>
+      </div>
+      <div>
+        <div style="font-size:12px; color:var(--muted); margin-bottom:8px;">Impact on EV and Solvency II</div>
+        <ul class="bullets">
+          <li>Realistic EV broadly <strong>unchanged</strong>: loan received ≈ PV of future repayments (which reduce future profit) → net effect ≈ zero</li>
+          <li>However, risk is <strong>reduced</strong>: uncertain VIF converted into certain cash</li>
+          <li>Under Solvency II: effectiveness much reduced — any funding offset by liability to repay in future</li>
+          <li>Only effective under regimes where: future profits not recognised as assets AND realistic liability not required for loan repayments</li>
+          <li>Assets restructuring: reduces inadmissible assets to improve solvency ratio</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- TAB 4: MECHANICS & NUMERICS -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div id="tab-mechanics" class="section">
+  <div class="sec-title"><span class="ico">🔢</span> Mechanics &amp; Numeric Examples</div>
+
+  <!-- QS Calculation -->
+  <div class="card">
+    <div class="card-title">Quota Share — Numeric Mechanics</div>
+    <div class="num-box">
+      <div class="num-title">EXAMPLE: 50% Original Terms QS — Premium Split</div>
+      <div>Gross office premium: £10,000</div>
+      <div>Cedant retains: 50% × £10,000 = <span class="calc">£5,000</span></div>
+      <div>Reinsurer receives: 50% × £10,000 = <span class="calc">£5,000</span></div>
+      <div> </div>
+      <div>Cedant pays intermediary commission: 15% × £10,000 = <span class="calc">£1,500</span></div>
+      <div>Cedant receives RI commission: 20% × £5,000 = <span class="calc">£1,000</span></div>
+      <div>Net to cedant: £5,000 − £1,500 + £1,000 = <span class="calc">£4,500</span></div>
+      <div>Net to reinsurer: £5,000 − £1,000 = <span class="calc">£4,000</span></div>
+      <div> </div>
+      <div>Claim of £50,000 occurs:</div>
+      <div>Reinsurer pays: 50% × £50,000 = <span class="calc">£25,000</span></div>
+      <div>Cedant net claim cost: £50,000 − £25,000 = <span class="calc">£25,000</span></div>
+    </div>
+
+    <div class="num-box" style="margin-top:10px;">
+      <div class="num-title">EXAMPLE: Surplus RI — Varying Proportions (Retention £75,000)</div>
+      <div>Policy A: SI = £150,000 → Excess = £75,000 → <span class="calc">50% ceded</span></div>
+      <div>Policy B: SI = £100,000 → Excess = £25,000 → <span class="calc">25% ceded</span></div>
+      <div>Policy C: SI = £50,000 → Below retention → <span class="calc">0% ceded</span></div>
+      <div class="note">// Each policy has a different cession %. Reinsurer sees only large-risk exposure.</div>
+    </div>
+  </div>
+
+  <!-- XL Layer Calculation -->
+  <div class="card">
+    <div class="card-title">XL Layers — Gap Detection &amp; Recovery Calculation <span class="tag tag-iai" style="margin-left:8px;">SP1 Revision Notes</span></div>
+    <div class="num-box">
+      <div class="num-title">PROGRAMME: 3 XL Layers (with gap)</div>
+      <div>Layer 1: £140,000 xs £60,000   → covers: £60k–£200k</div>
+      <div>Layer 2: £300,000 xs £200,000  → covers: £200k–£500k</div>
+      <div class="note">// GAP: £500k–£700k unprotected ← cedant fully exposed here</div>
+      <div>Layer 3: £2,000,000 xs £700,000 → covers: £700k–£2.7m</div>
+      <div> </div>
+      <div class="calc">Recoveries for various claim sizes:</div>
+      <div>(a) £50,000   → Below L1 retention → Recovery: <span class="calc">£0</span></div>
+      <div>(b) £80,000   → L1: £80k−£60k = £20k → Recovery: <span class="calc">£20,000</span></div>
+      <div>(c) £280,000  → L1 full=£140k; L2: £280k−£200k=£80k → Recovery: <span class="calc">£220,000</span></div>
+      <div>(d) £680,000  → L1=£140k; L2=£300k; Gap applies → Recovery: <span class="calc">£440,000</span> (cedant bears £240k in gap)</div>
+      <div>(e) £2,400,000→ L1=£140k; L2=£300k; L3: £2,400k−£700k=£1,700k → Recovery: <span class="calc">£2,140,000</span></div>
+      <div>(f) £4,000,000→ L1=£140k; L2=£300k; L3 full=£2,000k → Recovery: <span class="calc">£2,440,000</span> (cedant bears £1.56m above)</div>
+    </div>
+  </div>
+
+  <!-- Stop Loss Calculation -->
+  <div class="card">
+    <div class="card-title">Stop-Loss — Calculation <span class="tag tag-ifoa" style="margin-left:8px;">SP1 Revision Notes</span></div>
+    <div class="num-box">
+      <div class="num-title">EXAMPLE: Stop Loss with Co-participation</div>
+      <div>Earned premiums: £292m</div>
+      <div>Incurred claims: £333m</div>
+      <div>Stop loss: Lower limit 105% | Upper limit 125% | Reinsurer covers 80%</div>
+      <div> </div>
+      <div>Claims ratio = £333m / £292m = <span class="calc">114%</span> ← within layer (105%–125%)</div>
+      <div>Lower limit £ = 105% × £292m = <span class="calc">£306.6m</span></div>
+      <div>Upper limit £ = 125% × £292m = <span class="calc">£365m</span></div>
+      <div>Claims within layer = £333m − £306.6m = <span class="calc">£26.4m</span></div>
+      <div>Reinsurance recovery = 80% × £26.4m = <span class="calc">£21.12m</span></div>
+      <div>Cedant co-participation = 20% × £26.4m = <span class="calc">£5.28m</span></div>
+    </div>
+    <div class="highlight" style="margin-top:10px;">
+      <strong>Why % of earned premiums?</strong> Fixed monetary limits allow insurer to expand volume to trigger the cover. Expressing as % of earned premiums keeps the attachment proportional to business written — reinsurer cannot be exploited by volume growth.
+    </div>
+  </div>
+
+  <!-- IAI 1222 Stop-Loss Ranking -->
+  <div class="card">
+    <div class="card-title">IAI 1222 — Stop-Loss Premium Ranking Logic <span class="tag tag-iai">18 marks</span></div>
+    <div class="highlight blue">
+      <strong>Products:</strong> Individual IP (mean=85cr, SD=25cr) | Group CI (mean=75cr, SD=30cr) | LTCI (mean=90cr, SD=5cr) | PMI (mean=75cr, SD=30cr)
+    </div>
+    <table class="cmp-table" style="margin-top:10px;">
+      <tr><th>Treaty Structure</th><th>Key Logic</th><th>Ranking (highest → lowest premium)</th></tr>
+      <tr>
+        <td>XS 70cr</td>
+        <td>LTCI: 70cr is well below mean of 90cr (50%+ chance of recovery). IP/CI: 70cr ≈ 0.2 SD below mean. PMI: 0.33 SD below mean. But for large recoveries, high SD products (IP/CI/PMI) win over stable LTCI.</td>
+        <td>LTCI highest premium (highest probability of any recovery); then IP ≈ CI ≈ PMI for large recoveries</td>
+      </tr>
+      <tr>
+        <td>XS 100cr</td>
+        <td>PMI: 100cr is 1.67 SD above mean → greatest recovery probability. CI: 0.83 SD above. IP: 0.6 SD above. LTCI: 2 SD above (very unlikely).</td>
+        <td>PMI &gt; CI &gt; IP &gt; LTCI</td>
+      </tr>
+      <tr>
+        <td>XS 90cr capped 25cr</td>
+        <td>PMI most likely to breach upper limit (high SD relative to layer). Same order as XS 100cr.</td>
+        <td>PMI &gt; CI &gt; IP &gt; LTCI</td>
+      </tr>
+    </table>
+    <div class="highlight red" style="margin-top:10px;">
+      <strong>Burning cost limitation (IAI 1222 examiners):</strong> Burning cost of CI always appears larger than IP (consistent with large individual claims). However, burning cost for IP and LTCI at high attachment points = zero (no historical exceedances) — implying zero premium, which is inappropriate since there is still some probability of future recovery. Neither burning cost alone nor analytical approach alone is sufficient.
+    </div>
+  </div>
+
+  <!-- QA: Mechanics -->
+  <div class="card">
+    <div class="card-title">Practice Q&amp;A — Mechanics</div>
+    <div class="qa-block">
+      <div class="qa-q" onclick="toggleQA(this)"><span class="qa-arrow">▶</span><span class="qa-qtext">Why would an insurer reinsure only the <em>sum at risk</em> rather than the full sum insured on a long-term contract?</span></div>
+      <div class="qa-a"><ul><li>At any point, the insurer already holds assets = the statutory reserve for the policy</li><li>If a claim occurs, the insurer only needs additional funds for the excess of sum insured over the reserve — the sum at risk</li><li>Reinsuring the full sum insured means paying premiums on the reserve-backed portion for no useful risk protection</li><li>Since reinsurance carries a net cost (RI premiums &gt; expected recoveries), reinsuring the reserve portion wastes profit</li></ul></div>
+    </div>
+    <div class="qa-block">
+      <div class="qa-q" onclick="toggleQA(this)"><span class="qa-arrow">▶</span><span class="qa-qtext">Why are stop loss limits expressed as % of earned premiums rather than absolute monetary amounts?</span></div>
+      <div class="qa-a"><ul><li>If limits were fixed in £, the insurer could write substantially more business to increase the likelihood of triggering the stop loss without the reinsurer having been paid an appropriate additional premium</li><li>Expressing as % ensures both the attachment point and upper limit rise proportionally with business volume</li><li>Keeps the cedant's co-participation proportionate and maintains appropriate reinsurance pricing</li></ul></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- TAB 5: RETENTION LEVEL -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div id="tab-retention" class="section">
+  <div class="sec-title"><span class="ico">⚖️</span> Determining the Retention Level</div>
+
+  <div class="card">
+    <div class="card-title">Two Approaches to Setting Retention</div>
+    <div class="grid-2">
+      <div>
+        <div style="font-size:13px; font-weight:600; color:var(--teal); margin-bottom:8px;">1. Ruin Probability Method</div>
+        <ul class="bullets">
+          <li>Use stochastic model to simulate portfolio claims across many scenarios</li>
+          <li>Set retention at the level that keeps <strong>probability of insolvency</strong> below a specified threshold (e.g. 1 in 200)</li>
+          <li>For <strong>long-term fixed-benefit</strong> (IP, CI): model claim incidence stochastically</li>
+          <li>For <strong>short-term indemnity</strong> (PMI): model both incidence AND claim amounts stochastically</li>
+        </ul>
+      </div>
+      <div>
+        <div style="font-size:13px; font-weight:600; color:var(--teal); margin-bottom:8px;">2. Cost Minimisation Method</div>
+        <ul class="bullets">
+          <li>As retention rises → cost of RI falls but insurer must hold a larger internal <strong>fluctuation reserve</strong></li>
+          <li>As retention falls → RI cost rises (more external cover) but fluctuation reserve shrinks</li>
+          <li>Set retention at level that <strong>minimises total cost</strong> = cost of fluctuation reserve + cost of RI premiums</li>
+          <li>Practical tool for balancing internal capital vs external risk transfer</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Factors Driving Lower Retention (More RI)</div>
+    <div class="grid-2">
+      <div>
+        <div style="font-size:12px; color:var(--muted); margin-bottom:6px;">INCREASES REINSURANCE (lower retention):</div>
+        <ul class="bullets">
+          <li>Greater uncertainty about future claims experience</li>
+          <li>Lower acceptable insolvency probability (more conservative risk tolerance)</li>
+          <li>Higher variance in claim amounts (indemnity products)</li>
+          <li>Lower free assets (less internal capital buffer)</li>
+          <li>Newer insurer / new product / new territory</li>
+          <li>Higher writing capacity sought (want to write more volume)</li>
+          <li>Regulatory requirement (new company)</li>
+        </ul>
+      </div>
+      <div>
+        <div style="font-size:12px; color:var(--muted); margin-bottom:6px;">DECREASES REINSURANCE (higher retention):</div>
+        <ul class="bullets">
+          <li>Large, well-capitalised insurer with substantial free assets</li>
+          <li>Large diversified portfolio (more credible claims experience)</li>
+          <li>Long, established track record — confident in pricing assumptions</li>
+          <li>RI becomes expensive / poor value (rates cycle up)</li>
+          <li>Insurer wants to retain more profit (concern about ceding profit)</li>
+          <li>Fixed-benefit products (CI/IP) — large insurers may dispense with XL entirely</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">IAI 0619 — CFO Proposes Reducing RI Substantially <span class="tag tag-iai">8 marks</span></div>
+    <div class="highlight">
+      <strong>CFO concern:</strong> Net claim ratio rising faster than gross → reinsurer appears to be profiting at insurer's expense. CFO wants to recapture this profit by reducing RI.
+    </div>
+    <div class="highlight green" style="margin-top:8px;">
+      <strong>Reply points (examiner):</strong>
+      <ul style="list-style:none; margin-top:8px;">
+        <li style="padding:3px 0 3px 14px; position:relative;"><span style="position:absolute;left:0;color:var(--green);">✓</span> RI premium is paid annually in advance; recoveries received over next year — timing mismatch creates apparent imbalance</li>
+        <li style="padding:3px 0 3px 14px; position:relative;"><span style="position:absolute;left:0;color:var(--green);">✓</span> If RI is making profit, it is on expected value basis in the long run — in any individual year, results will vary</li>
+        <li style="padding:3px 0 3px 14px; position:relative;"><span style="position:absolute;left:0;color:var(--green);">✓</span> Major reason for RI is to <strong>reduce variance</strong> and protect company from short-term fluctuations — not purely to make a profit on RI account</li>
+        <li style="padding:3px 0 3px 14px; position:relative;"><span style="position:absolute;left:0;color:var(--green);">✓</span> Lower retention → lower variance → lower capital needs; higher retention → need more capital buffer</li>
+        <li style="padding:3px 0 3px 14px; position:relative;"><span style="position:absolute;left:0;color:var(--green);">✓</span> Conduct a study to find optimal RI level aligned with company's risk appetite and capital position</li>
+        <li style="padding:3px 0 3px 14px; position:relative;"><span style="position:absolute;left:0;color:var(--green);">✓</span> Being a new company, may be technically dependent on RI; existing treaty contracts may restrict ability to reduce</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">IAI 0916 — Recapture Decision <span class="tag tag-iai">4+5 marks</span></div>
+    <ul class="bullets">
+      <li>Recapturing business from reinsurer → insurer retains its share of RI profits going forward</li>
+      <li>Reinsurer will charge a <strong>recapture fee</strong> — must be validated against value of future RI profits being released</li>
+      <li>Validate fee: compare recapture fee to actuarial estimate of PV of future reinsurance profits (VIF of RI book); if fee &gt; VIF of RI profits, recapture is not value-accretive</li>
+      <li>Also consider: impact on capital requirements post-recapture (RI was providing solvency relief); available free assets must be sufficient to cover higher net retention</li>
+      <li>Treaty may have restrictions on recapture timing and conditions</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- TAB 6: FINANCIAL IMPACT -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div id="tab-impact" class="section">
+  <div class="sec-title"><span class="ico">📈</span> Financial Impact of Reinsurance</div>
+
+  <!-- Reinsurance credit -->
+  <div class="card">
+    <div class="card-title">Reinsurance Credit in Valuation <span class="tag tag-iai" style="margin-left:8px;">IAI 0523 — 12+3+5 marks</span></div>
+    <div class="grid-2">
+      <div>
+        <div style="font-size:12px; color:var(--muted); margin-bottom:8px;">SINGLE CI POLICY — Expected Pattern Over Term</div>
+        <ul class="bullets">
+          <li><strong>Gross reserve:</strong> Increases in first half (initial expenses + prudence margin; premium &lt; cost of cover in later years). Reduces gradually to zero at expiry — same U-shaped pattern as a level premium endowment.</li>
+          <li><strong>Reinsurance credit:</strong> = discounted PV of future expected excess of RI recovery over RI premium for remaining term. Starts highest in Year 1 (longest remaining term); <strong>reduces monotonically to zero at policy expiry</strong>.</li>
+          <li><strong>Net reserve</strong> (= Gross − RI credit): follows same broad shape as gross reserve but lower throughout.</li>
+        </ul>
+      </div>
+      <div>
+        <div style="font-size:12px; color:var(--muted); margin-bottom:8px;">AGGREGATE CI BOOK — Year-on-Year Stability (0523 Q1iiib)</div>
+        <ul class="bullets">
+          <li>If similar volume written for 12+ years → mix of policy durations is broadly stable</li>
+          <li>Aggregate gross reserve, RI credit and net reserve all expected to be <strong>similar to prior year</strong></li>
+          <li>The "steady state" effect — new business entering the book replaces matured/lapsed policies</li>
+        </ul>
+        <div style="font-size:12px; color:var(--muted); margin-top:12px; margin-bottom:8px;">IMPACT OF RI ARRANGEMENT ON RESERVES / EV / INVESTMENT INCOME (0523 Q1ivb)</div>
+        <ul class="bullets">
+          <li><strong>Reserves:</strong> reduced — prudence margin on 50% of benefit is lost (if RI premium = BE mortality assumption)</li>
+          <li><strong>EV (traditional method):</strong> improves (reduced reserves + reduced capital requirement)</li>
+          <li><strong>EV (market-consistent):</strong> no material impact (RI priced at BE → no economic gain)</li>
+          <li><strong>Investment income:</strong> slightly reduced — RI premiums paid in advance, recoveries received in arrear → cash-flow timing disadvantage</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Impact comparison -->
+  <div class="card">
+    <div class="card-title">Overall Financial Impact — Pricing and Profitability</div>
+    <ul class="bullets">
+      <li><strong>Net cost:</strong> RI premiums generally exceed expected RI benefits — reinsurer must cover own expenses and profit. Net cost must be included in pricing model.</li>
+      <li><strong>Exception — arbitrage:</strong> where tax or capital arbitrage exists, pricing net of RI can improve competitiveness (net premium lower than gross).</li>
+      <li><strong>Office premium build-up includes:</strong> risk premium + expense loading + profit margin + cost of capital + cost of reserves + reinsurance cost/recoveries + margins + investment return credit + persistency adjustment + tax</li>
+      <li><strong>Liquidity:</strong> RI can reduce liquidity requirement; but gross claims may need to be paid before RI recoveries are received — creates tension with matching strategy</li>
+      <li><strong>New business strain:</strong> RI commission (quota share, original terms) offsets initial NB strain — allows higher volumes to be written with the same capital</li>
+    </ul>
+    <div class="highlight green" style="margin-top:10px;">
+      <strong>IAI 1120 — XL → QS switch assessment (5 marks):</strong> "QS is preferable when company is looking for: solvency capital relief; technical support from reinsurer; expanding to new geographies/risks; writing more business without increasing capital base. A high level of QS would imply the company playing more of a fronting role. There may be regulatory limits on % reinsured. XL is preferable when: company is more experienced and confident taking risk; concerned about passing too much profit to reinsurer under QS."
+    </div>
+  </div>
+
+  <!-- Indemnity vs Assumption -->
+  <div class="card">
+    <div class="card-title">Portfolio Transfer: Indemnity vs Assumption Reinsurance <span class="tag tag-ifoa">IFoA 0922</span></div>
+    <table class="cmp-table">
+      <tr><th></th><th>Indemnity Reinsurance</th><th>Assumption Reinsurance</th></tr>
+      <tr><td>Mechanism</td><td>Original insurer reinsures liabilities with acquiring insurer; remains legally liable to policyholders</td><td>Policies novated to acquiring insurer; acquiring insurer becomes new insurer of record</td></tr>
+      <tr><td>Policyholder notice</td><td>Generally not required</td><td>Notification required; typically policyholder consent also required</td></tr>
+      <tr><td>Speed</td><td>Faster — no policyholder communication</td><td>Slower — subject to policyholder objections</td></tr>
+      <tr><td>Regulatory</td><td>Approval required but familiar method = often faster</td><td>Approval required; more complex process</td></tr>
+      <tr><td>Asset transfer</td><td>Not required</td><td>May require asset transfer (added complexity if non-cash assets)</td></tr>
+      <tr><td>Best for</td><td>Time-constrained transfers (time-critical: use indemnity)</td><td>Where policyholder transparency is priority</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- TAB 7: BY PRODUCT -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div id="tab-products" class="section">
+  <div class="sec-title"><span class="ico">💊</span> Reinsurance by Product Type</div>
+
+  <div class="card">
+    <div class="card-title">Product–Reinsurance Type Matrix</div>
+    <table class="prod-table">
+      <tr>
+        <th>Product</th>
+        <th>Quota Share</th>
+        <th>Surplus</th>
+        <th>Risk XL</th>
+        <th>Agg XL / Stop Loss</th>
+        <th>Cat XL</th>
+        <th>Fin Re</th>
+      </tr>
+      <tr>
+        <td>IP (Individual)</td>
+        <td class="dot-yes">●</td>
+        <td class="dot-yes">●</td>
+        <td class="dot-no">○</td>
+        <td class="dot-maybe">◑</td>
+        <td class="dot-no">○</td>
+        <td class="dot-yes">●</td>
+      </tr>
+      <tr>
+        <td>CI (Individual)</td>
+        <td class="dot-yes">●</td>
+        <td class="dot-yes">●</td>
+        <td class="dot-no">○</td>
+        <td class="dot-no">○</td>
+        <td class="dot-no">○</td>
+        <td class="dot-yes">●</td>
+      </tr>
+      <tr>
+        <td>LTCI</td>
+        <td class="dot-yes">●</td>
+        <td class="dot-yes">●</td>
+        <td class="dot-no">○</td>
+        <td class="dot-no">○</td>
+        <td class="dot-no">○</td>
+        <td class="dot-yes">●</td>
+      </tr>
+      <tr>
+        <td>PMI (Individual)</td>
+        <td class="dot-yes">●</td>
+        <td class="dot-no">○</td>
+        <td class="dot-yes">●</td>
+        <td class="dot-maybe">◑</td>
+        <td class="dot-no">○</td>
+        <td class="dot-no">○</td>
+      </tr>
+      <tr>
+        <td>Group IP / CI</td>
+        <td class="dot-yes">●</td>
+        <td class="dot-yes">●</td>
+        <td class="dot-maybe">◑</td>
+        <td class="dot-maybe">◑</td>
+        <td class="dot-yes">●</td>
+        <td class="dot-no">○</td>
+      </tr>
+      <tr>
+        <td>Group PMI (OP cover)</td>
+        <td class="dot-yes">●</td>
+        <td class="dot-no">○</td>
+        <td class="dot-maybe">◑</td>
+        <td class="dot-yes">●</td>
+        <td class="dot-no">○</td>
+        <td class="dot-no">○</td>
+      </tr>
+    </table>
+    <div style="font-size:11px; color:var(--muted); margin-top:8px;">● = Primary; ◑ = Possible/Secondary; ○ = Generally not applicable</div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title" style="color:var(--teal)">IP / CI — Reinsurance Logic</div>
+      <ul class="bullets">
+        <li>Long-term; fixed sums insured → proportional RI preferred</li>
+        <li>Surplus: cedes only excess above retention → efficiently targets large sums insured (key person IP, large CI)</li>
+        <li>Quota share: for new products/territories; parameter risk reduction; NB strain financing</li>
+        <li>XL <strong>not appropriate</strong> for individual long-term CI/IP — claim size capped at sum insured (XL unlikely to attach)</li>
+        <li>Group IP: quota share (original terms) simplest; proportion may reduce over time; catastrophe XL if concerned about simultaneous claims from same employer</li>
+      </ul>
+      <div class="highlight" style="margin-top:8px;">
+        <strong>IAI 0524:</strong> "Insurer likely to arrange quota-share RI, probably on original terms, in order to build up experience in the first few years without taking too large a risk."
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title" style="color:var(--teal)">PMI / OP Cover — Reinsurance Logic</div>
+      <ul class="bullets">
+        <li>Short-term indemnity; claim amount unknown at outset → non-proportional RI applicable</li>
+        <li>Risk XL: caps individual large treatment costs (e.g. cancer, complex surgery)</li>
+        <li>Stability clause critical — medical cost inflation can erode real value of XL limits</li>
+        <li>Stop loss: rarely used but applicable for group/aggregate protection</li>
+        <li><strong>OP cover (IAI 0722):</strong> high frequency / low severity → catastrophe XL less relevant. Quota share more appropriate — provides capacity, technical assistance, solvency relief. XL less relevant as claims are smaller but more numerous.</li>
+        <li>Proportional co-participation (e.g. 90% reinsured) in XL layers to maintain cedant claims management incentive</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">IAI 0921 — Assess 5 RI Types for Pandemic Risk <span class="tag tag-iai">15 marks (3 each)</span></div>
+    <table class="cmp-table">
+      <tr><th>RI Type</th><th>Suitability for Catastrophic Pandemic Risk</th><th>Verdict</th></tr>
+      <tr>
+        <td>Quota Share</td>
+        <td>Cedes x% of all claims — insurer still exposed to (1-x)% of the catastrophe. Helps with solvency capital and technical support. Does not address the fundamental concern.</td>
+        <td style="color:var(--red)">Not appropriate</td>
+      </tr>
+      <tr>
+        <td>Individual Surplus</td>
+        <td>Manages large individual fixed-sum claims. Pandemic risk materialises as high frequency, not high individual face amounts. Still exposed to frequency risk.</td>
+        <td style="color:var(--red)">Not appropriate</td>
+      </tr>
+      <tr>
+        <td>Per-person XL</td>
+        <td>Cumulates claims on same person per year above attachment point. Pandemic = high frequency of moderate claims, not large per-person costs. Low attachment = quasi quota share (reinsurer reluctant).</td>
+        <td style="color:var(--amber)">Partially appropriate</td>
+      </tr>
+      <tr>
+        <td>Per-occurrence XL</td>
+        <td>Depends critically on treaty wording. If pandemic = single occurrence → appropriate. If occurrence = one claim episode → does not address frequency risk. Generally lower cost than aggregate XL.</td>
+        <td style="color:var(--amber)">Conditionally appropriate</td>
+      </tr>
+      <tr>
+        <td>Aggregate XL</td>
+        <td>Covers total claims above threshold over 12 months — directly addresses the frequency/accumulation risk of a pandemic. More expensive; availability limited; cedant co-participation likely required.</td>
+        <td style="color:var(--green)">Most appropriate</td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- TAB 8: CONTEXTUAL Q&As -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div id="tab-contexts" class="section">
+  <div class="sec-title"><span class="ico">🌐</span> Contextual Q&amp;As — Key Exam Scenarios</div>
+
+  <!-- New market / product entry -->
+  <div class="card">
+    <div class="card-title">New Market / New Product Entry</div>
+    <div class="qa-block">
+      <div class="qa-q" onclick="toggleQA(this)"><span class="qa-arrow">▶</span><span class="qa-qtext">[IAI 0524 pattern] An insurer is launching a new product (e.g. Impaired Life Annuity / Group IP). Discuss reinsurance considerations.</span><span class="tag tag-iai" style="margin-left:8px;">~4–5 marks per product</span></div>
+      <div class="qa-a"><ul>
+        <li>RI will protect against claim volatility, which will be uncertain for a new product with small initial volumes</li>
+        <li>Technical assistance: data for pricing, underwriting criteria, product design input — critical when insurer lacks own experience</li>
+        <li>Reduces risk → reduces capital requirements (solvency capital relief)</li>
+        <li>Insurer likely to arrange quota share, probably on original terms, to build experience without taking too large a risk</li>
+        <li>The proportion ceded might reduce over time as experience develops and confidence grows</li>
+        <li>For group IP: may consider catastrophe XL if concerned about multiple simultaneous claims from same employer</li>
+        <li>Check availability of RI for the target product in the new territory — not always guaranteed</li>
+      </ul></div>
+    </div>
+    <div class="qa-block">
+      <div class="qa-q" onclick="toggleQA(this)"><span class="qa-arrow">▶</span><span class="qa-qtext">What data adjustments are needed before using reinsurer data for pricing?</span></div>
+      <div class="qa-a"><ul>
+        <li>Mix of business (product type, customer profile)</li>
+        <li>Level of underwriting applied</li>
+        <li>Product terms and conditions (options, features)</li>
+        <li>Claim conditions and control processes</li>
+        <li>Geography / jurisdiction</li>
+        <li>Credibility and time period of the data</li>
+        <li>Effects of medical advances and technology changes</li>
+        <li>Policy sizes and target market</li>
+        <li>Sales channel / distribution processes</li>
+        <li>Reinsurance arrangements of the contributing cedants</li>
+        <li>Competitiveness of the market from which data is drawn</li>
+        <li>Effects of inflation (on sums insured and claim amounts)</li>
+        <li>Trends in mortality / morbidity</li>
+        <li>Currency differences</li>
+      </ul></div>
+    </div>
+  </div>
+
+  <!-- Solvency / capital problems -->
+  <div class="card">
+    <div class="card-title">Solvency &amp; Capital Problems</div>
+    <div class="qa-block">
+      <div class="qa-q" onclick="toggleQA(this)"><span class="qa-arrow">▶</span><span class="qa-qtext">[IAI 0322] Discuss the suitability of financial reinsurance as a solution to a SAHI's borderline solvency problem.</span><span class="tag tag-iai" style="margin-left:8px;">7 marks</span></div>
+      <div class="qa-a"><ul>
+        <li>Suitability depends on the nature of the solvency problem — what specifically is driving the low solvency</li>
+        <li>Also depends on: whether the solution is acceptable to the regulator; cost vs benefit of the arrangement</li>
+        <li>Different FinRe structures:</li>
+        <li>→ Lump sum fund + profit participation: creates assets immediately; works when insurer has predictable future surpluses from RI business</li>
+        <li>→ VIF monetisation: requires large blocks of profitable long-term insurance business — less applicable to a SAHI with mainly short-term PMI</li>
+        <li>→ Commission financing: reduces NB strain — works for long-term products with large initial acquisition costs</li>
+        <li>→ Asset restructuring: reduces inadmissible assets to improve regulatory solvency ratio</li>
+        <li>Overall: for a medium-sized SAHI primarily writing short-term business, FinRe solutions are less likely to help materially</li>
+        <li>Effectiveness also much reduced under Solvency II / realistic reporting regimes</li>
+      </ul></div>
+    </div>
+  </div>
+
+  <!-- Underwriting / photo-based -->
+  <div class="card">
+    <div class="card-title">Underwriting Innovation &amp; RI Implications</div>
+    <div class="qa-block">
+      <div class="qa-q" onclick="toggleQA(this)"><span class="qa-arrow">▶</span><span class="qa-qtext">[IFoA 0422] What are the reinsurance-specific risks of photo-based underwriting?</span><span class="tag tag-ifoa">~2 marks</span></div>
+      <div class="qa-a"><ul>
+        <li>Reinsurer reluctance to accept business underwritten using photo-based tools — may require higher margins to price the additional uncertainty</li>
+        <li>Algorithmic bias risks may also concern reinsurers from a regulatory / reputational standpoint</li>
+        <li>Vendor dependency risk (if photo AI company ceases trading) could undermine underwriting integrity, which reinsurer relies on</li>
+      </ul></div>
+    </div>
+    <div class="qa-block">
+      <div class="qa-q" onclick="toggleQA(this)"><span class="qa-arrow">▶</span><span class="qa-qtext">[IFoA 0924] How could reinsurers assist when adding mental health conditions to a CI product?</span><span class="tag tag-ifoa">~3 marks</span></div>
+      <div class="qa-a"><ul>
+        <li>Assist with defining eligible mental health conditions (condition definitions)</li>
+        <li>Provide underwriting criteria and exclusions for mental health history</li>
+        <li>Supply pricing data from other markets where mental health CI is already offered</li>
+        <li>Confirm availability and cost of reinsurance for the mental health-inclusive product (availability not guaranteed)</li>
+      </ul></div>
+    </div>
+  </div>
+
+  <!-- Claim ratio deterioration -->
+  <div class="card">
+    <div class="card-title">Deteriorating Claims Experience — RI Actions</div>
+    <div class="qa-block">
+      <div class="qa-q" onclick="toggleQA(this)"><span class="qa-arrow">▶</span><span class="qa-qtext">What reinsurance actions can an insurer take when IP / PMI claims experience deteriorates?</span></div>
+      <div class="qa-a"><ul>
+        <li>Seek reinsurer advice on claims management improvements and underwriting tightening</li>
+        <li>Review and potentially change reinsurance programme — e.g. add aggregate XL / stop loss if not already in place</li>
+        <li>Consider reducing retention level to transfer more risk to reinsurer</li>
+        <li>Engage reinsurer as technical support for product redesign (stricter claim definitions, deferred periods, benefit caps)</li>
+        <li>Check whether reinsurance recoverability is being maximised for in-payment claims</li>
+        <li>Review reinsurance treaty terms — ensure RI commission thresholds trigger appropriately on unfavourable experience</li>
+        <li>Regulator may require additional RI as condition of continued operation (IFoA 0922)</li>
+      </ul></div>
+    </div>
+  </div>
+
+  <!-- Inflation -->
+  <div class="card">
+    <div class="card-title">High Inflation Context &amp; Reinsurance <span class="tag tag-ifoa">IFoA 0924 / IAI 0924</span></div>
+    <div class="qa-block">
+      <div class="qa-q" onclick="toggleQA(this)"><span class="qa-arrow">▶</span><span class="qa-qtext">How does a high-inflation environment affect reinsurance considerations?</span></div>
+      <div class="qa-a"><ul>
+        <li><strong>Counterparty risk:</strong> reinsurers may be downgraded as their own claim costs inflate — cedant should monitor reinsurer financial strength more actively</li>
+        <li><strong>XL limits:</strong> need to review stability clauses — if limits are not indexed, real value of cover erodes and XL is less likely to attach for the same severity of loss</li>
+        <li><strong>RI premium levels:</strong> reinsurers will reprice at renewal to reflect higher claims costs — RI becomes more expensive, and cost must be reflected in office premium build-up</li>
+        <li><strong>Outsourced services:</strong> third-party administrators may also face cost pressures, affecting quality — this has indirect RI implications if it affects claims data quality</li>
+        <li><strong>Office premium build-up:</strong> multiple components shift simultaneously — including RI cost — so full review needed before repricing</li>
+      </ul></div>
+    </div>
+  </div>
+
+  <!-- Overseas PMI -->
+  <div class="card">
+    <div class="card-title">Overseas PMI — RI Data Sources &amp; Mitigants <span class="tag tag-iai">IAI 0523</span></div>
+    <ul class="bullets">
+      <li><strong>Data sources:</strong> national health statistics; local regulator publications; hospital expense data; competitor pricing data; reinsurer multi-national databases; own domestic morbidity data (adjusted for local conditions)</li>
+      <li><strong>Risk mitigants:</strong> compulsory scheme membership (reduces anti-selection); reinsurance / coinsurance (risk transfer + technical assistance); strong PED exclusions; full individual underwriting for high-risk classes; clear terms and conditions; strong claims controls</li>
+      <li><strong>Solvency impact:</strong> entering new overseas market → short-term deterioration (start-up costs, NB strain, capital requirements); long-term improvement if profitable. Capital raising or quota-share RI can manage the transition.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- TAB 9: BADGING -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div id="tab-badging" class="section">
+  <div class="sec-title"><span class="ico">🏷</span> Badging — Alternative to Reinsurance</div>
+
+  <div class="card" style="border-color:var(--pink);">
+    <div class="card-title" style="color:var(--pink)">What is Badging?</div>
+    <ul class="bullets">
+      <li>Arrangement where insurer provides policy under its <strong>own brand name</strong>, but a <strong>specialist health insurer</strong> actually issues the policy and undertakes all administration, claims processing and payments</li>
+      <li><strong>Key distinction from reinsurance:</strong> under badging, <em>all risk is taken on by the specialist insurer</em> from the outset; under reinsurance, the issuing company takes on the risk first and then (partly or totally) passes it on to the reinsurer</li>
+    </ul>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title" style="color:var(--green)">Advantages of Badging</div>
+      <ul class="bullets">
+        <li>Non-specialist insurer ("Popular Insurance") gains access to health expertise without taking insurance risk</li>
+        <li>Specialist insurer ("Healthwise") gains access to large customer base / brand distribution</li>
+        <li>Both parties benefit — profit-sharing arrangement on retrospective basis</li>
+        <li>Reduces insurance risk similarly to reinsurance → lower capital requirement for the branding insurer</li>
+        <li>No need to build internal health and care infrastructure</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-title" style="color:var(--red)">Risks of Badging</div>
+      <ul class="bullets">
+        <li><strong>Reputational risk:</strong> poor service by specialist insurer could damage the branded insurer's reputation</li>
+        <li><strong>Legal permissibility:</strong> pure badging may not be allowed — local regulation may require the product provider's name to be clearly disclosed in product literature</li>
+        <li>Loss of control over customer experience and claims management</li>
+        <li>Dependency on the specialist — loss of the specialist partner is disruptive</li>
+        <li>Profit-sharing terms must be carefully negotiated and regularly reviewed</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="qa-block">
+    <div class="qa-q" onclick="toggleQA(this)"><span class="qa-arrow">▶</span><span class="qa-qtext">Compare badging and reinsurance as methods of accessing health and care expertise without taking full risk.</span></div>
+    <div class="qa-a"><ul>
+      <li><strong>Badging:</strong> Selling insurer takes NO insurance risk — all risk borne by specialist from outset. Not technically an alternative to RI in the strict sense; the selling insurer never assumed the risk. Better described as a distribution arrangement.</li>
+      <li><strong>Reinsurance:</strong> Issuing company takes risk first, then cedes part or all to reinsurer. Issuing company remains liable to policyholders if reinsurer defaults.</li>
+      <li>Badging gives simpler risk elimination but at cost of less control and potential regulatory/reputational risk.</li>
+      <li>Reinsurance preserves issuing company's regulatory relationship with policyholders but requires minimum capital to be held regardless.</li>
+    </ul></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- TAB 10: INWARDS RESERVING -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div id="tab-inwards" class="section">
+  <div class="sec-title"><span class="ico">📋</span> Inwards Reinsurance Reserving <span class="tag tag-iai" style="margin-left:8px;">IAI May 2025 — NEW</span></div>
+  <div class="sec-intro">This topic appeared for the first time in the IAI May 2025 paper (Q2, 13 marks). It covers the perspective of the reinsurance company itself — calculating IBNR reserves for inwards reinsurance business. High probability of re-examination.</div>
+
+  <div class="card">
+    <div class="card-title">Grouping Data for Inwards RI Reserving <span class="mark-pill">2 marks</span></div>
+    <ul class="bullets">
+      <li>Type of contract: <strong>Facultative vs Treaty</strong></li>
+      <li>Type of cover: <strong>Quota Share / Surplus / Per-risk XL / Aggregate XL</strong></li>
+      <li>Basis of cover: <strong>Loss occurring / Risk attaching / Claims made</strong></li>
+      <li>Line of business (CI / PMI / IP etc.)</li>
+      <li>Data characteristics: must be homogeneous, credible, relevant, reliable, complete and accurate</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Additional Data Issues vs Direct Insurance Reserving <span class="mark-pill">2 marks</span></div>
+    <ul class="bullets">
+      <li><strong>Longer claims reporting delays</strong> — insurers submit bordereaux after end of quarter → reinsurer's data is more lagged than a direct insurer's</li>
+      <li><strong>Greater heterogeneity</strong> — more contract types, differing terms and conditions, differing case reserving philosophies → development patterns are less stable</li>
+      <li><strong>Industry benchmarks less applicable</strong> — heterogeneity means standard industry development factors may not transfer well</li>
+      <li><strong>Less detail on losses</strong> — information provided on aggregated basis, not individual claim level → harder to assess tail development</li>
+      <li><strong>IT complexity</strong> — complexity of reinsurance contracts makes it hard to capture all terms and conditions in IT systems accurately</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Accident Year vs Underwriting Year Chain Ladder <span class="mark-pill">2 marks</span></div>
+    <ul class="bullets">
+      <li><strong>Accident year:</strong> chain ladder estimates ultimate claims for claims <em>occurring</em> in that accident year only — includes only expired risk (past events). No future IBNR for unexpired exposure in that cohort.</li>
+      <li><strong>Underwriting year:</strong> chain ladder estimates ultimate claims for all claims arising from <em>policies sold</em> in that underwriting year — includes both expired and unexpired risk portions. IBNR includes claims from policies that have not yet expired.</li>
+      <li>For IBNR purposes at the valuation date: accident year is appropriate (IBNR relates to claims already incurred on expired exposure).</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Earned vs Written Premium for IBNR <span class="mark-pill">2 marks</span></div>
+    <ul class="bullets">
+      <li>IBNR reserves relate to claims that have <strong>already occurred</strong> — consistent with <em>earned</em> premium (the portion of premium covering exposure already provided)</li>
+      <li>As at valuation date, a portion of written premium is <strong>unearned</strong> — this covers claim events occurring <em>after</em> the valuation date</li>
+      <li>Using written premium overstates the base → overstates the implied IBNR for incurred claims</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-title">IBNR Calculation Example <span class="mark-pill">5 marks</span></div>
+    <div class="num-box">
+      <div class="num-title">IAI 0525 Q2e — CI Reinsurance IBNR (3 Accident Years)</div>
+      <div>AY2023: Earned premium = ₹1,200L (100% earned) | ULR = 93%</div>
+      <div>Ultimate claims = 93% × ₹1,200L = <span class="calc">₹1,111L</span></div>
+      <div>Paid/notified to date = (₹1,111L − ₹166.76L) → IBNR = <span class="calc">₹166.76L</span></div>
+      <div> </div>
+      <div>AY2024: Earned premium = ₹1,250L × 66.67% = ₹833.33L | ULR = 89%</div>
+      <div>Ultimate claims = 89% × ₹1,250L = <span class="calc">₹1,112.5L</span> (on full UY)</div>
+      <div>Earned share = 66.67% × ₹1,112.5L → IBNR = <span class="calc">₹27.69L</span></div>
+      <div> </div>
+      <div>AY2025: Earned premium = ₹1,100L × 33.33% | ULR = 76%</div>
+      <div>IBNR = <span class="calc">₹83.33L</span></div>
+      <div> </div>
+      <div class="calc">Total IBNR = ₹166.76L + ₹27.69L + ₹83.33L = ₹277.79L</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Finalising the IBNR — Issues to Consider <span class="mark-pill">2 marks</span></div>
+    <ul class="bullets">
+      <li>If CI policies have term significantly different from 3 years → distorts earned premium calculation and hence IBNR</li>
+      <li>Development percentages derived from <strong>domestic Indian CI data</strong> may not apply to inwards CI reinsurance from other territories</li>
+      <li>IBNR calculated is <strong>gross of retrocession</strong> — retrocession recoveries must be calculated separately to arrive at net IBNR</li>
+      <li>Level of reserving margin to book — depends on company reserving policy and materiality</li>
+      <li>Whether changes in claims development patterns invalidate the assumption that past development is a good guide to the future</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════ -->
+<!-- TAB 11: EXAM TECHNIQUE -->
+<!-- ═══════════════════════════════════════════════════════════ -->
+<div id="tab-technique" class="section">
+  <div class="sec-title"><span class="ico">✍️</span> Exam Technique — Reinsurance Questions</div>
+
+  <div class="card" style="border-color:var(--amber);">
+    <div class="card-title" style="color:var(--amber)">⚡ The 5 Rules for Reinsurance in the Exam</div>
+    <div class="grid-2">
+      <div>
+        <ul class="bullets">
+          <li><strong>Rule 1 — Always anchor to the scenario.</strong> "Reduces variance" earns ½ mark. "Reduces variance of IP claims which are particularly volatile given the impaired lives book and new market entry" earns 1 mark.</li>
+          <li><strong>Rule 2 — State the RI type, not just the concept.</strong> Don't say "reinsurance can help". Say "quota share on original terms would provide..." or "XL reinsurance is appropriate here because..."</li>
+          <li><strong>Rule 3 — Cover both sides.</strong> For "assess" questions, always give advantages AND disadvantages / suitability AND limitations. Each XL type in the 0921 question was worth 3 marks — typically 1.5 marks each side.</li>
+        </ul>
+      </div>
+      <div>
+        <ul class="bullets">
+          <li><strong>Rule 4 — Match RI type to product type.</strong> Never suggest XL for individual long-term CI/IP. Never suggest surplus for PMI. This is an automatic mark loss.</li>
+          <li><strong>Rule 5 — Address cost vs benefit explicitly.</strong> For any RI question, always note that: (a) RI premiums exceed expected benefits → net cost to insurer; (b) this cost must be recovered in office premiums; (c) exception: where arbitrage (tax/capital) makes RI value-accretive.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Mark Allocation Guide by Question Type</div>
+    <table class="cmp-table">
+      <tr><th>Question Type</th><th>Typical Marks</th><th>Key Structure</th></tr>
+      <tr><td>List reasons for RI in context</td><td>4–6</td><td>½ per reason × 2 (reason + contextualisation)</td></tr>
+      <tr><td>Assess suitability of each RI type</td><td>3 per type, 15 total</td><td>Structure + how it applies + verdict on suitability</td></tr>
+      <tr><td>Quota share vs XL comparison</td><td>5–8</td><td>Contrast by: purpose, cost, flexibility, solvency impact</td></tr>
+      <tr><td>RI as part of new product launch</td><td>4–5 sub-marks</td><td>Type of RI → why → what it provides → how it changes over time</td></tr>
+      <tr><td>Stop-loss pricing — numeric</td><td>5–18</td><td>Ranking logic (SD approach) + burning cost + limitations of each</td></tr>
+      <tr><td>Financial RI — suitability</td><td>7</td><td>Which FinRe structure → why → regulatory effectiveness → verdict</td></tr>
+      <tr><td>Reinsurance credit pattern</td><td>12</td><td>Gross reserve movement + RI credit derivation + net reserve = separate marks for each</td></tr>
+      <tr><td>Inwards RI reserving</td><td>2–5 per sub</td><td>2 marks = 4 concise points; 5 marks = calculation with working</td></tr>
+      <tr><td>Indemnity vs assumption RI</td><td>3–5</td><td>Mechanism + speed + policyholder rights + recommendation</td></tr>
+      <tr><td>Recapture fee validation</td><td>4–5</td><td>Compare fee to VIF of RI profits + capital implications</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Common Mistakes to Avoid</div>
+    <div class="highlight red">
+      <ul style="list-style:none;">
+        <li style="padding:3px 0 3px 14px; position:relative;"><span style="position:absolute;left:0;color:var(--red);">✗</span> Suggesting XL reinsurance for individual CI or IP — claim is fixed at sum insured, XL won't attach</li>
+        <li style="padding:3px 0 3px 14px; position:relative;"><span style="position:absolute;left:0;color:var(--red);">✗</span> Suggesting surplus reinsurance for PMI — no fixed sum insured; not applicable</li>
+        <li style="padding:3px 0 3px 14px; position:relative;"><span style="position:absolute;left:0;color:var(--red);">✗</span> Saying financial RI "eliminates" solvency problem — its effectiveness is much reduced under Solvency II</li>
+        <li style="padding:3px 0 3px 14px; position:relative;"><span style="position:absolute;left:0;color:var(--red);">✗</span> Confusing "badging" with reinsurance — under badging, the branding insurer never takes the risk in the first place</li>
+        <li style="padding:3px 0 3px 14px; position:relative;"><span style="position:absolute;left:0;color:var(--red);">✗</span> Ignoring the timing issue: RI credit DECLINES over the policy term to zero at expiry (not increases)</li>
+        <li style="padding:3px 0 3px 14px; position:relative;"><span style="position:absolute;left:0;color:var(--red);">✗</span> Forgetting cedant remains liable to policyholders even if 100% reinsured — minimum capital always required</li>
+        <li style="padding:3px 0 3px 14px; position:relative;"><span style="position:absolute;left:0;color:var(--red);">✗</span> Writing "reinsurance commission paid by insurer to reinsurer" — it's the opposite (reinsurer pays commission to cedant under original terms)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">Quick Recall — Non-Negotiable Facts</div>
+    <div class="grid-2">
+      <div>
+        <ul class="bullets">
+          <li>Short-term health: only <strong>quota share on original terms</strong> (no surplus, no risk premium basis)</li>
+          <li>Surplus: only long-term, only <strong>fixed sum insured</strong> at outset</li>
+          <li>XL commission: <strong>none</strong> (except profit commission on lower layers)</li>
+          <li>Stop loss limits: <strong>% of earned premiums</strong>, not absolute £</li>
+          <li>RI credit at policy expiry: <strong>zero</strong></li>
+          <li>Reinsurer default: cedant remains <strong>liable to policyholders</strong></li>
+        </ul>
+      </div>
+      <div>
+        <ul class="bullets">
+          <li>Fac/Ob: <strong>cedant has discretion; reinsurer must accept</strong></li>
+          <li>Ob/Ob: <strong>most common treaty basis</strong></li>
+          <li>Deposits back: <strong>cedant retains investment income</strong> on reinsurer's reserve share</li>
+          <li>Badging: selling insurer takes <strong>no insurance risk</strong></li>
+          <li>FinRe EV impact: <strong>broadly neutral</strong> (loan ≈ PV of repayments)</li>
+          <li>Pandemic XL: generally <strong>not available</strong> at affordable premiums</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /main -->
+
+<script>
+function showTab(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  event.target.classList.add('active');
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+function toggleQA(el) {
+  const ans = el.nextElementSibling;
+  const isOpen = el.classList.contains('open');
+  el.classList.toggle('open', !isOpen);
+  ans.classList.toggle('open', !isOpen);
+}
+
+function toggleColl(el) {
+  const body = el.nextElementSibling;
+  el.classList.toggle('open');
+  body.classList.toggle('open');
+}
+
+// Keyboard nav
+document.addEventListener('keydown', function(e) {
+  const tabs = ['landscape','reasons','types','mechanics','retention','impact','products','contexts','badging','inwards','technique'];
+  const btns = document.querySelectorAll('.tab-btn');
+  const activeIdx = Array.from(btns).findIndex(b => b.classList.contains('active'));
+  if (e.key === 'ArrowRight' && activeIdx < btns.length - 1) {
+    btns[activeIdx + 1].click();
+  } else if (e.key === 'ArrowLeft' && activeIdx > 0) {
+    btns[activeIdx - 1].click();
+  }
+});
+</script>
+
+</body>
+</html>
