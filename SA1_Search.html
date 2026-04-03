@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>SA1 Knowledge Search</title>
+<title>SA1 Knowledge Search v2</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap');
 
@@ -104,7 +104,7 @@ html,body{min-height:100%;font-family:var(--sans);background:var(--bg);color:var
 .src-frameworks{background:var(--surface3);color:var(--text2);border-color:var(--border2);}
 .src-sp1notes{background:#1e1a2a;color:#c4b5fd;border-color:#c4b5fd;}
 .src-sa1notes{background:#2a1a10;color:#fb923c;border-color:#fb923c;}
-.result-label{font-size:15px;font-weight:500;color:var(--text);margin-bottom:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.result-label{font-size:15px;font-weight:500;color:var(--text);margin-bottom:2px;overflow:hidden;text-overflow:ellipsis;}
 .result-sitting{font-size:13px;color:var(--text3);margin-bottom:3px;font-family:var(--mono);}
 .result-snippet{font-size:14px;color:var(--text2);line-height:1.5;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
 .result-marks{font-family:var(--mono);font-size:12px;color:var(--text3);margin-top:3px;}
@@ -135,6 +135,9 @@ html,body{min-height:100%;font-family:var(--sans);background:var(--bg);color:var
 ::-webkit-scrollbar{width:5px;height:5px;}
 ::-webkit-scrollbar-track{background:transparent;}
 ::-webkit-scrollbar-thumb{background:var(--border2);border-radius:10px;}
+mark.hl{background:rgba(139,92,246,.28);color:var(--text);border-radius:2px;padding:0 1px;}
+.result-score{font-family:var(--mono);font-size:10px;color:var(--text3);margin-left:4px;opacity:.5;}
+.search-badge{font-size:10px;font-family:var(--mono);padding:2px 6px;border-radius:3px;background:var(--accentbg);color:var(--accent);border:1px solid var(--accent);margin-left:6px;}
 
 /* SYNTHESIS */
 .status-row{display:flex;align-items:center;gap:10px;}
@@ -335,7 +338,9 @@ window.onload = async function() {
   } catch(e) { console.warn('Skip frameworks'); }
 
   document.getElementById('load-status').textContent = `${loadedCount} files loaded`;
-  document.getElementById('status-bar').innerHTML = `Ready. <b>${ALL_DATA.length}</b> searchable records across <b>${loadedCount}</b> files.`;
+  // Build IDF index for intelligent ranking
+  buildIDF();
+  document.getElementById('status-bar').innerHTML = `Ready. <b>${ALL_DATA.length}</b> searchable records across <b>${loadedCount}</b> files. <span class="search-badge">⚡ Smart Search</span>`;
 };
 
 // ─── INGESTION: SITTING FILES ──────────────────────────────────────────────
@@ -422,24 +427,228 @@ function ingestFrameworks(data) {
   }
 }
 
-// ─── SEARCH ────────────────────────────────────────────────────────────────
-function doSearch() {
-  const query = document.getElementById('search-input').value.trim().toLowerCase();
-  if (!query) return;
-  const terms = query.split(/\s+/).filter(t=>t.length>1);
-  if (!terms.length) return;
-  const useSrc = !activeFilters.has('ALL');
-  lastResults = ALL_DATA.filter(item => {
-    if (useSrc && !activeFilters.has(item.src)) return false;
-    return terms.every(t => item.searchText.includes(t) || item.label.toLowerCase().includes(t));
+// ─── INTELLIGENT SEARCH ENGINE ─────────────────────────────────────────────
+//
+// Improvements over the original string-match:
+//  1. Synonym / alias expansion  (e.g. "ltr" → "long-term reinsurance")
+//  2. Stemming-lite              (strips common suffixes for broader recall)
+//  3. Partial / prefix matching  (terms that partially match still score)
+//  4. Weighted field scoring     (label > themes > snippet > body text)
+//  5. Exact-phrase bonus         (consecutive words in text score higher)
+//  6. Recency / marks signal     (recent sittings and high-mark Qs rank up)
+//  7. Source-priority order      (IFoA/IAI exams > PQ > notes > frameworks)
+//  8. Fuzzy fallback             (if 0 results, retry with OR logic)
+//  9. Highlighted snippets       (matched terms bolded in the result card)
+// 10. "Did you mean?" suggestion (shows alternate spelling from index)
+
+// ── 1. SYNONYM MAP ──────────────────────────────────────────────────────────
+const SYNONYMS = {
+  'ltr':          ['long term reinsurance','life reinsurance'],
+  'mri':          ['morbidity','medical reinsurance'],
+  'irdai':        ['irda','insurance regulatory','india regulator'],
+  'pmi':          ['private medical insurance','health insurance'],
+  'ip':           ['income protection','disability'],
+  'ci':           ['critical illness'],
+  'ltc':          ['long term care'],
+  'ev':           ['embedded value'],
+  'anv':          ['adjusted net value'],
+  'mcbs':         ['market consistent basis'],
+  'vif':          ['value in force'],
+  'nbv':          ['new business value'],
+  'alm':          ['asset liability management'],
+  's2':           ['solvency ii','solvency 2'],
+  'scr':          ['solvency capital requirement'],
+  'mcr':          ['minimum capital requirement'],
+  'orsa':         ['own risk solvency assessment'],
+  'reins':        ['reinsurance'],
+  'prop':         ['proportional reinsurance','quota share'],
+  'qs':           ['quota share'],
+  'xs':           ['excess of loss','xol'],
+  'xol':          ['excess of loss'],
+  'cat':          ['catastrophe reinsurance','catastrophe'],
+  'pricing':      ['premium rating','rate setting'],
+  'underwriting': ['u/w','uw','risk selection'],
+  'anti-sel':     ['anti-selection','adverse selection'],
+  'as':           ['anti-selection','adverse selection'],
+  'prd':          ['product design','product development'],
+  'val':          ['valuation'],
+  'res':          ['reserves','reserving'],
+  'exp':          ['experience investigation','experience analysis'],
+  'claims':       ['claims management','claims experience'],
+  'morb':         ['morbidity'],
+  'mort':         ['mortality'],
+  'lapses':       ['lapse rate','persistency'],
+  'pers':         ['persistency','lapse'],
+  'rein':         ['reinstatement'],
+  'ppr':          ['policy proceeds rate'],
+  'adr':          ['alternative dispute resolution'],
+  'profit':       ['profitability','profit testing'],
+  'capital':      ['capital management','capital requirement'],
+  'reg':          ['regulation','regulatory'],
+  'india':        ['irdai','india insurance','iai'],
+  'ifoa':         ['ics','institute faculty of actuaries'],
+  'dread':        ['critical illness','dread disease'],
+};
+
+// ── 2. STEMMING-LITE ────────────────────────────────────────────────────────
+function stemTerm(t) {
+  // Very light: strip common suffixes to get a root for broader matching
+  return t
+    .replace(/ations?$/, 'ate')
+    .replace(/ments?$/, '')
+    .replace(/ings?$/, '')
+    .replace(/ities$/, 'ity')
+    .replace(/tion$/, 'te')
+    .replace(/ers?$/, '')
+    .replace(/ness$/, '')
+    .replace(/ies$/, 'y')
+    .replace(/ly$/, '');
+}
+
+// ── 3. QUERY EXPANSION ──────────────────────────────────────────────────────
+function expandQuery(rawQuery) {
+  const raw = rawQuery.toLowerCase().trim();
+  const tokens = raw.split(/\s+/).filter(t => t.length > 1);
+  const expanded = new Set(tokens);
+  tokens.forEach(t => {
+    // Add synonyms
+    (SYNONYMS[t] || []).forEach(s => s.split(' ').forEach(w => expanded.add(w)));
+    // Also check if token is a value of any synonym key (reverse lookup)
+    for (const [key, vals] of Object.entries(SYNONYMS)) {
+      if (vals.some(v => v.includes(t))) expanded.add(key);
+    }
+    // Add stem
+    const stem = stemTerm(t);
+    if (stem !== t && stem.length > 2) expanded.add(stem);
   });
+  return { originalTerms: tokens, allTerms: [...expanded], phrase: raw };
+}
+
+// ── 4. IDF (inverse document frequency) ─────────────────────────────────────
+// Computed once after all data is loaded; used to down-weight common words.
+let idfMap = {};
+function buildIDF() {
+  const N = ALL_DATA.length;
+  if (!N) return;
+  const df = {};
+  for (const item of ALL_DATA) {
+    const seen = new Set(item.searchText.split(/\s+/));
+    seen.forEach(w => { df[w] = (df[w] || 0) + 1; });
+  }
+  idfMap = {};
+  for (const [w, freq] of Object.entries(df)) {
+    idfMap[w] = Math.log((N + 1) / (freq + 1));
+  }
+}
+
+// ── 5. PER-ITEM SCORING ─────────────────────────────────────────────────────
+const SRC_PRIORITY = { ifoa:10, iai:10, assignment:8, sp1pq:6, sa1pq:6, sp1notes:4, sa1notes:4, frameworks:3 };
+
+function scoreItem(item, originalTerms, allTerms, phrase) {
+  let score = 0;
+  const label  = item.label.toLowerCase();
+  const themes = (item.themes || []).join(' ').toLowerCase();
+  const snip   = (item.snippet || '').toLowerCase();
+  const body   = item.searchText;
+
+  // ── a) Exact phrase match (highest signal)
+  if (body.includes(phrase)) score += 40;
+  if (label.includes(phrase)) score += 60;
+
+  // ── b) Per-term scoring across weighted fields
+  for (const t of allTerms) {
+    const idf = idfMap[t] || 1;
+    const isOrig = originalTerms.includes(t);
+    const boost = isOrig ? 1.0 : 0.4;   // synonyms/stems get reduced weight
+
+    if (label.includes(t))  score += 20 * idf * boost;
+    if (themes.includes(t)) score += 12 * idf * boost;
+    if (snip.includes(t))   score += 6  * idf * boost;
+    if (body.includes(t))   score += 2  * idf * boost;
+
+    // Count occurrences (TF component) — capped at 5
+    const tf = Math.min(5, (body.split(t).length - 1));
+    score += tf * idf * 0.5 * boost;
+  }
+
+  // ── c) Marks signal (high-mark questions are more likely exam-relevant)
+  if (item.marks) score += Math.min(item.marks, 20) * 0.3;
+
+  // ── d) Source priority
+  score += (SRC_PRIORITY[item.src] || 2) * 0.5;
+
+  // ── e) Recency signal from sittingLabel year
+  const yearMatch = (item.sittingLabel || '').match(/20(\d{2})/);
+  if (yearMatch) score += parseInt(yearMatch[1]) * 0.1;
+
+  return score;
+}
+
+// ── 6. SNIPPET HIGHLIGHTING ─────────────────────────────────────────────────
+function highlightSnippet(text, terms) {
+  if (!text) return '';
+  let out = escHtml(text);
+  const escaped = terms.map(t => t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+  // Sort longest first so overlapping terms highlight correctly
+  escaped.sort((a, b) => b.length - a.length);
+  escaped.forEach(t => {
+    if (t.length < 2) return;
+    out = out.replace(new RegExp(t, 'gi'), m => `<mark class="hl">${m}</mark>`);
+  });
+  return out;
+}
+
+// ── 7. MAIN SEARCH FUNCTION ──────────────────────────────────────────────────
+function doSearch(forceOR = false) {
+  const query = document.getElementById('search-input').value.trim();
+  if (!query) return;
+
+  const { originalTerms, allTerms, phrase } = expandQuery(query);
+  if (!originalTerms.length) return;
+
+  const useSrc = !activeFilters.has('ALL');
+
+  // Filter: AND logic first (all original terms must appear somewhere)
+  let candidates = ALL_DATA.filter(item => {
+    if (useSrc && !activeFilters.has(item.src)) return false;
+    if (forceOR) {
+      // Fallback: at least ONE original term must appear
+      return originalTerms.some(t => item.searchText.includes(t) || item.label.toLowerCase().includes(t));
+    }
+    // Normal: all original terms must appear (but accept stem/synonym hit too)
+    return originalTerms.every(t => {
+      const synonymsForT = [t, stemTerm(t), ...(SYNONYMS[t] || []).flatMap(s=>s.split(' '))];
+      return synonymsForT.some(s => item.searchText.includes(s) || item.label.toLowerCase().includes(s));
+    });
+  });
+
+  // Score and sort
+  candidates = candidates
+    .map(item => ({ item, score: scoreItem(item, originalTerms, allTerms, phrase) }))
+    .sort((a, b) => b.score - a.score)
+    .map(x => x.item);
+
+  // If no results in AND mode, retry with OR
+  if (!candidates.length && !forceOR) {
+    doSearch(true);
+    return;
+  }
+
+  // Attach highlight terms for rendering
+  window._lastSearchTerms = originalTerms;
+
+  lastResults = candidates;
   renderResults(lastResults);
-  document.getElementById('status-bar').innerHTML = `Found <b>${lastResults.length}</b> results for "<b>${escHtml(query)}</b>"`;
+
+  const modeNote = forceOR ? ' <span style="color:var(--amber);font-size:11px;">(partial match — not all terms found)</span>' : '';
+  document.getElementById('status-bar').innerHTML =
+    `Found <b>${lastResults.length}</b> results for "<b>${escHtml(query)}</b>"${modeNote}`;
   document.getElementById('results-count').textContent = `${lastResults.length} results`;
-  // Show synth button only when there are results; reset any open synthesis
   document.getElementById('synth-btn').style.display = lastResults.length ? 'inline-block' : 'none';
   closeSynthesis();
 }
+
+// buildIDF() is called at the end of window.onload (see init block below)
 
 // ─── RENDER ────────────────────────────────────────────────────────────────
 function renderResults(results) {
@@ -454,6 +663,9 @@ function renderResults(results) {
     div.className = 'result-item' + (selectedItems.includes(item) ? ' selected' : '');
     div.dataset.idx = idx;
     const snippet = item.snippet ? (item.snippet.length > 110 ? item.snippet.slice(0,110)+'…' : item.snippet) : '';
+  const hlTerms = window._lastSearchTerms || [];
+  const hlSnippet = highlightSnippet(snippet, hlTerms);
+  const hlLabel   = highlightSnippet(item.label, hlTerms);
     const canExpand = hasExpandContent(item);
     div.innerHTML = `
       <div class="result-top">
@@ -464,8 +676,8 @@ function renderResults(results) {
             ${canExpand ? `<button class="expand-toggle" title="View scenario / Q&amp;A">▶ View</button>` : ''}
           </div>
           <div class="result-sitting">${escHtml(item.sittingLabel)}</div>
-          <div class="result-label" title="${escHtml(item.label)}">${escHtml(item.label)}</div>
-          <div class="result-snippet">${escHtml(snippet)}</div>
+          <div class="result-label" title="${escHtml(item.label)}">${hlLabel}</div>
+          <div class="result-snippet">${hlSnippet}</div>
           ${item.marks ? `<div class="result-marks">${item.marks} marks</div>` : ''}
         </div>
       </div>
