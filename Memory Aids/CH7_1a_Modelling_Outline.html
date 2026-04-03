@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Modelling — Outline Navigator</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --ink: #0f1117;
+    --paper: #f5f0e8;
+    --cream: #ede7d6;
+    --accent: #c0392b;
+    --gold: #b8860b;
+    --blue: #1a3a5c;
+    --green: #1e5f3f;
+    --purple: #5c3d7a;
+    --teal: #1a6b6b;
+    --brown: #7a3d1a;
+    --muted: #6b6560;
+    --rule: #c8bfaf;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 12px;
+    line-height: 1.5;
+    padding: 28px 24px;
+    max-width: 1140px;
+    margin: 0 auto;
+  }
+
+  /* MASTHEAD */
+  .masthead { border-top:4px solid var(--ink); border-bottom:2px solid var(--ink); padding:12px 0 10px; margin-bottom:28px; display:flex; align-items:baseline; gap:16px; flex-wrap:wrap; }
+  .masthead-title { font-family:'Playfair Display',serif; font-size:26px; font-weight:900; flex:1; }
+  .masthead-sub { font-family:'IBM Plex Mono',monospace; font-size:9.5px; color:var(--muted); text-transform:uppercase; letter-spacing:1.5px; }
+  .masthead-tag { font-family:'IBM Plex Mono',monospace; font-size:9.5px; background:var(--ink); color:#fff; padding:3px 8px; letter-spacing:1px; }
+
+  /* FLOW CONTAINER */
+  .flow {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    position: relative;
+  }
+  .flow::before {
+    content: '';
+    position: absolute;
+    left: 22px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--accent), var(--blue), var(--green), var(--purple), var(--teal), var(--brown), var(--gold), var(--ink));
+    z-index: 0;
+  }
+
+  /* BLOCK */
+  .block {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    margin-bottom: 6px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* NUMBER BADGE */
+  .num {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 900;
+    color: white;
+    flex-shrink: 0;
+    border: 3px solid var(--paper);
+    box-shadow: 0 0 0 2px currentColor;
+  }
+
+  /* BLOCK CONTENT */
+  .block-content {
+    flex: 1;
+    border-left: 3px solid;
+    padding: 10px 14px;
+    background: var(--cream);
+  }
+  .block-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .sub-items { display:flex; flex-direction:column; gap:5px; }
+  .sub {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    padding: 3px 9px;
+    border: 1px solid;
+    background: white;
+    letter-spacing: 0.3px;
+  }
+  .sub.key {
+    color: white !important;
+    background: var(--ink);
+    border-color: transparent;
+    font-weight: 600;
+  }
+  .sub-row { display:flex; align-items:center; gap:5px; flex-wrap:wrap; }
+  .sub-row .sub.key { flex-shrink:0; white-space:nowrap; }
+  .sub-row .sub:not(.key) { flex:1; min-width:0; }
+
+  /* ARROW */
+  .arrow {
+    display: flex;
+    align-items: center;
+    padding-left: 14px;
+    margin: 2px 0;
+    color: var(--muted);
+    font-size: 16px;
+    z-index: 1;
+    position: relative;
+  }
+
+  /* COLOR SCHEMES */
+  .b1 .num { background: var(--accent); box-shadow: 0 0 0 2px var(--accent); }
+  .b1 .block-content { border-color: var(--accent); }
+  .b1 .block-title { color: var(--accent); }
+  .b1 .sub { border-color: var(--accent); color: var(--accent); }
+
+  .b2 .num { background: var(--blue); box-shadow: 0 0 0 2px var(--blue); }
+  .b2 .block-content { border-color: var(--blue); }
+  .b2 .block-title { color: var(--blue); }
+  .b2 .sub { border-color: var(--blue); color: var(--blue); }
+
+  .b3 .num { background: var(--green); box-shadow: 0 0 0 2px var(--green); }
+  .b3 .block-content { border-color: var(--green); }
+  .b3 .block-title { color: var(--green); }
+  .b3 .sub { border-color: var(--green); color: var(--green); }
+
+  .b4 .num { background: var(--purple); box-shadow: 0 0 0 2px var(--purple); }
+  .b4 .block-content { border-color: var(--purple); }
+  .b4 .block-title { color: var(--purple); }
+  .b4 .sub { border-color: var(--purple); color: var(--purple); }
+
+  .b5 .num { background: var(--teal); box-shadow: 0 0 0 2px var(--teal); }
+  .b5 .block-content { border-color: var(--teal); }
+  .b5 .block-title { color: var(--teal); }
+  .b5 .sub { border-color: var(--teal); color: var(--teal); }
+
+  .b6 .num { background: var(--brown); box-shadow: 0 0 0 2px var(--brown); }
+  .b6 .block-content { border-color: var(--brown); }
+  .b6 .block-title { color: var(--brown); }
+  .b6 .sub { border-color: var(--brown); color: var(--brown); }
+
+  .b7 .num { background: var(--gold); box-shadow: 0 0 0 2px var(--gold); }
+  .b7 .block-content { border-color: var(--gold); }
+  .b7 .block-title { color: var(--gold); }
+  .b7 .sub { border-color: var(--gold); color: #7a5c00; }
+
+  .b8 .num { background: var(--ink); box-shadow: 0 0 0 2px var(--ink); }
+  .b8 .block-content { border-color: var(--ink); }
+  .b8 .block-title { color: var(--ink); }
+  .b8 .sub { border-color: var(--ink); color: var(--ink); }
+
+  .note {
+    font-size: 10px;
+    color: var(--muted);
+    margin-top: 6px;
+    font-style: italic;
+  }
+
+  /* HOW TO USE */
+  .how-to {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 10px 16px;
+    margin-bottom: 22px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-size: 11px;
+  }
+  .how-to strong {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--gold);
+    white-space: nowrap;
+  }
+
+  /* FOOTER */
+  .footer { border-top:1px solid var(--rule); padding-top:8px; margin-top:20px; font-family:'IBM Plex Mono',monospace; font-size:9px; color:var(--muted); display:flex; justify-content:space-between; flex-wrap:wrap; gap:6px; }
+</style>
+</head>
+<body>
+
+<!-- MASTHEAD -->
+<div class="masthead">
+  <div class="masthead-title">Modelling — Health &amp; Care Insurance</div>
+  <span class="masthead-sub">SP1 Ch.11 · Syllabus 4.1 / 4.2 / 4.3</span>
+  <span class="masthead-tag">OUTLINE NAVIGATOR</span>
+</div>
+
+<!-- HOW TO USE -->
+<div class="how-to">
+  <strong>How to use</strong>
+  <span>Each numbered block here maps exactly to a section in the <strong>Consolidated Study Matrix</strong>. Same number · Same colour · Same name. Use this page to rehearse the architecture before drilling into detail. Every sub-item is a distinct testable concept.</span>
+</div>
+
+<div class="flow">
+
+  <!-- ① USES OF MODELS -->
+  <div class="block b1">
+    <div class="num">①</div>
+    <div class="block-content">
+      <div class="block-title">Uses of Models</div>
+      <div class="sub-items">
+        <div class="sub-row">
+          <span class="sub key">4 Core Uses</span>
+          <span class="sub">Pricing &amp; premium rates · Reserving (statutory &amp; mgmt) · Options &amp; guarantees costing · Model office (NB projections, EV, solvency, takeovers)</span>
+        </div>
+        <div class="sub-row">
+          <span class="sub key">Extended List</span>
+          <span class="sub">Product design · Profitability analysis · Surplus analysis · EV / appraisal value · Capital requirements · Return on capital · Reinsurance needs · Investment strategy · Expense budgeting · M&amp;A valuation</span>
+        </div>
+        <div class="sub-row">
+          <span class="sub key">4 Model Types by Scope</span>
+          <span class="sub">Single policy profit test · New business model · Existing business model · Full model office</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="arrow">↓</div>
+
+  <!-- ② OBJECTIVES & BASIC FEATURES -->
+  <div class="block b2">
+    <div class="num">②</div>
+    <div class="block-content">
+      <div class="block-title">Objectives &amp; Basic Features of a Health Insurance Model</div>
+      <div class="sub-items">
+        <div class="sub-row">
+          <span class="sub key">Prime Objective</span>
+          <span class="sub">Enable actuary to advise company so it is run in a sound financial way</span>
+        </div>
+        <div class="sub-row">
+          <span class="sub key">Model Points</span>
+          <span class="sub">Data records representing a policy or group · Number influenced by: computer power, contract complexity/variability, stochastic vs det., purpose, time available, sensitivity of results</span>
+        </div>
+        <div class="sub-row">
+          <span class="sub key">Operational Requirements</span>
+          <span class="sub">Well documented · Clear &amp; communicable · Independently verifiable · Not overly complex · Capable of development · Range of implementation methods</span>
+        </div>
+        <div class="sub-row">
+          <span class="sub key">H&amp;C Specific Features</span>
+          <span class="sub">All cashflows inc. options/guarantees · Reserve &amp; solvency margin cashflows · State-based cashflow projection · Asset–liability interactions (dynamic links) · Stochastic capability where needed</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="arrow">↓</div>
+
+  <!-- ③ DETERMINISTIC vs STOCHASTIC -->
+  <div class="block b3">
+    <div class="num">③</div>
+    <div class="block-content">
+      <div class="block-title">Deterministic vs Stochastic Models</div>
+      <div class="sub-items">
+        <div class="sub-row">
+          <span class="sub key">Deterministic</span>
+          <span class="sub">Fixed parameters → point estimate → "one question, one answer" · Sensitivity testing available</span>
+        </div>
+        <div class="sub-row">
+          <span class="sub key">Stochastic</span>
+          <span class="sub">Parameters have distributions → many simulations → probability distribution output · "distribution-in, distribution-out"</span>
+        </div>
+        <div class="sub-row">
+          <span class="sub key">When Stochastic is Invaluable</span>
+          <span class="sub">Assessing guarantees · Stable/predictable distributions (e.g. investment returns) · Year-on-year volatility · Identifying worst-case scenarios</span>
+        </div>
+        <div class="sub-row">
+          <span class="sub key">Stochastic Disadvantages</span>
+          <span class="sub">Complex &amp; time-consuming · Results hard to explain · Dynamic links essential · Spurious accuracy risk</span>
+        </div>
+        <div class="sub-row">
+          <span class="sub key">Calibration</span>
+          <span class="sub">Risk-neutral (market-consistent): valuation, replicates market prices · Real-world: projections, realistic long-term expectations</span>
+        </div>
+      </div>
+      <div class="note">H&amp;C more volatile than pure life → stochastic especially important here</div>
+    </div>
+  </div>
+  <div class="arrow">↓</div>
+
+  <!-- ④ SENSITIVITY ANALYSIS -->
+  <div class="block b4">
+    <div class="num">④</div>
+    <div class="block-content">
+      <div class="block-title">Sensitivity Analysis</div>
+      <div class="sub-items">
+        <div class="sub-row">
+          <span class="sub key">Two Sources of Sensitivity</span>
+          <span class="sub">Model point error (choice of model points) · Parameter mis-estimation (actual ≠ assumed)</span>
+        </div>
+        <div class="sub-row">
+          <span class="sub key">Scenario Testing</span>
+          <span class="sub">Multiple correlated parameters changed together (e.g. low yields + low expense inflation)</span>
+        </div>
+        <div class="sub-row">
+          <span class="sub key">Key Parameters to Test</span>
+          <span class="sub">Claim inception/recovery/transfer rates · Mortality · Lapses/non-renewals · Avg claim size (PMI) · Expenses &amp; inflation · Benefit inflation · Investment yield · NB mix &amp; volume · Tax</span>
+        </div>
+        <div class="sub-row">
+          <span class="sub key">Uses</span>
+          <span class="sub">Set pricing margins · Trigger product redesign · Validate model behaviour · Quantify profit/RoC variance · Determine capital/global reserves</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="arrow">↓</div>
+
+  <!-- ⑤ FORMULA / EQUATION OF VALUE APPROACH -->
+  <div class="block b5">
+    <div class="num">⑤</div>
+    <div class="block-content">
+      <div class="block-title">Formula / Equation of Value Approach</div>
+      <div class="sub-items">
+        <div class="sub-row">
+          <span class="sub key">Principle</span>
+          <span class="sub">PV(income) = PV(outgo) → solve for premium · Numerator = PV(claims + expenses − inv. income) · Denominator = PV(1 unit premium)</span>
+        </div>
+        <div class="sub-row">
+          <span class="sub key">Components Valued</span>
+          <span class="sub">Claims (inc. inflation) · Premiums (inc. escalation, persistency, waiver) · Expenses · Investment income · Tax · Profit margin</span>
+        </div>
+        <div class="sub-row">
+          <span class="sub key">Drawbacks</span>
+          <span class="sub">No proper event timing · Reserves ignored · No capital needs · Negative cashflows ignored · No separate cashflow inspection · Fixed discount rate · No assumption variation over time · Complex products unsuited</span>
+        </div>
+      </div>
+      <div class="note">Best suited to short-term contracts (e.g. 1-year PMI) where drawbacks are immaterial</div>
+    </div>
+  </div>
+  <div class="arrow">↓</div>
+
+  <!-- ⑥ CASHFLOW APPROACH -->
+  <div class="block b6">
+    <div class="num">⑥</div>
+    <div class="block-content">
+      <div class="block-title">Cashflow Approach</div>
+      <div class="sub-items">
+        <div class="sub-row">
+          <span class="sub key">Process</span>
+          <span class="sub">Select model points → project all cashflows (inc. reserves &amp; capital) → discount at risk discount rate → find premium meeting profit criterion</span>
+        </div>
+        <div class="sub-row">
+          <span class="sub key">Cashflow Items (Conv.)</span>
+          <span class="sub">Premiums · Expenses (initial/renewal/claim) · Commission · Claims · Reserve contributions · Capital contributions · Interest · Tax</span>
+        </div>
+        <div class="sub-row">
+          <span class="sub key">Additional (Unit-Linked)</span>
+          <span class="sub">Unit allocations · Bid-offer spread · Excess claims cost · Risk charges · Unit/policy charges · FMC · Unit fund growth · Fund payouts on claim/surrender</span>
+        </div>
+        <div class="sub-row">
+          <span class="sub key">Profit Criterion</span>
+          <span class="sub">Per model point OR in aggregate (accepts cross-subsidy) · Risk discount rate = required return + statistical risk loading</span>
+        </div>
+        <div class="sub-row">
+          <span class="sub key">Further Uses</span>
+          <span class="sub">Profitability of existing business · Return on capital · Capital requirements (new business model / full model office)</span>
+        </div>
+      </div>
+      <div class="note">Gold standard for long-term pricing · Not needed for 1-year PMI</div>
+    </div>
+  </div>
+  <div class="arrow">↓</div>
+
+  <!-- ⑦ MULTI-STATE MODELLING -->
+  <div class="block b7">
+    <div class="num">⑦</div>
+    <div class="block-content">
+      <div class="block-title">Multi-State Modelling</div>
+      <div class="sub-items">
+        <div class="sub-row">
+          <span class="sub key">When Used</span>
+          <span class="sub">Policyholders exist in multiple states each with different cashflows · Most relevant to IP &amp; LTCI</span>
+        </div>
+        <div class="sub-row">
+          <span class="sub key">IP States</span>
+          <span class="sub">Healthy ↔ Sick (claiming) → Dead / Lapsed · Deferred period handled by adjustment (not a separate state)</span>
+        </div>
+        <div class="sub-row">
+          <span class="sub key">Transition Intensities</span>
+          <span class="sub">μ<sup>ij</sup><sub>x</sub> = annual rate of moving from state i to j at age x · Applied each period to project sub-cohort counts</span>
+        </div>
+        <div class="sub-row">
+          <span class="sub key">Pricing Logic</span>
+          <span class="sub">EPV(claims) = sick sub-cohort × benefit amount · EPV(premiums) = healthy sub-cohort × premium · Solve for P</span>
+        </div>
+        <div class="sub-row">
+          <span class="sub key">Practical Limits</span>
+          <span class="sub">Many sub-cohorts → spurious accuracy · Data availability determines feasibility · Combine cohorts, use fewer reliable intensities · Same framework used for reserving (different assumptions)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="arrow">↓</div>
+
+  <!-- ⑧ MODEL OFFICE COMPONENTS -->
+  <div class="block b8">
+    <div class="num">⑧</div>
+    <div class="block-content">
+      <div class="block-title">Model Office — Main Components</div>
+      <div class="sub-items">
+        <div class="sub-row">
+          <span class="sub key">Policy Liability Model</span>
+          <span class="sub">Projects cashflows (physical &amp; notional) · Rolls forward in-force portfolio · Calculates supervisory reserves &amp; capital at each year-end</span>
+        </div>
+        <div class="sub-row">
+          <span class="sub key">Expense Model</span>
+          <span class="sub">Full office: all company expenses · Profit test: policy-related only · Fixed overheads: modelled globally in full office only</span>
+        </div>
+        <div class="sub-row">
+          <span class="sub key">Asset Model</span>
+          <span class="sub">Simple (profit test): expected total return only · Complex (inv. strategy): stochastic, by asset class, income + gains, dynamic asset mix · Must be consistent with liability model (esp. inflation)</span>
+        </div>
+        <div class="sub-row">
+          <span class="sub key">Consolidation &amp; Verification</span>
+          <span class="sub">Add up outputs → manual adjustments (un-modelled business, tax, contingency reserves) → verify vs supervisory valuation, vs prior results, vs simplified model</span>
+        </div>
+      </div>
+      <div class="note">4 Model types by scope: Single policy → NB model → Existing business → Full model office</div>
+    </div>
+  </div>
+
+</div><!-- end flow -->
+
+<div class="footer">
+  <span>SP1 Ch.11 · IFE 2019</span>
+  <span>OUTLINE NAVIGATOR — Modelling</span>
+  <span>Syllabus 4.1 · 4.2 · 4.3</span>
+</div>
+</body>
+</html>

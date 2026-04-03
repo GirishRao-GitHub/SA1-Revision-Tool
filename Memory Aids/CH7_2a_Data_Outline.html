@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Data — Outline Navigator</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --ink: #0f1117;
+    --paper: #f5f0e8;
+    --cream: #ede7d6;
+    --accent: #c0392b;
+    --gold: #b8860b;
+    --blue: #1a3a5c;
+    --green: #1e5f3f;
+    --purple: #5c3d7a;
+    --teal: #1a6b6b;
+    --brown: #7a3d1a;
+    --muted: #6b6560;
+    --rule: #c8bfaf;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 12px;
+    line-height: 1.5;
+    padding: 28px 24px;
+    max-width: 1140px;
+    margin: 0 auto;
+  }
+
+  /* MASTHEAD */
+  .masthead { border-top:4px solid var(--ink); border-bottom:2px solid var(--ink); padding:12px 0 10px; margin-bottom:28px; display:flex; align-items:baseline; gap:16px; flex-wrap:wrap; }
+  .masthead-title { font-family:'Playfair Display',serif; font-size:26px; font-weight:900; flex:1; }
+  .masthead-sub { font-family:'IBM Plex Mono',monospace; font-size:9.5px; color:var(--muted); text-transform:uppercase; letter-spacing:1.5px; }
+  .masthead-tag { font-family:'IBM Plex Mono',monospace; font-size:9.5px; background:var(--ink); color:#fff; padding:3px 8px; letter-spacing:1px; }
+
+  /* HOW TO USE */
+  .how-to {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 10px 16px;
+    margin-bottom: 22px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-size: 11px;
+  }
+  .how-to strong {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--gold);
+    white-space: nowrap;
+  }
+
+  /* FLOW CONTAINER */
+  .flow {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    position: relative;
+  }
+  .flow::before {
+    content: '';
+    position: absolute;
+    left: 22px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--accent), var(--blue), var(--green), var(--purple), var(--teal), var(--brown));
+    z-index: 0;
+  }
+
+  /* BLOCK */
+  .block {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    margin-bottom: 6px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* NUMBER BADGE */
+  .num {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 900;
+    color: white;
+    flex-shrink: 0;
+    border: 3px solid var(--paper);
+    box-shadow: 0 0 0 2px currentColor;
+  }
+
+  /* BLOCK CONTENT */
+  .block-content {
+    flex: 1;
+    border-left: 3px solid;
+    padding: 10px 14px;
+    background: var(--cream);
+  }
+  .block-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .sub-items { display:flex; flex-direction:column; gap:5px; }
+  .sub {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 10px;
+    padding: 3px 9px;
+    border: 1px solid;
+    background: white;
+    letter-spacing: 0.3px;
+  }
+  .sub.key {
+    color: white !important;
+    background: var(--ink);
+    border-color: transparent;
+    font-weight: 600;
+  }
+  .sub-row { display:flex; align-items:center; gap:5px; flex-wrap:wrap; }
+  .sub-row .sub.key { flex-shrink:0; white-space:nowrap; }
+  .sub-row .sub:not(.key) { flex:1; min-width:0; }
+
+  /* ARROW */
+  .arrow {
+    display: flex;
+    align-items: center;
+    padding-left: 14px;
+    margin: 2px 0;
+    color: var(--muted);
+    font-size: 16px;
+    z-index: 1;
+    position: relative;
+  }
+
+  /* COLOR SCHEMES */
+  .b1 .num { background: var(--accent); box-shadow: 0 0 0 2px var(--accent); }
+  .b1 .block-content { border-color: var(--accent); }
+  .b1 .block-title { color: var(--accent); }
+  .b1 .sub { border-color: var(--accent); color: var(--accent); }
+
+  .b2 .num { background: var(--blue); box-shadow: 0 0 0 2px var(--blue); }
+  .b2 .block-content { border-color: var(--blue); }
+  .b2 .block-title { color: var(--blue); }
+  .b2 .sub { border-color: var(--blue); color: var(--blue); }
+
+  .b3 .num { background: var(--green); box-shadow: 0 0 0 2px var(--green); }
+  .b3 .block-content { border-color: var(--green); }
+  .b3 .block-title { color: var(--green); }
+  .b3 .sub { border-color: var(--green); color: var(--green); }
+
+  .b4 .num { background: var(--purple); box-shadow: 0 0 0 2px var(--purple); }
+  .b4 .block-content { border-color: var(--purple); }
+  .b4 .block-title { color: var(--purple); }
+  .b4 .sub { border-color: var(--purple); color: var(--purple); }
+
+  .b5 .num { background: var(--teal); box-shadow: 0 0 0 2px var(--teal); }
+  .b5 .block-content { border-color: var(--teal); }
+  .b5 .block-title { color: var(--teal); }
+  .b5 .sub { border-color: var(--teal); color: var(--teal); }
+
+  .b6 .num { background: var(--brown); box-shadow: 0 0 0 2px var(--brown); }
+  .b6 .block-content { border-color: var(--brown); }
+  .b6 .block-title { color: var(--brown); }
+  .b6 .sub { border-color: var(--brown); color: var(--brown); }
+
+  .note {
+    font-size: 10px;
+    color: var(--muted);
+    margin-top: 6px;
+    font-style: italic;
+  }
+
+  /* FOOTER */
+  .footer { border-top:1px solid var(--rule); padding-top:8px; margin-top:24px; font-family:'IBM Plex Mono',monospace; font-size:9px; color:var(--muted); display:flex; justify-content:space-between; flex-wrap:wrap; gap:6px; }
+</style>
+</head>
+<body>
+
+<!-- MASTHEAD -->
+<div class="masthead">
+  <div class="masthead-title">Data — Health &amp; Care Insurance</div>
+  <span class="masthead-sub">SP1 Ch.12 · Syllabus 4.2 · Data Availability</span>
+  <span class="masthead-tag">OUTLINE NAVIGATOR</span>
+</div>
+
+<!-- HOW TO USE -->
+<div class="how-to">
+  <strong>How to Use</strong>
+  <span>Six numbered blocks = the six sections of Ch.12 in order. Each block gives you the key labels to recall. Use as a memory scaffold — can you fill in the detail for each tag before checking the companion reference?</span>
+</div>
+
+<div class="flow">
+
+  <!-- ① DATA CRITERIA -->
+  <div class="block b1">
+    <div class="num">①</div>
+    <div class="block-content">
+      <div class="block-title">Data Criteria &amp; General Considerations</div>
+      <div class="sub-items">
+        <div class="sub-row">
+          <span class="sub key">4 Core Criteria</span>
+          <span class="sub">Relevant · Credible · Available · Reliable</span>
+        </div>
+        <div class="sub-row">
+          <span class="sub key">Also Consider</span>
+          <span class="sub">Cost of obtaining &amp; analysing · Suitability of format</span>
+        </div>
+        <div class="sub-row">
+          <span class="sub key">Relevance means</span>
+          <span class="sub">Similar class of lives &amp; policy conditions to the product in question</span>
+        </div>
+        <div class="sub-row">
+          <span class="sub key">Credibility means</span>
+          <span class="sub">Sufficient volume → low sampling error · Actuary combines sources using judgement</span>
+        </div>
+        <div class="sub-row">
+          <span class="sub key">Adjustments</span>
+          <span class="sub">Data often needs adjustment · Broad-based ratios initially · Improves as own experience grows</span>
+        </div>
+      </div>
+      <div class="note">Primary focus: pricing · also relevant for reserving &amp; profitability assessment</div>
+    </div>
+  </div>
+  <div class="arrow">↓</div>
+
+  <!-- ② PROJECTION TO MID-POINT -->
+  <div class="block b2">
+    <div class="num">②</div>
+    <div class="block-content">
+      <div class="block-title">Projection to Mid-Point of Insurance Usage</div>
+      <div class="sub-items">
+        <div class="sub-row">
+          <span class="sub key">Why Project?</span>
+          <span class="sub">Data is historic · Must be valid across the full period rates are in force</span>
+        </div>
+        <div class="sub-row">
+          <span class="sub key">Project Forward By</span>
+          <span class="sub">½ × [shelf-life of rates] + ½ × [expected policy duration to termination / next review]</span>
+        </div>
+        <div class="sub-row">
+          <span class="sub key">Claim Inception Rates</span>
+          <span class="sub">Vary by age &amp; calendar year · Project using annual improvement factors</span>
+        </div>
+        <div class="sub-row">
+          <span class="sub key">Termination Rates</span>
+          <span class="sub">Vary by duration from claim start · Allow for improvement or deterioration</span>
+        </div>
+        <div class="sub-row">
+          <span class="sub key">PMI Avg Claim Size</span>
+          <span class="sub">Function of inflation, protocols, hospital charges, State provision · Reviewed annually → shorter horizon</span>
+        </div>
+        <div class="sub-row">
+          <span class="sub key">Shorter Term Benefit</span>
+          <span class="sub">Shorter review cycle → smaller uncertainty margins → cheaper premiums &amp; smaller reserves</span>
+        </div>
+      </div>
+      <div class="note">If future uncertainty is high, contract should allow for periodic review — otherwise reserves make premiums uncompetitive</div>
+    </div>
+  </div>
+  <div class="arrow">↓</div>
+
+  <!-- ③ OWN DATA -->
+  <div class="block b3">
+    <div class="num">③</div>
+    <div class="block-content">
+      <div class="block-title">Own Data</div>
+      <div class="sub-items">
+        <div class="sub-row">
+          <span class="sub key">Best For</span>
+          <span class="sub">Relevance — reflects company's own underwriting, claims management, distribution &amp; target market</span>
+        </div>
+        <div class="sub-row">
+          <span class="sub key">Relevance Factors</span>
+          <span class="sub">Underwriting &amp; acceptance · Policy conditions · Claims management · Distribution channels · Target market</span>
+        </div>
+        <div class="sub-row">
+          <span class="sub key">Cost / Format</span>
+          <span class="sub">No problem — held internally</span>
+        </div>
+        <div class="sub-row">
+          <span class="sub key">Credibility Gap</span>
+          <span class="sub">Volume usually insufficient, especially at risk-cell level → must supplement with external data</span>
+        </div>
+        <div class="sub-row">
+          <span class="sub key">Workaround</span>
+          <span class="sub">Fit simple adjustment to standard table · Use market data to weight low-credibility cells</span>
+        </div>
+        <div class="sub-row">
+          <span class="sub key">New Insurer</span>
+          <span class="sub">Totally reliant on external sources for years until own data builds credibility</span>
+        </div>
+      </div>
+      <div class="note">Own data: high relevance, low credibility — opposite problem to population data</div>
+    </div>
+  </div>
+  <div class="arrow">↓</div>
+
+  <!-- ④ POPULATION DATA -->
+  <div class="block b4">
+    <div class="num">④</div>
+    <div class="block-content">
+      <div class="block-title">Population Data</div>
+      <div class="sub-items">
+        <div class="sub-row">
+          <span class="sub key">Source</span>
+          <span class="sub">National government periodic healthcare analyses · Free &amp; readily available · Large volumes → credible</span>
+        </div>
+        <div class="sub-row">
+          <span class="sub key">Drawbacks</span>
+          <span class="sub">Accuracy/reliability questionable (double counting) · Format may be unsuitable · Often out-of-date on publication</span>
+        </div>
+        <div class="sub-row">
+          <span class="sub key">Relevance — Lives</span>
+          <span class="sub">Not specific to insured lives · Improve by splitting by socio-economic group &amp; region</span>
+        </div>
+        <div class="sub-row">
+          <span class="sub key">Relevance — Definition</span>
+          <span class="sub">Population 'sickness' definition ≠ insurance claim definition · Must adjust</span>
+        </div>
+        <div class="sub-row">
+          <span class="sub key">Anti-selection Nuance</span>
+          <span class="sub">Underwriting → healthier insured lives; but non-essential policy → purchasers may expect to claim → offset · No universal rule</span>
+        </div>
+      </div>
+      <div class="note">Vital first estimate for some risk cells · may be only available base · still needs adjustment before use</div>
+    </div>
+  </div>
+  <div class="arrow">↓</div>
+
+  <!-- ⑤ REINSURERS' DATA -->
+  <div class="block b5">
+    <div class="num">⑤</div>
+    <div class="block-content">
+      <div class="block-title">Reinsurers' Data</div>
+      <div class="sub-items">
+        <div class="sub-row">
+          <span class="sub key">Why Provided</span>
+          <span class="sub">Part of reinsurer's service · Reinsurer profits depend on accurate pricing → incentive to help</span>
+        </div>
+        <div class="sub-row">
+          <span class="sub key">Payment</span>
+          <span class="sub">Normally via reinsurance treaty (share of business) rather than direct fee</span>
+        </div>
+        <div class="sub-row">
+          <span class="sub key">Relevance</span>
+          <span class="sub">Must adjust for company's own underwriting &amp; claims management practices</span>
+        </div>
+        <div class="sub-row">
+          <span class="sub key">Credibility</span>
+          <span class="sub">Draws on broad market experience · Low for brand-new products · Grows as market for product develops</span>
+        </div>
+        <div class="sub-row">
+          <span class="sub key">Classic Use Case</span>
+          <span class="sub">CI insurance launch in new territory — reinsurers bridged gap using weighted overseas + local population data</span>
+        </div>
+      </div>
+      <div class="note">Reinsurers are market-wide 'data experts' — especially valuable at product launch</div>
+    </div>
+  </div>
+  <div class="arrow">↓</div>
+
+  <!-- ⑥ MARKET & OTHER SOURCES -->
+  <div class="block b6">
+    <div class="num">⑥</div>
+    <div class="block-content">
+      <div class="block-title">Market Data &amp; Other Sources</div>
+      <div class="sub-items">
+        <div class="sub-row">
+          <span class="sub key">Insured Lives Data</span>
+          <span class="sub">Industry pooling (eg CMI in UK) · More credible than own · Less relevant than own · Produces standard morbidity tables · Takes time to publish</span>
+        </div>
+        <div class="sub-row">
+          <span class="sub key">Supervisory Returns</span>
+          <span class="sub">Accurate overall · Limited detail for pricing · High-level cross-check only · Not designed for competitors</span>
+        </div>
+        <div class="sub-row">
+          <span class="sub key">Overseas Data</span>
+          <span class="sub">Less relevant (culture, State care, legislation, policy conditions differ) · May be credible in volume · Use with caution · Bridge via population ratios</span>
+        </div>
+        <div class="sub-row">
+          <span class="sub key">Actuarial Consultants</span>
+          <span class="sub">Like reinsurers (national &amp; international data) · Charge a fee · Do not share in the risk</span>
+        </div>
+        <div class="sub-row">
+          <span class="sub key">Rate Table Software</span>
+          <span class="sub">Market premium comparisons · Useful for initial data &amp; competitiveness checks</span>
+        </div>
+        <div class="sub-row">
+          <span class="sub key">Trade Magazines</span>
+          <span class="sub">Market info &amp; benefit/premium levels · Reasonability check · No claim statistics</span>
+        </div>
+      </div>
+      <div class="note">Insured lives data: credibility between own data &amp; population data · relevance between own data &amp; population data</div>
+    </div>
+  </div>
+
+</div><!-- end flow -->
+
+<div class="footer">
+  <span>SP1 Ch.12 · IFE 2019</span>
+  <span>OUTLINE NAVIGATOR — Data</span>
+  <span>Syllabus 4.2 · Data Availability</span>
+</div>
+</body>
+</html>

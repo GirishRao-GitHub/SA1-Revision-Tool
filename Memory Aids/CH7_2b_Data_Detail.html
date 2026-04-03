@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Data — Consolidated Study Matrix</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0f1117;
+    --paper: #f5f0e8;
+    --cream: #ede7d6;
+    --accent: #c0392b;
+    --accent-text: #a83226;
+    --gold: #b8860b;
+    --gold-text: #7a5c00;
+    --blue: #1a3a5c;
+    --green: #1e5f3f;
+    --purple: #5c3d7a;
+    --teal: #1a6b6b;
+    --brown: #7a3d1a;
+    --muted: #6b6560;
+    --rule: #c8bfaf;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:var(--paper); color:var(--ink); font-family:'IBM Plex Sans',sans-serif; font-size:12.5px; line-height:1.5; padding:28px 22px; max-width:1140px; margin:0 auto; }
+
+  /* MASTHEAD */
+  .masthead { border-top:4px solid var(--ink); border-bottom:2px solid var(--ink); padding:12px 0 10px; margin-bottom:22px; display:flex; align-items:baseline; gap:16px; flex-wrap:wrap; }
+  .masthead-title { font-family:'Playfair Display',serif; font-size:26px; font-weight:900; flex:1; }
+  .masthead-sub { font-family:'IBM Plex Mono',monospace; font-size:9.5px; color:var(--muted); text-transform:uppercase; letter-spacing:1.5px; }
+  .masthead-tag { font-family:'IBM Plex Mono',monospace; font-size:9.5px; background:var(--accent); color:#fff; padding:3px 8px; letter-spacing:1px; }
+
+  /* SECTION LABEL */
+  .sl { font-family:'IBM Plex Mono',monospace; font-size:9px; text-transform:uppercase; letter-spacing:2px; color:var(--muted); margin-bottom:5px; border-left:3px solid var(--accent); padding-left:7px; }
+  .sl.b  { border-left-color:var(--blue); }
+  .sl.g  { border-left-color:var(--green); }
+  .sl.p  { border-left-color:var(--purple); }
+  .sl.t  { border-left-color:var(--teal); }
+  .sl.br { border-left-color:var(--brown); }
+  .sl.go { border-left-color:var(--gold); }
+
+  /* GRID HELPERS */
+  .g3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px; margin-bottom:18px; }
+  .g2 { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:18px; }
+
+  /* CARD */
+  .card { background:var(--cream); border:1px solid var(--rule); padding:12px 14px; }
+  .ct { font-family:'Playfair Display',serif; font-size:14px; font-weight:700; margin-bottom:8px; padding-bottom:5px; border-bottom:1px solid var(--rule); }
+  .ct.r  { color:var(--accent-text); }
+  .ct.b  { color:var(--blue); }
+  .ct.g  { color:var(--green); }
+  .ct.p  { color:var(--purple); }
+  .ct.t  { color:var(--teal); }
+  .ct.br { color:var(--brown); }
+  .ct.go { color:var(--gold-text); }
+
+  /* PILL LIST */
+  .pl { list-style:none; display:flex; flex-direction:column; gap:4px; }
+  .pl li { background:white; border-left:3px solid var(--rule); padding:4px 7px; font-size:11.5px; line-height:1.4; }
+  .pl li.r  { border-left-color:var(--accent); }
+  .pl li.b  { border-left-color:var(--blue); }
+  .pl li.g  { border-left-color:var(--green); }
+  .pl li.p  { border-left-color:var(--purple); }
+  .pl li.t  { border-left-color:var(--teal); }
+  .pl li.br { border-left-color:var(--brown); }
+  .pl li.go { border-left-color:var(--gold); }
+  .pl li strong { font-weight:600; }
+  .pl li em { color:var(--muted); font-size:10.5px; }
+
+  /* MATRIX TABLE */
+  table.mx { width:100%; border-collapse:collapse; font-size:11px; margin-bottom:18px; }
+  table.mx thead th { background:var(--ink); color:var(--paper); font-family:'IBM Plex Mono',monospace; font-size:9.5px; text-transform:uppercase; letter-spacing:.8px; padding:7px 9px; text-align:left; border-right:1px solid #2a2d38; }
+  table.mx thead th:first-child { width:160px; }
+  table.mx thead th.h-r  { background:var(--accent); }
+  table.mx thead th.h-b  { background:var(--blue); }
+  table.mx thead th.h-g  { background:var(--green); }
+  table.mx thead th.h-p  { background:var(--purple); }
+  table.mx thead th.h-t  { background:var(--teal); }
+  table.mx thead th.h-br { background:var(--brown); }
+  table.mx tbody tr:nth-child(even) { background:var(--cream); }
+  table.mx tbody tr:nth-child(odd)  { background:white; }
+  table.mx tbody td { padding:7px 9px; border:1px solid var(--rule); vertical-align:top; line-height:1.4; font-size:11px; }
+  table.mx tbody td:first-child { font-family:'IBM Plex Mono',monospace; font-size:10px; font-weight:600; background:#e8e2d4; border-right:2px solid var(--ink); }
+  table.mx .good { color:var(--green); font-weight:600; }
+  table.mx .bad  { color:var(--accent); font-weight:600; }
+  table.mx .mid  { color:var(--gold-text); font-weight:600; }
+
+  /* COMPARE PANEL */
+  .cmp-wrap { margin-bottom:18px; }
+  .cmp-header { background:var(--ink); color:var(--paper); padding:9px 14px; display:flex; align-items:center; gap:12px; }
+  .cmp-header-title { font-family:'Playfair Display',serif; font-size:16px; font-weight:700; flex:1; }
+  .cmp-cols { display:grid; grid-template-columns:1fr 1fr 1fr; border:1px solid var(--rule); border-top:none; }
+  .cc { padding:13px 14px; }
+  .cc.c1 { background:#fdf0ef; border-right:1px solid var(--rule); }
+  .cc.c2 { background:#eef2f7; border-right:1px solid var(--rule); }
+  .cc.c3 { background:#f0f5f0; }
+  .basis-head { display:flex; align-items:center; gap:8px; margin-bottom:10px; padding-bottom:7px; border-bottom:2px solid; }
+  .basis-badge { font-family:'IBM Plex Mono',monospace; font-size:9px; font-weight:600; text-transform:uppercase; letter-spacing:1px; padding:2px 8px; color:white; }
+  .bb-r  { background:var(--accent); }
+  .bb-b  { background:var(--blue); }
+  .bb-g  { background:var(--green); }
+  .bb-p  { background:var(--purple); }
+  .bb-t  { background:var(--teal); }
+  .bb-br { background:var(--brown); }
+  .basis-subtitle { font-size:10.5px; color:var(--muted); font-style:italic; }
+
+  /* HIGHLIGHT BOX */
+  .hbox { background:white; border:1px solid var(--rule); border-left:4px solid var(--accent); padding:8px 12px; font-size:11.5px; margin-bottom:10px; }
+  .hbox.b  { border-left-color:var(--blue); }
+  .hbox.g  { border-left-color:var(--green); }
+  .hbox.p  { border-left-color:var(--purple); }
+  .hbox.t  { border-left-color:var(--teal); }
+  .hbox.br { border-left-color:var(--brown); }
+  .hbox strong { font-weight:600; }
+
+  /* NOTE */
+  .note { font-size:10px; color:var(--muted); font-style:italic; margin-top:6px; }
+
+  /* DIVIDER */
+  hr.div { border:none; border-top:2px solid var(--rule); margin:22px 0; }
+
+  /* FOOTER */
+  .footer { border-top:1px solid var(--rule); padding-top:8px; margin-top:20px; font-family:'IBM Plex Mono',monospace; font-size:9px; color:var(--muted); display:flex; justify-content:space-between; flex-wrap:wrap; gap:6px; }
+
+  /* TAG */
+  .tag { display:inline-block; font-family:'IBM Plex Mono',monospace; font-size:9px; padding:1px 6px; letter-spacing:.5px; font-weight:600; }
+  .tag.r  { background:var(--accent); color:white; }
+  .tag.b  { background:var(--blue); color:white; }
+  .tag.g  { background:var(--green); color:white; }
+  .tag.p  { background:var(--purple); color:white; }
+  .tag.t  { background:var(--teal); color:white; }
+  .tag.br { background:var(--brown); color:white; }
+
+  /* FORMULA BOX */
+  .fbox { background:var(--ink); color:var(--paper); font-family:'IBM Plex Mono',monospace; font-size:11px; padding:10px 14px; margin-bottom:10px; letter-spacing:0.5px; line-height:1.8; }
+  .fbox .label { color:var(--gold); font-size:9px; text-transform:uppercase; letter-spacing:1.5px; display:block; margin-bottom:4px; }
+</style>
+</head>
+<body>
+
+<!-- MASTHEAD -->
+<div class="masthead">
+  <div class="masthead-title">Data — Health &amp; Care Insurance</div>
+  <span class="masthead-sub">SP1 Ch.12 · Syllabus 4.2 · Data Availability</span>
+  <span class="masthead-tag">CONSOLIDATED STUDY MATRIX</span>
+</div>
+
+<!-- ① DATA CRITERIA & GENERAL CONSIDERATIONS -->
+<div class="sl">① Data Criteria &amp; General Considerations</div>
+<div class="g2" style="margin-bottom:10px;">
+  <div class="card">
+    <div class="ct r">4 Core Criteria for Data</div>
+    <ul class="pl">
+      <li class="r"><strong>Relevant</strong> — must relate to a similar class of lives and policy conditions to those expected for the product in question</li>
+      <li class="r"><strong>Credible</strong> — sufficient volume of data to enable precise estimates with relatively little sampling error</li>
+      <li class="r"><strong>Available</strong> — accessible to the actuary in time for the exercise</li>
+      <li class="r"><strong>Reliable</strong> — fit for the purpose intended; trustworthy source</li>
+    </ul>
+    <div class="note">Also consider: cost of obtaining &amp; analysing data · suitability of format</div>
+  </div>
+  <div class="card">
+    <div class="ct r">Judgement &amp; Adjustment</div>
+    <ul class="pl">
+      <li class="r"><strong>Combining sources:</strong> actuary uses judgement to compile statistics from one or more sources that together meet the criteria</li>
+      <li class="r"><strong>Adjustments always needed:</strong> chosen data body will likely require adjustment for the specific purpose — not a precise methodology; broad-based ratios initially</li>
+      <li class="r"><strong>Improves with experience:</strong> more accurate allowances possible once insurer has significant own experience data</li>
+      <li class="r"><strong>New products / markets:</strong> relevant experience data typically scarce; US PMI is the exception (very well established)</li>
+    </ul>
+    <div class="note">Actuary projects data forward using skill &amp; judgement to estimate future claim experience</div>
+  </div>
+</div>
+<div class="hbox" style="margin-bottom:18px;">
+  <strong>Key Point:</strong> The most important premium component is the pure risk cost (anticipated claims). Getting data right is therefore critical. For health &amp; care products, this is harder than for most life insurance products — greater reliance on external sources is the norm, not the exception.
+</div>
+
+<hr class="div">
+
+<!-- ② PROJECTION TO MID-POINT -->
+<div class="sl b">② Projection to Mid-Point of Insurance Usage</div>
+<div class="g2" style="margin-bottom:10px;">
+  <div class="card">
+    <div class="ct b">Why &amp; How Far to Project</div>
+    <ul class="pl">
+      <li class="b"><strong>Database is historic</strong> — assumptions must stay valid across the full life of policies written under the current pricing basis</li>
+      <li class="b"><strong>Two horizons to bridge:</strong> (1) the shelf-life of the rates (how long before rates are next revised), and (2) the expected policy duration to termination or next premium review date</li>
+      <li class="b"><strong>Project forward to the average mid-point</strong> — i.e. ½ × [shelf-life of proposed premium rates] + ½ × [expected duration to termination / review date]</li>
+      <li class="b"><strong>Greater uncertainty → larger margins needed</strong> in assumptions; longer projection horizon = more uncertainty = higher cost</li>
+    </ul>
+    <div class="note">The actuary must gather information on all local market trends &amp; developments to support projections</div>
+  </div>
+  <div class="card">
+    <div class="ct b">Projection by Assumption Type</div>
+    <ul class="pl">
+      <li class="b"><strong>Claim inception rates</strong> — vary by age and calendar year; project using annual improvement/deterioration factors applied to each policy year</li>
+      <li class="b"><strong>Claim termination rates</strong> — vary by duration from claim commencement; allow for improvement or deterioration over time</li>
+      <li class="b"><strong>PMI average claim size</strong> — function of medical inflation, treatment protocols, hospital charges, State provision; reviewed annually → much shorter projection horizon needed</li>
+    </ul>
+    <div class="hbox b" style="margin-top:10px;"><strong>Short review cycles benefit:</strong> smaller uncertainty margins → cheaper premiums → more competitive; smaller reserves → less capital required. Contract should allow future review where there is significant uncertainty.</div>
+  </div>
+</div>
+
+<hr class="div">
+
+<!-- ③ OWN DATA -->
+<div class="sl g">③ Own Data</div>
+<div class="g3">
+  <div class="card">
+    <div class="ct g">Why Own Data is Best</div>
+    <ul class="pl">
+      <li class="g"><strong>Relevance is the key advantage</strong> — reflects the insurer's specific approach to underwriting, claims and distribution, which external data cannot capture</li>
+      <li class="g">No cost or format problems — data is held internally</li>
+      <li class="g">Company's own experience is generally the best base for prediction of future experience</li>
+    </ul>
+    <div class="note">Own data = high relevance, typically low credibility — the opposite of population data</div>
+  </div>
+  <div class="card">
+    <div class="ct g">5 Relevance Factors (unique to each insurer)</div>
+    <ul class="pl">
+      <li class="g"><strong>Underwriting &amp; acceptance:</strong> strictness determines health profile of accepted lives</li>
+      <li class="g"><strong>Policy conditions:</strong> definition of claim, benefit triggers, exclusions differ across companies</li>
+      <li class="g"><strong>Claims management:</strong> approach to investigating, paying and contesting claims</li>
+      <li class="g"><strong>Distribution method &amp; channels:</strong> IFA vs direct vs bancassurance attracts different customer types</li>
+      <li class="g"><strong>Target market:</strong> occupational class mix, geographic distribution, age profile</li>
+    </ul>
+  </div>
+  <div class="card">
+    <div class="ct g">Credibility Problem &amp; Workarounds</div>
+    <ul class="pl">
+      <li class="g"><strong>Volume insufficient</strong> for most H&amp;C lines, especially at individual risk-cell level</li>
+      <li class="g"><strong>Workaround 1:</strong> express assumption as a simple adjustment to a standard (external) table — fit adjustment parameter statistically to own data</li>
+      <li class="g"><strong>Workaround 2:</strong> weight low-credibility cells using market data published at the same level of detail</li>
+      <li class="g"><strong>New insurer:</strong> totally reliant on external sources for years; credibility builds slowly; high-level analysis only initially</li>
+    </ul>
+  </div>
+</div>
+
+<hr class="div">
+
+<!-- ④ POPULATION DATA -->
+<div class="sl p">④ Population Data</div>
+<div class="g2" style="margin-bottom:10px;">
+  <div class="card">
+    <div class="ct p">What It Is &amp; Credibility</div>
+    <ul class="pl">
+      <li class="p"><strong>Source:</strong> national government periodic analyses of healthcare experience for the population</li>
+      <li class="p"><strong>Degree of sophistication varies</strong> enormously by country; availability is not universal</li>
+      <li class="p"><strong>Credibility: HIGH</strong> — large numbers involved; often the only available first estimate for some risk cells</li>
+      <li class="p"><strong>Cost: free</strong> and readily available in many territories</li>
+    </ul>
+    <div class="note">For some risk cells, population data may be the only base from which a first estimate of future costs can be established</div>
+  </div>
+  <div class="card">
+    <div class="ct p">Drawbacks: Format &amp; Accuracy</div>
+    <ul class="pl">
+      <li class="p"><strong>Accuracy &amp; reliability questionable</strong> — especially in H&amp;C where definitions are subjective and double-counting is significant. <em>E.g. CI: heart attack + bypass surgery = 1 claim but 2 population records — overlap must be removed</em></li>
+      <li class="p"><strong>Format problems</strong> — data may not be available electronically or in appropriate format for actuarial use</li>
+      <li class="p"><strong>Out-of-date</strong> — population data often takes years to compile and publish; may be stale on arrival</li>
+    </ul>
+  </div>
+</div>
+<div class="g2" style="margin-bottom:10px;">
+  <div class="card">
+    <div class="ct p">Relevance Issues &amp; Adjustments</div>
+    <ul class="pl">
+      <li class="p"><strong>Class of lives:</strong> national experience ≠ insured lives (different health profiles, demographics). Improve by splitting data by socio-economic group and region — insurer's policyholders' occupations link to socio-economic class; regional distribution affects morbidity rates</li>
+      <li class="p"><strong>Claim definition:</strong> population 'sickness' definition will differ from the insurance policy's claim trigger — requires careful adjustment before use</li>
+      <li class="p"><strong>No universal adjustment rule</strong> — the appropriate adjustment depends on the specific product, market and insurer's practices</li>
+    </ul>
+  </div>
+  <div class="card">
+    <div class="ct p">Anti-Selection Nuance (Exam Favourite)</div>
+    <div class="hbox p"><strong>Underwriting effect:</strong> insured lives are healthier than the general population — declined or loaded lives removed → expect better experience than population data suggests.</div>
+    <div class="hbox p" style="margin-top:8px;"><strong>Countervailing effect:</strong> if the policy is non-essential, people choose to buy insurance partly because they expect to claim (adverse selection / moral hazard). This offsets the underwriting improvement — particularly evident in CI cover in many markets.</div>
+    <ul class="pl" style="margin-top:8px;">
+      <li class="p">Actuaries may apply only a small discount to population data; validity depends on sales, marketing, underwriting &amp; claims philosophy</li>
+    </ul>
+  </div>
+</div>
+
+<hr class="div">
+
+<!-- ⑤ REINSURERS' DATA -->
+<div class="sl t">⑤ Reinsurers' Data</div>
+<div class="g3">
+  <div class="card">
+    <div class="ct t">Why Reinsurers Provide Data</div>
+    <ul class="pl">
+      <li class="t"><strong>Service motivation:</strong> reinsurer's profits under a treaty depend on the accuracy of the insurance premiums → strong incentive to help price correctly</li>
+      <li class="t"><strong>Payment mechanism:</strong> normally provided in return for a share of the business (reinsurance treaty) rather than a direct fee</li>
+      <li class="t"><strong>Treaty is typical:</strong> it is almost invariably the case that a reinsurance treaty is set up — this is the usual means by which the insurer pays the reinsurer for data services received</li>
+    </ul>
+    <div class="note">Contrast with actuarial consultants: similar data access but charge a fee and do not share in the risk</div>
+  </div>
+  <div class="card">
+    <div class="ct t">Relevance &amp; Adjustments Needed</div>
+    <ul class="pl">
+      <li class="t"><strong>Assess divergence</strong> from company's own likely future experience, even if most risk is ceded</li>
+      <li class="t"><strong>Adjust for:</strong> company's specific underwriting approach and claims management practices — these may not be known to the reinsurer</li>
+      <li class="t"><strong>But:</strong> if the reinsurer is taking on a proportion of the risk, it will be very interested in the underwriting and claims process (directly impacts its own risk)</li>
+    </ul>
+  </div>
+  <div class="card">
+    <div class="ct t">Credibility &amp; Classic Use Case</div>
+    <ul class="pl">
+      <li class="t"><strong>Credibility:</strong> reinsurers draw from broad market involvement — excellent position to assist product launches</li>
+      <li class="t"><strong>New products:</strong> credibility is low initially; grows as the market for that product develops and reinsurers accumulate own treaty experience</li>
+      <li class="t"><strong>Classic example — CI:</strong> reinsurers drove CI development in many territories in the 1980s; no insured experience existed → used weighted overseas insured data + local population data</li>
+      <li class="t"><strong>Established products:</strong> reinsurers increasingly rely on own treaty experience → more accurate data</li>
+    </ul>
+  </div>
+</div>
+
+<hr class="div">
+
+<!-- ⑥ MARKET DATA & OTHER SOURCES -->
+<div class="sl br">⑥ Market Data &amp; Other Sources</div>
+
+<!-- Source comparison matrix -->
+<table class="mx" style="margin-bottom:14px;">
+  <thead>
+    <tr>
+      <th class="h-br">Source</th>
+      <th>Relevance</th>
+      <th>Credibility</th>
+      <th>Cost / Format</th>
+      <th>Key Drawback / Best Use</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Own Data</td>
+      <td><span class="good">BEST</span> — reflects company UW, claims mgmt, distribution, market</td>
+      <td><span class="bad">OFTEN LOW</span> — volume insufficient; especially at risk-cell level</td>
+      <td><span class="good">Free · No format issues</span></td>
+      <td>Supplement with external; use standard table adjustment</td>
+    </tr>
+    <tr>
+      <td>Population Data</td>
+      <td><span class="bad">WEAKEST</span> — not insured lives; claim definition differs; socio-econ split helps</td>
+      <td><span class="good">HIGH</span> — large national volumes; freely available</td>
+      <td><span class="good">Free</span> · Format / electronic access may be poor</td>
+      <td>Double counting risk (CI) · Often out-of-date; first estimate only</td>
+    </tr>
+    <tr>
+      <td>Reinsurers' Data</td>
+      <td><span class="mid">GOOD</span> — adjust for company's own UW &amp; claims practices</td>
+      <td><span class="mid">MODERATE–GOOD</span> — grows with market development</td>
+      <td>Paid via treaty share · Expert guidance included</td>
+      <td>Low credibility for brand-new products; must adjust for own practices</td>
+    </tr>
+    <tr>
+      <td>Insured Lives (Industry)</td>
+      <td><span class="mid">BETTER than population</span> — local insured experience; market practices reflected</td>
+      <td><span class="good">HIGH</span> — pooled industry volumes; more credible than own</td>
+      <td>Published; takes years to release; standard tables infrequent</td>
+      <td>Market average only — not company-specific; PMI data very limited</td>
+    </tr>
+    <tr>
+      <td>Supervisory Returns</td>
+      <td><span class="bad">LOW</span> — competitor data; different UW, claims, markets</td>
+      <td><span class="mid">ACCURATE</span> but lacks cell detail</td>
+      <td>Public; not designed for pricing competitors</td>
+      <td>High-level cross-check only; no breakdown by age, gender etc.</td>
+    </tr>
+    <tr>
+      <td>Overseas Data</td>
+      <td><span class="bad">LOW</span> — different culture, State provision, legislation, policy conditions</td>
+      <td><span class="mid">MAY BE CREDIBLE</span> in volume</td>
+      <td>Requires bridging via population ratios</td>
+      <td>Starting point only; substantial adjustments almost always needed</td>
+    </tr>
+    <tr>
+      <td>Actuarial Consultants</td>
+      <td><span class="mid">SIMILAR to reinsurers</span> — national &amp; international data access</td>
+      <td><span class="mid">SIMILAR to reinsurers</span></td>
+      <td><span class="bad">Fee charged</span> · Do not share in risk</td>
+      <td>Useful where reinsurance is not desired; same data quality caveats apply</td>
+    </tr>
+    <tr>
+      <td>Rate Table Software</td>
+      <td>Market premium comparisons</td>
+      <td>Reflects competitive market rates</td>
+      <td>Commercial software</td>
+      <td>Initial data gathering or final competitiveness check; no claim stats</td>
+    </tr>
+    <tr>
+      <td>Trade Magazines</td>
+      <td>Market info on benefits &amp; premiums</td>
+      <td>Limited detail</td>
+      <td>Low cost</td>
+      <td>Reasonability check only; no claim statistics published</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="g2">
+  <div class="card">
+    <div class="ct br">Insured Lives Data — Detail (e.g. CMI in UK)</div>
+    <ul class="pl">
+      <li class="br"><strong>Mechanism:</strong> agreement between companies to pool claims &amp; policy statistics → industry-wide data more credible than any individual insurer's data</li>
+      <li class="br"><strong>Output:</strong> standard morbidity tables (used as base reference for experience monitoring &amp; assumption-setting)</li>
+      <li class="br"><strong>Standard tables infrequent:</strong> great deal of preparation involved; pooled experience expressed as adjustment to most recent standard until a new one is warranted</li>
+      <li class="br"><strong>Key advantages:</strong> represents insured experience · credible volume · reflects local market practices · compiled by experts (removes company-specific glitches)</li>
+      <li class="br"><strong>Key limitation:</strong> market average only — not specific to any one company; actuary must consider how own experience differs and adjust accordingly</li>
+      <li class="br"><strong>Underwriting translation caution:</strong> strict life UW ratios may not translate directly to morbidity ratios for IP/CI business</li>
+    </ul>
+    <div class="note">PMI insured lives data: very limited except at a high level (unlike CI and IP)</div>
+  </div>
+  <div class="card">
+    <div class="ct br">Overseas Data — Bridging Method &amp; Caveats</div>
+    <div class="hbox br"><strong>Bridging formula (broad approach):</strong><br>Estimated home insured experience ≈ overseas insured experience × (home population rates ÷ overseas population rates)</div>
+    <ul class="pl" style="margin-top:8px;">
+      <li class="br"><strong>Always less relevant</strong> than equivalent home territory data, even where insured</li>
+      <li class="br"><strong>Key differences to allow for:</strong> culture · State healthcare provision (directly affects insurance experience) · market practices · legislation · policy conditions</li>
+      <li class="br"><strong>Starting point only</strong> — further adjustments almost certainly required</li>
+    </ul>
+    <div class="hbox br" style="margin-top:8px;"><strong>Actuarial Consultants vs Reinsurers:</strong> similar data access; key difference is that consultants charge a direct fee and do not share in the insurance risk. Reinsurers are compensated via the treaty.</div>
+  </div>
+</div>
+
+<div class="footer">
+  <span>SP1 Ch.12 · IFE 2019</span>
+  <span>CONSOLIDATED STUDY MATRIX — Data</span>
+  <span>Syllabus 4.2 · Data Availability</span>
+</div>
+</body>
+</html>
