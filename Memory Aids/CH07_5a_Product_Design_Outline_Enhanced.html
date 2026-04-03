@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Product Design — Outline Navigator (Enhanced)</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --ink: #0f1117;
+    --paper: #f5f0e8;
+    --cream: #ede7d6;
+    --accent: #c0392b;
+    --gold: #b8860b;
+    --blue: #1a3a5c;
+    --green: #1e5f3f;
+    --purple: #5c3d7a;
+    --stat: #1a3a5c;
+    --solv: #7a3d1a;
+    --muted: #6b6560;
+    --rule: #c8bfaf;
+    --ifoa: #0a6b3b;
+    --iai: #1a4a8a;
+    --enh-bg: #f0f7f4;
+    --enh-border: #0a6b3b;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 12px;
+    line-height: 1.5;
+    padding: 28px 24px;
+    max-width: 1140px;
+    margin: 0 auto;
+  }
+  .masthead { border-top:4px solid var(--ink); border-bottom:2px solid var(--ink); padding:12px 0 10px; margin-bottom:20px; display:flex; align-items:baseline; gap:16px; }
+  .masthead-title { font-family:'Playfair Display',serif; font-size:26px; font-weight:900; flex:1; }
+  .masthead-sub { font-family:'IBM Plex Mono',monospace; font-size:9.5px; color:var(--muted); text-transform:uppercase; letter-spacing:1.5px; }
+  .masthead-tag { font-family:'IBM Plex Mono',monospace; font-size:9.5px; background:var(--ink); color:#fff; padding:3px 8px; letter-spacing:1px; }
+
+  /* LEGEND */
+  .legend { background:#1a1d24; color:var(--paper); padding:10px 16px; margin-bottom:18px; display:flex; align-items:center; gap:20px; flex-wrap:wrap; font-size:10.5px; }
+  .legend strong { font-family:'IBM Plex Mono',monospace; font-size:9px; text-transform:uppercase; letter-spacing:1px; color:var(--gold); white-space:nowrap; margin-right:4px; }
+  .leg-item { display:flex; align-items:center; gap:6px; }
+  .badge { font-family:'IBM Plex Mono',monospace; font-size:8.5px; font-weight:600; padding:2px 6px; letter-spacing:0.5px; white-space:nowrap; border-radius:2px; }
+  .badge.ifoa { background:var(--ifoa); color:white; }
+  .badge.iai  { background:var(--iai);  color:white; }
+
+  .flow { display:flex; flex-direction:column; gap:0; position:relative; }
+  .flow::before {
+    content:'';
+    position:absolute;
+    left:22px; top:0; bottom:0; width:2px;
+    background: linear-gradient(to bottom, var(--accent), var(--blue), var(--stat), var(--gold), var(--purple), #5c3d1a, var(--green), var(--ink));
+    z-index:0;
+  }
+
+  .block { display:flex; gap:16px; align-items:flex-start; margin-bottom:6px; position:relative; z-index:1; }
+  .num {
+    width:44px; height:44px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Playfair Display',serif; font-size:18px; font-weight:900; color:white;
+    flex-shrink:0; border:3px solid var(--paper); box-shadow:0 0 0 2px currentColor;
+  }
+  .block-content { flex:1; border-left:3px solid; padding:10px 14px; background:var(--cream); }
+  .block-title { font-family:'Playfair Display',serif; font-size:14px; font-weight:700; margin-bottom:6px; }
+  .sub-items { display:flex; flex-direction:column; gap:5px; }
+  .sub {
+    font-family:'IBM Plex Mono',monospace; font-size:10px;
+    padding:3px 9px; border:1px solid; background:white; letter-spacing:0.3px;
+  }
+  .sub.key { color:white !important; background:var(--ink); border-color:transparent; font-weight:600; }
+  .arrow { display:flex; align-items:center; padding-left:14px; margin:2px 0; color:var(--muted); font-size:16px; z-index:1; position:relative; }
+
+  /* ENHANCEMENT BLOCK */
+  .enh-block { margin-top:7px; padding:7px 10px; background:var(--enh-bg); border-left:3px solid var(--enh-border); }
+  .enh-label { font-family:'IBM Plex Mono',monospace; font-size:8.5px; text-transform:uppercase; letter-spacing:1px; color:var(--enh-border); margin-bottom:4px; font-weight:600; }
+  .enh-row { display:flex; align-items:flex-start; gap:6px; margin-bottom:3px; font-size:10.5px; line-height:1.4; }
+  .enh-row:last-child { margin-bottom:0; }
+
+  /* Block colour schemes */
+  .b1 .num { background:var(--accent); box-shadow:0 0 0 2px var(--accent); }
+  .b1 .block-content { border-color:var(--accent); }
+  .b1 .block-title { color:var(--accent); }
+  .b1 .sub { color:var(--accent); border-color:#e8a09a; }
+  .b1 .sub.key { background:var(--accent); }
+  .b1 .enh-block { border-color:var(--accent); background:#fdf3f3; }
+  .b1 .enh-label { color:var(--accent); }
+
+  .b2 .num { background:var(--blue); box-shadow:0 0 0 2px var(--blue); }
+  .b2 .block-content { border-color:var(--blue); }
+  .b2 .block-title { color:var(--blue); }
+  .b2 .sub { color:var(--blue); border-color:#a0b4c8; }
+  .b2 .sub.key { background:var(--blue); }
+  .b2 .enh-block { border-color:var(--blue); background:#f0f4f8; }
+  .b2 .enh-label { color:var(--blue); }
+
+  .b3 .num { background:var(--stat); box-shadow:0 0 0 2px var(--stat); }
+  .b3 .block-content { border-color:var(--stat); background:#eef2f7; }
+  .b3 .block-title { color:var(--stat); }
+  .b3 .sub { color:var(--stat); border-color:#a0b4c8; }
+  .b3 .sub.key { background:var(--stat); }
+  .b3 .enh-block { border-color:var(--stat); background:#e8eef5; }
+  .b3 .enh-label { color:var(--stat); }
+
+  .b4 .num { background:var(--gold); box-shadow:0 0 0 2px var(--gold); }
+  .b4 .block-content { border-color:var(--gold); background:#fffdf0; }
+  .b4 .block-title { color:var(--gold); }
+  .b4 .sub { color:var(--gold); border-color:#d4b86a; }
+  .b4 .sub.key { background:var(--gold); }
+  .b4 .enh-block { border-color:var(--gold); background:#fdf8e0; }
+  .b4 .enh-label { color:var(--gold); }
+
+  .b5 .num { background:var(--purple); box-shadow:0 0 0 2px var(--purple); }
+  .b5 .block-content { border-color:var(--purple); background:#f8f4fc; }
+  .b5 .block-title { color:var(--purple); }
+  .b5 .sub { color:var(--purple); border-color:#c4a8e0; }
+  .b5 .sub.key { background:var(--purple); }
+  .b5 .enh-block { border-color:var(--purple); background:#f4f0f9; }
+  .b5 .enh-label { color:var(--purple); }
+
+  .b6 .num { background:#5c3d1a; box-shadow:0 0 0 2px #5c3d1a; }
+  .b6 .block-content { border-color:#5c3d1a; }
+  .b6 .block-title { color:#5c3d1a; }
+  .b6 .sub { color:#5c3d1a; border-color:#c4a888; }
+  .b6 .sub.key { background:#5c3d1a; }
+  .b6 .enh-block { border-color:#5c3d1a; background:#f7f0e8; }
+  .b6 .enh-label { color:#5c3d1a; }
+
+  .b7 .num { background:var(--green); box-shadow:0 0 0 2px var(--green); }
+  .b7 .block-content { border-color:var(--green); background:#eef7f2; }
+  .b7 .block-title { color:var(--green); }
+  .b7 .sub { color:var(--green); border-color:#90c4a8; }
+  .b7 .sub.key { background:var(--green); }
+  .b7 .enh-block { border-color:var(--green); background:#e6f4ec; }
+  .b7 .enh-label { color:var(--green); }
+
+  .b8 .num { background:var(--ink); box-shadow:0 0 0 2px var(--ink); }
+  .b8 .block-content { border-color:var(--ink); background:#1a1d24; color:var(--paper); }
+  .b8 .block-title { color:var(--paper); }
+  .b8 .sub { color:var(--paper); border-color:#444; background:#2a2d38; }
+  .b8 .sub.key { background:var(--accent); border-color:var(--accent); color:white; }
+  .b8 .enh-block { border-color:var(--gold); background:#242830; }
+  .b8 .enh-label { color:var(--gold); }
+  .b8 .enh-row { color:#d0cfc8; }
+
+  .note { font-family:'IBM Plex Mono',monospace; font-size:9.5px; color:var(--muted); margin-top:6px; font-style:italic; }
+  .b8 .note { color:#888; }
+  .footer { border-top:1px solid var(--rule); padding-top:8px; margin-top:20px; font-family:'IBM Plex Mono',monospace; font-size:9px; color:var(--muted); display:flex; justify-content:space-between; }
+  .how-to { background:var(--ink); color:var(--paper); padding:10px 16px; margin-bottom:22px; display:flex; align-items:center; gap:16px; font-size:11px; }
+  .how-to strong { font-family:'IBM Plex Mono',monospace; font-size:9px; text-transform:uppercase; letter-spacing:1px; color:var(--gold); white-space:nowrap; }
+  .sub-row { display:flex; align-items:center; gap:5px; flex-wrap:wrap; }
+  .sub-row .sub.key { flex-shrink:0; white-space:nowrap; }
+  .sub-row .sub:not(.key) { flex:1; min-width:0; }
+</style>
+</head>
+<body>
+
+<div class="masthead">
+  <div class="masthead-title">Product Design &amp; Stakeholder Interests</div>
+  <span class="masthead-sub">SP1 Ch.6–7 · SA1 · Enhanced</span>
+  <span class="masthead-tag">OUTLINE NAVIGATOR — LEVEL 1</span>
+</div>
+
+<div class="how-to">
+  <strong>How to use</strong>
+  <span>Each numbered block maps exactly to a section in the <strong>Consolidated Study Matrix</strong>. Same number · Same colour · Same name. Rehearse the architecture here before drilling into detail. Green-tinted additions below each block are exam-sourced enhancements.</span>
+</div>
+
+<div class="legend">
+  <strong>Enhancement Key</strong>
+  <div class="leg-item"><span class="badge ifoa">IFoA Apr-24</span> = IFoA examiner solution — year and sitting</div>
+  <div class="leg-item"><span class="badge iai">IAI Mar-21</span> = IAI examiner solution — year and sitting</div>
+  <div class="leg-item" style="color:#aaa;">Green-tinted boxes = exam-sourced additions not in original notes</div>
+</div>
+
+<div class="flow">
+
+<!-- ① -->
+<div class="block b1">
+  <div class="num">①</div>
+  <div class="block-content">
+    <div class="block-title">The 5 Customer Design Factors</div>
+    <div class="sub-items">
+      <div class="sub-row"><span class="sub key">Meet Specific Needs</span><span class="sub">Repay loans · Replace income · Finance medical treatment · Product meets needs at time of purchase</span></div>
+      <div class="sub-row"><span class="sub key">Provide Cash</span><span class="sub">Cash = policyholder chooses level &amp; use · Indemnity = insurer negotiates cheaper provider prices · Risk of poor decision with cash</span></div>
+      <div class="sub-row"><span class="sub key">Peace of Mind</span><span class="sub">Psychological value of knowing you are protected · Customers often unaware of true risk size · State benefits perceived as more generous than reality</span></div>
+      <div class="sub-row"><span class="sub key">Simplicity &amp; Clarity</span><span class="sub">Health cover more complex than life insurance · Events variable in severity · Definition problems throughout · Exclusions/conditions add confusion</span></div>
+      <div class="sub-row"><span class="sub key">Guaranteed vs Reviewable</span><span class="sub">Customers prefer guaranteed · Uncertainty in H&amp;C → reviewable often dominant · Guarantee = expensive reserves · Must inform customer clearly</span></div>
+    </div>
+    <div class="enh-block">
+      <div class="enh-label">★ Exam Additions</div>
+      <div class="enh-row"><span class="badge ifoa" style="flex-shrink:0;">IFoA Apr-25</span><span>CI in mature markets: ~50–60% of claims paid out — a simplicity/clarity failure at scale. Definitions too restrictive vs layperson understanding erodes peace of mind and trust.</span></div>
+      <div class="enh-row"><span class="badge iai" style="flex-shrink:0;">IAI May-25</span><span>Information asymmetry in healthcare (patient cannot know cost in advance) → certainty of procedure cost is a powerful peace-of-mind driver for fixed-price surgical products.</span></div>
+      <div class="enh-row"><span class="badge ifoa" style="flex-shrink:0;">IFoA Sep-21</span><span>Microinsurance: peace of mind value is high even for simple/low-benefit products — certainty of cost at point of need is the core customer benefit regardless of benefit level.</span></div>
+      <div class="enh-row"><span class="badge iai" style="flex-shrink:0;">IAI Nov-20</span><span>Rider vs standalone: rider reduces customer price barrier and simplifies purchase decision; standalone gives clearer customer understanding of cover — simplicity tension.</span></div>
+    </div>
+  </div>
+</div>
+<div class="arrow">↓</div>
+
+<!-- ② -->
+<div class="block b2">
+  <div class="num">②</div>
+  <div class="block-content">
+    <div class="block-title">Meeting Specific Needs — By Product</div>
+    <div class="sub-items">
+      <div class="sub-row"><span class="sub key">IP</span><span class="sub">(1) Replace income during disability [60–75% salary] (2) Service loans/mortgage (3) Locum cover · Key groups: self-employed · employer scheme · individuals without employer provision</span></div>
+      <div class="sub-row"><span class="sub key">CI</span><span class="sub">Repay loan/mortgage · Fund medical costs · Income via annuity · Keyperson cover · Lifestyle change · Recuperation · Taxation planning</span></div>
+      <div class="sub-row"><span class="sub key">LTCI</span><span class="sub">Protect against care costs in old age · Domestic support → live-in care → residential · State uncertainty &amp; reduced informal care drive demand · May also be purchased for elderly relatives</span></div>
+      <div class="sub-row"><span class="sub key">PMI</span><span class="sub">Complement/augment state care · Better quality or shorter waiting times · Primary care too where no state cover · Microinsurance = low-income markets / basic cover / affordability</span></div>
+    </div>
+    <div class="enh-block">
+      <div class="enh-label">★ Exam Additions</div>
+      <div class="enh-row"><span class="badge ifoa" style="flex-shrink:0;">IFoA Sep-21</span><span>Student IP: conditions covered should reflect those prevalent amongst target group (e.g. mental health, stress, sport injuries); incapacity definition adapted to studying context — not occupation-based.</span></div>
+      <div class="enh-row"><span class="badge iai" style="flex-shrink:0;">IAI Mar-21</span><span>Group IP employer rationale: insures statutory/discretionary sickness liability; enhances reward package; attracts/retains staff; provides absence management support — all distinct needs from individual IP.</span></div>
+      <div class="enh-row"><span class="badge iai" style="flex-shrink:0;">IAI Nov-19</span><span>LTCI pre-funded vs immediate needs: pre-funded bought in good health (regular/single premium); immediate needs = lump sum at point of care need — completely different customer timing and risk profile.</span></div>
+      <div class="enh-row"><span class="badge iai" style="flex-shrink:0;">IAI Nov-24</span><span>PMI key features (exam checklist): indemnity product; acute not chronic conditions; insurer pays provider directly; annually renewable; variable premium on renewal.</span></div>
+      <div class="enh-row"><span class="badge ifoa" style="flex-shrink:0;">IFoA Apr-24</span><span>Novel distribution (grocery chain): product design adapted to no-underwriting, promotional, short-term context — benefits must be simple, limits low, exclusions minimal; customer need must still be identified.</span></div>
+    </div>
+  </div>
+</div>
+<div class="arrow">↓</div>
+
+<!-- ③ -->
+<div class="block b3">
+  <div class="num">③</div>
+  <div class="block-content">
+    <div class="block-title">Cash vs Indemnity &amp; Benefit Form — By Product</div>
+    <div class="sub-items">
+      <div class="sub-row"><span class="sub key">IP</span><span class="sub">Cash income · Commutable (anti-selection caution) · Proportional/rehabilitation benefit → incentive to return to work</span></div>
+      <div class="sub-row"><span class="sub key">CI</span><span class="sub">Cash lump sum — cannot be withdrawn · Not linked to actual loss → windfall risk → anti-selection · Can exceed medical cost (angioplasty example)</span></div>
+      <div class="sub-row"><span class="sub key">LTCI</span><span class="sub">Usually cash (not indemnity) — longevity risk + benefit inflation too uncertain · Immediate needs policy: lump sum → income · Pre-funded: cash income at onset of incapacity</span></div>
+      <div class="sub-row"><span class="sub key">PMI</span><span class="sub">Indemnity — insurer pays provider directly · Exceptions: health cash plans · daily hospital benefit · major medical expenses · personal accident (lump sum on specified injury)</span></div>
+    </div>
+    <div class="note">IP stops on recovery; CI lump sum does not — key product comparison point</div>
+    <div class="enh-block">
+      <div class="enh-label">★ Exam Additions</div>
+      <div class="enh-row"><span class="badge iai" style="flex-shrink:0;">IAI Jul-22</span><span>Outpatient (OP) cover: cash co-payment/deductible per consultation controls moral hazard in high-frequency, low-severity OP business; annual cap on aggregate benefit. GP referral required before specialist.</span></div>
+      <div class="enh-row"><span class="badge ifoa" style="flex-shrink:0;">IFoA Sep-22</span><span>Microinsurance: fixed daily hospital benefit (cash) avoids anti-selection risk vs indemnity and greatly simplifies administration at scale — preferred form for mobile/low-infrastructure markets.</span></div>
+      <div class="enh-row"><span class="badge iai" style="flex-shrink:0;">IAI Nov-20</span><span>Overseas top-up: fixed annual benefit cap; regional geographic options (cost of care varies significantly); cover travel and companion costs partially — design features that control cost while maximising perceived value.</span></div>
+    </div>
+  </div>
+</div>
+<div class="arrow">↓</div>
+
+<!-- ④ -->
+<div class="block b4">
+  <div class="num">④</div>
+  <div class="block-content">
+    <div class="block-title">Simplicity &amp; Clarity — Issues by Product</div>
+    <div class="sub-items">
+      <div class="sub-row"><span class="sub key">IP Issues</span><span class="sub">(1) Benefit limits (60%) (2) Not always salary-linked (3) Complex UW — occupation/history (4) Exclusions — alcohol/war/travel (5) Objective incapacity — ADWs / FATs / PCAs</span></div>
+      <div class="sub-row"><span class="sub key">CI: Simple</span><span class="sub">Lump sum cannot be withdrawn · Diagnosis/procedure trigger easy to explain · No withdrawal risk</span></div>
+      <div class="sub-row"><span class="sub key">CI: Complex</span><span class="sub">Exclusions · Point-of-claim UW · Non-standard definitions differ by insurer · Tiered benefits = harder to compare + more claims disputes</span></div>
+      <div class="sub-row"><span class="sub key">LTCI</span><span class="sub">Cash ≠ full indemnity (confusion risk) · Limited periods/amounts · ADL triggers — not doctor's referral — must be explained</span></div>
+      <div class="sub-row"><span class="sub key">PMI</span><span class="sub">UW process misunderstood · Excesses/upper limits · Chronic/cosmetic exclusions · Cost-sharing (coinsurance/excess) · Pre-authorisation · Hospital bands/networks</span></div>
+    </div>
+    <div class="enh-block">
+      <div class="enh-label">★ Exam Additions</div>
+      <div class="enh-row"><span class="badge ifoa" style="flex-shrink:0;">IFoA Apr-25</span><span>CI mature market failure: ~50–60% claims-paid rate signals definitions too restrictive vs layperson understanding — regulator introduced consumer protection rules requiring definition review.</span></div>
+      <div class="enh-row"><span class="badge ifoa" style="flex-shrink:0;">IFoA Sep-24</span><span>Adding mental health to CI: hard to define objectively for claim trigger; high population prevalence creates adverse selection risk; definitions even more likely to differ from layperson understanding than physical conditions.</span></div>
+      <div class="enh-row"><span class="badge iai" style="flex-shrink:0;">IAI Jun-19</span><span>PMI complaints (India): back-end UW (moratorium) means exclusions only applied at claim stage — customer unaware at purchase → disputes and complaints. Source of major clarity failure in practice.</span></div>
+      <div class="enh-row"><span class="badge iai" style="flex-shrink:0;">IAI Nov-23</span><span>Gender-neutral marketing (complexity workaround): target gender indirectly — advertise in gender-targeted media; use worksite marketing for gender-biased occupations; highlight specific illness covered.</span></div>
+    </div>
+  </div>
+</div>
+<div class="arrow">↓</div>
+
+<!-- ⑤ -->
+<div class="block b5">
+  <div class="num">⑤</div>
+  <div class="block-content">
+    <div class="block-title">Guaranteed vs Reviewable — By Product</div>
+    <div class="sub-items">
+      <div class="sub-row"><span class="sub key">IP</span><span class="sub">Reviewable predominates · Uncertain experience (unemployment trends, economic/social) · Guarantees expensive: reserves required · Selective lapsing limits size of premium increases</span></div>
+      <div class="sub-row"><span class="sub key">CI</span><span class="sub">Reviewable more suitable (medical advances rapid) · But competitive pressure has led to guaranteed premium products being sold · Difficult to assess new risk implications</span></div>
+      <div class="sub-row"><span class="sub key">LTCI</span><span class="sub">Immediate needs policy = no guarantee problem (lump sum → income at point of need) · Pre-funded products: reviewable premiums predominate</span></div>
+      <div class="sub-row"><span class="sub key">PMI</span><span class="sub">Annually renewable → premiums AND policy conditions reviewed each year · Short-term nature eliminates long-term guarantee problem entirely</span></div>
+    </div>
+    <div class="note">Customer must be clearly informed of reviewable status and potential for premium change</div>
+    <div class="enh-block">
+      <div class="enh-label">★ Exam Additions</div>
+      <div class="enh-row"><span class="badge iai" style="flex-shrink:0;">IAI Dec-22</span><span>Guaranteed IP pros: increases sales; no reputational risk; less selective lapsation (no renewal trigger); simpler admin. Cons: onerous capital requirements; inflexible if experience deteriorates.</span></div>
+      <div class="enh-row"><span class="badge iai" style="flex-shrink:0;">IAI Dec-22</span><span>Hybrid structure (5-year initial guarantee + reviewable thereafter): balances marketability vs risk — initial guarantee builds customer confidence; review after 5 years reflects actual experience.</span></div>
+      <div class="enh-row"><span class="badge ifoa" style="flex-shrink:0;">IFoA Sep-20</span><span>Good practice for reviewable CI: demonstrate reviews calculated fairly; review assumptions in line with frequency stated in policy literature; communicate changes clearly and in advance to policyholders (TCF obligation).</span></div>
+      <div class="enh-row"><span class="badge iai" style="flex-shrink:0;">IAI Apr-16</span><span>New CI product — reviewable justified when: no credible own experience; confidence intervals on pricing basis are wide; cost of guarantee very high with limited data. Must assess marketability impact vs competitors.</span></div>
+    </div>
+  </div>
+</div>
+<div class="arrow">↓</div>
+
+<!-- ⑥ -->
+<div class="block b6">
+  <div class="num">⑥</div>
+  <div class="block-content">
+    <div class="block-title">Insurer: 8 Iterative Design Targets</div>
+    <div class="sub-items">
+      <div class="sub-row"><span class="sub key">① Customer Acceptability</span><span class="sub">Clear benefits/premiums · Meet needs · Marketable · Not overly complex for channel · Sufficient benefits to justify price</span></div>
+      <div class="sub-row"><span class="sub key">② Regulator Requirements</span><span class="sub">Product approval before launch · Premium filing (compulsory markets) · Comply with sales/disclosure rules</span></div>
+      <div class="sub-row"><span class="sub key">③ Distributor Needs</span><span class="sub">Consult sales/marketing early · Appropriate channels · Competitive premiums · Commission/clawback structures · Sales training by actuary</span></div>
+      <div class="sub-row"><span class="sub key">④ Profitability / ROC</span><span class="sub">Premiums cover benefits + expenses + profit · Adequate return on capital · Balance between competitive pricing and margin</span></div>
+      <div class="sub-row"><span class="sub key">⑤ Company Culture</span><span class="sub">Consistency with existing products · Efficiencies: training / admin / systems / printing · Avoid dissatisfying existing policyholders with more favourable new terms</span></div>
+      <div class="sub-row"><span class="sub key">⑥ Systems</span><span class="sub">Record inception · Align claims data · Monitor profitability · Group by risk · Add external data · Model/project cashflows</span></div>
+      <div class="sub-row"><span class="sub key">⑦ Underwriting</span><span class="sub">Medical UW affects design &amp; pricing · Claims UW must be consistent with initial UW criteria and pricing data assumptions</span></div>
+      <div class="sub-row"><span class="sub key">⑧ Risk Management</span><span class="sub">Anti-selection/moral hazard control · Reinsurance (cost + risk reduction) · Minimise financing strain · Cross-subsidies · Guarantee costs · Premium review process</span></div>
+    </div>
+    <div class="note">Design and pricing are iterative — adjusting each in turn until all targets are simultaneously met</div>
+    <div class="enh-block">
+      <div class="enh-label">★ Exam Additions — New Product Launch Risks (frequently examined)</div>
+      <div class="enh-row"><span class="badge iai" style="flex-shrink:0;">IAI Apr-16</span><span>New product launch risk list: (1) Product substitution — new product outsells existing profitable product. (2) Too-much-success — capital-intensive product consumes capital faster than planned. (3) Sales failure — development costs not recovered. (4) Regulatory non-compliance. (5) Reputational risk if product fails to meet expectations.</span></div>
+      <div class="enh-row"><span class="badge iai" style="flex-shrink:0;">IAI Mar-18</span><span>Pre-launch checklist: understand customer requirements; market research and demand assessment; study competitor success stories; check if government/employer covers part of benefit; assess reinsurer appetite; review regulatory product filing requirements.</span></div>
+      <div class="enh-row"><span class="badge iai" style="flex-shrink:0;">IAI Mar-21</span><span>Online/virtual channel design requirements: compulsory participation to minimise UW; low annual limits; plain language exclusions prominently disclosed; fixed co-pays/deductibles; simplified claims process.</span></div>
+      <div class="enh-row"><span class="badge ifoa" style="flex-shrink:0;">IFoA Apr-24</span><span>AI/automated UW impact: potential for better risk classification; loss of human judgment; change in business mix and volume; claims experience shift; upfront development cost allocation; third-party dependency risk.</span></div>
+      <div class="enh-row"><span class="badge iai" style="flex-shrink:0;">IAI May-24</span><span>Cross-product launch points: allow for product disclosure and sales training costs; risk of too-successful launch consuming capital; new H&amp;C business adds pricing/capital uncertainty — allow extra margins.</span></div>
+    </div>
+  </div>
+</div>
+<div class="arrow">↓</div>
+
+<!-- ⑦ -->
+<div class="block b7">
+  <div class="num">⑦</div>
+  <div class="block-content">
+    <div class="block-title">Insurer: Product-Specific Control</div>
+    <div class="sub-items">
+      <div class="sub-row"><span class="sub key">IP</span><span class="sub">UW by occupation/age/gender · Check benefit vs current salary · Claims counsellor · Proportionate benefit (part-time return) · Linked-claims period · After 2yr → 'any job' + retrain</span></div>
+      <div class="sub-row"><span class="sub key">CI</span><span class="sub">Guard vs anti-selection/non-disclosure · Survival period 28–30 days (avoid death claims) · IBNR reserves (up to 10yr notification lag) · Manage new disease/market change expectations</span></div>
+      <div class="sub-row"><span class="sub key">CI Tiered</span><span class="sub">More complex underwriting · Data scarce → large margins and/or reinsurer essential · Careful policy wording for each benefit tier · Higher dispute risk</span></div>
+      <div class="sub-row"><span class="sub key">LTCI</span><span class="sub">Policy design robust to state provision changes · Robust to regulatory interpretation of benefit promises · Manage longevity and care cost inflation risks</span></div>
+      <div class="sub-row"><span class="sub key">PMI</span><span class="sub">Provider price negotiation/controls · Case management / managed care · Pre-authorisation · IBNR is material · Experience rating for groups</span></div>
+    </div>
+    <div class="enh-block">
+      <div class="enh-label">★ Exam Additions</div>
+      <div class="enh-row"><span class="badge iai" style="flex-shrink:0;">IAI Jul-22</span><span>OP cover controls: co-payment per consultation (moral hazard deterrent); GP gatekeeper before specialist; pre-authorisation for high-cost items; separate dental/optical/maternity treatment; annual aggregate cap.</span></div>
+      <div class="enh-row"><span class="badge iai" style="flex-shrink:0;">IAI Sep-21</span><span>Top-up/excess layer anti-selection controls: 6-month waiting period; higher co-pay in first year (skin in the game); restrict to specific event types only (e.g. accidents + named CI); individual UW for small groups.</span></div>
+      <div class="enh-row"><span class="badge ifoa" style="flex-shrink:0;">IFoA Apr-25</span><span>CI regulatory response controls: review product needs and definitions against current customer needs; target claims-paid ratio improvement; management information framework tracking complaints and rejected claims rates.</span></div>
+      <div class="enh-row"><span class="badge iai" style="flex-shrink:0;">IAI Jun-19</span><span>PMI back-end UW (moratorium) control risk: exclusions only applied at claim → information asymmetry → complaint risk. Front-end UW improves customer clarity but slows sales — design tension between control and distribution speed.</span></div>
+      <div class="enh-row"><span class="badge iai" style="flex-shrink:0;">IAI Mar-17</span><span>Wearable/wellness product risks: mispricing (limited credible data for discount parameters); reputational risk (device/third-party failures); data breach; counterparty risk if device manufacturer fails.</span></div>
+    </div>
+  </div>
+</div>
+<div class="arrow">↓</div>
+
+<!-- ⑧ -->
+<div class="block b8">
+  <div class="num">⑧</div>
+  <div class="block-content">
+    <div class="block-title">Regulator as Stakeholder &amp; Design Conflicts</div>
+    <div class="sub-items">
+      <div class="sub-row"><span class="sub key">Regulator: Priorities</span><span class="sub">Insurer solvency · Consumer protection — minimise disadvantages in sales, admin and claims</span></div>
+      <div class="sub-row"><span class="sub key">Consumer Protection</span><span class="sub">Clear/unambiguous policy wording · Key features document · Value for money vs market · No misrepresentation of title (CI / LTCI)</span></div>
+      <div class="sub-row"><span class="sub key">Sales Monitoring</span><span class="sub">Appropriate product at right level · No undue pressure · Cooling-off periods · Promises match conditions · Sold to intended target market · Premium increases approved (compulsory markets)</span></div>
+      <div class="sub-row"><span class="sub key">Key Conflicts</span><span class="sub">Customer: guaranteed ↔ Insurer: reviewable · Customer: simplicity ↔ Insurer: needs exclusions/definitions · Customer: full indemnity ↔ Insurer: LTCI uncertainty · Volume ↔ Profitability</span></div>
+    </div>
+    <div class="note" style="color:#a0a8b8;">All stakeholder needs are interlinked — rarely one set of needs can be discussed without touching others</div>
+    <div class="enh-block">
+      <div class="enh-label">★ Exam Additions</div>
+      <div class="enh-row"><span class="badge ifoa" style="flex-shrink:0;">IFoA Apr-24</span><span>Regulator concerns — free product: financial soundness (no premium → can liabilities be met?); reserves adequacy; mis-selling (minimum spend excludes genuine-need customers); enrolment process must ensure customer awareness.</span></div>
+      <div class="enh-row"><span class="badge ifoa" style="flex-shrink:0;">IFoA Apr-25</span><span>Consumer protection intervention — CI: regulator introduced rules requiring: review of product needs; review of definitions to improve claims-paid rate; monitoring framework (claims paid ratio, complaint rates, product value).</span></div>
+      <div class="enh-row"><span class="badge iai" style="flex-shrink:0;">IAI Jun-19</span><span>IRDAI policyholder protection objectives: ensure distribution channels fulfil obligations; policyholder-centric governance with grievance redressal emphasis; prevent mis-selling and unfair business practices at point of sale.</span></div>
+      <div class="enh-row"><span class="badge ifoa" style="flex-shrink:0;">IFoA Apr-24</span><span>AI underwriting — regulator concerns: unfair discrimination / prohibited characteristic proxied; algorithmic bias; lack of model transparency; data consent and jurisdiction issues; over-reliance on third-party system.</span></div>
+      <div class="enh-row"><span class="badge iai" style="flex-shrink:0;">IAI Mar-18</span><span>Changing existing policy conditions: guaranteed renewability provisions prevent unilateral worsening — regulator approval typically required; legal implications depend on policy wording; policyholder reasonable expectations must be respected.</span></div>
+    </div>
+  </div>
+</div>
+
+</div><!-- end flow -->
+
+<div class="footer">
+  <span>SP1 Ch.6–7 · SA1 · IFoA &amp; IAI Exam Enhanced</span>
+  <span>OUTLINE NAVIGATOR — LEVEL 1</span>
+  <span>Product Design &amp; Stakeholder Interests</span>
+</div>
+</body>
+</html>
