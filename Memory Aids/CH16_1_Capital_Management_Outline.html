@@ -211,9 +211,36 @@
   .footer { border-top:1px solid var(--rule); padding-top:8px; font-family:'IBM Plex Mono',monospace; font-size:9px; color:var(--muted); display:flex; justify-content:space-between; margin-top:18px; }
 
   .sub-row { display:flex; align-items:center; gap:5px; flex-wrap:wrap; }
-  .sub-row .sub.key, .sub-row .sub.accent, .sub-row .sub.blue,
-  .sub-row .sub.green, .sub-row .sub.purple, .sub-row .sub.teal { flex-shrink:0; white-space:nowrap; }
-  .sub-row .sub:not(.key):not(.accent):not(.blue):not(.green):not(.purple):not(.teal) { flex:1; min-width:0; }
+
+  /* ALL coloured label spans — must not grow or shrink; stay compact beside their description */
+  .sub-row .sub.key,
+  .sub-row .sub.eco, .sub-row .sub.reg, .sub-row .sub.rat,
+  .sub-row .sub.wk,
+  .sub-row .sub.prop, .sub-row .sub.mut,
+  .sub-row .sub.stoch, .sub-row .sub.stress,
+  .sub-row .sub.proxy,
+  .sub-row .sub.accent, .sub-row .sub.blue,
+  .sub-row .sub.green, .sub-row .sub.purple, .sub-row .sub.teal {
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+
+  /* Plain description spans (no extra class) — fill remaining space */
+  .sub-row .sub:not(.key):not(.eco):not(.reg):not(.rat):not(.wk):not(.prop):not(.mut):not(.stoch):not(.stress):not(.proxy):not(.accent):not(.blue):not(.green):not(.purple):not(.teal) {
+    flex: 1;
+    min-width: 0;
+  }
+
+  /* Block 8 — 6-column grid so each coloured label sits above its description */
+  .b8 .sub-row {
+    display: grid;
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: auto 1fr;
+    grid-auto-flow: column;
+    align-items: start;
+    gap: 5px;
+  }
+  .b8 .sub-row .sub { flex: unset; min-width: 0; }
 </style>
 </head>
 <body>
