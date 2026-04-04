@@ -1,0 +1,1816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Critical Illness — SA1 Revision Exhibit</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:ital,wght@0,300;0,400;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap');
+
+  :root {
+    --crimson: #8b1a2e;
+    --crimson-light: #c42a45;
+    --crimson-pale: #fdf0f2;
+    --teal: #0d6e6e;
+    --teal-light: #148f8f;
+    --teal-pale: #e0f5f5;
+    --navy: #1a2840;
+    --navy-mid: #263d5c;
+    --gold: #b07d1a;
+    --gold-pale: #fdf4df;
+    --slate: #5a6a7a;
+    --bg: #f5f3f0;
+    --white: #ffffff;
+    --border: #d8d0c8;
+    --text: #1c2030;
+    --text-light: #4a5060;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 15px;
+    line-height: 1.65;
+  }
+
+  /* ── HEADER ── */
+  .site-header {
+    background: linear-gradient(135deg, #1a0a10 0%, #2d1020 100%);
+    color: white;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 3px 16px rgba(0,0,0,0.4);
+  }
+  .header-inner {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 10px 24px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  .header-badge {
+    background: var(--crimson);
+    color: white;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 4px;
+    letter-spacing: 1px;
+    white-space: nowrap;
+  }
+  .header-title {
+    font-family: 'Crimson Pro', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: white;
+    flex: 1;
+    font-style: italic;
+  }
+  .header-title span { color: #f8a0b0; }
+  .header-search {
+    display: flex;
+    align-items: center;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .header-search input {
+    background: transparent;
+    border: none;
+    color: white;
+    padding: 7px 12px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    width: 220px;
+    outline: none;
+  }
+  .header-search input::placeholder { color: rgba(255,255,255,0.45); }
+  .header-search button {
+    background: var(--crimson);
+    border: none;
+    color: white;
+    padding: 7px 12px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+
+  /* ── NAV ── */
+  .nav-strip {
+    background: rgba(0,0,0,0.35);
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding: 0 24px;
+  }
+  .nav-strip::-webkit-scrollbar { display: none; }
+  .nav-tab {
+    padding: 9px 16px;
+    color: rgba(255,255,255,0.6);
+    cursor: pointer;
+    font-size: 12.5px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    white-space: nowrap;
+    border-bottom: 3px solid transparent;
+    transition: all 0.18s;
+    user-select: none;
+  }
+  .nav-tab:hover { color: white; }
+  .nav-tab.active { color: #f8a0b0; border-bottom-color: #f8a0b0; }
+
+  /* ── LAYOUT ── */
+  .main { max-width: 1400px; margin: 0 auto; padding: 24px 24px 60px; }
+  .section-panel { display: none; }
+  .section-panel.active { display: block; }
+
+  /* ── SECTION HEADER ── */
+  .sec-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 20px;
+    padding-bottom: 14px;
+    border-bottom: 2px solid var(--border);
+  }
+  .sec-icon {
+    width: 44px; height: 44px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; flex-shrink: 0;
+  }
+  .sec-title {
+    font-family: 'Crimson Pro', serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--navy);
+  }
+  .sec-sub { font-size: 13px; color: var(--slate); margin-top: 2px; }
+
+  /* ── CARDS ── */
+  .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; margin-bottom: 22px; }
+  .card { background: var(--white); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.05); }
+  .card-hd { padding: 11px 16px; font-weight: 700; font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; display: flex; align-items: center; gap: 8px; }
+  .card-hd.crimson { background: var(--crimson-pale); color: var(--crimson); }
+  .card-hd.teal { background: var(--teal-pale); color: var(--teal); }
+  .card-hd.gold { background: var(--gold-pale); color: var(--gold); }
+  .card-hd.navy { background: #e8edf5; color: var(--navy); }
+  .card-bd { padding: 13px 16px; }
+
+  /* ── BULLETS ── */
+  .blist { list-style: none; }
+  .blist li {
+    padding: 5px 0 5px 20px;
+    position: relative;
+    font-size: 13.5px;
+    border-bottom: 1px solid var(--bg);
+    line-height: 1.55;
+  }
+  .blist li:last-child { border-bottom: none; }
+  .blist li::before { content: '▸'; position: absolute; left: 0; color: var(--crimson); font-size: 11px; top: 7px; }
+
+  /* ── KEY TERMS ── */
+  .terms-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 10px; margin-bottom: 22px; }
+  .term {
+    background: white;
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--crimson);
+    border-radius: 6px;
+    padding: 11px 14px;
+  }
+  .term-name { font-weight: 700; font-size: 12.5px; color: var(--crimson); margin-bottom: 4px; font-family: 'JetBrains Mono', monospace; }
+  .term-def { font-size: 13px; color: var(--text-light); line-height: 1.5; }
+
+  /* ── FLASHCARDS ── */
+  .fc-wrap { perspective: 1000px; cursor: pointer; margin-bottom: 12px; }
+  .fc-inner { position: relative; min-height: 120px; transition: transform 0.5s; transform-style: preserve-3d; }
+  .fc-wrap.flipped .fc-inner { transform: rotateX(180deg); }
+  .fc-front, .fc-back {
+    position: absolute; width: 100%; min-height: 120px;
+    backface-visibility: hidden; border-radius: 10px;
+    padding: 16px 20px; display: flex; flex-direction: column; justify-content: center;
+  }
+  .fc-front { background: linear-gradient(135deg, #1a0a10 0%, #3d1525 100%); color: white; }
+  .fc-back { background: linear-gradient(135deg, var(--teal) 0%, #0a9090 100%); color: white; transform: rotateX(180deg); }
+  .fc-label { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; opacity: 0.6; margin-bottom: 8px; }
+  .fc-q { font-size: 15px; font-weight: 600; line-height: 1.5; }
+  .fc-a { font-size: 13.5px; line-height: 1.6; }
+  .fc-hint { text-align: center; font-size: 11px; color: var(--slate); margin-top: 4px; }
+
+  /* ── EXAM Qs ── */
+  .eq { background: white; border: 1px solid var(--border); border-radius: 10px; margin-bottom: 16px; overflow: hidden; }
+  .eq-hd {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 16px;
+    background: var(--navy);
+    color: white; cursor: pointer; user-select: none;
+  }
+  .eq-hd-l { display: flex; align-items: center; gap: 12px; }
+  .badge { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 4px; white-space: nowrap; }
+  .badge.iai { background: var(--teal); }
+  .badge.ifoa { background: var(--gold); }
+  .eq-marks { font-size: 12px; opacity: 0.7; font-family: 'JetBrains Mono', monospace; }
+  .eq-q { font-size: 13.5px; font-weight: 600; color: rgba(255,255,255,0.92); flex: 1; }
+  .eq-arrow { color: rgba(255,255,255,0.55); font-size: 18px; transition: transform 0.3s; flex-shrink: 0; }
+  .eq-hd.open .eq-arrow { transform: rotate(180deg); }
+  .eq-scenario { padding: 11px 16px; background: #f5f3f0; font-size: 13px; color: var(--text-light); border-bottom: 1px solid var(--border); font-style: italic; line-height: 1.5; }
+  .eq-body { display: none; padding: 16px; }
+  .eq-body.open { display: block; }
+  .eq-sec { font-size: 11.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; color: var(--crimson); margin: 12px 0 6px; padding-bottom: 4px; border-bottom: 1px solid var(--crimson-pale); }
+  .eq-sec:first-child { margin-top: 0; }
+
+  /* ── COMPARE TABLE ── */
+  .tbl { width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 20px; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.05); }
+  .tbl th { background: var(--navy); color: white; padding: 10px 14px; text-align: left; font-size: 11.5px; font-weight: 700; letter-spacing: 0.4px; text-transform: uppercase; }
+  .tbl td { padding: 9px 14px; border-bottom: 1px solid var(--bg); vertical-align: top; line-height: 1.5; }
+  .tbl tr:last-child td { border-bottom: none; }
+  .tbl tr:nth-child(even) td { background: #f9f7f5; }
+  .tbl td:first-child { font-weight: 700; color: var(--navy); width: 22%; }
+
+  /* ── ACCORDION ── */
+  .acc { background: white; border: 1px solid var(--border); border-radius: 8px; margin-bottom: 8px; overflow: hidden; }
+  .acc-hd { padding: 13px 16px; font-weight: 700; font-size: 13.5px; cursor: pointer; display: flex; align-items: center; justify-content: space-between; user-select: none; color: var(--navy); transition: background 0.15s; }
+  .acc-hd:hover { background: var(--bg); }
+  .acc-arr { transition: transform 0.25s; font-size: 16px; color: var(--slate); }
+  .acc-hd.open .acc-arr { transform: rotate(90deg); }
+  .acc-body { display: none; padding: 14px 16px; border-top: 1px solid var(--border); background: #fcfbfa; }
+  .acc-body.open { display: block; }
+
+  /* ── ALERT ── */
+  .alert { border-radius: 8px; padding: 12px 16px; margin-bottom: 12px; font-size: 13.5px; display: flex; gap: 10px; align-items: flex-start; }
+  .alert.gold { background: var(--gold-pale); border-left: 4px solid var(--gold); }
+  .alert.crimson { background: var(--crimson-pale); border-left: 4px solid var(--crimson); }
+  .alert.teal { background: var(--teal-pale); border-left: 4px solid var(--teal); }
+  .alert-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+  /* ── MNEMONIC ── */
+  .mnemonic {
+    background: linear-gradient(135deg, #1a0a10 0%, #2d1825 100%);
+    color: white; border-radius: 12px; padding: 20px 24px; margin-bottom: 20px;
+  }
+  .mn-title { font-family: 'Crimson Pro', serif; font-size: 13px; font-weight: 700; opacity: 0.65; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1.5px; font-style: italic; }
+  .mn-items { display: flex; flex-wrap: wrap; gap: 10px; }
+  .mn-item { display: flex; align-items: flex-start; gap: 8px; min-width: 200px; flex: 1; }
+  .mn-letter { font-family: 'Crimson Pro', serif; font-size: 28px; font-weight: 700; color: #f8a0b0; line-height: 1; min-width: 26px; }
+  .mn-word { font-size: 13px; line-height: 1.45; padding-top: 2px; }
+  .mn-word strong { display: block; font-size: 13.5px; color: #f8a0b0; }
+
+  /* ── FORMULA BOX ── */
+  .formula {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 100%);
+    color: white; border-radius: 10px; padding: 18px 22px; margin-bottom: 18px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .formula-label { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; opacity: 0.6; margin-bottom: 10px; font-family: 'DM Sans', sans-serif; }
+  .formula-expr { font-size: 17px; color: #a8d8d8; margin-bottom: 8px; }
+  .formula-notes { font-size: 12px; opacity: 0.8; font-family: 'DM Sans', sans-serif; line-height: 1.7; }
+
+  /* ── SUB HEADING ── */
+  .sub-hd { font-family: 'Crimson Pro', serif; font-size: 17px; font-weight: 700; color: var(--navy); margin: 22px 0 10px; padding-left: 12px; border-left: 4px solid var(--crimson); font-style: italic; }
+
+  /* ── SEARCH ── */
+  #search-panel { display: none; }
+  #search-panel.active { display: block; }
+  .sr { background: white; border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; margin-bottom: 10px; }
+  .sr-src { font-size: 11px; font-family: 'JetBrains Mono', monospace; color: var(--slate); margin-bottom: 6px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+  .sr-text { font-size: 13.5px; line-height: 1.55; }
+  .hl { background: #fff176; color: #333; border-radius: 2px; }
+
+  @media (max-width: 768px) {
+    .cards { grid-template-columns: 1fr; }
+    .header-search { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <div class="header-badge">SA1 · SP1</div>
+    <div class="header-title">Critical Illness Insurance <span>— Comprehensive Revision</span></div>
+    <div class="header-search">
+      <input type="text" id="searchInput" placeholder="Search notes, terms, exam Qs…" oninput="doSearch(this.value)">
+      <button onclick="doSearch(document.getElementById('searchInput').value)">⌕</button>
+    </div>
+  </div>
+  <div style="background:rgba(0,0,0,0.25);">
+    <div class="nav-strip">
+      <div class="nav-tab active" onclick="showTab('overview')">📋 Overview</div>
+      <div class="nav-tab" onclick="showTab('conditions')">🦠 Conditions</div>
+      <div class="nav-tab" onclick="showTab('structures')">🏗 Structures</div>
+      <div class="nav-tab" onclick="showTab('pricing')">💰 Pricing</div>
+      <div class="nav-tab" onclick="showTab('uw-claims')">🔍 UW & Claims</div>
+      <div class="nav-tab" onclick="showTab('disability')">♿ Disability Defs</div>
+      <div class="nav-tab" onclick="showTab('risks')">⚠️ Risks</div>
+      <div class="nav-tab" onclick="showTab('flashcards')">🃏 Flashcards</div>
+      <div class="nav-tab" onclick="showTab('iai-qs')">📝 IAI Exam Qs</div>
+      <div class="nav-tab" onclick="showTab('ifoa-qs')">🎓 IFoA Exam Qs</div>
+      <div class="nav-tab" onclick="showTab('mnemonics')">🧠 Mnemonics</div>
+    </div>
+  </div>
+</header>
+
+<div class="main">
+
+  <div id="search-panel">
+    <div class="sec-header">
+      <div class="sec-icon" style="background:#e8edf5;">🔎</div>
+      <div>
+        <div class="sec-title">Search Results</div>
+        <div class="sec-sub" id="search-count">0 results</div>
+      </div>
+    </div>
+    <div id="search-results"></div>
+  </div>
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- TAB 1: OVERVIEW -->
+  <!-- ══════════════════════════════════════ -->
+  <div id="tab-overview" class="section-panel active">
+    <div class="sec-header">
+      <div class="sec-icon" style="background:var(--crimson-pale);">📋</div>
+      <div>
+        <div class="sec-title">CI — Product Overview</div>
+        <div class="sec-sub">SP1 Chapter 2 · Definition, nature, characteristics</div>
+      </div>
+    </div>
+
+    <div class="alert gold">
+      <span class="alert-icon">💡</span>
+      <div><strong>Exam Lens:</strong> CI questions test your ability to link product features to their rationale, compare CI with IP and PMI, and apply knowledge to novel scenarios (new conditions, new markets, recession). Always state <em>why</em>, not just <em>what</em>.</div>
+    </div>
+
+    <div class="cards">
+      <div class="card">
+        <div class="card-hd crimson">❤️ Definition & Nature</div>
+        <div class="card-bd">
+          <ul class="blist">
+            <li>Pays a <strong>lump sum</strong> on diagnosis of one of a defined list of serious conditions, or on undergoing a specified surgical procedure</li>
+            <li><strong>Pure protection product</strong> — no surrender value, no maturity benefit; policy ends on first claim or at term end</li>
+            <li><strong>NOT indemnity</strong> — sum insured chosen by policyholder independently; not designed to return policyholder to pre-condition position</li>
+            <li>Covers both <strong>morbidity and (sometimes) mortality</strong> risk</li>
+            <li>Also known as: dread disease insurance, serious illness insurance, crisis cash, living assurance</li>
+            <li>Historically grew from recognition that surviving a heart attack or cancer creates large financial need even if not permanently disabled</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-hd teal">⚖️ CI vs IP vs PMI</div>
+        <div class="card-bd">
+          <ul class="blist">
+            <li><strong>CI vs IP:</strong> CI pays on <em>diagnosis</em> regardless of ability to work. IP requires inability to work. CI is lump sum; IP is income replacement</li>
+            <li><strong>CI vs PMI:</strong> PMI reimburses actual treatment cost (indemnity). CI pays fixed sum on diagnosis regardless of treatment cost</li>
+            <li>CI premiums usually <strong>level</strong> throughout the term (unlike IP which may escalate)</li>
+            <li>CI is usually <strong>long-term</strong> (terms &gt;5 years); PMI is short-term annually renewable</li>
+            <li>CI benefit: policyholder decides how to use it — mortgage, treatment, income replacement</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-hd gold">💳 How Policyholders Use the CI Benefit</div>
+        <div class="card-bd">
+          <ul class="blist">
+            <li>Meet immediate and ongoing medical costs (treatment, surgery, hospital stays)</li>
+            <li>Repay mortgage or other loan on diagnosis</li>
+            <li>Fund other insurance premiums / continuing retirement savings when unable to work</li>
+            <li>Support a dependant requiring care as result of the illness</li>
+            <li>Fund day-to-day living costs during recovery (rent, food, utilities)</li>
+            <li>Fund adaptations to home environment (wheelchair access), domestic help, recuperation</li>
+            <li>Ensure policyholder not reliant on state benefits or family financial support</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-hd navy">📋 Key Characteristics</div>
+        <div class="card-bd">
+          <ul class="blist">
+            <li>Exhaustive list of covered conditions — only named conditions are insured</li>
+            <li>Can be sold standalone OR as rider to life insurance (accelerated or additional basis)</li>
+            <li>Products sold on: with-profits, unit-linked, or without-profits basis</li>
+            <li>Increasing use of <strong>tiered/partial payments</strong> for less severe conditions (e.g. early-stage cancer)</li>
+            <li>Survival period: claimant must survive minimum period (typically 14-28 days) after diagnosis before benefit paid</li>
+            <li>Benefit payment can also be in instalments (reduces fraud risk) or used to purchase impaired-life annuity</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="sub-hd">Three Criteria for Including a Condition</div>
+    <div class="alert teal">
+      <span class="alert-icon">📌</span>
+      <div><strong>These three criteria are examinable directly.</strong> A fourth criterion sometimes added is: <em>ability to avoid anti-selection</em>.</div>
+    </div>
+    <table class="tbl">
+      <tr><th>Criterion</th><th>Explanation</th><th>Example / Implication</th></tr>
+      <tr>
+        <td>1. Perceived serious &amp; occurs frequently</td>
+        <td>Public perception drives coverage — condition must be seen as "lifestyle-threatening" even if not life-threatening. Must not be so rare as to be negligible.</td>
+        <td>Cancer, heart attack, stroke — universally perceived as serious. Rare conditions: insufficient claims data; premium too small relative to admin cost</td>
+      </tr>
+      <tr>
+        <td>2. Clearly defined</td>
+        <td>Avoid ambiguity at claim time. Use precise medical terminology. Prevents windfall payments for minor conditions and disputes.</td>
+        <td>Heart attack: must show typical symptoms + EKG changes + specific enzyme/Troponin levels. Excludes angina, other coronary syndromes.</td>
+      </tr>
+      <tr>
+        <td>3. Sufficient pricing data</td>
+        <td>Must predict future incidence accurately. Difficult due to medical advances (vaccines, new treatments). New conditions take time for claims data to build.</td>
+        <td>New/emerging diseases: initially impossible to price. Conditions added to CI product after initial launch carry model risk.</td>
+      </tr>
+    </table>
+
+    <div class="sub-hd">Consumer Value &amp; Regulatory Scrutiny (IFoA Apr 2025)</div>
+    <div class="cards">
+      <div class="card">
+        <div class="card-hd crimson">📉 Poor Value Indicators</div>
+        <div class="card-bd">
+          <ul class="blist">
+            <li>Low CI claims payout ratio (e.g. 55-60%) → overly restrictive definitions or harsh claims management</li>
+            <li>Rising claim settlement times → policyholders need benefit quickly; delays generate complaints</li>
+            <li>Expected lifetime premiums &gt; maximum benefit payable → fails fair value test</li>
+            <li>Rising advisor commission without corresponding policyholder value → churning, mis-selling</li>
+            <li>Adding conditions with very low incidence → appears comprehensive but delivers no real value</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-hd teal">✅ Consumer Responsibility (Consumer Responsibility Regulation)</div>
+        <div class="card-bd">
+          <ul class="blist">
+            <li>Define "good outcomes" and "fair value" for own CI products; Board reporting required</li>
+            <li>Target market review: changing customer needs (longevity, earlier diagnosis, lifestyle changes)</li>
+            <li>Product design review: conditions, benefit levels, severity-based partial payments</li>
+            <li>Clear product literature; conditions should be widely understood</li>
+            <li>Appropriate distribution strategy and commission governance</li>
+            <li>Fair pricing benchmarked against competitors; benefit levels reviewed for real-terms adequacy</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- TAB 2: CONDITIONS -->
+  <!-- ══════════════════════════════════════ -->
+  <div id="tab-conditions" class="section-panel">
+    <div class="sec-header">
+      <div class="sec-icon" style="background:var(--crimson-pale);">🦠</div>
+      <div>
+        <div class="sec-title">CI Conditions Covered</div>
+        <div class="sec-sub">Core, additional, terminal illness, TPD, children's benefit</div>
+      </div>
+    </div>
+
+    <div class="sub-hd">Core vs Additional Conditions</div>
+    <table class="tbl">
+      <tr><th>Category</th><th>Conditions</th><th>Notes</th></tr>
+      <tr>
+        <td>Core (~90% of claims)</td>
+        <td>Cancer, Heart Attack, Stroke, Coronary Artery Bypass Surgery, Kidney Failure, Major Organ Transplant, Multiple Sclerosis</td>
+        <td>ABI Model Wording (UK) standardised these — reduces disputes, faster settlement, better industry data. India: no uniform standard yet.</td>
+      </tr>
+      <tr>
+        <td>Additional (variable by market)</td>
+        <td>Alzheimer's, AIDS/HIV (via transfusion/occupation), Aorta graft surgery, Benign brain tumour, Blindness, Coma, Deafness, Heart valve replacement/repair, Loss of limbs, Loss of speech, Motor neurone disease, Paralysis/paraplegia, Parkinson's, Severe burns, Severe head injury</td>
+        <td>Incidence much lower than core. Added for completeness / competitive positioning. Low incremental cost. Risk: each adds definition complexity and dispute potential.</td>
+      </tr>
+    </table>
+
+    <div class="alert gold">
+      <span class="alert-icon">⚠️</span>
+      <div><strong>Pricing trap — up to 40 separate condition distributions to estimate.</strong> Medical advances affect new vs existing business differently — conditions can be removed from new policies but not from guaranteed in-force ones. Separate disease-based and treatment-based trend modelling is advisable.</div>
+    </div>
+
+    <div class="sub-hd">Terminal Illness Benefit</div>
+    <div class="cards">
+      <div class="card">
+        <div class="card-hd crimson">📋 Definition</div>
+        <div class="card-bd">
+          <ul class="blist">
+            <li>Illness expected to cause death within a specified period (typically <strong>12 months</strong>) in opinion of hospital consultant</li>
+            <li>Triggered by severity and effect on life expectancy — <strong>NOT by diagnosis of a specific CI condition</strong></li>
+            <li>Fills gaps where severe illness significantly reduces life expectancy but doesn't qualify as listed CI condition</li>
+            <li>Allows insured to use funds while alive — for care, family provision, or other needs</li>
+            <li>Often ceases 12-24 months before policy end (to avoid claims near term end)</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-hd gold">💰 Cost Implications</div>
+        <div class="card-bd">
+          <ul class="blist">
+            <li><strong>Accelerated CI:</strong> Main effect is to bring forward the death benefit. Additional cost is very small — approximately 12 months' investment return on sum insured</li>
+            <li><strong>Standalone CI:</strong> TI is a <em>genuine extra cost</em> — no death benefit to accelerate; incidence by cause of terminal illness must be priced and reserved separately</li>
+            <li>TI benefit ≠ CI benefit — CI pays on diagnosis of specific conditions; TI pays when ANY condition is expected to cause death imminently</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="sub-hd">Total and Permanent Disability (TPD)</div>
+    <div class="cards">
+      <div class="card">
+        <div class="card-hd teal">📋 Definition Nuances</div>
+        <div class="card-bd">
+          <ul class="blist">
+            <li><strong>"Permanent"</strong> = beyond hope of recovery in policyholder's lifetime</li>
+            <li><strong>"Total"</strong> = major and substantial part of role/function failed (not every single element)</li>
+            <li>Permanency distinguishes TPD from IP (which also covers <em>temporary</em> disability)</li>
+            <li>Waiting period often used before claim accepted as permanent; IBNS maintained while outcome unclear</li>
+            <li>Benefit paid immediately if diagnosis is unequivocal</li>
+            <li>Many CI conditions (paralysis, dementia) also qualify as TPD — significant overlap; TPD can be added to extensive CI for relatively little additional cost</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-hd navy">⚖️ TPD Definition Types</div>
+        <div class="card-bd">
+          <ul class="blist">
+            <li><strong>Own occupation:</strong> Most generous; highest cost. Unsuitable for high-risk manual work</li>
+            <li><strong>Suited occupation:</strong> Unable to work in occupation suited by education/training/experience. Middle ground; dispute risk at claims stage</li>
+            <li><strong>Any occupation:</strong> Most restrictive; lowest cost. Standard for manual/high-risk workers</li>
+            <li><strong>ADL-based:</strong> Inability to perform specified number of Activities of Daily Living (Feeding, Dressing, Washing, Toileting, Mobility, Transferring). Applicable at any age, including post-retirement. Less subjective. Called "loss of independent existence" when used throughout life</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="sub-hd">Children's Benefit</div>
+    <div class="acc">
+      <div class="acc-hd" onclick="toggleAcc(this)">Children's CI Benefit — Design &amp; Cost <span class="acc-arr">›</span></div>
+      <div class="acc-body">
+        <ul class="blist">
+          <li>Cover for each child of policyholder, typically until age 18</li>
+          <li>Child claims do <strong>NOT terminate the policy</strong> — cover continues for subsequent child claims AND the policyholder's own claim; only the policyholder's own claim terminates cover</li>
+          <li>Reduced lump sum typically paid (e.g. 25% of adult sum insured)</li>
+          <li>Conditions for children may differ from adult conditions — certain childhood illnesses (e.g. Type 1 diabetes) may be included</li>
+          <li>Often included at <strong>no extra premium</strong> — actual cost is minimal: childhood CI incidence is low (e.g. 1 in 10,000 children diagnosed with cancer per year in Britain)</li>
+          <li>However, <strong>perceived value</strong> to parents is very high → strong marketing and sales feature</li>
+          <li>Early product designs excluded conditions that could be caused intentionally (e.g. third-degree burns) due to moral hazard concern — these fears proved unfounded in practice</li>
+          <li>Current exclusions: typically only pre-existing congenital defects</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="sub-hd">Tiered / Severity-Based Benefits</div>
+    <table class="tbl">
+      <tr><th>Feature</th><th>Standard CI</th><th>Tiered CI</th></tr>
+      <tr><td>Payout</td><td>Full sum insured for ALL covered conditions regardless of severity</td><td>Full payout for severe; partial (e.g. 10-25%) for less severe/early stage</td></tr>
+      <tr><td>Conditions range</td><td>Fewer conditions defined</td><td>More conditions covered (more triggers at lower severity thresholds)</td></tr>
+      <tr><td>Number of claims</td><td>Single claim terminates policy</td><td>Partial claims reduce remaining SI; policy continues for balance; multiple claims possible until full SI reached</td></tr>
+      <tr><td>Consumer fit</td><td>May over-pay for minor conditions; under-pay for missed minor ones</td><td>Better matches degree of illness; fewer legitimate claims fail threshold</td></tr>
+      <tr><td>Insurer challenges</td><td>Simpler definitions; fewer disputes</td><td>Greater complexity; more definitions; more potential disputes; pricing needs more granular data; anti-selection on tiered conditions</td></tr>
+      <tr><td>Premiums</td><td>Do not reduce after partial claim</td><td>Premiums typically do NOT reduce after partial payment — remaining risk still exists</td></tr>
+    </table>
+
+    <div class="alert crimson">
+      <span class="alert-icon">⚠️</span>
+      <div><strong>Exam Trap:</strong> "Premiums do not typically reduce with any proportionate payment" after a partial claim. The remaining sum insured decreases but the premium remains at the original level — the insured life still has the same mortality/morbidity risk for the remaining conditions.</div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- TAB 3: STRUCTURES -->
+  <!-- ══════════════════════════════════════ -->
+  <div id="tab-structures" class="section-panel">
+    <div class="sec-header">
+      <div class="sec-icon" style="background:var(--teal-pale);">🏗</div>
+      <div>
+        <div class="sec-title">Product Structures &amp; Variations</div>
+        <div class="sec-sub">Accelerated vs standalone, premium types, ROP, guaranteed vs reviewable</div>
+      </div>
+    </div>
+
+    <div class="sub-hd">Accelerated vs Standalone vs Additional</div>
+    <table class="tbl">
+      <tr><th>Structure</th><th>How It Works</th><th>Death Benefit</th><th>CI Benefit</th><th>Key Use Case</th></tr>
+      <tr>
+        <td>Standalone CI</td>
+        <td>CI sum insured paid ONLY on diagnosis of insured condition; no payment on death</td>
+        <td>None</td>
+        <td>Full sum insured on CI diagnosis</td>
+        <td>Policyholder wants pure CI protection without life cover</td>
+      </tr>
+      <tr>
+        <td>Accelerated CI (rider on term life)</td>
+        <td>Sum insured paid on whichever event occurs first: CI diagnosis OR death. Death benefit reduced by any CI payment.</td>
+        <td>Reduced/eliminated after CI claim</td>
+        <td>Full sum insured — accelerates death benefit</td>
+        <td>Mortgage protection; cost-effective combined cover; most common structure</td>
+      </tr>
+      <tr>
+        <td>Additional benefit CI</td>
+        <td>CI benefit paid in ADDITION to the full life sum insured — both can be paid independently</td>
+        <td>Full; payable independently</td>
+        <td>Full; payable independently</td>
+        <td>Maximum protection; higher premium; policyholder wants both benefits to be payable</td>
+      </tr>
+    </table>
+
+    <div class="sub-hd">Guaranteed vs Reviewable Premiums</div>
+    <div class="alert teal">
+      <span class="alert-icon">📌</span>
+      <div><strong>Tested directly in IFoA Sep 2020 Q3.</strong> Key tension: guaranteed = certainty for policyholder but risk to insurer; reviewable = risk management for insurer but uncertainty for policyholder and selective lapse risk on review.</div>
+    </div>
+    <table class="tbl">
+      <tr><th>Dimension</th><th>Guaranteed Premiums</th><th>Reviewable Premiums</th></tr>
+      <tr><td>Policyholder certainty</td><td>High — knows exact premiums for full term</td><td>Low — premiums can change at review</td></tr>
+      <tr><td>Insurer pricing risk</td><td>High — all future mortality/morbidity risk priced at outset</td><td>Lower — can re-price on review if experience deteriorates</td></tr>
+      <tr><td>Reserves / capital</td><td>Higher (must hold for long-term guaranteed obligation)</td><td>Lower (option to re-price reduces long-term liability)</td></tr>
+      <tr><td>Reinsurance</td><td>Some reinsurers may not offer guaranteed CI reinsurance</td><td>Easier to obtain reinsurance</td></tr>
+      <tr><td>Selective lapse risk</td><td>Lower (policyholder locked into guaranteed terms)</td><td>High on review — especially if premiums increase; healthier lives lapse; sicker pool remains</td></tr>
+      <tr><td>Product differentiation</td><td>Preferred by policyholders; competitive advantage</td><td>Less preferred but may allow lower initial premiums</td></tr>
+      <tr><td>Regulatory scrutiny</td><td>Lower</td><td>Higher — Treating Customers Fairly; contract boundaries; basis for review must be clearly stated</td></tr>
+      <tr><td>Inflation environment</td><td>High risk — guaranteed premiums locked while claims costs inflate</td><td>Lower risk — can reprice to reflect inflation at review</td></tr>
+    </table>
+
+    <div class="sub-hd">Return of Premium (ROP) Options (IFoA Apr 2023)</div>
+    <div class="acc">
+      <div class="acc-hd" onclick="toggleAcc(this)">ROP — Triggers, Pricing, IFA Considerations <span class="acc-arr">›</span></div>
+      <div class="acc-body">
+        <div class="sub-hd" style="margin-top:0;font-size:14px;">Possible ROP Triggers</div>
+        <ul class="blist">
+          <li><strong>Surrender/lapse:</strong> premiums returned if policy cancelled</li>
+          <li><strong>End of term / age expiry:</strong> if no CI claim made during term</li>
+          <li><strong>Death (outside a CI claim):</strong> premiums returned to estate</li>
+          <li><strong>Conversion to another policy</strong></li>
+          <li><strong>Claim decline</strong></li>
+          <li><strong>Claim within moratorium/survival period</strong></li>
+          <li><strong>Partial claim:</strong> proportion of premiums returned</li>
+        </ul>
+        <div class="sub-hd" style="font-size:14px;">Pricing Considerations</div>
+        <ul class="blist">
+          <li>Probability and timing of each trigger event</li>
+          <li>Expected policyholder behaviour (e.g. selective lapse by healthier lives for surrender ROP)</li>
+          <li>Investment return on pre-funded reserves</li>
+          <li>Amount of premium returned (full vs partial, net of charges)</li>
+          <li>Fairness between policyholders with and without the option</li>
+        </ul>
+        <div class="sub-hd" style="font-size:14px;">IFA Considerations</div>
+        <ul class="blist">
+          <li>Client need and affordability — ROP increases premium, reducing affordability</li>
+          <li>Value as quasi-savings vehicle or tax-deferral tool</li>
+          <li>Commission implications (higher premium = higher commission if linked) — TCF risk</li>
+          <li>Regulatory risk if added complexity leads to policyholder misunderstanding</li>
+          <li>ROP may widen the protection gap if it makes standard CI unaffordable for lower-income policyholders</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="sub-hd">Mental Health Conditions in CI (IFoA Sep 2024)</div>
+    <div class="acc">
+      <div class="acc-hd" onclick="toggleAcc(this)">Mental Health — Suitability, Challenges, Catch-All Definitions <span class="acc-arr">›</span></div>
+      <div class="acc-body">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+          <div>
+            <div class="card-hd teal" style="border-radius:6px;padding:8px 12px;margin-bottom:8px;">Suitable conditions (criteria)</div>
+            <ul class="blist">
+              <li>Severe and debilitating impact comparable to traditional CIs</li>
+              <li>Occurs with sufficient frequency</li>
+              <li>Clearly and precisely defined to avoid claim ambiguity</li>
+              <li>Sufficient data to support pricing</li>
+              <li>Objective measurable triggers (e.g. inability to work 12 months; hospitalisation for specified period)</li>
+            </ul>
+          </div>
+          <div>
+            <div class="card-hd crimson" style="border-radius:6px;padding:8px 12px;margin-bottom:8px;">Unsuitable conditions</div>
+            <ul class="blist">
+              <li>Temporary or curable — payment would be a windfall not protection</li>
+              <li>Conditions without objective measurable triggers</li>
+              <li>Adding only to new business → dissatisfaction among existing policyholders who requested inclusion</li>
+            </ul>
+          </div>
+        </div>
+        <div style="margin-top:12px;">
+          <div class="card-hd gold" style="border-radius:6px;padding:8px 12px;margin-bottom:8px;">UW changes needed</div>
+          <ul class="blist">
+            <li>New UW questions: clear, relevant, proportionate, sensitive; comply with anti-discrimination law</li>
+            <li>Specialist medical advice needed for definitions AND underwriting criteria</li>
+            <li>Reinsurers: key resource for definitions, UW criteria, data from other markets, reinsurance availability and cost</li>
+          </ul>
+        </div>
+        <div class="alert crimson" style="margin-top:12px;">
+          <span class="alert-icon">⚠️</span>
+          <div><strong>Catch-all definition (e.g. "serious infectious diseases") risks:</strong> pricing uncertainty; past data unusable; higher reserves and capital; legal/dispute risk around what qualifies. If leads to materially higher-than-expected sales: capital strain. Over-prudent pricing: unaffordable. Under-prudent: insolvency risk. Pricing tension is structurally unresolvable without a specific condition list.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- TAB 4: PRICING -->
+  <!-- ══════════════════════════════════════ -->
+  <div id="tab-pricing" class="section-panel">
+    <div class="sec-header">
+      <div class="sec-icon" style="background:var(--gold-pale);">💰</div>
+      <div>
+        <div class="sec-title">CI — Pricing</div>
+        <div class="sec-sub">Incidence rate formulas, premium build-up, medical advances, reviewable premium review process</div>
+      </div>
+    </div>
+
+    <div class="sub-hd">CI Pricing Formulas</div>
+    <div class="formula">
+      <div class="formula-label">Accelerated CI — Claim Incidence Rate</div>
+      <div class="formula-expr">λ_CI_accelerated = i<sub>x</sub> + (1 − k<sub>x</sub>) × q<sub>x</sub></div>
+      <div class="formula-notes">
+        i<sub>x</sub> = CI incidence rate (probability of CI diagnosis, surviving survival period, not yet dead) &nbsp;|&nbsp;
+        q<sub>x</sub> = mortality rate &nbsp;|&nbsp;
+        k<sub>x</sub> = proportion of deaths caused by CI condition<br>
+        ⚠️ Double-counting k<sub>x</sub> overstates the rate → understates claim cost → <strong>inadequate premiums and reserves</strong>
+      </div>
+    </div>
+
+    <div class="formula">
+      <div class="formula-label">Standalone CI — Claim Incidence Rate</div>
+      <div class="formula-expr">λ_CI_standalone = i<sub>x</sub> × P(survive survival period)</div>
+      <div class="formula-notes">
+        No death benefit interaction. Must separately estimate incidence of each covered condition.<br>
+        Overall CI incidence = Σ incidence rates by cause (heart disease + stroke + cancer + other). <strong>Avoid double-counting overlapping conditions.</strong>
+      </div>
+    </div>
+
+    <div class="cards">
+      <div class="card">
+        <div class="card-hd crimson">📊 Data Requirements</div>
+        <div class="card-bd">
+          <ul class="blist">
+            <li>Up to <strong>40 separate condition distributions</strong> to estimate</li>
+            <li>Incidence rates by: age, gender, smoking status, occupation, benefit type</li>
+            <li>CI data historically limited — reinsurers are key data source</li>
+            <li>CI not similar to normal insured population (insured lives are selected — healthier initially)</li>
+            <li>Separate first and subsequent incidence rates (for tiered CI)</li>
+            <li>Medical advances affect new vs existing business differently — conditions can be removed from new policies but NOT from guaranteed in-force ones</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-hd gold">📈 Medical Advances — Pricing Challenge</div>
+        <div class="card-bd">
+          <ul class="blist">
+            <li>Screening programmes → earlier diagnosis → shifts timing of claims; may trigger claims that might otherwise have lapsed</li>
+            <li>New treatments → conditions that previously led to death now survivable → more CI claims (earlier) but fewer deaths</li>
+            <li>Better survival rates → CI incidence increases; death incidence decreases</li>
+            <li>New diseases emerge — not on existing CI list; new diseases initially impossible to price</li>
+            <li>Definition of conditions may need updating as medical understanding evolves</li>
+            <li>Separate disease-based and treatment-based trend modelling advisable</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-hd teal">🏗 Premium Build-up</div>
+        <div class="card-bd">
+          <ul class="blist">
+            <li>Risk premium (expected claims cost) as base</li>
+            <li>+ Expense loading (initial + renewal; amortised over expected policy years)</li>
+            <li>+ Profit margin / risk discount rate</li>
+            <li>+ Contingency loading (model risk; data uncertainty)</li>
+            <li>+ Reinsurance cost (net of recoveries)</li>
+            <li>= Office premium</li>
+            <li>Profit test: verify required ROC at projected volumes</li>
+            <li>For tiered CI: higher contingency loading given uncertainty in multiple-claim distributions</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-hd navy">🔄 Reviewable Premium Review Process (IFoA Sep 2020 Q3)</div>
+        <div class="card-bd">
+          <ul class="blist">
+            <li>Split existing policies into homogeneous groups by product type, pricing series, premium rates</li>
+            <li>Experience investigation for each group: incidence rates by age, gender, occupation, region, duration, cause of claim</li>
+            <li>Compare actual to assumed; calculate A/E ratio; investigate causes of deviation</li>
+            <li>Medical/lifestyle trend analysis; reinsurer experience comparison</li>
+            <li>Assess future trends: medical advances, lifestyle changes, demographic shifts</li>
+            <li>Profit test new rates; check against regulatory requirements</li>
+            <li>Communicate changes clearly to policyholders; reasons for increase must be explained in plain language</li>
+            <li>Good practice: cannot increase premiums purely to recoup earlier losses</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="sub-hd">Inflation Impact on CI (IFoA Sep 2024)</div>
+    <div class="acc">
+      <div class="acc-hd" onclick="toggleAcc(this)">High Inflation Environment — CI-specific impacts <span class="acc-arr">›</span></div>
+      <div class="acc-body">
+        <ul class="blist">
+          <li>Long-term guaranteed-premium CI is most exposed to inflation risk — premiums locked while claims costs and expenses inflate</li>
+          <li>Short-term and group products can reprice annually — lower inflation risk; strategy should shift sales toward these in high-inflation environment</li>
+          <li>Higher inflation → higher living costs → policyholders more likely to lapse, particularly healthy lives who feel less exposed → adverse selection</li>
+          <li>Guaranteed premium rates become more attractive to policyholders in uncertain inflationary environment → demand increases</li>
+          <li>Expenses inflate → expense loading in existing guaranteed premiums becomes inadequate</li>
+          <li>Investment returns may be eroded; matching assets harder to access (inflation-linked bonds become expensive)</li>
+          <li>Commission payments linked to premiums: if premiums increase, commission increases → cost pressure</li>
+          <li>Higher socio-economic groups less price-sensitive → premiums for CI/IP can be increased without reducing sales volumes in this segment; expenses should be loaded to reflect this differential</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- TAB 5: UW & CLAIMS -->
+  <!-- ══════════════════════════════════════ -->
+  <div id="tab-uw-claims" class="section-panel">
+    <div class="sec-header">
+      <div class="sec-icon" style="background:var(--crimson-pale);">🔍</div>
+      <div>
+        <div class="sec-title">Underwriting &amp; Claims</div>
+        <div class="sec-sub">UW approach, declined claims, anti-selection, reinsurance, front-end UW</div>
+      </div>
+    </div>
+
+    <div class="sub-hd">CI Underwriting</div>
+    <div class="cards">
+      <div class="card">
+        <div class="card-hd teal">📋 UW Approach for CI</div>
+        <div class="card-bd">
+          <ul class="blist">
+            <li>CI is typically <strong>fully medically underwritten</strong> at outset (unlike health cash plans which use community rating)</li>
+            <li>Long-term nature justifies cost of full UW — premium locked for many years</li>
+            <li>UW aims to select lives as assumed in pricing basis</li>
+            <li>Substandard lives: rated premium (loading), exclusion of specific conditions, decline</li>
+            <li>Anti-selection risk: asymmetry of information (e.g. occupational exposure to cancer not picked up by standard UW questions)</li>
+            <li>Waiting periods (e.g. 6 months for cancer-related claims) mitigate anti-selection in absence of full UW</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-hd crimson">🔍 Front-End vs Back-End UW (IAI June 2019)</div>
+        <div class="card-bd">
+          <ul class="blist">
+            <li><strong>Back-end UW</strong> (India traditional): limited initial UW; anti-selection risk managed via waiting periods and claims assessment at claim time</li>
+            <li><strong>Front-end UW</strong>: detailed medical assessment at proposal; explicit exclusions; faster claims processing; peace of mind for policyholder (no waiting periods)</li>
+            <li>Challenges of FMU: difficult to design tests covering all conditions; expensive; healthy applicants opting in but unhealthy avoiding → may worsen selection; lengthy process; may increase declines and reputational risk</li>
+            <li>Recommendation: FMU as option for younger applicants (&lt;40); pass benefit of lower claims to customer via lower premiums</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="sub-hd">Declined Claims — Causes &amp; Implications (IAI July 2022 Q1)</div>
+    <div class="acc">
+      <div class="acc-hd" onclick="toggleAcc(this)">Reasons for Increase in Declined Claims <span class="acc-arr">›</span></div>
+      <div class="acc-body">
+        <ul class="blist">
+          <li><strong>Volume effect:</strong> Simply more claims made (maturing book; adverse mix change) → absolute number of declines rises even if decline rate is unchanged</li>
+          <li><strong>Improved claims control:</strong> More experienced staff, stricter process → more claims properly declined that were previously paid in error</li>
+          <li><strong>Policyholder misunderstanding:</strong> Precise cover not explained clearly at sale; new disease emerged not covered; policyholder tries to claim for something not covered</li>
+          <li><strong>Fraud:</strong> Especially likely in economic downturn; policyholders in financial stress attempt fraudulent claims</li>
+          <li><strong>Non-disclosure / misrepresentation:</strong> Pre-existing condition not declared at application (poor selling practices; insurer not asking right questions; insured forgetting)</li>
+          <li><strong>Other policy breaches:</strong> Premium non-payment making cover void; policy expiry</li>
+          <li><strong>Definition disputes:</strong> Condition diagnosed does not meet precise definition (e.g. cancer that does not meet malignancy criteria; heart attack without Troponin threshold)</li>
+        </ul>
+      </div>
+    </div>
+    <div class="acc">
+      <div class="acc-hd" onclick="toggleAcc(this)">Implications of Increased Declined Claims <span class="acc-arr">›</span></div>
+      <div class="acc-body">
+        <ul class="blist">
+          <li>If due to improved claims control: good news short-term — lower claims costs; but if customers expected to be paid, adverse customer experience and complaints</li>
+          <li>Reputation damage — perception that CI policies "don't pay out"; reduces demand long-term</li>
+          <li>Brokers upset by disputed claims → less willing to sell the insurer's CI products</li>
+          <li>Ombudsman/court may subsequently overturn declines → more claims paid than expected; legal costs</li>
+          <li>If due to worsening claim incidence: profitability and solvency implications</li>
+          <li>If due to mis-selling: higher-than-expected lapses; further claim disputes in future; regulatory action</li>
+          <li>Admin burden processing declined claims and subsequent complaints</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="sub-hd">Reinsurance for CI (IAI May 2023 Q1)</div>
+    <div class="acc">
+      <div class="acc-hd" onclick="toggleAcc(this)">Why Reinsure CI? <span class="acc-arr">›</span></div>
+      <div class="acc-body">
+        <ul class="blist">
+          <li>Protect actual solvency — especially given uncertainty about future CI incidence trends (screening effects, medical advances)</li>
+          <li>Increase capacity to accept risk — write more business with same capital; accept very large risks and wider range of substandard lives</li>
+          <li>Iron out experience fluctuations — protect against "blips" in surplus emergence</li>
+          <li>Reduce new business strain via financing arrangements (reinsurance commissions)</li>
+          <li>Reduce capital requirements (though less critical for established insurers)</li>
+          <li>Reinsurer provides UW and claims control expertise and advice — particularly valuable for impaired lives</li>
+          <li>Reinsurer may provide software for pricing, UW, claims administration</li>
+          <li>Reinsurance terms serve as a check on premium adequacy</li>
+          <li>May be available at favourable price (reinsurer accepting at a loss to build market share)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- TAB 6: DISABILITY DEFINITIONS -->
+  <!-- ══════════════════════════════════════ -->
+  <div id="tab-disability" class="section-panel">
+    <div class="sec-header">
+      <div class="sec-icon" style="background:var(--teal-pale);">♿</div>
+      <div>
+        <div class="sec-title">Disability Definitions</div>
+        <div class="sec-sub">Occupation-based, ADL-based, FATs, PCAs — SP1 Chapters 1 &amp; 2</div>
+      </div>
+    </div>
+
+    <div class="alert teal">
+      <span class="alert-icon">📌</span>
+      <div>Disability definitions apply to <strong>IP, TPD (within CI), and LTCI</strong>. The choice of definition is a key pricing and product design decision — directly affects claim cost, moral hazard, and range of insurable lives.</div>
+    </div>
+
+    <div class="sub-hd">Occupation-Based Definitions</div>
+    <table class="tbl">
+      <tr><th>Definition</th><th>Trigger</th><th>Cost</th><th>Suitable For</th><th>Risk</th></tr>
+      <tr><td>Own Occupation</td><td>Cannot perform the specific occupation of the insured</td><td>Highest</td><td>Professional, white-collar; own occupation well-defined</td><td>Minor disability could trigger claim for specialised workers (e.g. pianist with hand injury); not offered to high-risk/manual workers</td></tr>
+      <tr><td>Suited Occupation (Any Occupation Suited by Education/Training/Experience)</td><td>Cannot work in any occupation suited by experience, training, education</td><td>Medium</td><td>Compromise where own occ unsuitable; broadens insurable range</td><td>High dispute risk at claims — what is "suited"?</td></tr>
+      <tr><td>Own Occ (initial) then Any Occ</td><td>Own occ for first 2 years; then any occ</td><td>Medium-High</td><td>Balance early generosity with long-term cost control</td><td>Cliff-edge at transition; policyholder expectation mismatch</td></tr>
+      <tr><td>Any Occupation</td><td>Cannot perform ANY occupation</td><td>Lowest</td><td>High-risk/manual occupations (building trade); when cost of broader cover is prohibitive</td><td>Most restrictive for policyholder; claim disputes if policyholder technically able to do any work</td></tr>
+    </table>
+
+    <div class="alert crimson">
+      <span class="alert-icon">⚠️</span>
+      <div><strong>Key risk across ALL occupation-based definitions:</strong> Lenient claims interpretation in practice means claims often paid more generously than priced. Experience monitoring must feed back into pricing (actuarial control cycle).</div>
+    </div>
+
+    <div class="sub-hd">Activities of Daily Living (ADLs)</div>
+    <div class="cards">
+      <div class="card">
+        <div class="card-hd teal">📋 Standard ADL List</div>
+        <div class="card-bd">
+          <ul class="blist">
+            <li><strong>F</strong>eeding (self)</li>
+            <li><strong>D</strong>ressing</li>
+            <li><strong>W</strong>ashing</li>
+            <li><strong>T</strong>oileting</li>
+            <li><strong>M</strong>obility</li>
+            <li><strong>T</strong>ransferring (moving from bed/chair)</li>
+            <li>Trigger: inability to perform (unaided) a specified number — typically 3 or 4 out of 6</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-hd gold">⚖️ ADL vs Occupational</div>
+        <div class="card-bd">
+          <ul class="blist">
+            <li><strong>ADL advantages:</strong> Applicable to non-workers (housepersons, unemployed, retired); usable beyond retirement age; single definition throughout policy term; less subjective than occupational</li>
+            <li><strong>ADL limitation:</strong> May be harder to satisfy than occupational definition; less sensitive to partial disability</li>
+            <li>TPD on ADL basis throughout life = <strong>"loss of independent existence"</strong></li>
+            <li>LTCI: typically 50% benefit on failure of 2/6 ADLs; 100% on failure of 3+/6 (or cognitive impairment)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="sub-hd">Alternative Definitions: FATs, ADWs, PCAs</div>
+    <table class="tbl">
+      <tr><th>Definition</th><th>How It Works</th><th>Key Advantage</th></tr>
+      <tr>
+        <td>Activities of Daily Working (ADWs)</td>
+        <td>Skills-based tests relating to workplace activities — dexterity, mobility, communication</td>
+        <td>More objective than occupational; can be linked to occupational class; applicable to non-earners</td>
+      </tr>
+      <tr>
+        <td>Functional Assessment Tests (FATs)</td>
+        <td>Physical tests of capability — e.g. getting up from chair, standing 10 mins, walking 200m, lifting 2kg, climbing 12 stairs, bending, using hands. Fail specified number (e.g. 3 of 7). Mental incapacity: overriding test alongside FAT.</td>
+        <td>Applicable at any age; easily understood; precisely defined; easier to apply in practice; no occupation-specific expertise needed</td>
+      </tr>
+      <tr>
+        <td>Personal Capability Assessments (PCAs)</td>
+        <td>Hybrid — fails if cannot perform specified number of personal capabilities OR suffers one of list of serious illnesses (blindness, terminal illness, complete dependency). Trigger: fail 3+ personal capabilities OR meet serious illness criterion.</td>
+        <td>Combines objective functional tests with defined serious illness triggers; broadly applicable across all age groups and employment statuses</td>
+      </tr>
+    </table>
+
+    <div class="sub-hd">Choosing the Right Definition</div>
+    <table class="tbl">
+      <tr><th>Policyholder Profile</th><th>Recommended Definition</th><th>Rationale</th></tr>
+      <tr><td>Employed professional (e.g. surgeon, lawyer)</td><td>Own Occupation</td><td>Specific occupational skills have high financial value; partial disability can have large income impact</td></tr>
+      <tr><td>Manual / high-risk worker (e.g. builder, miner)</td><td>Any Occupation (or suited occ)</td><td>Own occ cost prohibitive; risk of minor physical injury triggering claim frequently</td></tr>
+      <tr><td>Non-worker / houseperson</td><td>ADL-based</td><td>Cannot apply occupational definition; ADL captures actual functional capacity loss</td></tr>
+      <tr><td>Post-retirement / older ages</td><td>ADL-based or FAT</td><td>No occupation to define; ADL/FAT applicable throughout life; avoids contract boundaries issue</td></tr>
+      <tr><td>Within LTCI</td><td>ADL (trigger for benefit)</td><td>Industry standard; needs-based; clearly captures care dependency</td></tr>
+    </table>
+  </div>
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- TAB 7: RISKS -->
+  <!-- ══════════════════════════════════════ -->
+  <div id="tab-risks" class="section-panel">
+    <div class="sec-header">
+      <div class="sec-icon" style="background:var(--crimson-pale);">⚠️</div>
+      <div>
+        <div class="sec-title">CI Risks &amp; Risk Management</div>
+        <div class="sec-sub">Lapse risk in recession, anti-selection, medical advances, new product launch risks</div>
+      </div>
+    </div>
+
+    <div class="sub-hd">Core CI Risks</div>
+    <div class="cards">
+      <div class="card">
+        <div class="card-hd crimson">📉 Morbidity Risk</div>
+        <div class="card-bd">
+          <ul class="blist">
+            <li>Higher-than-expected CI claim incidence</li>
+            <li>Medical advances: screening → earlier diagnosis → more claims; new treatments → more survivors → more CI claims</li>
+            <li>New conditions emerge after pricing (e.g. pandemic disease)</li>
+            <li>Definition disputes lead to claims being paid that were not priced for</li>
+            <li>Claim definitions become outdated (e.g. heart attack Troponin thresholds as diagnostics improve)</li>
+            <li>Up to 40 separate condition distributions — model risk on each</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-hd gold">🔄 Lapse &amp; Anti-Selection Risk</div>
+        <div class="card-bd">
+          <ul class="blist">
+            <li>Selective lapsing: healthy lives lapse (feel less exposed); sicker lives stay → deteriorating risk pool</li>
+            <li>On reviewable premium review: if premiums increase, healthy lives more likely to lapse → worsening experience → further increases → spiral</li>
+            <li>Lapse before expenses recovered → loss on policy</li>
+            <li>Fixed costs spread over fewer policies → profitability pressure</li>
+            <li>Asset disinvestment at unfavourable prices if large-scale lapsing occurs</li>
+            <li>Reinsurance premiums become relatively more expensive per remaining policy</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-hd teal">🏗 New Product Launch Risks (IAI Apr 2016)</div>
+        <div class="card-bd">
+          <ul class="blist">
+            <li><strong>Product substitution:</strong> new product outsells existing profitable product</li>
+            <li><strong>Over-selling:</strong> too much capital-intensive business destabilises portfolio</li>
+            <li><strong>Sales failure:</strong> development costs not recovered; small portfolio has poor morbidity experience</li>
+            <li><strong>Expense overrun:</strong> high cost of sales reduces available capital</li>
+            <li><strong>Product design failure:</strong> product doesn't meet target market needs; poor positioning vs competitors</li>
+            <li><strong>Pricing error:</strong> under/over-priced due to lack of data, modelling errors, inadequate UW</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-hd navy">📋 Operational / Definition Risks</div>
+        <div class="card-bd">
+          <ul class="blist">
+            <li>Complex medical terminology → dispute risk → costly litigation</li>
+            <li>Non-standardised definitions across market → customer confusion; adversarial claims</li>
+            <li>Moral hazard (lower than IP due to lump-sum nature) — but monitoring still important</li>
+            <li>TPD: permanence difficult to establish early — IBNS reserves needed</li>
+            <li>Fraudulent claims — especially in economic downturns</li>
+            <li>Mis-selling risk on tiered CI — complex benefit structure; higher potential for misunderstanding</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="sub-hd">Recession &amp; Lapse Management (IFoA Apr 2022)</div>
+    <div class="acc">
+      <div class="acc-hd" onclick="toggleAcc(this)">Minimising Lapses — Actions on Existing and New CI Policies <span class="acc-arr">›</span></div>
+      <div class="acc-body">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+          <div>
+            <div class="card-hd teal" style="border-radius:6px;padding:8px 12px;margin-bottom:8px;">Existing Policies</div>
+            <ul class="blist">
+              <li>Customer retention strategy; train retention team</li>
+              <li>Write to all policyholders outlining the value their policy provides</li>
+              <li>Offer incentives to most profitable subgroups</li>
+              <li>Provide flexible options: reduce sum assured; convert escalating to level premiums; pay-up options</li>
+              <li>Introduce premium holiday (no catch-up) or premium deferral (catch-up later)</li>
+              <li>Target shortest-duration policies (where unrecovered expenses greatest)</li>
+              <li>Approach distributors to discourage churning</li>
+            </ul>
+          </div>
+          <div>
+            <div class="card-hd gold" style="border-radius:6px;padding:8px 12px;margin-bottom:8px;">New Policies</div>
+            <ul class="blist">
+              <li>Add benefits to attract retention-conscious buyers: children's benefit, tiered payments</li>
+              <li>Simplify underwriting to reduce barriers to entry</li>
+              <li>Offer more flexible premium structures (reviewable; monthly; step-down)</li>
+              <li>Ensure product value proposition is clear and meaningful</li>
+              <li>Commission structure: include clawback to discourage distributor churning</li>
+            </ul>
+          </div>
+        </div>
+        <div class="alert gold" style="margin-top:12px;">
+          <span class="alert-icon">⚖️</span>
+          <div><strong>Premium Holiday (Option A) vs Deferral (Option B):</strong> Option A retains the customer but permanently reduces premium income and profitability. Option B recovers missed income but relies on policyholder's ability and willingness to pay later. Both are superior to lapse for the insurer if they prevent selective lapsing by healthier lives.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sub-hd">Group CI — Recession-Specific Issues (IFoA Apr 2022)</div>
+    <div class="acc">
+      <div class="acc-hd" onclick="toggleAcc(this)">Group CI Premium Adjustment &amp; Renewal in Recession <span class="acc-arr">›</span></div>
+      <div class="acc-body">
+        <div class="sub-hd" style="margin-top:0;font-size:14px;">Mid-Year Premium Return (redundancies reducing exposure)</div>
+        <ul class="blist">
+          <li>Standard method: assume employees join/leave at uniform rate → calculate updated exposure</li>
+          <li>In recession with mass redundancies: actual exit rate not uniform; redundancies may be concentrated at higher-risk roles/ages</li>
+          <li>Insurer must consider: mix of those made redundant vs those retained; adverse selection if higher-risk lives kept on (firm retains younger fitter workers temporarily)</li>
+          <li>Employer considers: whether they will receive a return or face an increase; timing of redundancy announcement relative to year-end</li>
+        </ul>
+        <div class="sub-hd" style="font-size:14px;">Renewal Premium Negotiation</div>
+        <ul class="blist">
+          <li>Insurer considers: change in risk profile of employees retained; claims experience during year; cost trends; reinsurance terms; competitive pressures; employer's financial position (credit risk)</li>
+          <li>Employer considers: affordability; benchmarking vs market; value of scheme to employee retention; whether to amend benefit levels</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- TAB 8: FLASHCARDS -->
+  <!-- ══════════════════════════════════════ -->
+  <div id="tab-flashcards" class="section-panel">
+    <div class="sec-header">
+      <div class="sec-icon" style="background:var(--crimson-pale);">🃏</div>
+      <div>
+        <div class="sec-title">Flashcards</div>
+        <div class="sec-sub">Click any card to reveal the answer</div>
+      </div>
+    </div>
+    <div id="fc-container"></div>
+  </div>
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- TAB 9: IAI EXAM Qs -->
+  <!-- ══════════════════════════════════════ -->
+  <div id="tab-iai-qs" class="section-panel">
+    <div class="sec-header">
+      <div class="sec-icon" style="background:var(--teal-pale);">📝</div>
+      <div>
+        <div class="sec-title">IAI Exam Questions — CI</div>
+        <div class="sec-sub">Questions and model answers from IAI SA1 papers</div>
+      </div>
+    </div>
+    <div id="iai-container"></div>
+  </div>
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- TAB 10: IFoA EXAM Qs -->
+  <!-- ══════════════════════════════════════ -->
+  <div id="tab-ifoa-qs" class="section-panel">
+    <div class="sec-header">
+      <div class="sec-icon" style="background:var(--gold-pale);">🎓</div>
+      <div>
+        <div class="sec-title">IFoA Exam Questions — CI</div>
+        <div class="sec-sub">SP1 papers with direct CI focus</div>
+      </div>
+    </div>
+
+    <div class="alert teal">
+      <span class="alert-icon">📌</span>
+      <div>IFoA questions are scenario-based. Apply CI principles to the fictional country/context. Always read the specific scenario carefully before writing generic points.</div>
+    </div>
+
+    <!-- IFoA Apr 2025 -->
+    <div class="eq">
+      <div class="eq-hd" onclick="toggleEQ(this)">
+        <div class="eq-hd-l"><span class="badge ifoa">IFoA Apr 2025 — Q1</span><span class="eq-marks">40 marks</span></div>
+        <div class="eq-q">CI meeting policyholder needs; regulator's concerns (low payout ratio, rising claims time, premium/benefit ratio, conditions list); Consumer Responsibility; monitoring</div>
+        <div class="eq-arrow">▾</div>
+      </div>
+      <div class="eq-scenario">Country X: CI market for 25 years; conditions grown from 10 to 100; payout ratio only 55-59%; claims time 14→72 days; premiums/max benefit ratio 0.8→1.5; advisor commission $240→$2,400. Regulator concludes CI not meeting needs and not good value. New Consumer Responsibility regulation introduced.</div>
+      <div class="eq-body">
+        <div class="eq-sec">i) How CI meets policyholder needs</div>
+        <ul class="blist">
+          <li>Meets medical costs (treatment, surgery, hospital stays)</li>
+          <li>Repays mortgage or loan on diagnosis</li>
+          <li>Provides income from lump sum (via annuity) when cannot work</li>
+          <li>Funds other insurance / retirement savings continuation</li>
+          <li>Supports dependants requiring care</li>
+          <li>Funds day-to-day costs during recovery; home adaptations; domestic help; recuperation</li>
+          <li>Ensures policyholder not reliant on state benefits or family</li>
+        </ul>
+        <div class="eq-sec">ii) Regulator's concerns — from the table</div>
+        <ul class="blist">
+          <li><strong>Payout ratio 55-59%:</strong> Very low — policyholders claiming but only ~57% being paid. Could mean overly restrictive definitions, harsh claims management, or mis-selling (policies not covering what policyholders think). Rising conditions (10→100) barely moved payout ratio → new conditions are low-incidence, low-relevance → perceived but not real value</li>
+          <li><strong>Claims settlement time 14→72 days:</strong> Significant increase. Policyholders need benefit urgently (to fund treatment); 72-day delay causes financial hardship and dissatisfaction. Likely reflects: more complex assessments; resource cuts; more disputed claims</li>
+          <li><strong>Premium/benefit ratio 0.8→1.5:</strong> Now expected lifetime premiums EXCEED maximum benefit. Fails fair value test. Policyholders now paying more in total premiums than they could ever receive</li>
+          <li><strong>Commission $240→$2,400:</strong> 10x increase — rising distributor commission without corresponding policyholder value. Incentivises churning and mis-selling. Likely driver of increasing conditions list and premium growth</li>
+          <li><strong>Conditions 10→100:</strong> Vast majority of additional conditions are low-incidence/low-relevance — adding apparent comprehensiveness without delivering real protection value. Increases product complexity and claim disputes</li>
+        </ul>
+        <div class="eq-sec">iii) Ensuring good consumer outcomes and fair value (Company A)</div>
+        <ul class="blist">
+          <li>Review and tighten CI condition definitions to reduce dispute rates; simplify where possible</li>
+          <li>Remove or reclassify conditions that rarely result in claims; focus on meaningful coverage</li>
+          <li>Introduce severity-based partial payments to better match benefit to degree of illness</li>
+          <li>Benchmark premiums against competitors; ensure premium/benefit ratio does not exceed 1.0 for typical policyholders</li>
+          <li>Reduce claims settlement time — invest in claims team capacity; streamline process; set internal SLA targets</li>
+          <li>Review and reduce commission levels; introduce clawback to discourage churning</li>
+          <li>Clear product literature explaining exactly what is and is not covered; plain language condition definitions</li>
+          <li>Review benefit levels regularly to ensure they keep pace with inflation in real terms</li>
+          <li>Target market review: ensure CI product meets changing needs (longevity, earlier diagnosis, lifestyle shifts)</li>
+        </ul>
+        <div class="eq-sec">iv) Monitoring for Consumer Responsibility compliance</div>
+        <ul class="blist">
+          <li>Monitor CI claims payout ratio regularly (target: materially above 60%); investigate falls</li>
+          <li>Track claims settlement time: monthly; set internal target (e.g. 30 days); root cause analysis for delays</li>
+          <li>Track premium/maximum benefit ratio for new business: should remain &lt;1.0 for typical policyholders</li>
+          <li>Monitor commission levels vs competitor benchmarks; ensure not driving mis-selling incentives</li>
+          <li>Policyholder satisfaction surveys; complaint volumes and themes; ombudsman referrals</li>
+          <li>Lapse rates by duration: high early lapses may indicate mis-selling or poor product fit</li>
+          <li>Board reporting: annual Consumer Responsibility report with all metrics above</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- IFoA Apr 2022 -->
+    <div class="eq">
+      <div class="eq-hd" onclick="toggleEQ(this)">
+        <div class="eq-hd-l"><span class="badge ifoa">IFoA Apr 2022 — Q1</span><span class="eq-marks">48 marks</span></div>
+        <div class="eq-q">CI lapse risk in recession — adverse lapse consequences, minimising lapses, premium holiday vs deferral, stakeholder interests, group CI premium adjustment</div>
+        <div class="eq-arrow">▾</div>
+      </div>
+      <div class="eq-scenario">Country A: recession causing mass CI lapse requests. Individual CI: policyholders want to stop premiums due to income uncertainty. Group CI: recession causing redundancies, reducing group exposure during year.</div>
+      <div class="eq-body">
+        <div class="eq-sec">i) How increased lapses adversely affect insurer</div>
+        <ul class="blist">
+          <li>Anti-selection: healthy lives lapse → sicker risk pool remains → higher expected future claims; potentially higher premiums → further lapses → spiral</li>
+          <li>Lapse before expenses recovered → loss on those policies; initial expenses and commission unrecovered</li>
+          <li>Fixed costs spread over fewer policies → profitability pressure; economies of scale lost</li>
+          <li>Forced asset disinvestment at unfavourable recession prices (if surrender values must be paid)</li>
+          <li>Reinsurance premiums become relatively more expensive per remaining policy</li>
+          <li>Regulatory scrutiny if large-scale lapsing processed slowly; operational strain on systems</li>
+          <li>Reputational damage if distributors churn — increased commission costs if replaced at re-entry</li>
+        </ul>
+        <div class="eq-sec">ii) Actions to minimise lapses</div>
+        <ul class="blist">
+          <li><strong>Existing policies:</strong> Retention team; proactive communication of policy value; flexible premium options (reduce SI, pay-up, premium holiday/deferral); target shorter-duration policies; approach distributors to discourage churning; incentives for most profitable subgroups</li>
+          <li><strong>New policies:</strong> Add value-adding benefits (children's benefit, tiered payments); simplify UW; more flexible premium structures; commission clawback to discourage churning on re-entry</li>
+        </ul>
+        <div class="eq-sec">iii) Premium holiday (Option A) vs deferral (Option B) vs lapse</div>
+        <ul class="blist">
+          <li><strong>Option A (premium holiday):</strong> vs lapse — retains customer relationship; avoids selective lapse effects; maintains in-force volume (fixed cost spread). Vs lapse — permanently reduces premium income; profitability reduced; potential customer re-assessment at end of holiday</li>
+          <li><strong>Option B (premium deferral):</strong> vs lapse — same retention benefits; deferred premiums eventually recovered. Vs lapse — relies on policyholder ability and willingness to pay catch-up premiums; operational complexity; potential for dispute at catch-up date</li>
+          <li>Both Options A and B: better than lapse if they prevent selective lapsing of healthy lives</li>
+        </ul>
+        <div class="eq-sec">iv) Stakeholder interests</div>
+        <ul class="blist">
+          <li><strong>Shareholders:</strong> Concerned about profitability impact (reduced premium income, potential increased costs of options); whether selective lapsing or options preserves long-term value; dividend impact</li>
+          <li><strong>Individual policyholders:</strong> Want to maintain cover at reduced/deferred cost; concerned about whether CI benefit will be available when needed; fairness of option terms</li>
+          <li><strong>Government:</strong> Concerned about maintaining private insurance sector's ability to pay claims; reducing reliance on state benefits if CI cover lapses widely; social policy implications</li>
+          <li><strong>Distributors:</strong> Impact on commission income (premium holiday = no commission); risk of client going to competitor; potential for churning to generate new business commission</li>
+          <li><strong>Staff:</strong> Job security if business volume falls; increased workload managing lapse requests and premium options; potential redundancies</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- IFoA Sep 2020 Q3 -->
+    <div class="eq">
+      <div class="eq-hd" onclick="toggleEQ(this)">
+        <div class="eq-hd-l"><span class="badge ifoa">IFoA Sep 2020 — Q3</span><span class="eq-marks">35 marks</span></div>
+        <div class="eq-q">CI guaranteed vs reviewable premiums — advantages/disadvantages; good practice statement; premium review process; actions when profitability below target</div>
+        <div class="eq-arrow">▾</div>
+      </div>
+      <div class="eq-scenario">CI insurer offering both guaranteed and reviewable premium CI. No industry statements of good practice on reviewable premiums. Recent review shows reviewable business not meeting profit criteria.</div>
+      <div class="eq-body">
+        <div class="eq-sec">i) Reviewable premiums — advantages and disadvantages for insurer</div>
+        <ul class="blist">
+          <li><strong>Adv:</strong> Better risk management — can re-price if experience deteriorates. Lower initial premiums → market appeal. Lower reserves and capital (option to re-price reduces long-term liability). Easier to obtain reinsurance. Less reliance on pricing data credibility at outset. Less product differentiation risk from competitors with guaranteed products</li>
+          <li><strong>Dis:</strong> Review process is onerous and time-consuming. Systems cost (run dual system for guaranteed and reviewable). Premium increases: not well received → reputational risk → selective lapses → worsening experience → further increases → spiral. Reinsurance premium may become out of sync with insurer's decision not to reprice. Regulatory scrutiny (TCF, contract boundaries). Managing policyholder reasonable expectations over time</li>
+        </ul>
+        <div class="eq-sec">ii) Good practice examples for premium review statement</div>
+        <ul class="blist">
+          <li>Demonstrate reviews are calculated fairly; disclose basis on which review is carried out</li>
+          <li>Review assumptions regularly; specify the reasons and circumstances under which assumptions can be changed</li>
+          <li>Cannot increase premiums purely to recoup earlier losses</li>
+          <li>Changes to CI conditions list: customers to be on "no worse" terms going forward</li>
+          <li>Communicate results to policyholders clearly; explain reasons for increases in plain language</li>
+          <li>If premiums increase, give policyholders option to amend policy (e.g. reduce SI instead of premium increase)</li>
+          <li>Allow sufficient time for policyholders to make decisions; complaints process must be available</li>
+        </ul>
+        <div class="eq-sec">iii) Premium review process</div>
+        <ul class="blist">
+          <li>Split business into homogeneous groups (by product type, pricing series, premium rates)</li>
+          <li>Experience investigation: incidence rates by age, gender, occupation, region, duration, cause of claim</li>
+          <li>Compare actual vs assumed (A/E ratio); investigate causes of deviation</li>
+          <li>Medical/lifestyle trend analysis; compare with reinsurer experience</li>
+          <li>Assess future trends: medical advances, screening effects, lifestyle changes</li>
+          <li>Profit test revised rates; compliance check with regulatory requirements</li>
+          <li>Communicate outcome to policyholders with reasons; allow options if premiums increasing</li>
+        </ul>
+        <div class="eq-sec">iv) Actions when profitability below target</div>
+        <ul class="blist">
+          <li>Increase premiums on reviewable business to restore profitability (but balance selective lapse risk)</li>
+          <li>Reduce benefits or tighten condition definitions on new business (not possible on guaranteed in-force)</li>
+          <li>Tighten underwriting on new business to improve future risk selection</li>
+          <li>Improve claims management and control (reduce improper payments; speed up assessment)</li>
+          <li>Review expense base — reduce overheads where possible</li>
+          <li>Consider reinsurance treaty renegotiation or new reinsurance arrangements</li>
+          <li>Consider whether to cease writing new business if product is not viable</li>
+          <li>Communicate transparently with regulator if solvency could be affected</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- IFoA Sep 2024 Q2 -->
+    <div class="eq">
+      <div class="eq-hd" onclick="toggleEQ(this)">
+        <div class="eq-hd-l"><span class="badge ifoa">IFoA Sep 2024 — Q2</span><span class="eq-marks">33 marks</span></div>
+        <div class="eq-q">Mental health in CI — suitability; new business only; conditions to add; competitive impact; UW changes; catch-all "serious infectious diseases" definition</div>
+        <div class="eq-arrow">▾</div>
+      </div>
+      <div class="eq-scenario">XYZ Health (CI insurer): current CI product does not cover mental health. Requests from FAs and policyholders to add. Sales director proposes adding a small number of serious mental health conditions for new business only. Also proposes replacing specific infectious disease list with catch-all "serious infectious diseases".</div>
+      <div class="eq-body">
+        <div class="eq-sec">i) Suitability of mental health conditions for CI</div>
+        <ul class="blist">
+          <li>Suitable IF: severe debilitating impact comparable to traditional CIs; occurs with sufficient frequency; can be clearly defined (objective measurable triggers); sufficient pricing data available</li>
+          <li>Unsuitable: temporary or curable conditions — payment would be a windfall; conditions without objective triggers; rare conditions with insufficient data</li>
+        </ul>
+        <div class="eq-sec">ii) Does new business only meet policyholder needs?</div>
+        <ul class="blist">
+          <li>Existing policyholders who requested addition will NOT be covered — likely dissatisfaction; may lapse to seek new policies with mental health cover</li>
+          <li>New policyholders benefit — meets the stated need</li>
+          <li>But: only those who can pass new UW (including mental health questions) will be accepted — those with existing mental health conditions may be excluded or rated</li>
+          <li>Overall: partially meets needs; existing policyholders not served; some new policyholders excluded by UW</li>
+        </ul>
+        <div class="eq-sec">iii) Factors in determining which mental health conditions to cover</div>
+        <ul class="blist">
+          <li>Must be severe and persistent (not temporary/curable)</li>
+          <li>Must be objectively measurable (e.g. hospitalisation for specified period; inability to work for 12 months)</li>
+          <li>Must have sufficient frequency and data to support pricing</li>
+          <li>Must comply with anti-discrimination law in UW questions</li>
+          <li>Reinsurer input on definitions, UW criteria, pricing data from other markets, reinsurance availability</li>
+          <li>Specialist medical advice on definitions and UW criteria</li>
+          <li>Consider fraud risk (mental health harder to verify objectively than cancer or heart attack)</li>
+        </ul>
+        <div class="eq-sec">iv) Competitive impact</div>
+        <ul class="blist">
+          <li>Positive: first-mover advantage if no competitors cover mental health; attracts new segment; PR benefit</li>
+          <li>Risk: adverse selection — lives with mental health risk more likely to buy XYZ Health product vs competitors; XYZ bears worse risk than market average</li>
+          <li>Competitors may copy quickly — first-mover advantage may be short-lived</li>
+          <li>If UW too restrictive, many declined → bad press; if too relaxed, adverse selection</li>
+        </ul>
+        <div class="eq-sec">v) UW changes needed</div>
+        <ul class="blist">
+          <li>New mental health questions: clear, relevant, proportionate, sensitive; comply with anti-discrimination law</li>
+          <li>Specialist medical advice needed to develop questions and underwriting criteria</li>
+          <li>Reinsurer guidance on UW approach for mental health conditions</li>
+          <li>Staff training for underwriters on mental health assessment</li>
+          <li>Increased monitoring of claims experience post-launch to validate UW assumptions</li>
+        </ul>
+        <div class="eq-sec">vi) Catch-all "serious infectious diseases" — advantages and disadvantages</div>
+        <ul class="blist">
+          <li><strong>Adv (insurer):</strong> Simpler product to sell and explain; covers new emerging diseases automatically; reduces claims disputes about whether a specific disease is listed; positive PR ("covers anything serious")</li>
+          <li><strong>Dis (insurer):</strong> Pricing uncertainty — cannot use past data for specific conditions; reserves and capital must increase significantly; legal/dispute risk — what constitutes "serious"? Definition open to challenge; if a new pandemic occurs: could face mass claims; capital strain. Over-prudent pricing → unaffordable. Under-prudent → insolvency. Pricing tension structurally unresolvable without specific condition list</li>
+          <li><strong>Adv (policyholder):</strong> Greater certainty of coverage; simpler to understand; no risk of coverage gap from new disease</li>
+          <li><strong>Dis (policyholder):</strong> Premium likely higher due to uncertainty loading; potential for insurer insolvency risk harming them; disputes at claim stage about what qualifies</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- IFoA Apr 2023 Q2 (ROP) -->
+    <div class="eq">
+      <div class="eq-hd" onclick="toggleEQ(this)">
+        <div class="eq-hd-l"><span class="badge ifoa">IFoA Apr 2023 — Q2</span><span class="eq-marks">33 marks</span></div>
+        <div class="eq-q">Standalone CI with Return of Premium (ROP) options — triggers, pricing, IFA considerations, policy types, first-mover risk of ceasing ROP</div>
+        <div class="eq-arrow">▾</div>
+      </div>
+      <div class="eq-scenario">Country Z: industry sells only SACI. ~70% of sales include at least one ROP option. All sold via IFAs. Regulator concerned ROP making SACI unaffordable and widening protection gap.</div>
+      <div class="eq-body">
+        <div class="eq-sec">i) Four possible ROP triggers</div>
+        <ul class="blist">
+          <li>Surrender/lapse: premiums returned if policy cancelled before term end</li>
+          <li>End of term / age expiry: premiums returned if no CI claim made during term</li>
+          <li>Death (outside a CI claim): premiums returned to estate</li>
+          <li>Claim decline: premiums returned if claim is denied</li>
+          <li>(Also: conversion to another policy; claim within survival/moratorium period; partial claim)</li>
+        </ul>
+        <div class="eq-sec">ii) Pricing factors for ROP options</div>
+        <ul class="blist">
+          <li>Probability and timing of each trigger event</li>
+          <li>Expected selective lapse by healthier lives for surrender ROP (adverse selection on trigger)</li>
+          <li>Investment return assumed on pre-funded reserves</li>
+          <li>Amount of premium returned (full vs partial, net of charges)</li>
+          <li>Fairness between policyholders with and without the option</li>
+          <li>Anti-selection implications: which lives are more likely to select each trigger type?</li>
+        </ul>
+        <div class="eq-sec">iii) IFA considerations before recommending ROP</div>
+        <ul class="blist">
+          <li>Client need and affordability — ROP increases premium significantly; may reduce sum assured to stay affordable</li>
+          <li>Value as quasi-savings vehicle: does client have alternative savings? Is ROP the best mechanism?</li>
+          <li>Tax implications of premium return (varies by jurisdiction)</li>
+          <li>Commission implications — higher premium = higher commission; must demonstrate this is in client's interest (TCF)</li>
+          <li>Regulatory risk if added complexity leads to client misunderstanding</li>
+        </ul>
+        <div class="eq-sec">vi) Consequences for first insurer to cease ROP</div>
+        <ul class="blist">
+          <li>Competitive disadvantage — other insurers still offering ROP; policyholders and IFAs prefer ROP option</li>
+          <li>Potential reduction in sales volumes and market share</li>
+          <li>IFAs may recommend competitors; insurer-distributor relationship damaged</li>
+          <li>If new lower premium attracts different (younger/healthier) target market → could be beneficial to risk pool long-term</li>
+          <li>First-mover may capture positive PR for acting in consumer interest — regulatory goodwill</li>
+          <li>Market may not follow immediately — competitive disadvantage period before industry moves</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- TAB 11: MNEMONICS -->
+  <!-- ══════════════════════════════════════ -->
+  <div id="tab-mnemonics" class="section-panel">
+    <div class="sec-header">
+      <div class="sec-icon" style="background:#1a0a10;">🧠</div>
+      <div>
+        <div class="sec-title">Mnemonics &amp; Memory Aids</div>
+        <div class="sec-sub">Quick-recall frameworks for exam conditions</div>
+      </div>
+    </div>
+
+    <div class="mnemonic">
+      <div class="mn-title">Three Criteria for CI Inclusion — "FDS"</div>
+      <div class="mn-items">
+        <div class="mn-item"><div class="mn-letter">F</div><div class="mn-word"><strong>Frequent &amp; serious</strong><br>Perceived as serious &amp; occurs frequently enough to price</div></div>
+        <div class="mn-item"><div class="mn-letter">D</div><div class="mn-word"><strong>Defined clearly</strong><br>No ambiguity at claim time; precise medical criteria</div></div>
+        <div class="mn-item"><div class="mn-letter">S</div><div class="mn-word"><strong>Sufficient data</strong><br>Enough data to price accurately; reinsurer help if not</div></div>
+      </div>
+    </div>
+
+    <div class="mnemonic">
+      <div class="mn-title">Core CI Conditions — "COACH MS"</div>
+      <div class="mn-items">
+        <div class="mn-item"><div class="mn-letter">C</div><div class="mn-word"><strong>Cancer</strong></div></div>
+        <div class="mn-item"><div class="mn-letter">O</div><div class="mn-word"><strong>Organ transplant</strong> (major)</div></div>
+        <div class="mn-item"><div class="mn-letter">A</div><div class="mn-word"><strong>Artery bypass</strong> (coronary)</div></div>
+        <div class="mn-item"><div class="mn-letter">C</div><div class="mn-word"><strong>Coronary / Cardiac</strong> (heart attack)</div></div>
+        <div class="mn-item"><div class="mn-letter">H</div><div class="mn-word"><strong>Heart failure</strong> (kidney = renal failure)</div></div>
+        <div class="mn-item"><div class="mn-letter">M</div><div class="mn-word"><strong>Multiple sclerosis</strong></div></div>
+        <div class="mn-item"><div class="mn-letter">S</div><div class="mn-word"><strong>Stroke</strong></div></div>
+      </div>
+    </div>
+
+    <div class="mnemonic">
+      <div class="mn-title">ADL List — "FeDWToMoT"</div>
+      <div class="mn-items">
+        <div class="mn-item"><div class="mn-letter">F</div><div class="mn-word"><strong>Feeding</strong></div></div>
+        <div class="mn-item"><div class="mn-letter">D</div><div class="mn-word"><strong>Dressing</strong></div></div>
+        <div class="mn-item"><div class="mn-letter">W</div><div class="mn-word"><strong>Washing</strong></div></div>
+        <div class="mn-item"><div class="mn-letter">To</div><div class="mn-word"><strong>Toileting</strong></div></div>
+        <div class="mn-item"><div class="mn-letter">Mo</div><div class="mn-word"><strong>Mobility</strong></div></div>
+        <div class="mn-item"><div class="mn-letter">T</div><div class="mn-word"><strong>Transferring</strong> (bed/chair)</div></div>
+      </div>
+    </div>
+
+    <div class="mnemonic">
+      <div class="mn-title">Reasons for CI Lapse Adverse Effects — "SCARED"</div>
+      <div class="mn-items">
+        <div class="mn-item"><div class="mn-letter">S</div><div class="mn-word"><strong>Selective lapsing</strong> → worse risk pool</div></div>
+        <div class="mn-item"><div class="mn-letter">C</div><div class="mn-word"><strong>Costs unrecovered</strong> (initial expenses, commission)</div></div>
+        <div class="mn-item"><div class="mn-letter">A</div><div class="mn-word"><strong>Asset disinvestment</strong> at unfavourable recession prices</div></div>
+        <div class="mn-item"><div class="mn-letter">R</div><div class="mn-word"><strong>Reinsurance</strong> more expensive per remaining policy</div></div>
+        <div class="mn-item"><div class="mn-letter">E</div><div class="mn-word"><strong>Economies of scale lost</strong> (fixed costs / fewer policies)</div></div>
+        <div class="mn-item"><div class="mn-letter">D</div><div class="mn-word"><strong>Distributor churning</strong> → extra commission on re-entry</div></div>
+      </div>
+    </div>
+
+    <div class="mnemonic">
+      <div class="mn-title">Reasons to Reinsure CI — "SPEC FC"</div>
+      <div class="mn-items">
+        <div class="mn-item"><div class="mn-letter">S</div><div class="mn-word"><strong>Solvency protection</strong></div></div>
+        <div class="mn-item"><div class="mn-letter">P</div><div class="mn-word"><strong>Premium check</strong> (reinsurer validates pricing)</div></div>
+        <div class="mn-item"><div class="mn-letter">E</div><div class="mn-word"><strong>Experience smoothing</strong> (iron out fluctuations)</div></div>
+        <div class="mn-item"><div class="mn-letter">C</div><div class="mn-word"><strong>Capacity increase</strong> (write more / larger risks)</div></div>
+        <div class="mn-item"><div class="mn-letter">F</div><div class="mn-word"><strong>Financing</strong> (new business strain relief)</div></div>
+        <div class="mn-item"><div class="mn-letter">C</div><div class="mn-word"><strong>Claims / UW expertise</strong> from reinsurer</div></div>
+      </div>
+    </div>
+
+    <div class="sub-hd">Key Terms — Quick Reference</div>
+    <div class="terms-grid" id="terms-container"></div>
+  </div>
+
+</div><!-- /main -->
+
+<script>
+// ═══════════════════════════════════════
+// DATA
+// ═══════════════════════════════════════
+
+const FLASHCARDS = [
+  { q: "What are the three criteria for including a condition in a CI product?", a: "(1) Perceived as serious AND occurs frequently — public perception drives demand; must not be so rare as to be negligible. (2) Clearly defined — precise medical criteria to avoid ambiguity at claim time. (3) Sufficient pricing data — must predict future incidence; difficult due to medical advances. (Sometimes a 4th: ability to avoid anti-selection.)" },
+  { q: "Accelerated vs Standalone CI: what is the key structural difference?", a: "Accelerated: CI sum is paid instead of (reduces/eliminates) the life death benefit — CI and death cannot both be paid in full. Standalone: CI sum is paid ONLY on diagnosis; no death benefit at all. Additional CI: CI sum is paid ON TOP of the full life death benefit — both can be paid independently." },
+  { q: "Why does the survival period exist in CI? Typical length?", a: "The survival period (typically 14-28 days) ensures the policyholder must survive for a minimum time after diagnosis before benefit is paid. This reduces the overlap between CI and death benefits — prevents the CI benefit being paid and then immediately a death claim also arising. It also reduces fraud risk (claimant must genuinely survive the acute event)." },
+  { q: "How does medical advance affect CI claim frequency?", a: "Screening programmes → earlier diagnosis → claims triggered before the condition would have been clinically apparent; some cases might have resolved without diagnosis. New/better treatments → more people survive conditions that previously caused death → CI incidence increases while mortality decreases. Net effect: HIGHER CI claim frequency, often at earlier ages." },
+  { q: "Accelerated CI pricing formula for claim incidence rate?", a: "λ = i_x + (1 − k_x) × q_x where: i_x = CI incidence rate (probability of diagnosis, surviving survival period, not yet dead); q_x = mortality rate; k_x = proportion of deaths caused by a CI condition. WARNING: double-counting k_x overstates the rate → understates claim cost → inadequate premiums and reserves." },
+  { q: "What is 'tiered' or 'severity-based' CI? What are the key insurer challenges?", a: "Tiered CI pays different proportions of sum insured depending on severity (e.g. full payout for advanced cancer; 10-25% for early-stage). Multiple partial claims possible until full SI reached. Insurer challenges: greater complexity in definitions; more conditions to price (more granular data needed); greater dispute potential at claim; pricing challenge for multiple-claim distributions; anti-selection on tiered conditions." },
+  { q: "What is terminal illness benefit? How does its cost differ between accelerated and standalone CI?", a: "TI benefit: accelerated payment when any illness is expected to cause death within 12 months (consultant opinion). NOT linked to a specific CI condition. Accelerated CI: TI mainly brings forward the death benefit — additional cost is very small (~12 months' investment return on SI). Standalone CI: TI is a genuine EXTRA COST — no death benefit to accelerate; incidence by cause must be separately priced and reserved." },
+  { q: "Why are CI premiums typically level throughout the term?", a: "CI is a long-term product — policyholders want certainty of outgoings for the full policy term. Level premiums allow policyholders to budget. Cross-subsidy in reverse: young pays slightly more than pure risk in early years; older pays slightly less in later years. Premium must still be sufficient to cover increasing CI incidence with age over the full term." },
+  { q: "What is the difference between Own Occupation and Any Occupation TPD definitions?", a: "Own Occupation: cannot perform the policyholder's specific occupation — most generous to claimant, highest cost, not offered for high-risk/manual occupations. Any Occupation: cannot perform ANY occupation — most restrictive, lowest cost, standard for manual/high-risk workers. Suited Occupation (middle): cannot work in any occupation suited by education, training or experience — compromise definition; carries high dispute risk at claims stage." },
+  { q: "Why is the ADL definition useful for TPD? What is 'loss of independent existence'?", a: "ADL definition: unable to perform (unaided) a specified number (typically 3 or 4 out of 6) standard daily tasks: Feeding, Dressing, Washing, Toileting, Mobility, Transferring. Advantages over occupational: applicable to non-workers, housepersons, retired persons; usable throughout life including post-retirement; single definition for the entire policy term; less subjective. 'Loss of independent existence' = TPD written on ADL basis throughout the insured's entire lifetime." },
+  { q: "What are the risks of adding mental health conditions to a CI product?", a: "Suitable only if: severe/persistent; objectively measurable trigger; sufficient data; clearly defined. Risks: UW questions must be sensitive and comply with anti-discrimination law; fraud risk (mental health harder to verify); adverse selection (lives with mental health risk more likely to buy); pricing uncertainty (limited data). Adding to new business only causes dissatisfaction among existing policyholders." },
+  { q: "What is a Return of Premium (ROP) option and what are the pricing considerations?", a: "ROP: policyholder receives return of premiums paid on occurrence of specified event (lapse, expiry without claim, death, decline). Pricing: probability and timing of each trigger; expected selective lapse behaviour (healthier lives more likely to lapse for surrender ROP); investment return on pre-funded reserves; fairness between policyholders with and without the option. Key concern: ROP increases premiums → may widen protection gap for lower-income policyholders." },
+  { q: "How does a recession create adverse lapse behaviour in CI, and what are the consequences?", a: "Recession → income uncertainty → policyholders want to stop premiums. Healthy lives more willing to lapse (feel less exposed to CI risk). Selective lapsing → worse risk pool → higher expected future claims → premium increase needed → further lapses → spiral. Also: unrecovered initial expenses; fixed costs spread over fewer policies; forced asset disinvestment at unfavourable prices; reinsurance more expensive per remaining policy." },
+  { q: "Why are CI conditions defined exhaustively (listed) rather than using a broad definition of serious illness?", a: "Exhaustive list gives CERTAINTY to both insurer (can price each condition separately; know maximum exposure) and policyholder (know exactly what is covered). A broad definition creates: ambiguity at claim time → disputes and litigation; extreme pricing uncertainty (past data unusable); high reserves and capital requirements; legal risk around what constitutes a qualifying condition. The pricing tension of a broad definition is structurally unresolvable." },
+  { q: "What is the children's benefit in CI and why is it often offered at no extra premium?", a: "Reduced lump sum (e.g. 25% of adult SI) paid on diagnosis of a specified CI condition in a child. Child claims do NOT terminate the policy. Offered at no extra premium because: actual cost is minimal (childhood CI incidence is very low — e.g. 1 in 10,000 children diagnosed with cancer per year in UK). However perceived value to parents is very high → strong sales and marketing feature." },
+  { q: "What were the regulator's key concerns about CI in Country X (IFoA Apr 2025)?", a: "(1) Only 55-59% of claims received are paid — too low; conditions added not delivering real value. (2) Settlement time 14→72 days — unacceptable delay; policyholders need benefit urgently. (3) Premium/benefit ratio now 1.5 — expected lifetime premiums exceed max benefit — fails fair value test. (4) Advisor commission $240→$2,400 — rising without corresponding policyholder value → mis-selling incentive. (5) Conditions 10→100 — most new conditions rare/irrelevant; apparent but not real value." },
+  { q: "Guaranteed vs Reviewable CI premiums: what is the key insurer advantage of reviewable?", a: "Reviewable premiums allow the insurer to re-price if actual CI incidence experience is worse than assumed at outset — reducing the long-term pricing risk. This also results in lower reserves and capital requirements (option to re-price reduces long-term liability). May also be easier to obtain reinsurance. Lower initial premiums may be offered (less contingency needed). However: review process is onerous; selective lapse risk on review; reputational risk if premiums increase." },
+  { q: "What is the main reinsurance structure for CI and why?", a: "Proportional reinsurance (quota share or surplus) is most common for CI — insurer cedes a fixed proportion of every risk. Appropriate because CI has relatively predictable incidence patterns for known conditions; the key risk is volume and model uncertainty rather than individual claim catastrophe. XL (non-proportional) may be used for very large SI policies. Reinsurer also provides expertise on UW, condition definitions, and pricing data." },
+  { q: "Tiered CI: why don't premiums reduce after a partial claim?", a: "After a partial claim, the remaining sum insured decreases — the policyholder has claimed part of the SI. However the PREMIUM typically does NOT reduce proportionately. This is because: the insured life still exists with the same underlying morbidity risk; the remaining conditions can still be claimed; the insurer's per-claim risk may not have reduced proportionately. It would also be complex and costly to recalculate premiums after each partial claim." },
+  { q: "What are Functional Assessment Tests (FATs) and when are they used?", a: "FATs: structured physical tests of capability — failing a specified number triggers the disability definition. Example tests: getting up from chair, standing 10 mins, walking 200m, lifting 2kg, climbing 12 stairs, bending/kneeling, using hands. Mental incapacity: overriding test alongside physical FAT. Used when occupational definitions are unsuitable (unemployed, retired, non-workers) and ADL definition is too coarse — FATs provide a more objective, precisely defined intermediate option." },
+];
+
+const IAI_QUESTIONS = [
+  {
+    source: "IAI Apr 2016", qid: "Q2 (i-iv)", marks: 30,
+    scenario: "Healing Health Insurance (8 years established; sells indemnity and standalone CI; annually reviewable premiums) is exploring a new severity-based CI product with partial/multiple claims.",
+    question: "Why launch severity-based CI? Risks of new product launch? Product design, pricing, UW, claims, reviewability, sales considerations?",
+    sections: {
+      "i) Why launch the severity-based CI product": [
+        "More comprehensive than standalone CI — multiple claims possible → enhanced policyholder satisfaction and retention.",
+        "Differentiates from competitors; may be more profitable than existing products.",
+        "Demand from policyholders and distribution channel for more flexible CI.",
+        "Declining sales of traditional health indemnity / standard CI → need for product refresh.",
+        "Cross-sell and upsell opportunities with existing policyholders.",
+        "Reinsurer encouragement and support (data, capacity).",
+      ],
+      "ii) Risks of new product launch": [
+        "Product substitution risk: new product may cannibalize existing profitable CI book.",
+        "Over-selling: capital-intensive product using capital needed elsewhere; destabilising portfolio.",
+        "Sales failure: development costs unrecovered; small portfolio has poor morbidity experience.",
+        "Expense overrun: high cost of sales reduces available capital.",
+        "Product design failure: doesn't meet target market needs; poor positioning vs competitors.",
+        "Pricing error: under/over-priced due to lack of data, modelling errors, inadequate UW for multi-claim structure.",
+      ],
+      "iii-a) Product design and pricing": [
+        "Product design: exhaustive conditions list split into full-claim and partial-claim tiers; define claim thresholds precisely for each tier to minimise disputes.",
+        "Pricing: estimate incidence rates for first and subsequent occurrences; model inter-linkages between conditions (e.g. cancer leading to heart failure); more conditions = more distributions to estimate.",
+        "Frequency will be higher than standard CI; severity lower (partial payments for early-stage); average cost per claim may differ significantly.",
+        "Claims assessment cost increases (multiple possible claims) → must be factored into pricing.",
+        "Capital requirements higher than traditional CI — must verify availability of sufficient capital.",
+        "Higher contingency/uncertainty loading given novel structure and limited data.",
+        "Post-illness mortality assumptions must be modelled.",
+        "Higher profit margin warranted given elevated uncertainty.",
+      ],
+      "iii-b) Underwriting and claims": [
+        "UW approach broadly similar to existing standalone CI; same UW philosophy applies.",
+        "Claims: assessors need training to categorize severity tier correctly; clear claims manual / guidelines essential.",
+        "Claims expected earlier than standard CI (partial triggers at less severe stages).",
+        "Multiple claim tracking: administration must track partial claims, remaining SI, and policy status at each stage.",
+        "At any time: policyholders with no claim, partial claim(s), or full claim — system must manage all three states.",
+      ],
+      "iii-c) Premium reviewability": [
+        "Reviewable premiums advisable given lack of credible experience for new severity-based structure.",
+        "Allows insurer to adjust rates as own-experience data emerges.",
+        "Enables offering lower initial premiums (lower guarantee cost).",
+        "BUT: review basis must be clearly stated in product literature; customers must understand when/why premiums may change.",
+        "Reputational risk if large increases needed on review — assumptions must be conservative enough from outset.",
+        "If competitor offers guaranteed premiums for similar product: competitive disadvantage.",
+      ],
+      "iii-d) Sales and other considerations": [
+        "Higher mis-selling risk due to product complexity — choose distribution channels carefully; prefer advised sales.",
+        "Distributor training essential; may exclude web aggregators / pure online channels for this product.",
+        "Administration more complex: multiple claim tracking; ongoing monitoring of partial claim history per policy.",
+        "Financial reporting: three classes of policyholders (unclaimed, partial claimed, fully claimed) need separate tracking.",
+      ],
+    }
+  },
+  {
+    source: "IAI July 2022", qid: "Q1i & Q1ii", marks: 17,
+    scenario: "Healthy Life Insurance (HLI) has been writing CI insurance for many years and has recently noticed an increase in the number of CI claims being declined.",
+    question: "Reasons for increase in declined claims? Implications for insurer?",
+    sections: {
+      "Reasons for increase in declined claims": [
+        "Volume effect: simply more claims being made (maturing book; adverse mix change) → absolute number of declines rises even if decline rate is unchanged.",
+        "Improved claims control: more experienced staff, stricter process → claims previously paid in error now correctly declined.",
+        "Policyholder misunderstanding: cover not explained clearly at sale; new disease emerged not covered; claimant tries to claim for excluded condition.",
+        "Fraud: especially likely in economic downturn; policyholders in financial stress attempt fraudulent claims.",
+        "Non-disclosure / misrepresentation: PEC not declared (poor selling; insurer questions not probing enough; insured forgot).",
+        "Policy breach: premium non-payment making cover void; policy expiry.",
+        "Definition disputes: condition diagnosed does not meet precise definition (e.g. cancer not malignant enough; heart attack lacks Troponin threshold).",
+      ],
+      "Implications for insurer": [
+        "If improved claims control: good news short-term (lower costs) — but disappointed claimants → complaints → admin burden.",
+        "Reputation damage — perception that CI policies 'don't pay out' → reduces future sales.",
+        "Brokers upset by disputed claims → less willing to sell insurer's CI products.",
+        "Ombudsman/court may overturn some declines → more claims paid than expected plus legal costs.",
+        "If due to worsening claim incidence: profitability and solvency implications.",
+        "If due to mis-selling: higher-than-expected lapses; further claim disputes in future; regulatory action.",
+      ],
+    }
+  },
+  {
+    source: "IAI May 2023", qid: "Q1i", marks: 6,
+    scenario: "A proprietary life and health insurer writing large amounts of CI and IP business (including substandard lives) has recently started reinsuring a proportion of this business.",
+    question: "State the main reasons why the company might have reinsured the CI and IP business.",
+    sections: {
+      "Reasons for reinsuring CI and IP": [
+        "Solvency protection — uncertainty about future CI/IP incidence trends (screening effects, medical advances, new treatments).",
+        "Capacity increase — write more business with same capital; accept very large risks and wider range of substandard lives.",
+        "Experience smoothing — protect against 'blips' in surplus emergence even for an established insurer.",
+        "New business financing — reinsurance commissions reduce new business strain.",
+        "Capital requirement reduction (especially relevant for newer/smaller insurers).",
+        "UW and claims expertise from reinsurer — particularly valuable for impaired/substandard lives.",
+        "Reinsurer software for pricing, UW, claims administration.",
+        "Reinsurance terms serve as a check on premium rate adequacy.",
+        "May be available at favourable price (reinsurer accepting at a loss to build market share).",
+      ],
+    }
+  },
+  {
+    source: "IAI March 2017", qid: "Q1vi & Q1vii", marks: 10,
+    scenario: "The product team wants to offer fitness-based premium discount rider to existing standalone CI policyholders. A wearable device captures health data; premium reduction offered at renewal based on healthy metrics.",
+    question: "Evaluate the proposal. Discuss approach to calculate rider premium.",
+    sections: {
+      "Evaluation — fitness rider on CI policies": [
+        "CI is bought to cover lump-sum financial loss on diagnosis — typically covers high-severity low-frequency illnesses (cancer, heart attack, stroke). Many of these are NOT driven by lifestyle factors in the way morbidity-based products are.",
+        "Illnesses covered by CI may be caused by non-lifestyle factors (genetics, accidents) — the fitness rider may not genuinely reduce CI risk sufficiently to justify a premium discount.",
+        "CI products typically have level premiums — offering a variable annual discount is inconsistent with the long-term level premium philosophy and may confuse policyholders.",
+        "Self-selection: policyholders opting for the rider are likely healthier → selection benefit exists, BUT the rider cost must reflect this selection benefit without over-charging.",
+        "Actuary must judge whether the rider can be correctly priced depending on illnesses covered and whether the premium discount offers a strong value proposition.",
+      ],
+      "Approach to calculate rider premium": [
+        "Total rider premium collected ≈ total premium reduction offered (net zero to insurer if morbidity unchanged).",
+        "Assumption required: take-up rate for the rider (% of policyholders who opt in).",
+        "Assumption required: proportion of take-up policyholders who qualify for the premium reduction (meet health metrics threshold).",
+        "Example: 1,000 lives; 10% take-up = 100; 30% of those qualify for 10% discount on Rs 5,000 premium → total discount = 30 × 500 = Rs 15,000. Spread across 100 rider purchasers → rider premium = Rs 150. So by paying Rs 150, member has ~30% chance of saving Rs 500.",
+        "Key risk: if take-up is higher than assumed, total discount payable exceeds total rider premium collected → rider is loss-making.",
+      ],
+    }
+  },
+  {
+    source: "IAI November 2024", qid: "Q1a & Q1b", marks: 18,
+    scenario: "Health Insurance Company XYZ is developing a new policy to cover chronic diseases. Senior actuary is tasked with analysing impact for a Board report.",
+    question: "What is a chronic illness? Discuss the importance of analysing the impact of chronic diseases.",
+    sections: {
+      "What is a chronic illness?": [
+        "Long-term health condition lasting years or a lifetime.",
+        "Usually no cure but can be managed with medication, therapy, lifestyle changes.",
+        "Severity and impact vary widely.",
+        "Examples: Diabetes, heart disease, arthritis, asthma, some mental health conditions (bipolar, depression).",
+        "Requires ongoing medical care to maintain quality of life and minimise symptoms.",
+      ],
+      "Importance of analysing chronic disease impact": [
+        "Risk assessment: chronic diseases significantly affect insurability and morbidity assumptions — pricing must reflect actual risk of covering these lives.",
+        "Underwriting: understanding prevalence enables effective UW criteria; helps identify insurable vs uninsurable risk segments.",
+        "Product development: insights inform tailored products (disease-specific riders, disease management programs) meeting actual policyholder needs.",
+        "Claims management: anticipate high-frequency claims; develop proactive management tools; set appropriate reserves.",
+        "Healthcare cost projections: chronic diseases are major cost drivers; must be modelled accurately for premium adequacy and reserving.",
+        "Regulatory compliance: regulators require analysis and reporting on chronic disease exposure as part of risk management.",
+        "Actuarial modelling: accurate chronic disease models essential for reserves, capital, and embedded value calculations.",
+      ],
+    }
+  },
+];
+
+const KEY_TERMS = [
+  { term: "Critical Illness (CI) Insurance", def: "Pure protection product paying a fixed lump sum on diagnosis of one of a defined list of conditions or on undergoing a specified surgical procedure. Not an indemnity product." },
+  { term: "Accelerated CI", def: "CI benefit paid instead of (reduces) the life death benefit — CI and death cannot both be paid in full. Most common CI structure." },
+  { term: "Standalone CI", def: "CI sum insured paid ONLY on diagnosis of a covered condition; no death benefit payable at all." },
+  { term: "Additional benefit CI", def: "CI benefit paid IN ADDITION to the full life death benefit — both can be paid independently." },
+  { term: "Survival Period", def: "Minimum period the claimant must survive after the CI event before benefit is paid. Typically 14-28 days. Reduces overlap between CI and death benefits." },
+  { term: "Core Conditions", def: "Standard CI conditions always included (cancer, heart attack, stroke) — account for ~90% of claims." },
+  { term: "ABI Model Wording", def: "UK standard definitions for CI conditions by Association of British Insurers — promotes consistency, reduces disputes, faster settlement." },
+  { term: "Tiered CI Benefit", def: "CI design where payout varies by severity — full SI for serious conditions; partial (e.g. 10-25%) for less severe/early-stage. Multiple claims possible until full SI reached." },
+  { term: "Terminal Illness Benefit", def: "Accelerated payment when any illness expected to cause death within 12 months (consultant opinion). NOT linked to a specific CI condition." },
+  { term: "TPD", def: "Total and Permanent Disability — CI condition where claimant is permanently and totally unable to work (or perform ADLs)." },
+  { term: "Own Occupation", def: "Disability definition: unable to perform the specific occupation of the insured. Most generous to claimant; highest cost." },
+  { term: "Any Occupation", def: "Disability definition: unable to perform ANY occupation. Most restrictive; lowest cost. Standard for manual/high-risk workers." },
+  { term: "ADL (Activities of Daily Living)", def: "Feeding, Dressing, Washing, Toileting, Mobility, Transferring. Inability to perform 3-4 of 6 (unaided) triggers disability benefit. Applicable at any age." },
+  { term: "FAT (Functional Assessment Test)", def: "Physical capability tests (e.g. walk 200m, lift 2kg). Fail specified number triggers disability. Objective; usable at any age; no occupation expertise needed." },
+  { term: "Loss of Independent Existence", def: "TPD written on ADL basis throughout the insured's entire lifetime — applicable post-retirement; captures complete functional incapacity." },
+  { term: "Return of Premium (ROP)", def: "Option to receive return of premiums paid on a specified trigger event (lapse, expiry without claim, death, claim decline). Increases premium significantly." },
+  { term: "Selective Lapsing", def: "Healthier lives lapse disproportionately — leaves sicker risk pool; higher expected future claims; potential adverse selection spiral on premium increase." },
+  { term: "Premium Holiday", def: "Option A: premiums cease for a period with no later catch-up. Retains customer relationship but permanently reduces premium income." },
+  { term: "Premium Deferral", def: "Option B: premiums cease for a period but missed premiums must be caught up later. Recovers income but reliant on policyholder ability to pay." },
+  { term: "Children's Benefit", def: "Reduced CI lump sum (e.g. 25% of adult SI) for a child of the policyholder. Child claim does NOT terminate the policy. Often at no extra premium — low actual cost, high perceived value." },
+  { term: "Reviewable Premium CI", def: "CI premiums guaranteed unchanged for initial period (e.g. 5 years) then subject to annual review at insurer's discretion. Lower reserves/capital; selective lapse risk on review." },
+  { term: "Consumer Responsibility", def: "Regulatory framework requiring insurers to define 'good consumer outcomes' and 'fair value' for own products; periodic review and Board monitoring required." },
+  { term: "Claim Payout Ratio", def: "CI claims paid / CI claims received. Regulator scrutinises low ratios (55-60% considered too low) as indicator of product design failure or harsh claims management." },
+  { term: "Double-counting (k_x)", def: "Error in accelerated CI pricing: overstating proportion of deaths caused by CI condition (k_x) leads to overstating claim incidence → understating claim cost → inadequate premium/reserves." },
+];
+
+// ═══════════════════════════════════════
+// RENDER
+// ═══════════════════════════════════════
+
+function renderFlashcards() {
+  document.getElementById('fc-container').innerHTML = FLASHCARDS.map((fc, i) => `
+    <div class="fc-wrap" id="fc-${i}" onclick="this.classList.toggle('flipped')">
+      <div class="fc-inner">
+        <div class="fc-front">
+          <div class="fc-label">Question ${i+1} of ${FLASHCARDS.length}</div>
+          <div class="fc-q">${fc.q}</div>
+        </div>
+        <div class="fc-back">
+          <div class="fc-label">Answer</div>
+          <div class="fc-a">${fc.a}</div>
+        </div>
+      </div>
+    </div>
+    <div class="fc-hint">Click to flip</div>
+  `).join('');
+}
+
+function renderIAI() {
+  document.getElementById('iai-container').innerHTML = IAI_QUESTIONS.map(q => {
+    const secs = Object.entries(q.sections).map(([t, bs]) => `
+      <div class="eq-sec">${t}</div>
+      <ul class="blist">${bs.map(b => `<li>${b}</li>`).join('')}</ul>
+    `).join('');
+    return `
+      <div class="eq">
+        <div class="eq-hd" onclick="toggleEQ(this)">
+          <div class="eq-hd-l"><span class="badge iai">${q.source} ${q.qid}</span><span class="eq-marks">${q.marks} marks</span></div>
+          <div class="eq-q">${q.question}</div>
+          <div class="eq-arrow">▾</div>
+        </div>
+        ${q.scenario ? `<div class="eq-scenario">${q.scenario}</div>` : ''}
+        <div class="eq-body">${secs}</div>
+      </div>`;
+  }).join('');
+}
+
+function renderTerms() {
+  document.getElementById('terms-container').innerHTML = KEY_TERMS.map(t => `
+    <div class="term">
+      <div class="term-name">${t.term}</div>
+      <div class="term-def">${t.def}</div>
+    </div>`).join('');
+}
+
+// ═══════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════
+
+function showTab(name) {
+  document.getElementById('search-panel').classList.remove('active');
+  document.querySelectorAll('.section-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  const panel = document.getElementById(`tab-${name}`);
+  if (panel) panel.classList.add('active');
+  event.currentTarget.classList.add('active');
+  document.getElementById('searchInput').value = '';
+}
+
+// ═══════════════════════════════════════
+// ACCORDION & EQ TOGGLE
+// ═══════════════════════════════════════
+
+function toggleAcc(hd) {
+  hd.classList.toggle('open');
+  hd.nextElementSibling.classList.toggle('open');
+}
+
+function toggleEQ(hd) {
+  hd.classList.toggle('open');
+  hd.parentElement.querySelector('.eq-body').classList.toggle('open');
+}
+
+// ═══════════════════════════════════════
+// SEARCH
+// ═══════════════════════════════════════
+
+function buildCorpus() {
+  const c = [];
+  FLASHCARDS.forEach((fc, i) => c.push({ src: `Flashcard ${i+1}`, text: fc.q + ' ' + fc.a, disp: `<strong>${fc.q}</strong><br>${fc.a}` }));
+  IAI_QUESTIONS.forEach(q => {
+    Object.entries(q.sections).forEach(([t, bs]) => {
+      bs.forEach(b => c.push({ src: `${q.source} ${q.qid} — ${t}`, text: b, disp: b }));
+    });
+  });
+  KEY_TERMS.forEach(kt => c.push({ src: `Key Term: ${kt.term}`, text: kt.term + ' ' + kt.def, disp: `<strong>${kt.term}:</strong> ${kt.def}` }));
+  return c;
+}
+
+let corpus = null;
+
+function doSearch(query) {
+  if (!query || query.length < 2) {
+    document.getElementById('search-panel').classList.remove('active');
+    document.querySelectorAll('.section-panel').forEach(p => p.classList.remove('active'));
+    const at = document.querySelector('.nav-tab.active');
+    if (at) {
+      const m = at.getAttribute('onclick').match(/showTab\('([^']+)'\)/);
+      if (m) document.getElementById(`tab-${m[1]}`).classList.add('active');
+    }
+    return;
+  }
+  if (!corpus) corpus = buildCorpus();
+  const q = query.toLowerCase();
+  const results = corpus.filter(item => item.text.toLowerCase().includes(q));
+  document.querySelectorAll('.section-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('search-panel').classList.add('active');
+  document.getElementById('search-count').textContent = `${results.length} result${results.length !== 1 ? 's' : ''} for "${query}"`;
+  const hl = (text, q) => text.replace(new RegExp(`(${q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi'), '<mark class="hl">$1</mark>');
+  document.getElementById('search-results').innerHTML = results.slice(0, 30).map(r => `
+    <div class="sr">
+      <div class="sr-src">${r.src}</div>
+      <div class="sr-text">${hl(r.disp, query)}</div>
+    </div>`).join('') || '<div class="sr"><div class="sr-text">No results found.</div></div>';
+}
+
+// ═══════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════
+renderFlashcards();
+renderIAI();
+renderTerms();
+</script>
+</body>
+</html>
