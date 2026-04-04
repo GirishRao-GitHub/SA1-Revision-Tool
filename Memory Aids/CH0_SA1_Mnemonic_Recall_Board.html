@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SA1 — Mnemonic Recall Board</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap');
+
+:root {
+  --ink:     #0f1218;
+  --ink-mid: #1c2333;
+  --ink-soft:#2a3448;
+  --rule:    #2e3c54;
+  --cream:   #e8e0d0;
+  --cream-dim:#b0a898;
+  --gold:    #c9973a;
+  --gold-dim: #7a5c1e;
+  --gold-pale:#1e1810;
+  --blue:    #4a8fc4;
+  --blue-dim: #1e3a54;
+  --teal:    #3aada0;
+  --teal-dim: #1a3d38;
+  --rose:    #c45a6a;
+  --rose-dim: #3d1820;
+  --sage:    #5a9e6e;
+  --sage-dim: #1a3020;
+  --amber:   #c98a3a;
+  --white10: rgba(255,255,255,0.06);
+  --white20: rgba(255,255,255,0.12);
+  --glow-gold: 0 0 20px rgba(201,151,58,0.15);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'IBM Plex Sans', sans-serif;
+  background: var(--ink);
+  color: var(--cream);
+  min-height: 100vh;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* ── HEADER ─────────────────────────────── */
+.hdr {
+  background: linear-gradient(180deg, #070c14 0%, var(--ink) 100%);
+  border-bottom: 1px solid var(--rule);
+  padding: 28px 36px 20px;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+.hdr-inner {
+  max-width: 1320px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+.hdr-eyebrow {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 2.5px;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.hdr-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 26px;
+  font-weight: 900;
+  color: var(--cream);
+  letter-spacing: -0.5px;
+}
+.hdr-title em { color: var(--gold); font-style: italic; }
+.hdr-right { margin-left: auto; display: flex; align-items: center; gap: 12px; }
+
+/* Mode toggle */
+.mode-wrap {
+  background: var(--ink-mid);
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  padding: 4px;
+  display: flex;
+  gap: 3px;
+}
+.mode-btn {
+  padding: 7px 16px;
+  border-radius: 6px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  color: var(--cream-dim);
+  transition: all 0.2s;
+}
+.mode-btn.active {
+  background: var(--gold);
+  color: var(--ink);
+}
+.mode-btn:hover:not(.active) { color: var(--cream); background: var(--white10); }
+
+/* Reveal all button */
+.reveal-btn {
+  padding: 8px 18px;
+  border-radius: 6px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  border: 1px solid var(--rule);
+  background: transparent;
+  color: var(--cream-dim);
+  transition: all 0.2s;
+  display: none;
+}
+.reveal-btn:hover { border-color: var(--gold); color: var(--gold); }
+body.drill-mode .reveal-btn { display: block; }
+
+/* ── LAYOUT ─────────────────────────────── */
+.page { max-width: 1320px; margin: 0 auto; padding: 32px 36px 80px; }
+
+/* ── SKELETON CARD ───────────────────────── */
+.skeleton-card {
+  background: linear-gradient(135deg, #0d1520 0%, #131e30 100%);
+  border: 1px solid var(--gold-dim);
+  border-radius: 14px;
+  padding: 28px 32px;
+  margin-bottom: 40px;
+  position: relative;
+  overflow: hidden;
+}
+.skeleton-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+}
+.sk-header {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  margin-bottom: 20px;
+}
+.sk-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  color: var(--gold);
+  text-transform: uppercase;
+}
+.sk-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--cream);
+}
+.sk-desc {
+  font-size: 12.5px;
+  color: var(--cream-dim);
+  margin-bottom: 20px;
+  font-style: italic;
+  line-height: 1.5;
+  max-width: 700px;
+}
+.sk-dims {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 10px;
+}
+.sk-dim {
+  background: var(--white10);
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  padding: 10px 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+}
+.sk-dim:hover { border-color: var(--gold-dim); background: var(--white20); }
+.sk-dim.open { border-color: var(--gold-dim); background: var(--gold-pale); }
+.sk-dim-row { display: flex; align-items: center; gap: 10px; }
+.sk-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--gold);
+  background: var(--gold-pale);
+  border: 1px solid var(--gold-dim);
+  border-radius: 4px;
+  padding: 1px 7px;
+  min-width: 26px;
+  text-align: center;
+  flex-shrink: 0;
+}
+.sk-code {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--cream);
+}
+.sk-name { font-size: 12px; color: var(--cream-dim); }
+.sk-arr { margin-left: auto; color: var(--cream-dim); font-size: 14px; transition: transform 0.2s; flex-shrink: 0; }
+.sk-dim.open .sk-arr { transform: rotate(90deg); }
+.sk-sub {
+  display: none;
+  padding-top: 10px;
+  margin-top: 10px;
+  border-top: 1px solid var(--rule);
+}
+.sk-dim.open .sk-sub { display: block; }
+.sk-prompt {
+  font-size: 11.5px;
+  color: var(--gold);
+  font-style: italic;
+  margin-bottom: 7px;
+}
+.sk-sub ul { list-style: none; }
+.sk-sub ul li {
+  font-size: 12px;
+  color: var(--cream-dim);
+  padding: 3px 0 3px 14px;
+  position: relative;
+  line-height: 1.45;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+}
+.sk-sub ul li:last-child { border-bottom: none; }
+.sk-sub ul li::before { content: '·'; position: absolute; left: 0; color: var(--gold-dim); }
+
+/* ── SECTION DIVIDER ─────────────────────── */
+.section-divider {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin: 36px 0 20px;
+}
+.divider-line { flex: 1; height: 1px; background: var(--rule); }
+.divider-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  padding: 4px 14px;
+  border: 1px solid var(--rule);
+  border-radius: 20px;
+  white-space: nowrap;
+}
+.divider-label.ci { color: var(--rose); border-color: var(--rose-dim); background: var(--rose-dim); }
+.divider-label.ip { color: var(--blue); border-color: var(--blue-dim); background: var(--blue-dim); }
+.divider-label.shared { color: var(--teal); border-color: var(--teal-dim); background: var(--teal-dim); }
+
+/* ── MNEMONIC GRID ───────────────────────── */
+.mn-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 16px;
+}
+
+/* ── MNEMONIC CARD ───────────────────────── */
+.mn-card {
+  background: var(--ink-mid);
+  border: 1px solid var(--rule);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: border-color 0.2s;
+}
+.mn-card:hover { border-color: rgba(255,255,255,0.15); }
+
+.mn-card-hd {
+  padding: 13px 16px 10px;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  border-bottom: 1px solid var(--rule);
+}
+.mn-badge {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 5px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  letter-spacing: 0.5px;
+}
+.mn-badge.ci { background: var(--rose-dim); color: var(--rose); border: 1px solid rgba(196,90,106,0.3); }
+.mn-badge.ip { background: var(--blue-dim); color: var(--blue); border: 1px solid rgba(74,143,196,0.3); }
+.mn-badge.shared { background: var(--teal-dim); color: var(--teal); border: 1px solid rgba(58,173,160,0.3); }
+
+.mn-card-title {
+  font-size: 12.5px;
+  font-weight: 500;
+  color: var(--cream-dim);
+  line-height: 1.4;
+  padding-top: 2px;
+}
+
+/* Letter tiles */
+.mn-items-wrap { padding: 14px 16px 16px; }
+
+.mn-item {
+  display: grid;
+  grid-template-columns: 36px 1fr;
+  gap: 0;
+  margin-bottom: 4px;
+  border-radius: 6px;
+  overflow: hidden;
+  border: 1px solid transparent;
+  transition: all 0.15s;
+  cursor: default;
+}
+body.drill-mode .mn-item { cursor: pointer; }
+body.drill-mode .mn-item:hover { border-color: var(--rule); }
+body.drill-mode .mn-item.revealed { border-color: rgba(255,255,255,0.08); }
+
+.mn-letter-cell {
+  background: var(--ink-soft);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 4px;
+  font-family: 'Playfair Display', serif;
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1;
+  min-height: 40px;
+  flex-shrink: 0;
+}
+.mn-content-cell {
+  background: var(--ink-soft);
+  padding: 7px 12px;
+  border-left: 1px solid var(--rule);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 40px;
+}
+.mn-word {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--cream);
+  line-height: 1.3;
+  transition: opacity 0.2s;
+}
+.mn-detail {
+  font-size: 11px;
+  color: var(--cream-dim);
+  line-height: 1.4;
+  margin-top: 2px;
+  transition: opacity 0.2s;
+}
+
+/* Drill mode — hide words until revealed */
+body.drill-mode .mn-item:not(.revealed) .mn-word { opacity: 0.08; }
+body.drill-mode .mn-item:not(.revealed) .mn-detail { opacity: 0; }
+body.drill-mode .mn-item.revealed .mn-word { opacity: 1; }
+body.drill-mode .mn-item.revealed .mn-detail { opacity: 1; }
+
+/* Reveal hint in drill mode */
+.mn-drill-hint {
+  display: none;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  color: var(--cream-dim);
+  text-align: center;
+  padding: 6px;
+  border-top: 1px solid var(--rule);
+  letter-spacing: 0.5px;
+}
+body.drill-mode .mn-drill-hint { display: block; }
+
+/* Score tracker in drill mode */
+.mn-score {
+  display: none;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  color: var(--gold);
+  text-align: right;
+  padding: 5px 10px 0;
+  letter-spacing: 0.5px;
+}
+body.drill-mode .mn-score { display: block; }
+
+/* ── PROGRESS BAR (drill mode only) ────── */
+.drill-bar-wrap {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--ink-mid);
+  border-top: 1px solid var(--rule);
+  padding: 12px 36px;
+  z-index: 40;
+}
+body.drill-mode .drill-bar-wrap { display: flex; align-items: center; gap: 16px; }
+.drill-bar-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: var(--cream-dim);
+  white-space: nowrap;
+}
+.drill-bar-track {
+  flex: 1;
+  height: 6px;
+  background: var(--rule);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.drill-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--teal), var(--gold));
+  border-radius: 3px;
+  transition: width 0.3s;
+}
+.drill-count {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: var(--gold);
+  white-space: nowrap;
+}
+.drill-reset {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  color: var(--cream-dim);
+  background: none;
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  padding: 4px 10px;
+  cursor: pointer;
+  letter-spacing: 0.5px;
+}
+.drill-reset:hover { border-color: var(--rose); color: var(--rose); }
+
+/* ── REFERENCE MODE PULSE ─────────────── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.mn-card { animation: fadeUp 0.3s ease both; }
+.mn-card:nth-child(1) { animation-delay: 0.05s; }
+.mn-card:nth-child(2) { animation-delay: 0.10s; }
+.mn-card:nth-child(3) { animation-delay: 0.15s; }
+.mn-card:nth-child(4) { animation-delay: 0.20s; }
+.mn-card:nth-child(5) { animation-delay: 0.25s; }
+.mn-card:nth-child(6) { animation-delay: 0.30s; }
+.mn-card:nth-child(7) { animation-delay: 0.35s; }
+.mn-card:nth-child(8) { animation-delay: 0.40s; }
+.mn-card:nth-child(9) { animation-delay: 0.45s; }
+
+/* ── COLOR ASSIGNMENTS ───────────────── */
+.letter-ci    { color: var(--rose); }
+.letter-ip    { color: var(--blue); }
+.letter-skel  { color: var(--gold); }
+
+/* ── RESPONSIVE ───────────────────────── */
+@media (max-width: 700px) {
+  .hdr { padding: 18px 20px 14px; }
+  .page { padding: 20px 20px 80px; }
+  .mn-grid { grid-template-columns: 1fr; }
+  .sk-dims { grid-template-columns: 1fr; }
+  .hdr-right { width: 100%; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ HEADER ═══════════════════════════════════ -->
+<header class="hdr">
+  <div class="hdr-inner">
+    <div>
+      <div class="hdr-eyebrow">SA1 · SP1 — Exam Revision</div>
+      <div class="hdr-title">Mnemonic <em>Recall Board</em></div>
+    </div>
+    <div class="hdr-right">
+      <div class="mode-wrap">
+        <button class="mode-btn active" onclick="setMode('reference')">Reference</button>
+        <button class="mode-btn" onclick="setMode('drill')">Drill Mode</button>
+      </div>
+      <button class="reveal-btn" onclick="revealAll()">Reveal All</button>
+    </div>
+  </div>
+</header>
+
+<!-- ═══ MAIN ══════════════════════════════════════ -->
+<div class="page">
+
+  <!-- UNIVERSAL SKELETON -->
+  <div class="skeleton-card">
+    <div class="sk-header">
+      <div class="sk-label">Universal</div>
+      <div class="sk-title">SA1 Exam Skeleton — 8 Dimensions</div>
+    </div>
+    <div class="sk-desc">Apply to every exam question regardless of product or topic. Scan all 8 in order. Write on each dimension the question touches. Skip dimensions genuinely out of scope.</div>
+    <div class="sk-dims" id="skeleton-dims"></div>
+  </div>
+
+  <!-- CI MNEMONICS -->
+  <div class="section-divider">
+    <div class="divider-line"></div>
+    <div class="divider-label ci">Critical Illness</div>
+    <div class="divider-line"></div>
+  </div>
+  <div class="mn-grid" id="ci-grid"></div>
+
+  <!-- IP MNEMONICS -->
+  <div class="section-divider">
+    <div class="divider-line"></div>
+    <div class="divider-label ip">Income Protection</div>
+    <div class="divider-line"></div>
+  </div>
+  <div class="mn-grid" id="ip-grid"></div>
+
+</div>
+
+<!-- DRILL MODE PROGRESS BAR -->
+<div class="drill-bar-wrap">
+  <span class="drill-bar-label">Recall progress</span>
+  <div class="drill-bar-track">
+    <div class="drill-bar-fill" id="drill-fill" style="width:0%"></div>
+  </div>
+  <span class="drill-count" id="drill-count">0 / 0</span>
+  <button class="drill-reset" onclick="resetDrill()">Reset</button>
+</div>
+
+<script>
+// ══════════════════════════════════════════════
+// DATA  (sourced from Memory_Aids.json)
+// ══════════════════════════════════════════════
+
+const SKELETON = {
+  label: "SA1 Universal Exam Skeleton — 8 Dimensions",
+  description: "Apply to every exam question regardless of product or topic. Scan all 8 in order. Write on each dimension the question touches. Skip dimensions genuinely out of scope.",
+  dimensions: [
+    { id:1, code:"NEED",         label:"Customer Need",       prompt:"Why does this exist? Who buys it and why?",
+      sub:["Individual customer need","Employer / group need","Societal / State gap being filled","Self-employed / specific segment needs"] },
+    { id:2, code:"BENEFIT",      label:"Benefit Design",      prompt:"Amount · Timing · Definitions · Exclusions · Variations",
+      sub:["Benefit amount and limits (replacement ratio / sum insured)","Benefit timing (deferred period / survival period / expiry)","Trigger / incapacity definition","Exclusions and conditions covered","Escalation / inflation linkage","Options and variations (ROP, waiver, partial benefit)"] },
+    { id:3, code:"UNDERWRITING", label:"Underwriting",        prompt:"Rating factors · Medical triggers · Group: FCL and actively-at-work",
+      sub:["Key risk factors and corresponding rating factors","Individual UW: medical / non-medical thresholds","Group UW: free cover limit, actively-at-work, compulsory membership","Anti-selection controls","UW at claim stage (claims underwriting)"] },
+    { id:4, code:"PRICING",      label:"Pricing",             prompt:"Model · Data · Assumptions · Guaranteed vs reviewable",
+      sub:["Pricing approach / model (inception-annuity, multi-state, frequency-severity)","Key assumptions (morbidity/inception, recovery, lapse, expenses)","Data availability and credibility","Guaranteed vs reviewable premium structure","Profit testing and capital return requirement"] },
+    { id:5, code:"CLAIMS",       label:"Claims Management",   prompt:"Trigger · Benefit limitation · Moral hazard · Rehabilitation · In-claim monitoring",
+      sub:["Definition of insured event at claim stage","Benefit limitation formula (IP) / condition verification (CI) / pre-authorisation (PMI)","Moral hazard identification and control","Rehabilitation and return-to-work support","Ongoing claim monitoring and medical certification","Fraud detection"] },
+    { id:6, code:"MONITORING",   label:"Monitoring",          prompt:"Why monitor · What to investigate · How · Use of results",
+      sub:["Why monitor (actuarial control cycle, pricing update, EV, regulatory)","What to investigate (inception rates, recovery rates, lapses, expenses)","How to investigate (A vs E, exposure calculation, investigation period)","Use of results (re-price new business, improve in-force, reserve basis, EV assumptions)"] },
+    { id:7, code:"RISKS",        label:"Risks",               prompt:"Insurer financial · Operational · Policyholder behaviour · External",
+      sub:["Insurer financial risks (morbidity, pricing, reserving, capital)","Operational risks (systems, claims handling, distribution, fraud)","Policyholder behaviour risks (anti-selection, moral hazard, selective lapsing)","External risks (economic cycle, State benefit changes, medical advances, demographic trends, regulation)"] },
+    { id:8, code:"REGULATORY",   label:"Regulatory & Capital", prompt:"Solvency · TCF / Consumer Duty · Reporting · Product governance",
+      sub:["Solvency and capital requirements (Solvency II / IRDAI equivalent)","Treating Customers Fairly / Consumer Duty obligations","Regulatory reporting requirements","Product governance and target market review","Local IRDAI-specific rules (India context)"] },
+  ]
+};
+
+const CI_AIDS = [
+  {
+    id:"CI-01", code:"FDS", title:"Three Criteria for CI Condition Inclusion",
+    items:[
+      { letter:"F", word:"Frequent & serious",  detail:"Perceived as serious AND occurs frequently enough to generate data and meaningful claims" },
+      { letter:"D", word:"Defined clearly",     detail:"Precise medical criteria; no ambiguity at claim time; reduces disputes and windfall payments" },
+      { letter:"S", word:"Sufficient data",     detail:"Enough data to price accurately; reinsurer help if own data insufficient" },
+    ]
+  },
+  {
+    id:"CI-02", code:"COACH MS", title:"Core CI Conditions (≈90% of claims)",
+    items:[
+      { letter:"C", word:"Cancer",                           detail:"" },
+      { letter:"O", word:"Organ transplant (major)",         detail:"" },
+      { letter:"A", word:"Artery bypass (coronary)",         detail:"" },
+      { letter:"C", word:"Coronary / Cardiac (heart attack)",detail:"" },
+      { letter:"H", word:"Heart failure / Kidney failure",   detail:"Kidney = renal failure" },
+      { letter:"M", word:"Multiple sclerosis",               detail:"" },
+      { letter:"S", word:"Stroke",                           detail:"" },
+    ]
+  },
+  {
+    id:"CI-03", code:"FeDWToMoT", title:"Six Activities of Daily Living (ADLs)",
+    items:[
+      { letter:"Fe", word:"Feeding",               detail:"" },
+      { letter:"D",  word:"Dressing",              detail:"" },
+      { letter:"W",  word:"Washing",               detail:"" },
+      { letter:"To", word:"Toileting",             detail:"" },
+      { letter:"Mo", word:"Mobility",              detail:"" },
+      { letter:"T",  word:"Transferring (bed/chair)", detail:"" },
+    ]
+  },
+  {
+    id:"CI-04", code:"SCARED", title:"Adverse Effects of High Lapse Rates in CI",
+    items:[
+      { letter:"S", word:"Selective lapsing",         detail:"Healthier lives lapse → worse remaining risk pool → premium spiral" },
+      { letter:"C", word:"Costs unrecovered",         detail:"Initial expenses and commission not yet recouped from in-force premiums" },
+      { letter:"A", word:"Asset disinvestment",       detail:"Forced sale of assets at unfavourable prices (e.g. during recession)" },
+      { letter:"R", word:"Reinsurance cost rises",    detail:"More expensive per remaining policy as portfolio shrinks" },
+      { letter:"E", word:"Economies of scale lost",   detail:"Fixed costs spread over fewer policies → higher per-policy expenses" },
+      { letter:"D", word:"Distributor churning",      detail:"Extra commission earned on policyholder re-entry at lower new-business premium" },
+    ]
+  },
+  {
+    id:"CI-05", code:"SPEC FC", title:"Reasons to Reinsure CI",
+    items:[
+      { letter:"S", word:"Solvency protection",       detail:"Reduces capital strain and peak claims exposure" },
+      { letter:"P", word:"Pricing validation",        detail:"Reinsurer validates assumptions and provides market data" },
+      { letter:"E", word:"Experience smoothing",      detail:"Irons out random fluctuations in claims" },
+      { letter:"C", word:"Capacity increase",         detail:"Ability to write larger risks and greater volume" },
+      { letter:"F", word:"Financing new business strain", detail:"Reduces initial capital required for new business" },
+      { letter:"C", word:"Capability / expertise",   detail:"Condition definitions, UW guidance, claims assessment support" },
+    ]
+  },
+];
+
+const IP_AIDS = [
+  {
+    id:"IP-01", code:"DRIVE", title:"Core IP Benefit Design Elements",
+    items:[
+      { letter:"D", word:"Deferred Period",        detail:"Links with employer sick pay; shorter = higher inception rate; major rating factor" },
+      { letter:"R", word:"Replacement Ratio",      detail:"Must stay <100% net of tax; 1% rise ≈ 1% extra claim cost; core moral hazard control" },
+      { letter:"I", word:"Incapacity Definition",  detail:"Own occ → suited occ → any occ; changing definition after 2 years reduces long-term moral hazard" },
+      { letter:"V", word:"Variations",             detail:"Short-term A&S, MPPI, group IP, unit-linked; each has different UW/claims complexity" },
+      { letter:"E", word:"Escalation",             detail:"Benefits linked to RPI/NAEI; protects real value; also escalates premium; subject to max cap" },
+    ]
+  },
+  {
+    id:"IP-02", code:"MORPH", title:"Moral Hazard Controls in IP",
+    items:[
+      { letter:"M", word:"Maximum benefit cap",      detail:"X% of pre-disability income minus all continuing income; monetary maximum for high earners" },
+      { letter:"O", word:"Own → Any occ switch",     detail:"Definition becomes more restrictive after (e.g.) 2 years; reduces long-term claim incentive" },
+      { letter:"R", word:"Rehabilitation",           detail:"Counselling; vocational retraining; proportionate benefit on partial return — reduces claim duration" },
+      { letter:"P", word:"Proportionate benefit",    detail:"Part-time return or lower-paid role partially compensated; avoids cliff-edge loss of full benefit" },
+      { letter:"H", word:"Health certification",     detail:"Regular medical re-certification; insurer-checked not employer; income verification; monitoring" },
+    ]
+  },
+  {
+    id:"IP-03", code:"FARM", title:"Key IP Rating Factors",
+    items:[
+      { letter:"F", word:"Female / gender",            detail:"Where legislation permits; different morbidity patterns; often restricted in new markets" },
+      { letter:"A", word:"Age at entry",               detail:"Inception rates rise with age; claim duration also age-dependent; the primary driver" },
+      { letter:"R", word:"Ratio (replacement) & Region", detail:"Higher ratio = higher cost; geographic/zone variation significant; India: zone-based pricing" },
+      { letter:"M", word:"Manual / occupation class",  detail:"THE single most critical IP rating factor — affects inception probability AND claim duration" },
+    ]
+  },
+  {
+    id:"IP-04", code:"CLAIM", title:"Loss Ratio Investigation Framework",
+    items:[
+      { letter:"C", word:"Cause of claims",            detail:"Mix shift to mental health/stress; long-duration causes; change in claim type distribution" },
+      { letter:"L", word:"Lapses",                     detail:"Selective lapsing → healthier lives leaving; check by duration, channel, benefit level" },
+      { letter:"A", word:"Anti-selection / early claims", detail:"Early claims by notification date; abnormal large group schemes; new business mix changes" },
+      { letter:"I", word:"Inception & recovery rates", detail:"Study separately — actions differ; inception rise vs recovery fall have different solutions" },
+      { letter:"M", word:"Mix (business)",             detail:"Demographic shift; cross-subsidy breakdown; occupation class drift; scheme size changes" },
+    ]
+  },
+];
+
+// ══════════════════════════════════════════════
+// RENDER SKELETON
+// ══════════════════════════════════════════════
+
+function renderSkeleton() {
+  const container = document.getElementById('skeleton-dims');
+  container.innerHTML = SKELETON.dimensions.map(d => `
+    <div class="sk-dim" id="sk-${d.id}" onclick="toggleSk(${d.id})">
+      <div class="sk-dim-row">
+        <span class="sk-num">${d.id}</span>
+        <span class="sk-code">${d.code}</span>
+        <span class="sk-name">— ${d.label}</span>
+        <span class="sk-arr">›</span>
+      </div>
+      <div class="sk-sub">
+        <div class="sk-prompt">${d.prompt}</div>
+        <ul>${d.sub.map(s => `<li>${s}</li>`).join('')}</ul>
+      </div>
+    </div>`).join('');
+}
+
+function toggleSk(id) {
+  document.getElementById('sk-'+id).classList.toggle('open');
+}
+
+// ══════════════════════════════════════════════
+// RENDER MNEMONIC CARDS
+// ══════════════════════════════════════════════
+
+let totalItems = 0;
+let revealedItems = 0;
+
+function renderMnGrid(containerId, aids, colorClass) {
+  const container = document.getElementById(containerId);
+  container.innerHTML = aids.map(aid => {
+    totalItems += aid.items.length;
+    const items = aid.items.map((item, i) => `
+      <div class="mn-item" id="${aid.id}-${i}" onclick="revealItem('${aid.id}-${i}', '${aid.id}')">
+        <div class="mn-letter-cell letter-${colorClass}">${item.letter}</div>
+        <div class="mn-content-cell">
+          <div class="mn-word">${item.word}</div>
+          ${item.detail ? `<div class="mn-detail">${item.detail}</div>` : ''}
+        </div>
+      </div>`).join('');
+
+    return `
+      <div class="mn-card">
+        <div class="mn-card-hd">
+          <span class="mn-badge ${colorClass}">${aid.code}</span>
+          <span class="mn-card-title">${aid.title}</span>
+        </div>
+        <div class="mn-items-wrap" id="${aid.id}-wrap">${items}</div>
+        <div class="mn-score" id="${aid.id}-score">0 / ${aid.items.length} recalled</div>
+        <div class="mn-drill-hint">↑ Click each row to reveal</div>
+      </div>`;
+  }).join('');
+}
+
+// ══════════════════════════════════════════════
+// DRILL MODE LOGIC
+// ══════════════════════════════════════════════
+
+const revealed = new Set();
+
+function revealItem(itemId, aidId) {
+  if (!document.body.classList.contains('drill-mode')) return;
+  const el = document.getElementById(itemId);
+  if (!el || el.classList.contains('revealed')) return;
+  el.classList.add('revealed');
+  revealed.add(itemId);
+  updateScore(aidId);
+  updateProgress();
+}
+
+function updateScore(aidId) {
+  const wrap = document.getElementById(aidId + '-wrap');
+  if (!wrap) return;
+  const total = wrap.querySelectorAll('.mn-item').length;
+  const done  = wrap.querySelectorAll('.mn-item.revealed').length;
+  const scoreEl = document.getElementById(aidId + '-score');
+  if (scoreEl) scoreEl.textContent = `${done} / ${total} recalled`;
+}
+
+function updateProgress() {
+  revealedItems = revealed.size;
+  const pct = totalItems > 0 ? (revealedItems / totalItems * 100) : 0;
+  document.getElementById('drill-fill').style.width = pct + '%';
+  document.getElementById('drill-count').textContent = `${revealedItems} / ${totalItems}`;
+}
+
+function revealAll() {
+  document.querySelectorAll('.mn-item:not(.revealed)').forEach(el => {
+    el.classList.add('revealed');
+    revealed.add(el.id);
+  });
+  // Update all scores
+  [...CI_AIDS, ...IP_AIDS].forEach(aid => updateScore(aid.id));
+  updateProgress();
+}
+
+function resetDrill() {
+  document.querySelectorAll('.mn-item.revealed').forEach(el => el.classList.remove('revealed'));
+  revealed.clear();
+  [...CI_AIDS, ...IP_AIDS].forEach(aid => {
+    const scoreEl = document.getElementById(aid.id + '-score');
+    if (scoreEl) scoreEl.textContent = `0 / ${aid.items.length} recalled`;
+  });
+  updateProgress();
+}
+
+// ══════════════════════════════════════════════
+// MODE SWITCHING
+// ══════════════════════════════════════════════
+
+function setMode(mode) {
+  document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+  if (mode === 'drill') {
+    document.body.classList.add('drill-mode');
+    resetDrill();
+  } else {
+    document.body.classList.remove('drill-mode');
+  }
+}
+
+// ══════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════
+
+renderSkeleton();
+renderMnGrid('ci-grid', CI_AIDS, 'ci');
+renderMnGrid('ip-grid', IP_AIDS, 'ip');
+updateProgress();
+</script>
+</body>
+</html>
