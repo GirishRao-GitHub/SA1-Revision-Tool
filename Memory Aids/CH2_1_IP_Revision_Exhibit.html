@@ -1,0 +1,2098 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Income Protection — SA1 Revision Exhibit</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:ital,wght@0,300;0,400;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap');
+
+  :root {
+    --blue: #1e4d8c;
+    --blue-light: #2563bc;
+    --blue-pale: #eef2fb;
+    --teal: #0d6e6e;
+    --teal-light: #148f8f;
+    --teal-pale: #e0f5f5;
+    --navy: #1a2840;
+    --navy-mid: #263d5c;
+    --amber: #8b5a0d;
+    --amber-pale: #fdf4df;
+    --slate: #5a6a7a;
+    --bg: #f3f5f8;
+    --white: #ffffff;
+    --border: #d0d8e4;
+    --text: #1c2030;
+    --text-light: #4a5060;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 15px;
+    line-height: 1.65;
+  }
+
+  /* ── HEADER ── */
+  .site-header {
+    background: linear-gradient(135deg, #0a1a38 0%, #1a3360 100%);
+    color: white;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 3px 16px rgba(0,0,0,0.4);
+  }
+  .header-inner {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 10px 24px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  .header-badge {
+    background: var(--blue);
+    color: white;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 4px;
+    letter-spacing: 1px;
+    white-space: nowrap;
+  }
+  .header-title {
+    font-family: 'Crimson Pro', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: white;
+    flex: 1;
+    font-style: italic;
+  }
+  .header-title span { color: #90c4f8; }
+  .header-search {
+    display: flex;
+    align-items: center;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .header-search input {
+    background: transparent;
+    border: none;
+    color: white;
+    padding: 7px 12px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    width: 220px;
+    outline: none;
+  }
+  .header-search input::placeholder { color: rgba(255,255,255,0.45); }
+  .header-search button {
+    background: var(--blue);
+    border: none;
+    color: white;
+    padding: 7px 12px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+
+  /* ── NAV ── */
+  .nav-strip {
+    background: rgba(0,0,0,0.3);
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding: 0 24px;
+  }
+  .nav-strip::-webkit-scrollbar { display: none; }
+  .nav-tab {
+    padding: 9px 16px;
+    color: rgba(255,255,255,0.6);
+    cursor: pointer;
+    font-size: 12.5px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    white-space: nowrap;
+    border-bottom: 3px solid transparent;
+    transition: all 0.18s;
+    user-select: none;
+  }
+  .nav-tab:hover { color: white; }
+  .nav-tab.active { color: #90c4f8; border-bottom-color: #90c4f8; }
+
+  /* ── LAYOUT ── */
+  .main { max-width: 1400px; margin: 0 auto; padding: 24px 24px 60px; }
+  .section-panel { display: none; }
+  .section-panel.active { display: block; }
+
+  /* ── SECTION HEADER ── */
+  .sec-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 20px;
+    padding-bottom: 14px;
+    border-bottom: 2px solid var(--border);
+  }
+  .sec-icon {
+    width: 44px; height: 44px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; flex-shrink: 0;
+  }
+  .sec-title {
+    font-family: 'Crimson Pro', serif;
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--navy);
+  }
+  .sec-sub { font-size: 13px; color: var(--slate); margin-top: 2px; }
+
+  /* ── CARDS ── */
+  .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; margin-bottom: 22px; }
+  .card { background: var(--white); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.05); }
+  .card-hd { padding: 11px 16px; font-weight: 700; font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; display: flex; align-items: center; gap: 8px; }
+  .card-hd.blue { background: var(--blue-pale); color: var(--blue); }
+  .card-hd.teal { background: var(--teal-pale); color: var(--teal); }
+  .card-hd.amber { background: var(--amber-pale); color: var(--amber); }
+  .card-hd.navy { background: #e8edf5; color: var(--navy); }
+  .card-bd { padding: 13px 16px; }
+
+  /* ── BULLETS ── */
+  .blist { list-style: none; }
+  .blist li {
+    padding: 5px 0 5px 20px;
+    position: relative;
+    font-size: 13.5px;
+    border-bottom: 1px solid var(--bg);
+    line-height: 1.55;
+  }
+  .blist li:last-child { border-bottom: none; }
+  .blist li::before { content: '▸'; position: absolute; left: 0; color: var(--blue); font-size: 11px; top: 7px; }
+
+  /* ── KEY TERMS ── */
+  .terms-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 10px; margin-bottom: 22px; }
+  .term {
+    background: white;
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--blue);
+    border-radius: 6px;
+    padding: 11px 14px;
+  }
+  .term-name { font-weight: 700; font-size: 12.5px; color: var(--blue); margin-bottom: 4px; font-family: 'JetBrains Mono', monospace; }
+  .term-def { font-size: 13px; color: var(--text-light); line-height: 1.5; }
+
+  /* ── FLASHCARDS ── */
+  .fc-wrap { perspective: 1000px; cursor: pointer; margin-bottom: 12px; }
+  .fc-inner { position: relative; min-height: 120px; transition: transform 0.5s; transform-style: preserve-3d; }
+  .fc-wrap.flipped .fc-inner { transform: rotateX(180deg); }
+  .fc-front, .fc-back {
+    position: absolute; width: 100%; min-height: 120px;
+    backface-visibility: hidden; border-radius: 10px;
+    padding: 16px 20px; display: flex; flex-direction: column; justify-content: center;
+  }
+  .fc-front { background: linear-gradient(135deg, #0a1a38 0%, #1a3360 100%); color: white; }
+  .fc-back { background: linear-gradient(135deg, var(--teal) 0%, #0a9090 100%); color: white; transform: rotateX(180deg); }
+  .fc-label { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; opacity: 0.6; margin-bottom: 8px; }
+  .fc-q { font-size: 15px; font-weight: 600; line-height: 1.5; }
+  .fc-a { font-size: 13.5px; line-height: 1.6; }
+  .fc-hint { text-align: center; font-size: 11px; color: var(--slate); margin-top: 4px; }
+
+  /* ── EXAM Qs ── */
+  .eq { background: white; border: 1px solid var(--border); border-radius: 10px; margin-bottom: 16px; overflow: hidden; }
+  .eq-hd {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 16px;
+    background: var(--navy);
+    color: white; cursor: pointer; user-select: none;
+  }
+  .eq-hd-l { display: flex; align-items: center; gap: 12px; }
+  .badge { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 4px; white-space: nowrap; }
+  .badge.iai { background: var(--teal); }
+  .badge.ifoa { background: var(--amber); }
+  .eq-marks { font-size: 12px; opacity: 0.7; font-family: 'JetBrains Mono', monospace; }
+  .eq-q { font-size: 13.5px; font-weight: 600; color: rgba(255,255,255,0.92); flex: 1; }
+  .eq-arrow { color: rgba(255,255,255,0.55); font-size: 18px; transition: transform 0.3s; flex-shrink: 0; }
+  .eq-hd.open .eq-arrow { transform: rotate(180deg); }
+  .eq-scenario { padding: 11px 16px; background: #f3f5f8; font-size: 13px; color: var(--text-light); border-bottom: 1px solid var(--border); font-style: italic; line-height: 1.5; }
+  .eq-body { display: none; padding: 16px; }
+  .eq-body.open { display: block; }
+  .eq-sec { font-size: 11.5px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; color: var(--blue); margin: 12px 0 6px; padding-bottom: 4px; border-bottom: 1px solid var(--blue-pale); }
+  .eq-sec:first-child { margin-top: 0; }
+
+  /* ── COMPARE TABLE ── */
+  .tbl { width: 100%; border-collapse: collapse; font-size: 13px; margin-bottom: 20px; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.05); }
+  .tbl th { background: var(--navy); color: white; padding: 10px 14px; text-align: left; font-size: 11.5px; font-weight: 700; letter-spacing: 0.4px; text-transform: uppercase; }
+  .tbl td { padding: 9px 14px; border-bottom: 1px solid var(--bg); vertical-align: top; line-height: 1.5; }
+  .tbl tr:last-child td { border-bottom: none; }
+  .tbl tr:nth-child(even) td { background: #f5f7fb; }
+  .tbl td:first-child { font-weight: 700; color: var(--navy); width: 22%; }
+
+  /* ── ACCORDION ── */
+  .acc { background: white; border: 1px solid var(--border); border-radius: 8px; margin-bottom: 8px; overflow: hidden; }
+  .acc-hd { padding: 13px 16px; font-weight: 700; font-size: 13.5px; cursor: pointer; display: flex; align-items: center; justify-content: space-between; user-select: none; color: var(--navy); transition: background 0.15s; }
+  .acc-hd:hover { background: var(--bg); }
+  .acc-arr { transition: transform 0.25s; font-size: 16px; color: var(--slate); }
+  .acc-hd.open .acc-arr { transform: rotate(90deg); }
+  .acc-body { display: none; padding: 14px 16px; border-top: 1px solid var(--border); background: #fcfbfa; }
+  .acc-body.open { display: block; }
+
+  /* ── ALERT ── */
+  .alert { border-radius: 8px; padding: 12px 16px; margin-bottom: 12px; font-size: 13.5px; display: flex; gap: 10px; align-items: flex-start; }
+  .alert.amber { background: var(--amber-pale); border-left: 4px solid var(--amber); }
+  .alert.blue { background: var(--blue-pale); border-left: 4px solid var(--blue); }
+  .alert.teal { background: var(--teal-pale); border-left: 4px solid var(--teal); }
+  .alert-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+  /* ── MNEMONIC ── */
+  .mnemonic {
+    background: linear-gradient(135deg, #0a1a38 0%, #1a3360 100%);
+    color: white; border-radius: 12px; padding: 20px 24px; margin-bottom: 20px;
+  }
+  .mn-title { font-family: 'Crimson Pro', serif; font-size: 13px; font-weight: 700; opacity: 0.65; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1.5px; font-style: italic; }
+  .mn-items { display: flex; flex-wrap: wrap; gap: 10px; }
+  .mn-item { display: flex; align-items: flex-start; gap: 8px; min-width: 200px; flex: 1; }
+  .mn-letter { font-family: 'Crimson Pro', serif; font-size: 28px; font-weight: 700; color: #90c4f8; line-height: 1; min-width: 26px; }
+  .mn-word { font-size: 13px; line-height: 1.45; padding-top: 2px; }
+  .mn-word strong { display: block; font-size: 13.5px; color: #90c4f8; }
+
+  /* ── FORMULA BOX ── */
+  .formula {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 100%);
+    color: white; border-radius: 10px; padding: 18px 22px; margin-bottom: 18px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .formula-label { font-size: 10px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; opacity: 0.6; margin-bottom: 10px; font-family: 'DM Sans', sans-serif; }
+  .formula-expr { font-size: 17px; color: #a8d8d8; margin-bottom: 8px; }
+  .formula-notes { font-size: 12px; opacity: 0.8; font-family: 'DM Sans', sans-serif; line-height: 1.7; }
+
+  /* ── SUB HEADING ── */
+  .sub-hd { font-family: 'Crimson Pro', serif; font-size: 17px; font-weight: 700; color: var(--navy); margin: 22px 0 10px; padding-left: 12px; border-left: 4px solid var(--blue); font-style: italic; }
+
+  /* ── SEARCH ── */
+  #search-panel { display: none; }
+  #search-panel.active { display: block; }
+  .sr { background: white; border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; margin-bottom: 10px; }
+  .sr-src { font-size: 11px; font-family: 'JetBrains Mono', monospace; color: var(--slate); margin-bottom: 6px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; }
+  .sr-text { font-size: 13.5px; line-height: 1.55; }
+  .hl { background: #c7dffb; color: #1a2840; border-radius: 2px; }
+
+  @media (max-width: 768px) {
+    .cards { grid-template-columns: 1fr; }
+    .header-search { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <div class="header-badge">SA1 · SP1</div>
+    <div class="header-title">Income Protection Insurance <span>— Comprehensive Revision</span></div>
+    <div class="header-search">
+      <input type="text" id="searchInput" placeholder="Search notes, terms, exam Qs…" oninput="doSearch(this.value)">
+      <button onclick="doSearch(document.getElementById('searchInput').value)">⌕</button>
+    </div>
+  </div>
+  <div style="background:rgba(0,0,0,0.25);">
+    <div class="nav-strip">
+      <div class="nav-tab active" onclick="showTab('overview')">📋 Overview</div>
+      <div class="nav-tab" onclick="showTab('policy-design')">📝 Policy Design</div>
+      <div class="nav-tab" onclick="showTab('incapacity')">🔑 Incapacity Defs</div>
+      <div class="nav-tab" onclick="showTab('variations')">🏗 Variations</div>
+      <div class="nav-tab" onclick="showTab('pricing')">💰 Pricing</div>
+      <div class="nav-tab" onclick="showTab('uw-claims')">🔍 UW &amp; Claims</div>
+      <div class="nav-tab" onclick="showTab('risks')">⚠️ Risks</div>
+      <div class="nav-tab" onclick="showTab('flashcards')">🃏 Flashcards</div>
+      <div class="nav-tab" onclick="showTab('iai-qs')">📝 IAI Exam Qs</div>
+      <div class="nav-tab" onclick="showTab('ifoa-qs')">🎓 IFoA Exam Qs</div>
+      <div class="nav-tab" onclick="showTab('mnemonics')">🧠 Mnemonics</div>
+    </div>
+  </div>
+</header>
+
+<div class="main">
+
+  <div id="search-panel">
+    <div class="sec-header">
+      <div class="sec-icon" style="background:#e8edf5;">🔎</div>
+      <div>
+        <div class="sec-title">Search Results</div>
+        <div class="sec-sub" id="search-count">0 results</div>
+      </div>
+    </div>
+    <div id="search-results"></div>
+  </div>
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- TAB 1: OVERVIEW -->
+  <!-- ══════════════════════════════════════ -->
+  <div id="tab-overview" class="section-panel active">
+    <div class="sec-header">
+      <div class="sec-icon" style="background:var(--blue-pale);">📋</div>
+      <div>
+        <div class="sec-title">IP — Product Overview</div>
+        <div class="sec-sub">SP1 Chapter 1 · SA1 Chapter 2 · Definition, nature, aims, customer needs</div>
+      </div>
+    </div>
+
+    <div class="alert amber">
+      <span class="alert-icon">💡</span>
+      <div><strong>Exam Lens:</strong> IP questions test your ability to link product features to their rationale, distinguish IP from CI and PMI, and apply knowledge to group schemes, new markets, and monitoring scenarios. Always explain <em>why</em> a feature exists, not just <em>what</em> it is. Moral hazard and return-to-work incentives are the dominant thread.</div>
+    </div>
+
+    <div class="cards">
+      <div class="card">
+        <div class="card-hd blue">📘 Definition &amp; History</div>
+        <div class="card-bd">
+          <ul class="blist">
+            <li>Modern name for <strong>Permanent Health Insurance (PHI)</strong> — renamed to better reflect coverage and attract customers</li>
+            <li>PHI name emphasised insurer <em>must</em> pay a valid claim as long as conditions met (claimant sick and below retirement age)</li>
+            <li>Also known as: <strong>Disability Income Insurance</strong> (USA), long-term sickness insurance</li>
+            <li>Name change partly to avoid confusion with PMI — PHI pays a regular income, not medical costs</li>
+            <li>Provides the insured with <strong>regular income</strong> during periods of incapacity (inability to work due to illness or injury)</li>
+            <li>Benefits are in the form of a <strong>temporary annuity</strong> — continuing until policyholder recovers, dies, or policy expires</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-hd teal">⚖️ IP vs CI vs PMI</div>
+        <div class="card-bd">
+          <ul class="blist">
+            <li><strong>IP vs CI:</strong> IP requires <em>inability to work</em>; CI pays on <em>diagnosis</em> regardless of work capacity. IP = income stream; CI = lump sum</li>
+            <li><strong>IP vs PMI:</strong> PMI reimburses actual treatment cost (indemnity); IP replaces lost earnings. IP is long-term; PMI is annually renewable</li>
+            <li>IP premiums usually <strong>level</strong> (unlike PMI which rises with age); inflation-linking common</li>
+            <li>IP = <strong>long-term product</strong>; multiple separate claim periods possible without policy ceasing</li>
+            <li>IP benefit: policyholder decides use — mortgage, living costs, pension contributions, locum cover</li>
+            <li>Not all illness/injury covered — unemployment, drug abuse, self-inflicted injury excluded</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-hd amber">👥 Customer Needs</div>
+        <div class="card-bd">
+          <ul class="blist">
+            <li><strong>Employers</strong> — transfer long-term sick pay liability to insurer; statutory sickness benefit covered; encourages staff retention and morale; tax-deductible premiums; benefits treated as business expense</li>
+            <li><strong>Self-employed</strong> — no employer safety net; actively purchase IP; locum cover for professional practices (e.g. doctors)</li>
+            <li><strong>Individuals</strong> — income replacement especially for those with dependants; loan/mortgage servicing; premium waiver (continues pension contributions during incapacity)</li>
+            <li>Where State disability benefits are low, IP fills a clear gap</li>
+            <li>IP may also cover <strong>MPPI</strong> — mortgage payment protection during incapacity</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-hd navy">⚙️ Product Cycle Highlights</div>
+        <div class="card-bd">
+          <ul class="blist">
+            <li>IP fits the full product cycle: design → pricing → marketing → underwriting → claims → monitoring → valuation</li>
+            <li>Product design is complex — admin systems must record claim start dates, cessation dates, reasons, and causes</li>
+            <li>Pricing must reflect practices across the cycle (e.g. weaker claims management = higher premiums)</li>
+            <li>Underwriting and claims management are <strong>more complex for IP</strong> than most life products</li>
+            <li>Experience monitoring complicated by actuarial difficulties in measuring morbidity risk</li>
+            <li>IP may be actively bought by the self-employed; others need active marketing</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="sub-hd">Group IP — Why Employers Buy</div>
+    <div class="alert teal">
+      <span class="alert-icon">📌</span>
+      <div><strong>Tested in IAI Mar 2021 Q1(i) and IFoA Sep 2020 Q2(i).</strong> Always distinguish between employer's financial motivations (statutory sick pay liability transfer, tax relief) and HR/welfare motivations (staff retention, morale, return-to-work incentives).</div>
+    </div>
+    <div class="cards">
+      <div class="card">
+        <div class="card-hd blue">💼 Financial &amp; Tax Reasons</div>
+        <div class="card-bd">
+          <ul class="blist">
+            <li>Insures liability for statutory sickness payments and any discretionary sick pay (custom and practice)</li>
+            <li>Premiums paid by employer <strong>qualify for tax relief</strong>; benefits treated as business expense</li>
+            <li>May also pay for a replacement employee — IP protects against some of this cost</li>
+            <li>Long-term cost could be lower than recruitment fees if key staff retained</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-hd teal">🤝 HR &amp; Welfare Reasons</div>
+        <div class="card-bd">
+          <ul class="blist">
+            <li>Enhances total reward package — attracts and retains better staff, reduces turnover</li>
+            <li>Particularly valued by employees — creates loyalty, especially among senior key staff</li>
+            <li>Employees who fall sick are more able to return — living standards maintained during incapacity</li>
+            <li>Rehabilitation benefits encourage faster return to work</li>
+            <li>Access to counselling and advice services to manage sickness absence</li>
+            <li>Employer has a moral obligation to support workforce wellbeing</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- TAB 2: POLICY DESIGN -->
+  <!-- ══════════════════════════════════════ -->
+  <div id="tab-policy-design" class="section-panel">
+    <div class="sec-header">
+      <div class="sec-icon" style="background:var(--blue-pale);">📝</div>
+      <div>
+        <div class="sec-title">Policy Conditions &amp; Benefit Design</div>
+        <div class="sec-sub">Replacement ratio, deferred period, linked claims, escalation, exclusions</div>
+      </div>
+    </div>
+
+    <div class="alert blue">
+      <span class="alert-icon">📌</span>
+      <div><strong>Core exam principle:</strong> Every benefit design feature in IP has an underlying rationale — usually controlling moral hazard, matching employer sick pay, or preserving return-to-work incentive. Always state the <em>why</em>.</div>
+    </div>
+
+    <div class="sub-hd">Benefit Amount Design</div>
+    <table class="tbl">
+      <tr><th>Feature</th><th>Definition / Mechanism</th><th>Key Rationale / Exam Point</th></tr>
+      <tr>
+        <td>Replacement Ratio</td>
+        <td>Post-claim net income ÷ pre-claim net income. Insurers limit benefit to 50–75% of pre-claim gross earnings</td>
+        <td>A ratio ≥100% removes all financial incentive to return to work. A 1% rise in replacement ratio may imply ~1% higher expected claim cost. <strong>Core IP pricing concept.</strong></td>
+      </tr>
+      <tr>
+        <td>Over-insurance</td>
+        <td>Benefit + all other income sources must not exceed full pre-claim income</td>
+        <td>Offsets employer sick pay, State benefits, other insurance. Moral hazard control. Can be hard to enforce if claimant earns informal income.</td>
+      </tr>
+      <tr>
+        <td>Escalating Benefits</td>
+        <td>Benefits increase in line with RPI / NAEI index annually in and out of claim</td>
+        <td>Protects real value of benefit; subject to maximum (e.g. 5% p.a.). Premium also index-linked. Reduces "benefit erosion" by inflation.</td>
+      </tr>
+      <tr>
+        <td>Proportionate / Rehabilitation Benefit</td>
+        <td>Reduced benefit when partially incapacitated or returning to part-time work</td>
+        <td>Incentivises rehabilitation and partial return to work. Benefits both insurer (lower claim cost) and insured (income during recovery).</td>
+      </tr>
+      <tr>
+        <td>Waiver of Premium</td>
+        <td>Premiums waived during a valid claim; usually after short deferred period (3–6 months)</td>
+        <td>Prevents lapsing during incapacity — insured shouldn't lose cover when most in need. Adds cost; short deferred period on WOP reduces moral hazard.</td>
+      </tr>
+      <tr>
+        <td>Tax Treatment</td>
+        <td>If benefits taxed as income, effective replacement ratio is lower than nominal</td>
+        <td>Group IP benefits typically taxed. Individual IP benefits often tax-free. Affects real net replacement ratio and incentive to return to work.</td>
+      </tr>
+    </table>
+
+    <div class="sub-hd">Benefit Timing Features</div>
+    <table class="tbl">
+      <tr><th>Feature</th><th>How It Works</th><th>Purpose / Key Points</th></tr>
+      <tr>
+        <td>Deferred Period</td>
+        <td>Period of sickness before benefit payments begin. Common: 4, 13, 26, 52 weeks (UK). Up to 2 years possible.</td>
+        <td>Integrates with employer sick pay. Avoids short-term/trivial claims. Reduces premium and moral hazard. Shorter deferred period = higher claims inception rate. <strong>Major rating factor.</strong></td>
+      </tr>
+      <tr>
+        <td>Waiting Period</td>
+        <td>Period at start of policy during which no benefits paid at all (now uncommon)</td>
+        <td>Reduces anti-selection. Initial underwriting now preferred over waiting period. Uncommon in modern products.</td>
+      </tr>
+      <tr>
+        <td>Split Deferred</td>
+        <td>Two benefit levels, e.g. £250/week after 13 weeks rising to £500/week after 26 weeks</td>
+        <td>Integrates IP benefits with a stepped employer sick pay scheme. More precisely matches customer need at different claim durations.</td>
+      </tr>
+      <tr>
+        <td>Early Notification Clause</td>
+        <td>Policyholder must notify insurer (e.g. after 1 month of sickness) even if deferred period is longer</td>
+        <td>Enables early rehabilitation support before benefit commencement. Enables thorough claim assessment. Reduces overall claim cost if recovery aided early.</td>
+      </tr>
+      <tr>
+        <td>Linked Claims</td>
+        <td>Deferred period waived if sickness recurs within (e.g.) 26–52 weeks from the same cause</td>
+        <td>Encourages return to work — claimant doesn't fear "resetting" the deferred period if relapse occurs. Reduces disincentive to attempt recovery.</td>
+      </tr>
+      <tr>
+        <td>Expiry Age / Term</td>
+        <td>Benefits cease at expiry age (usually retirement age: 50, 55, 60, or 65) or at end of fixed term</td>
+        <td>Minimum 5-year term ensures classification as long-term business. Must align with employer's pension scheme retirement ages for group IP.</td>
+      </tr>
+    </table>
+
+    <div class="sub-hd">Benefit Limitation Formula (Claims Management)</div>
+    <div class="formula">
+      <div class="formula-label">IP Benefit Limitation — Typical Structure</div>
+      <div class="formula-expr">Benefit = min( X% × Gross Pre-disability Income − All Continuing Income, Maximum Cap )</div>
+      <div class="formula-notes">
+        X% &lt; 100 — ensures financial incentive to return to work is preserved<br>
+        Continuing income offsets include: employer sick pay, State disability benefits, other IP policies, investment income<br>
+        Monetary maximum cap: prevents excessive replacement ratios for very high earners<br>
+        Pre-disability income: averaged over prior period (e.g. 1 year) to include bonuses and irregular payments<br>
+        Challenge: claimants may earn undeclared informal income — hard for insurer to detect
+      </div>
+    </div>
+
+    <div class="sub-hd">Common Exclusions</div>
+    <div class="cards">
+      <div class="card">
+        <div class="card-hd blue">🚫 Standard Exclusions</div>
+        <div class="card-bd">
+          <ul class="blist">
+            <li>Unemployment, redundancy, or voluntary early retirement</li>
+            <li>Alcohol or drug abuse</li>
+            <li>Self-inflicted injury or attempted suicide</li>
+            <li>War, civil commotion, or terrorism</li>
+            <li>Failure to follow prescribed medical advice</li>
+            <li>Hazardous sports or recreational activities</li>
+            <li>Criminal acts</li>
+            <li>Pre-existing conditions (within moratorium or with exclusion clause)</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-hd amber">⚠️ Policy Condition Design Principles</div>
+        <div class="card-bd">
+          <ul class="blist">
+            <li>Conditions are <strong>the most complex part</strong> of IP design — must cover lapse, claim, recovery, partial recovery, retirement, and death scenarios</li>
+            <li>Unclear conditions risk being interpreted by <strong>courts in favour of the claimant</strong></li>
+            <li>Simple conditions help policyholders understand at sale → accurate proposals → better underwriting</li>
+            <li>Must give cushion against adverse events (e.g. war exclusions) while remaining fair</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="sub-hd">Guaranteed vs Reviewable Premiums</div>
+    <table class="tbl">
+      <tr><th>Dimension</th><th>Guaranteed Premiums</th><th>Reviewable Premiums</th></tr>
+      <tr><td>Policyholder certainty</td><td>High — knows exact premiums for full term</td><td>Low — premiums can change at review; must be clearly stated basis for review</td></tr>
+      <tr><td>Insurer pricing risk</td><td>High — all future morbidity risk priced at outset</td><td>Lower — can re-price on review if experience deteriorates</td></tr>
+      <tr><td>Capital requirement</td><td>Higher — must hold for long-term guaranteed obligation</td><td>Lower — option to re-price reduces long-term liability</td></tr>
+      <tr><td>Selective lapse risk</td><td>Lower — policyholder locked in</td><td>High on review — healthier lives lapse if premium increases; sicker pool remains</td></tr>
+      <tr><td>New/uncertain markets</td><td>High risk — insufficient data for long-term guarantee</td><td>Preferred — allows data to accumulate before first review (e.g. 5-year initial guarantee)</td></tr>
+      <tr><td>Regulatory scrutiny</td><td>Lower</td><td>Higher — TCF; basis for review must be transparent; adequate notice to policyholders</td></tr>
+    </table>
+  </div>
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- TAB 3: INCAPACITY DEFINITIONS -->
+  <!-- ══════════════════════════════════════ -->
+  <div id="tab-incapacity" class="section-panel">
+    <div class="sec-header">
+      <div class="sec-icon" style="background:var(--teal-pale);">🔑</div>
+      <div>
+        <div class="sec-title">Incapacity Definitions</div>
+        <div class="sec-sub">Own occ, any occ, suited occ, ADW, ADL, changing definitions</div>
+      </div>
+    </div>
+
+    <div class="alert teal">
+      <span class="alert-icon">📌</span>
+      <div><strong>Definition of incapacity is key to a sustainable, profitable product</strong> and normally applies throughout the contract (SP1 Ch7). Heavily tested in IAI Apr 2024 Q1(i) and Dec 2022 Q2(i). Always link definition choice to cost, moral hazard, and occupational suitability.</div>
+    </div>
+
+    <div class="sub-hd">Occupational Definitions</div>
+    <table class="tbl">
+      <tr><th>Definition</th><th>Standard</th><th>Who pays?</th><th>Cost to Insurer</th><th>Moral Hazard</th><th>Typical Use</th></tr>
+      <tr>
+        <td>Own Occupation</td>
+        <td>Unable to perform the specific duties of the policyholder's <em>own</em> job</td>
+        <td>Most generous to claimant</td>
+        <td>Highest</td>
+        <td>Highest — subjective; easy to maintain claim</td>
+        <td>Professional/white-collar workers; individual policies</td>
+      </tr>
+      <tr>
+        <td>Suited Occupation</td>
+        <td>Unable to perform occupations for which reasonably suited by education, training, or experience</td>
+        <td>Intermediate</td>
+        <td>Intermediate</td>
+        <td>Intermediate; dispute risk at claims stage</td>
+        <td>Common in group IP; balances cost vs. generosity</td>
+      </tr>
+      <tr>
+        <td>Any Occupation</td>
+        <td>Unable to perform ANY occupation for remuneration</td>
+        <td>Most restrictive</td>
+        <td>Lowest</td>
+        <td>Lowest — very hard to remain unable to do anything</td>
+        <td>Rarely used in individual policies; manual/high-risk workers</td>
+      </tr>
+      <tr>
+        <td>Activities of Daily Work (ADW)</td>
+        <td>Unable to perform a specified number of specific work-related activities</td>
+        <td>Functional; objective</td>
+        <td>Moderate</td>
+        <td>Lower — objective measurable tasks</td>
+        <td>Higher-risk occupations where occupational definitions are impractical</td>
+      </tr>
+    </table>
+
+    <div class="sub-hd">Non-Occupational Definitions</div>
+    <div class="cards">
+      <div class="card">
+        <div class="card-hd teal">🏠 Activities of Daily Living (ADL)</div>
+        <div class="card-bd">
+          <ul class="blist">
+            <li>The 6 ADLs: Washing, Dressing, Feeding, Mobility (walking/transferring), Continence, Toileting</li>
+            <li>Typically requires inability to perform <strong>2 of 6</strong> ADLs (unaided)</li>
+            <li>Used for <strong>LTCI</strong> and sometimes IP for non-workers (e.g. homemakers)</li>
+            <li>Not occupation-dependent — applicable at any age, including post-retirement</li>
+            <li>Less subjective than occupational definitions — objective functional assessment</li>
+            <li>Also used in extension of group IP to family members (adapted tasks: e.g. travelling on public transport, dealing with money)</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-hd blue">🔄 Changing Definitions</div>
+        <div class="card-bd">
+          <ul class="blist">
+            <li>Policy may start on <strong>own occupation</strong> definition for first (e.g.) 2 years of incapacity</li>
+            <li>Then switch to <strong>any occupation</strong> or suited occupation after the initial period</li>
+            <li>Reduces moral hazard for long-term claims — less generous definition after initial period provides return-to-work incentive</li>
+            <li>Commonly used in group IP for manual workers</li>
+            <li>Example wording: "own occupation for first 24 months; thereafter unable to perform any occupation suited by education or training"</li>
+            <li>Clinically: most long-term conditions — the condition itself doesn't change, but capacity to do alternative work exists</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="sub-hd">Occupation Classes — Impact on Rating</div>
+    <div class="alert blue">
+      <span class="alert-icon">🔢</span>
+      <div><strong>Occupation class is the most critical IP rating factor</strong> — affects both probability AND duration of claim. Insurers group occupations into classes (e.g. Class 1 = professional/office; Class 4/5 = manual/hazardous). Manual workers have higher inception rates AND longer claim durations than office workers — doubly more expensive.</div>
+    </div>
+    <table class="tbl">
+      <tr><th>Factor</th><th>Impact on Claim Inception</th><th>Impact on Claim Duration</th><th>Net Effect on Cost</th></tr>
+      <tr><td>Manual (high-risk) occupation</td><td>Higher probability of physical injury/illness</td><td>Longer — physical jobs cannot be done with impairment; fewer alternative roles</td><td>Much higher premium loading</td></tr>
+      <tr><td>Professional / office occupation</td><td>Lower inception rate</td><td>Shorter — can often work partially; wide range of suited alternative occupations</td><td>Lowest premium class</td></tr>
+      <tr><td>Mental illness claims</td><td>Growing proportion — difficult to assess</td><td>Very long; hard to manage; subjective triggers</td><td>Increasing cost burden; major management challenge</td></tr>
+      <tr><td>Self-employed</td><td>Lower (economic incentive to work)</td><td>Shorter (financial pressure to return)</td><td>Lower; but moral hazard risk if business failing</td></tr>
+    </table>
+  </div>
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- TAB 4: VARIATIONS -->
+  <!-- ══════════════════════════════════════ -->
+  <div id="tab-variations" class="section-panel">
+    <div class="sec-header">
+      <div class="sec-icon" style="background:var(--amber-pale);">🏗</div>
+      <div>
+        <div class="sec-title">Product Variations</div>
+        <div class="sec-sub">Short-term vs long-term, Group IP design, MPPI, family extension</div>
+      </div>
+    </div>
+
+    <div class="sub-hd">Short-Term vs Long-Term IP</div>
+    <table class="tbl">
+      <tr><th>Dimension</th><th>Short-Term IP (A&amp;S)</th><th>Long-Term IP (Full IP)</th></tr>
+      <tr><td>Benefit duration</td><td>Maximum 1–2 years per claim (sometimes 5 years)</td><td>Potentially to retirement age (50, 55, 60, or 65)</td></tr>
+      <tr><td>Premium</td><td>Lower — limited tail risk</td><td>Higher — open-ended claim duration</td></tr>
+      <tr><td>Pricing complexity</td><td>Simpler — claim duration capped; standard frequency/severity model</td><td>More complex — inception rates AND recovery rates AND duration all critical</td></tr>
+      <tr><td>Admin complexity</td><td>Lower</td><td>High — recording claim starts, cessations, causes, durations</td></tr>
+      <tr><td>UW &amp; claims</td><td>Less stringent claims management needed</td><td>Intensive claims management essential — rehabilitation, monitoring, benefit limitation</td></tr>
+      <tr><td>Renewability</td><td>Often annually renewable (like PMI)</td><td>Long-term — guaranteed renewable subject to conditions</td></tr>
+      <tr><td>Distribution</td><td>Through bancassurance, aggregators, group channels</td><td>Through IFAs, specialist brokers, employee benefit consultants</td></tr>
+      <tr><td>MPPI variant</td><td>Often written on A&amp;S basis — covers mortgage payments during incapacity</td><td>Can also cover mortgage but more expensive</td></tr>
+    </table>
+
+    <div class="sub-hd">Group IP — Design Considerations (IAI Mar 2021 Q1ii)</div>
+    <div class="acc">
+      <div class="acc-hd" onclick="toggleAcc(this)">Policy Conditions for Group IP <span class="acc-arr">›</span></div>
+      <div class="acc-body">
+        <ul class="blist">
+          <li>Offer range of deferred periods (e.g. 1 month to 1 year) — short deferred period covers statutory sickness benefits risk; longer = lower premium</li>
+          <li>Require <strong>early notification</strong> of sickness absence (e.g. halfway through deferred period) — enables counselling/advice to prevent claim coming into payment</li>
+          <li>Own occupation definition initially appropriate — may switch to less generous after (e.g.) 2 years</li>
+          <li>Require regular medical certification and re-certification every 6–12 months</li>
+          <li>Enforce <strong>benefit limitation</strong> (X% of pre-disability income minus all continuing income, X &lt; 100%) — preserves return-to-work incentive</li>
+          <li>Pre-disability income averaged over defined period (e.g. 1 year) to include bonuses/irregular pay</li>
+          <li>Linked claims period (e.g. 3–6 months) — encourages return to work</li>
+          <li>Proportionate benefits on partial return to work or return in lower-paid role</li>
+          <li>Waiting period before new employees are eligible (e.g. 12 months) — limits anti-selection and admin costs</li>
+          <li>Compulsory scheme membership (or high participation rate) — reduces anti-selection</li>
+          <li>Stepped benefit structure possible (e.g. 100% salary for first 6 months, then 50%)</li>
+          <li>Benefit expiry age aligned with employer pension scheme retirement age</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="acc">
+      <div class="acc-hd" onclick="toggleAcc(this)">Group IP Underwriting <span class="acc-arr">›</span></div>
+      <div class="acc-body">
+        <ul class="blist">
+          <li><strong>Free Cover Limit (FCL)</strong>: set based on group size, proportion joining, industry, location — all employees below FCL accepted without individual UW</li>
+          <li>Higher FCL if membership compulsory or participation rate high</li>
+          <li>Employees above FCL: individually underwritten using standard individual procedures (medical info, tests, specialist reports)</li>
+          <li><strong>Actively at work</strong> criterion: all new members continuously at work with no absence for (e.g.) 3 months prior to joining — directly related to events causing claims</li>
+          <li>Specific exclusions may apply for chronic disease (e.g. severe asthma) — though broad exclusions may be unacceptable to employer</li>
+          <li>Consider time in dangerous environment, overseas work, driving, as underwriting risk factors</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="acc">
+      <div class="acc-hd" onclick="toggleAcc(this)">Group IP Claims Administration <span class="acc-arr">›</span></div>
+      <div class="acc-body">
+        <ul class="blist">
+          <li>Telephone helplines: advise on State benefits, policy conditions, and part-time working options</li>
+          <li>Counselling/advice service: ensure claimants aware of all help available; may train employer's HR department</li>
+          <li>Regular evidence of continuing incapacity required — minimises fraudulent claims</li>
+          <li>Regularly check other income sources to be offset against maximum claim entitlement</li>
+          <li>Claims payments made by employer via payroll (offset against premium due) — reduces insurer admin costs</li>
+          <li>Portfolio transfer risk: if insurer takes over existing group scheme from another insurer, may need to take on responsibility for existing as well as future liabilities</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="sub-hd">Workers vs Managers Design Differences (IAI Mar 2021 Q1iii)</div>
+    <div class="cards">
+      <div class="card">
+        <div class="card-hd blue">💼 Managers' Scheme</div>
+        <div class="card-bd">
+          <ul class="blist">
+            <li>Benefits typically higher — employer values retention of senior staff more</li>
+            <li>Wide income variation — free cover limit more impactful; more individual UW cases</li>
+            <li>Own occupation definition appropriate — professional roles; wide suited alternatives available</li>
+            <li>More comprehensive ill-health retirement benefits likely to be available from pension scheme</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-hd teal">🔨 Workers' Scheme (Differences)</div>
+        <div class="card-bd">
+          <ul class="blist">
+            <li>Premiums higher — manual workers have higher inception rates AND longer claim durations</li>
+            <li>Less income variation — FCL less important (unless overtime/bonuses included)</li>
+            <li>Slightly incapacity triggers full claim (physical jobs) — possibly less restrictive incapacity definition needed</li>
+            <li>After 24 months: switch to inability to perform "any suited occupation" — retraining to less physical work may be appropriate</li>
+            <li>Different employer sick pay terms — different range of deferred periods needed</li>
+            <li>Claims smaller but more frequent — relatively more expensive per £ to administer</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="sub-hd">Family Member Extension of Group IP (IAI Mar 2021 Q1iv)</div>
+    <div class="acc">
+      <div class="acc-hd" onclick="toggleAcc(this)">Family Extension — Design, UW, Pros &amp; Cons <span class="acc-arr">›</span></div>
+      <div class="acc-body">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:12px;">
+          <div>
+            <div class="card-hd blue" style="border-radius:6px;padding:8px 12px;margin-bottom:8px;">Design Challenges</div>
+            <ul class="blist">
+              <li>Not all family members in employment — occupational definition problematic; ADL-based or personal capability assessment needed</li>
+              <li>Benefit often set as % of employee's salary (e.g. 50% of employee benefit) — links benefit to family financial impact</li>
+              <li>Or flat rate benefit (e.g. ₹1,00,000 p.a.) — simpler but less precise</li>
+              <li>Spouses may earn other income — must be offset against maximum entitlement</li>
+              <li>Long deferred period (6–12 months) reduces admin cost and compensates for limited underwriting</li>
+            </ul>
+          </div>
+          <div>
+            <div class="card-hd teal" style="border-radius:6px;padding:8px 12px;margin-bottom:8px;">Underwriting &amp; Pricing</div>
+            <ul class="blist">
+              <li>If near-universal coverage: additional premium = simple % loading on main premium (based on average family size)</li>
+              <li>Voluntary election by employees → adverse selection (large families more likely to join)</li>
+              <li>Medical underwriting of family members possible but costly relative to savings</li>
+              <li>Alternative: moratorium on pre-existing condition claims (2 years free of symptoms)</li>
+            </ul>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+          <div>
+            <div class="card-hd amber" style="border-radius:6px;padding:8px 12px;margin-bottom:8px;">Advantages for Insurer</div>
+            <ul class="blist">
+              <li>Increased premium income → greater profits</li>
+              <li>Novelty in market — brokers more likely to consider it in reviews</li>
+              <li>Perceived value much greater than additional premium → strong selling point</li>
+            </ul>
+          </div>
+          <div>
+            <div class="card-hd navy" style="border-radius:6px;padding:8px 12px;margin-bottom:8px;">Disadvantages for Insurer</div>
+            <ul class="blist">
+              <li>Data collection for underwriting more complex — employer won't have family member data</li>
+              <li>More expensive to administer — personal capability assessments vs occupational criteria</li>
+              <li>Very limited statistical data to cost the additional risk</li>
+              <li>Premium collection more complex unless flat % addition used</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- TAB 5: PRICING -->
+  <!-- ══════════════════════════════════════ -->
+  <div id="tab-pricing" class="section-panel">
+    <div class="sec-header">
+      <div class="sec-icon" style="background:var(--amber-pale);">💰</div>
+      <div>
+        <div class="sec-title">Pricing — IP</div>
+        <div class="sec-sub">Rating factors, inception/annuity approach, multi-state model, premium review</div>
+      </div>
+    </div>
+
+    <div class="sub-hd">Key Rating Factors</div>
+    <table class="tbl">
+      <tr><th>Rating Factor</th><th>Why It Matters</th><th>Country A vs B Note</th></tr>
+      <tr><td>Age at entry</td><td>Older = higher inception rates; claim duration changes with age</td><td>Used in both; main driver</td></tr>
+      <tr><td>Gender</td><td>Different morbidity patterns; females historically higher incidence (mental health, musculoskeletal)</td><td>Used where legislation permits</td></tr>
+      <tr><td>Occupation class</td><td>Single most critical factor — affects both inception probability AND claim duration. Manual = much higher.</td><td>Full classification in mature markets; simplified in new markets</td></tr>
+      <tr><td>Deferred period</td><td>Shorter deferred period = higher inception rate (captures more claims); longer = lower rate</td><td>Standard factor in all markets</td></tr>
+      <tr><td>Incapacity definition</td><td>Own occ &gt; suited occ &gt; any occ in cost; definition drives claim frequency and duration</td><td>New markets may not offer own-occ initially</td></tr>
+      <tr><td>Replacement ratio / benefit level</td><td>Higher ratio = lower return-to-work incentive = higher expected claim cost per inception</td><td>Higher ratios may be restricted in new markets</td></tr>
+      <tr><td>Smoker / non-smoker status</td><td>Smokers have higher morbidity and mortality</td><td>Used in mature markets where data permits</td></tr>
+      <tr><td>Geographic region</td><td>Significant experience variation; some insurers use as rating factor</td><td>India: zone-based variations expected</td></tr>
+      <tr><td>Policy term / expiry age</td><td>Longer term = more years of exposure to increasing age-specific rates</td><td>Standard</td></tr>
+    </table>
+
+    <div class="sub-hd">Pricing Approach — Inception / Disabled Life Annuity</div>
+    <div class="formula">
+      <div class="formula-label">IP Pricing Formula — Inception / Disabled Life Annuity Approach (SP1 Ch17)</div>
+      <div class="formula-expr">PV(Claims) = Σₜ  p(survive to t+½) × v^(t+½) × iₓᵈ × äᵢₗ</div>
+      <div class="formula-notes">
+        iₓᵈ = Claim inception rate: probability that a claim becomes payable to life aged x, having become sick d weeks earlier and remained sick through deferred period<br>
+        Note: Sickness inception ≠ Claim inception — sickness inception = first unable to work; claim inception = end of deferred period when benefit commences<br>
+        Claim inception rates derived from sickness inception rates × probability of remaining sick through deferred period<br>
+        äᵢₗ = Disabled Life Annuity: PV of benefit payments to a life currently a claimant (allows for recovery and death)<br>
+        This approach ignores recoveries leading back to further sickness — a simplification of the full multi-state model
+      </div>
+    </div>
+
+    <div class="sub-hd">Multi-State Modelling (SP1 Ch17)</div>
+    <div class="acc">
+      <div class="acc-hd" onclick="toggleAcc(this)">States, Transitions, and Modelling Complexities <span class="acc-arr">›</span></div>
+      <div class="acc-body">
+        <div class="cards" style="margin-bottom:10px;">
+          <div class="card">
+            <div class="card-hd blue">5 Model States</div>
+            <div class="card-bd">
+              <ul class="blist">
+                <li><strong>State 1:</strong> Healthy premium payer</li>
+                <li><strong>State 2:</strong> Sick within deferred period (no benefit yet)</li>
+                <li><strong>State 3:</strong> Claimant (benefit in payment)</li>
+                <li><strong>State 4:</strong> Recovered — returned to healthy premium payer</li>
+                <li><strong>State 5:</strong> Dead</li>
+              </ul>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-hd teal">Transition Rates Required</div>
+            <div class="card-bd">
+              <ul class="blist">
+                <li>Sickness inception rate (1→2)</li>
+                <li>Recovery during deferred period (2→1)</li>
+                <li>Claim inception rate (2→3)</li>
+                <li>Recovery from claim (3→4/1)</li>
+                <li>Death rates from both healthy and sick states</li>
+                <li>Lapse rate from healthy state</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <ul class="blist">
+          <li><strong>Recovery rates</strong> must vary by duration of claim (reduce as duration increases) AND by cause of incapacity</li>
+          <li>Sales volumes hard to estimate: depend on economic/political factors; IP markets typically under-insured</li>
+          <li>Data limitations: published IP inception tables have limited credibility; US statistics plentiful but limited relevance due to different UW, wordings, claims management</li>
+          <li>Economic morale: recession → prolonged claims; self-employed less motivated to return to work</li>
+          <li>Government welfare provision: high State benefits reduce IP demand AND return-to-work incentive</li>
+          <li>Tax: premium taxes reduce sales; tax relief increases sales</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="sub-hd">Premium Review Process (IAI Dec 2022 Q2vii)</div>
+    <div class="acc">
+      <div class="acc-hd" onclick="toggleAcc(this)">Step-by-Step Premium Review — Full Process <span class="acc-arr">›</span></div>
+      <div class="acc-body">
+        <div class="eq-sec">Step 1 — Experience Investigation</div>
+        <ul class="blist">
+          <li>Collect morbidity experience since last review; split at least by: gender, age group, occupational class, deferred period, smoker status, region, income replacement ratio, type of incapacity definition</li>
+          <li>Study claim <strong>inception rates and termination rates separately</strong> — necessary actions differ depending on which is the problem</li>
+          <li>Termination rates: split by reason (death or recovery) and by claim duration</li>
+          <li>Mortality experience: also an important component</li>
+          <li>Expense analysis: actual vs expected, split by initial/renewal/claims expenses, adjusted for inflation</li>
+          <li>Lapse investigation: by duration in force, distribution channel, gender, age, benefit level</li>
+          <li>Exposure calculation: ensure lives insured in investigation period only; adjust for withdrawals (lapse, cancellation) on life-by-life basis</li>
+          <li>A vs E: actual vs expected by issue year (UW implications) and calendar year (general claims environment)</li>
+        </ul>
+        <div class="eq-sec">Step 2 — Assumption Revision</div>
+        <ul class="blist">
+          <li>Revise best estimate assumptions based on experience, allowing for: credibility of own data; future trends in inception/termination rates</li>
+          <li>Risk discount rate: based on required profit margin at original pricing; risk-free rate consistent with current economic conditions</li>
+          <li>Investment return assumption: consistent with risk discount rate and expense inflation</li>
+        </ul>
+        <div class="eq-sec">Step 3 — Profit Testing</div>
+        <ul class="blist">
+          <li>Project cashflows forward from review date to end of policy term; discount at risk discount rate</li>
+          <li>Compare profitability criterion under latest assumptions with original pricing criterion</li>
+          <li>Decide if rates should be adjusted — consider reducing rates if excess profits expected</li>
+        </ul>
+        <div class="eq-sec">Step 4 — Communication &amp; Behavioural Risk</div>
+        <ul class="blist">
+          <li>Give policyholders sufficient notice to decide whether to continue cover</li>
+          <li>Rate increase is <strong>last resort</strong> — first explore UW/claims/process improvements</li>
+          <li>Weight risk of <strong>selective withdrawal</strong> — healthier lives more likely to lapse; sicker pool remains</li>
+          <li>Monitor impact on volume — fewer policies = higher per-policy overheads</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="sub-hd">Investment Policy for IP Liabilities (IAI May 2025 Q3d)</div>
+    <div class="cards">
+      <div class="card">
+        <div class="card-hd blue">📈 Level / Fixed Benefits → Fixed Interest Assets</div>
+        <div class="card-bd">
+          <ul class="blist">
+            <li>Benefits guaranteed in money terms → match with fixed-interest bonds and cash</li>
+            <li>Assets in same currency as liabilities</li>
+            <li>Short-dated gilts and cash suitable for backing capital requirements — limits SCR market risk</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-hd teal">📊 Escalating Benefits → Index-Linked Assets</div>
+        <div class="card-bd">
+          <ul class="blist">
+            <li>Benefits linked to salary inflation (NAEI) → index-linked gilts best match</li>
+            <li>Alternatively: equities or property (expected real return) — but higher volatility; requires large free surplus and investment expertise</li>
+            <li>Growing book: incoming premiums can be used to pay claims (liquidity less critical) — but future premium income not guaranteed</li>
+            <li>Highly variable claims → retain higher proportion of liquid assets</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- TAB 6: UW & CLAIMS -->
+  <!-- ══════════════════════════════════════ -->
+  <div id="tab-uw-claims" class="section-panel">
+    <div class="sec-header">
+      <div class="sec-icon" style="background:var(--teal-pale);">🔍</div>
+      <div>
+        <div class="sec-title">Underwriting &amp; Claims Management</div>
+        <div class="sec-sub">Individual UW, group free cover, benefit limitation, rehabilitation, monitoring</div>
+      </div>
+    </div>
+
+    <div class="sub-hd">Underwriting Approach — Individual IP (IFoA Apr 2024 Q1)</div>
+    <div class="alert teal">
+      <span class="alert-icon">📌</span>
+      <div><strong>IP is more complex to underwrite than other health and care products.</strong> Back pain and stress-related incapacity are IP-specific risks not relevant for CI or PMI. The insurer must assess the likelihood that a person will take prolonged time off work — not just current health status.</div>
+    </div>
+    <div class="cards">
+      <div class="card">
+        <div class="card-hd blue">✅ What Good IP Underwriting Achieves</div>
+        <div class="card-bd">
+          <ul class="blist">
+            <li>Identifies applicants with substantially higher risk of prolonged incapacity than assumed in standard rates</li>
+            <li>Classifies applicants into broadly homogeneous risk groups → appropriate pricing</li>
+            <li>Reduces anti-selection — thorough UW upfront limits adverse selection spiral</li>
+            <li>Fewer disputes at claims stage — conditions already assessed at inception</li>
+            <li>More accurate case reserving for individual policies</li>
+            <li>Allows more nuanced decisions (rating, exclusion, decline) — minimises flat declines</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-hd amber">⚠️ UW Challenges Specific to IP</div>
+        <div class="card-bd">
+          <ul class="blist">
+            <li>Many conditions that keep people off work (back pain, stress) are not clinically measurable at UW stage</li>
+            <li>Subjective incapacity definitions create moral hazard that medical UW cannot fully control</li>
+            <li>Automated UW tools may not capture IP-specific factors adequately</li>
+            <li>Labour-intensive process → expensive; prone to human error; can take many weeks for complex cases</li>
+            <li>Applicant may need to disclose sensitive personal health/lifestyle information</li>
+            <li>Occupation class assessment is critical — must verify actual job duties, not just title</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="sub-hd">Three Key Claims Management Components (SA1 Ch7)</div>
+    <div class="cards">
+      <div class="card">
+        <div class="card-hd blue">1️⃣ Benefit Limitation</div>
+        <div class="card-bd">
+          <ul class="blist">
+            <li>Required so claimant retains <strong>financial incentive to return to work</strong></li>
+            <li>Formula: X% of gross pre-disability income minus all continuing income (X &lt; 100%)</li>
+            <li>Continuing income includes: employer sick pay, State benefits, other IP policies, investment income</li>
+            <li>Monetary maxima; percentage limitations; overall maximum cap</li>
+            <li>Stringent limits for high earners</li>
+            <li>Difficult to enforce — claimants may earn undeclared informal income</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-hd teal">2️⃣ Proportionate / Partial Benefit</div>
+        <div class="card-bd">
+          <ul class="blist">
+            <li>Payable when claimant returns to <strong>original occupation in reduced capacity</strong> or lower-paid role</li>
+            <li>Calculated same way as benefit limitation — preserves return-to-work incentive</li>
+            <li>Enables "stepping down" from full claim without abrupt income loss</li>
+            <li>Benefits employer (gets worker back part-time) and insured (supports recovery income)</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-hd amber">3️⃣ Rehabilitation</div>
+        <div class="card-bd">
+          <ul class="blist">
+            <li>Counselling — positive attitude towards return, awareness of alternatives to full employment</li>
+            <li>Rehabilitation via counselling yields <strong>significant cost reductions</strong></li>
+            <li>Physiotherapy, vocational retraining, psychological support — especially for mental health claims</li>
+            <li>Early notification clause enables intervention <em>before</em> benefit commences</li>
+            <li>Reducing claim duration is as valuable as reducing inception rate</li>
+            <li>Most cost-effective claims management tool for IP</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="sub-hd">Monitoring Experience (IAI May 2025 Q3b, Q3c)</div>
+    <div class="acc">
+      <div class="acc-hd" onclick="toggleAcc(this)">Why Monitor — Key Reasons <span class="acc-arr">›</span></div>
+      <div class="acc-body">
+        <ul class="blist">
+          <li>Identify divergences in actual experience from pricing assumptions (actuarial control cycle)</li>
+          <li>Assess whether contract is proving as profitable as expected — provides shareholders acceptable return</li>
+          <li>On in-force guaranteed-rate IP: limited scope to change pricing; can improve claims underwriting</li>
+          <li>On reviewable-rate IP: use results to change premiums or benefits — subject to TCF and competitive constraints</li>
+          <li>Revise assumptions in embedded value calculations — recognise profits/losses appropriately</li>
+          <li>Use results to re-price new business where necessary</li>
+          <li>Monitor business volumes and mix — cross-subsidies between policies are likely; mix monitoring essential</li>
+          <li>Check appropriateness of supervisory valuation assumptions for regulatory reporting</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="acc">
+      <div class="acc-hd" onclick="toggleAcc(this)">Monitoring Methods for IP Business <span class="acc-arr">›</span></div>
+      <div class="acc-body">
+        <ul class="blist">
+          <li><strong>Analysis of surplus</strong> — identifies items of experience drifting from assumptions</li>
+          <li><strong>Model office approach</strong> — alternative to surplus analysis</li>
+          <li><strong>Morbidity investigation</strong> (3–5 year period): split by gender, age group, occupation class, deferred period, smoker status, region</li>
+          <li>Study <strong>inception AND termination rates separately</strong> — action differs depending on which is problematic</li>
+          <li>Termination data: split by reason (death vs recovery) and duration from claim commencement</li>
+          <li>Large volumes → more cells in analysis while retaining credibility</li>
+          <li><strong>Expense investigation</strong>: actual vs expected by initial/renewal/termination/claims; allow for inflation since last analysis; exclude one-off expenses</li>
+          <li><strong>Lapse investigation</strong>: by duration in force, distribution channel, gender, age, benefit level, payment frequency — volatile; linked to economic conditions</li>
+          <li>Monitor by individual salesperson/broker — identify problematic sales outlets</li>
+          <li>Monitor underwriting and reinsurance limits — still appropriate for developing portfolio?</li>
+          <li>Monitor economic factors and competition — external influences on future experience</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="sub-hd">Investigating a High Loss Ratio (IFoA Sep 2024 Q3i, Q3ii)</div>
+    <div class="acc">
+      <div class="acc-hd" onclick="toggleAcc(this)">Possible Causes and Actions to Improve Loss Ratio <span class="acc-arr">›</span></div>
+      <div class="acc-body">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+          <div>
+            <div class="card-hd blue" style="border-radius:6px;padding:8px 12px;margin-bottom:8px;">Investigate These Causes</div>
+            <ul class="blist">
+              <li>Higher claim inception rates; lower recovery rates; higher claim amounts; lower premium income</li>
+              <li>Changes in business mix: age, gender, smoker, occupation, scheme size</li>
+              <li>Product terms: incapacity definitions, deferred periods, benefit limits, replacement ratios</li>
+              <li>Pricing discounts to win market share → lower premium income</li>
+              <li>Decline in new business → average book age rising → higher risk pool</li>
+              <li>Economic recession → more claims, worse recovery rates</li>
+              <li>Selective lapses → healthier lives leaving</li>
+              <li>Mental health / stress claims (lower recovery rates, harder to manage)</li>
+              <li>Anti-selective early claims or abnormal large group schemes</li>
+              <li>Ex-gratia claims, legal challenges, fines</li>
+            </ul>
+          </div>
+          <div>
+            <div class="card-hd teal" style="border-radius:6px;padding:8px 12px;margin-bottom:8px;">Actions to Improve Loss Ratio</div>
+            <ul class="blist">
+              <li>Increase premium rates; introduce more granular rating</li>
+              <li>Reduce maximum replacement ratio</li>
+              <li>Increase deferred periods; strengthen waiting periods</li>
+              <li>Introduce partial / rehabilitation benefits if not present</li>
+              <li>Tighten underwriting: limit high-risk occupations; increase health UW; reduce group FCL</li>
+              <li>Review disability definitions — ensure they are clear to limit disputes</li>
+              <li>Tighten claims assessment practices; require additional documentation / second opinions</li>
+              <li>Introduce rehabilitation services to reduce claim duration</li>
+              <li>Review and tighten policy wording</li>
+              <li>Improve fraud detection processes</li>
+              <li>Consult reinsurer for advice and data</li>
+              <li>Introduce loyalty benefits to reduce selective lapses</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- TAB 7: RISKS -->
+  <!-- ══════════════════════════════════════ -->
+  <div id="tab-risks" class="section-panel">
+    <div class="sec-header">
+      <div class="sec-icon" style="background:var(--amber-pale);">⚠️</div>
+      <div>
+        <div class="sec-title">Key Risks in IP</div>
+        <div class="sec-sub">Moral hazard, anti-selection, mental health, external factors, propensity to claim</div>
+      </div>
+    </div>
+
+    <div class="sub-hd">Moral Hazard — The Central IP Risk</div>
+    <div class="alert blue">
+      <span class="alert-icon">🧠</span>
+      <div><strong>Moral hazard is unique in IP</strong> compared to CI or PMI. IP claimants may prolong claims because they receive replacement income. This cannot be eliminated — it can only be controlled through product design, claims management, and benefit limitation. The examiner expects you to address this for every IP design question.</div>
+    </div>
+    <div class="cards">
+      <div class="card">
+        <div class="card-hd blue">📊 Moral Hazard Drivers</div>
+        <div class="card-bd">
+          <ul class="blist">
+            <li>Replacement ratio ≥ 100% → zero financial incentive to return to work</li>
+            <li>Long claim duration: as claim extends, psychological barriers to return increase</li>
+            <li>Mental health and stress conditions: subjective; hard to assess; long duration; increasing proportion of claims</li>
+            <li>Self-employed: economic incentive to claim if business performing poorly</li>
+            <li>Recession: unemployment risk encourages prolonged IP claims as alternative to redundancy</li>
+            <li>High State benefits: reduce return-to-work incentive (State alternative to IP claim)</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-hd teal">🛡️ Moral Hazard Controls</div>
+        <div class="card-bd">
+          <ul class="blist">
+            <li>Benefit capped at X% of pre-disability income (X &lt; 100%)</li>
+            <li>Offset all continuing income sources against maximum benefit</li>
+            <li>Own occupation → suited/any occupation after 2 years (reduces incentive for prolonged claims)</li>
+            <li>Proportionate / rehabilitation benefit — incentivises partial return</li>
+            <li>Counselling and rehabilitation services — address psychological barriers</li>
+            <li>Regular medical certification and re-certification</li>
+            <li>Target occupations with strong work ethic in marketing / underwriting</li>
+            <li>Claims monitoring — regular check on other income sources</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="sub-hd">Anti-Selection &amp; Selective Lapsing</div>
+    <div class="cards">
+      <div class="card">
+        <div class="card-hd blue">🎯 Anti-Selection at Inception</div>
+        <div class="card-bd">
+          <ul class="blist">
+            <li>Unhealthy lives self-select into IP — moral hazard controls AND underwriting required</li>
+            <li>Insufficient UW questions → adverse risk pool builds progressively</li>
+            <li>If market tightens UW and one insurer does not, that insurer attracts all the adverse risks</li>
+            <li>Mental health conditions: hard to detect at UW; significant anti-selection risk</li>
+            <li>Early claims (within 1–2 years of inception): indicator of anti-selection; investigate separately</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-hd amber">📉 Selective Lapsing Risk</div>
+        <div class="card-bd">
+          <ul class="blist">
+            <li>On premium review / rate increase: healthier lives more likely to lapse (re-entry to market at lower rate)</li>
+            <li>Sicker lives remain → deteriorating risk pool → further premium increases → spiral</li>
+            <li>Lapse and re-entry cycle: healthy lives lapse and take new policy at lower premium in competitive market; only healthy lives can do this (others can't pass new UW)</li>
+            <li>Impact: per-policy expense loading rises; remaining risk pool worsens</li>
+            <li>Mitigation: loyalty benefits; carefully calibrated rate increases; TCF communication</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="sub-hd">External Risk Factors</div>
+    <table class="tbl">
+      <tr><th>External Factor</th><th>Impact on IP Claims</th><th>Insurer Response</th></tr>
+      <tr><td>Economic recession</td><td>Higher inception rates (financial stress); longer claims (fear of unemployment on recovery); self-employed claim instead of closing business</td><td>Monitor economic indicators; scenario test; consider reviewing rates; tighten claims management</td></tr>
+      <tr><td>High unemployment</td><td>Voluntary lapsing by unemployed; claims if unemployed and ill simultaneously; selection of poorest risks remaining</td><td>Understand policy conditions re. unemployment exclusions; monitor lapse rates</td></tr>
+      <tr><td>Inflation (high)</td><td>Escalating benefits: claim costs rise in real terms; expenses inflate; replacement ratio risk if benefits not fully indexed</td><td>Review escalation mechanisms; index-linked assets; reviewable premiums preferred</td></tr>
+      <tr><td>State benefit changes</td><td>Reduction in State disability benefits → demand increase but claims costs may rise; increase in State benefits → demand falls</td><td>Monitor welfare provision closely; adjust pricing for net IP need; product design review</td></tr>
+      <tr><td>Medical advances</td><td>New treatments may accelerate recovery (positive) or extend survival with chronic condition (mixed)</td><td>Regular pricing basis review; separate trend factors by cause</td></tr>
+      <tr><td>Mental health trends</td><td>Increasing proportion of claims; long duration; subjective triggers; hard to manage</td><td>Specialist rehabilitation; specific claim management protocols; UW review for mental health history</td></tr>
+    </table>
+
+    <div class="sub-hd">Factors Influencing Individual Propensity to Claim (IAI Mar 2018 Q2vi)</div>
+    <div class="cards">
+      <div class="card">
+        <div class="card-hd blue">👤 Individual Factors</div>
+        <div class="card-bd">
+          <ul class="blist">
+            <li>Current state of health — healthy individuals likely to claim only for infectious diseases or accidents</li>
+            <li>Personal medical history — prior chronic disease history increases propensity</li>
+            <li>Family history — diseases with genetic correlation (cancer, diabetes) increase risk</li>
+            <li>Age — older individuals more likely to claim; age increases both inception and duration</li>
+            <li>Gender — different morbidity patterns; females higher incidence of some conditions</li>
+            <li>Smoking — smokers more likely to develop health conditions earlier</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-hd teal">🌍 External &amp; Behavioural Factors</div>
+        <div class="card-bd">
+          <ul class="blist">
+            <li>Financial circumstances — financial stress increases propensity (claim as income replacement)</li>
+            <li>Occupation — manual/hazardous workers much more likely to claim than sedentary workers</li>
+            <li>Leisure/hobby activities — risky hobbies (mountaineering, scuba diving, motorsport) increase risk</li>
+            <li>Area of residence / access to healthcare — urban areas: better access → more diagnosis → more claims</li>
+            <li>Replacement ratio — higher ratio reduces incentive to return to work (duration risk)</li>
+            <li>Definition of incapacity — own occupation: easier to maintain claim; any occupation: very hard</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="sub-hd">Risk of Entering New Market with IP (IAI Dec 2022 Q2iv)</div>
+    <div class="acc">
+      <div class="acc-hd" onclick="toggleAcc(this)">Key Considerations Before Launching IP in a New Market <span class="acc-arr">›</span></div>
+      <div class="acc-body">
+        <div class="eq-sec">Demand &amp; Competition</div>
+        <ul class="blist">
+          <li>Sufficient demand to achieve required volumes? Conduct surveys to assess customer awareness and affordability</li>
+          <li>Any personal tax incentives for IP? Consumer confidence in brand and product?</li>
+          <li>Why haven't other insurers entered? If existing insurers not profitable, why should the new entrant be?</li>
+        </ul>
+        <div class="eq-sec">Data &amp; Regulatory</div>
+        <ul class="blist">
+          <li>Availability of relevant data for pricing: disability incidence, termination rates, split by age, gender, occupation, income</li>
+          <li>Licensing requirements; capital/solvency requirements; expense overruns/new business strain</li>
+          <li>Restrictions on product design, rating factors, and investment</li>
+          <li>How evolved are insurance ombudsman and legal dispute systems?</li>
+        </ul>
+        <div class="eq-sec">Distribution &amp; Infrastructure</div>
+        <ul class="blist">
+          <li>Availability of qualified salespeople; distribution channel options (bancassurance, direct, IFAs)</li>
+          <li>Availability of service partners (disability rehabilitation, counselling services)</li>
+          <li>Healthcare infrastructure: hospitals and doctors for medical reports and UW referrals</li>
+          <li>Willingness of reinsurers to support the business</li>
+        </ul>
+        <div class="eq-sec">Profitability &amp; Other</div>
+        <ul class="blist">
+          <li>Demographics and demand projections; regulatory limitations on profitability; repatriation of profits; corporate tax</li>
+          <li>Cultural impacts on propensity to claim and lapse</li>
+          <li>Potential for fraud</li>
+          <li>Would acquiring an existing local insurer be a better alternative?</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- TAB 8: FLASHCARDS -->
+  <!-- ══════════════════════════════════════ -->
+  <div id="tab-flashcards" class="section-panel">
+    <div class="sec-header">
+      <div class="sec-icon" style="background:var(--blue-pale);">🃏</div>
+      <div>
+        <div class="sec-title">Flashcards</div>
+        <div class="sec-sub">Click each card to flip — question on front, answer on back</div>
+      </div>
+    </div>
+    <div id="fc-container"></div>
+  </div>
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- TAB 9: IAI EXAM Qs -->
+  <!-- ══════════════════════════════════════ -->
+  <div id="tab-iai-qs" class="section-panel">
+    <div class="sec-header">
+      <div class="sec-icon" style="background:var(--teal-pale);">📝</div>
+      <div>
+        <div class="sec-title">IAI Exam Questions — IP</div>
+        <div class="sec-sub">Model answers from IAI sittings 2017–2025 · Click to expand</div>
+      </div>
+    </div>
+    <div id="iai-container"></div>
+  </div>
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- TAB 10: IFoA EXAM Qs -->
+  <!-- ══════════════════════════════════════ -->
+  <div id="tab-ifoa-qs" class="section-panel">
+    <div class="sec-header">
+      <div class="sec-icon" style="background:var(--amber-pale);">🎓</div>
+      <div>
+        <div class="sec-title">IFoA Exam Questions — IP</div>
+        <div class="sec-sub">Model answers from IFoA SA1 sittings 2019–2025 · Click to expand</div>
+      </div>
+    </div>
+    <div id="ifoa-container"></div>
+  </div>
+
+  <!-- ══════════════════════════════════════ -->
+  <!-- TAB 11: MNEMONICS -->
+  <!-- ══════════════════════════════════════ -->
+  <div id="tab-mnemonics" class="section-panel">
+    <div class="sec-header">
+      <div class="sec-icon" style="background:var(--blue-pale);">🧠</div>
+      <div>
+        <div class="sec-title">Mnemonics &amp; Memory Aids</div>
+        <div class="sec-sub">Structured recall frameworks for IP exam questions</div>
+      </div>
+    </div>
+
+    <div class="mnemonic">
+      <div class="mn-title">DRIVE — Core IP Benefit Design Elements</div>
+      <div class="mn-items">
+        <div class="mn-item"><div class="mn-letter">D</div><div class="mn-word"><strong>Deferred Period</strong>links with employer sick pay; shorter = higher inception rate; major rating factor</div></div>
+        <div class="mn-item"><div class="mn-letter">R</div><div class="mn-word"><strong>Replacement Ratio</strong>must stay &lt;100% net of tax; 1% rise ≈ 1% extra claim cost; core moral hazard control</div></div>
+        <div class="mn-item"><div class="mn-letter">I</div><div class="mn-word"><strong>Incapacity Definition</strong>own occ → suited occ → any occ; changing definition after 2 years reduces long-term moral hazard</div></div>
+        <div class="mn-item"><div class="mn-letter">V</div><div class="mn-word"><strong>Variations</strong>short-term A&amp;S, MPPI, group IP, unit-linked IP; each has different UW/claims complexity</div></div>
+        <div class="mn-item"><div class="mn-letter">E</div><div class="mn-word"><strong>Escalation</strong>benefits linked to RPI/NAEI; protects real value; also escalates premium; subject to max cap</div></div>
+      </div>
+    </div>
+
+    <div class="mnemonic">
+      <div class="mn-title">MORPH — Moral Hazard Controls in IP</div>
+      <div class="mn-items">
+        <div class="mn-item"><div class="mn-letter">M</div><div class="mn-word"><strong>Maximum benefit cap</strong>X% of pre-disability income minus all continuing income; monetary maximum for high earners</div></div>
+        <div class="mn-item"><div class="mn-letter">O</div><div class="mn-word"><strong>Own → Any occ switch</strong>definition becomes more restrictive after (e.g.) 2 years; reduces long-term claim incentive</div></div>
+        <div class="mn-item"><div class="mn-letter">R</div><div class="mn-word"><strong>Rehabilitation</strong>counselling; vocational retraining; proportionate benefit on partial return — reduces claim duration</div></div>
+        <div class="mn-item"><div class="mn-letter">P</div><div class="mn-word"><strong>Proportionate benefit</strong>part-time return or lower-paid role partially compensated; avoids cliff-edge lossof benefit</div></div>
+        <div class="mn-item"><div class="mn-letter">H</div><div class="mn-word"><strong>Health certification</strong>regular medical re-certification; insurer-checked (not employer); claims monitoring; income verification</div></div>
+      </div>
+    </div>
+
+    <div class="mnemonic">
+      <div class="mn-title">FARM — Key IP Rating Factors</div>
+      <div class="mn-items">
+        <div class="mn-item"><div class="mn-letter">F</div><div class="mn-word"><strong>Female / gender</strong>where legislation permits; different morbidity patterns; growing markets often restrict this</div></div>
+        <div class="mn-item"><div class="mn-letter">A</div><div class="mn-word"><strong>Age at entry</strong>inception rates rise with age; claim duration patterns also age-dependent; main driver</div></div>
+        <div class="mn-item"><div class="mn-letter">R</div><div class="mn-word"><strong>Ratio (replacement) &amp; Region</strong>higher ratio = higher cost; geographic/zone variation significant in India</div></div>
+        <div class="mn-item"><div class="mn-letter">M</div><div class="mn-word"><strong>Manual / occupation class</strong>THE single most critical IP rating factor; affects both inception probability AND duration of claim</div></div>
+      </div>
+    </div>
+
+    <div class="mnemonic">
+      <div class="mn-title">CLAIM LENS — Loss Ratio Investigation Framework</div>
+      <div class="mn-items">
+        <div class="mn-item"><div class="mn-letter">C</div><div class="mn-word"><strong>Cause of claims</strong>mix shift to mental health / stress; long duration causes; change in claim type</div></div>
+        <div class="mn-item"><div class="mn-letter">L</div><div class="mn-word"><strong>Lapses</strong>selective lapsing → healthier lives leaving; check by duration, channel, benefit level</div></div>
+        <div class="mn-item"><div class="mn-letter">A</div><div class="mn-word"><strong>Anti-selection / early claims</strong>early claims by notification date; abnormal large group schemes; new business mix changes</div></div>
+        <div class="mn-item"><div class="mn-letter">I</div><div class="mn-word"><strong>Inception &amp; recovery rates</strong>study separately — actions differ; inception rise vs recovery fall have different solutions</div></div>
+        <div class="mn-item"><div class="mn-letter">M</div><div class="mn-word"><strong>Mix (business)</strong>demographic shift; cross-subsidy breakdown; occupation class drift; scheme size changes</div></div>
+      </div>
+    </div>
+
+    <div class="sub-hd">Key Terms Reference</div>
+    <div id="terms-container" class="terms-grid"></div>
+  </div>
+
+</div><!-- end .main -->
+
+<script>
+// ═══════════════════════════════════════
+// DATA
+// ═══════════════════════════════════════
+
+const FLASHCARDS = [
+  { q: "What is the definition of Income Protection Insurance and its core aim?", a: "Provides regular income (temporary annuity) during periods of incapacity (inability to work due to illness/injury). Aim: replace part of income lost while unable to work. Benefit continues until policyholder recovers, dies, or policy expires. Multiple claim periods possible without policy ceasing." },
+  { q: "Why was Permanent Health Insurance (PHI) renamed to Income Protection?", a: "To better reflect the coverage and attract more customers. Also to avoid confusion with Private Medical Insurance (PMI) — PHI/IP pays a regular income, not medical treatment costs. PHI name had emphasised the insurer MUST pay valid claims as long as conditions are met." },
+  { q: "What is the Replacement Ratio and why does it matter for IP pricing?", a: "Replacement Ratio = post-claim net income ÷ pre-claim net income. Must stay below 100% to preserve financial incentive to return to work. Insurers typically limit benefit to 50–75% of gross pre-claim earnings. A 1% rise in replacement ratio implies approximately 1% higher expected claim cost. Central moral hazard control mechanism." },
+  { q: "What is the Deferred Period in IP and what purpose does it serve?", a: "Period of sickness before benefit payments begin (common: 4, 13, 26, 52 weeks). Integrates with employer sick pay. Avoids short-term/trivial claims. Reduces moral hazard and lowers premium. Shorter deferred period = higher claim inception rate. Major rating factor. Up to 2 years possible." },
+  { q: "Explain Linked Claims and why they are included in IP policies.", a: "Deferred period is waived if sickness recurs from the same cause within (e.g.) 26–52 weeks of returning to work. Purpose: encourages return to work — claimant doesn't fear losing the deferred period credit and facing another wait if they relapse. Removes disincentive to attempt recovery." },
+  { q: "Compare Own Occupation, Suited Occupation, and Any Occupation definitions.", a: "Own Occupation: unable to perform specific duties of policyholder's own job — most generous, highest cost, highest moral hazard. Suited Occupation: unable to perform any occupation suited by education/training/experience — intermediate; common in group IP. Any Occupation: unable to perform ANY job for remuneration — most restrictive, lowest cost, lowest moral hazard; rarely used in individual policies." },
+  { q: "What is the Changing Definition feature in IP and why is it used?", a: "Policy starts on Own Occupation definition for (e.g.) first 2 years of incapacity, then switches to Any Occupation or Suited Occupation. Reduces moral hazard for long-term claims — less generous definition after initial period provides return-to-work incentive. Commonly used in group IP for manual workers, who may be retrained for less physical work." },
+  { q: "What is the Free Cover Limit in Group IP and how is it set?", a: "Maximum benefit level below which group scheme members are accepted without individual medical underwriting. Set based on: group size, proportion of employees joining, industry type, and location. More generous FCL if membership is compulsory or participation rate is high. Those above FCL are individually underwritten." },
+  { q: "Name the three key IP claims management components and explain each briefly.", a: "(1) Benefit Limitation: cap at X% of pre-disability income minus all continuing income (X<100%) — preserves return-to-work incentive. (2) Proportionate/Rehabilitation Benefit: reduced benefit on partial return to work — incentivises recovery. (3) Rehabilitation: counselling and vocational support — reduces claim duration; yields significant cost savings." },
+  { q: "What is the Inception / Disabled Life Annuity approach to IP pricing?", a: "Expected PV of claims = Σ [survival probability × discount factor × claim inception rate (iₓᵈ) × disabled life annuity (äᵢₗ)]. Claim inception rate = probability claim becomes payable (sick through deferred period). Disabled life annuity = PV of benefits to a current claimant, allowing for recovery and death. Simpler alternative to full multi-state model — ignores recoveries leading to further claims." },
+  { q: "Why is recovery rate as important as inception rate in IP pricing?", a: "Claim cost = inception rate × expected claim duration. Even a low inception rate produces high cost if duration is very long. Recovery rates must vary by claim duration (reduce as duration increases) and by cause of incapacity. Mental health claims have particularly long durations and low recovery rates. Studying inception and termination rates separately is essential — management actions differ for each." },
+  { q: "What are the three reasons employers introduce Group IP schemes?", a: "Financial: insures statutory sick pay liability; tax-deductible premiums; may pay for replacement employee. HR/Welfare: attracts and retains staff; signals caring employer; access to rehabilitation services. Employee welfare: maintains income during incapacity; encourages faster return to work via proportionate benefit and counselling." },
+  { q: "How does IP differ from CI in terms of claim trigger and benefit form?", a: "IP trigger: inability to work (ongoing — no specific diagnosis required). CI trigger: diagnosis of a specific listed condition. IP benefit: regular income (temporary annuity). CI benefit: lump sum. IP continues as long as incapacity persists; CI pays once and terminates. IP requires occupational or ADL assessment; CI uses medical diagnosis." },
+  { q: "What is the Early Notification Clause and why is it included?", a: "Requires policyholder to notify insurer (e.g.) 1 month into sickness even if deferred period is longer. Enables early rehabilitation support and counselling before benefit commences. Allows thorough claim assessment before payment begins. Reduces overall claim cost — early intervention more effective than later intervention." },
+  { q: "Explain the Activities of Daily Living (ADL) definition and when it is used in IP.", a: "6 ADLs: Washing, Dressing, Feeding, Mobility, Continence, Toileting. Typically requires inability to perform 2 of 6 unaided. Used in IP for non-workers (homemakers) where occupational definitions are inapplicable. Less subjective than occupational definitions — objective functional assessment. Also basis for family member IP cover under group scheme extension." },
+  { q: "What is selective lapsing and why is it particularly dangerous for IP?", a: "On premium review or rate increase: healthier lives disproportionately lapse (they can get new cover elsewhere); sicker lives remain who know they cannot pass underwriting again. Leaves deteriorating risk pool → further premium increases → spiral. Mitigation: loyalty benefits; carefully calibrated rate increases; TCF communication; rate increase is last resort." },
+  { q: "What are the key differences in IP rating factors between a mature market (Country A) and a new market (Country B)?", a: "Mature market: many rating factors (age, gender, occupation, region, replacement ratio, deferred period, incapacity definition, income level) — sufficient data for granular segmentation. New market: fewer factors; data limited; simple rating keeps product understandable for distribution; may not offer own-occupation or high replacement ratios initially; regulatory restrictions may also limit factors (e.g. no gender)." },
+  { q: "What are the main items to investigate when IP loss ratio has increased?", a: "Higher claim inception rates; lower recovery rates; higher claim amounts; lower premium income. Check: business mix shift; product terms changes; deferred period / replacement ratio changes; economic recession effects; selective lapsing; change in claim cause (especially mental health); early claims / anti-selection; large group scheme outliers; ex-gratia payments." },
+];
+
+const IAI_QUESTIONS = [
+  {
+    source: "IAI May 2025", qid: "Q3a", marks: 15,
+    scenario: "A life insurance company has written significant volumes of only conventional income protection business over the past few years.",
+    question: "Explain how income protection business meets the needs of customers.",
+    sections: {
+      "Meeting customer needs": [
+        "IP provides the insured with an income during periods of short or long-term disability, sickness or accident (referred to as incapacity).",
+        "Its function is to replace part of the income lost as a result of the incapacity.",
+        "The income lost would also be a major problem for any dependants the insured may have, e.g. children and spouse.",
+        "The insured can claim any number of times during the term of the policy, subject to the policy conditions.",
+        "On individual contracts, premiums are unlikely to increase with age, but may increase with inflation and may be reviewable depending on experience.",
+        "There are limitations on the benefits, for example in the form of deferred periods, and in the definition of disability.",
+        "The product may also be used to cover loan repayments (including the vehicle used to repay the loan) — often called Mortgage Payment Protection Insurance.",
+        "Unemployment may also be a covered peril.",
+        "The benefits from an IP policy may also be used to cover insurance premium payments on other insurance policies, e.g. pension contributions.",
+        "Locum Protection Insurance is another form of IP — where professionals (e.g. doctors in one practice) use the benefits to pay for temporary employment of a replacement during incapacity.",
+        "Group versions of IP policies are available for purchase by employers; the employer will at least have to pay statutory sickness benefits and may also have to pay for a replacement employee — IP protects against some of this loss.",
+        "IP is a benefit valued by the workforce — encourages retention of senior key staff who are more valuable and more difficult to replace.",
+        "IP products may provide a partial benefit to those who return to work on a part-time basis or in a less strenuous role — benefits both employer and employee.",
+        "Employer may get a tax advantage — premiums paid qualify for tax relief; benefits treated as a business expense.",
+      ]
+    }
+  },
+  {
+    source: "IAI May 2025", qid: "Q3b", marks: 8,
+    scenario: "Same as Q3(a).",
+    question: "Explain why the company will want to monitor the experience and profitability of this business on an ongoing basis.",
+    sections: {
+      "Why monitor": [
+        "With substantial volumes the company needs to be aware of how the business is performing to spot possible trends and take early action.",
+        "Key reason for monitoring: to identify divergences in actual experience from that assumed in contract pricing — part of the actuarial control cycle.",
+        "Company is particularly interested in whether the contract is proving as profitable as expected and is giving shareholders an acceptable return on capital.",
+        "On in-force IP business it might improve claims underwriting if that is found to be a problem — little it can do on pricing if terms are guaranteed.",
+        "Either way, the company can revise assumptions in embedded value calculations, to maintain an accurate view of worth and recognise profits/losses appropriately.",
+        "If existing contracts are reviewable, results can be used to change premiums or benefits given — scope limited by competitive forces and need to treat customers fairly.",
+        "For new business: use results of monitoring to help re-price where this is shown to be necessary.",
+        "Monitoring business volumes and mix: gain information on marketability and competitiveness by sector; especially important if there is cross-subsidy between policies.",
+        "Company also needs to monitor inception/termination experience, expenses, and persistency to check appropriateness of supervisory valuation assumptions and for regulatory reporting.",
+      ]
+    }
+  },
+  {
+    source: "IAI May 2025", qid: "Q3c", marks: 10,
+    scenario: "Same as Q3(a).",
+    question: "Describe the methods that the company is likely to use to monitor the existing business.",
+    sections: {
+      "Monitoring methods": [
+        "Analysis of surplus — identifies if any items of experience are drifting from assumptions. Alternatively, a model office approach could be used.",
+        "Morbidity investigation (3–5 years): split at least by gender, age group, occupational class, deferred period — possibly also smoker status and region.",
+        "Study claim inception and termination rates separately — necessary action differs depending on where problems emerge.",
+        "Split claim termination data by reason (death or recovery) and by claim duration.",
+        "Large volumes allow more cells in the analysis while retaining credibility; inception and termination rates compared with pricing assumptions.",
+        "Expense investigation: actual vs expected, classified per premium / per sum assured / per policy; split into initial, renewal, termination and investment expenses.",
+        "Lapse investigation: by duration in force and by distribution channel; other splits (gender, age, benefit level, payment frequency) considered where data sufficient.",
+        "Monitor by individual salesperson or broker to identify problematic sales outlets — care needed using lapse results for pricing due to volatility.",
+        "Monitor underwriting and reinsurance limits — ensure still appropriate for developing portfolio.",
+        "Monitor economic factors and competition — assess possible effects of external influences on future experience.",
+      ]
+    }
+  },
+  {
+    source: "IAI May 2025", qid: "Q3d", marks: 12,
+    scenario: "Same as Q3(a).",
+    question: "Give, with reasons, suitable asset classes for the company's investments. Indicate further information you would want to refine the asset mix.",
+    sections: {
+      "Suitable assets and further information needed": [
+        "Company should invest to maximise return subject to acceptable risk.",
+        "For benefits guaranteed in money terms: a mixture of suitable fixed-interest bonds and cash provides a good match.",
+        "For increasing benefits (linked to salary inflation): index-linked gilts are suitable matching assets. Alternative: equities or property (expected real return) — but higher volatility; requires large free surplus and investment expertise.",
+        "Assets should be in the same currency as liabilities — need to know if any policies cover overseas policyholders.",
+        "Short-dated gilts and cash could be held to back the capital requirements — limits market risk and reduces the SCR.",
+        "For proprietary company: duty to shareholders to enhance return on free surplus → some investment in equities and property appropriate.",
+        "Further information needed: Mix of level vs escalating benefits (affects matching); premium income profile (level or increasing); size of insurer and investment expertise level; size of free surplus (determines tolerance for volatile assets); recent claims variability (more variable = more liquid assets); tax position; legislative restrictions on investment.",
+        "If claims outgo is highly variable, retain higher proportion of liquid assets as incoming premiums not guaranteed.",
+      ]
+    }
+  },
+  {
+    source: "IAI Dec 2022", qid: "Q2i", marks: 5,
+    scenario: "WTH is planning to launch an individual IP product in Country A where IP insurance is currently not available. WTH is also planning to enter Country B with a similar product.",
+    question: "Outline the typical key features of an individual income protection insurance product.",
+    sections: {
+      "Key features of individual IP": [
+        "Provides insured with regular income during periods when unable to work due to illness or incapacity. Policy may have exclusions — not all illnesses/injuries covered (e.g. mental illness).",
+        "Policy term typically runs to retirement (e.g. age 60) but could be for a fixed term. Regular premiums (yearly/half-yearly/quarterly/monthly) — level or increasing in line with an index.",
+        "Waiver of premium whilst claim is in payment.",
+        "Multiple periods of sickness benefits can be paid during policy term.",
+        "Typically includes a deferred period — e.g. 4-week deferred period commences income payments once policyholder has been off work for 4 weeks.",
+        "Linked claims period — if policyholder goes off work again for the same reason within (e.g.) 12 months, new deferred period does not apply.",
+        "Benefits can be level or increasing in line with an index — may escalate differently in and out of claim.",
+        "Benefits limited to prevent over-insurance — based on percentage of salary (gross or net of tax) at date of incapacity.",
+        "Definitions of incapacity — occupational (e.g. unable to do 'own' occupation) or activity based (e.g. unable to carry out 4 of 6 ADLs).",
+        "Rehabilitation/counselling services may be available to facilitate earlier return to work.",
+      ]
+    }
+  },
+  {
+    source: "IAI Dec 2022", qid: "Q2iv", marks: 12,
+    scenario: "WTH is considering entering Country B with an IP product. Country B has no existing IP insurance market.",
+    question: "Describe the factors that should be considered by WTH before deciding on whether to enter Country B with an IP product.",
+    sections: {
+      "Demand and competition": [
+        "Sufficient demand to sell volumes? No state provision and no IP insurance = greenfield opportunity with potential volume.",
+        "Personal tax incentives? Consumer awareness of need? Affordability? Consumer confidence in company and product brand?",
+        "Any previous attempts from outside companies — if so, why did they fail? Is the existing health insurance market profitable in Country B?",
+      ],
+      "Data and regulatory": [
+        "Availability of relevant and sufficient data to price — disability incidence, termination rates split by age, gender, occupation, income.",
+        "Licensing requirements; capital/solvency requirements; expense overruns/new business strain.",
+        "Restrictions on product design, rating factors, investments; regulations on commission/distribution.",
+        "How evolved are insurance ombudsman and legal dispute systems?",
+      ],
+      "Distribution and talent": [
+        "Availability of qualified salespeople and training required. Potential channels and how evolved they are.",
+        "Availability of key staff; administrative and claims systems; rehabilitation/counselling service partners; outsourcing possibilities.",
+      ],
+      "Profitability and other": [
+        "Demographics/demand projections; profitability levels and growth; investment returns; regulatory limitations on profit; repatriation of profits.",
+        "Willingness of reinsurers to support business; healthcare infrastructure (hospitals/doctors for reports).",
+        "Potential for fraud; cultural impacts on propensity to claim and lapse. Would acquiring an existing insurer be better?",
+      ]
+    }
+  },
+  {
+    source: "IAI Dec 2022", qid: "Q2v", marks: 5,
+    scenario: "WTH is comparing rating factors for IP in Country A (5 years' experience) vs Country B (new market).",
+    question: "Explain the differences in rating factors WTH would use for Country A versus Country B.",
+    sections: {
+      "Rating factor differences A vs B": [
+        "Country A is more mature — adequate data for segmented pricing — tends to have a higher number of rating factors.",
+        "Typical rating factors for IP: age, gender, occupation, location, income level, type of disability definition, length of deferred period, replacement ratio level.",
+        "Country B (new market) will have fewer rating factors due to: data limitations (availability and quality); need to keep rating simple for distribution to sell; need to keep it simple for customers to understand.",
+        "WTH will be reluctant to offer certain features in Country B — e.g. high replacement ratio or 'own occupation' definition — and so fewer premium rating dimensions.",
+        "In both countries, regulations may limit rating factors — e.g. no gender discrimination; no discrimination by place of residence within the country.",
+      ]
+    }
+  },
+  {
+    source: "IAI Dec 2022", qid: "Q2vii", marks: 10,
+    scenario: "WTH has been writing IP in Country B for 5 years and is now carrying out its first premium review.",
+    question: "Describe the premium review process WTH should follow.",
+    sections: {
+      "Experience investigation": [
+        "Collect morbidity experience since last pricing or review date, whichever is latest.",
+        "Incidence and termination rates investigated for each homogeneous group split by: age, gender, occupation, location, income level, duration from entry, UW method, income replacement ratio, disability definition type, waiting period length.",
+        "Mortality experience is also an important component. Analyse by type of claim (accident or sickness) and subdivide by cause.",
+        "Exposure calculation: only lives insured in investigation period; adjust for withdrawals (lapse/free-look) on life-by-life basis.",
+        "A vs E: monitor actual vs expected by issue year (UW implications) and calendar year (general claims environment).",
+        "Expense analysis: actual vs expected; split initial/renewal/claims; allow for inflation since last analysis; exclude one-off expenses.",
+        "Lapse investigation: by duration; other splits as relevant. Investment income: actual vs expected.",
+      ],
+      "Assumption revision and profit testing": [
+        "Revise best estimate assumptions based on experience investigations, allowing for credibility and future trends in incidence/termination rates.",
+        "Risk discount rate based on required profit margin at original pricing; risk-free rate consistent with current economic conditions.",
+        "Project cashflows forward from review date to end of policy term; discount at risk discount rate; compare profitability criterion with last review basis.",
+        "Consider reducing rates if excess profits expected. Rate increase is a LAST RESORT after exploring all other improvements.",
+        "Communicate review results to policyholders with sufficient notice. Weigh risk of selective withdrawal on rate increase — healthier lives will lapse first.",
+      ]
+    }
+  },
+  {
+    source: "IAI Mar 2021", qid: "Q1i", marks: 3,
+    scenario: "A large corporate group in mining, manufacturing, transport and construction has approached you to buy a group IP product covering all employees.",
+    question: "What might be the reasons for offering such a group IP scheme to the employees?",
+    sections: {
+      "Reasons for offering group IP scheme": [
+        "Insures the liability for statutory sickness payments and any discretionary sickness payments (custom and practice).",
+        "Offers employees valuable long-term sickness benefits complementing any ill-health retirement benefits from the occupational pension scheme.",
+        "Enhances the total reward package — attracts better staff, reduces staff turnover, improves morale.",
+        "Provides access to support, help and advice to assist in management of sickness absence in the workforce.",
+        "Creates employee loyalty to the employer.",
+        "Favourable tax treatment available to the employer and/or employees.",
+      ]
+    }
+  },
+  {
+    source: "IAI Mar 2021", qid: "Q1ii", marks: 20,
+    scenario: "Same as Q1(i). You are now designing the group IP product.",
+    question: "Discuss the design of the Group IP product under: (i) Policy conditions; (ii) Underwriting; (iii) Claims administration.",
+    sections: {
+      "(i) Policy conditions": [
+        "Offer a range of deferred periods (e.g. 1 month to 1 year) — short deferred period covers statutory sickness risk; longer = lower premium.",
+        "Require early notification of sickness absence (e.g. halfway through deferred period) — enables counselling to prevent claim coming into payment.",
+        "Own occupation definition of incapacity initially appropriate; switch to less restrictive after (e.g.) 2 years.",
+        "Require medical certification and re-certification every 6–12 months during claim — checked by insurer, not employer.",
+        "Enforce benefit limitation (X% of pre-disability income minus all continuing income, X<100%) — preserves return-to-work incentive.",
+        "Pre-disability income averaged over 1 year to include bonuses and irregular payments.",
+        "Linked claims period (e.g. 3–6 months) — encourages return to work without fear of resetting deferred period.",
+        "Proportionate benefits on partial return to work or return in lower-paid role.",
+        "Waiting period before eligibility (e.g. 12 months) — reduces anti-selection and admin costs.",
+        "Compulsory membership or high participation rate — reduces anti-selection.",
+        "Stepped benefit structure possible (e.g. 100% salary for first 6 months, then 50%).",
+        "Benefit expiry age aligned with employer pension scheme retirement age.",
+      ],
+      "(ii) Underwriting": [
+        "Impose a free-cover limit to control morbidity risk — significant impact given wide income variation in this group.",
+        "More generous FCL if membership compulsory or participation high.",
+        "Employees above FCL individually underwritten using standard procedures.",
+        "Actively at work criterion: no sickness absence in (e.g.) 3 months prior to joining — directly related to claim-generating events.",
+        "Consider time in dangerous environment, overseas work, driving, as key underwriting risk factors for this industrial group.",
+        "Specific exclusions for chronic disease (e.g. severe asthma) — but avoid overly broad exclusions as employer wants universal cover.",
+      ],
+      "(iii) Claims administration": [
+        "Telephone helplines: advise on State benefit entitlement, policy conditions, part-time working options.",
+        "Counselling/advice service: ensure claimants aware of all help available; may train employer HR department.",
+        "Require regular evidence of continuing incapacity — minimises fraudulent claims.",
+        "Regularly check other sources of income to be offset against maximum benefit.",
+        "Claims payments made by employer via payroll, offset against premium due — reduces admin cost and insurer exposure.",
+        "New business may involve taking on responsibility for existing liabilities from previous insurer's scheme — assess carefully.",
+      ]
+    }
+  },
+  {
+    source: "IAI Mar 2021", qid: "Q1iii", marks: 7,
+    scenario: "The corporate group has separate worker (manual) and managerial populations.",
+    question: "Describe how the design of the group IP scheme for the workers differs from that for managers.",
+    sections: {
+      "Key differences": [
+        "Premiums higher — manual workers have higher inception rates AND longer claim durations than managers.",
+        "Less income variation within workers' scheme — FCL may be less critical (unless overtime/bonuses included).",
+        "Physical jobs mean even slight incapacity triggers full inability to work — may use less restrictive definition initially (e.g. own occ for 24 months, then suited occ).",
+        "If no prospect of returning to old physical job, workers may welcome support from insurer and employer to retrain for alternative less demanding work.",
+        "Different terms and conditions of employment → different range of deferred periods may be needed.",
+        "Claims smaller in amount but more frequent — relatively more expensive per £ to administer.",
+        "Employer may devote fewer HR resources to these employees vs managers — insurer must ensure adequate direct contact with claimants.",
+        "Workers typically less likely to have comprehensive ill-health retirement benefits → IP fills a more critical gap.",
+      ]
+    }
+  },
+  {
+    source: "IAI May 2024", qid: "Q2ib", marks: 17,
+    scenario: "An insurer is considering launching a Group Income Protection product providing pay-related benefit whilst unable to work as a result of accident or sickness for more than a month.",
+    question: "Discuss the key considerations for the insurer in launching a Group IP product, covering: Underwriting; Reinsurance; Distribution; Costs and risks.",
+    sections: {
+      "Underwriting": [
+        "Underwriting must be simple and in line with market for group IP — attractive to employer and keeps administration minimal.",
+        "Free cover limits set based on group size, proportion taking cover, industry, and location.",
+        "Typically require all insured members to be 'actively at work' at cover commencement.",
+        "Waiting period for new members before a claim can be accepted.",
+        "Benefits to follow a prescribed formula (e.g. percentage of salary) — simplifies UW and claim assessment.",
+        "Employees above FCL individually underwritten — medical information, tests, etc.; consider dangerous environments/overseas.",
+        "Special terms (increased premiums) on cover in excess of free cover limit.",
+      ],
+      "Reinsurance": [
+        "Insurer likely already writing individual IP — reinsurance need may be small for group business.",
+        "Reinsurers provide useful advice: product design, UW criteria, group IP data for pricing.",
+        "Original terms quota-share probably best — simple; level of cover relatively stable (60–75% of salary).",
+        "Proportion reinsured might reduce over time as experience develops.",
+        "Consider catastrophe reinsurance if concerned about multiple simultaneous claims from the same employer.",
+      ],
+      "Distribution": [
+        "Most group health business sold through large financial advisers/employee benefit consultants — many new to insurer; need to develop relationships.",
+        "Tied agent or direct marketing unlikely to succeed for group IP — employers want flexibility to get best market deal.",
+        "New specialist sales force unlikely to be cost-justified.",
+      ],
+      "Costs and risks": [
+        "Existing individual IP systems may be partially adaptable but many changes needed for group business (claim definitions, design, pricing, claims handling, UW).",
+        "Development costs of setting FCLs — new to insurer; reinsurer advice helpful.",
+        "High commission likely needed early on to build market traction with large brokers.",
+        "Persistency risk: employers change insurer every 1–2 years; may lose direct client contact.",
+        "Morbidity experience uncertain for group — may differ significantly from individual IP; can adjust at renewal via experience rating.",
+        "Significant demand variability with economic cycle — recession reduces employer appetite for group schemes.",
+        "Accumulation risk: concentration in one occupation class or one large employer → catastrophic claim potential.",
+        "Political risk: changes in State sickness/disability benefits or tax treatment of employer IP affect demand.",
+      ]
+    }
+  },
+  {
+    source: "IAI Sept 2018", qid: "Q1i (IP section)", marks: 9,
+    scenario: "An insurer has two portfolios — one in India, one in the Middle East.",
+    question: "Outline the key risk factors and corresponding rating factors for Individual IP.",
+    sections: {
+      "IP risk factors and rating factors": [
+        "Key risk factors: health status (pre-existing conditions), occupation (manual vs sedentary), income level (replacement ratio risk), lifestyle factors (smoking, alcohol), age and gender.",
+        "Rating factors: age, gender (where permitted), occupation class, sum insured/benefit amount, deferred period, definition of disability (own occupation vs any occupation), smoking status.",
+        "Occupation is the most critical IP rating factor — affects both probability of claim inception AND duration of claim. Occupations grouped into classes (e.g. Class 1 = professional/office; Class 4/5 = manual/hazardous).",
+        "Mental illness claims are a major risk — difficult to assess, long duration, hard to manage. Growing proportion of claims in many markets.",
+        "Geographical/regional variations in claims experience are significant — some insurers use region as a rating factor.",
+        "Aggregate policy limits may be placed on total annual benefit payable to all policyholders in a household.",
+      ]
+    }
+  },
+  {
+    source: "IAI Mar 2018", qid: "Q2vi", marks: 5,
+    scenario: "An insurer is reviewing claims experience on its IP portfolio.",
+    question: "List the factors that influence the propensity to claim by an individual.",
+    sections: {
+      "Factors influencing propensity to claim": [
+        "Current state of health — healthy individuals likely to claim only for infectious diseases or accidents.",
+        "Personal medical history — prior chronic disease history strongly influences claim behaviour.",
+        "Family history — diseases with genetic correlation (cancer, diabetes) increase propensity.",
+        "Financial circumstances — financial stress increases propensity to claim (IP as income replacement).",
+        "Age and gender — older individuals more likely to claim; different gender morbidity patterns.",
+        "Smoking — smokers more likely to develop health conditions; higher morbidity risk.",
+        "Leisure/hobby activities — risky hobbies (mountaineering, scuba diving, racing) increase risk.",
+        "Area of residence / access to healthcare — urban areas: better access to diagnosis → more claims identified and submitted.",
+        "Occupation — manual/hazardous workers much more likely to claim than sedentary workers.",
+        "Replacement ratio — higher ratio reduces return-to-work incentive; effectively prolongs claim duration.",
+      ]
+    }
+  },
+];
+
+const IFOA_QUESTIONS = [
+  {
+    source: "IFoA Sep 2024", qid: "Q3(i)", marks: 10,
+    scenario: "Company X writes group and individual IP. Its IP loss ratio has increased significantly versus competitors.",
+    question: "Discuss what investigations you could undertake to understand the reasons for the increase in the loss ratio.",
+    sections: {
+      "Investigation areas": [
+        "Loss ratio may be higher due to: higher claim inception rates; lower recovery rates; higher claim amounts; lower premium income.",
+        "Investigate business mix changes: demographic trends (age, gender, smoker); occupation class; scheme size for group (FCL adequacy); cross-subsidies in pricing.",
+        "Review changes in product terms: incapacity definitions; deferred periods; benefit limits / replacement ratios; claim criteria; partial/rehabilitation benefits.",
+        "Pricing discounts to increase market share → lower premium income. Investigate new business decline (rising average book age → higher risk).",
+        "Review general economic conditions — recession → higher claims; worse recovery rates; changes in interest rates affecting reserve values.",
+        "Lapse experience — selective lapses if product uncompetitive; healthier lives leaving.",
+        "Investigate cause of claims — mental health/stress claims have lower recovery rates; material impact on loss ratio.",
+        "Early claims or claims by notification date — anti-selective behaviour indicator.",
+        "Check for outliers: abnormal claims; large group schemes with outsize impact; ex-gratia claims; legal challenges.",
+      ]
+    }
+  },
+  {
+    source: "IFoA Sep 2024", qid: "Q3(ii)", marks: 5,
+    scenario: "Same as Q3(i).",
+    question: "Suggest possible actions Company X could take to improve the loss ratio.",
+    sections: {
+      "Actions to improve loss ratio": [
+        "Increase premium rates or implement more granular premium rates.",
+        "Amend product terms: reduce maximum replacement ratio; increase waiting/deferred periods; introduce partial or rehabilitation benefits.",
+        "Tighten underwriting: limit high-risk occupations; increase health UW; reduce group FCL; review disability definitions for clarity.",
+        "Tighten claims assessment: require additional documentation or second opinions; improve fraud detection.",
+        "Tighten claims management: ensure benefits paid and recovery times are as expected.",
+        "Introduce rehabilitation services to get customers back to work sooner.",
+        "Measures to reduce selective lapses (e.g. loyalty benefits).",
+        "Review and tighten policy wording.",
+        "Consult reinsurer for advice, data, and reinsurance solutions.",
+      ]
+    }
+  },
+  {
+    source: "IFoA Sep 2024", qid: "Q3(iii)", marks: 8,
+    scenario: "Company X has concluded it lacks a claims management team. It is estimating costs and benefits of setting one up.",
+    question: "Describe the approach Company X should take to estimate the costs and benefits of setting up the claims management team.",
+    sections: {
+      "Estimating costs": [
+        "Fixed and variable costs related to number of people needed to manage claims.",
+        "Number of people depends on: current and future expected claim volume; duration profile; cause of claims (determines mix of skills needed).",
+        "Salaries of different medical/health professionals needed; expected salary inflation; other staff costs (bonuses, social security, pension).",
+        "Treatment costs; additional systems to manage treatments and evaluate treatment vs ongoing claim payment.",
+        "External costs: specialist opinions for complex cases; offices, computers, furniture.",
+      ],
+      "Estimating benefits": [
+        "Understand number of claims in payment with sufficiently large reserves and their causes.",
+        "Once-off benefit: large current reserves for claims in payment may have potential for return to work.",
+        "Long-term benefit: arresting trend of increasing loss ratio; reverting to industry norm.",
+        "Industry claim ratios provide a guide to expected benefit; reinsurer/consultant data may assist.",
+        "Check policy terms — can treatment recommendations be applied to existing business?",
+        "Are partial/rehabilitation benefits currently available — affects ultimate benefit realised.",
+        "Difficult to quantify: brand value; customer perception benefits; new business attraction.",
+      ]
+    }
+  },
+  {
+    source: "IFoA Sep 2024", qid: "Q1(ii)", marks: 10,
+    scenario: "Country X has higher than usual inflation expected to last 5–10 years. Company Y sells IP, CI, PMI and Hospital Cash.",
+    question: "Discuss the impact of higher than expected inflation on Company Y's IP and other product lines.",
+    sections: {
+      "Income Protection": [
+        "IP benefit linked to earnings outside of claim (salary-linked) — greater scope for outgo to increase materially due to higher inflation.",
+        "Benefits may be in payment multiple times over duration of cover — inflation compounding effect is significant.",
+        "IP has unknown benefit amounts with unknown timing and duration — harder to find matching assets in high inflation.",
+        "Company Y may wish to reduce new individual IP business written in high inflation environment for these reasons.",
+        "Group IP premiums adjusted annually — lower inflation exposure than individual guaranteed-premium IP.",
+      ],
+      "Critical Illness": [
+        "CI benefit is usually a fixed sum insured paid once — expected CI claims outgo not materially impacted by claims inflation.",
+        "However, CI has labour-intensive claims review processes — underwriting and claims costs increase with labour cost inflation.",
+        "Company Y could look to write more CI in high inflation environment as the benefit itself is inflation-resistant.",
+      ],
+      "PMI": [
+        "PMI premiums reset each year — lower inflation exposure than long-term products like CI and IP.",
+        "Often sold with moratorium — less exposed to high underwriting cost inflation.",
+        "Claim is based on treatment occurring — claim assessment less complex than IP or CI.",
+        "Company Y could consider writing more PMI in high inflation environment.",
+      ],
+      "Mitigation actions": [
+        "Review and update new business premium rates to allow for latest inflation expectations.",
+        "Consider more reviewable premiums and more group business (adjusted annually).",
+        "Improve asset-liability matching; consider inflation swaps (though expensive in high inflation).",
+        "Policyholders may lapse — employ retention team; offer option to reduce sum insured or step down premium.",
+        "Review reinsurance terms if treaties coming up for renewal.",
+      ]
+    }
+  },
+  {
+    source: "IFoA Apr 2024", qid: "Q1(i)", marks: 5,
+    scenario: "XYZ Health sells individual IP in Country B using a detailed telephone interview UW process.",
+    question: "Assess the suitability of this underwriting approach for income protection business.",
+    sections: {
+      "Assessment of UW approach for IP": [
+        "IP is more complex to underwrite than other health and care products — many conditions that keep people off work (back pain, stress) are subjective and not relevant for CI or PMI.",
+        "Insurer needs sufficient information to assess likelihood of prolonged time off work — not just current health status.",
+        "The current approach gives a wide range of directly relevant information — allows full picture of risk; classifies applicants into homogeneous risk groups for appropriate pricing.",
+        "Thorough upfront UW reduces anti-selection; also simplifies later claim management (conditions already assessed).",
+        "Accurate UW assessment allows more accurate case reserving.",
+        "Allows nuanced decisions (rate, exclude, decline) — minimises flat declines; treats customers fairly.",
+        "However: potentially time-consuming (many weeks for complex cases); expensive; prone to human error.",
+        "Applicant must disclose sensitive information; may be rejected or heavily rated at end of long process.",
+        "Overall: the current approach is suitable for IP business despite its resource intensity.",
+      ]
+    }
+  },
+  {
+    source: "IFoA Apr 2024", qid: "Q1(iv)", marks: 15,
+    scenario: "XYZ Health is considering implementing AutoUW — an AI-based automated underwriting system for its IP business.",
+    question: "Discuss the possible impact on XYZ Health's business of implementing AutoUW's underwriting system for income protection business.",
+    sections: {
+      "Key impacts": [
+        "DATA: Existing claims data may no longer be representative of future claims experience — past UW decisions embedded in current data.",
+        "RISK CLASSIFICATION: Automation may allow more accurate risk assessment in theory — but human underwriters offer judgment and expertise that AI may not capture. Risk of losing human expertise permanently.",
+        "BUSINESS MIX: May change if only standard lives accepted and rated/excluded lives are declined — fall in new business. Alternatively, faster process may attract more advisers — potential increase.",
+        "CLAIMS OUTGO: Could improve if more business is standard lives; but may take years to build credible claims experience for pricing/reserving under new system.",
+        "EXPENSES: Potentially lower underwriting costs (no underwriters) — but depends on AutoUW charge form; upfront development cost; potential redundancy costs. May spread overheads over fewer policies if more are rejected.",
+        "PROFITABILITY: Significant uncertainty — positive and negative changes to mix, volumes, experience, and expenses could interact in complex ways. Model the impact.",
+        "RESERVES / CAPITAL: Increased uncertainty → higher prudence margins needed initially.",
+        "REINSURER: Must discuss implications with reinsurer — may have concerns; may require higher margins.",
+        "COMPETITION: Faster UW could be competitive advantage. But if more declines than before, advisers may go elsewhere.",
+        "REPUTATION: Faster consistent UW could improve reputation. But systems errors, bias, or legally problematic decisions → reputational damage.",
+        "STAFF: Train staff in new system; consider effects on underwriting team — redeployment or redundancy risk; implementation can cause dissatisfaction.",
+        "DEPENDENCE: Complete dependence on AutoUW — if AutoUW ceases trading or system fails, insurer has no underwriting capability if staff have been released.",
+      ]
+    }
+  },
+  {
+    source: "IFoA Sep 2020", qid: "Q2(i)", marks: 3,
+    scenario: "A large company in a country with no State sickness/disability benefits is considering introducing a group sickness and disability benefit scheme.",
+    question: "Outline possible reasons why the company is introducing the scheme.",
+    sections: {
+      "Reasons": [
+        "Improve staff retention — employees not leaving for better remuneration elsewhere.",
+        "Attract good quality staff — competitive remuneration package.",
+        "Viewed as paternal/caring company — positive consumer and employee perception.",
+        "Retention leads to working efficiencies — lower cost of recruitment fees.",
+        "Employees who fall sick are more able to return — living standards maintained; rehabilitation benefits speed recovery.",
+        "May be a legislative requirement to offer benefit.",
+        "May be tax benefits from offering a scheme for employer or employees.",
+        "As the company is large it may consider this approach cheaper than purchasing IP insurance for the employees.",
+      ]
+    }
+  },
+  {
+    source: "IFoA Sep 2020", qid: "Q2(ii)", marks: 10,
+    scenario: "Same as Q2(i). No State provision. Employees in a wide range of roles.",
+    question: "Suggest, with reasons, how the benefits of the scheme could be structured to meet the requirements of the company.",
+    sections: {
+      "Benefit structure": [
+        "Replacement benefit related to employee's income (e.g. 90% of average income over prior 3 months) — ensures net after-tax income not higher than when working (otherwise no return-to-work incentive).",
+        "Specify what income is included: basic salary, bonuses, overtime — need a defined averaging period.",
+        "Ensure consistent with any statutory sick pay — avoid over-insurance.",
+        "Benefit may vary by type of employee — to help retain key groups of employees.",
+        "For longer sickness (e.g. over 2 years), reduce benefit to 50% of income — reduces cost for long-term cases.",
+        "Benefits in payment increased annually by RPI, NAE, or max(RPI, NAE) — maintains employee living standards.",
+        "Short deferred period (e.g. 7 days) — reduces short-term absenteeism; avoids admin costs for very short illness.",
+        "Circumstances for payment must be specified — e.g. does injury from hazardous outside-work activities qualify? Reduces moral hazard.",
+        "Benefits cease at earlier of recovery or retirement age — encourages return if sickness ceases before retirement.",
+        "Rehabilitation services and proportionate benefit for partial return to work — encourages full recovery.",
+        "Linked claims: payments restart if employee returns then goes off sick for same reason within set period.",
+        "Payments may be re-started; may be stopped whilst employee is outside agreed geography.",
+        "The employer will need to put in place medical certification and monitoring procedures.",
+        "Benefits may be higher if sickness/disability was incurred through work.",
+        "Eligibility criteria (e.g. 3-month probation) reduce overall cost and anti-selection.",
+      ]
+    }
+  },
+  {
+    source: "IFoA Sep 2023", qid: "Q3(i)", marks: 8,
+    scenario: "Company A has a substantial book of IP business (split group/individual) and has not regularly reviewed its UW policy.",
+    question: "Discuss the possible risks that the company is exposed to by not regularly reviewing its underwriting policy.",
+    sections: {
+      "Risks of not reviewing UW policy": [
+        "Greater risk of over-insurance → excessive claims and higher fraudulent claim risk.",
+        "Concentration risk: existing policy may concentrate risk in a particular market segment (employer, geography, occupation) → catastrophic claim risk.",
+        "Out-of-date financial UW limits: inflation may have eroded limits → policy uncompetitive (limits too low relative to market).",
+        "Out-of-date medical limits may not be aligned with market practice → brokers may avoid insurer.",
+        "Competitors may now cover occupations previously excluded → loss of broker support and new business volume.",
+        "Anti-selection: out-of-date policy relative to market or new medical developments → adverse selection risk → higher than anticipated claims.",
+        "New product benefits may have been introduced not reflected in UW policy → pricing and UW no longer aligned.",
+        "May not be following current regulations (e.g. access for mental health conditions) → regulatory risk.",
+        "Out-of-date UW approach may be more expensive than necessary (e.g. modern tech-based approaches).",
+      ]
+    }
+  },
+  {
+    source: "IFoA Apr 2022", qid: "Q3(i)", marks: 8,
+    scenario: "Company Y has a large portfolio of group and individual IP business. A specialist has offered a photo-based automated underwriting tool.",
+    question: "Outline how using the underwriting tool will impact Company Y's processes for individual and group IP business in respect of: (a) pricing; (b) policy application and underwriting.",
+    sections: {
+      "Pricing impacts": [
+        "Individual: ability to provide individual rate depending on expected healthy life from photo data; potential to review rates at renewal with new photo.",
+        "May reduce margins for uncertainty if certain factors (e.g. smoker status) can be confirmed with high accuracy.",
+        "May require increased margins if tool accuracy is uncertain → mispricing risk.",
+        "Group: if rating factors not currently used for group pricing, tool may add limited value or require methodology change.",
+        "Accidents must still be rated separately regardless of tool.",
+        "Tool may have little impact if personal characteristics captured do not match the key IP rating factors (occupation, deferred period, replacement ratio).",
+      ],
+      "Policy application and underwriting impacts": [
+        "Individual: may reduce need for traditional medical underwriting; speed up acceptance process.",
+        "May reduce fraud by applicant — but conversely may enable new forms of misrepresentation (digitally altered photos).",
+        "Need parallel manual process for customers who cannot or will not use the tool.",
+        "Past data less relevant under new system — lack of data on how photo features correlate with IP claims.",
+        "Group: limited impact on group business as few individuals are typically individually underwritten; but could be done remotely and applied to above-FCL cases.",
+        "For both: does the applicant population have a smartphone? Key practical constraint.",
+      ]
+    }
+  },
+];
+
+const KEY_TERMS = [
+  { term: "Permanent Health Insurance (PHI)", def: "Original name for IP insurance. PHI emphasised the insurer MUST pay a valid claim as long as conditions are met (claimant sick and below retirement age). Renamed to Income Protection to better reflect coverage and avoid PMI confusion." },
+  { term: "Replacement Ratio", def: "Post-claim net income ÷ pre-claim net income. The central moral hazard control in IP — must be kept below 100%. Insurers typically cap benefit at 50–75% of gross pre-claim earnings. A 1% rise may imply ~1% higher expected claim cost." },
+  { term: "Deferred Period", def: "Period of sickness before IP benefits begin. Common lengths: 4, 13, 26, 52 weeks. Integrates with employer sick pay; avoids trivial claims; reduces premium and moral hazard. KEY rating factor — shorter deferred period = higher claim inception rate." },
+  { term: "Claim Inception Rate (iₓᵈ)", def: "Probability that a claim becomes payable to a life aged x, who became sick d weeks earlier and remained sick through the deferred period. Derived from sickness inception rates × probability of surviving sickness through deferred period. Sickness inception ≠ claim inception." },
+  { term: "Disabled Life Annuity (äᵢₗ)", def: "Present value of future benefit payments to a life currently a claimant, allowing for recovery and death. Multiplied by claim inception rate to give expected claim cost. Must vary by duration of claim and cause of incapacity. Recovery rates reduce as claim duration increases." },
+  { term: "Own Occupation Definition", def: "Incapacity = unable to perform the specific duties of the policyholder's own job. Most generous to claimant; highest cost; highest moral hazard. Preferred by individual policyholders; unsuitable for very high-risk manual workers." },
+  { term: "Any Occupation Definition", def: "Incapacity = unable to perform ANY occupation for remuneration. Most restrictive definition; lowest cost; lowest moral hazard. Rarely used in individual IP policies now. More common for high-risk manual workers." },
+  { term: "Activities of Daily Work (ADW)", def: "Functional definition of incapacity — unable to perform a specified number of specific work-related activities. Used for higher-risk occupations where occupational definitions are impractical. Objective and measurable." },
+  { term: "Activities of Daily Living (ADL)", def: "6 activities: Washing, Dressing, Feeding, Mobility, Continence, Toileting. Inability to perform (typically) 2 of 6 triggers benefit. Used in IP for non-workers and in LTCI. Objective; applicable at any age; does not require occupational assessment." },
+  { term: "Linked Claims", def: "Deferred period waived if sickness recurs from the same cause within (e.g.) 26–52 weeks of returning to work. Purpose: removes disincentive to attempt recovery — claimant not penalised for relapse within defined period." },
+  { term: "Free Cover Limit (FCL)", def: "Maximum benefit level below which group scheme members are accepted WITHOUT individual medical underwriting. Set based on group size, participation rate, industry, and location. More generous if membership compulsory. Above FCL = individual UW required." },
+  { term: "Proportionate / Rehabilitation Benefit", def: "Reduced IP benefit paid when claimant returns to original occupation in reduced capacity, or to part-time/lower-paid work. Incentivises partial return to work. Calculated same way as benefit limitation formula. Benefits both insurer (shorter claim) and insured (income support during recovery)." },
+  { term: "Early Notification Clause", def: "Policyholder must notify insurer of sickness (e.g.) 1 month into illness, even if deferred period is longer. Enables early rehabilitation and claim assessment before benefit commences. Reduces overall claim cost through early intervention." },
+  { term: "Split Deferred Period", def: "IP design with two benefit levels — e.g. £250/week after 13 weeks rising to £500/week after 26 weeks. Integrates IP benefits with a stepped employer sick pay scheme. More precisely matches customer financial need at different claim durations." },
+  { term: "Mortgage Payment Protection Insurance (MPPI)", def: "IP variant paying mortgage instalments during incapacity. Often written on short-term A&S basis (up to 1–2 years). Directly links benefit to a specific financial commitment rather than general income replacement." },
+  { term: "Accident & Sickness (A&S) Insurance", def: "Short-term IP providing benefits for a maximum period (typically 1–2 years per claim, sometimes 5). Lower premium, simpler pricing (no open-ended duration tail risk). Often annually renewable. Sold through bancassurance and group channels." },
+  { term: "Benefit Limitation Formula", def: "IP claim benefit = X% × Gross Pre-disability Income − All Continuing Income (with X < 100%). Continuing income includes employer sick pay, State benefits, investment income, other IP policies. Hard to enforce if claimant earns undeclared informal income." },
+  { term: "Actively at Work Criterion", def: "Group IP UW criterion: all new members must have been continuously at work with no sickness absence for (e.g.) 3 months prior to joining. Directly related to events that generate IP claims. Core anti-selection control for group IP." },
+  { term: "Multi-State Model (IP)", def: "IP pricing model tracking policyholders through 5 states: Healthy / Sick (deferred period) / Claimant / Recovered / Dead. Each transition (inception, recovery, death, lapse) has its own rate. More accurate than inception/annuity approach but requires more data for all transition rates." },
+  { term: "Selective Lapsing (IP)", def: "On premium review: healthier lives disproportionately lapse (can re-enter market via new UW); sicker lives remain as they know they cannot pass underwriting again. Leaves deteriorating risk pool → further premium increases → spiral. Mitigation: carefully calibrated rate increases; loyalty benefits." },
+];
+
+// ═══════════════════════════════════════
+// RENDER
+// ═══════════════════════════════════════
+
+function renderFlashcards() {
+  document.getElementById('fc-container').innerHTML = FLASHCARDS.map((fc, i) => `
+    <div class="fc-wrap" id="fc-${i}" onclick="this.classList.toggle('flipped')">
+      <div class="fc-inner">
+        <div class="fc-front">
+          <div class="fc-label">Question ${i+1} of ${FLASHCARDS.length}</div>
+          <div class="fc-q">${fc.q}</div>
+        </div>
+        <div class="fc-back">
+          <div class="fc-label">Answer</div>
+          <div class="fc-a">${fc.a}</div>
+        </div>
+      </div>
+    </div>
+    <div class="fc-hint">Click to flip</div>
+  `).join('');
+}
+
+function renderExamQs(containerId, questions) {
+  document.getElementById(containerId).innerHTML = questions.map(q => {
+    const badgeClass = q.source.includes('IAI') ? 'iai' : 'ifoa';
+    const secs = Object.entries(q.sections).map(([t, bs]) => `
+      <div class="eq-sec">${t}</div>
+      <ul class="blist">${bs.map(b => `<li>${b}</li>`).join('')}</ul>
+    `).join('');
+    return `
+      <div class="eq">
+        <div class="eq-hd" onclick="toggleEQ(this)">
+          <div class="eq-hd-l"><span class="badge ${badgeClass}">${q.source} ${q.qid}</span><span class="eq-marks">${q.marks} marks</span></div>
+          <div class="eq-q">${q.question}</div>
+          <div class="eq-arrow">▾</div>
+        </div>
+        ${q.scenario ? `<div class="eq-scenario">${q.scenario}</div>` : ''}
+        <div class="eq-body">${secs}</div>
+      </div>`;
+  }).join('');
+}
+
+function renderTerms() {
+  document.getElementById('terms-container').innerHTML = KEY_TERMS.map(t => `
+    <div class="term">
+      <div class="term-name">${t.term}</div>
+      <div class="term-def">${t.def}</div>
+    </div>`).join('');
+}
+
+// ═══════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════
+
+function showTab(name) {
+  document.getElementById('search-panel').classList.remove('active');
+  document.querySelectorAll('.section-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  const panel = document.getElementById(`tab-${name}`);
+  if (panel) panel.classList.add('active');
+  event.currentTarget.classList.add('active');
+  document.getElementById('searchInput').value = '';
+}
+
+// ═══════════════════════════════════════
+// ACCORDION & EQ TOGGLE
+// ═══════════════════════════════════════
+
+function toggleAcc(hd) {
+  hd.classList.toggle('open');
+  hd.nextElementSibling.classList.toggle('open');
+}
+
+function toggleEQ(hd) {
+  hd.classList.toggle('open');
+  hd.parentElement.querySelector('.eq-body').classList.toggle('open');
+}
+
+// ═══════════════════════════════════════
+// SEARCH
+// ═══════════════════════════════════════
+
+function buildCorpus() {
+  const c = [];
+  FLASHCARDS.forEach((fc, i) => c.push({ src: `Flashcard ${i+1}`, text: fc.q + ' ' + fc.a, disp: `<strong>${fc.q}</strong><br>${fc.a}` }));
+  IAI_QUESTIONS.forEach(q => {
+    Object.entries(q.sections).forEach(([t, bs]) => {
+      bs.forEach(b => c.push({ src: `${q.source} ${q.qid} — ${t}`, text: b, disp: b }));
+    });
+  });
+  IFOA_QUESTIONS.forEach(q => {
+    Object.entries(q.sections).forEach(([t, bs]) => {
+      bs.forEach(b => c.push({ src: `${q.source} ${q.qid} — ${t}`, text: b, disp: b }));
+    });
+  });
+  KEY_TERMS.forEach(kt => c.push({ src: `Key Term: ${kt.term}`, text: kt.term + ' ' + kt.def, disp: `<strong>${kt.term}:</strong> ${kt.def}` }));
+  return c;
+}
+
+let corpus = null;
+
+function doSearch(query) {
+  if (!query || query.length < 2) {
+    document.getElementById('search-panel').classList.remove('active');
+    document.querySelectorAll('.section-panel').forEach(p => p.classList.remove('active'));
+    const at = document.querySelector('.nav-tab.active');
+    if (at) {
+      const m = at.getAttribute('onclick').match(/showTab\('([^']+)'\)/);
+      if (m) document.getElementById(`tab-${m[1]}`).classList.add('active');
+    }
+    return;
+  }
+  if (!corpus) corpus = buildCorpus();
+  const q = query.toLowerCase();
+  const results = corpus.filter(item => item.text.toLowerCase().includes(q));
+  document.querySelectorAll('.section-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('search-panel').classList.add('active');
+  document.getElementById('search-count').textContent = `${results.length} result${results.length !== 1 ? 's' : ''} for "${query}"`;
+  const hl = (text, q) => text.replace(new RegExp(`(${q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi'), '<mark class="hl">$1</mark>');
+  document.getElementById('search-results').innerHTML = results.slice(0, 30).map(r => `
+    <div class="sr">
+      <div class="sr-src">${r.src}</div>
+      <div class="sr-text">${hl(r.disp, query)}</div>
+    </div>`).join('') || '<div class="sr"><div class="sr-text">No results found.</div></div>';
+}
+
+// ═══════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════
+renderFlashcards();
+renderExamQs('iai-container', IAI_QUESTIONS);
+renderExamQs('ifoa-container', IFOA_QUESTIONS);
+renderTerms();
+</script>
+</body>
+</html>
