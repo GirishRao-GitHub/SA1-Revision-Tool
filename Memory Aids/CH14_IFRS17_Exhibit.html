@@ -1,0 +1,1206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IFRS 17 · SA1 Interactive Exhibit</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0e1117;
+  --surface: #151c28;
+  --card: #1a2236;
+  --border: #2a3a55;
+  --gold: #d4a44c;
+  --gold-dim: #8a6930;
+  --teal: #3ecfb8;
+  --coral: #e06b5a;
+  --blue: #4a90d9;
+  --lavender: #9b7fca;
+  --text: #c8d4e8;
+  --text-dim: #6b7fa0;
+  --text-bright: #edf2ff;
+  --csm-col: #9b7fca;
+  --ra-col: #3ecfb8;
+  --bel-col: #4a90d9;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'IBM Plex Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* ── HEADER ── */
+header {
+  background: linear-gradient(135deg, #0a0f1a 0%, #111827 100%);
+  border-bottom: 1px solid var(--border);
+  padding: 32px 40px 28px;
+  position: relative;
+  overflow: hidden;
+}
+header::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 60% 80% at 80% 50%, rgba(212,164,76,0.07) 0%, transparent 70%);
+  pointer-events: none;
+}
+.header-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 3px;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.header-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 36px;
+  color: var(--text-bright);
+  line-height: 1.2;
+}
+.header-title span { color: var(--gold); }
+.header-sub {
+  margin-top: 8px;
+  color: var(--text-dim);
+  font-size: 13px;
+  max-width: 600px;
+}
+.header-badge {
+  display: inline-block;
+  background: rgba(212,164,76,0.12);
+  border: 1px solid var(--gold-dim);
+  color: var(--gold);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  padding: 3px 10px;
+  border-radius: 3px;
+  letter-spacing: 1px;
+  margin-top: 12px;
+}
+
+/* ── LAYOUT ── */
+.main { max-width: 1100px; margin: 0 auto; padding: 32px 24px; }
+
+/* ── NAV TABS ── */
+.nav-tabs {
+  display: flex;
+  gap: 4px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 4px;
+  margin-bottom: 32px;
+  overflow-x: auto;
+}
+.tab-btn {
+  flex: 1;
+  min-width: 140px;
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 9px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.2s;
+  letter-spacing: 0.3px;
+  text-align: center;
+  white-space: nowrap;
+}
+.tab-btn:hover { background: rgba(255,255,255,0.05); color: var(--text); }
+.tab-btn.active {
+  background: var(--gold);
+  color: #0e1117;
+  font-weight: 600;
+}
+
+/* ── PANEL ── */
+.panel { display: none; animation: fadeIn 0.3s ease; }
+.panel.active { display: block; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ── SECTION HEADINGS ── */
+.section-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  color: var(--text-bright);
+  margin-bottom: 16px;
+}
+
+/* ── CARDS ── */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 24px;
+  margin-bottom: 20px;
+}
+.card-title {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ── BULLET LISTS ── */
+.bullet-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.bullet-list li {
+  padding-left: 18px;
+  position: relative;
+  color: var(--text);
+  font-size: 13px;
+}
+.bullet-list li::before {
+  content: '▸';
+  position: absolute; left: 0;
+  color: var(--gold-dim);
+  font-size: 11px;
+  top: 1px;
+}
+
+/* ── GRID ── */
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
+@media (max-width: 700px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
+
+/* ── BUILDING BLOCKS DIAGRAM ── */
+.bb-wrapper {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 28px;
+  margin-bottom: 20px;
+}
+.bb-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 18px;
+  color: var(--text-bright);
+  text-align: center;
+  margin-bottom: 8px;
+}
+.bb-subtitle {
+  font-size: 12px;
+  color: var(--text-dim);
+  text-align: center;
+  margin-bottom: 28px;
+  font-family: 'IBM Plex Mono', monospace;
+}
+.bb-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  max-width: 480px;
+  margin: 0 auto;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.4);
+}
+.bb-block {
+  padding: 18px 24px;
+  cursor: pointer;
+  transition: filter 0.2s, transform 0.15s;
+  position: relative;
+}
+.bb-block:hover { filter: brightness(1.15); transform: scaleX(1.01); }
+.bb-block.csm { background: linear-gradient(135deg, #5a3d8a 0%, #7b5fb5 100%); }
+.bb-block.ra  { background: linear-gradient(135deg, #1d7a6e 0%, #2ea898 100%); }
+.bb-block.bel { background: linear-gradient(135deg, #1f4e8a 0%, #3a6eb5 100%); }
+.bb-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.95);
+  letter-spacing: 1px;
+}
+.bb-full { font-size: 11px; color: rgba(255,255,255,0.7); margin-top: 2px; }
+.bb-tag {
+  position: absolute; right: 16px; top: 50%; transform: translateY(-50%);
+  background: rgba(0,0,0,0.25);
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  color: rgba(255,255,255,0.8);
+  letter-spacing: 0.5px;
+}
+
+.bb-detail {
+  display: none;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 20px;
+  margin: 16px 0;
+  max-width: 480px;
+  margin-left: auto;
+  margin-right: auto;
+  animation: fadeIn 0.25s ease;
+}
+.bb-detail.open { display: block; }
+.bb-detail h4 {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  letter-spacing: 1px;
+  margin-bottom: 10px;
+}
+.bb-detail h4.csm-h { color: var(--csm-col); }
+.bb-detail h4.ra-h  { color: var(--ra-col); }
+.bb-detail h4.bel-h { color: var(--bel-col); }
+.bb-detail p { font-size: 13px; color: var(--text); margin-bottom: 8px; }
+.bb-detail .formula {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  background: rgba(0,0,0,0.3);
+  padding: 10px 14px;
+  border-radius: 5px;
+  color: var(--gold);
+  margin-top: 8px;
+}
+.bb-hint { text-align: center; font-size: 11px; color: var(--text-dim); margin-top: 12px; font-family: 'IBM Plex Mono', monospace; }
+
+/* ── CSM TIMELINE ── */
+.csm-timeline { margin-bottom: 20px; }
+.timeline-steps { display: flex; gap: 0; overflow-x: auto; }
+.tstep {
+  flex: 1; min-width: 160px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  padding: 18px 16px;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+}
+.tstep:not(:last-child)::after {
+  content: '→';
+  position: absolute; right: -12px; top: 50%; transform: translateY(-50%);
+  color: var(--gold-dim);
+  font-size: 16px;
+  z-index: 1;
+}
+.tstep:first-child { border-radius: 8px 0 0 8px; }
+.tstep:last-child { border-radius: 0 8px 8px 0; }
+.tstep:hover { background: var(--card); border-color: var(--gold-dim); }
+.tstep.active { background: var(--card); border-color: var(--gold); }
+.tstep-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  color: var(--gold);
+  letter-spacing: 1px;
+  margin-bottom: 4px;
+}
+.tstep-title { font-size: 12px; font-weight: 500; color: var(--text-bright); }
+.tstep-body {
+  display: none;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 20px;
+  margin-top: 12px;
+  animation: fadeIn 0.25s ease;
+}
+.tstep-body.open { display: block; }
+.tstep-body p { font-size: 13px; color: var(--text); margin-bottom: 8px; }
+.tstep-body .formula {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 12px;
+  background: rgba(0,0,0,0.3);
+  padding: 10px 14px;
+  border-radius: 5px;
+  color: var(--gold);
+  margin: 8px 0;
+}
+.highlight-pos { color: var(--teal); font-weight: 500; }
+.highlight-neg { color: var(--coral); font-weight: 500; }
+.highlight-csm { color: var(--csm-col); font-weight: 500; }
+
+/* ── MODEL CARDS ── */
+.model-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 22px;
+  transition: border-color 0.2s;
+}
+.model-card:hover { border-color: var(--gold-dim); }
+.model-badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 4px;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 1px;
+  font-weight: 500;
+  margin-bottom: 12px;
+}
+.badge-gmm { background: rgba(74,144,217,0.15); color: var(--blue); border: 1px solid rgba(74,144,217,0.3); }
+.badge-vfa { background: rgba(62,207,184,0.15); color: var(--teal); border: 1px solid rgba(62,207,184,0.3); }
+.badge-paa { background: rgba(212,164,76,0.15); color: var(--gold); border: 1px solid rgba(212,164,76,0.3); }
+.model-name {
+  font-family: 'Playfair Display', serif;
+  font-size: 17px;
+  color: var(--text-bright);
+  margin-bottom: 6px;
+}
+.model-use {
+  font-size: 11px;
+  color: var(--text-dim);
+  font-style: italic;
+  margin-bottom: 14px;
+  font-family: 'IBM Plex Mono', monospace;
+}
+
+/* ── COMPARE TABLE ── */
+.compare-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.compare-table th {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--gold);
+  padding: 10px 14px;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+  background: rgba(0,0,0,0.2);
+}
+.compare-table td {
+  padding: 11px 14px;
+  border-bottom: 1px solid rgba(42,58,85,0.5);
+  vertical-align: top;
+  color: var(--text);
+}
+.compare-table tr:last-child td { border-bottom: none; }
+.compare-table tr:hover td { background: rgba(255,255,255,0.02); }
+.td-label { font-weight: 500; color: var(--text-bright); width: 28%; }
+.td-gmm { color: #7ab3e8; }
+.td-vfa { color: #4fd9c8; }
+
+/* ── TRANSITIONAL ── */
+.trans-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+@media (max-width: 700px) { .trans-grid { grid-template-columns: 1fr; } }
+.trans-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 18px;
+}
+.trans-badge {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 1px;
+  padding: 3px 8px;
+  border-radius: 4px;
+  display: inline-block;
+  margin-bottom: 10px;
+}
+.tb-fra { background: rgba(62,207,184,0.15); color: var(--teal); border: 1px solid rgba(62,207,184,0.3); }
+.tb-mra { background: rgba(74,144,217,0.15); color: var(--blue); border: 1px solid rgba(74,144,217,0.3); }
+.tb-fva { background: rgba(212,164,76,0.15); color: var(--gold); border: 1px solid rgba(212,164,76,0.3); }
+.trans-name { font-size: 14px; font-weight: 600; color: var(--text-bright); margin-bottom: 6px; }
+.trans-desc { font-size: 12px; color: var(--text); }
+.trans-when { font-size: 11px; color: var(--text-dim); margin-top: 8px; font-style: italic; }
+.pref-arrow {
+  text-align: center;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  color: var(--gold-dim);
+  margin: 4px 0;
+  letter-spacing: 1px;
+}
+
+/* ── EXAM Q&A ── */
+.qa-item {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+.qa-q {
+  padding: 16px 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  transition: background 0.15s;
+}
+.qa-q:hover { background: rgba(212,164,76,0.05); }
+.qa-num {
+  flex-shrink: 0;
+  width: 26px; height: 26px;
+  background: rgba(212,164,76,0.15);
+  border: 1px solid var(--gold-dim);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  color: var(--gold);
+  font-weight: 500;
+  margin-top: 1px;
+}
+.qa-text { font-size: 13px; color: var(--text-bright); flex: 1; font-weight: 500; }
+.qa-chevron {
+  flex-shrink: 0;
+  color: var(--gold-dim);
+  font-size: 14px;
+  transition: transform 0.2s;
+  margin-top: 2px;
+}
+.qa-item.open .qa-chevron { transform: rotate(90deg); }
+.qa-a {
+  display: none;
+  padding: 0 20px 16px 58px;
+  font-size: 13px;
+  color: var(--text);
+  border-top: 1px solid var(--border);
+  padding-top: 14px;
+}
+.qa-item.open .qa-a { display: block; }
+.qa-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: var(--teal);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+
+/* ── GLOSSARY ── */
+.glossary { display: flex; flex-direction: column; gap: 10px; }
+.gloss-item {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  padding: 14px 18px;
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+.gloss-term {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--gold);
+  min-width: 140px;
+  letter-spacing: 0.5px;
+  padding-top: 1px;
+}
+.gloss-def { font-size: 13px; color: var(--text); }
+
+/* ── PILLS ── */
+.pill-row { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+.pill {
+  background: rgba(212,164,76,0.1);
+  border: 1px solid rgba(212,164,76,0.25);
+  color: var(--gold);
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  letter-spacing: 0.5px;
+}
+
+/* ── DIVIDER ── */
+.divider { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
+
+/* ── INFO BOX ── */
+.info-box {
+  background: rgba(74,144,217,0.08);
+  border: 1px solid rgba(74,144,217,0.25);
+  border-left: 3px solid var(--blue);
+  border-radius: 6px;
+  padding: 14px 16px;
+  font-size: 13px;
+  color: var(--text);
+  margin-bottom: 16px;
+}
+.warn-box {
+  background: rgba(224,107,90,0.08);
+  border: 1px solid rgba(224,107,90,0.25);
+  border-left: 3px solid var(--coral);
+  border-radius: 6px;
+  padding: 14px 16px;
+  font-size: 13px;
+  color: var(--text);
+  margin-bottom: 16px;
+}
+
+/* ── FOOTER ── */
+footer {
+  border-top: 1px solid var(--border);
+  padding: 16px 40px;
+  text-align: center;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 10px;
+  color: var(--text-dim);
+  letter-spacing: 1px;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-label">SA1 · Chapter 14 · Profit Reporting</div>
+  <div class="header-title">IFRS <span>17</span> Insurance Contracts</div>
+  <div class="header-sub">An interactive study exhibit covering the General Measurement Model, measurement approaches, CSM mechanics, and transition requirements.</div>
+  <div class="header-badge">SOURCE: SA1_REVISION_NOTES.JSON · CH14</div>
+</header>
+
+<div class="main">
+
+  <div class="nav-tabs">
+    <button class="tab-btn active" onclick="showTab('overview')">① Overview</button>
+    <button class="tab-btn" onclick="showTab('building-blocks')">② Building Blocks</button>
+    <button class="tab-btn" onclick="showTab('csm')">③ CSM Mechanics</button>
+    <button class="tab-btn" onclick="showTab('models')">④ Measurement Models</button>
+    <button class="tab-btn" onclick="showTab('transition')">⑤ Transition</button>
+    <button class="tab-btn" onclick="showTab('examqa')">⑥ Exam Q&A</button>
+    <button class="tab-btn" onclick="showTab('glossary')">⑦ Glossary</button>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       PANEL 1 · OVERVIEW
+  ══════════════════════════════════════════════════════ -->
+  <div id="panel-overview" class="panel active">
+
+    <div class="card">
+      <div class="card-title">📋 What is IFRS 17?</div>
+      <ul class="bullet-list">
+        <li>IFRS 17 <em>Insurance Contracts</em> is the IFRS standard governing accounting for insurance contracts. It replaced IFRS 4 from <strong>1 January 2023</strong>.</li>
+        <li>It is the <strong>first comprehensive international accounting standard</strong> applicable to all types of health and care insurance contracts.</li>
+        <li>It is much more prescriptive than IFRS 4 and its adoption has led to substantial changes to financial disclosures and the systems and processes that produce them.</li>
+        <li>IFRS 17 aims to make financial statements <strong>more relevant, comparable, and transparent</strong>.</li>
+        <li>EU regulations require all listed insurance companies to use EU-adopted IFRS for their consolidated financial statements. In the UK, all listed companies must use IFRS.</li>
+        <li>Key related IFRS standards for health and care insurers: <strong>IFRS 9</strong> (Financial Instruments) and <strong>IFRS 7</strong> (Financial Instruments: Disclosures).</li>
+      </ul>
+    </div>
+
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-title">⚠️ Why Replace IFRS 4? (Main Criticisms)</div>
+        <ul class="bullet-list">
+          <li><strong>Sensitivity to assumptions:</strong> Reported profits were highly sensitive to reserving assumptions.</li>
+          <li><strong>Lack of comparability:</strong> Companies could use local accounting standards or different methodologies, making cross-insurer comparison difficult.</li>
+          <li><strong>Early profit recognition:</strong> Premiums and profits for long-term contracts could be recognised too early.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <div class="card-title">✅ What IFRS 17 Achieves</div>
+        <ul class="bullet-list">
+          <li><strong>Defers profit</strong> on long-term contracts through the CSM — profit recognised over the service period.</li>
+          <li><strong>Standardises methodology</strong> — all insurers follow the same GMM framework.</li>
+          <li><strong>Separates insurance profit</strong> from investment returns — revenue and expenses presented separately.</li>
+          <li><strong>Immediate loss recognition</strong> — loss-making contracts cannot be offset against profitable ones.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📊 IFRS Principles (Background)</div>
+      <div class="grid-2">
+        <ul class="bullet-list">
+          <li><strong>Fair representation:</strong> Financial statements must present fairly financial position, performance, and cashflows.</li>
+          <li><strong>Going concern:</strong> Statements prepared assuming the entity will continue in operation.</li>
+          <li><strong>Accruals based:</strong> Revenue when earned, expenses when incurred — regardless of actual cashflows.</li>
+          <li><strong>Comparability:</strong> Presentation must be consistent period to period unless justified by changed circumstances.</li>
+        </ul>
+        <ul class="bullet-list">
+          <li><strong>Compliance:</strong> Entity must make an explicit statement of compliance with all IFRS requirements.</li>
+          <li><strong>Reporting period:</strong> Statements prepared at least annually; period changes must be disclosed.</li>
+          <li><strong>Understandability:</strong> Information should be readily understandable to knowledgeable users.</li>
+          <li><strong>Offsetting:</strong> Assets and liabilities, and income and expenses, may generally not be offset.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📄 Disclosure Requirements</div>
+      <ul class="bullet-list">
+        <li><strong>Insurance revenue earned</strong> — amount earned from providing insurance coverage.</li>
+        <li><strong>Insurance service expenses incurred</strong> — claims, benefits, and other expenses of providing insurance.</li>
+        <li><strong>Insurance finance income and expenses</strong> — the unwinding of discount on insurance liabilities.</li>
+      </ul>
+      <div class="warn-box" style="margin-top:14px">
+        <strong>Implementation note:</strong> The implementation of IFRS 17 took much longer than planned and has been <strong>complex and expensive</strong> for many health and care insurers — requiring significant changes to systems, processes, and data.
+      </div>
+    </div>
+
+  </div><!-- /panel-overview -->
+
+
+  <!-- ══════════════════════════════════════════════════════
+       PANEL 2 · BUILDING BLOCKS
+  ══════════════════════════════════════════════════════ -->
+  <div id="panel-building-blocks" class="panel">
+
+    <div class="section-label">GMM · Building Block Approach</div>
+    <div class="section-title">The Four Building Blocks</div>
+
+    <div class="info-box">
+      The <strong>General Measurement Model (GMM)</strong>, also called the <strong>Building Block Approach (BBA)</strong>, is the <strong>default</strong> valuation methodology under IFRS 17. It applies to all insurance contracts unless another method is permitted. Click each block below to explore.
+    </div>
+
+    <div class="bb-wrapper">
+      <div class="bb-title">IFRS 17 Contract Liability</div>
+      <div class="bb-subtitle">GMM / Building Block Approach · Click a block to expand</div>
+      <div class="bb-stack">
+        <div class="bb-block csm" onclick="toggleBlock('csm')">
+          <div class="bb-label">CSM — Contractual Service Margin</div>
+          <div class="bb-full">Unearned future profit</div>
+          <div class="bb-tag">BLOCK 4</div>
+        </div>
+        <div class="bb-block ra" onclick="toggleBlock('ra')">
+          <div class="bb-label">RA — Risk Adjustment</div>
+          <div class="bb-full">Non-market risk allowance</div>
+          <div class="bb-tag">BLOCK 3</div>
+        </div>
+        <div class="bb-block bel" onclick="toggleBlock('bel')">
+          <div class="bb-label">BEL — Best Estimate Liability</div>
+          <div class="bb-full">Block 1 (FCF) + Block 2 (TVM)</div>
+          <div class="bb-tag">BLOCKS 1+2</div>
+        </div>
+      </div>
+      <div class="bb-hint">▸ Click a building block above to see details</div>
+
+      <div id="detail-bel" class="bb-detail">
+        <h4 class="bel-h">BLOCKS 1 + 2 · Best Estimate Liability (BEL)</h4>
+        <p><strong>Block 1 — Fulfilment Cashflows (FCF):</strong> Probability-weighted estimates of all future cashflows arising from the contract — premiums, claims, benefits, and expenses.</p>
+        <p><strong>Block 2 — Time Value of Money:</strong> FCFs are discounted using a rate derived from observable market data to get the present value.</p>
+        <p>The BEL is analogous to the <strong>Solvency II Best Estimate</strong>. Methodology: derive best estimate assumptions → derive a discount rate from observable market data → discount projected cashflows → allow for the cost of any guarantees.</p>
+        <div class="formula">BEL = PV(Future claims + expenses − future premiums)</div>
+      </div>
+
+      <div id="detail-ra" class="bb-detail">
+        <h4 class="ra-h">BLOCK 3 · Risk Adjustment (RA)</h4>
+        <p>The RA represents the value of <strong>non-market risks</strong> not captured in the BEL — analogous to the Solvency II Risk Margin.</p>
+        <p>Calculation methods: <strong>VaR</strong> (Value at Risk), <strong>CTE</strong> (Conditional Tail Expectation), or <strong>Cost of Capital (CoC)</strong>. IFRS 17 does NOT specify the confidence level — this is chosen by the insurer.</p>
+        <p>This flexibility means comparability of RA across insurers is limited unless they disclose confidence levels.</p>
+        <div class="formula">RA = Compensation for bearing non-market risk uncertainty</div>
+      </div>
+
+      <div id="detail-csm" class="bb-detail">
+        <h4 class="csm-h">BLOCK 4 · Contractual Service Margin (CSM)</h4>
+        <p>The CSM is a <strong>new concept</strong> under IFRS 17. It represents <strong>future (unearned) profit</strong> on the contract. At inception:</p>
+        <div class="formula">CSM = (Initial premium − Initial expenses) − (BEL + RA)</div>
+        <p>It is set so that <strong>zero profit arises at the point of sale</strong>. If BEL + RA exceeds the initial net cashflow (i.e. CSM would be negative), a <strong>loss is recognised immediately</strong> — the CSM cannot be negative.</p>
+        <p>The CSM is then <strong>released</strong> over the policy term in line with a chosen <em>coverage unit</em> measure (e.g. number of policies in-force), smoothing profit emergence.</p>
+        <p>The CSM also <strong>absorbs</strong> changes in BEL and RA due to non-investment assumption changes — so reported profit is driven by actual experience, not assumption volatility.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">📐 Contract Grouping Rules</div>
+      <ul class="bullet-list">
+        <li>Profitable and unprofitable contracts <strong>cannot be offset</strong>.</li>
+        <li>Each policy is categorised as: <span class="highlight-neg">loss-making at inception</span>; <span class="highlight-pos">profitable with no significant risk of loss</span>; or <em>any other profitable contract</em>.</li>
+        <li><strong>Annual cohort rule:</strong> Policies written more than one year apart cannot be grouped — contracts must remain in annual cohorts.</li>
+        <li><strong>Losses recognised immediately;</strong> profits emerge over the contract term via CSM release.</li>
+      </ul>
+    </div>
+
+  </div><!-- /panel-building-blocks -->
+
+
+  <!-- ══════════════════════════════════════════════════════
+       PANEL 3 · CSM MECHANICS
+  ══════════════════════════════════════════════════════ -->
+  <div id="panel-csm" class="panel">
+
+    <div class="section-label">Contractual Service Margin</div>
+    <div class="section-title">CSM Lifecycle — From Inception to Release</div>
+
+    <div class="info-box">
+      The CSM is the most novel concept in IFRS 17. It defers profit recognition and acts as a buffer against assumption changes. Click each stage below to understand what happens.
+    </div>
+
+    <div class="csm-timeline">
+      <div class="timeline-steps">
+        <div class="tstep active" onclick="showStep(0)">
+          <div class="tstep-num">STAGE 01</div>
+          <div class="tstep-title">Policy inception</div>
+        </div>
+        <div class="tstep" onclick="showStep(1)">
+          <div class="tstep-num">STAGE 02</div>
+          <div class="tstep-title">Annual release</div>
+        </div>
+        <div class="tstep" onclick="showStep(2)">
+          <div class="tstep-num">STAGE 03</div>
+          <div class="tstep-title">Assumption changes</div>
+        </div>
+        <div class="tstep" onclick="showStep(3)">
+          <div class="tstep-num">STAGE 04</div>
+          <div class="tstep-title">CSM insufficient</div>
+        </div>
+        <div class="tstep" onclick="showStep(4)">
+          <div class="tstep-num">STAGE 05</div>
+          <div class="tstep-title">Loss at inception</div>
+        </div>
+      </div>
+
+      <div id="step-0" class="tstep-body open">
+        <div class="qa-label">INCEPTION · SETTING THE CSM</div>
+        <p>At policy inception, the CSM is set to ensure <strong>zero profit is recognised at point of sale</strong>.</p>
+        <div class="formula">CSM₀ = (Initial premium − Initial expenses) − (BEL₀ + RA₀)</div>
+        <p>For a profitable contract, the present value of future profit loadings in all future premiums exceeds current expenses — so CSM₀ is <span class="highlight-pos">positive</span>.</p>
+        <p><strong>Key insight:</strong> Even if initial expenses exceed the first premium (common in regular premium business), the BEL will be <em>negative</em> (PV of future premiums net of benefits is positive), making the CSM positive as long as the RA is smaller than the total profit loadings.</p>
+      </div>
+      <div id="step-1" class="tstep-body">
+        <div class="qa-label">EACH REPORTING PERIOD · RELEASING THE CSM</div>
+        <p>The CSM is <strong>released</strong> over the contract term according to a chosen <strong>coverage unit</strong> measure — for example, number of policies in-force, sum at risk, or expected claims.</p>
+        <div class="formula">CSM released each period = CSM balance × (coverage units in period ÷ total remaining coverage units)</div>
+        <p>This creates a <strong>smooth, systematic emergence of profit</strong> over the policy term — rather than a large profit at inception and losses in later years.</p>
+        <p>The CSM balance also <strong>unwinds</strong> at the discount rate each period (interest accretes on the CSM).</p>
+      </div>
+      <div id="step-2" class="tstep-body">
+        <div class="qa-label">ASSUMPTION CHANGES · CSM AS BUFFER</div>
+        <p>If non-investment assumptions change (e.g. revised morbidity or lapse assumptions), the resulting change to BEL + RA is <strong>absorbed by the CSM</strong> rather than flowing through to profit/loss.</p>
+        <p>This is a key design feature: reported profit is driven more by <strong>actual experience</strong> than by assumption changes, reducing volatility.</p>
+        <p class="highlight-pos">→ If BEL + RA increases by £X: CSM decreases by £X (P&L unaffected)</p>
+        <p class="highlight-pos">→ If BEL + RA decreases by £X: CSM increases by £X (profit deferred)</p>
+        <p><strong>Exception (GMM only):</strong> Changes in discount rate <em>cannot</em> be absorbed by the CSM under the GMM — these flow directly to profit/loss. Under the VFA, discount rate changes are absorbed by the CSM.</p>
+      </div>
+      <div id="step-3" class="tstep-body">
+        <div class="qa-label">CSM INSUFFICIENT · IMMEDIATE LOSS</div>
+        <p>If the required increase in BEL + RA <strong>exceeds the remaining CSM balance</strong>, the CSM is exhausted and the shortfall is recognised <span class="highlight-neg">immediately as a loss in P&L</span>.</p>
+        <div class="formula">Loss recognised = Increase in (BEL + RA) − Remaining CSM</div>
+        <p>After this point, the contract becomes an <strong>onerous contract</strong>. Any subsequent favourable experience or assumption changes first restore the onerous contract balance before the CSM can become positive again.</p>
+      </div>
+      <div id="step-4" class="tstep-body">
+        <div class="qa-label">LOSS-MAKING CONTRACT · NO CSM</div>
+        <p>The CSM <strong>cannot be negative</strong>. If (BEL + RA) exceeds initial net cashflows at inception, the entire day-one loss is recognised <span class="highlight-neg">immediately in P&L</span>.</p>
+        <div class="formula">If (BEL₀ + RA₀) > (Initial premium − Initial expenses): CSM = 0, loss = full shortfall</div>
+        <p>Loss-making and profitable contracts must be kept in separate groups — a profitable contract cannot subsidise a loss-making one within the liability measurement.</p>
+      </div>
+    </div>
+
+    <div class="grid-2" style="margin-top:20px">
+      <div class="card">
+        <div class="card-title">📝 Coverage Unit</div>
+        <p style="font-size:13px;color:var(--text)">The measure used to determine how the CSM is released each period. Examples: number of policies in-force, sum at risk, expected claims. Must be chosen consistently and applied on an annual cohort basis — policies written more than one year apart cannot be grouped together.</p>
+      </div>
+      <div class="card">
+        <div class="card-title">💡 Key Design Goal</div>
+        <p style="font-size:13px;color:var(--text)">The CSM ensures profit is recognised as insurance services are provided — <em>not</em> at inception. This addresses the IFRS 4 criticism of early profit recognition, and prevents insurers from "front-loading" profit by changing assumptions.</p>
+      </div>
+    </div>
+
+  </div><!-- /panel-csm -->
+
+
+  <!-- ══════════════════════════════════════════════════════
+       PANEL 4 · MEASUREMENT MODELS
+  ══════════════════════════════════════════════════════ -->
+  <div id="panel-models" class="panel">
+
+    <div class="section-label">IFRS 17 · Valuation Methods</div>
+    <div class="section-title">Three Measurement Models</div>
+
+    <div class="grid-3" style="margin-bottom:20px">
+      <div class="model-card">
+        <div class="model-badge badge-gmm">GMM / BBA</div>
+        <div class="model-name">General Measurement Model</div>
+        <div class="model-use">Also: Building Block Approach</div>
+        <ul class="bullet-list">
+          <li><strong>Default</strong> methodology — applies to any contract not eligible for VFA or PAA.</li>
+          <li>Appropriate for <strong>traditional long-term life business</strong> e.g. term assurance, without-profit annuities.</li>
+          <li>Discount rate based on <strong>market observable data</strong>.</li>
+          <li>Discount rate changes flow through <strong>directly to P&L</strong> — CSM not unlocked for rate changes.</li>
+        </ul>
+      </div>
+      <div class="model-card">
+        <div class="model-badge badge-vfa">VFA</div>
+        <div class="model-name">Variable Fee Approach</div>
+        <div class="model-use">Mandatory for direct participation features</div>
+        <ul class="bullet-list">
+          <li>Used where a significant portion of cashflows <strong>vary with the value of a defined pool of assets</strong>.</li>
+          <li>Applicable to <strong>unit-linked, with-profits</strong>, or similar contracts.</li>
+          <li>Discount rate calculated with reference to the <strong>underlying asset pool</strong>.</li>
+          <li>CSM is <strong>"unlocked"</strong> — absorbs changes in BEL and RA due to discount rate movements.</li>
+        </ul>
+      </div>
+      <div class="model-card">
+        <div class="model-badge badge-paa">PAA</div>
+        <div class="model-name">Premium Allocation Approach</div>
+        <div class="model-use">Simplified model</div>
+        <ul class="bullet-list">
+          <li>Simplified method — similar to the <strong>unearned premium method</strong> used by general insurers.</li>
+          <li>May be used for <strong>short-term health and care business</strong> (typically annual contracts).</li>
+          <li>Permitted where it would produce a liability not materially different from the full GMM.</li>
+          <li>Significantly reduces computational complexity vs GMM.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">⚖️ GMM vs VFA — Key Differences</div>
+      <div style="overflow-x:auto">
+        <table class="compare-table">
+          <tr>
+            <th>Dimension</th>
+            <th class="td-gmm">GMM</th>
+            <th class="td-vfa">VFA</th>
+          </tr>
+          <tr>
+            <td class="td-label">Applicable to</td>
+            <td class="td-gmm">Traditional long-term contracts (term assurance, annuities)</td>
+            <td class="td-vfa">Unit-linked, with-profits, and direct participation contracts</td>
+          </tr>
+          <tr>
+            <td class="td-label">Discount rate</td>
+            <td class="td-gmm">Market observable data — not linked to a specific asset pool</td>
+            <td class="td-vfa">Calculated with reference to the pool of assets backing the contract</td>
+          </tr>
+          <tr>
+            <td class="td-label">Discount rate changes → P&amp;L?</td>
+            <td class="td-gmm">Yes — flows directly to P&L (CSM not unlocked)</td>
+            <td class="td-vfa">No — absorbed by the CSM (CSM unlocked)</td>
+          </tr>
+          <tr>
+            <td class="td-label">Non-investment assumption changes</td>
+            <td class="td-gmm">Absorbed by CSM (up to available balance)</td>
+            <td class="td-vfa">Absorbed by CSM (up to available balance)</td>
+          </tr>
+          <tr>
+            <td class="td-label">CSM "unlocking"</td>
+            <td class="td-gmm">Not unlocked for financial assumptions</td>
+            <td class="td-vfa">Unlocked to absorb financial assumption changes</td>
+          </tr>
+          <tr>
+            <td class="td-label">P&amp;L volatility from market moves</td>
+            <td class="td-gmm">Higher — market movements pass through directly</td>
+            <td class="td-vfa">Lower — market movements absorbed in CSM, released over time</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="info-box">
+      <strong>Memory hook:</strong> Under GMM the CSM is a <em>fixed dam</em> that absorbs non-financial shocks but lets market waves through to P&L. Under VFA, the CSM is a <em>flexible reservoir</em> that absorbs both financial and non-financial shocks.
+    </div>
+
+  </div><!-- /panel-models -->
+
+
+  <!-- ══════════════════════════════════════════════════════
+       PANEL 5 · TRANSITION
+  ══════════════════════════════════════════════════════ -->
+  <div id="panel-transition" class="panel">
+
+    <div class="section-label">IFRS 17 · Effective date: 1 January 2023</div>
+    <div class="section-title">Transitional Requirements</div>
+
+    <div class="info-box">
+      Companies transitioning to IFRS 17 were required to calculate a <strong>transitional CSM</strong> for all in-force business at the transition date. Three approaches are available, applied in order of preference.
+    </div>
+
+    <div class="trans-grid" style="margin-bottom:12px">
+      <div class="trans-card">
+        <div class="trans-badge tb-fra">PREFERRED</div>
+        <div class="trans-name">Full Retrospective Approach (FRA)</div>
+        <div class="trans-desc">Determines the position at transition as if IFRS 17 had always applied throughout the <strong>full policy lifetime</strong>. Requires complete historical data.</div>
+        <div class="trans-when">Must be used if practicable.</div>
+      </div>
+      <div class="trans-card">
+        <div class="trans-badge tb-mra">IF FRA NOT PRACTICABLE</div>
+        <div class="trans-name">Modified Retrospective Approach (MRA)</div>
+        <div class="trans-desc">A <strong>simplified version</strong> of the FRA, using reasonably available information. Aims to produce a result as close as possible to FRA.</div>
+        <div class="trans-when">Used when FRA is not practicable; requires reasonably available information.</div>
+      </div>
+      <div class="trans-card">
+        <div class="trans-badge tb-fva">LAST RESORT</div>
+        <div class="trans-name">Fair Value Approach (FVA)</div>
+        <div class="trans-desc">Transitional CSM = <strong>fair value of policies</strong> less fulfilment cashflows at the transition date. Requires only current-date data.</div>
+        <div class="trans-when">Used when MRA is also not practicable.</div>
+      </div>
+    </div>
+
+    <div class="pref-arrow">FRA  →  MRA  →  FVA  (in order of preference)</div>
+
+    <div class="card" style="margin-top:20px">
+      <div class="card-title">🔎 FVA — Transitional CSM Formula</div>
+      <div class="formula" style="font-size:13px; padding:14px 18px; border-radius:6px; background:rgba(0,0,0,0.3); color:var(--gold); font-family:'IBM Plex Mono',monospace">
+        Transitional CSM (FVA) = Fair value of in-force policies at transition date<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;− Fulfilment cashflows at transition date
+      </div>
+    </div>
+
+    <div class="warn-box" style="margin-top:16px">
+      <strong>Practical challenge:</strong> IFRS 17 implementation took much longer than planned and proved complex and expensive. Systems needed to hold historical data for FRA, build new actuarial models for the GMM building blocks, and produce new disclosure formats — all simultaneously.
+    </div>
+
+    <div class="card">
+      <div class="card-title">📋 Other Key Points</div>
+      <ul class="bullet-list">
+        <li>Ind AS 117 is the Indian equivalent of IFRS 17 — relevant for Indian health insurer reporting.</li>
+        <li>IFRS 9 (Financial Instruments) governs the asset side: default measurement is <strong>Fair Value through Profit and Loss (FVPL)</strong>.</li>
+        <li>FVPL means changes in asset fair value come through as profit/loss — consistent with a <strong>market-consistent</strong> approach to both sides of the balance sheet.</li>
+        <li>FVOCI (Fair Value through Other Comprehensive Income) allows some unrealised gains/losses to bypass the P&L where restrictive criteria are met.</li>
+      </ul>
+    </div>
+
+  </div><!-- /panel-transition -->
+
+
+  <!-- ══════════════════════════════════════════════════════
+       PANEL 6 · EXAM Q&A
+  ══════════════════════════════════════════════════════ -->
+  <div id="panel-examqa" class="panel">
+
+    <div class="section-label">Source: SA1 Revision Notes · Ch14 Exam Q&amp;A</div>
+    <div class="section-title">Exam-Style Questions &amp; Answers</div>
+
+    <div class="info-box">
+      These Q&amp;As are drawn directly from the SA1 revision notes (Ch14). Click a question to reveal the model answer.
+    </div>
+
+    <div class="qa-item" onclick="toggleQA(this)">
+      <div class="qa-q">
+        <div class="qa-num">1</div>
+        <div class="qa-text">Why would the CSM be expected to be positive for a profitable regular premium contract, despite initial expenses likely exceeding the initial premium?</div>
+        <div class="qa-chevron">▶</div>
+      </div>
+      <div class="qa-a">
+        <div class="qa-label">Model Answer</div>
+        For a regular premium contract, the BEL would be <strong>negative</strong> because the present value of future premiums (net of future benefits and expenses) exceeds current obligations — the profit loadings in future premiums are expected to recover initial expenses and provide a profit margin. As long as the RA is smaller than the discounted value of all profit loadings, the CSM = (Initial premium − Initial expenses) − (BEL + RA) will be <strong>positive</strong>.
+      </div>
+    </div>
+
+    <div class="qa-item" onclick="toggleQA(this)">
+      <div class="qa-q">
+        <div class="qa-num">2</div>
+        <div class="qa-text">What are the main criticisms of IFRS 4 that IFRS 17 addresses?</div>
+        <div class="qa-chevron">▶</div>
+      </div>
+      <div class="qa-a">
+        <div class="qa-label">Model Answer</div>
+        IFRS 4 was criticised for three main reasons:
+        <br><br>
+        (1) <strong>Sensitivity of reported profits</strong> to reserving assumptions — small changes in assumptions could dramatically alter reported results.
+        <br><br>
+        (2) <strong>Lack of comparability</strong> between different health and care insurance companies — companies could use local standards or different methodologies, making cross-insurer comparison difficult.
+        <br><br>
+        (3) <strong>Early recognition of premiums and profits</strong> for long-term contracts — profits could be front-loaded at inception rather than spread over the service period.
+      </div>
+    </div>
+
+    <div class="qa-item" onclick="toggleQA(this)">
+      <div class="qa-q">
+        <div class="qa-num">3</div>
+        <div class="qa-text">How does the CSM smooth the emergence of profit under IFRS 17?</div>
+        <div class="qa-chevron">▶</div>
+      </div>
+      <div class="qa-a">
+        <div class="qa-label">Model Answer</div>
+        The CSM smooths profit in two ways:
+        <br><br>
+        <strong>(1) Systematic release:</strong> The CSM is set at inception to equal the present value of all future profit loadings. It is then released over the contract term in line with a coverage unit measure (e.g. policies in-force), causing profit to emerge steadily rather than at inception.
+        <br><br>
+        <strong>(2) Absorption of assumption changes:</strong> Changes in the BEL and RA due to non-investment assumption changes are absorbed by the CSM (rather than flowing directly to P&L). So reported profit is driven primarily by <strong>actual experience</strong> rather than by changes in assumptions — further reducing volatility.
+      </div>
+    </div>
+
+    <div class="qa-item" onclick="toggleQA(this)">
+      <div class="qa-q">
+        <div class="qa-num">4</div>
+        <div class="qa-text">What is the key difference between the GMM and VFA with regard to the discount rate and CSM?</div>
+        <div class="qa-chevron">▶</div>
+      </div>
+      <div class="qa-a">
+        <div class="qa-label">Model Answer</div>
+        <strong>GMM:</strong> The discount rate is based on market observable data and is not linked to a specific asset pool. Changes in the discount rate flow through <strong>directly to the profit and loss statement</strong>, and the CSM is not unlocked — financial assumption changes are not absorbed by the CSM.
+        <br><br>
+        <strong>VFA:</strong> The discount rate is calculated with reference to the <strong>pool of assets backing the contract</strong>. The CSM is <strong>unlocked</strong> at each future period to absorb changes in BEL and RA arising from discount rate changes — so these changes are deferred into future profit releases rather than being recognised immediately in P&L.
+        <br><br>
+        Both models absorb non-investment assumption changes in the CSM in the same way.
+      </div>
+    </div>
+
+    <div class="qa-item" onclick="toggleQA(this)">
+      <div class="qa-q">
+        <div class="qa-num">5</div>
+        <div class="qa-text">What happens if the CSM is insufficient to absorb an increase in BEL + RA?</div>
+        <div class="qa-chevron">▶</div>
+      </div>
+      <div class="qa-a">
+        <div class="qa-label">Model Answer (derived from notes)</div>
+        If the CSM is insufficient to absorb the required increase in BEL + RA:
+        <br><br>
+        (1) The CSM is reduced to zero — exhausting its available balance.
+        <br><br>
+        (2) The <strong>shortfall is recognised immediately as a loss</strong> in P&L — the contract becomes onerous.
+        <br><br>
+        The CSM cannot go negative. Once the contract is onerous, any subsequent favourable experience changes first restore the onerous contract balance before the CSM can rebuild.
+      </div>
+    </div>
+
+    <div class="qa-item" onclick="toggleQA(this)">
+      <div class="qa-q">
+        <div class="qa-num">6</div>
+        <div class="qa-text">Describe the three approaches available for transitioning in-force business to IFRS 17, and in what order they should be applied.</div>
+        <div class="qa-chevron">▶</div>
+      </div>
+      <div class="qa-a">
+        <div class="qa-label">Model Answer</div>
+        Three approaches are available, applied in order of preference:
+        <br><br>
+        <strong>(1) Full Retrospective Approach (FRA) — preferred:</strong> Must be used if practicable. Determines the IFRS 17 position as if the standard had always applied throughout the full policy lifetime.
+        <br><br>
+        <strong>(2) Modified Retrospective Approach (MRA):</strong> A simplified version of the FRA, using reasonably available information to produce a result as close as possible to FRA. Used when FRA is not practicable.
+        <br><br>
+        <strong>(3) Fair Value Approach (FVA) — last resort:</strong> Used when MRA is also not practicable. Transitional CSM = fair value of policies less fulfilment cashflows at the transition date.
+      </div>
+    </div>
+
+  </div><!-- /panel-examqa -->
+
+
+  <!-- ══════════════════════════════════════════════════════
+       PANEL 7 · GLOSSARY
+  ══════════════════════════════════════════════════════ -->
+  <div id="panel-glossary" class="panel">
+
+    <div class="section-label">Key Terms · SA1 Chapter 14</div>
+    <div class="section-title">IFRS 17 Glossary</div>
+
+    <div class="glossary">
+      <div class="gloss-item">
+        <div class="gloss-term">IFRS 17</div>
+        <div class="gloss-def">Insurance Contracts — the IFRS standard specifically governing accounting for insurance contracts, replacing IFRS 4 from 1 January 2023.</div>
+      </div>
+      <div class="gloss-item">
+        <div class="gloss-term">GMM / BBA</div>
+        <div class="gloss-def">General Measurement Model / Building Block Approach — the default IFRS 17 valuation methodology for insurance contracts. Defines four building blocks: fulfilment cashflows, time value of money, risk adjustment, and CSM.</div>
+      </div>
+      <div class="gloss-item">
+        <div class="gloss-term">VFA</div>
+        <div class="gloss-def">Variable Fee Approach — an IFRS 17 measurement model used where a significant proportion of cashflows vary with the value of a defined pool of assets (e.g. unit-linked, with-profits). Mandatory for direct participation contracts.</div>
+      </div>
+      <div class="gloss-item">
+        <div class="gloss-term">PAA</div>
+        <div class="gloss-def">Premium Allocation Approach — a simplified IFRS 17 model similar to the unearned premium method used by general insurers. May be used for short-term health and care business.</div>
+      </div>
+      <div class="gloss-item">
+        <div class="gloss-term">BEL</div>
+        <div class="gloss-def">Best Estimate Liability — the probability-weighted estimate of the present value of future net cashflows arising from fulfilment of policyholder obligations. Calculated using best estimate assumptions and a market-observable discount rate.</div>
+      </div>
+      <div class="gloss-item">
+        <div class="gloss-term">Risk Adjustment (RA)</div>
+        <div class="gloss-def">The IFRS 17 component representing the value of non-market risks not captured in the BEL (analogous to the Solvency II risk margin). Calculated using VaR, CTE, or cost of capital; the confidence level is chosen by the insurer.</div>
+      </div>
+      <div class="gloss-item">
+        <div class="gloss-term">CSM</div>
+        <div class="gloss-def">Contractual Service Margin — an IFRS 17 building block representing the unearned (future) profit on a contract. Set at inception so no profit is recognised at sale; released over the contract term as insurance services are provided. Cannot be negative.</div>
+      </div>
+      <div class="gloss-item">
+        <div class="gloss-term">Coverage Unit</div>
+        <div class="gloss-def">The measure used to determine how the CSM is released over the contract term (e.g. number of policies in-force). Contracts must remain in annual cohorts — policies written more than one year apart cannot be grouped.</div>
+      </div>
+      <div class="gloss-item">
+        <div class="gloss-term">FRA</div>
+        <div class="gloss-def">Full Retrospective Approach — the preferred IFRS 17 transitional approach. Determines the position at transition as if IFRS 17 had always applied throughout the full policy lifetime.</div>
+      </div>
+      <div class="gloss-item">
+        <div class="gloss-term">MRA</div>
+        <div class="gloss-def">Modified Retrospective Approach — a simplified IFRS 17 transitional approach used when FRA is not practicable; uses reasonably available information to produce a result as close as possible to FRA.</div>
+      </div>
+      <div class="gloss-item">
+        <div class="gloss-term">FVA</div>
+        <div class="gloss-def">Fair Value Approach — an IFRS 17 transitional approach used when MRA is also not practicable; transitional CSM = fair value of policies less fulfilment cashflows at the transition date.</div>
+      </div>
+      <div class="gloss-item">
+        <div class="gloss-term">FVPL</div>
+        <div class="gloss-def">Fair Value through Profit and Loss — the default IFRS 9 measurement basis for financial assets. Changes in fair value are recognised directly in profit and loss as they arise.</div>
+      </div>
+      <div class="gloss-item">
+        <div class="gloss-term">FVOCI</div>
+        <div class="gloss-def">Fair Value through Other Comprehensive Income — an IFRS 9 classification where changes in fair value are recognised in other comprehensive income rather than directly in P&L.</div>
+      </div>
+      <div class="gloss-item">
+        <div class="gloss-term">IASB</div>
+        <div class="gloss-def">International Accounting Standards Board — the body that produces IFRS standards.</div>
+      </div>
+      <div class="gloss-item">
+        <div class="gloss-term">IAS 1</div>
+        <div class="gloss-def">Presentation of Financial Statements — sets out the overall requirements for general purpose financial statements prepared under IFRS.</div>
+      </div>
+      <div class="gloss-item">
+        <div class="gloss-term">Ind AS 117</div>
+        <div class="gloss-def">The Indian equivalent of IFRS 17 — applicable to Indian insurers reporting under Indian Accounting Standards.</div>
+      </div>
+    </div>
+
+    <div class="pill-row" style="margin-top:24px">
+      <div class="pill">SA1 CH14</div>
+      <div class="pill">SYLLABUS REFS 2.3 · 2.5</div>
+      <div class="pill">EFFECTIVE: 1 JAN 2023</div>
+      <div class="pill">REPLACES: IFRS 4</div>
+      <div class="pill">ISSUER: IASB</div>
+    </div>
+
+  </div><!-- /panel-glossary -->
+
+</div><!-- /main -->
+
+<footer>SA1 REVISION TOOL · IFRS 17 EXHIBIT · SOURCE: SA1_REVISION_NOTES.JSON CH14 · KNOWLEDGE BOUNDARY: PROVIDED FILES ONLY</footer>
+
+<script>
+function showTab(name) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-' + name).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+
+function toggleBlock(name) {
+  const ids = ['bel', 'ra', 'csm'];
+  ids.forEach(id => {
+    const el = document.getElementById('detail-' + id);
+    if (id === name) {
+      el.classList.toggle('open');
+    } else {
+      el.classList.remove('open');
+    }
+  });
+}
+
+let activeStep = 0;
+function showStep(n) {
+  for (let i = 0; i < 5; i++) {
+    document.getElementById('step-' + i).classList.remove('open');
+    document.querySelectorAll('.tstep')[i].classList.remove('active');
+  }
+  document.getElementById('step-' + n).classList.add('open');
+  document.querySelectorAll('.tstep')[n].classList.add('active');
+  activeStep = n;
+}
+
+function toggleQA(item) {
+  item.classList.toggle('open');
+}
+</script>
+</body>
+</html>
