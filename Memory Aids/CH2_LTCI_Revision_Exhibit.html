@@ -1,0 +1,2109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LTCI — SA1 Revision Exhibit</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap');
+
+  :root {
+    --teal: #0a7c6e;
+    --teal-light: #13a896;
+    --teal-pale: #e0f5f2;
+    --navy: #0d2137;
+    --navy-mid: #1a3a5c;
+    --gold: #c8941f;
+    --gold-pale: #fdf3df;
+    --red: #c0392b;
+    --red-pale: #fdecea;
+    --slate: #5a6a7a;
+    --bg: #f4f6f8;
+    --white: #ffffff;
+    --border: #d0dce8;
+    --text: #1c2a3a;
+    --text-light: #4a5a6a;
+    --violet: #6c3d91;
+    --violet-pale: #f0e8f8;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Source Sans 3', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 15px;
+    line-height: 1.65;
+  }
+
+  /* ── HEADER ── */
+  .site-header {
+    background: var(--navy);
+    color: white;
+    padding: 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+  }
+  .header-inner {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 10px 24px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  .header-badge {
+    background: var(--violet);
+    color: white;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 4px;
+    letter-spacing: 1px;
+    white-space: nowrap;
+  }
+  .header-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: white;
+    flex: 1;
+  }
+  .header-title span { color: var(--teal-light); }
+  .header-search {
+    display: flex;
+    align-items: center;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .header-search input {
+    background: transparent;
+    border: none;
+    color: white;
+    padding: 7px 12px;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 13px;
+    width: 220px;
+    outline: none;
+  }
+  .header-search input::placeholder { color: rgba(255,255,255,0.5); }
+  .header-search button {
+    background: var(--teal);
+    border: none;
+    color: white;
+    padding: 7px 12px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+
+  /* ── NAV TABS ── */
+  .nav-tabs {
+    background: var(--navy-mid);
+    display: flex;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding: 0 24px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  .nav-tabs::-webkit-scrollbar { display: none; }
+  .nav-tab {
+    padding: 10px 18px;
+    color: rgba(255,255,255,0.65);
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    white-space: nowrap;
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s;
+    user-select: none;
+  }
+  .nav-tab:hover { color: white; }
+  .nav-tab.active {
+    color: var(--teal-light);
+    border-bottom-color: var(--teal-light);
+  }
+
+  /* ── LAYOUT ── */
+  .main-content {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 24px 24px 60px;
+  }
+
+  .section-panel { display: none; }
+  .section-panel.active { display: block; }
+
+  /* ── SECTION HEADER ── */
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 20px;
+    padding-bottom: 14px;
+    border-bottom: 2px solid var(--border);
+  }
+  .section-icon {
+    width: 44px; height: 44px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; flex-shrink: 0;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px; font-weight: 700; color: var(--navy);
+  }
+  .section-subtitle { font-size: 13px; color: var(--slate); margin-top: 2px; }
+
+  /* ── CARDS GRID ── */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .cards-grid-3 {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .card-header {
+    padding: 12px 16px;
+    font-weight: 700; font-size: 13px;
+    letter-spacing: 0.4px; text-transform: uppercase;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .card-header.teal  { background: var(--teal-pale);   color: var(--teal); }
+  .card-header.gold  { background: var(--gold-pale);   color: var(--gold); }
+  .card-header.red   { background: var(--red-pale);    color: var(--red); }
+  .card-header.navy  { background: #e8edf5;            color: var(--navy); }
+  .card-header.violet{ background: var(--violet-pale); color: var(--violet); }
+  .card-body { padding: 14px 16px; }
+
+  /* ── BULLET LISTS ── */
+  .bullet-list { list-style: none; }
+  .bullet-list li {
+    padding: 5px 0;
+    padding-left: 20px;
+    position: relative;
+    font-size: 14px;
+    color: var(--text);
+    border-bottom: 1px solid var(--bg);
+    line-height: 1.55;
+  }
+  .bullet-list li:last-child { border-bottom: none; }
+  .bullet-list li::before {
+    content: '▸';
+    position: absolute; left: 0;
+    color: var(--teal); font-size: 11px; top: 7px;
+  }
+
+  /* ── KEY TERMS ── */
+  .key-terms-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+  .key-term {
+    background: white;
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--teal);
+    border-radius: 6px;
+    padding: 11px 14px;
+  }
+  .key-term-name {
+    font-weight: 700; font-size: 13px; color: var(--teal);
+    margin-bottom: 4px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .key-term-def { font-size: 13px; color: var(--text-light); line-height: 1.5; }
+
+  /* ── FLASHCARDS ── */
+  .flashcard-container {
+    perspective: 1000px;
+    cursor: pointer;
+    margin-bottom: 12px;
+  }
+  .flashcard-inner {
+    position: relative;
+    min-height: 120px;
+    transition: transform 0.5s;
+    transform-style: preserve-3d;
+  }
+  .flashcard-container.flipped .flashcard-inner { transform: rotateX(180deg); }
+  .flashcard-front, .flashcard-back {
+    position: absolute; width: 100%; min-height: 120px;
+    backface-visibility: hidden;
+    border-radius: 10px;
+    padding: 16px 20px;
+    display: flex; flex-direction: column; justify-content: center;
+  }
+  .flashcard-front {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 100%);
+    color: white;
+  }
+  .flashcard-back {
+    background: linear-gradient(135deg, var(--violet) 0%, #8a52b0 100%);
+    color: white;
+    transform: rotateX(180deg);
+  }
+  .flashcard-front .fc-label, .flashcard-back .fc-label {
+    font-size: 10px; font-weight: 700;
+    letter-spacing: 1.5px; text-transform: uppercase; opacity: 0.65;
+    margin-bottom: 8px;
+  }
+  .flashcard-front .fc-q { font-size: 15px; font-weight: 600; line-height: 1.5; }
+  .flashcard-back .fc-a  { font-size: 14px; line-height: 1.6; }
+  .flashcard-hint { text-align: center; font-size: 11px; color: var(--slate); margin-top: 4px; }
+
+  /* ── EXAM QUESTIONS ── */
+  .exam-question {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin-bottom: 16px;
+    overflow: hidden;
+  }
+  .eq-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 16px;
+    background: var(--navy); color: white;
+    cursor: pointer; user-select: none;
+  }
+  .eq-header-left { display: flex; align-items: center; gap: 12px; }
+  .eq-source-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px; font-weight: 600;
+    padding: 3px 8px; border-radius: 4px; white-space: nowrap;
+  }
+  .eq-source-badge.iai   { background: var(--teal);   color: white; }
+  .eq-source-badge.ifoa  { background: var(--gold);   color: white; }
+  .eq-source-badge.sp1   { background: var(--violet); color: white; }
+  .eq-marks { font-size: 12px; opacity: 0.7; font-family: 'JetBrains Mono', monospace; }
+  .eq-question { font-size: 14px; font-weight: 600; color: rgba(255,255,255,0.92); flex: 1; }
+  .eq-toggle { color: rgba(255,255,255,0.6); font-size: 18px; transition: transform 0.3s; flex-shrink: 0; }
+  .eq-header.open .eq-toggle { transform: rotate(180deg); }
+  .eq-scenario {
+    padding: 12px 16px;
+    background: #f0f4f8;
+    font-size: 13px; color: var(--text-light);
+    border-bottom: 1px solid var(--border);
+    font-style: italic; line-height: 1.5;
+  }
+  .eq-body { display: none; padding: 16px; }
+  .eq-body.open { display: block; }
+  .eq-section-title {
+    font-size: 12px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.6px;
+    color: var(--teal);
+    margin: 12px 0 6px; padding-bottom: 4px;
+    border-bottom: 1px solid var(--teal-pale);
+  }
+  .eq-section-title:first-child { margin-top: 0; }
+
+  /* ── COMPARE TABLE ── */
+  .compare-table {
+    width: 100%; border-collapse: collapse;
+    font-size: 13px; margin-bottom: 20px;
+    background: white; border-radius: 8px; overflow: hidden;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .compare-table th {
+    background: var(--navy); color: white;
+    padding: 10px 14px; text-align: left;
+    font-size: 12px; font-weight: 700;
+    letter-spacing: 0.4px; text-transform: uppercase;
+  }
+  .compare-table td {
+    padding: 9px 14px; border-bottom: 1px solid var(--bg);
+    vertical-align: top; line-height: 1.5;
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+  .compare-table tr:nth-child(even) td { background: #f7f9fb; }
+  .compare-table td:first-child {
+    font-weight: 700; color: var(--navy);
+    width: 20%; white-space: nowrap;
+  }
+
+  /* ── MNEMONIC BOX ── */
+  .mnemonic-box {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 100%);
+    color: white; border-radius: 12px;
+    padding: 20px 24px; margin-bottom: 20px;
+  }
+  .mnemonic-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 15px; font-weight: 700; opacity: 0.7;
+    margin-bottom: 12px;
+    text-transform: uppercase; letter-spacing: 1px; font-style: italic;
+  }
+  .mnemonic-letters { display: flex; flex-wrap: wrap; gap: 10px; }
+  .mnemonic-item {
+    display: flex; align-items: flex-start; gap: 8px;
+    min-width: 200px; flex: 1;
+  }
+  .mnemonic-letter {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px; font-weight: 900;
+    color: var(--teal-light); line-height: 1; min-width: 28px;
+  }
+  .mnemonic-word { font-size: 13px; line-height: 1.45; padding-top: 2px; }
+  .mnemonic-word strong { display: block; font-size: 14px; color: var(--teal-light); }
+
+  /* ── ACCORDION ── */
+  .accordion-item {
+    background: white; border: 1px solid var(--border);
+    border-radius: 8px; margin-bottom: 8px; overflow: hidden;
+  }
+  .accordion-header {
+    padding: 13px 16px; font-weight: 700; font-size: 14px;
+    cursor: pointer; display: flex; align-items: center; justify-content: space-between;
+    user-select: none; color: var(--navy); background: white;
+    transition: background 0.15s;
+  }
+  .accordion-header:hover { background: var(--bg); }
+  .accordion-arrow { transition: transform 0.25s; font-size: 16px; color: var(--slate); }
+  .accordion-header.open .accordion-arrow { transform: rotate(90deg); }
+  .accordion-body {
+    display: none; padding: 14px 16px;
+    border-top: 1px solid var(--border); background: #fcfdfe;
+  }
+  .accordion-body.open { display: block; }
+
+  /* ── ALERT BOX ── */
+  .alert-box {
+    border-radius: 8px; padding: 12px 16px;
+    margin-bottom: 12px; font-size: 13.5px;
+    display: flex; gap: 10px; align-items: flex-start;
+  }
+  .alert-box.gold   { background: var(--gold-pale);   border-left: 4px solid var(--gold); }
+  .alert-box.red    { background: var(--red-pale);    border-left: 4px solid var(--red); }
+  .alert-box.teal   { background: var(--teal-pale);   border-left: 4px solid var(--teal); }
+  .alert-box.violet { background: var(--violet-pale); border-left: 4px solid var(--violet); }
+  .alert-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+  /* ── SUBHEADING ── */
+  .sub-heading {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px; font-weight: 700; color: var(--navy);
+    margin: 22px 0 10px;
+    padding-left: 12px; border-left: 4px solid var(--teal);
+  }
+
+  /* ── ADL GRID ── */
+  .adl-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .adl-card {
+    background: white;
+    border: 2px solid var(--teal);
+    border-radius: 10px;
+    padding: 14px;
+    text-align: center;
+  }
+  .adl-emoji { font-size: 28px; margin-bottom: 6px; }
+  .adl-name { font-weight: 700; font-size: 14px; color: var(--navy); margin-bottom: 4px; }
+  .adl-def { font-size: 12px; color: var(--text-light); line-height: 1.4; }
+
+  /* ── FLOW DIAGRAM ── */
+  .flow-row {
+    display: flex; align-items: center; flex-wrap: wrap; gap: 8px;
+    margin-bottom: 12px;
+  }
+  .flow-box {
+    background: var(--navy); color: white;
+    border-radius: 8px; padding: 8px 14px;
+    font-size: 13px; font-weight: 600;
+  }
+  .flow-box.teal { background: var(--teal); }
+  .flow-box.gold { background: var(--gold); }
+  .flow-box.violet { background: var(--violet); }
+  .flow-arrow { color: var(--slate); font-size: 18px; }
+
+  /* ── SEARCH ── */
+  #search-panel { display: none; }
+  #search-panel.active { display: block; }
+  .search-result {
+    background: white; border: 1px solid var(--border);
+    border-radius: 8px; padding: 14px 16px; margin-bottom: 10px;
+  }
+  .search-result-source {
+    font-size: 11px; font-family: 'JetBrains Mono', monospace;
+    color: var(--slate); margin-bottom: 6px;
+    font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .search-result-text { font-size: 14px; line-height: 1.55; }
+  .search-highlight { background: #fff176; color: #333; border-radius: 2px; }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .cards-grid, .cards-grid-3 { grid-template-columns: 1fr; }
+    .header-search { display: none; }
+    .header-title { font-size: 16px; }
+    .adl-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <div class="header-badge">SA1 · SP1 · CH3</div>
+    <div class="header-title">Long-Term Care Insurance <span>— Comprehensive Revision</span></div>
+    <div class="header-search">
+      <input type="text" id="searchInput" placeholder="Search notes, terms, exam Qs…" oninput="doSearch(this.value)">
+      <button onclick="doSearch(document.getElementById('searchInput').value)">⌕</button>
+    </div>
+  </div>
+  <div style="background: var(--navy-mid);">
+    <div class="nav-tabs" id="navTabs">
+      <div class="nav-tab active"   onclick="showTab('overview')">📋 Overview</div>
+      <div class="nav-tab"          onclick="showTab('prefunded')">🏦 Pre-Funded</div>
+      <div class="nav-tab"          onclick="showTab('immediate')">⚡ Immediate Needs</div>
+      <div class="nav-tab"          onclick="showTab('variants')">🔀 Variants</div>
+      <div class="nav-tab"          onclick="showTab('pricing')">💰 Pricing</div>
+      <div class="nav-tab"          onclick="showTab('uw-claims')">🔍 UW &amp; Claims</div>
+      <div class="nav-tab"          onclick="showTab('risks')">⚠️ Risks</div>
+      <div class="nav-tab"          onclick="showTab('flashcards')">🃏 Flashcards</div>
+      <div class="nav-tab"          onclick="showTab('iai-qs')">📝 IAI Exam Qs</div>
+      <div class="nav-tab"          onclick="showTab('ifoa-qs')">🎓 IFoA / SP1 Qs</div>
+      <div class="nav-tab"          onclick="showTab('mnemonics')">🧠 Mnemonics</div>
+    </div>
+  </div>
+</header>
+
+<div class="main-content">
+
+  <!-- SEARCH PANEL -->
+  <div id="search-panel">
+    <div class="section-header">
+      <div class="section-icon" style="background:#e8edf5;">🔎</div>
+      <div>
+        <div class="section-title">Search Results</div>
+        <div class="section-subtitle" id="search-count">0 results</div>
+      </div>
+    </div>
+    <div id="search-results"></div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════ -->
+  <!-- TAB 1: OVERVIEW -->
+  <!-- ════════════════════════════════════════════════════ -->
+  <div id="tab-overview" class="section-panel active">
+    <div class="section-header">
+      <div class="section-icon" style="background:var(--teal-pale);">📋</div>
+      <div>
+        <div class="section-title">LTCI — Product Overview</div>
+        <div class="section-subtitle">SP1 Chapter 3 · Core Reading fundamentals</div>
+      </div>
+    </div>
+
+    <div class="alert-box gold">
+      <span class="alert-icon">💡</span>
+      <div><strong>Exam Lens:</strong> LTCI questions frequently test the distinction between pre-funded and immediate needs, ADL triggers, and why cash rather than indemnity benefits predominate. Always link features to their <em>rationale</em> from both insurer and policyholder perspectives.</div>
+    </div>
+
+    <div class="cards-grid">
+      <div class="card">
+        <div class="card-header teal">🏠 Definition &amp; Nature</div>
+        <div class="card-body">
+          <ul class="bullet-list">
+            <li><strong>All forms</strong> of continuing personal/nursing care and associated domestic services for people unable to look after themselves without support</li>
+            <li>May be provided in the person's <strong>own home, day centre, State-sponsored or care home setting</strong></li>
+            <li>Distinct from acute medical care — NOT principally concerned with curing conditions; treats the <em>results</em> of conditions</li>
+            <li>Long-term because health is expected to <strong>deteriorate or not improve</strong></li>
+            <li>Two generic types: <strong>Pre-funded plans</strong> (bought when healthy) and <strong>Immediate needs plans</strong> (bought when already in need)</li>
+            <li>Responsibility split between <strong>State</strong> (welfare programme) and <strong>individual</strong> (insurance / own assets)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header gold">💷 Costs of Care</div>
+        <div class="card-body">
+          <ul class="bullet-list">
+            <li><strong>Living costs</strong> — food, clothing, heating, amenities (insure the <em>extra</em> costs)</li>
+            <li><strong>Housing costs</strong> — rent, mortgage, council tax, adaptations (hoists, rails); also called "hotel element"</li>
+            <li><strong>Personal care</strong> — all care directly involving the body; includes nursing care and non-nursing personal care</li>
+            <li><strong>Nursing care</strong> (narrowest) — requires specific knowledge/skills of a qualified nurse</li>
+            <li><strong>Intermediate care</strong> — recuperative services after acute event (e.g. heart attack) to reduce hospital readmission and dependence on ongoing LTC</li>
+            <li>Informal care by family has <em>indirect</em> cost: lost economic activity or cost of replacing that care</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header navy">🏢 Care Settings</div>
+        <div class="card-body">
+          <ul class="bullet-list">
+            <li><strong>Own home</strong> — preferred by most; encouraged by government policy; majority of care provided here</li>
+            <li><strong>Homes of relatives</strong> — community care outside person's own home</li>
+            <li><strong>Private residential homes</strong> — majority of non-home care; can be charity-run (e.g. for veterans)</li>
+            <li><strong>Nursing homes</strong> — for those needing higher levels of clinical care</li>
+            <li><strong>Continuing Care Retirement Communities (CCRCs)</strong> — lump sum to join; ongoing service charges; tiered care within community</li>
+            <li>Care setting can affect <strong>benefit level</strong> (some US plans pay different amounts for home vs nursing home)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header teal">👨‍👩‍👧 Informal vs Formal Care</div>
+        <div class="card-body">
+          <ul class="bullet-list">
+            <li><strong>Informal care</strong> — provided by spouse, children, other relatives; often &gt;60 yrs old themselves (those needing care may be 80s/90s)</li>
+            <li>Those over 60 are retired and have time; younger relatives have work/family responsibilities</li>
+            <li>Informal care has an <em>indirect</em> cost — lost economic activity or replacement cost</li>
+            <li><strong>Formal care</strong> — professional services from private/public providers; direct cost to individual or State</li>
+            <li>LTCI purchased partly to <strong>avoid dependence</strong> on family and friends</li>
+            <li>Cash benefits can compensate informal carers; not restricted to formal care spending</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header red">❓ Uncertainties for Individuals</div>
+        <div class="card-body">
+          <ul class="bullet-list">
+            <li><strong>Probability of needing care</strong> — medical advances, genetic predisposition, new conditions</li>
+            <li><strong>Extent of care needed</strong> — speed of deterioration, technology advances, level of informal support available</li>
+            <li><strong>Duration of care needed</strong> — longevity risk; mortality improvement makes this less predictable</li>
+            <li>All three dimensions make self-funding risky — LTCI pools these risks</li>
+            <li>If underestimated → accumulated wealth insufficient to meet care needs in retirement</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header violet">🎯 Consumer Needs Met</div>
+        <div class="card-body">
+          <ul class="bullet-list">
+            <li>Financial protection against <strong>cost of care in old age</strong> when unable to look after themselves</li>
+            <li>Independence from reliance on <strong>family or State</strong></li>
+            <li>Protection of <strong>assets</strong> (e.g. family home) from care costs</li>
+            <li>Peace of mind — LTCI provides certainty even if future State provision is uncertain</li>
+            <li>Bought by people who wish to fund care of <strong>elderly relatives</strong></li>
+            <li>A <strong>lower priority</strong> while employed (mortgage, pension take precedence) — awareness grows post-retirement</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <h2 class="sub-heading">Pre-Funded vs Immediate Needs: At a Glance</h2>
+    <table class="compare-table">
+      <thead><tr><th>Feature</th><th>Pre-Funded Plans</th><th>Immediate Needs Plans</th></tr></thead>
+      <tbody>
+        <tr><td>Who buys</td><td>Relatively healthy people</td><td>Those already in need of LTC</td></tr>
+        <tr><td>Purpose</td><td>Protect against future disability risk</td><td>Protect against uncertain survival duration</td></tr>
+        <tr><td>Premium</td><td>Regular (or single) paid in advance; can be level, increasing or retrospective</td><td>Single premium at outset when care is needed</td></tr>
+        <tr><td>Health effect on premium</td><td>Poor health ↑ premium (shorter premium payment period, earlier claims)</td><td>Poor health ↓ premium (shorter expected annuity payment period)</td></tr>
+        <tr><td>Benefit trigger</td><td>Disability trigger (ADLs / cognitive impairment)</td><td>Guaranteed income payable immediately upon purchase</td></tr>
+        <tr><td>Risk of no benefit</td><td>Yes — may pay premiums and receive no benefits</td><td>No — always receives some benefit</td></tr>
+        <tr><td>Underwriting</td><td>At inception when healthy; medical questionnaire</td><td>Detailed individual medical evidence; functional ability tests</td></tr>
+        <tr><td>Surrender/death</td><td>Basic plans: no surrender; some offer paid-up benefit after min period; optional death benefit</td><td>No surrender; optional capital protection / min payment period</td></tr>
+        <tr><td>Product structure</td><td>Conventional, unit-linked, or pension-linked</td><td>Impaired life annuity equivalent</td></tr>
+        <tr><td>Key actuarial risk</td><td>Longevity + care cost inflation + disability incidence</td><td>Longevity of impaired lives + care cost inflation</td></tr>
+      </tbody>
+    </table>
+
+    <div class="key-terms-grid" id="key-terms-container"></div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════ -->
+  <!-- TAB 2: PRE-FUNDED -->
+  <!-- ════════════════════════════════════════════════════ -->
+  <div id="tab-prefunded" class="section-panel">
+    <div class="section-header">
+      <div class="section-icon" style="background:var(--teal-pale);">🏦</div>
+      <div>
+        <div class="section-title">Pre-Funded Plans — Product Design</div>
+        <div class="section-subtitle">Bought when healthy · ADL-triggered · Cash or indemnity benefits</div>
+      </div>
+    </div>
+
+    <div class="alert-box teal">
+      <span class="alert-icon">📌</span>
+      <div><strong>Core principle:</strong> The claim trigger defines everything else. ADLs are the dominant trigger; the number failed determines both eligibility and, for tiered products, the benefit level. The overriding cognitive impairment trigger applies regardless of ADL failures.</div>
+    </div>
+
+    <h2 class="sub-heading">The 6 Standard Activities of Daily Living (ADLs)</h2>
+    <div class="adl-grid">
+      <div class="adl-card">
+        <div class="adl-emoji">🚿</div>
+        <div class="adl-name">Washing</div>
+        <div class="adl-def">Ability to maintain adequate cleanliness and personal hygiene</div>
+      </div>
+      <div class="adl-card">
+        <div class="adl-emoji">👕</div>
+        <div class="adl-name">Dressing</div>
+        <div class="adl-def">Ability to put on/take off all garments and surgical appliances</div>
+      </div>
+      <div class="adl-card">
+        <div class="adl-emoji">🍽️</div>
+        <div class="adl-name">Feeding</div>
+        <div class="adl-def">Ability to transfer food from plate to mouth once food is prepared</div>
+      </div>
+      <div class="adl-card">
+        <div class="adl-emoji">🚽</div>
+        <div class="adl-name">Toileting</div>
+        <div class="adl-def">Ability to manage bowel and bladder function at acceptable hygiene level</div>
+      </div>
+      <div class="adl-card">
+        <div class="adl-emoji">🚶</div>
+        <div class="adl-name">Mobility</div>
+        <div class="adl-def">Ability to move indoors from room to room on level surfaces at normal place of residence</div>
+      </div>
+      <div class="adl-card">
+        <div class="adl-emoji">🛏️</div>
+        <div class="adl-name">Transferring</div>
+        <div class="adl-def">Ability to move from lying in bed to sitting in upright chair/wheelchair and vice versa</div>
+      </div>
+    </div>
+
+    <div class="cards-grid">
+      <div class="card">
+        <div class="card-header teal">🔔 Claim Triggers</div>
+        <div class="card-body">
+          <ul class="bullet-list">
+            <li><strong>ADL trigger:</strong> Unable to perform a specified number of the 6 ADLs alone and without endangering wellbeing of self or others</li>
+            <li>Common requirement: failure of <strong>2 out of 6</strong> for 50% benefit; <strong>3 or more out of 6</strong> for 100% benefit</li>
+            <li><strong>Mental/Cognitive impairment trigger</strong> — overriding; payable whether or not any ADLs are failed</li>
+            <li>Cognitive impairment: deterioration in memory, orientation (who/where/when), ability to solve problems, make rational decisions — from <em>organic cause</em> (Alzheimer's, irreversible dementia) — NOT depression or drug side effects</li>
+            <li>ADL definitions are worded carefully for objectivity, but still leave room for value judgements</li>
+            <li>Some plans require <strong>additional conditions</strong>: e.g. need for night care, or care only providable in nursing home</li>
+            <li>Disability must be <strong>continuing</strong> (not a single point-in-time assessment)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header gold">💰 Benefit Types</div>
+        <div class="card-body">
+          <ul class="bullet-list">
+            <li><strong>Indemnity basis:</strong> Insurer pays cost of care as incurred, subject to upper limits (e.g. £15,000/year)</li>
+            <li><strong>Cash basis:</strong> Fixed amounts specified at policy inception — regardless of actual care cost</li>
+            <li>Most plans provide <strong>cash</strong> (not indemnity): insurer cannot reliably forecast future care cost inflation</li>
+            <li>Benefit forms: regular income for life (most common), lump sum, annuity certain, or limited benefit payment period</li>
+            <li><strong>Tiered benefits</strong>: 50% for 2 ADLs failed; 100% for 3+ ADLs failed — more common than flat benefit</li>
+            <li>Benefits should not depend on place of residence under cash plans (unlike US where home vs nursing home rates differ)</li>
+            <li>Indemnity plans often restricted to maximum (e.g. 3 hrs care/day × 7 days for UK PMI add-on)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header navy">⏱️ Deferred Periods &amp; Escalation</div>
+        <div class="card-body">
+          <ul class="bullet-list">
+            <li><strong>Deferred periods:</strong> 3 months or 12 months — gives time for informal care, adjustment, and assessment</li>
+            <li>Longer deferred period → lower premium; policyholder self-funds initial period</li>
+            <li><strong>Benefit escalation options:</strong></li>
+            <li>→ Level (no escalation)</li>
+            <li>→ Fixed rate (e.g. 3% or 5% p.a.) — may not keep pace with actual care costs</li>
+            <li>→ Linked to inflation index — better match but more uncertain for insurer</li>
+            <li>Care is primarily <strong>people-based</strong> → costs rise with wage inflation (not just price inflation)</li>
+            <li><strong>Benefit payment period:</strong> Lifetime (most comprehensive) or fixed period (e.g. 3 years) — limited period complements State provision</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header teal">💳 Premium Structures</div>
+        <div class="card-body">
+          <ul class="bullet-list">
+            <li><strong>Regular premiums:</strong> Level or escalating in line with benefit; usually waived during claim</li>
+            <li><strong>Single premium:</strong> Paid at outset; immediate full cover</li>
+            <li><strong>Retrospective payment:</strong> Premium funded from equity released on sale of home after death</li>
+            <li><strong>Restricted regular premiums:</strong> Stop at a certain age (e.g. 65) or when disability benefit triggers</li>
+            <li><strong>Guaranteed premiums:</strong> Fixed for life — expensive contingency loading; not offered in UK or USA</li>
+            <li><strong>Reviewable premiums:</strong> Adjusted in light of experience — risk of increase in retirement on fixed income</li>
+            <li>Compromise: premiums reviewable to age 70–75, then <em>guaranteed</em> — limits insurer risk as few survive to receive guarantee</li>
+            <li>Age-dependent guarantee: effectiveness limited at advanced ages (most policyholders near claim or already claiming)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header violet">🎁 Additional Benefits</div>
+        <div class="card-body">
+          <ul class="bullet-list">
+            <li><strong>Assistive devices benefit:</strong> 3–6 months' benefits paid to fund grab rails, bathing seats, stair lifts — helps defer further disability trigger</li>
+            <li><strong>Personal alarms:</strong> Helps people remain in own homes</li>
+            <li><strong>Independent care advice:</strong> At point of claim; claimant inexperienced in buying care; care manager/advocate</li>
+            <li><strong>Respite care:</strong> For policies covering professional care costs — enables non-professional carer breaks</li>
+            <li><strong>Death benefit:</strong> Basic plans = none; some return portion of premium (amortised over 5 years on early death → zero after 60 months)</li>
+            <li><strong>Surrender/paid-up:</strong> Basic plans = no surrender; after minimum premium-paying period (e.g. 5 years) → reduced paid-up benefit</li>
+            <li>Paid-up alternatives: shorter benefit payment period, or coverage ceasing at e.g. age 85</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header gold">🏗️ Product Structure Options</div>
+        <div class="card-body">
+          <ul class="bullet-list">
+            <li><strong>Long-term vs general (short-term) business</strong> — can be structured either way</li>
+            <li><strong>On-shore vs off-shore:</strong> Unit-linked plans may be written off-shore (beyond local legislation), often accumulate free of tax; benefits taxed when remitted</li>
+            <li><strong>Stand-alone</strong> or as a <strong>rider benefit</strong> on: IP insurance, CI insurance, PMI, or whole of life assurance</li>
+            <li>LTCI rider on <strong>CI</strong>: good — many critical illnesses (Alzheimer's, Parkinson's, stroke) lead to LTC need</li>
+            <li>LTCI rider on <strong>PMI</strong>: natural — PMI covers acute; LTC rider covers chronic disability</li>
+            <li>LTCI rider on <strong>IP</strong>: less natural — no link between IP benefit level (based on salary) and LTC benefit needed</li>
+            <li>LTCI rider on <strong>whole of life</strong>: LTC benefits seen as accelerated death benefits — good conceptual fit</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <h2 class="sub-heading">Tiered Benefits — Advantages &amp; Disadvantages</h2>
+    <div class="cards-grid">
+      <div class="card">
+        <div class="card-header teal">✅ Advantages of Tiered Benefits</div>
+        <div class="card-body">
+          <ul class="bullet-list">
+            <li>Earlier care at mild disability level → slows deterioration → better quality of life and lower long-run cost</li>
+            <li>Better fit to customer needs → more likely to sell well</li>
+            <li>Seems better value → increases appeal</li>
+            <li>Differentiates from competitors</li>
+            <li>Reduces incentive to exaggerate disability (partial benefit available at mild stages)</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header red">❌ Disadvantages of Tiered Benefits</div>
+        <div class="card-body">
+          <ul class="bullet-list">
+            <li>Increased administration costs for insurer</li>
+            <li>More complex to price (data scarce for each severity level)</li>
+            <li>Higher cost of waiver of premium (more trigger events)</li>
+            <li>More difficult to sell — sellers may prefer simpler products</li>
+            <li>Risk of disputes over which tier applies</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════ -->
+  <!-- TAB 3: IMMEDIATE NEEDS -->
+  <!-- ════════════════════════════════════════════════════ -->
+  <div id="tab-immediate" class="section-panel">
+    <div class="section-header">
+      <div class="section-icon" style="background:var(--gold-pale);">⚡</div>
+      <div>
+        <div class="section-title">Immediate Needs Plans</div>
+        <div class="section-subtitle">Single-premium impaired life annuity · Bought when in need of care</div>
+      </div>
+    </div>
+
+    <div class="alert-box violet">
+      <span class="alert-icon">🔑</span>
+      <div><strong>Key Contrast:</strong> For pre-funded plans, poor health <em>increases</em> the premium (shorter premium-paying period, earlier claims). For immediate needs plans, poor health <em>decreases</em> the premium (shorter expected annuity payment period — less total benefit expected).</div>
+    </div>
+
+    <div class="cards-grid">
+      <div class="card">
+        <div class="card-header teal">📋 Core Features</div>
+        <div class="card-body">
+          <ul class="bullet-list">
+            <li>Purchased by <strong>people already in need of LTC</strong> — not a pre-funded product</li>
+            <li>Protects against <strong>uncertain survival duration</strong> — longevity risk</li>
+            <li>Single premium → <strong>guaranteed lifetime income</strong></li>
+            <li>Premium <strong>individually calculated</strong> based on health status of applicant</li>
+            <li>Effectively an <strong>impaired life annuity</strong> (not indemnity — provides fixed cash amounts)</li>
+            <li>Extended from nursing homes to <strong>domiciliary care</strong> in modern markets</li>
+            <li>Policyholder always receives some benefit — no risk of zero benefit (unlike pre-funded)</li>
+            <li>No surrender value — cannot exit the contract</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header gold">💸 Benefit Structure</div>
+        <div class="card-body">
+          <ul class="bullet-list">
+            <li><strong>Level benefit</strong> or escalating at fixed rate (often 5% p.a.) or linked to inflation index + perhaps 2% p.a.</li>
+            <li>Care is primarily <strong>staff-based</strong> → costs should rise with average earnings over long term</li>
+            <li>Some plans pre-agreed <strong>escalation with specific nursing homes</strong> — insurer not responsible for quality of care or care home failure</li>
+            <li>Benefits can differ for <strong>nursing home vs home care</strong></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header navy">💀 Death Benefit Options</div>
+        <div class="card-body">
+          <ul class="bullet-list">
+            <li><strong>Minimum payment period:</strong> Benefits paid for minimum period even if PH dies (e.g. 2 years)</li>
+            <li><strong>Amortising the single premium:</strong> Premium spread over N years; death benefit = unreturned portion (e.g. 4-year spread → 25% returned if dies after year 3)</li>
+            <li><strong>Capital protection:</strong> Part of premium returned on death (e.g. unit-linked: proportion of premium not yet used as benefit returned on death)</li>
+            <li><strong>Higher death benefit selected → less sensitive to health status</strong> at inception (benefit payable regardless of survival duration)</li>
+            <li>Trade-off: more death benefit = less of the premium available to fund annuity income</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header violet">🏗️ Product Structures</div>
+        <div class="card-body">
+          <ul class="bullet-list">
+            <li>Not just simple impaired-life annuities — structures include: <strong>pure endowments, purchased life annuities, disability covers</strong></li>
+            <li>Structure chosen to <strong>maximise tax efficiency and minimise capital requirements</strong> for the insurer and policyholder</li>
+            <li>Life annuity provides continuing benefit on survival; series of pure endowments also achieves this</li>
+            <li>Disability cover (like IP with different definition) also meets the need</li>
+            <li>Actuary's role: design product that meets needs at lowest cost by exploiting <strong>tax reliefs</strong> and minimising capital</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <h2 class="sub-heading">Worked Example: Alice's Immediate Needs Solution (SP1 Ch3 Q3.2)</h2>
+    <div class="accordion-item">
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        Alice, aged 78, post-stroke, needs £18,000 pa net. She has £75,000 capital. What risk does she face and what solution is appropriate? <span class="accordion-arrow">▶</span>
+      </div>
+      <div class="accordion-body">
+        <div class="eq-section-title">Risk Identification</div>
+        <ul class="bullet-list">
+          <li>Immediate residual care cost: £25,000 (nursing home) − £7,000 (State + occupational pension) = <strong>£18,000 p.a.</strong></li>
+          <li>£75,000 invested at 5% = £3,750 income p.a. — far below £18,000 needed</li>
+          <li>Solving: 18,000 × ä₇₈ = 75,000 → ä₇₈ ≈ 4.17 → capital runs out in approximately <strong>4.75 years</strong></li>
+          <li>Probability of Alice (post-stroke) surviving 5+ years ≈ 30% → <strong>significant longevity risk</strong></li>
+          <li>Risk: living too long so capital exhausted, unable to maintain lifestyle, may need cheaper care home, burdens family</li>
+        </ul>
+        <div class="eq-section-title">Immediate Needs Solution</div>
+        <ul class="bullet-list">
+          <li>Using impaired mortality (ELT15 + loadings: +0.35 in year 1, +0.10 thereafter) → ä₇₈ ≈ 3.75</li>
+          <li>After insurer loading of ~10%: £10,000 single premium buys ≈ £2,425 p.a. annuity</li>
+          <li>£75,000 buys approximately <strong>£18,200 p.a.</strong> — neatly covering the £18,000 shortfall</li>
+          <li>This <strong>eliminates longevity risk</strong> — Alice's income is guaranteed for life regardless of how long she survives</li>
+          <li>Consider adding modest escalation to allow for care cost inflation</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="alert-box gold">
+      <span class="alert-icon">⚠️</span>
+      <div><strong>Common Objection &amp; Response:</strong> "Buy fixed-interest bonds directly and cut out insurer expenses/profit — then leave remainder to heirs on death." <strong>Rebuttal:</strong> This ignores the core purpose of the annuity — pooling longevity risk. Without insurance, Alice bears the risk of outliving her capital. No assets are left to bequeath if care continues. The insurer's bulk-buying power on bonds may also give better returns than individual investment, and the individual may not have the expertise to select optimal bonds.</div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════ -->
+  <!-- TAB 4: VARIANTS -->
+  <!-- ════════════════════════════════════════════════════ -->
+  <div id="tab-variants" class="section-panel">
+    <div class="section-header">
+      <div class="section-icon" style="background:var(--violet-pale);">🔀</div>
+      <div>
+        <div class="section-title">Product Variants</div>
+        <div class="section-subtitle">Unit-linked plans · Pension solutions · Rider benefits</div>
+      </div>
+    </div>
+
+    <h2 class="sub-heading">Unit-Linked LTCI Plans</h2>
+
+    <div class="alert-box teal">
+      <span class="alert-icon">💡</span>
+      <div><strong>Design Rationale:</strong> People would buy savings plans but avoided thinking about LTCI. Solution: sell it <em>primarily as a flexible investment</em> (often an inheritance plan held in trust) — with LTCI protection as a secondary feature. Death benefit makes it more attractive than pure protection plans where all premiums are "lost" on death.</div>
+    </div>
+
+    <div class="cards-grid">
+      <div class="card">
+        <div class="card-header teal">⚙️ How Unit-Linked LTCI Works</div>
+        <div class="card-body">
+          <ul class="bullet-list">
+            <li>Single premium (most common) → allocated to <strong>unit fund</strong></li>
+            <li>Monthly <strong>risk charges</strong> deducted from unit fund → non-unit fund → covers LTC protection cost</li>
+            <li>Also: fund management charges, policy admin charges</li>
+            <li>Death/surrender: bid value of units from unit fund</li>
+            <li>LTC benefits: primarily from <strong>non-unit fund</strong> (protection element); may also use unit fund (depending on protection level selected)</li>
+            <li>Often placed in <strong>discretionary trust</strong> — inheritance plan structure: trust beneficiaries receive fund on death; policyholder has contingent claim for LTC</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header gold">🛡️ Fund Protection Options</div>
+        <div class="card-body">
+          <ul class="bullet-list">
+            <li><strong>Full fund protection:</strong> Entire fund (initial + growth) protected; LTC benefits paid entirely from non-unit fund; minimum fixed deferred period applies; highest risk charges</li>
+            <li><strong>Initial investment protection:</strong> Only initial premium protected; growth is available to meet some LTC benefit before non-unit fund used</li>
+            <li><strong>No protection (exhaustion):</strong> Unit fund pays LTC benefits first until exhausted; non-unit fund only kicks in after fund exhausted; lowest risk charges</li>
+            <li>From insurer's view: <strong>fund protection choice = varying the effective deferred period</strong></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header navy">📐 Effective Deferred Period Calculation</div>
+        <div class="card-body">
+          <ul class="bullet-list">
+            <li>Effective deferred period = fixed minimum deferred period <strong>+</strong> extra period while fund covers benefit</li>
+            <li><strong>Example:</strong> Single premium £10,000; benefit £300/week; fund grown to £35,200; initial investment protected</li>
+            <li>Available for benefit: £35,200 − £10,000 = £25,200</li>
+            <li>Fund pays for: 25,200 / 300 = <strong>84 additional weeks</strong></li>
+            <li>Effective deferred period: 84 + 26 (fixed) = <strong>110 weeks</strong></li>
+            <li>Risk charges increase as policyholder ages and as benefit escalates (fund may be exhausted faster than expected)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header violet">🔒 Guarantees on Unit-Linked Plans</div>
+        <div class="card-body">
+          <ul class="bullet-list">
+            <li><strong>No guarantee:</strong> If fund exhausted before death and before claim, cover lapses (no more risk charges can be deducted) unless policyholder tops up</li>
+            <li><strong>Guarantee from fixed age (e.g. 90):</strong> If fund positive at age 90, no further risk charges — insurer accepts ongoing longevity risk</li>
+            <li><strong>Full guarantee with restricted investment:</strong> Insurer accepts fund exhaustion risk; investment restricted to managed/with-profits fund; moves toward middle ground between stand-alone and investment solution</li>
+            <li>Complexity is a significant barrier to sales — considerable ongoing financial advice required</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <h2 class="sub-heading">Pension-Based Solutions</h2>
+    <div class="cards-grid">
+      <div class="card">
+        <div class="card-header teal">🏛️ Rationale for Pension Link</div>
+        <div class="card-body">
+          <ul class="bullet-list">
+            <li>LTCI has natural link with pensions — both address post-retirement needs</li>
+            <li>Standard pension annuity <em>may be inappropriate</em> for extreme old age — fixed income doesn't recognise extra costs of care</li>
+            <li>Pension annuity problem: surviving spouse pension often reduced; further eroded by inflation</li>
+            <li>Original occupational pension designed for ~10 years of retirement with level income — not today's 30+ year retirements with potential LTC needs</li>
+            <li>UK: pensioners no longer required to purchase annuity → they may have a capital pot for LTCI purchase</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header gold">🏗️ Pension-LTCI Design</div>
+        <div class="card-body">
+          <ul class="bullet-list">
+            <li><strong>Pseudo-pension annuity solution:</strong> Conventional immediate annuity from pension fund + <em>rider LTCI benefit</em> that increases pension income at disability trigger</li>
+            <li>Benefit = impaired <em>deferred</em> life annuity — deferred period ends at triggering event (disability/age)</li>
+            <li>LTC rider premium: from <strong>tax-free lump sum</strong> (single premium) OR from ongoing pension income (regular premium)</li>
+            <li>Regular premiums stop at earlier of: death, or triggering of LTC benefit</li>
+            <li>Challenge: initial pension may be reduced to fund LTC cover, relative to pre-retirement salary</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <h2 class="sub-heading">LTCI as Rider Benefit — Comparison</h2>
+    <table class="compare-table">
+      <thead><tr><th>Host Policy</th><th>Fit</th><th>Rationale</th></tr></thead>
+      <tbody>
+        <tr><td>CI Insurance</td><td>✅ Good</td><td>Many CIs (Alzheimer's, Parkinson's, stroke, dementia) generate LTC need — natural overlap; CI death benefit = resource for LTC</td></tr>
+        <tr><td>PMI</td><td>✅ Good</td><td>PMI covers acute; LTC covers chronic disability — complementary; consumers may expect PMI to cover care (natural linkage)</td></tr>
+        <tr><td>Whole of Life</td><td>✅ Good</td><td>LTC benefits = accelerated death benefit; good conceptual fit; but policy needs very large sum insured to provide adequate LTC benefit → expensive for older lives</td></tr>
+        <tr><td>IP Insurance</td><td>⚠️ Weak</td><td>IP benefit based on salary; LTC benefit based on care costs — no natural link in benefit level; extend IP beyond retirement by switching to ADL definition, but feels like two products bolted together; neither IP nor LTCI is very popular individually</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════ -->
+  <!-- TAB 5: PRICING -->
+  <!-- ════════════════════════════════════════════════════ -->
+  <div id="tab-pricing" class="section-panel">
+    <div class="section-header">
+      <div class="section-icon" style="background:var(--gold-pale);">💰</div>
+      <div>
+        <div class="section-title">Pricing &amp; Assumptions</div>
+        <div class="section-subtitle">Key assumptions · Rating factors · Asset-liability matching</div>
+      </div>
+    </div>
+
+    <div class="alert-box gold">
+      <span class="alert-icon">⚠️</span>
+      <div><strong>Data Warning:</strong> LTCI suffers from severe data scarcity. Disability incidence, recovery rates, cognitive impairment rates and care cost inflation are all uncertain. This means <strong>large contingency loadings</strong> are required — making guaranteed premium products expensive and potentially unmarketable.</div>
+    </div>
+
+    <div class="cards-grid">
+      <div class="card">
+        <div class="card-header teal">📊 Key Pricing Assumptions</div>
+        <div class="card-body">
+          <ul class="bullet-list">
+            <li><strong>Morbidity (disability incidence):</strong> Probability of failing required number of ADLs by age — scarce data; must use population statistics plus reinsurer data</li>
+            <li><strong>Mortality:</strong> Mortality of both healthy and disabled lives — life table adjustments for impaired lives; also affects premium payment period</li>
+            <li><strong>Recovery rates:</strong> Probability of recovering from LTC (improving → re-entering healthy state); relevant for multi-state models</li>
+            <li><strong>Benefit escalation:</strong> Rate at which benefits increase (fixed vs linked); care cost inflation highly uncertain</li>
+            <li><strong>Expenses:</strong> High admin costs; claims assessment costs; care management services</li>
+            <li><strong>Investment return / discount rate:</strong> For discounting benefit stream; matching adjustment may be available for immediate needs block</li>
+            <li><strong>Lapse/persistency:</strong> Voluntary lapses; potential for anti-selective lapsing if premiums rise</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header navy">⚖️ Rating Factors (Pre-Funded)</div>
+        <div class="card-body">
+          <ul class="bullet-list">
+            <li><strong>Age at entry</strong> — primary factor; older → shorter premium-paying period, earlier expected claim</li>
+            <li><strong>Health status / functional ability</strong> — medical questionnaire; pre-existing conditions</li>
+            <li><strong>Benefit amount</strong> — larger benefit → higher premium proportionally</li>
+            <li><strong>Deferred period</strong> — longer → lower premium</li>
+            <li><strong>Benefit escalation rate</strong> — higher escalation → higher premium</li>
+            <li><strong>Benefit payment period</strong> — lifetime vs fixed term</li>
+            <li><strong>Policy term</strong> — whole life vs to fixed age</li>
+            <li><strong>Guarantee type</strong> — guaranteed vs reviewable premiums</li>
+            <li><strong>Gender</strong> — if permitted; women have longer expected disability duration</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header gold">🧮 Modelling Approaches</div>
+        <div class="card-body">
+          <ul class="bullet-list">
+            <li><strong>Multi-state models</strong> — most appropriate: Healthy → Mildly disabled → Severely disabled → Dead; allows transitions between states and recovery</li>
+            <li>Transition intensities estimated from experience data at each age</li>
+            <li><strong>Deterministic cashflow model:</strong> Project benefit payments by duration, applying probability of being in each state</li>
+            <li><strong>Stochastic model:</strong> Allows for uncertainty in incidence, duration, recovery rates</li>
+            <li>Sensitivity analysis essential — assumptions are very uncertain</li>
+            <li>For immediate needs: simpler — project annuity cashflows using impaired mortality table</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header teal">🏦 Asset-Liability Matching (IAI 1119 Q1iv)</div>
+        <div class="card-body">
+          <ul class="bullet-list">
+            <li><strong>Pre-funded liabilities (premium-paying phase):</strong> Long duration — fixed-interest bonds of matching term; cash for short-duration liabilities</li>
+            <li><strong>Benefits increasing at 3% p.a. (fixed):</strong> Index-linked gilts; provides real return matching benefit escalation</li>
+            <li><strong>Benefits linked to general inflation:</strong> Index-linked gilts (inflation linkers); or equities/property for long-run real return (higher risk/volatility)</li>
+            <li><strong>Expense liabilities (staff-based):</strong> Assets linked to wage inflation</li>
+            <li><strong>Currency matching:</strong> Assets in same currency as liabilities; overseas policies may require overseas investments</li>
+            <li><strong>Immediate needs block:</strong> Fixed-interest bonds for level benefits; index-linked for escalating; <strong>matching adjustment</strong> may be available (Solvency II) if cash flows predictable and assets ring-fenced</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header violet">📐 Matching Adjustment (IAI 1222 Q1iv)</div>
+        <div class="card-body">
+          <ul class="bullet-list">
+            <li><strong>Conditions for MA:</strong> (1) Regulator approval; (2) Long-term predictable liabilities — no surrender; (3) Key risks: longevity and expenses only; (4) Assets ring-fenced; (5) No early redemption; (6) Assets matched by nature, term, currency</li>
+            <li><strong>Calculation example:</strong> 50% of assets earn +1.50% additional yield; default risk 0.50%</li>
+            <li>MA = 50% × (1.50% − 0.50%) = <strong>0.50% p.a.</strong></li>
+            <li>LTCI immediate needs business is well-suited to MA: fixed predictable cash flows, no policyholder surrender, longevity risk pooled</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header red">📉 New Business Strain</div>
+        <div class="card-body">
+          <ul class="bullet-list">
+            <li>Even for <strong>single premium LTCI</strong> (immediate needs), new business strain can arise if supervisory reserves are on a stronger basis than the premium basis</li>
+            <li>Solvency capital requirement adds to strain beyond reserves</li>
+            <li>For regular premium pre-funded: strain arises because initial expenses (commission, underwriting, admin) exceed first premium</li>
+            <li>Reviewable premium products carry less capital strain than guaranteed premium products</li>
+            <li>Capital strain particularly important for new/small LTCI insurers with limited free assets</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <h2 class="sub-heading">EV for Unit-Linked LTCI (IAI 1222 Q1v)</h2>
+    <div class="accordion-item">
+      <div class="accordion-header" onclick="toggleAccordion(this)">EV methodology for acquired unit-linked LTCI block <span class="accordion-arrow">▶</span></div>
+      <div class="accordion-body">
+        <ul class="bullet-list">
+          <li><strong>Net assets:</strong> Total assets in excess of technical provisions + SCR (Solvency II). 100% of net assets included (shareholder-owned).</li>
+          <li><strong>PVIF (Present Value of In-Force):</strong> PV of future shareholder cashflows = release of risk margin + release of SCR, less frictional costs (tax, agency costs).</li>
+          <li><strong>Projection model:</strong> Must project both unit fund AND non-unit fund cashflows (non-unit cashflows depend on unit fund size at claim trigger).</li>
+          <li><strong>Assumptions needed:</strong> Investment returns, morbidity (disability incidence/recovery), mortality, expenses, lapses, inflation, tax.</li>
+          <li><strong>Top-up premiums:</strong> Treated as in-force (if reasonable to assume ongoing contributions) or as new business (if uncertain). Contract boundary applies under Solvency II but EV treatment may differ.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════ -->
+  <!-- TAB 6: UNDERWRITING & CLAIMS -->
+  <!-- ════════════════════════════════════════════════════ -->
+  <div id="tab-uw-claims" class="section-panel">
+    <div class="section-header">
+      <div class="section-icon" style="background:var(--red-pale);">🔍</div>
+      <div>
+        <div class="section-title">Underwriting &amp; Claims Management</div>
+        <div class="section-subtitle">Acceptance · ADL assessment · Ongoing monitoring</div>
+      </div>
+    </div>
+
+    <div class="cards-grid">
+      <div class="card">
+        <div class="card-header teal">📋 Pre-Funded: Initial Underwriting</div>
+        <div class="card-body">
+          <ul class="bullet-list">
+            <li><strong>Proposal form</strong> — age, health status, functional ability, family history of dementia/long-term conditions</li>
+            <li>Further medical evidence if any adverse indicators: GP report, specialist report, medical examination</li>
+            <li><strong>Financial underwriting:</strong> Benefit level should not exceed expected costs of care (prevents over-insurance windfall)</li>
+            <li>If benefit level much higher than actual care costs → temptation to claim → financial underwriting required</li>
+            <li>Key aim: ensure premium reflects risk; prevent adverse selection by those already experiencing early deterioration</li>
+            <li>Guaranteed premium products require most stringent underwriting (no opportunity to revise)</li>
+            <li>Reviewable premium products allow more lenient initial underwriting</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header gold">⚡ Immediate Needs: Underwriting</div>
+        <div class="card-body">
+          <ul class="bullet-list">
+            <li>Detailed <strong>individual medical evidence</strong> collected — health status directly determines premium</li>
+            <li><strong>Functional ability tests / ADL assessment</strong> to establish level of disability</li>
+            <li>Indicative quote first (based on brief questions), then full underwriting if proposal proceeds</li>
+            <li>Decision must be made <strong>quickly</strong> — applicant is already in need of care; delays are unacceptable</li>
+            <li>Medical examinations should be <strong>kept to a minimum</strong> — unnecessary cost and inconvenience at a difficult time</li>
+            <li>GP/consultant report used to confirm health status and likely prognosis</li>
+            <li>Adverse health → lower premium (shorter expected payment period)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header navy">🩺 Claim Assessment</div>
+        <div class="card-body">
+          <ul class="bullet-list">
+            <li>Assessment by <strong>independent assessor</strong> (not insurer's own staff) — preserves objectivity; policyholder confidence</li>
+            <li>ADL assessments: functional ability tests — structured for objectivity but subjective elements remain (e.g. no specification of exact stair count)</li>
+            <li><strong>Cognitive impairment assessed separately</strong> — standardised tests; overriding trigger if satisfied</li>
+            <li>Important to assess: <em>cannot</em> perform the activity vs <em>chooses not to</em> perform it — moral hazard risk</li>
+            <li><strong>Waiting period</strong> in claim definition: disability must persist for specified period (not one-off event) before benefit triggers</li>
+            <li>Care manager / advocate may be appointed to help policyholder navigate care choices</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header violet">🔄 Ongoing Claims Monitoring</div>
+        <div class="card-body">
+          <ul class="bullet-list">
+            <li>Periodic reassessment of ADL status — frequency depends on nature of disability</li>
+            <li>Some conditions are clearly permanent (e.g. severe Alzheimer's) — less frequent reassessment</li>
+            <li>Others may improve (e.g. post-stroke) — regular monitoring required</li>
+            <li>Care manager reviews care plan and expenditure (for indemnity policies)</li>
+            <li>Monitor for: recovery (claim termination), change in disability level (tiered benefit adjustment), death</li>
+            <li>Insurer may offer rehabilitation services to slow deterioration</li>
+            <li>Assistive devices provided early to defer progression to higher care levels</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <h2 class="sub-heading">Rating Factors for LTCI (IAI 0918 Q1i)</h2>
+    <table class="compare-table">
+      <thead><tr><th>Rating Factor</th><th>Why It Matters</th><th>Direction of Effect</th></tr></thead>
+      <tbody>
+        <tr><td>Age at entry</td><td>Primary driver of disability incidence and premium payment period</td><td>↑ Age → ↑ Premium</td></tr>
+        <tr><td>Health status</td><td>Pre-existing conditions predict early disability</td><td>Poor health → ↑ Premium (pre-funded) or ↓ Premium (immediate needs)</td></tr>
+        <tr><td>Cognitive / family history</td><td>Genetic predisposition to dementia is a key risk factor</td><td>Positive family history → ↑ Premium</td></tr>
+        <tr><td>Benefit amount</td><td>Directly proportional to expected claim outgo</td><td>↑ Benefit → ↑ Premium</td></tr>
+        <tr><td>Deferred period</td><td>Longer period → fewer claims expected; self-funding covers initial period</td><td>Longer → ↓ Premium</td></tr>
+        <tr><td>Escalation rate</td><td>Higher escalation → higher expected benefit over claim duration</td><td>↑ Escalation → ↑ Premium</td></tr>
+        <tr><td>Payment period</td><td>Lifetime vs fixed-term affects total expected benefit outgo</td><td>Lifetime → ↑ Premium</td></tr>
+        <tr><td>Gender</td><td>Women have longer disability duration on average; live longer</td><td>Female → ↑ Premium (if permitted)</td></tr>
+        <tr><td>Smoking status</td><td>Smokers have higher morbidity and mortality</td><td>Smoker → complex (↑ incidence but ↓ duration)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════ -->
+  <!-- TAB 7: RISKS -->
+  <!-- ════════════════════════════════════════════════════ -->
+  <div id="tab-risks" class="section-panel">
+    <div class="section-header">
+      <div class="section-icon" style="background:var(--red-pale);">⚠️</div>
+      <div>
+        <div class="section-title">Risks to the Insurer</div>
+        <div class="section-subtitle">Longevity · Morbidity · Inflation · Political · Moral hazard</div>
+      </div>
+    </div>
+
+    <div class="cards-grid">
+      <div class="card">
+        <div class="card-header red">📈 Longevity Risk</div>
+        <div class="card-body">
+          <ul class="bullet-list">
+            <li>Policyholders surviving <em>longer</em> than expected → more benefit payments than priced</li>
+            <li>Critical for immediate needs plans: annuity payments continue longer than expected single premium covers</li>
+            <li>Mortality improvements are hard to predict — especially at very old ages (80+) where improvements are accelerating</li>
+            <li>Pooled across portfolio but systematic longevity improvement cannot be diversified away</li>
+            <li>Reinsurance can transfer longevity risk; longevity swaps also available in some markets</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header red">🧬 Morbidity / Disability Risk</div>
+        <div class="card-body">
+          <ul class="bullet-list">
+            <li>More policyholders claiming than expected (higher disability incidence)</li>
+            <li>Claims lasting longer than expected (lower recovery rates)</li>
+            <li>Progression to higher ADL failure levels faster than expected</li>
+            <li>Cognitive impairment rates rising with ageing population</li>
+            <li>Data is scarce — largely population-based, not insured-population-based</li>
+            <li>Medical advances can work both ways: cure some conditions (↓ incidence) but extend life with disability (↑ duration)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header gold">💷 Care Cost Inflation Risk</div>
+        <div class="card-body">
+          <ul class="bullet-list">
+            <li>Care costs are <strong>primarily staff-based</strong> → driven by wage inflation, not just price inflation</li>
+            <li>Rising demand for carers (ageing population) + limited supply → wage growth in care sector may exceed general earnings growth</li>
+            <li>New care technologies and practices may increase cost per care episode</li>
+            <li>Cash benefit policies: insurer bears fixed cash risk (no direct exposure to care inflation) but policyholder bears this risk</li>
+            <li>Indemnity policies: insurer bears full care inflation risk — very difficult to price and reserve for</li>
+            <li>Key reason most UK insurers offer <em>cash</em> rather than <em>indemnity</em> benefits</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header navy">🏛️ Political / Regulatory Risk</div>
+        <div class="card-body">
+          <ul class="bullet-list">
+            <li>State may <em>increase</em> its provision → demand for LTCI falls; existing policyholders may lapse</li>
+            <li>State may <em>decrease</em> provision → claims on insurer increase if policyholders expected State to supplement</li>
+            <li>State could charge for nursing care (previously free) → insurer faces unexpected additional claims cost</li>
+            <li>Regulator may insist insurer provides more than intended (e.g. interpret "care" broadly) → margin required in pricing</li>
+            <li>Tax treatment changes (premiums or benefits) → affects demand and benefit levels</li>
+            <li>Contract design must be <em>robust to changes in State provision</em></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header red">🎭 Moral Hazard</div>
+        <div class="card-body">
+          <ul class="bullet-list">
+            <li>ADL definitions leave room for value judgements — policyholders may exaggerate disability</li>
+            <li>High benefit → reduced incentive to stay active or attempt recovery</li>
+            <li>Cash benefits used for non-care purposes (holiday, gift to relatives) — insurer has no control</li>
+            <li>Family may exploit cash payments; inadequate care provided to elderly person</li>
+            <li>Over-insurance: benefit exceeds actual care costs → windfall effect → incentive to claim</li>
+            <li>Managed by: independent assessment, financial underwriting, benefit limits, deferred periods</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header violet">🎯 Anti-Selection</div>
+        <div class="card-body">
+          <ul class="bullet-list">
+            <li>Those expecting to need care soon (early deterioration not yet diagnosable) may select in</li>
+            <li>Selective lapsing: if premiums rise, <em>healthier</em> lives lapse; sicker lives retain → portfolio worsens → further premium rises needed → spiral</li>
+            <li>Managed by: underwriting at inception, capping premium increases, actively-at-work criteria</li>
+            <li>Reviewable premiums create anti-selection spiral risk if market allows switching</li>
+            <li>Voluntary group schemes carry higher anti-selection than compulsory schemes</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header gold">💾 Data &amp; Pricing Risk</div>
+        <div class="card-body">
+          <ul class="bullet-list">
+            <li>Limited insured-lives experience data globally — must rely on population statistics</li>
+            <li>Published morbidity tables may be out of date rapidly (changing care patterns, new conditions)</li>
+            <li>Transition intensities between health states particularly sparse</li>
+            <li>Reinsurer assistance is critical — provides mortality/morbidity data and pricing support</li>
+            <li>Large contingency loadings required → makes guaranteed premiums expensive → limits marketability</li>
+            <li>Data problem worse for new markets (e.g. developing countries launching LTCI)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header navy">💼 Insurer Operational Risks</div>
+        <div class="card-body">
+          <ul class="bullet-list">
+            <li><strong>Systems risk:</strong> Complex multi-state models, ongoing claim monitoring, ADL tracking</li>
+            <li><strong>Reputation risk:</strong> If cash benefits perceived as inadequate for care costs → policyholder dissatisfaction, complaints</li>
+            <li><strong>Mis-selling risk:</strong> Policyholders believe they are buying "care" not "cash" → unrealistic expectations</li>
+            <li><strong>Provider risk:</strong> For indemnity plans, care home quality/failure affects claims</li>
+            <li><strong>Expense risk:</strong> LTCI has high ongoing admin costs vs other H&amp;C products</li>
+            <li><strong>Investment risk:</strong> Mismatch between assets and long-duration, inflation-linked liabilities</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════ -->
+  <!-- TAB 8: FLASHCARDS -->
+  <!-- ════════════════════════════════════════════════════ -->
+  <div id="tab-flashcards" class="section-panel">
+    <div class="section-header">
+      <div class="section-icon" style="background:var(--violet-pale);">🃏</div>
+      <div>
+        <div class="section-title">Flashcards</div>
+        <div class="section-subtitle">Click each card to reveal the answer</div>
+      </div>
+    </div>
+    <div id="flashcard-container"></div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════ -->
+  <!-- TAB 9: IAI EXAM Qs -->
+  <!-- ════════════════════════════════════════════════════ -->
+  <div id="tab-iai-qs" class="section-panel">
+    <div class="section-header">
+      <div class="section-icon" style="background:var(--teal-pale);">📝</div>
+      <div>
+        <div class="section-title">IAI Exam Questions — LTCI</div>
+        <div class="section-subtitle">Past questions with model answers · Click to expand</div>
+      </div>
+    </div>
+    <div id="iai-questions-container"></div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════ -->
+  <!-- TAB 10: IFoA / SP1 Qs -->
+  <!-- ════════════════════════════════════════════════════ -->
+  <div id="tab-ifoa-qs" class="section-panel">
+    <div class="section-header">
+      <div class="section-icon" style="background:var(--gold-pale);">🎓</div>
+      <div>
+        <div class="section-title">IFoA / SP1 Practice Questions</div>
+        <div class="section-subtitle">Course note questions with model answers · Click to expand</div>
+      </div>
+    </div>
+
+    <!-- Q1 -->
+    <div class="exam-question">
+      <div class="eq-header" onclick="toggleEQ(this)">
+        <div class="eq-header-left">
+          <span class="eq-source-badge sp1">SP1 Ch3 Q3.1</span>
+        </div>
+        <div class="eq-question">Comment on the advice: "Buy fixed-interest investments directly instead of an immediate needs annuity — cut out insurer expenses; bequeath remainder on death."</div>
+        <div class="eq-toggle">▾</div>
+      </div>
+      <div class="eq-body">
+        <div class="eq-section-title">Main Rebuttal — Longevity Risk</div>
+        <ul class="bullet-list">
+          <li>An annuity is insurance against the financial consequences of <strong>living too long</strong>. Without it, the individual bears all longevity risk</li>
+          <li>A person in LTC cannot supplement income when savings run out — they may have to change to a cheaper care home at the worst possible time</li>
+          <li>Rather than leaving money to relatives, you may end up <strong>relying on relatives</strong> to fund your care</li>
+        </ul>
+        <div class="eq-section-title">Additional Points</div>
+        <ul class="bullet-list">
+          <li>Insurer's admin expenses and profit are offset by <strong>pooling of longevity risk</strong> — those who die early subsidise those who live long</li>
+          <li>Individual buying bonds directly may have higher dealing costs and less expertise in selecting optimal bonds</li>
+          <li>Insurer may hold a proportion in equities/property/index-linked gilts (not just fixed-interest) — potentially offering <em>better</em> returns than individual bond investment</li>
+          <li>On death, fixed-interest bonds may have positive value — but if you're alive and funds exhausted, there's nothing left</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Q2 -->
+    <div class="exam-question">
+      <div class="eq-header" onclick="toggleEQ(this)">
+        <div class="eq-header-left">
+          <span class="eq-source-badge sp1">SP1 Ch3 Q3.2</span>
+        </div>
+        <div class="eq-question">Alice, aged 78, post-stroke, needs £18,000 p.a. extra. She has £75,000 savings. Describe her risk and suggest an immediate needs solution.</div>
+        <div class="eq-body">
+        </div>
+        <div class="eq-toggle">▾</div>
+      </div>
+      <div class="eq-scenario">Alice receives £7,000 p.a. net (State + occupational pension). Nursing home costs £25,000 p.a. Assume: post-stroke mortality loading +0.35 (year 1) and +0.10 (thereafter) above ELT15; discount rate 5%.</div>
+      <div class="eq-body">
+        <div class="eq-section-title">Risk Quantification</div>
+        <ul class="bullet-list">
+          <li>Annual shortfall: £25,000 − £7,000 = £18,000 p.a. needed</li>
+          <li>£75,000 at 5% = £3,750 income p.a. — far insufficient</li>
+          <li>Self-funding: capital runs out in ~4.75 years</li>
+          <li>Using impaired mortality from ELT15 (Female): survival probability after 5 years ≈ 30% → significant longevity risk</li>
+        </ul>
+        <div class="eq-section-title">Immediate Needs Solution</div>
+        <ul class="bullet-list">
+          <li>Impaired life annuity using enhanced mortality: ä₇₈ (impaired) ≈ 3.75</li>
+          <li>After 10% expense/profit loading: £10,000 buys ~£2,425 p.a.</li>
+          <li>£75,000 buys approximately <strong>£18,200 p.a.</strong> — matches the shortfall</li>
+          <li>This eliminates longevity risk completely for Alice</li>
+          <li>Consider modest escalation to match care cost inflation</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Q3 -->
+    <div class="exam-question">
+      <div class="eq-header" onclick="toggleEQ(this)">
+        <div class="eq-header-left">
+          <span class="eq-source-badge sp1">SP1 Ch7 Q7.5</span>
+          <span class="eq-marks">13 marks</span>
+        </div>
+        <div class="eq-question">Design a pre-funded LTCI product covering home and nursing-home care, meeting the needs of all stakeholders. Cover benefit structure, premiums, and claim definitions.</div>
+        <div class="eq-toggle">▾</div>
+      </div>
+      <div class="eq-body">
+        <div class="eq-section-title">Benefit Structure</div>
+        <ul class="bullet-list">
+          <li>Main benefit: indemnity-based covering actual care costs subject to specified limits (e.g. max £X per year per ADL failure level)</li>
+          <li>Cash alternative: fixed regular income — avoids exposure to care cost inflation but transfers risk to policyholder</li>
+          <li>Two benefit levels: lower for home care; higher for nursing home care</li>
+          <li>Benefits for life subject to ongoing disability; alternatively fixed 3-year period complementing State provision</li>
+          <li>Benefit escalation linked to inflation index; insurer may accept or limit this</li>
+          <li>Additional: assistive devices benefit (fixed months), independent care advice at claim, respite care for informal carers</li>
+          <li>Death benefit: possible; adds cost; single premium return or minimum payment period</li>
+          <li>Guarantee vs reviewable: guaranteed from advanced age (e.g. 75) — limits additional cost while providing policyholder security</li>
+        </ul>
+        <div class="eq-section-title">Premiums</div>
+        <ul class="bullet-list">
+          <li>Regular premiums with waiver during claim; option for single premium</li>
+          <li>Reviewable premiums most likely given uncertain claims experience</li>
+          <li>Premiums linked to benefit escalation rate; stop at e.g. age 85</li>
+          <li>Actuarially fair rating by age, health, benefit level, deferred period, escalation, payment period</li>
+        </ul>
+        <div class="eq-section-title">Claim Definitions</div>
+        <ul class="bullet-list">
+          <li>Clear, unambiguous criteria — e.g. inability to perform N out of 6 ADLs (washing, dressing, feeding, toileting, mobility, transferring)</li>
+          <li>Mental impairment overriding trigger (Alzheimer's, organic dementia)</li>
+          <li>Number of ADLs required for benefit to trigger: calibrate to limit windfall and ensure genuine need</li>
+          <li>Assessment by independent body (not insurer) — builds policyholder trust</li>
+          <li>Consistent with competitors to limit anti-selection and regulatory scrutiny</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Q4 -->
+    <div class="exam-question">
+      <div class="eq-header" onclick="toggleEQ(this)">
+        <div class="eq-header-left">
+          <span class="eq-source-badge sp1">SP1 Ch6 Q6.2</span>
+          <span class="eq-marks">5 marks</span>
+        </div>
+        <div class="eq-question">Give an example of LTCI with indemnity benefits and a similar product with non-indemnity benefits. How can indemnity be limited while maintaining appeal to consumers?</div>
+        <div class="eq-toggle">▾</div>
+      </div>
+      <div class="eq-body">
+        <div class="eq-section-title">Indemnity vs Non-Indemnity Examples</div>
+        <ul class="bullet-list">
+          <li><strong>Indemnity:</strong> Policy pays for the cost of care in an approved nursing home, covering whatever care is assessed as needed (subject to limits) — restores policyholder to pre-claim position financially</li>
+          <li><strong>Non-indemnity:</strong> Policy pays £500 per week when claim conditions are met — fixed regardless of actual care costs incurred. May over- or under-compensate</li>
+        </ul>
+        <div class="eq-section-title">Limiting Indemnity While Remaining Attractive</div>
+        <ul class="bullet-list">
+          <li><strong>Deferred period:</strong> No benefits for initial 3–12 months — policyholder funds this; still seen as reasonable since initial care can be informal/own resources</li>
+          <li><strong>Maximum benefit period:</strong> 3–5 years of full care benefits, then State provision assumed — acceptable if probability of longer need is perceived as low</li>
+          <li><strong>Annual monetary cap:</strong> Indemnity up to e.g. £30,000/year — partial indemnity; still valuable protection against most scenarios</li>
+          <li><strong>Reviewable premiums:</strong> Maintains affordability by adjusting to experience</li>
+          <li><strong>Limiting coverage age:</strong> Benefits cease at e.g. 85 — reduces tail risk for insurer</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════════════ -->
+  <!-- TAB 11: MNEMONICS -->
+  <!-- ════════════════════════════════════════════════════ -->
+  <div id="tab-mnemonics" class="section-panel">
+    <div class="section-header">
+      <div class="section-icon" style="background:var(--violet-pale);">🧠</div>
+      <div>
+        <div class="section-title">Mnemonics &amp; Memory Aids</div>
+        <div class="section-subtitle">Quick recall frameworks for LTCI</div>
+      </div>
+    </div>
+
+    <!-- ADLs -->
+    <div class="mnemonic-box">
+      <div class="mnemonic-title">The 6 ADLs — "Will Tom Forget My Dog Tonight?"</div>
+      <div class="mnemonic-letters">
+        <div class="mnemonic-item"><div class="mnemonic-letter">W</div><div class="mnemonic-word"><strong>Washing</strong>Maintain adequate cleanliness and personal hygiene</div></div>
+        <div class="mnemonic-item"><div class="mnemonic-letter">T</div><div class="mnemonic-word"><strong>Toileting</strong>Manage bowel and bladder function at adequate hygiene</div></div>
+        <div class="mnemonic-item"><div class="mnemonic-letter">F</div><div class="mnemonic-word"><strong>Feeding</strong>Transfer food from plate to mouth (once prepared)</div></div>
+        <div class="mnemonic-item"><div class="mnemonic-letter">M</div><div class="mnemonic-word"><strong>Mobility</strong>Move indoors from room to room on level surfaces</div></div>
+        <div class="mnemonic-item"><div class="mnemonic-letter">D</div><div class="mnemonic-word"><strong>Dressing</strong>Put on/take off garments and surgical appliances</div></div>
+        <div class="mnemonic-item"><div class="mnemonic-letter">T</div><div class="mnemonic-word"><strong>Transferring</strong>Move from lying in bed to sitting in chair and back</div></div>
+      </div>
+    </div>
+
+    <!-- Risks -->
+    <div class="mnemonic-box">
+      <div class="mnemonic-title">LTCI Insurer Risks — "CLIMPAD"</div>
+      <div class="mnemonic-letters">
+        <div class="mnemonic-item"><div class="mnemonic-letter">C</div><div class="mnemonic-word"><strong>Care cost Inflation</strong>Staff-based costs rise with wage inflation; care market supply/demand</div></div>
+        <div class="mnemonic-item"><div class="mnemonic-letter">L</div><div class="mnemonic-word"><strong>Longevity</strong>Policyholders surviving longer than priced (key for immediate needs)</div></div>
+        <div class="mnemonic-item"><div class="mnemonic-letter">I</div><div class="mnemonic-word"><strong>Inadequate data</strong>Scarce insured-population morbidity data → large contingency margins</div></div>
+        <div class="mnemonic-item"><div class="mnemonic-letter">M</div><div class="mnemonic-word"><strong>Morbidity deterioration</strong>Higher disability incidence or longer claim duration than priced</div></div>
+        <div class="mnemonic-item"><div class="mnemonic-letter">P</div><div class="mnemonic-word"><strong>Political / regulatory risk</strong>State changes provision; regulator reinterprets benefit promise</div></div>
+        <div class="mnemonic-item"><div class="mnemonic-letter">A</div><div class="mnemonic-word"><strong>Anti-selection</strong>Selective lapsing when premiums rise; adverse lives retain</div></div>
+        <div class="mnemonic-item"><div class="mnemonic-letter">D</div><div class="mnemonic-word"><strong>Data / pricing risk</strong>Model error; future care patterns differ from assumptions</div></div>
+      </div>
+    </div>
+
+    <!-- Pre-funded vs Immediate Needs -->
+    <div class="mnemonic-box">
+      <div class="mnemonic-title">Pre-funded vs Immediate Needs — "SHIP vs CASH"</div>
+      <div class="mnemonic-letters">
+        <div class="mnemonic-item"><div class="mnemonic-letter">S</div><div class="mnemonic-word"><strong>Single or regular premium</strong>Pre-funded = either; Immediate = single only</div></div>
+        <div class="mnemonic-item"><div class="mnemonic-letter">H</div><div class="mnemonic-word"><strong>Health at entry</strong>Pre-funded = healthy; Immediate = already in poor health</div></div>
+        <div class="mnemonic-item"><div class="mnemonic-letter">I</div><div class="mnemonic-word"><strong>Incidence vs annuity risk</strong>Pre-funded faces disability incidence risk; Immediate faces longevity of impaired lives</div></div>
+        <div class="mnemonic-item"><div class="mnemonic-letter">P</div><div class="mnemonic-word"><strong>Possibly no benefit</strong>Pre-funded: risk of no benefit if never claiming; Immediate: always receives income</div></div>
+        <div class="mnemonic-item"><div class="mnemonic-letter">C</div><div class="mnemonic-word"><strong>Cash or indemnity</strong>Both can provide either; cash predominates due to insurer's inability to forecast care inflation</div></div>
+        <div class="mnemonic-item"><div class="mnemonic-letter">A</div><div class="mnemonic-word"><strong>Adverse health effect</strong>Pre-funded: poor health ↑ premium; Immediate: poor health ↓ premium</div></div>
+        <div class="mnemonic-item"><div class="mnemonic-letter">S</div><div class="mnemonic-word"><strong>Surrender / paid-up</strong>Pre-funded: possible paid-up after min period; Immediate: no surrender</div></div>
+        <div class="mnemonic-item"><div class="mnemonic-letter">H</div><div class="mnemonic-word"><strong>Healthier lives at inception</strong>Pre-funded underwriting selects in healthy; Immediate by definition insures unhealthy</div></div>
+      </div>
+    </div>
+
+    <!-- Unit-Linked Flow -->
+    <div class="mnemonic-box">
+      <div class="mnemonic-title">Unit-Linked LTCI — Fund Protection Spectrum</div>
+      <div class="mnemonic-letters">
+        <div class="mnemonic-item"><div class="mnemonic-letter">F</div><div class="mnemonic-word"><strong>Full protection</strong>Entire fund (premium + growth) protected → highest risk charges → insurer bears most risk → shortest effective deferred period</div></div>
+        <div class="mnemonic-item"><div class="mnemonic-letter">I</div><div class="mnemonic-word"><strong>Initial investment only</strong>Growth available to pay some LTC benefit → medium risk charges → medium effective deferred period</div></div>
+        <div class="mnemonic-item"><div class="mnemonic-letter">E</div><div class="mnemonic-word"><strong>Exhaustion (no protection)</strong>Full fund pays LTC benefit first → lowest risk charges → policyholder bears most investment risk → longest effective deferred period</div></div>
+      </div>
+    </div>
+
+    <!-- Rider fit -->
+    <div class="mnemonic-box">
+      <div class="mnemonic-title">LTCI Rider Fit — "CWP (good) vs I (weak)"</div>
+      <div class="mnemonic-letters">
+        <div class="mnemonic-item"><div class="mnemonic-letter">C</div><div class="mnemonic-word"><strong>CI rider — GOOD FIT</strong>Many CIs (Alzheimer's, stroke, Parkinson's) lead to LTC → natural overlap; CI death benefit = resource for LTC</div></div>
+        <div class="mnemonic-item"><div class="mnemonic-letter">W</div><div class="mnemonic-word"><strong>Whole of life — GOOD FIT</strong>LTC benefits = accelerated death benefits; conceptually clean</div></div>
+        <div class="mnemonic-item"><div class="mnemonic-letter">P</div><div class="mnemonic-word"><strong>PMI rider — GOOD FIT</strong>PMI (acute) + LTC rider (chronic) = natural complement; consumers may expect this link</div></div>
+        <div class="mnemonic-item"><div class="mnemonic-letter">I</div><div class="mnemonic-word"><strong>IP rider — WEAK FIT</strong>IP benefit based on salary; LTC benefit based on care costs — no natural link; feels like two separate products</div></div>
+      </div>
+    </div>
+
+    <!-- Accordion: Quick-fire facts -->
+    <h2 class="sub-heading" style="margin-top:24px;">Quick-Fire Facts</h2>
+    <div class="accordion-item">
+      <div class="accordion-header" onclick="toggleAccordion(this)">Standard deferred periods for pre-funded plans <span class="accordion-arrow">▶</span></div>
+      <div class="accordion-body"><strong>3 months</strong> and <strong>12 months</strong> are the two standard options. Longer = lower premium. Purpose: initial care typically self-funded / informal; allows adjustment period for policyholder.</div>
+    </div>
+    <div class="accordion-item">
+      <div class="accordion-header" onclick="toggleAccordion(this)">Why do most LTCI insurers prefer cash over indemnity benefits? <span class="accordion-arrow">▶</span></div>
+      <div class="accordion-body">Insurer cannot reliably forecast care cost inflation (staff-based costs rising with wages). Indemnity means open-ended claims exposure. Cash benefits cap the insurer's payment obligation at a fixed amount; care cost inflation risk transfers to policyholder.</div>
+    </div>
+    <div class="accordion-item">
+      <div class="accordion-header" onclick="toggleAccordion(this)">What is the mental impairment trigger and why is it "overriding"? <span class="accordion-arrow">▶</span></div>
+      <div class="accordion-body">Mental impairment = deterioration in memory, orientation, problem-solving, rational decisions from an organic cause (Alzheimer's, irreversible dementia). It is "overriding" because benefit is payable when this condition is satisfied <em>regardless</em> of ADL status — a cognitively impaired person may still physically be able to dress/wash themselves.</div>
+    </div>
+    <div class="accordion-item">
+      <div class="accordion-header" onclick="toggleAccordion(this)">Why do reviewable LTCI premiums cause more problems than reviewable IP premiums? <span class="accordion-arrow">▶</span></div>
+      <div class="accordion-body">IP policyholders are working-age with growing income — premium increases are affordable. LTCI policyholders in retirement have fixed (pension) income growing only at price inflation, not wage inflation. A care cost-driven premium review may make premiums unaffordable, leading to forced lapse when the person needs cover most. Solution: guarantee premiums from a certain age (e.g. 80).</div>
+    </div>
+    <div class="accordion-item">
+      <div class="accordion-header" onclick="toggleAccordion(this)">Why is the LTCI + IP rider combination weak? <span class="accordion-arrow">▶</span></div>
+      <div class="accordion-body">IP benefit level is based on salary (replacing pre-disability income). LTC benefit needed depends on the cost of care (unrelated to salary). No natural link. The combined policy resembles two separate products bolted together with limited synergy. Additional issue: neither IP nor LTCI is individually very popular with consumers, so combining two unpopular products is unlikely to generate a large market.</div>
+    </div>
+  </div>
+
+</div><!-- /main-content -->
+
+<script>
+// ═══════════════════════════════════════════════════
+// FLASHCARDS DATA
+// ═══════════════════════════════════════════════════
+const FLASHCARDS = [
+  { q: "Define long-term care insurance.", a: "All forms of continuing personal or nursing care and associated domestic services for people who are unable to look after themselves without some degree of support, whether in own home, day centre, or care home setting. Distinct from acute care — not principally about curing conditions." },
+  { q: "What are the two generic types of LTCI?", a: "1) Pre-funded plans — bought by relatively healthy people to protect against future disability. 2) Immediate needs plans — bought by those already needing care to protect against uncertain survival duration." },
+  { q: "List all 6 standard ADLs.", a: "Washing, Toileting, Feeding, Mobility, Dressing, Transferring. (Mnemonic: Will Tom Forget My Dog Tonight?)" },
+  { q: "What is the mental/cognitive impairment trigger and why is it 'overriding'?", a: "Deterioration in memory, orientation, problem-solving, rational decisions — from an organic cause (Alzheimer's, irreversible dementia, NOT depression or medication side effects). 'Overriding' means benefit is payable when satisfied regardless of whether any ADLs are failed — a cognitively impaired person may still physically perform ADLs." },
+  { q: "How does health status affect premiums differently for pre-funded vs immediate needs plans?", a: "Pre-funded: poor health INCREASES premium (shorter premium-paying period, earlier expected claim). Immediate needs: poor health DECREASES premium (shorter expected annuity payment period — less total benefit expected). The direction of effect is opposite." },
+  { q: "What are the three methods of funding pre-funded LTCI premiums?", a: "1) Regular premiums (usually increasing with benefit escalation; waived during claim). 2) Single premium (paid upfront). 3) Retrospective payment — from equity released on sale of home after death." },
+  { q: "Why do most LTCI insurers offer cash rather than indemnity benefits?", a: "Care costs are primarily staff-based → driven by wage inflation, which is uncertain. Indemnity means open-ended claims exposure to care cost inflation. With cash benefits, the insurer fixes its maximum payment; care inflation risk transfers to the policyholder. Indemnity also requires agreeing and monitoring care provider fees." },
+  { q: "What is 'intermediate care'?", a: "Recuperative services following an acute event (heart attack, stroke, accident) to reduce avoidable hospital readmission and minimise dependence on ongoing long-term care. It is 'intermediate' between hospital care and care at home. Involves intensive therapy and support." },
+  { q: "What are assistive devices in LTCI and why include them?", a: "Devices such as grab rails, bathing seats, stair lifts, personal alarms — typically covered for 3–6 months' benefit equivalent. Purpose: enable the policyholder to regain independence and DEFER the trigger of further (more expensive) benefits. Cheap to provide; high perceived value." },
+  { q: "Explain the effective deferred period concept for unit-linked LTCI.", a: "Effective deferred period = fixed minimum deferred period + additional period during which the unit fund covers LTC benefit payments before the non-unit fund (insurer protection fund) kicks in. Fund protection choice is equivalent to varying this effective deferred period: Full protection → shortest; No protection (exhaustion) → longest." },
+  { q: "State 4 conditions required to apply a Solvency II matching adjustment to an LTCI block.", a: "1) Regulator approval. 2) Long-term predictable liabilities — no surrender allowed. 3) Key liability risks are longevity and expenses only. 4) Assets ring-fenced, no premature redemption; matched by nature, term and currency to liabilities." },
+  { q: "Why is LTCI as a rider on an IP policy considered a 'weak fit' compared to LTCI on a CI policy?", a: "IP benefit based on salary; LTC benefit based on care costs — no natural link. Feels like two separate products with limited synergy. CI naturally links: many CIs (Alzheimer's, Parkinson's, stroke) lead to LTC needs, so there is natural overlap. Also, neither IP nor LTCI sells very well individually, compounding the marketing problem." },
+  { q: "Why do reviewable LTCI premiums create more problems than reviewable IP premiums?", a: "LTCI policyholders are typically retired with fixed pension income growing only at price inflation. If care cost-driven premium reviews increase premiums faster than pension income, cover becomes unaffordable → forced lapse when cover is most needed. IP policyholders are working-age with rising incomes and can absorb premium increases more easily." },
+  { q: "What are the three fund protection levels in a unit-linked LTCI plan?", a: "1) Full protection (initial + growth). 2) Initial investment only. 3) No protection (fund exhaustion). Higher protection = higher risk charges on the unit fund = shorter effective deferred period from insurer's perspective." },
+  { q: "State the three main uncertainties an individual faces when assessing LTC needs in old age.", a: "1) Likelihood of needing care (probability of disability). 2) Extent of care needed (severity/progression). 3) Duration of care needed (longevity risk). All three are difficult to forecast individually, making self-funding risky." },
+  { q: "What is the standard benefit payment period on a typical pre-funded LTCI plan?", a: "Either (a) lifetime — subject to ongoing disability; most comprehensive, or (b) fixed period such as 3 years — cheaper; may complement State provision (State provides care once private insurance exhausted)." },
+  { q: "How is nursing care defined and why does it matter to insurers?", a: "Nursing care is the narrowest form of LTC — requires specific knowledge/skills of a qualified nurse (assessment, interventions requiring technical competence). Broader definition would encompass delegating/supervising. Key to insurer: nursing care is more expensive than other personal care, and the boundary between what is 'nursing care' (insurer/State liability) affects claims." },
+  { q: "Name 4 product structures used for immediate needs LTCI (beyond simple impaired life annuity).", a: "1) Pure endowments. 2) Purchased life annuities. 3) Disability cover (income payable during periods of disability). 4) Combination with pension annuity ('pseudo-pension annuity solution'). Structure chosen to maximise tax efficiency and minimise capital requirements for insurer and policyholder." },
+  { q: "What is a 'paid-up' benefit in the context of pre-funded LTCI?", a: "Where regular premiums have been paid for a minimum period (e.g. 5 years), the policyholder may stop paying and receive a reduced benefit (paid-up). This normally reduces the benefit amount, or may limit the benefit payment period or coverage age. It is an alternative to full surrender (which basic plans do not offer)." },
+  { q: "State 3 reasons why the stop-loss premium for LTCI is typically lowest among health products.", a: "1) LTCI has very low variability (low standard deviation) relative to its mean — more predictable claims. 2) Disability incidence affects all cohorts similarly (low random variation). 3) Individual claim amounts are bounded. In contrast, PMI and CI have much higher coefficient of variation (SD/mean), making extreme outcomes more likely." },
+  { q: "In unit-linked LTCI, what happens if the unit fund is exhausted before a claim?", a: "If no guarantee has been provided: the risk charges can no longer be deducted → the LTC insurance protection lapses, unless the policyholder pays additional premium into the unit fund. With a guarantee from a fixed age (e.g. 90): if fund is still positive at that age, further risk charges cease and the insurer covers all future LTC benefits." },
+  { q: "Describe the New York State Partnership for Long-Term Care.", a: "A public-private partnership linking Medicaid and private LTCI. Private LTCI must cover at least 3 years nursing home or 6 years home care (minimum). Once this minimum duration is exhausted, regardless of whether benefits are exhausted, policyholders qualify for Medicaid extended coverage for life with full asset protection. Meets all stakeholder needs: individual gets asset protection; State limits its exposure; insurer can forecast maximum claim cost." },
+];
+
+// ═══════════════════════════════════════════════════
+// IAI QUESTIONS
+// ═══════════════════════════════════════════════════
+const IAI_QUESTIONS = [
+  {
+    source: "IAI Nov'19",
+    qid: "Q1(i)",
+    marks: "8",
+    scenario: "Government of a developing Asian country has agreed to introduce LTCI. Benefits may be provided as care-in-kind or as fixed cash benefits increasing at 3% p.a. post retirement. The Minister favours the fixed-benefit approach.",
+    question: "Explain the advantages and disadvantages of the fixed benefit (increasing at 3% p.a.) product for both the insured and the insurer.",
+    sections: {
+      "Advantages for the Insurer": [
+        "Reduces claims administration costs (no pre-authorisation, no invoice processing) → cheaper premiums.",
+        "Only incidence rates of insured events at various durations need to be estimated — no claim size distribution required.",
+        "Do not need assumption about future care cost inflation rate.",
+        "Less risk → smaller contingency loadings → lower, more competitive premiums.",
+        "May widen market by offering budget policies (modest cash benefits, modest premiums) targeting partial cost contribution."
+      ],
+      "Disadvantages for the Insurer": [
+        "Pressure to provide care advice/guidance on spending the cash benefits.",
+        "If cash benefits are insufficient for adequate care, insurer may be blamed → reputational risk, regulatory complaints.",
+        "Potential mis-selling claims if policyholders believed they were buying 'care' rather than 'cash'."
+      ],
+      "Advantages for the Insured": [
+        "Greater flexibility — cash can be used for any form of care or other purpose (e.g. compensate informal carers).",
+        "Lower premiums compared to indemnity policies.",
+        "Cash provides independence and dignity of choice.",
+        "Benefits tax-free if triggered by disability."
+      ],
+      "Disadvantages for the Insured": [
+        "Cash benefit may be insufficient to cover actual care costs — especially if care cost inflation exceeds 3% p.a.",
+        "Policyholder is inexperienced in selecting care and may make poor spending decisions — may be in poor health when care needed.",
+        "If care costs rise faster than 3% p.a., purchasing power of benefit erodes.",
+        "Family may exploit cash receipts; inadequate care may result."
+      ]
+    }
+  },
+  {
+    source: "IAI Nov'19",
+    qid: "Q1(ii)",
+    marks: "16",
+    scenario: "Both pre-funded and Immediate Needs versions of the LTCI product will be offered in the developing Asian country.",
+    question: "Explain the differences between a pre-funded and an immediate needs LTCI policy. Describe the advantages and disadvantages for the insured of each design.",
+    sections: {
+      "Pre-Funded: Key Features": [
+        "Protection insurance bought when the insured is in good health.",
+        "Benefit can be cash or indemnity against care costs.",
+        "Level or pre-determined increasing premiums paid regularly until death, policy expiry, or claim.",
+        "Alternatively a single premium may be paid at outset.",
+        "Risk of paying premiums and receiving no benefits (most basic products offer no surrender).",
+        "After minimum premium payment period, paid-up benefit may be available (reduced amount).",
+        "May be unit-linked or conventional.",
+        "Disability-triggered benefits are typically tax-free."
+      ],
+      "Pre-Funded: Advantages for Insured": [
+        "Purchase when healthy → premiums affordable; adverse health not yet factored in.",
+        "Coverage secured before health deterioration → cannot be refused or rated adversely later.",
+        "Peace of mind well in advance of need.",
+        "Regular premiums allow spreading of cost over working life.",
+        "May have some investment/savings element (unit-linked plans)."
+      ],
+      "Pre-Funded: Disadvantages for Insured": [
+        "May pay premiums for many years and receive no benefits if disability never arises.",
+        "Premiums may be reviewable and may increase in retirement on fixed income.",
+        "Benefit amount chosen at inception may be inadequate for future care costs.",
+        "Product complexity may lead to misunderstanding of what is covered."
+      ],
+      "Immediate Needs: Key Features": [
+        "Bought when policyholder is already in poor health and in need of care.",
+        "Single premium paid at outset when care is needed.",
+        "Guaranteed lifetime income — protects against longevity risk.",
+        "Premium individually calculated based on health status at inception.",
+        "Equivalent to an impaired life annuity.",
+        "Policies do not acquire surrender value; some offer capital guarantee on death.",
+        "Poor health → lower premium (shorter expected benefit payment period)."
+      ],
+      "Immediate Needs: Advantages for Insured": [
+        "Immediately useful — provides income at the point of need.",
+        "Eliminates longevity risk completely — income guaranteed for life regardless of survival duration.",
+        "Premium reflects impaired mortality → premium per unit of income may be lower than for pre-funded.",
+        "Policyholder always receives some benefit (no risk of zero benefit).",
+        "Capital protection option allows some estate to be preserved."
+      ],
+      "Immediate Needs: Disadvantages for Insured": [
+        "Must part with a large lump sum at a time of personal difficulty and health stress.",
+        "No surrender value — capital permanently committed (partially offset by capital protection option at extra cost).",
+        "Benefit amount fixed at inception; may prove insufficient if care costs rise faster than escalation rate.",
+        "If policyholder dies shortly after purchase, most of premium 'lost' (unless capital protection selected)."
+      ]
+    }
+  },
+  {
+    source: "IAI Sep'18",
+    qid: "Q1(i) — LTCI section",
+    marks: "9",
+    scenario: "ABC is an established medium-size Indian H&C insurer writing IP, CI, PMI, and LTCI in India and the Middle East, including a unique deferred unit-linked LTCI product in India.",
+    question: "Outline the key risk factors and corresponding rating factors for Individual LTCI (Indian and Middle East portfolios).",
+    sections: {
+      "Key Risk Factors for LTCI": [
+        "Age — older lives have much higher disability incidence and shorter life expectancy (affects duration of claims).",
+        "Health status and functional ability at inception — pre-existing conditions predict early disability.",
+        "Cognitive ability and family history of dementia — genetic predisposition to Alzheimer's or related conditions.",
+        "Gender — women typically have longer periods of disability and longer life expectancy.",
+        "Socio-economic status — affects quality of informal care available and tendency to claim."
+      ],
+      "Rating Factors for LTCI": [
+        "Age at entry — primary driver of premium level.",
+        "Benefit amount — directly proportional to expected claim cost.",
+        "Benefit escalation rate — higher rate → higher premium.",
+        "Deferred period — longer → lower premium.",
+        "Policy term (whole life vs fixed term to age X).",
+        "Gender (if permitted by regulation).",
+        "Health status — via medical questionnaire and functional assessment.",
+        "Whether pre-existing conditions apply (covered or excluded)."
+      ],
+      "Middle East vs India Differences": [
+        "Middle East: different care infrastructure, cost of care, social norms regarding family care, regulatory requirements.",
+        "Repatriation risk: expatriate policyholders may return to home country with different care costs and availability.",
+        "Cultural factors: family care norms stronger in some Middle East populations → lower formal care utilisation.",
+        "Data: limited local data; more reliance on reinsurer data and population statistics."
+      ]
+    }
+  },
+  {
+    source: "IAI Nov'19",
+    qid: "Q1(iv)",
+    marks: "14",
+    scenario: "The LTCI scheme is operational with both pre-funded and immediate needs products. Benefits increase at 3% p.a. post retirement. About 20% of the portfolio is reinsured.",
+    question: "Describe suitable asset classes for the company's investments to support the LTCI liabilities.",
+    sections: {
+      "General Principles": [
+        "Assets should maximise return subject to acceptable risk — matching by nature, term and currency.",
+        "Need more information on: mix of pre-funded vs immediate needs; durations to retirement (pre-funded) and durations post-retirement (immediate needs); premium payment patterns."
+      ],
+      "Liabilities with Fixed 3% p.a. Increase": [
+        "Best match: index-linked bonds calibrated to 3% annual increase (if available).",
+        "If not available: combination of fixed-interest bonds + rolling reinvestment strategy.",
+        "For guaranteed benefit payments: fixed-interest bonds of matching term and yield."
+      ],
+      "Liabilities Linked to General Inflation (if applicable)": [
+        "Index-linked government bonds (gilts) — directly match inflation-linked liabilities.",
+        "Equities or property for long-term real return — higher risk/volatility but may outperform inflation over long horizon."
+      ],
+      "Expense Liabilities": [
+        "Expenses are staff-based → match with assets expected to grow with wage inflation.",
+        "Index-linked gilts or floating-rate assets linked to earnings index."
+      ],
+      "Currency and Reinsurance": [
+        "Assets in same currency as liabilities. Overseas policies: overseas investments to match.",
+        "20% reinsured: reinsurance credit reduces effective liability — net liability is 80% of gross.",
+        "Consider credit risk on reinsurance receivables when determining asset allocation."
+      ],
+      "Matching Adjustment Applicability": [
+        "Immediate needs block may qualify for Solvency II matching adjustment: predictable cash flows, no surrender, longevity + expense risk only.",
+        "This would allow a higher discount rate on assets, reducing the value of liabilities."
+      ]
+    }
+  },
+  {
+    source: "IAI May'24",
+    qid: "Q2(ia)",
+    marks: "18",
+    scenario: "A medium-sized life insurer is preparing a CEO report on three new H&C products. Product (a) is an Impaired Life Immediate Monthly Annuity increasing with wholesale price inflation — effectively an immediate needs LTCI product.",
+    question: "Discuss key considerations for launching an Impaired Life Immediate Annuity: Underwriting, Reinsurance, Distribution, Costs and Risks.",
+    sections: {
+      "Underwriting": [
+        "Heavy mortality experience benefits the insurer (shorter annuity payment period for very ill lives); but level of ill-health directly determines annuity rate.",
+        "Indicative quotation based on few proposal form questions, then detailed evidence if proposal proceeds.",
+        "Activity-based / functional ability tests to assess disability level.",
+        "GP/consultant report for final detailed premium — must be obtained quickly as applicant is already in need.",
+        "Medical examinations kept to minimum — unnecessary cost; inconvenient at a difficult time.",
+        "Anti-selection risk: sicker lives (longer expected survival than indicated) may select in — very detailed individual assessment required."
+      ],
+      "Reinsurance": [
+        "New product — volumes initially small → reinsurance protects against claim volatility.",
+        "Provides technical assistance: pricing, underwriting guidelines, mortality/morbidity data for impaired lives.",
+        "Quota share or facultative reinsurance for large individual cases.",
+        "Risk: reinsurer may withdraw if experience is adverse — need to plan for self-sufficiency over time."
+      ],
+      "Distribution": [
+        "Tied agents are existing channel — but agents need specialist training in impaired life products; complex underwriting requires explanation.",
+        "Social workers, care home operators, financial advisers specialising in later life planning may be better channels.",
+        "Direct to consumer unlikely due to complexity and sensitivity of the product.",
+        "Regulatory disclosure requirements: clear communication that this is an irrevocable commitment of capital."
+      ],
+      "Costs and Risks": [
+        "Key risk: longevity — if impaired lives survive significantly longer than expected, claim payments far exceed premiums.",
+        "Care inflation risk: if benefits linked to wholesale price index and care costs rise faster, policyholder benefit erosion creates reputational risk.",
+        "Expense risk: underwriting each case individually is expensive; initial volumes are low → high per-policy costs.",
+        "Regulatory risk: reserve requirements for annuity liabilities may be onerous; matching adjustment application may reduce capital burden.",
+        "Reputational risk: if product is perceived as unsuitable or premium too high relative to annuity income, complaints may follow."
+      ]
+    }
+  },
+  {
+    source: "IAI Dec'22",
+    qid: "Q1(i, ii, iii)",
+    marks: "18",
+    scenario: "An insurer has four health business lines: Individual IP (mean=85cr, SD=25cr), Group CI (mean=75cr, SD=30cr), LTCI (mean=90cr, SD=5cr), PMI (mean=75cr, SD=15cr). Considering stop-loss reinsurance.",
+    question: "Rank the four products by stop-loss premium for (a) XS 70cr; (b) XS 100cr; (c) XS 90cr capped at 25cr.",
+    sections: {
+      "Key Insight for LTCI": [
+        "LTCI has the lowest standard deviation (SD=5cr) relative to its mean — it is the most predictable of the four lines.",
+        "This reflects the nature of LTCI: disability incidence is relatively stable; individual claim amounts vary less than CI/PMI catastrophic claims.",
+        "LTCI consistently has the smallest stop-loss premium across all three structures because it is least likely to exceed any retention (except XS 70cr where its mean of 90cr makes recovery likely, but the low SD means few very large recoveries)."
+      ],
+      "(a) XS 70cr — Ranking": [
+        "LTCI: 70cr is well below mean of 90cr → recovery nearly certain, but low SD means large recoveries rare. Low stop-loss premium due to certainty of modest recovery.",
+        "PMI/IP/CI: 70cr is below their means, recovery likely, but higher SD means chance of large recoveries.",
+        "Ranking (highest stop-loss premium to lowest): PMI ≈ IP/CI > LTCI"
+      ],
+      "(b) XS 100cr — Ranking": [
+        "LTCI: 100cr is 2 SD above mean (90+5×2=100) — very rare to exceed → very low or near-zero premium.",
+        "PMI: 100cr is 1.67 SD above mean of 75cr → moderate probability of recovery.",
+        "IP: 100cr is 0.6 SD above mean → decent chance of recovery.",
+        "CI: 100cr is 0.83 SD above mean → decent chance.",
+        "Ranking: PMI > CI > IP > LTCI"
+      ],
+      "(c) XS 90cr capped at 25cr — Ranking": [
+        "LTCI: 90cr is exactly the mean → 50% chance of recovery; but low SD means recovery amount almost always small (≤ 5cr); cap at 25cr rarely binds. Premium very low.",
+        "CI (mean 75cr, SD 30cr): 90cr is 0.5 SD above mean; high chance of large recovery (>115cr possible, cap binds); premium highest.",
+        "Ranking: CI > PMI > IP > LTCI"
+      ]
+    }
+  },
+  {
+    source: "IAI Dec'22",
+    qid: "Q1(iv)",
+    marks: "5",
+    scenario: "An insurer is considering applying a Solvency II matching adjustment to a block of LTCI business. 50% of backing assets earn +1.50% additional yield; default risk on these assets is 0.50%.",
+    question: "State the conditions required to apply a matching adjustment and calculate the extent of the matching adjustment.",
+    sections: {
+      "Conditions for Matching Adjustment": [
+        "1) Must have regulator approval.",
+        "2) Long-term predictable liabilities — no surrender is allowed from policyholders.",
+        "3) The key liability risks must be longevity and expense only (not lapse, not market-related).",
+        "4) Assets must be ring-fenced in a dedicated portfolio; no premature redemption of the assets.",
+        "5) Assets matched by nature, term and currency to the expected benefit payments."
+      ],
+      "Calculation": [
+        "Additional yield on 50% of assets: 1.50% p.a.",
+        "Less default risk: 0.50% p.a.",
+        "Net additional yield on those assets: 1.50% − 0.50% = 1.00%",
+        "On 50% of total backing assets: 50% × 1.00% = 0.50% p.a.",
+        "Matching Adjustment = 0.50% p.a. — applied to the discount rate for the LTCI liabilities."
+      ]
+    }
+  },
+  {
+    source: "IAI Nov'19",
+    qid: "Q1(v)",
+    marks: "12",
+    scenario: "LTCI scheme operational. EV analysis shows negative operating variances for expense and morbidity items for the first time (positive last year).",
+    question: "Discuss the implications of the EV operating variances and whether premium rates need to change.",
+    sections: {
+      "Interpretation of Negative Variances": [
+        "Negative morbidity variance: claims heavier than assumed — either more claimants or claims lasting longer (or both).",
+        "This may reflect: higher ADL failure rates at younger ages; cognitive impairment claims rising; slower recovery than expected.",
+        "Negative expense variance: expenses higher than assumed — possibly higher claim assessment costs, care management overheads, or volume lower than expected (fixed costs spread over fewer policies).",
+        "First time negative (was positive last year) — could be random fluctuation, OR could be the start of a genuine trend. Cannot conclude from one year alone."
+      ],
+      "Whether to Change Premium Rates": [
+        "Do NOT immediately change rates based on one year of adverse experience — may be random.",
+        "Conduct detailed claims experience investigation: split by age, disability level, ADL trigger, claim duration, product type (pre-funded vs immediate needs).",
+        "Compare against: own company history, CMI data, reinsurer data, published morbidity statistics.",
+        "If investigation confirms genuine deterioration in morbidity trends: revise pricing basis and recalculate premium rates.",
+        "For pre-funded plans with reviewable premiums: can increase premiums at next review — but risk of selective lapsing (healthier lives leave).",
+        "For guaranteed premium plans: cannot change premiums — must increase reserves and capital instead.",
+        "Expense: investigate root cause (volume, claims processing, admin) — operational improvements may resolve without premium change.",
+        "Immediate needs block: no premium change possible (single premium already paid) — must adjust reserves/capital."
+      ]
+    }
+  }
+];
+
+// ═══════════════════════════════════════════════════
+// KEY TERMS
+// ═══════════════════════════════════════════════════
+const KEY_TERMS = [
+  { term: "Pre-Funded Plan", def: "LTCI bought when relatively healthy; protects against future disability risk; premiums paid regularly until claim, death, or policy term." },
+  { term: "Immediate Needs Plan", def: "LTCI bought when already requiring care; single premium; guaranteed lifetime income; equivalent to impaired life annuity. Poor health → lower premium." },
+  { term: "ADL", def: "Activity of Daily Living: standard trigger measures. The 6 are: Washing, Toileting, Feeding, Mobility, Dressing, Transferring (Will Tom Forget My Dog Tonight?)." },
+  { term: "Cognitive Impairment", def: "Overriding LTCI trigger. Deterioration in memory, orientation, problem-solving from organic cause (Alzheimer's, irreversible dementia — NOT depression). Benefit payable regardless of ADL status." },
+  { term: "Informal Care", def: "Care provided unpaid by family/friends. Often by persons over 60 themselves. Has indirect cost: lost economic activity, or cost to replace if no longer available." },
+  { term: "Nursing Care", def: "Narrowest form of LTC: care requiring specific skills/knowledge of a qualified nurse. More expensive than other personal care; boundary with State provision is key." },
+  { term: "Intermediate Care", def: "Recuperative services post-acute event (stroke, heart attack) to prevent hospital readmission and reduce dependence on ongoing LTC. Between hospital care and home care." },
+  { term: "Deferred Period", def: "LTCI: period (typically 3 or 12 months) after onset of qualifying disability during which no benefits are paid. Longer period → lower premium; policyholder self-funds or relies on family initially." },
+  { term: "Tiered Benefits", def: "Benefit levels vary with number of ADLs failed (e.g. 50% for 2 ADLs, 100% for 3+). More comprehensive; better fits financial need; but more complex and costly to administer." },
+  { term: "Assistive Devices", def: "Grab rails, bathing seats, stair lifts, personal alarms. LTCI benefit covering 3–6 months' equivalent benefit. Purpose: help regain independence; defer progression to higher care levels." },
+  { term: "Fund Protection", def: "Unit-linked LTCI: choice of how much unit fund is protected from LTC benefit payments. Full / Initial investment only / None (exhaustion). Higher protection = higher risk charges = shorter effective deferred period." },
+  { term: "Matching Adjustment (MA)", def: "Solvency II: additional yield applied to discount rate for predictable long-term liabilities (e.g. immediate needs LTCI). Conditions: regulator approval, no surrender, longevity/expense risk only, ring-fenced assets." },
+  { term: "Retrospective Premium", def: "Premium for pre-funded LTCI funded from equity released on sale of home after death. Insurer effectively extends credit to policyholder; repaid on property sale." },
+  { term: "Paid-Up Benefit", def: "If policyholder stops paying regular premiums after minimum period (e.g. 5 years), they retain a reduced benefit. Normalises as reduced benefit amount, shorter payment period, or earlier coverage end date." },
+  { term: "CCRC", def: "Continuing Care Retirement Community: residents pay lump sum (often from property sale) + ongoing service charge; receive tiered care as needs escalate within the community." },
+  { term: "Hotel Element", def: "Housing/accommodation component of LTC costs. Includes rent, adaptations (hoists, rails). Persons needing care may require specialist/adapted accommodation beyond normal housing costs." },
+  { term: "Impaired Life Annuity", def: "Annuity priced using enhanced mortality (shorter life expectancy than standard). Immediate needs LTCI is structurally equivalent — poor health → lower price per unit of income." },
+  { term: "Stop-Loss Reinsurance", def: "Reinsurer pays when aggregate claims exceed a retention level (excess). LTCI has low SD relative to mean → low stop-loss premium vs other H&C products. Used to protect insurer from unexpected clustering of morbidity events." },
+  { term: "Longevity Risk", def: "Risk that policyholders survive longer than assumed in pricing. Critical for immediate needs plans (annuity keeps paying) and for pre-funded plans where disabled lives claim longer than expected." },
+  { term: "Moral Hazard (LTCI)", def: "Risk that behaviour changes due to having insurance. ADL definitions are subjective → incentive to exaggerate disability. High cash benefits reduce motivation to remain active. Managed by: independent assessment, benefit limits, deferred periods, financial underwriting." },
+];
+
+// ═══════════════════════════════════════════════════
+// RENDER FUNCTIONS
+// ═══════════════════════════════════════════════════
+
+function renderFlashcards() {
+  const container = document.getElementById('flashcard-container');
+  container.innerHTML = FLASHCARDS.map((fc, i) => `
+    <div class="flashcard-container" id="fc-${i}" onclick="this.classList.toggle('flipped')">
+      <div class="flashcard-inner">
+        <div class="flashcard-front">
+          <div class="fc-label">Question ${i+1} of ${FLASHCARDS.length}</div>
+          <div class="fc-q">${fc.q}</div>
+        </div>
+        <div class="flashcard-back">
+          <div class="fc-label">Answer</div>
+          <div class="fc-a">${fc.a}</div>
+        </div>
+      </div>
+    </div>
+    <div class="flashcard-hint">Click to flip</div>
+  `).join('');
+}
+
+function renderIAIQuestions() {
+  const container = document.getElementById('iai-questions-container');
+  container.innerHTML = IAI_QUESTIONS.map((q, i) => {
+    const sectionsHtml = Object.entries(q.sections).map(([title, bullets]) => `
+      <div class="eq-section-title">${title}</div>
+      <ul class="bullet-list">${bullets.map(b => `<li>${b}</li>`).join('')}</ul>
+    `).join('');
+    return `
+      <div class="exam-question">
+        <div class="eq-header" onclick="toggleEQ(this)">
+          <div class="eq-header-left">
+            <span class="eq-source-badge iai">${q.source} ${q.qid}</span>
+            <span class="eq-marks">${q.marks} marks</span>
+          </div>
+          <div class="eq-question">${q.question}</div>
+          <div class="eq-toggle">▾</div>
+        </div>
+        ${q.scenario ? `<div class="eq-scenario">${q.scenario}</div>` : ''}
+        <div class="eq-body">${sectionsHtml}</div>
+      </div>
+    `;
+  }).join('');
+}
+
+function renderKeyTerms() {
+  const container = document.getElementById('key-terms-container');
+  container.innerHTML = KEY_TERMS.map(kt => `
+    <div class="key-term">
+      <div class="key-term-name">${kt.term}</div>
+      <div class="key-term-def">${kt.def}</div>
+    </div>
+  `).join('');
+}
+
+// ═══════════════════════════════════════════════════
+// TAB NAVIGATION
+// ═══════════════════════════════════════════════════
+
+function showTab(tabName) {
+  document.getElementById('search-panel').classList.remove('active');
+  document.querySelectorAll('.section-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  const panel = document.getElementById(`tab-${tabName}`);
+  if (panel) panel.classList.add('active');
+  event.currentTarget.classList.add('active');
+  document.getElementById('searchInput').value = '';
+}
+
+// ═══════════════════════════════════════════════════
+// ACCORDION
+// ═══════════════════════════════════════════════════
+
+function toggleAccordion(header) {
+  header.classList.toggle('open');
+  const body = header.nextElementSibling;
+  body.classList.toggle('open');
+}
+
+// ═══════════════════════════════════════════════════
+// EXAM QUESTION TOGGLE
+// ═══════════════════════════════════════════════════
+
+function toggleEQ(header) {
+  header.classList.toggle('open');
+  const body = header.parentElement.querySelector('.eq-body');
+  body.classList.toggle('open');
+}
+
+// ═══════════════════════════════════════════════════
+// SEARCH
+// ═══════════════════════════════════════════════════
+
+function buildSearchCorpus() {
+  const corpus = [];
+  FLASHCARDS.forEach((fc, i) => {
+    corpus.push({ source: `Flashcard ${i+1}`, text: fc.q + ' ' + fc.a, display: `<strong>${fc.q}</strong><br>${fc.a}` });
+  });
+  IAI_QUESTIONS.forEach(q => {
+    Object.entries(q.sections).forEach(([title, bullets]) => {
+      bullets.forEach(b => {
+        corpus.push({ source: `${q.source} ${q.qid} — ${title}`, text: b, display: b });
+      });
+    });
+  });
+  KEY_TERMS.forEach(kt => {
+    corpus.push({ source: `Key Term: ${kt.term}`, text: kt.term + ' ' + kt.def, display: `<strong>${kt.term}:</strong> ${kt.def}` });
+  });
+  return corpus;
+}
+
+let searchCorpus = null;
+
+function doSearch(query) {
+  if (!query || query.length < 2) {
+    document.getElementById('search-panel').classList.remove('active');
+    document.querySelectorAll('.section-panel').forEach(p => {
+      if (p.id !== 'search-panel') p.classList.remove('active');
+    });
+    const activeTab = document.querySelector('.nav-tab.active');
+    if (activeTab) {
+      const match = activeTab.getAttribute('onclick').match(/showTab\('([^']+)'\)/);
+      if (match) document.getElementById(`tab-${match[1]}`).classList.add('active');
+    }
+    return;
+  }
+
+  if (!searchCorpus) searchCorpus = buildSearchCorpus();
+  const q = query.toLowerCase();
+  const results = searchCorpus.filter(item => item.text.toLowerCase().includes(q));
+
+  document.querySelectorAll('.section-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('search-panel').classList.add('active');
+  document.getElementById('search-count').textContent = `${results.length} result${results.length !== 1 ? 's' : ''} for "${query}"`;
+
+  const highlight = (text, q) => {
+    const re = new RegExp(`(${q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+    return text.replace(re, '<mark class="search-highlight">$1</mark>');
+  };
+
+  document.getElementById('search-results').innerHTML = results.slice(0, 40).map(r => `
+    <div class="search-result">
+      <div class="search-result-source">${r.source}</div>
+      <div class="search-result-text">${highlight(r.display, query)}</div>
+    </div>
+  `).join('') || '<div class="search-result"><div class="search-result-text">No results found.</div></div>';
+}
+
+// ═══════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════
+renderFlashcards();
+renderIAIQuestions();
+renderKeyTerms();
+</script>
+</body>
+</html>
