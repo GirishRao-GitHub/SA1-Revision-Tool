@@ -1,0 +1,1349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Solvency II · SA1 Interactive Exhibit</title>
+<link href="https://fonts.googleapis.com/css2?family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&family=JetBrains+Mono:wght@400;500;600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0b0f17;
+  --surface: #111827;
+  --card: #161f30;
+  --card2: #1b2540;
+  --border: #243050;
+  --border-bright: #3a4f70;
+  --amber: #e8a838;
+  --amber-dim: #8a6020;
+  --teal: #2ecfb0;
+  --red: #e05c5c;
+  --blue: #5599e8;
+  --purple: #9b7fca;
+  --green: #4caf7d;
+  --text: #b8cce0;
+  --text-dim: #5a7090;
+  --text-bright: #e8f2ff;
+  --p1: #5599e8;
+  --p2: #9b7fca;
+  --p3: #2ecfb0;
+  --bel: #5599e8;
+  --rm: #4caf7d;
+  --scr: #e8a838;
+  --mcr: #e05c5c;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; font-size: 13.5px; line-height: 1.65; }
+
+/* HEADER */
+header {
+  background: linear-gradient(135deg, #080c13 0%, #0f1828 60%, #0b1520 100%);
+  border-bottom: 1px solid var(--border);
+  padding: 30px 40px 26px;
+  position: relative; overflow: hidden;
+}
+header::before {
+  content: '';
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 50% 100% at 90% 50%, rgba(85,153,232,0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+.h-eyebrow { font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:3px; color:var(--amber); text-transform:uppercase; margin-bottom:8px; }
+.h-title { font-family:'Libre Baskerville',serif; font-size:34px; color:var(--text-bright); line-height:1.15; }
+.h-title em { color:var(--amber); font-style:normal; }
+.h-sub { margin-top:8px; color:var(--text-dim); font-size:12.5px; max-width:660px; }
+.h-source { display:inline-block; margin-top:12px; background:rgba(232,168,56,0.1); border:1px solid var(--amber-dim); color:var(--amber); font-family:'JetBrains Mono',monospace; font-size:9px; padding:3px 10px; border-radius:3px; letter-spacing:1px; }
+
+/* NAV */
+.nav-wrap { background:var(--surface); border-bottom:1px solid var(--border); padding:0 24px; overflow-x:auto; }
+.nav-tabs { display:flex; gap:0; }
+.tab-btn {
+  background:none; border:none; border-bottom:2px solid transparent;
+  color:var(--text-dim); font-family:'DM Sans',sans-serif; font-size:12px; font-weight:500;
+  padding:13px 16px; cursor:pointer; transition:all 0.2s; white-space:nowrap;
+  letter-spacing:0.2px;
+}
+.tab-btn:hover { color:var(--text); }
+.tab-btn.active { color:var(--amber); border-bottom-color:var(--amber); }
+
+/* LAYOUT */
+.main { max-width:1120px; margin:0 auto; padding:32px 24px; }
+.panel { display:none; animation:fadeUp 0.3s ease; }
+.panel.active { display:block; }
+@keyframes fadeUp { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+
+/* SECTION */
+.s-label { font-family:'JetBrains Mono',monospace; font-size:9.5px; letter-spacing:2.5px; color:var(--amber); text-transform:uppercase; margin-bottom:6px; }
+.s-title { font-family:'Libre Baskerville',serif; font-size:20px; color:var(--text-bright); margin-bottom:18px; }
+
+/* CARDS */
+.card { background:var(--card); border:1px solid var(--border); border-radius:10px; padding:22px; margin-bottom:18px; }
+.card-head { font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:1.5px; text-transform:uppercase; color:var(--amber); margin-bottom:13px; display:flex; align-items:center; gap:8px; }
+.grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:18px; }
+.grid-3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; }
+@media(max-width:720px){ .grid-2,.grid-3{grid-template-columns:1fr} }
+
+/* BULLETS */
+.blist { list-style:none; display:flex; flex-direction:column; gap:7px; }
+.blist li { padding-left:16px; position:relative; color:var(--text); font-size:13px; }
+.blist li::before { content:'▸'; position:absolute; left:0; color:var(--amber-dim); font-size:10px; top:2px; }
+.blist li strong { color:var(--text-bright); }
+
+/* INLINE FORMULA */
+.formula { font-family:'JetBrains Mono',monospace; font-size:12px; background:rgba(0,0,0,0.35); border:1px solid var(--border); padding:10px 14px; border-radius:5px; color:var(--amber); margin:10px 0; }
+
+/* INFO / WARN BOXES */
+.info-box { background:rgba(85,153,232,0.07); border:1px solid rgba(85,153,232,0.2); border-left:3px solid var(--blue); border-radius:6px; padding:13px 16px; font-size:13px; color:var(--text); margin-bottom:16px; }
+.warn-box { background:rgba(224,92,92,0.07); border:1px solid rgba(224,92,92,0.2); border-left:3px solid var(--red); border-radius:6px; padding:13px 16px; font-size:13px; color:var(--text); margin-bottom:16px; }
+.amber-box { background:rgba(232,168,56,0.07); border:1px solid rgba(232,168,56,0.2); border-left:3px solid var(--amber); border-radius:6px; padding:13px 16px; font-size:13px; color:var(--text); margin-bottom:16px; }
+
+/* PILLAR CARDS */
+.pillar-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:0; border:1px solid var(--border); border-radius:10px; overflow:hidden; margin-bottom:20px; }
+.pillar { padding:22px; border-right:1px solid var(--border); }
+.pillar:last-child { border-right:none; }
+.pillar-num { font-family:'Libre Baskerville',serif; font-size:36px; line-height:1; margin-bottom:6px; }
+.p1-col { color:var(--p1); }
+.p2-col { color:var(--p2); }
+.p3-col { color:var(--p3); }
+.pillar-label { font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:2px; text-transform:uppercase; margin-bottom:10px; }
+.pillar-title { font-size:14px; font-weight:600; color:var(--text-bright); margin-bottom:10px; }
+@media(max-width:720px){ .pillar-grid{grid-template-columns:1fr}; .pillar{border-right:none; border-bottom:1px solid var(--border)} }
+
+/* BALANCE SHEET DIAGRAM */
+.bs-wrap { display:grid; grid-template-columns:1fr 1fr; gap:0; border:1px solid var(--border); border-radius:10px; overflow:hidden; margin-bottom:20px; }
+.bs-side { display:flex; flex-direction:column; }
+.bs-label { font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:2px; text-transform:uppercase; padding:10px 16px; background:rgba(0,0,0,0.3); color:var(--text-dim); border-bottom:1px solid var(--border); }
+.bs-block {
+  padding:14px 18px; border-bottom:1px solid var(--border); cursor:pointer;
+  transition:filter 0.2s, transform 0.1s; position:relative;
+}
+.bs-block:last-child { border-bottom:none; flex:1; }
+.bs-block:hover { filter:brightness(1.15); }
+.bs-block-label { font-size:12px; font-weight:600; color:rgba(255,255,255,0.92); }
+.bs-block-sub { font-size:11px; color:rgba(255,255,255,0.6); margin-top:2px; }
+.bsb-assets { background:linear-gradient(135deg,#1a3a6a,#2a5299); }
+.bsb-bel { background:linear-gradient(135deg,#1a3a6a,#1e4a8a); }
+.bsb-rm { background:linear-gradient(135deg,#1a4a30,#22663e); }
+.bsb-mcr { background:linear-gradient(135deg,#6a1a1a,#963030); }
+.bsb-scr { background:linear-gradient(135deg,#6a4010,#9a5f10); }
+.bsb-surplus { background:linear-gradient(135deg,#2a2a5a,#3a3a7a); }
+.bs-arrow { text-align:center; font-family:'JetBrains Mono',monospace; font-size:9px; color:var(--text-dim); letter-spacing:1px; padding:8px 0; }
+.bs-detail { display:none; background:var(--card2); border:1px solid var(--border); border-radius:8px; padding:18px; margin-top:16px; animation:fadeUp 0.2s ease; }
+.bs-detail.open { display:block; }
+.bs-detail h4 { font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:1px; margin-bottom:10px; }
+
+/* SCR MODULE DIAGRAM */
+.scr-modules { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:16px; }
+.scr-mod { background:var(--card); border:1px solid var(--border); border-radius:8px; padding:14px; text-align:center; cursor:pointer; transition:all 0.2s; }
+.scr-mod:hover { border-color:var(--amber-dim); background:var(--card2); }
+.scr-mod.active { border-color:var(--amber); background:var(--card2); }
+.scr-mod-icon { font-size:22px; margin-bottom:6px; }
+.scr-mod-label { font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:1px; text-transform:uppercase; color:var(--amber); margin-bottom:4px; }
+.scr-mod-title { font-size:12px; font-weight:600; color:var(--text-bright); }
+.scr-detail { display:none; background:var(--card); border:1px solid var(--border); border-radius:8px; padding:20px; margin-bottom:16px; animation:fadeUp 0.2s ease; }
+.scr-detail.open { display:block; }
+
+/* LADDER */
+.ladder { display:flex; flex-direction:column; gap:0; border:1px solid var(--border); border-radius:10px; overflow:hidden; margin-bottom:20px; }
+.ladder-rung { padding:18px 24px; border-bottom:1px solid var(--border); display:flex; gap:16px; align-items:flex-start; }
+.ladder-rung:last-child { border-bottom:none; }
+.ladder-icon { font-size:24px; flex-shrink:0; }
+.ladder-badge { font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:1px; padding:3px 8px; border-radius:4px; display:inline-block; margin-bottom:6px; }
+.lb-ok { background:rgba(76,175,125,0.15); color:var(--green); border:1px solid rgba(76,175,125,0.3); }
+.lb-warn { background:rgba(232,168,56,0.15); color:var(--amber); border:1px solid rgba(232,168,56,0.3); }
+.lb-danger { background:rgba(224,92,92,0.15); color:var(--red); border:1px solid rgba(224,92,92,0.3); }
+.ladder-title { font-size:14px; font-weight:600; color:var(--text-bright); margin-bottom:6px; }
+
+/* TIERING TABLE */
+.tier-grid { display:grid; grid-template-columns:auto 1fr 1fr; gap:0; border:1px solid var(--border); border-radius:10px; overflow:hidden; margin-bottom:20px; }
+.tier-cell { padding:12px 16px; border-right:1px solid var(--border); border-bottom:1px solid var(--border); font-size:13px; }
+.tier-cell:nth-child(3n) { border-right:none; }
+.tier-last { border-bottom:none; }
+.tier-head { font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:1px; text-transform:uppercase; color:var(--amber); background:rgba(0,0,0,0.25); }
+.t1 { color:var(--green); font-weight:600; }
+.t2 { color:var(--amber); font-weight:600; }
+.t3 { color:var(--red); font-weight:600; }
+
+/* ORSA STEPS */
+.orsa-steps { display:flex; gap:0; margin-bottom:20px; }
+.orsa-step { flex:1; background:var(--card); border:1px solid var(--border); padding:18px 16px; position:relative; }
+.orsa-step:not(:last-child)::after { content:'→'; position:absolute; right:-12px; top:50%; transform:translateY(-50%); color:var(--amber-dim); font-size:18px; z-index:1; }
+.orsa-step:first-child { border-radius:8px 0 0 8px; }
+.orsa-step:last-child { border-radius:0 8px 8px 0; }
+.os-num { font-family:'JetBrains Mono',monospace; font-size:9px; color:var(--amber); letter-spacing:1px; margin-bottom:4px; }
+.os-title { font-size:12px; font-weight:600; color:var(--text-bright); margin-bottom:6px; }
+.os-body { font-size:12px; color:var(--text); }
+
+/* REPORTING */
+.report-grid { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:20px; }
+.report-card { background:var(--card); border:1px solid var(--border); border-radius:8px; padding:20px; }
+.report-badge { font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:1px; padding:3px 8px; border-radius:4px; display:inline-block; margin-bottom:10px; }
+.rb-private { background:rgba(155,127,202,0.15); color:var(--purple); border:1px solid rgba(155,127,202,0.3); }
+.rb-public { background:rgba(46,207,176,0.15); color:var(--teal); border:1px solid rgba(46,207,176,0.3); }
+
+/* EXAM QA */
+.qa-item { background:var(--card); border:1px solid var(--border); border-radius:8px; margin-bottom:12px; overflow:hidden; }
+.qa-q { padding:15px 20px; cursor:pointer; display:flex; align-items:flex-start; gap:12px; transition:background 0.15s; }
+.qa-q:hover { background:rgba(232,168,56,0.04); }
+.qa-num { flex-shrink:0; width:26px; height:26px; background:rgba(232,168,56,0.12); border:1px solid var(--amber-dim); border-radius:50%; display:flex; align-items:center; justify-content:center; font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--amber); margin-top:1px; }
+.qa-text { font-size:13px; color:var(--text-bright); flex:1; font-weight:500; }
+.qa-src { font-family:'JetBrains Mono',monospace; font-size:9px; color:var(--text-dim); letter-spacing:1px; margin-top:3px; }
+.qa-chev { flex-shrink:0; color:var(--amber-dim); font-size:13px; transition:transform 0.2s; margin-top:2px; }
+.qa-item.open .qa-chev { transform:rotate(90deg); }
+.qa-a { display:none; padding:0 20px 16px 58px; border-top:1px solid var(--border); padding-top:14px; }
+.qa-item.open .qa-a { display:block; }
+.qa-alabel { font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:2px; color:var(--teal); text-transform:uppercase; margin-bottom:8px; }
+
+/* GLOSSARY */
+.gloss { display:flex; flex-direction:column; gap:9px; }
+.gloss-item { background:var(--card); border:1px solid var(--border); border-radius:7px; padding:13px 18px; display:flex; gap:14px; align-items:flex-start; }
+.gloss-term { font-family:'JetBrains Mono',monospace; font-size:11px; font-weight:500; color:var(--amber); min-width:160px; letter-spacing:0.3px; padding-top:1px; }
+.gloss-def { font-size:13px; color:var(--text); }
+
+/* INDIA CONTEXT */
+.india-card { background:var(--card); border:1px solid var(--border); border-left:3px solid var(--amber); border-radius:8px; padding:20px; margin-bottom:16px; }
+.india-badge { font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:1px; background:rgba(232,168,56,0.12); color:var(--amber); border:1px solid var(--amber-dim); padding:3px 8px; border-radius:3px; display:inline-block; margin-bottom:10px; }
+
+/* PILLS */
+.pill-row { display:flex; flex-wrap:wrap; gap:6px; margin-top:14px; }
+.pill { background:rgba(232,168,56,0.08); border:1px solid rgba(232,168,56,0.2); color:var(--amber); font-family:'JetBrains Mono',monospace; font-size:9.5px; padding:3px 9px; border-radius:20px; letter-spacing:0.5px; }
+
+/* COMPARE TABLE */
+.ctable { width:100%; border-collapse:collapse; font-size:12.5px; }
+.ctable th { font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:1px; text-transform:uppercase; color:var(--amber); padding:9px 14px; text-align:left; border-bottom:1px solid var(--border); background:rgba(0,0,0,0.2); }
+.ctable td { padding:10px 14px; border-bottom:1px solid rgba(36,48,80,0.5); vertical-align:top; color:var(--text); }
+.ctable tr:last-child td { border-bottom:none; }
+.ctable tr:hover td { background:rgba(255,255,255,0.02); }
+.ctable .td-h { font-weight:500; color:var(--text-bright); }
+
+/* DIVIDER */
+hr { border:none; border-top:1px solid var(--border); margin:22px 0; }
+
+/* FOOTER */
+footer { border-top:1px solid var(--border); padding:14px 40px; text-align:center; font-family:'JetBrains Mono',monospace; font-size:9.5px; color:var(--text-dim); letter-spacing:1px; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="h-eyebrow">SA1 · Chapters 11 &amp; 12 · Capital &amp; Solvency Regulation</div>
+  <div class="h-title">Solvency <em>II</em></div>
+  <div class="h-sub">Interactive exhibit covering all three pillars, technical provisions, SCR/MCR, own funds, governance, reporting, and exam question analysis from IAI &amp; IFoA past papers.</div>
+  <div class="h-source">SOURCES: SA1 CH11–13 · IAI 0921/1123/0322/0722/0524 · IFoA 201904/202004/202109/202209/202404</div>
+</header>
+
+<div class="nav-wrap">
+  <div class="nav-tabs">
+    <button class="tab-btn active" onclick="showTab('overview')">① Overview</button>
+    <button class="tab-btn" onclick="showTab('tp')">② Technical Provisions</button>
+    <button class="tab-btn" onclick="showTab('scr')">③ SCR &amp; MCR</button>
+    <button class="tab-btn" onclick="showTab('funds')">④ Own Funds</button>
+    <button class="tab-btn" onclick="showTab('p2p3')">⑤ Pillar 2 &amp; 3</button>
+    <button class="tab-btn" onclick="showTab('india')">⑥ India Context</button>
+    <button class="tab-btn" onclick="showTab('examqa')">⑦ Exam Q&amp;A</button>
+    <button class="tab-btn" onclick="showTab('glossary')">⑧ Glossary</button>
+  </div>
+</div>
+
+<div class="main">
+
+<!-- ════════════════════════════════════════
+     PANEL 1 · OVERVIEW
+════════════════════════════════════════ -->
+<div id="panel-overview" class="panel active">
+
+  <div class="s-label">Background &amp; Scope</div>
+  <div class="s-title">What is Solvency II?</div>
+
+  <div class="card">
+    <div class="card-head">📋 Background</div>
+    <ul class="blist">
+      <li>Solvency II is a <strong>risk-based, harmonised EU-wide regulatory framework</strong> for insurance firms, focused on adequate protection of policyholders and beneficiaries.</li>
+      <li>Operative from <strong>1 January 2016</strong>, replacing the patchwork of national Solvency I regimes across EU member states. Greater harmonisation was intended to increase competition.</li>
+      <li>Applies to all EU insurance and reinsurance companies with <strong>gross premium income &gt; €5m</strong> or <strong>gross technical provisions &gt; €25m</strong>.</li>
+      <li><strong>EIOPA</strong> (European Insurance and Occupational Pensions Authority) provides technical advice to the European Commission for Solvency II development.</li>
+      <li>Transitional arrangements are available for some aspects (e.g. technical provisions, risk-free rates) for up to <strong>16 years</strong>.</li>
+      <li>Although an EU framework, Solvency II has influenced regulation in many non-EU countries — including the Indian market's move toward Solvency II-style RBC.</li>
+      <li>In 2021, the UK PRA began consulting on potential changes to how Solvency II is applied in the UK (the 'Solvency UK' project), particularly the matching adjustment.</li>
+    </ul>
+  </div>
+
+  <div class="s-label">Three-Pillar Framework</div>
+  <div class="pillar-grid">
+    <div class="pillar">
+      <div class="pillar-num p1-col">P1</div>
+      <div class="pillar-label p1-col">Quantitative Requirements</div>
+      <div class="pillar-title">Pillar 1 — Capital &amp; Valuation</div>
+      <ul class="blist">
+        <li>Sets <strong>minimum capital requirements</strong> (SCR and MCR)</li>
+        <li>Specifies market-consistent <strong>valuation methodologies</strong> for assets and liabilities</li>
+        <li>Two capital thresholds: SCR (first intervention) and MCR (ultimate intervention)</li>
+        <li>SCR: standard formula or approved internal model</li>
+        <li>Supervisors may impose a <strong>capital add-on</strong></li>
+      </ul>
+    </div>
+    <div class="pillar">
+      <div class="pillar-num p2-col">P2</div>
+      <div class="pillar-label p2-col">Qualitative &amp; Supervisory</div>
+      <div class="pillar-title">Pillar 2 — Governance &amp; Risk</div>
+      <ul class="blist">
+        <li>Systems of <strong>governance and risk management</strong></li>
+        <li>Four key functions: risk management, actuarial, compliance, internal audit</li>
+        <li>Each insurer must conduct an <strong>ORSA</strong> (Own Risk and Solvency Assessment)</li>
+        <li>Supervisory review process</li>
+        <li>Capital add-on (added to SCR) in exceptional cases</li>
+      </ul>
+    </div>
+    <div class="pillar">
+      <div class="pillar-num p3-col">P3</div>
+      <div class="pillar-label p3-col">Reporting &amp; Disclosure</div>
+      <div class="pillar-title">Pillar 3 — Transparency</div>
+      <ul class="blist">
+        <li>Private supervisory reporting: <strong>RSR + QRT</strong> (annual; MCR/SCR subset quarterly)</li>
+        <li>Public disclosure: annual <strong>SFCR</strong> (Solvency and Financial Condition Report)</li>
+        <li>Market discipline from public disclosures adds an extra layer of confidence</li>
+        <li>ORSA is both a Pillar 2 process and a Pillar 3 report to the regulator</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="amber-box">
+    <strong>Exam tip:</strong> Pillars 2 and 3 are sometimes referred to together as "Pillar 5" due to their close synergies — the ORSA from Pillar 2 is also one of the defined Pillar 3 reports submitted to the regulator. [SA1 Ch11 — IFoA Apr 2020 Q1(i)]
+  </div>
+
+  <div class="card">
+    <div class="card-head">🏦 Solvency II Balance Sheet — Overview</div>
+    <div class="bs-arrow">ASSETS = LIABILITIES + OWN FUNDS</div>
+    <div class="grid-2">
+      <div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:1px;color:var(--text-dim);margin-bottom:8px;">ASSETS</div>
+        <div style="background:linear-gradient(135deg,#1a3a6a,#2a5299);padding:14px;border-radius:6px;color:white;font-size:13px;">
+          <div style="font-weight:600;">Investments + RI recoveries + Participations</div>
+          <div style="font-size:11px;opacity:0.75;margin-top:4px;">Valued at market value / mark-to-model</div>
+        </div>
+      </div>
+      <div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:1px;color:var(--text-dim);margin-bottom:8px;">LIABILITIES + OWN FUNDS</div>
+        <div style="display:flex;flex-direction:column;gap:4px;">
+          <div style="background:linear-gradient(135deg,#1a3a6a,#1e4a8a);padding:10px 14px;border-radius:4px;color:white;font-size:12px;font-weight:600;">BEL (Best Estimate Liability)</div>
+          <div style="background:linear-gradient(135deg,#1a4a30,#22663e);padding:10px 14px;border-radius:4px;color:white;font-size:12px;font-weight:600;">Risk Margin</div>
+          <div style="background:linear-gradient(135deg,#6a1a1a,#963030);padding:10px 14px;border-radius:4px;color:white;font-size:12px;font-weight:600;">MCR</div>
+          <div style="background:linear-gradient(135deg,#6a4010,#9a5f10);padding:10px 14px;border-radius:4px;color:white;font-size:12px;font-weight:600;">SCR (above MCR)</div>
+          <div style="background:linear-gradient(135deg,#2a2a5a,#3a3a7a);padding:10px 14px;border-radius:4px;color:white;font-size:12px;font-weight:600;">Surplus (Own Funds above SCR)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head">🌍 Group Supervision</div>
+    <ul class="blist">
+      <li>Insurance groups supervised by a <strong>group supervisor</strong> in the home country, co-operating with other national supervisors — avoiding double counting of capital.</li>
+      <li><strong>Double use of capital:</strong> e.g. regulated entities making subordinated loans to each other. <strong>Double leverage:</strong> parent raises debt to fund subsidiary, inflating that subsidiary's capital position. Solvency II group supervision addresses both.</li>
+      <li>Each insurance group must cover its <strong>overall group SCR</strong> (with diversification) AND its <strong>group solvency floor</strong> (= sum of all subsidiaries' MCRs).</li>
+      <li><strong>Equivalence</strong> for third countries: Full (indefinite) — Bermuda, Switzerland; Provisional (10 years) — USA, Australia, Japan, Brazil, Canada, Mexico.</li>
+    </ul>
+  </div>
+
+</div><!-- /overview -->
+
+
+<!-- ════════════════════════════════════════
+     PANEL 2 · TECHNICAL PROVISIONS
+════════════════════════════════════════ -->
+<div id="panel-tp" class="panel">
+
+  <div class="s-label">Pillar 1 · Technical Provisions</div>
+  <div class="s-title">Valuation of Assets &amp; Technical Provisions</div>
+
+  <div class="info-box">
+    Technical provisions (TPs) should represent <strong>the amount an insurer would pay to transfer its obligations immediately to another insurer</strong> — a market-consistent, transfer-value concept. TPs = BEL + Risk Margin.
+  </div>
+
+  <div class="card">
+    <div class="card-head">📦 Asset Valuation — Three Components</div>
+    <div class="grid-3">
+      <div style="background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:16px;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--blue);letter-spacing:1px;margin-bottom:6px;">INVESTMENTS</div>
+        <ul class="blist" style="font-size:12px;">
+          <li>Valued at <strong>market value</strong> using quoted market prices in active markets</li>
+          <li>If no active market → <strong>mark-to-model</strong> (market-consistent)</li>
+          <li>Significant change from Solvency I where book values were often used</li>
+        </ul>
+      </div>
+      <div style="background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:16px;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--teal);letter-spacing:1px;margin-bottom:6px;">RI RECOVERIES</div>
+        <ul class="blist" style="font-size:12px;">
+          <li>Shown as an <strong>asset</strong> (not a reduction in gross liabilities)</li>
+          <li>Adjusted for <strong>best estimate of expected losses</strong> due to reinsurer default</li>
+          <li>Change from previous regimes where netting was common</li>
+        </ul>
+      </div>
+      <div style="background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:16px;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--purple);letter-spacing:1px;margin-bottom:6px;">PARTICIPATIONS</div>
+        <ul class="blist" style="font-size:12px;">
+          <li>Companies where insurer owns <strong>≥20% voting rights</strong></li>
+          <li>Valued using market-consistent approach</li>
+          <li>Mainly arise in groups or where outsourcing subsidiaries exist</li>
+        </ul>
+      </div>
+    </div>
+    <div class="amber-box" style="margin-top:14px;">
+      <strong>Prudent person principle:</strong> Assets must be appropriate for the nature and term of liabilities; chosen in best interests of policyholders; derivatives only for risk reduction or efficient portfolio management; assets properly diversified by class, issuer, geography.
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head">💰 SLT vs Non-SLT Health Contracts</div>
+    <table class="ctable">
+      <tr>
+        <th>Category</th><th>Definition</th><th>Examples</th><th>TP Approach</th>
+      </tr>
+      <tr>
+        <td class="td-h" style="color:var(--blue);">SLT Health</td>
+        <td>Similar to Life Techniques — written on similar technical basis to life insurance (long-term)</td>
+        <td>Income Protection (IP), Stand-alone Critical Illness (SACI), Long-Term Care (LTC)</td>
+        <td>Life-style actuarial calculations; BEL + Risk Margin</td>
+      </tr>
+      <tr>
+        <td class="td-h" style="color:var(--teal);">Non-SLT Health</td>
+        <td>Similar to non-life insurance techniques (short-term)</td>
+        <td>Private Medical Insurance (PMI)</td>
+        <td>Non-life style; premium provisions + claims provisions</td>
+      </tr>
+    </table>
+    <div style="font-size:12px;color:var(--text-dim);margin-top:10px;">Note: Accelerated CI cover (attached to life) is likely designated as a life insurance obligation, not SLT health.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-head">🔵 Best Estimate Liability (BEL)</div>
+    <div class="formula">BEL = PV [ Future cashflows (benefits + expenses − premiums) ] using risk-free yield curve</div>
+    <ul class="blist">
+      <li><strong>No prudential margins</strong> — all assumptions must be best estimate.</li>
+      <li>Ideally calculated <strong>policy-by-policy</strong>; grouped model points permitted with validation.</li>
+      <li>BEL can be <strong>negative</strong> (no floor of zero) — e.g. where PV future premiums &gt; PV future outgo.</li>
+      <li><strong>Contract boundary:</strong> Future premiums only included up to the point the insurer can unilaterally terminate, refuse premiums, or reprice to fully reflect risks. For long-term health = maturity date; for annually renewable PMI = end of policy year.</li>
+      <li>Allowance for all expected decrements and policyholder actions including <strong>lapses</strong> — and how policyholder behaviour varies with circumstances (e.g. option in-the-money, financial position of company).</li>
+      <li>Expenses: both <strong>overheads and directly attributable expenses</strong> included; no closure reserve required.</li>
+      <li>For guarantees and options: <strong>stochastic / market-consistent simulation</strong> may be required.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-head">📉 Risk-Free Discount Rates</div>
+    <ul class="blist">
+      <li>Published monthly by <strong>EIOPA</strong> for each currency — insurers cannot set their own discount rate.</li>
+      <li>Based on <strong>swap rates</strong> (where sufficiently deep/liquid) or government bond rates, adjusted downward for counterparty default credit risk.</li>
+      <li>Extrapolated for longer maturities using the <strong>Smith-Wilson method</strong> to a long-term equilibrium rate.</li>
+      <li>EIOPA publishes curves for <strong>53 countries</strong> — including India, China, Australia, USA.</li>
+    </ul>
+    <hr>
+    <div class="grid-2" style="margin-top:14px;">
+      <div style="background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:16px;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--green);letter-spacing:1px;margin-bottom:8px;">MATCHING ADJUSTMENT (MA)</div>
+        <ul class="blist" style="font-size:12px;">
+          <li>For long-term predictable liabilities where insurer holds matching assets to <strong>maturity</strong></li>
+          <li><strong>MA = Asset spread − Fundamental spread</strong> (FS = allowance for retained credit risk, published by EIOPA)</li>
+          <li>Assets must be ring-fenced, bond-like; liability risks relate to longevity and expenses only (no surrender risk)</li>
+          <li>Requires <strong>regulator approval</strong>; losing eligibility removes right to use MA for 24 months (unless compliance restored within 2 months)</li>
+          <li>Typically used for annuity business</li>
+        </ul>
+      </div>
+      <div style="background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:16px;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--blue);letter-spacing:1px;margin-bottom:8px;">VOLATILITY ADJUSTMENT (VA)</div>
+        <ul class="blist" style="font-size:12px;">
+          <li>For liabilities <strong>not eligible</strong> for the matching adjustment</li>
+          <li>Purpose: reduce risk of <strong>forced asset sales</strong> in extreme bond spread movements</li>
+          <li>Based on spreads on a representative portfolio for each currency/national insurance market</li>
+          <li>Published by EIOPA alongside risk-free curves</li>
+          <li>Subject to certain risk management requirements (e.g. liquidity plan, sensitivity analysis) and prior supervisory approval in some member states</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head">🟢 Risk Margin (RM)</div>
+    <div class="amber-box">
+      The Risk Margin is the addition to the BEL that brings TPs to the <strong>transfer value</strong> — the amount another insurer would require to take on the BEL. It compensates for the risk that future experience is worse than best estimate, and for the cost of holding regulatory capital against this.
+    </div>
+    <ul class="blist">
+      <li>Calculated using the <strong>cost of capital method</strong>.</li>
+      <li>Non-hedgeable risks covered: all <strong>insurance risk</strong>, reinsurance credit risk, operational risk, and <strong>residual market risk</strong> (where liability duration &gt; available risk-free asset duration).</li>
+      <li>Cost of capital rate: <strong>6% per annum</strong> (fixed under Solvency II).</li>
+    </ul>
+    <div class="formula">RM = Σ [ (SCR_non-hedgeable at time t) × 6% ] discounted at risk-free rates</div>
+    <div class="grid-2" style="margin-top:14px;">
+      <div>
+        <div style="font-size:12px;font-weight:600;color:var(--text-bright);margin-bottom:8px;">Three steps:</div>
+        <ul class="blist" style="font-size:12px;">
+          <li><strong>Step 1:</strong> Project future non-hedgeable SCR at each future year-end during run-off</li>
+          <li><strong>Step 2:</strong> Multiply each projected SCR by 6% p.a.</li>
+          <li><strong>Step 3:</strong> Discount the resulting amounts at risk-free rates to give the RM</li>
+        </ul>
+      </div>
+      <div>
+        <div style="font-size:12px;font-weight:600;color:var(--text-bright);margin-bottom:8px;">Simplified approaches:</div>
+        <ul class="blist" style="font-size:12px;">
+          <li>Select a driver with approximately linear relationship to required capital (e.g. policy count for expense risk; sum at risk for mortality/morbidity; total reserves for operational risk)</li>
+          <li>Project capital as same percentage of projected driver as at t=0</li>
+          <li>RM can be reduced for <strong>diversification</strong> between lines up to legal entity level</li>
+        </ul>
+      </div>
+    </div>
+    <div class="formula" style="margin-top:12px;">
+      Worked example: SCR = £10m, Sum at Risk = £100m → SCR = 10% of SAR<br>
+      SCR at t=1 (SAR=£90m) = £9m; t=2 (SAR=£85m) = £8.5m; t=3 = £8.2m; t=4 = £8m; t=5 = £0
+      <br>[IAI Nov 2023 Q1v]
+    </div>
+  </div>
+
+</div><!-- /tp -->
+
+
+<!-- ════════════════════════════════════════
+     PANEL 3 · SCR & MCR
+════════════════════════════════════════ -->
+<div id="panel-scr" class="panel">
+
+  <div class="s-label">Pillar 1 · Capital Requirements</div>
+  <div class="s-title">SCR, MCR &amp; Supervisory Intervention</div>
+
+  <div class="card">
+    <div class="card-head">🎯 SCR — Solvency Capital Requirement</div>
+    <ul class="blist">
+      <li>A <strong>Value at Risk</strong> measure based on a <strong>99.5% confidence interval</strong> of the variation over one year of basic own funds (assets − TPs).</li>
+      <li>Covers: non-life underwriting risk; life underwriting risk; <strong>health underwriting risk</strong>; market risk; counterparty default risk; operational risk.</li>
+      <li>Can be calculated using the <strong>standard formula</strong> (prescribed stress tests + correlation matrices) or a company-specific <strong>internal model</strong> (approved by regulator).</li>
+      <li>A <strong>partial internal model</strong> can combine both approaches for different risk modules.</li>
+      <li><strong>Undertaking Specific Parameters (USPs)</strong> can replace prescribed parameters in underwriting risk modules (with regulatory approval) if they better reflect the company's risk profile.</li>
+      <li>Firms using standard formula must justify it is appropriate; regulator can compel use of an internal model if it is not.</li>
+      <li>Regulator can impose a <strong>capital add-on</strong> to the SCR in exceptional circumstances.</li>
+    </ul>
+    <div class="amber-box" style="margin-top:12px;">
+      <strong>Important:</strong> The SCR net asset value is calculated as <em>assets − BEL</em> (not assets − TPs) to avoid circularity — the RM calculation itself requires the SCR, so only BEL is used. [SA1 Ch12 Exam QA]
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head">⚙️ Standard Formula — Module Structure (click to expand)</div>
+    <div class="scr-modules">
+      <div class="scr-mod" onclick="toggleScr('market')">
+        <div class="scr-mod-icon">📈</div>
+        <div class="scr-mod-label">SCR Module</div>
+        <div class="scr-mod-title">Market Risk</div>
+      </div>
+      <div class="scr-mod" onclick="toggleScr('default')">
+        <div class="scr-mod-icon">⚠️</div>
+        <div class="scr-mod-label">SCR Module</div>
+        <div class="scr-mod-title">Counterparty Default</div>
+      </div>
+      <div class="scr-mod" onclick="toggleScr('health')">
+        <div class="scr-mod-icon">🏥</div>
+        <div class="scr-mod-label">SCR Module</div>
+        <div class="scr-mod-title">Health Insurance Risk</div>
+      </div>
+      <div class="scr-mod" onclick="toggleScr('life')">
+        <div class="scr-mod-icon">💗</div>
+        <div class="scr-mod-label">SCR Module</div>
+        <div class="scr-mod-title">Life Underwriting</div>
+      </div>
+      <div class="scr-mod" onclick="toggleScr('nonlife')">
+        <div class="scr-mod-icon">🌪️</div>
+        <div class="scr-mod-label">SCR Module</div>
+        <div class="scr-mod-title">Non-Life Underwriting</div>
+      </div>
+      <div class="scr-mod" onclick="toggleScr('op')">
+        <div class="scr-mod-icon">⚙️</div>
+        <div class="scr-mod-label">SCR Module</div>
+        <div class="scr-mod-title">Operational Risk</div>
+      </div>
+    </div>
+
+    <div id="scr-market" class="scr-detail">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:1px;color:var(--amber);margin-bottom:10px;">MARKET RISK MODULE</div>
+      <ul class="blist">
+        <li>Sub-modules: <strong>equity, property, interest rate, credit spread, currency, concentration</strong></li>
+        <li>Interest rate risk: stress on risk-free yield curve up and down</li>
+        <li>Spread risk: credit spreads widening on corporate bonds and other assets</li>
+        <li>Concentration risk: excessive exposure to a single counterparty or issuer</li>
+        <li>Dynamic hedging is not permitted in standard formula (may be allowed in internal model)</li>
+      </ul>
+    </div>
+    <div id="scr-default" class="scr-detail">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:1px;color:var(--amber);margin-bottom:10px;">COUNTERPARTY DEFAULT RISK MODULE</div>
+      <ul class="blist">
+        <li><strong>Type 1 exposures:</strong> May not be diversified; counterparty likely to be rated — e.g. derivatives, reinsurance, cash deposits at banks</li>
+        <li><strong>Type 2 exposures:</strong> Usually diversified; counterparty unlikely to be rated — e.g. receivables from intermediaries and policyholders</li>
+        <li>Risk mitigation techniques recognised in SCR provided basis risk is immaterial</li>
+      </ul>
+    </div>
+    <div id="scr-health" class="scr-detail">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:1px;color:var(--amber);margin-bottom:10px;">HEALTH INSURANCE RISK — THREE COMPONENTS</div>
+      <div class="grid-3" style="margin-bottom:12px;">
+        <div style="background:var(--card2);border:1px solid var(--border);border-radius:7px;padding:14px;">
+          <div style="font-size:11px;font-weight:600;color:var(--blue);margin-bottom:6px;">SLT Health</div>
+          <ul class="blist" style="font-size:12px;">
+            <li>Disability/morbidity: 35% increase in disability rates for Year 1 + permanent 25% increase thereafter</li>
+            <li>20% permanent decrease in disability recovery rates</li>
+            <li>Also: mortality, longevity, lapse, expense, revision risks</li>
+          </ul>
+        </div>
+        <div style="background:var(--card2);border:1px solid var(--border);border-radius:7px;padding:14px;">
+          <div style="font-size:11px;font-weight:600;color:var(--teal);margin-bottom:6px;">Non-SLT Health</div>
+          <ul class="blist" style="font-size:12px;">
+            <li>Volume measure × standard deviation × adjustment factor</li>
+            <li>Premium risk + reserve risk + lapse risk</li>
+            <li>Applies to PMI and similar short-term products</li>
+          </ul>
+        </div>
+        <div style="background:var(--card2);border:1px solid var(--border);border-radius:7px;padding:14px;">
+          <div style="font-size:11px;font-weight:600;color:var(--red);margin-bottom:6px;">CAT Risk</div>
+          <ul class="blist" style="font-size:12px;">
+            <li>Extreme events: epidemics, pandemics, climate change, anti-microbial resistance</li>
+            <li>Standardised scenario-based approach</li>
+          </ul>
+        </div>
+      </div>
+      <div class="formula">Example: SCR_SLT=£614.3m, SCR_Non-SLT=£250m, SCR_CAT=£100m<br>
+Corr(SLT,Non-SLT)=50%, Corr(SLT,CAT)=25%, Corr(Non-SLT,CAT)=25%<br>
+SCR_health = √(614.3² + 250² + 100² + 2×0.5×614.3×250 + 2×0.25×614.3×100 + 2×0.25×250×100)<br>
+= √646,654.5 = £804.1m  [SA1 Ch12 Exam QA]</div>
+    </div>
+    <div id="scr-life" class="scr-detail">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:1px;color:var(--amber);margin-bottom:10px;">LIFE UNDERWRITING RISK</div>
+      <ul class="blist">
+        <li>Applies to life insurance obligations (not health SLT/Non-SLT)</li>
+        <li>Sub-risks: mortality, longevity, disability/morbidity, lapse, expense, revision, CAT</li>
+        <li>For SA1: accelerated CI (attached to life policy) likely classified as a life insurance obligation here</li>
+        <li>Correlation with health module: 25%</li>
+      </ul>
+    </div>
+    <div id="scr-nonlife" class="scr-detail">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:1px;color:var(--amber);margin-bottom:10px;">NON-LIFE UNDERWRITING RISK</div>
+      <ul class="blist">
+        <li>Does not overlap with health Non-SLT (correlation between health and non-life = 0%)</li>
+        <li>Premium risk, reserve risk, lapse risk, CAT risk (natural catastrophe scenarios)</li>
+      </ul>
+    </div>
+    <div id="scr-op" class="scr-detail">
+      <div style="font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:1px;color:var(--amber);margin-bottom:10px;">OPERATIONAL RISK MODULE</div>
+      <ul class="blist">
+        <li>Relatively simple formula based on <strong>percentages of earned premiums and technical provisions</strong></li>
+        <li><strong>Added to BSCR</strong> with no diversification credit — no correlation matrix reduction</li>
+        <li>Plus two further adjustments to BSCR: loss absorbing capacity of TPs and deferred taxes (Adj)</li>
+      </ul>
+      <div class="formula">SCR = BSCR + SCR_op + Adj<br>
+Where BSCR combines market, default, life, health, non-life modules via correlation matrix</div>
+    </div>
+
+    <div style="margin-top:14px;">
+      <div style="font-size:12px;font-weight:600;color:var(--text-bright);margin-bottom:8px;">BSCR Correlation Matrix (selected):</div>
+      <table class="ctable" style="font-size:11.5px;">
+        <tr><th>Risk pair</th><th>Correlation</th></tr>
+        <tr><td>Market ↔ Default</td><td>25%</td></tr>
+        <tr><td>Market ↔ Life</td><td>25%</td></tr>
+        <tr><td>Market ↔ Health</td><td>25%</td></tr>
+        <tr><td>Market ↔ Non-Life</td><td>25%</td></tr>
+        <tr><td>Default ↔ Health</td><td>25%</td></tr>
+        <tr><td>Default ↔ Non-Life</td><td>50%</td></tr>
+        <tr><td>Life ↔ Health</td><td>25%</td></tr>
+        <tr><td>Life ↔ Non-Life</td><td>0%</td></tr>
+        <tr><td>Health ↔ Non-Life</td><td>0%</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head">🔬 Internal Model — Six Approval Tests</div>
+    <table class="ctable">
+      <tr><th>#</th><th>Test</th><th>Key requirements</th></tr>
+      <tr><td style="color:var(--amber);font-family:'JetBrains Mono',monospace;">01</td><td class="td-h">Use Test</td><td>Model widely used throughout business; significant role in governance, risk management, decision-making, capital allocation. <strong>Most challenging</strong> to demonstrate — requires evidence of embeddedness and risk culture.</td></tr>
+      <tr><td style="color:var(--amber);font-family:'JetBrains Mono',monospace;">02</td><td class="td-h">Statistical Quality</td><td>Minimum quality standards for assumptions and data (accurate, complete, appropriate, updated annually); probability distribution forecasting; expert judgment; materiality; aggregation methods.</td></tr>
+      <tr><td style="color:var(--amber);font-family:'JetBrains Mono',monospace;">03</td><td class="td-h">Calibration</td><td>SCR derived must be equivalent to <strong>VaR at 99.5% confidence over one year</strong>. Alternative confidence levels/time periods permitted if equivalent policyholder protection is demonstrated.</td></tr>
+      <tr><td style="color:var(--amber);font-family:'JetBrains Mono',monospace;">04</td><td class="td-h">P&amp;L Attribution</td><td>Demonstrate how the risk categorisation in the model will be used to explain causes and sources of actual profits and losses.</td></tr>
+      <tr><td style="color:var(--amber);font-family:'JetBrains Mono',monospace;">05</td><td class="td-h">Validation</td><td>Fully validated by the company; regular control cycle review including testing against emerging experience, sensitivity testing, independent reviews.</td></tr>
+      <tr><td style="color:var(--amber);font-family:'JetBrains Mono',monospace;">06</td><td class="td-h">Documentation</td><td>Design and operational aspects clearly and thoroughly documented — including theory, assumptions, and circumstances under which the model does not work effectively.</td></tr>
+    </table>
+    <div class="warn-box" style="margin-top:14px;">
+      <strong>Key challenges:</strong> Limited historical data for calibrating extreme morbidity events; setting dependency structures / correlations under extreme conditions; non-linearity and non-separability of risks (e.g. options that bite at a threshold interest rate; risks correlated under stress but not normally). Once approved, cannot revert to standard formula without regulatory approval.
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head">🔴 MCR — Minimum Capital Requirement</div>
+    <ul class="blist">
+      <li>A simple <strong>factor-based linear formula</strong> targeted at VaR with <strong>85% confidence</strong> over one year.</li>
+      <li>For SLT health/life: based on technical provisions and capital at risk (on death or disability), multiplied by specified factors that vary by product type (with-profits, unit-linked, without-profits).</li>
+      <li>For Non-SLT health/non-life: based on technical provisions and written premiums, with factors varying by product type.</li>
+      <li>Calculated and <strong>reported quarterly</strong>.</li>
+    </ul>
+    <div class="formula">
+      Floor: MCR ≥ 25% of SCR<br>
+      Cap: MCR ≤ 45% of SCR<br>
+      Absolute minimum: €3.7m (long-term) / €2.5m (short-term)
+    </div>
+    <div class="info-box" style="margin-top:10px;">The MCR floor/cap (25–45% of SCR) may bite for a significant number of health and care insurance companies — particularly smaller ones where the formula-based MCR would otherwise fall below 25% of the SCR.</div>
+  </div>
+
+  <div class="card">
+    <div class="card-head">⚖️ Ladder of Supervisory Intervention</div>
+    <div class="ladder">
+      <div class="ladder-rung" style="background:rgba(76,175,125,0.05);">
+        <div class="ladder-icon">✅</div>
+        <div>
+          <div class="ladder-badge lb-ok">COMPLIANT</div>
+          <div class="ladder-title">Capital ≥ SCR</div>
+          <ul class="blist" style="font-size:12px;margin-top:4px;">
+            <li>Normal operations; no supervisory action required</li>
+            <li>ORSA may still prompt internal capital management actions</li>
+          </ul>
+        </div>
+      </div>
+      <div class="ladder-rung" style="background:rgba(232,168,56,0.05);">
+        <div class="ladder-icon">⚠️</div>
+        <div>
+          <div class="ladder-badge lb-warn">FIRST INTERVENTION</div>
+          <div class="ladder-title">Capital falls below SCR</div>
+          <ul class="blist" style="font-size:12px;margin-top:4px;">
+            <li><strong>Immediate notification</strong> to regulator (also if breach likely within 3 months)</li>
+            <li>Submit a <strong>recovery plan</strong> to regulator within <strong>2 months</strong></li>
+            <li>Rectify breach within <strong>6 months</strong> (extendable by 3 months; further extension in exceptional market falls)</li>
+            <li>Remedies: increase eligible own funds OR reduce risk profile → lower SCR</li>
+          </ul>
+        </div>
+      </div>
+      <div class="ladder-rung" style="background:rgba(224,92,92,0.05);">
+        <div class="ladder-icon">🔴</div>
+        <div>
+          <div class="ladder-badge lb-danger">ULTIMATE INTERVENTION</div>
+          <div class="ladder-title">Capital falls below MCR</div>
+          <ul class="blist" style="font-size:12px;margin-top:4px;">
+            <li><strong>Immediate notification</strong> to regulator (also if breach likely within 3 months)</li>
+            <li>Submit a <strong>short-term finance scheme</strong> within <strong>1 month</strong></li>
+            <li>Rectify breach within <strong>3 months</strong></li>
+            <li>Regulator may <strong>restrict or prohibit disposal of assets</strong></li>
+            <li>If scheme fails: <strong>authorisation withdrawn</strong> — no more business</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head">🆚 Standard Formula vs Internal Model</div>
+    <table class="ctable">
+      <tr><th>Dimension</th><th>Standard Formula</th><th>Internal Model</th></tr>
+      <tr><td class="td-h">Approach</td><td>Prescribed stress tests + correlation matrices</td><td>Company's own method — can use stochastic simulation, copulas</td></tr>
+      <tr><td class="td-h">Capital requirement</td><td>May be too high if company has lower risk than standard assumptions</td><td>Can be higher or lower than SF; reflects actual risk profile</td></tr>
+      <tr><td class="td-h">Cost</td><td>Lower — no model approval needed</td><td>High — staff, systems, consultant, regulatory approval costs</td></tr>
+      <tr><td class="td-h">Regulatory burden</td><td>Must justify SF is appropriate for risk profile</td><td>Must pass 6 tests; 'use test' is most challenging</td></tr>
+      <tr><td class="td-h">Reversion</td><td>N/A</td><td>Cannot revert to SF once approved (without regulatory approval)</td></tr>
+      <tr><td class="td-h">Best for</td><td>Business with risk profile similar to SF assumptions</td><td>Businesses with specialist risks, complex products, existing risk models</td></tr>
+    </table>
+    <div style="font-size:12px;color:var(--text-dim);margin-top:10px;">Source: IAI Nov 2023 Q1vi, IAI May 2024 Q2vii</div>
+  </div>
+
+</div><!-- /scr -->
+
+
+<!-- ════════════════════════════════════════
+     PANEL 4 · OWN FUNDS
+════════════════════════════════════════ -->
+<div id="panel-funds" class="panel">
+
+  <div class="s-label">Pillar 1 · Quality of Capital</div>
+  <div class="s-title">Own Funds &amp; Tiering</div>
+
+  <div class="card">
+    <div class="card-head">💰 Own Funds — Definition and Split</div>
+    <ul class="blist">
+      <li><strong>Own funds</strong> = assets in excess of technical provisions + any subordinated liabilities.</li>
+      <li><strong>Basic own funds:</strong> Capital that already exists within the insurer — broadly assets minus TPs plus subordinated liabilities.</li>
+      <li><strong>Ancillary own funds:</strong> Capital that may be called upon in adverse circumstances but does not currently exist within the insurer (e.g. unpaid share capital). Requires prior supervisory approval before it can be recognised.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-head">🏆 Tiering Framework</div>
+    <div class="info-box">Capital is tiered based on two properties: <strong>loss absorbency</strong> (ability to absorb losses as a going concern) and <strong>permanence</strong> (length of time capital is available). Tier 1 is highest quality on both dimensions.</div>
+    <div class="tier-grid">
+      <div class="tier-cell tier-head">Tier</div>
+      <div class="tier-cell tier-head">Characteristics</div>
+      <div class="tier-cell tier-head">Examples</div>
+      <div class="tier-cell"><span class="t1">TIER 1</span></div>
+      <div class="tier-cell">Highest quality. Immediately available to absorb losses; most permanent; ranks behind all policyholders and creditors in wind-up; no obligation to pay dividends/interest</div>
+      <div class="tier-cell">Paid-up ordinary share capital; retained earnings</div>
+      <div class="tier-cell"><span class="t2">TIER 2</span></div>
+      <div class="tier-cell">Intermediate quality. Some limitations on permanence or immediate loss absorbency; subordinated but with some restrictions (e.g. fixed coupon payments)</div>
+      <div class="tier-cell">Subordinated liabilities with longer maturities; some preference shares</div>
+      <div class="tier-cell tier-last"><span class="t3">TIER 3</span></div>
+      <div class="tier-cell tier-last">Lowest quality. Least permanent; limited loss absorbency; e.g. shorter-dated subordinated debt; incentives to redeem</div>
+      <div class="tier-cell tier-last">Subordinated debt with shorter maturity; some deferred tax assets</div>
+    </div>
+    <div style="margin-top:12px;">
+      <div style="font-size:12px;font-weight:600;color:var(--text-bright);margin-bottom:10px;">Tiering Criteria (relates to loss absorbency then permanence):</div>
+      <div class="grid-2">
+        <div>
+          <div style="font-size:12px;color:var(--text-dim);font-style:italic;margin-bottom:6px;">Loss absorbency criteria:</div>
+          <ul class="blist" style="font-size:12px;">
+            <li>Whether paid up or not</li>
+            <li>Whether immediately available to absorb losses</li>
+            <li>Ranking in a wind-up (subordination)</li>
+            <li>Extent of any obligation to pay dividends/interest</li>
+          </ul>
+        </div>
+        <div>
+          <div style="font-size:12px;color:var(--text-dim);font-style:italic;margin-bottom:6px;">Permanence criteria:</div>
+          <ul class="blist" style="font-size:12px;">
+            <li>Its outstanding term (maturity)</li>
+            <li>Existence of any incentives to redeem the capital</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head">📏 Capital Quality Restrictions</div>
+    <div class="grid-2">
+      <div style="background:var(--card2);border:1px solid var(--border);border-left:3px solid var(--amber);border-radius:8px;padding:16px;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--amber);letter-spacing:1px;margin-bottom:10px;">SCR COVERAGE REQUIREMENTS</div>
+        <ul class="blist">
+          <li>At least <strong>50% Tier 1</strong></li>
+          <li>Less than <strong>15% Tier 3</strong></li>
+          <li>Tier 2 fills the remainder</li>
+        </ul>
+      </div>
+      <div style="background:var(--card2);border:1px solid var(--border);border-left:3px solid var(--red);border-radius:8px;padding:16px;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--red);letter-spacing:1px;margin-bottom:10px;">MCR COVERAGE REQUIREMENTS</div>
+        <ul class="blist">
+          <li>At least <strong>80% Tier 1</strong></li>
+          <li><strong>No Tier 3</strong> allowed</li>
+          <li>Tier 2 fills the remainder (up to 20%)</li>
+        </ul>
+      </div>
+    </div>
+    <div class="amber-box" style="margin-top:14px;">
+      <strong>Exam memory hook:</strong> MCR needs <em>more</em> quality capital — 80% T1 vs 50% T1 for SCR; and absolutely no T3 for MCR. The MCR is the point of ultimate intervention so the capital quality requirements are stricter.
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head">📊 Data Quality Standards</div>
+    <ul class="blist">
+      <li>EIOPA guidance requires data used for technical provisions (and across Pillar 1) to be <strong>accurate, complete and appropriate</strong>, with data sets updated at least annually.</li>
+      <li>Good data quality enables: wider range of methodologies; more reliable validation; better comparisons over time and against market data.</li>
+      <li>Data quality requirements must be applied consistently across Pillar 1 — for both TPs (using standard formula or internal model) and the SCR calculation.</li>
+    </ul>
+  </div>
+
+</div><!-- /funds -->
+
+
+<!-- ════════════════════════════════════════
+     PANEL 5 · PILLAR 2 & 3
+════════════════════════════════════════ -->
+<div id="panel-p2p3" class="panel">
+
+  <div class="s-label">Governance, Risk Management &amp; Reporting</div>
+  <div class="s-title">Pillars 2 &amp; 3</div>
+
+  <div class="card">
+    <div class="card-head">🏛️ Four Key Functions (Pillar 2)</div>
+    <div class="grid-2">
+      <div style="background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:16px;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--blue);letter-spacing:1px;margin-bottom:8px;">RISK MANAGEMENT FUNCTION</div>
+        <ul class="blist" style="font-size:12px;">
+          <li>Manages the risk management framework</li>
+          <li>If an internal model is used: responsible for <strong>detailed implementation of the model</strong> (not the actuarial function)</li>
+        </ul>
+      </div>
+      <div style="background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:16px;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--teal);letter-spacing:1px;margin-bottom:8px;">ACTUARIAL FUNCTION</div>
+        <ul class="blist" style="font-size:12px;">
+          <li>Coordinate calculation of technical provisions</li>
+          <li>Ensure appropriateness of methodologies and assumptions</li>
+          <li>Assess sufficiency and quality of data for TPs</li>
+          <li>Compare best estimates against experience</li>
+          <li>Express opinion on <strong>overall underwriting policy</strong></li>
+          <li>Express opinion on <strong>adequacy of reinsurance arrangements</strong></li>
+          <li>Contribute to effective risk management system</li>
+        </ul>
+      </div>
+      <div style="background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:16px;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--purple);letter-spacing:1px;margin-bottom:8px;">COMPLIANCE FUNCTION</div>
+        <ul class="blist" style="font-size:12px;">
+          <li>Monitor compliance with laws, regulations and internal policies</li>
+          <li>Must be segregated from internal audit function</li>
+        </ul>
+      </div>
+      <div style="background:var(--card2);border:1px solid var(--border);border-radius:8px;padding:16px;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--amber);letter-spacing:1px;margin-bottom:8px;">INTERNAL AUDIT FUNCTION</div>
+        <ul class="blist" style="font-size:12px;">
+          <li>Independent review of all functions and processes</li>
+          <li>Must not assume responsibility for any other key function — strict segregation</li>
+        </ul>
+      </div>
+    </div>
+    <div class="amber-box" style="margin-top:14px;">
+      <strong>Note:</strong> The Board retains overall responsibility for ongoing compliance with Solvency II. Persons in the internal audit function cannot assume responsibility for other functions.
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head">🔍 ORSA — Own Risk and Solvency Assessment</div>
+    <div class="info-box">
+      Defined by EIOPA as <em>"the entirety of processes and procedures employed to identify, assess, monitor, manage and report the short- and long-term risks an insurance undertaking faces or may face, and to determine the own funds necessary to ensure overall solvency needs are met at all times."</em>
+    </div>
+    <div class="orsa-steps">
+      <div class="orsa-step">
+        <div class="os-num">STEP 01</div>
+        <div class="os-title">Risk Identification</div>
+        <div class="os-body">Identify all risks including qualitative risks not assessed under Pillar 1 (e.g. reputational risk)</div>
+      </div>
+      <div class="orsa-step">
+        <div class="os-num">STEP 02</div>
+        <div class="os-title">Solvency Assessment</div>
+        <div class="os-body">Quantify ability to continue meeting MCR and SCR over business planning horizon (3–5 years), including new business</div>
+      </div>
+      <div class="orsa-step">
+        <div class="os-num">STEP 03</div>
+        <div class="os-title">Embeddedness</div>
+        <div class="os-body">Evidence that ORSA is genuinely used by senior management in strategic decisions — not a regulatory tickbox</div>
+      </div>
+      <div class="orsa-step">
+        <div class="os-num">STEP 04</div>
+        <div class="os-title">Capital Add-On</div>
+        <div class="os-body">ORSA is one factor the supervisor considers when deciding whether to impose a capital add-on to the SCR</div>
+      </div>
+    </div>
+    <ul class="blist">
+      <li>Does not have to be at a <strong>prescribed confidence level</strong> — the company sets a level appropriate to its risk appetite or target credit rating.</li>
+      <li>Relatively <strong>little prescriptive guidance</strong> allows companies to build a process that genuinely fits their business and integrates with strategic planning.</li>
+      <li>Capital add-ons added to the SCR; used <strong>only in exceptional circumstances</strong>.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <div class="card-head">📄 Pillar 3 Reporting Requirements</div>
+    <div class="report-grid">
+      <div class="report-card">
+        <div class="report-badge rb-private">PRIVATE · SUPERVISORY</div>
+        <div style="font-size:14px;font-weight:600;color:var(--text-bright);margin-bottom:10px;">RSR + QRT</div>
+        <ul class="blist" style="font-size:12px;">
+          <li><strong>RSR</strong> (Regular Supervisory Report) — qualitative + quantitative (QRTs); pre-defined sections including ORSA</li>
+          <li><strong>QRT</strong> (Quantitative Reporting Templates) — balance sheet; premiums/claims/expenses by LoB; own funds; SCR/MCR; assets; TPs; reinsurance; group data</li>
+          <li>Full QRT: <strong>annually</strong></li>
+          <li>MCR/SCR subset of QRT: <strong>quarterly</strong></li>
+          <li>Summary (material changes) RSR acceptable under certain conditions</li>
+        </ul>
+      </div>
+      <div class="report-card">
+        <div class="report-badge rb-public">PUBLIC · MARKET DISCIPLINE</div>
+        <div style="font-size:14px;font-weight:600;color:var(--text-bright);margin-bottom:10px;">SFCR</div>
+        <ul class="blist" style="font-size:12px;">
+          <li><strong>SFCR</strong> (Solvency and Financial Condition Report) — public annual disclosure</li>
+          <li>Contains extracts from QRT and qualitative information from RSR</li>
+          <li>Certain items may be omitted if demonstrably confidential</li>
+          <li>Must be published and submitted to regulator within <strong>3–4 months of year-end</strong></li>
+          <li>Market discipline: enables capital markets, rating agencies, analysts to form informed views on capital and risk management</li>
+        </ul>
+      </div>
+    </div>
+    <div class="info-box">
+      <strong>Why public disclosure?</strong> The discipline of public disclosures adds an additional layer of confidence in the regime. Other stakeholders (capital markets, rating agencies) can form an informed view — and a company's desire to maintain its share price or credit rating reinforces supervisory oversight. [SA1 Ch11 Exam QA]
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-head">💼 Impact on Business Culture and Strategy</div>
+    <ul class="blist">
+      <li>Solvency II is not just a reporting framework — it is a <strong>risk management framework</strong> with implications for capital allocation, risk mitigation and performance management.</li>
+      <li>May impact <strong>optimal product mix</strong> and product design — some products become relatively more capital-efficient.</li>
+      <li>Impacts <strong>optimal asset mix</strong> — some asset classes more attractive due to lower capital charges.</li>
+      <li>Risk diversification benefits may affect corporate structures and trigger <strong>M&A activity</strong>.</li>
+      <li>Management information changed to align Solvency II metrics with business decision-making.</li>
+    </ul>
+  </div>
+
+</div><!-- /p2p3 -->
+
+
+<!-- ════════════════════════════════════════
+     PANEL 6 · INDIA CONTEXT
+════════════════════════════════════════ -->
+<div id="panel-india" class="panel">
+
+  <div class="s-label">Indian Regulatory Context</div>
+  <div class="s-title">India Solvency Regime &amp; Solvency II Transition</div>
+
+  <div class="amber-box">
+    India currently operates a <strong>factor-based solvency regime</strong> (ASM/RSM). This differs fundamentally from Solvency II's risk-based approach. The market is moving toward Solvency II-style RBC — making this a live exam topic.
+  </div>
+
+  <div class="india-card">
+    <div class="india-badge">CURRENT INDIA REGIME · IRDAI</div>
+    <div style="font-size:14px;font-weight:600;color:var(--text-bright);margin-bottom:10px;">ASM / RSM Framework</div>
+    <div class="grid-2">
+      <ul class="blist">
+        <li><strong>ASM</strong> = Available Solvency Margin = excess of admissible assets over liabilities</li>
+        <li><strong>RSM</strong> = Required Solvency Margin = factor-based minimum capital requirement</li>
+        <li><strong>Solvency Ratio</strong> = ASM ÷ RSM</li>
+        <li>Regulatory minimum: <strong>ASM ≥ 150% of RSM</strong> (i.e. solvency ratio ≥ 150%)</li>
+      </ul>
+      <div>
+        <div class="formula">SR = ASM / RSM<br><br>
+δ(SR) = δ(ASM)/RSM − δ(RSM)×(ASM/RSM²)<br>
+       = δ(ASM)/RSM − SR × δ(RSM)/RSM
+        </div>
+        <div style="font-size:11px;color:var(--text-dim);margin-top:6px;">Change in SR = ASM change as % of RSM − SR × RSM change as % of RSM [IAI Jul 2022 Q1iv]</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="india-card">
+    <div class="india-badge">WORKED EXAMPLE · IAI Jul 2022 Q1v</div>
+    <div style="font-size:14px;font-weight:600;color:var(--text-bright);margin-bottom:10px;">Solvency Ratio Calculation</div>
+    <div style="font-size:13px;color:var(--text);margin-bottom:10px;">Opening: ASM = ₹1,231cr, RSM = ₹403cr → Opening SR = 305.46%</div>
+    <div style="font-size:13px;color:var(--text);margin-bottom:10px;font-style:italic;">Events in the month:</div>
+    <table class="ctable" style="font-size:12px;">
+      <tr><th>Event</th><th>Change</th><th>Closing SR</th><th>Impact</th></tr>
+      <tr><td>(a) Net RSM increase (individual) +₹8cr</td><td>RSM: 403→411</td><td>1,231/411 = 299.5%</td><td style="color:var(--red);">−5.95%</td></tr>
+      <tr><td>(b) RSM decrease (group) −₹3cr</td><td>RSM: 403→400</td><td>1,231/400 = 307.75%</td><td style="color:var(--green);">+2.20%</td></tr>
+      <tr><td>(c) Demographic loss −₹27cr</td><td>ASM: 1,231→1,204</td><td>1,204/403 = 298.8%</td><td style="color:var(--red);">−6.62%</td></tr>
+      <tr><td>(d) Economic profit +₹3cr</td><td>ASM: 1,231→1,234</td><td>1,234/403 = 306.2%</td><td style="color:var(--green);">+0.74%</td></tr>
+      <tr><td>(e) Capital injection +₹50cr</td><td>ASM: 1,231→1,281</td><td>1,281/403 = 317.9%</td><td style="color:var(--green);">+12.25%</td></tr>
+      <tr><td><strong>Combined (all events)</strong></td><td>ASM→1,257; RSM→408</td><td><strong>1,257/408 = 308.1%</strong></td><td style="color:var(--green);">+2.63%</td></tr>
+    </table>
+  </div>
+
+  <div class="india-card">
+    <div class="india-badge">SOLVENCY II-STYLE TRANSITION · IAI May 2024 Q2vii</div>
+    <div style="font-size:14px;font-weight:600;color:var(--text-bright);margin-bottom:10px;">Key differences when moving to Solvency II-style regulations</div>
+    <div class="grid-2">
+      <div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--red);letter-spacing:1px;margin-bottom:8px;">CURRENT INDIAN REGIME</div>
+        <ul class="blist" style="font-size:12px;">
+          <li>Factor-based (not risk-based)</li>
+          <li>Prudent reserves in statutory accounts</li>
+          <li>ASM ≥ 150% RSM threshold</li>
+          <li>No formal BEL + Risk Margin split</li>
+          <li>No formal matching/volatility adjustment</li>
+        </ul>
+      </div>
+      <div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--green);letter-spacing:1px;margin-bottom:8px;">SOLVENCY II-STYLE (PROPOSED)</div>
+        <ul class="blist" style="font-size:12px;">
+          <li>Risk-based capital — capital tied to actual risk profile</li>
+          <li>TPs = BEL + Risk Margin (market-consistent)</li>
+          <li>SCR at prescribed confidence level</li>
+          <li>Standard formula OR internal model (with 6 tests)</li>
+          <li>Indian equivalent: Ind AS 117 for IFRS 17</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="india-card">
+    <div class="india-badge">INVESTMENT STRATEGY FOR ASM · IAI Jul 2022 Q1vi–vii</div>
+    <div style="font-size:14px;font-weight:600;color:var(--text-bright);margin-bottom:10px;">ALM for Shareholder Fund &amp; ULIP equity exposure</div>
+    <ul class="blist">
+      <li><strong>Portion of ASM supporting regulatory minimum:</strong> Should mirror the policyholder fund's asset allocation, because RSM is a proxy for the risk of the liability book and moves similarly to policy liabilities.</li>
+      <li><strong>Excess ASM (well above minimum):</strong> May be invested for higher expected returns — equity, bonds, property — as the buffer provides tolerance for market movements.</li>
+      <li><strong>ULIP business creates an important ALM issue:</strong> ULIP unit funds and reserves move with equity markets → RSM also moves with equity markets → need corresponding equity in ASM to avoid the RSM increasing without a matching ASM increase (which would <em>erode</em> the solvency ratio).</li>
+    </ul>
+  </div>
+
+  <div class="india-card">
+    <div class="india-badge">BORDERLINE SOLVENCY · IAI Mar 2022 Q2</div>
+    <div style="font-size:14px;font-weight:600;color:var(--text-bright);margin-bottom:10px;">Implications, investigation and recovery plan</div>
+    <div class="grid-2">
+      <div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--red);letter-spacing:1px;margin-bottom:8px;">IMPLICATIONS OF BORDERLINE SOLVENCY</div>
+        <ul class="blist" style="font-size:12px;">
+          <li>Regulatory intervention — closure to new business, capital injection required</li>
+          <li>Bad publicity → lower sales; broker withdrawal</li>
+          <li>Share price drop (if listed)</li>
+          <li>Credit rating downgrade</li>
+          <li>Staff morale/turnover impact → customer service quality</li>
+          <li>Increased lapses → further capital deterioration</li>
+          <li>Company expansion plans stalled</li>
+        </ul>
+      </div>
+      <div>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--teal);letter-spacing:1px;margin-bottom:8px;">RECOVERY PLAN CONTENTS</div>
+        <ul class="blist" style="font-size:12px;">
+          <li>Analysis of causes — systemic vs temporary</li>
+          <li>Business plan and projected solvency over 3+ years (certified by Appointed Actuary)</li>
+          <li>List of actions, rationale, impact on solvency, timelines</li>
+          <li>PRE implications and how policyholder/investor confidence will be maintained</li>
+          <li>Regular monitoring and reporting framework</li>
+          <li>Board approval for the plan</li>
+          <li>Whether plan will be made public and why no regulatory action is necessary</li>
+        </ul>
+      </div>
+    </div>
+    <div class="warn-box" style="margin-top:12px;">
+      <strong>Why expenses matter for solvency</strong> (IAI Mar 2022 Q2v): The CFO who says expense management is unrelated to solvency is wrong. Expense overrun eats directly into available capital; risk-based capital frameworks include expense risk as a driver of required capital; expense management drives profitability and hence long-term capital generation.
+    </div>
+  </div>
+
+</div><!-- /india -->
+
+
+<!-- ════════════════════════════════════════
+     PANEL 7 · EXAM Q&A
+════════════════════════════════════════ -->
+<div id="panel-examqa" class="panel">
+
+  <div class="s-label">IAI &amp; IFoA Past Paper Questions</div>
+  <div class="s-title">Exam Q&amp;A — Solvency II</div>
+
+  <div class="info-box">
+    Questions drawn from IAI (Sep 2021, Nov 2023, Mar 2022, Jul 2022, May 2024) and IFoA (Apr 2019, Apr 2020, Sep 2021, Sep 2022) past papers.
+  </div>
+
+  <!-- Q1 -->
+  <div class="qa-item" onclick="toggleQA(this)">
+    <div class="qa-q">
+      <div class="qa-num">1</div>
+      <div style="flex:1"><div class="qa-text">Describe how assets and technical provisions (BEL and risk margin) are valued under Solvency II. [25m]</div><div class="qa-src">IAI Sep 2021 Q2ii</div></div>
+      <div class="qa-chev">▶</div>
+    </div>
+    <div class="qa-a">
+      <div class="qa-alabel">Model Answer</div>
+      <strong>Assets — three components:</strong> Investments valued at market value (quoted prices in active markets); if unavailable, mark-to-model (must be market-consistent). Reinsurance recoveries shown as an asset (not netted off); adjusted for expected reinsurer default. Participations (≥20% voting rights) valued on market-consistent basis. Prudent person principle applies — assets appropriate for nature/term of liabilities; chosen in best interests of policyholders; properly diversified.
+      <br><br>
+      <strong>TPs — Best Estimate Liability:</strong> Market-consistent approach; represents transfer value to another insurer. BEL = PV of expected future cashflows (benefits + expenses − premiums) discounted at risk-free yield curve. Best estimate assumptions; no prudential margins. Policy-by-policy preferred; model points permitted. BEL can be negative. Contract boundary — premiums only to point of unilateral repricing. Matching adjustment or volatility adjustment can be added to discount rate where applicable.
+      <br><br>
+      <strong>TPs — Risk Margin:</strong> Addition to BEL bringing TPs to transfer value. Represents compensation for non-hedgeable risks and cost of holding regulatory capital. Cost of capital method: project future non-hedgeable SCR during run-off; multiply by 6% p.a.; discount at risk-free rates. Simplified driver approach permitted. Can be reduced for diversification.
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="qa-item" onclick="toggleQA(this)">
+    <div class="qa-q">
+      <div class="qa-num">2</div>
+      <div style="flex:1"><div class="qa-text">Outline each pillar of the three-pillars approach under Solvency II. [4m]</div><div class="qa-src">IFoA Apr 2020 Q1(i)</div></div>
+      <div class="qa-chev">▶</div>
+    </div>
+    <div class="qa-a">
+      <div class="qa-alabel">Model Answer</div>
+      <strong>Pillar 1 (Quantitative):</strong> Sets minimum capital requirements (SCR and MCR) and specifies market-consistent valuation methodologies for assets and liabilities. Two capital requirements: SCR (calculated via standard formula or internal model) and MCR. Supervisors may impose a capital add-on. SCR and MCR must be held in addition to technical provisions.
+      <br><br>
+      <strong>Pillar 2 (Qualitative):</strong> Governance, systems of governance and risk management. Requires four key functions (risk management, actuarial, compliance, internal audit). Each insurer must conduct an ORSA. Supervisory review process.
+      <br><br>
+      <strong>Pillar 3 (Reporting/Disclosure):</strong> Defined reports to regulators (RSR + QRT, annually; MCR/SCR subset quarterly) and public (SFCR, annually within 3–4 months of year-end). Market discipline from public disclosures reinforces supervisory oversight.
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="qa-item" onclick="toggleQA(this)">
+    <div class="qa-q">
+      <div class="qa-num">3</div>
+      <div style="flex:1"><div class="qa-text">Describe the risk margin calculation under Solvency II, including the cost of capital method and simplified approaches. [12m]</div><div class="qa-src">IAI Nov 2023 Q1v</div></div>
+      <div class="qa-chev">▶</div>
+    </div>
+    <div class="qa-a">
+      <div class="qa-alabel">Model Answer</div>
+      <strong>Purpose:</strong> The risk margin brings TPs to the transfer value — the theoretical compensation for non-hedgeable risks and the cost of holding regulatory capital against them.
+      <br><br>
+      <strong>Non-hedgeable risks covered:</strong> All insurance risk, reinsurance credit risk, operational risk, and residual market risk (where liability duration > available risk-free asset duration).
+      <br><br>
+      <strong>Three-step cost of capital method:</strong>
+      <br>(1) Project future capital requirement (non-hedgeable SCR subset) at each future year-end during run-off of existing business.
+      <br>(2) Multiply each year's projected capital by the cost of capital rate — <strong>6% p.a.</strong> (fixed under Solvency II).
+      <br>(3) Discount the resulting amounts at risk-free rates to give the overall risk margin.
+      <br><br>
+      <strong>Simplified approaches:</strong> Select a driver approximately linearly related to the required capital (e.g. policy count for expense risk; sum at risk for morbidity; total reserves for operational risk). Express initial capital as % of driver; project capital as same % of projected driver at each future date. More sophisticated methods using multiple drivers and correlations may be needed in practice.
+      <br><br>
+      <strong>Diversification:</strong> RM can be reduced for diversification between lines of business up to legal entity level, even though it must be disclosed separately by line.
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="qa-item" onclick="toggleQA(this)">
+    <div class="qa-q">
+      <div class="qa-num">4</div>
+      <div style="flex:1"><div class="qa-text">Discuss whether the company should use the standard formula or an internal model to calculate the SCR. [12m]</div><div class="qa-src">IAI Nov 2023 Q1vi</div></div>
+      <div class="qa-chev">▶</div>
+    </div>
+    <div class="qa-a">
+      <div class="qa-alabel">Model Answer</div>
+      <strong>In favour of standard formula:</strong> If the standard formula is a good fit to the company's risk profile, it saves significant resources. Lower cost — no model development, documentation, or regulatory approval required. Suitable for smaller companies without specialist expertise. Easier for senior management to understand. Simpler to maintain and audit.
+      <br><br>
+      <strong>In favour of internal model:</strong> If the risk profile differs materially from SF assumptions — e.g. specialist products, unusual risks — the internal model provides a more accurate capital picture. May reveal lower capital requirements if company has better-than-assumed diversification. Competitive advantage: better risk management, better business decisions. If the company already has risk models for other purposes, extending them to Solvency II may be less resource-intensive. Demonstrates sophistication to investors.
+      <br><br>
+      <strong>Challenges of internal model:</strong> Must pass 6 tests — particularly the use test (most challenging). High cost: staff, consultant, IT, documentation. Limited historical data for extreme morbidity events. Complex dependency structures under stress. Once approved, cannot revert to standard formula without regulator approval.
+      <br><br>
+      <strong>Partial internal model</strong> may be a good compromise — use internal model for specialist risk modules where SF is a poor fit, and standard formula elsewhere.
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="qa-item" onclick="toggleQA(this)">
+    <div class="qa-q">
+      <div class="qa-num">5</div>
+      <div style="flex:1"><div class="qa-text">A PMI insurer has commissioned an independent review of its Solvency II TPs and SCR. What areas should the review cover and what information is needed? [17m]</div><div class="qa-src">IFoA Apr 2019 Q2(i) &amp; Q2(ii)</div></div>
+      <div class="qa-chev">▶</div>
+    </div>
+    <div class="qa-a">
+      <div class="qa-alabel">Model Answer</div>
+      <strong>Areas for review (i):</strong> Review of methodology, approach and assumptions for TPs against Solvency II requirements. BEL and Risk Margin assessed separately (premium provisions and claims provisions assessed separately for BEL). Review of SCR methodology, assumptions and calculation. Check actual BEL results against internal documentation. Check discount rate (including matching adjustment or volatility adjustment applied). Check Risk Margin calculation. Review governance and controls.
+      <br><br>
+      <strong>Information required (ii):</strong> TP methodology and approach paper; TP assumptions paper; experience investigation reports; back-testing results; SCR methodology and approach paper; expert judgement log; asset data (including look-through data for investment funds); market value of assets. Also policy data (reconciled to policy admin system); premium amounts (reconciled to audited accounts); claims amounts (reconciled to audited accounts).
+      <br><br>
+      <strong>Appropriateness of standard formula (iv):</strong> Assessment of whether the insurer's risk profile materially deviates from SF assumptions, assessed per risk module separately. For PMI business, insurance risk is likely material — check SF assumptions for health module. ORSA should support the assessment. Check insurer has expertise and funds for an internal model if SF is not appropriate.
+    </div>
+  </div>
+
+  <!-- Q6 -->
+  <div class="qa-item" onclick="toggleQA(this)">
+    <div class="qa-q">
+      <div class="qa-num">6</div>
+      <div style="flex:1"><div class="qa-text">Why is the SCR net asset value taken as assets minus BEL (not assets minus TPs)? Calculate SCR_health given SCR_SLT=£614.3m, SCR_Non-SLT=£250m, SCR_CAT=£100m.</div><div class="qa-src">SA1 Ch12 Exam QA</div></div>
+      <div class="qa-chev">▶</div>
+    </div>
+    <div class="qa-a">
+      <div class="qa-alabel">Model Answer</div>
+      <strong>Why BEL only:</strong> TPs = BEL + Risk Margin. The Risk Margin calculation itself requires the SCR to be calculated first (to project the future non-hedgeable capital). Using TPs (which include the RM) in the SCR calculation would introduce a circularity — the SCR depends on the RM and the RM depends on the SCR. Using only the BEL avoids this circularity and makes the calculation practical.
+      <br><br>
+      <strong>SCR_health calculation:</strong>
+      <br>SCR_health = √(SCR_SLT² + SCR_Non-SLT² + SCR_CAT² + 2×ρ_SN × SCR_SLT × SCR_Non-SLT + 2×ρ_SC × SCR_SLT × SCR_CAT + 2×ρ_NC × SCR_Non-SLT × SCR_CAT)
+      <br><br>
+      = √(614.3² + 250² + 100² + 2×0.50×614.3×250 + 2×0.25×614.3×100 + 2×0.25×250×100)
+      <br>= √(377,484.5 + 62,500 + 10,000 + 153,575 + 30,715 + 12,500)
+      <br>= √646,774.5 ≈ <strong>£804.2m</strong>
+    </div>
+  </div>
+
+  <!-- Q7 -->
+  <div class="qa-item" onclick="toggleQA(this)">
+    <div class="qa-q">
+      <div class="qa-num">7</div>
+      <div style="flex:1"><div class="qa-text">What should a company do when its solvency ratio falls to a borderline level, and what actions can it take to restore solvency? [14m combined]</div><div class="qa-src">IAI Mar 2022 Q2ii–Q2iv</div></div>
+      <div class="qa-chev">▶</div>
+    </div>
+    <div class="qa-a">
+      <div class="qa-alabel">Model Answer</div>
+      <strong>Implications (Q2ii):</strong> Regulatory intervention — possible restriction or closure to new business, requirement for immediate capital injection. Bad publicity leading to lower sales; broker withdrawal; share price drop; credit rating downgrade. Staff morale and turnover impact. Increased lapses worsening financials. Company expansion plans stalled.
+      <br><br>
+      <strong>Chief Actuary investigation (Q2iii):</strong> Investigate drivers from both ASM (assets) and RSM (liabilities/capital requirement) sides. Check asset admissibility issues; review reserving assumptions (more prudent than required?); check for large/catastrophic claims — one-off or trend? Review reinsurance structure — could different structure reduce RSM? Profit-test products — are premiums adequate? Expense analysis — are there inefficiencies? Consider shareholder appetite for capital injection. Customer persistency analysis. New business strain analysis. Financial reinsurance assessment (if permitted). ALM analysis.
+      <br><br>
+      <strong>Recovery plan (Q2iv):</strong> Summary of analyses and causes; multi-year business plan with projected solvency (certified by Appointed Actuary); list of actions with rationale, impact and timelines; PRE implications and how policyholder/investor confidence will be maintained; regular monitoring and regulatory reporting framework; Board approval; explanation of why no regulatory action is necessary.
+    </div>
+  </div>
+
+  <!-- Q8 -->
+  <div class="qa-item" onclick="toggleQA(this)">
+    <div class="qa-q">
+      <div class="qa-num">8</div>
+      <div style="flex:1"><div class="qa-text">Outline the tests an internal model must pass to be used to calculate the SCR under Solvency II-style regulations. [7m]</div><div class="qa-src">IAI May 2024 Q2vii</div></div>
+      <div class="qa-chev">▶</div>
+    </div>
+    <div class="qa-a">
+      <div class="qa-alabel">Model Answer</div>
+      <strong>(1) Use test:</strong> Model must be widely used throughout all relevant areas of business. Must play a significant role in internal governance, risk management, decision-making, economic/solvency capital assessments, and capital allocation. Most challenging test to demonstrate — requires evidence of embeddedness and risk culture (senior management sign-off, ORSA integration).
+      <br><br>
+      <strong>(2) Statistical quality standards:</strong> Minimum quality standards for assumptions and data (accurate, complete, appropriate, updated annually); probability distribution forecasting; use of expert judgement; materiality considerations; methods of aggregation.
+      <br><br>
+      <strong>(3) Calibration standards:</strong> SCR must be calibrated equivalent to VaR at 99.5% confidence over one year. Alternative confidence levels/time horizons permitted if equivalent policyholder protection is demonstrated.
+      <br><br>
+      <strong>(4) Profit and loss attribution:</strong> Demonstrate how the risk categorisation in the model will be used to explain the causes and sources of actual profits and losses.
+      <br><br>
+      <strong>(5) Validation standards:</strong> Fully validated by the company; regular control cycle review including testing against emerging experience; independent reviews; comparison against external data.
+      <br><br>
+      <strong>(6) Documentation standards:</strong> Design and operational aspects clearly and thoroughly documented — including theory, assumptions, and circumstances under which the model does not work effectively.
+    </div>
+  </div>
+
+</div><!-- /examqa -->
+
+
+<!-- ════════════════════════════════════════
+     PANEL 8 · GLOSSARY
+════════════════════════════════════════ -->
+<div id="panel-glossary" class="panel">
+
+  <div class="s-label">Key Terms</div>
+  <div class="s-title">Solvency II Glossary</div>
+
+  <div class="gloss">
+    <div class="gloss-item"><div class="gloss-term">Solvency II</div><div class="gloss-def">A risk-based, harmonised EU-wide regulatory framework for insurance firms. Operative from 1 January 2016. Main objective: adequate protection of policyholders and beneficiaries. Three pillars: Quantitative (P1), Governance (P2), Disclosure (P3).</div></div>
+    <div class="gloss-item"><div class="gloss-term">EIOPA</div><div class="gloss-def">European Insurance and Occupational Pensions Authority — provides technical advice and support to the European Commission for Solvency II. Publishes risk-free yield curves monthly for 53 countries.</div></div>
+    <div class="gloss-item"><div class="gloss-term">SCR</div><div class="gloss-def">Solvency Capital Requirement — VaR at 99.5% confidence over one year of basic own funds. Can use standard formula or internal model. First point of supervisory intervention if breached; recovery plan required within 2 months; rectify within 6 months.</div></div>
+    <div class="gloss-item"><div class="gloss-term">MCR</div><div class="gloss-def">Minimum Capital Requirement — factor-based linear formula targeted at VaR 85% over one year. Floor 25%, cap 45% of SCR. Absolute minimum €3.7m/€2.5m. Reported quarterly. Ultimate point of supervisory intervention — breach leads to authorisation withdrawal.</div></div>
+    <div class="gloss-item"><div class="gloss-term">Technical Provisions</div><div class="gloss-def">Market-consistent transfer value of insurance obligations = BEL + Risk Margin. Segmented by homogeneous product type. Classified as SLT health (IP, SACI, LTC) or Non-SLT health (PMI).</div></div>
+    <div class="gloss-item"><div class="gloss-term">BEL</div><div class="gloss-def">Best Estimate Liability — PV of expected future cashflows (benefits + expenses − premiums) discounted at risk-free yield curve. No prudential margins. Can be negative. Ideally policy-by-policy; model points permitted.</div></div>
+    <div class="gloss-item"><div class="gloss-term">Contract Boundary</div><div class="gloss-def">The point at which the company can unilaterally terminate a contract, refuse premiums, or reprice to fully reflect risks. Future premiums only included within this boundary. Long-term health = maturity date; annually renewable PMI = end of policy year.</div></div>
+    <div class="gloss-item"><div class="gloss-term">Risk Margin</div><div class="gloss-def">Addition to BEL bringing TPs to transfer value. Calculated by cost of capital method: project future non-hedgeable SCR; multiply by 6% p.a.; discount at risk-free rates. Can be reduced for diversification.</div></div>
+    <div class="gloss-item"><div class="gloss-term">Matching Adjustment</div><div class="gloss-def">Addition to risk-free discount rate for long-term predictable liabilities backed by matching assets held to maturity. MA = asset spread − fundamental spread. Requires regulator approval; strict eligibility requirements.</div></div>
+    <div class="gloss-item"><div class="gloss-term">Volatility Adjustment</div><div class="gloss-def">Addition to risk-free discount rate for liabilities not eligible for the matching adjustment. Reduces risk of forced asset sales in extreme bond spread movements. Based on representative portfolio spreads per currency. Published by EIOPA.</div></div>
+    <div class="gloss-item"><div class="gloss-term">Prudent Person Principle</div><div class="gloss-def">Principles-based test for non-linked asset investments under Solvency II. Replaces prescriptive admissibility limits. Requires assets appropriate for nature/term of liabilities; chosen in best interests of policyholders; properly diversified.</div></div>
+    <div class="gloss-item"><div class="gloss-term">Standard Formula</div><div class="gloss-def">Prescribed approach for calculating SCR using standard stress tests and factors for each risk module, aggregated using prescribed correlation matrices. Firms must justify it is appropriate for their risk profile.</div></div>
+    <div class="gloss-item"><div class="gloss-term">BSCR</div><div class="gloss-def">Basic SCR — combination of module SCRs (market, counterparty default, life, health, non-life) using a specified correlation matrix. SCR = BSCR + SCR_op + Adj (loss-absorbing capacity adjustment).</div></div>
+    <div class="gloss-item"><div class="gloss-term">SLT Health</div><div class="gloss-def">Similar to Life Techniques — health contracts written on similar technical basis to life insurance (long-term). Covers IP, SACI and LTC. Health SLT module includes: disability/morbidity, mortality, longevity, lapse, expense, revision risks.</div></div>
+    <div class="gloss-item"><div class="gloss-term">Non-SLT Health</div><div class="gloss-def">Health contracts similar to non-life insurance (short-term). Covers PMI. Module uses volume measure × standard deviation × adjustment factor.</div></div>
+    <div class="gloss-item"><div class="gloss-term">CAT Risk (Health)</div><div class="gloss-def">Health catastrophe risk sub-module — extreme events including epidemics, pandemics, climate change, anti-microbial resistance. Standardised scenario-based approach.</div></div>
+    <div class="gloss-item"><div class="gloss-term">ORSA</div><div class="gloss-def">Own Risk and Solvency Assessment — entirety of processes to identify, assess, monitor, manage and report risks and determine own funds needed. Part of Pillar 2 governance and also a Pillar 3 report to supervisor. Must be genuinely embedded in senior management decision-making.</div></div>
+    <div class="gloss-item"><div class="gloss-term">Capital Add-On</div><div class="gloss-def">Additional capital requirement added to the SCR by the supervisor in exceptional circumstances — e.g. where the risk profile materially differs from SF assumptions and no internal model has been developed.</div></div>
+    <div class="gloss-item"><div class="gloss-term">Own Funds</div><div class="gloss-def">Assets in excess of TPs plus subordinated liabilities. Split: Basic own funds (existing capital) and Ancillary own funds (callable capital). Tiered into Tier 1 (highest), 2, 3 (lowest) based on loss absorbency and permanence.</div></div>
+    <div class="gloss-item"><div class="gloss-term">Tiering — SCR/MCR</div><div class="gloss-def">SCR: ≥50% Tier 1; &lt;15% Tier 3. MCR: ≥80% Tier 1; no Tier 3. Higher quality capital required for MCR given it is the ultimate intervention threshold.</div></div>
+    <div class="gloss-item"><div class="gloss-term">RSR</div><div class="gloss-def">Regular Supervisory Report — private annual report to supervisor containing qualitative information and QRTs. Pre-defined sections including ORSA. Summary report acceptable under certain conditions.</div></div>
+    <div class="gloss-item"><div class="gloss-term">SFCR</div><div class="gloss-def">Solvency and Financial Condition Report — annual public disclosure. Must be published and submitted to regulator within 3–4 months of year-end.</div></div>
+    <div class="gloss-item"><div class="gloss-term">QRT</div><div class="gloss-def">Quantitative Reporting Templates — quantitative part of private regulatory reporting. Annual full submission; quarterly MCR/SCR subset.</div></div>
+    <div class="gloss-item"><div class="gloss-term">Use Test</div><div class="gloss-def">Internal model approval test — model must be widely used throughout all relevant areas of business; significant role in governance, risk management, capital allocation decisions. Most challenging test to evidence.</div></div>
+    <div class="gloss-item"><div class="gloss-term">Equivalence</div><div class="gloss-def">Determination that a third country's regulatory regime is broadly Solvency II compliant. Full (indefinite): Bermuda, Switzerland. Provisional (10 years): USA, Australia, Japan, Brazil, Canada, Mexico.</div></div>
+    <div class="gloss-item"><div class="gloss-term">Group Solvency Floor</div><div class="gloss-def">Sum of MCRs (or local equivalent) for each entity in the group. An insurance group must cover both its overall group SCR and this group solvency floor.</div></div>
+    <div class="gloss-item"><div class="gloss-term">ASM / RSM (India)</div><div class="gloss-def">Available Solvency Margin / Required Solvency Margin — India's current factor-based regime. Regulatory minimum: ASM ≥ 150% of RSM. RSM is factor-based (not risk-based). India is transitioning toward Solvency II-style RBC.</div></div>
+  </div>
+
+  <div class="pill-row" style="margin-top:24px;">
+    <div class="pill">SA1 CH11 · CH12 · CH13</div>
+    <div class="pill">OPERATIVE: 1 JAN 2016</div>
+    <div class="pill">IAI: 0921 · 1123 · 0322 · 0722 · 0524</div>
+    <div class="pill">IFoA: 201904 · 202004 · 202109 · 202209</div>
+    <div class="pill">EIOPA PUBLISHED: 53 CURRENCIES</div>
+    <div class="pill">SCR: 99.5% VaR · MCR: 85% VaR</div>
+    <div class="pill">CoC RATE: 6% p.a.</div>
+  </div>
+
+</div><!-- /glossary -->
+
+</div><!-- /main -->
+
+<footer>SA1 REVISION TOOL · SOLVENCY II EXHIBIT · SOURCES: SA1 CH11–13 · IAI 5 SITTINGS · IFoA 4 SITTINGS · KNOWLEDGE BOUNDARY: PROVIDED FILES ONLY</footer>
+
+<script>
+function showTab(name) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-' + name).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+
+let activeScr = null;
+function toggleScr(name) {
+  const el = document.getElementById('scr-' + name);
+  const mod = event.currentTarget;
+  if (activeScr === name) {
+    el.classList.remove('open');
+    mod.classList.remove('active');
+    activeScr = null;
+  } else {
+    if (activeScr) {
+      document.getElementById('scr-' + activeScr).classList.remove('open');
+      document.querySelectorAll('.scr-mod').forEach(m => m.classList.remove('active'));
+    }
+    el.classList.add('open');
+    mod.classList.add('active');
+    activeScr = name;
+  }
+}
+
+function toggleQA(item) {
+  item.classList.toggle('open');
+}
+</script>
+</body>
+</html>

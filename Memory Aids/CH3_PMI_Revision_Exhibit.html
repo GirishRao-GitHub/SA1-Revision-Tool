@@ -1,0 +1,2259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PMI — SA1 Revision Exhibit</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;1,400&family=JetBrains+Mono:wght@400;600&display=swap');
+
+  :root {
+    --teal: #0a7c6e;
+    --teal-light: #13a896;
+    --teal-pale: #e0f5f2;
+    --navy: #0d2137;
+    --navy-mid: #1a3a5c;
+    --gold: #c8941f;
+    --gold-pale: #fdf3df;
+    --red: #c0392b;
+    --red-pale: #fdecea;
+    --slate: #5a6a7a;
+    --bg: #f4f6f8;
+    --white: #ffffff;
+    --border: #d0dce8;
+    --text: #1c2a3a;
+    --text-light: #4a5a6a;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Source Sans 3', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 15px;
+    line-height: 1.65;
+  }
+
+  /* ── HEADER ── */
+  .site-header {
+    background: var(--navy);
+    color: white;
+    padding: 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+  }
+  .header-inner {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 10px 24px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  .header-badge {
+    background: var(--teal);
+    color: white;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 4px;
+    letter-spacing: 1px;
+    white-space: nowrap;
+  }
+  .header-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: white;
+    flex: 1;
+  }
+  .header-title span { color: var(--teal-light); }
+  .header-search {
+    display: flex;
+    align-items: center;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .header-search input {
+    background: transparent;
+    border: none;
+    color: white;
+    padding: 7px 12px;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 13px;
+    width: 220px;
+    outline: none;
+  }
+  .header-search input::placeholder { color: rgba(255,255,255,0.5); }
+  .header-search button {
+    background: var(--teal);
+    border: none;
+    color: white;
+    padding: 7px 12px;
+    cursor: pointer;
+    font-size: 14px;
+  }
+
+  /* ── NAV TABS ── */
+  .nav-tabs {
+    background: var(--navy-mid);
+    display: flex;
+    overflow-x: auto;
+    scrollbar-width: none;
+    padding: 0 24px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  .nav-tabs::-webkit-scrollbar { display: none; }
+  .nav-tab {
+    padding: 10px 18px;
+    color: rgba(255,255,255,0.65);
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+    white-space: nowrap;
+    border-bottom: 3px solid transparent;
+    transition: all 0.2s;
+    user-select: none;
+  }
+  .nav-tab:hover { color: white; }
+  .nav-tab.active {
+    color: var(--teal-light);
+    border-bottom-color: var(--teal-light);
+  }
+
+  /* ── LAYOUT ── */
+  .main-content {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 24px 24px 60px;
+  }
+
+  .section-panel {
+    display: none;
+  }
+  .section-panel.active { display: block; }
+
+  /* ── SECTION HEADER ── */
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 20px;
+    padding-bottom: 14px;
+    border-bottom: 2px solid var(--border);
+  }
+  .section-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    flex-shrink: 0;
+  }
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--navy);
+  }
+  .section-subtitle {
+    font-size: 13px;
+    color: var(--slate);
+    margin-top: 2px;
+  }
+
+  /* ── CARDS GRID ── */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+  .card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .card-header {
+    padding: 12px 16px;
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .card-header.teal { background: var(--teal-pale); color: var(--teal); }
+  .card-header.gold { background: var(--gold-pale); color: var(--gold); }
+  .card-header.red { background: var(--red-pale); color: var(--red); }
+  .card-header.navy { background: #e8edf5; color: var(--navy); }
+  .card-body { padding: 14px 16px; }
+
+  /* ── BULLET LISTS ── */
+  .bullet-list { list-style: none; }
+  .bullet-list li {
+    padding: 5px 0;
+    padding-left: 20px;
+    position: relative;
+    font-size: 14px;
+    color: var(--text);
+    border-bottom: 1px solid var(--bg);
+    line-height: 1.55;
+  }
+  .bullet-list li:last-child { border-bottom: none; }
+  .bullet-list li::before {
+    content: '▸';
+    position: absolute;
+    left: 0;
+    color: var(--teal);
+    font-size: 11px;
+    top: 7px;
+  }
+
+  /* ── KEY TERMS ── */
+  .key-terms-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+  .key-term {
+    background: white;
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--teal);
+    border-radius: 6px;
+    padding: 11px 14px;
+  }
+  .key-term-name {
+    font-weight: 700;
+    font-size: 13px;
+    color: var(--teal);
+    margin-bottom: 4px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .key-term-def {
+    font-size: 13px;
+    color: var(--text-light);
+    line-height: 1.5;
+  }
+
+  /* ── FLASHCARDS ── */
+  .flashcard-container {
+    perspective: 1000px;
+    cursor: pointer;
+    margin-bottom: 12px;
+  }
+  .flashcard-inner {
+    position: relative;
+    min-height: 120px;
+    transition: transform 0.5s;
+    transform-style: preserve-3d;
+  }
+  .flashcard-container.flipped .flashcard-inner {
+    transform: rotateX(180deg);
+  }
+  .flashcard-front, .flashcard-back {
+    position: absolute;
+    width: 100%;
+    min-height: 120px;
+    backface-visibility: hidden;
+    border-radius: 10px;
+    padding: 16px 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .flashcard-front {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 100%);
+    color: white;
+  }
+  .flashcard-back {
+    background: linear-gradient(135deg, var(--teal) 0%, #0f9988 100%);
+    color: white;
+    transform: rotateX(180deg);
+  }
+  .flashcard-front .fc-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    opacity: 0.6;
+    margin-bottom: 8px;
+  }
+  .flashcard-front .fc-q {
+    font-size: 15px;
+    font-weight: 600;
+    line-height: 1.5;
+  }
+  .flashcard-back .fc-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    opacity: 0.7;
+    margin-bottom: 8px;
+  }
+  .flashcard-back .fc-a {
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  .flashcard-hint {
+    text-align: center;
+    font-size: 11px;
+    color: var(--slate);
+    margin-top: 4px;
+  }
+
+  /* ── EXAM QUESTIONS ── */
+  .exam-question {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin-bottom: 16px;
+    overflow: hidden;
+  }
+  .eq-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    background: var(--navy);
+    color: white;
+    cursor: pointer;
+    user-select: none;
+  }
+  .eq-header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .eq-source-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+  .eq-source-badge.iai { background: var(--teal); color: white; }
+  .eq-source-badge.ifoa { background: var(--gold); color: white; }
+  .eq-marks {
+    font-size: 12px;
+    opacity: 0.7;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .eq-question {
+    font-size: 14px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.92);
+    flex: 1;
+  }
+  .eq-toggle {
+    color: rgba(255,255,255,0.6);
+    font-size: 18px;
+    transition: transform 0.3s;
+    flex-shrink: 0;
+  }
+  .eq-header.open .eq-toggle { transform: rotate(180deg); }
+  .eq-scenario {
+    padding: 12px 16px;
+    background: #f0f4f8;
+    font-size: 13px;
+    color: var(--text-light);
+    border-bottom: 1px solid var(--border);
+    font-style: italic;
+    line-height: 1.5;
+  }
+  .eq-body {
+    display: none;
+    padding: 16px;
+  }
+  .eq-body.open { display: block; }
+  .eq-section-title {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: var(--teal);
+    margin: 12px 0 6px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid var(--teal-pale);
+  }
+  .eq-section-title:first-child { margin-top: 0; }
+
+  /* ── COMPARISON TABLE ── */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin-bottom: 20px;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+  }
+  .compare-table th {
+    background: var(--navy);
+    color: white;
+    padding: 10px 14px;
+    text-align: left;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+  }
+  .compare-table td {
+    padding: 9px 14px;
+    border-bottom: 1px solid var(--bg);
+    vertical-align: top;
+    line-height: 1.5;
+  }
+  .compare-table tr:last-child td { border-bottom: none; }
+  .compare-table tr:nth-child(even) td { background: #f7f9fb; }
+  .compare-table td:first-child {
+    font-weight: 700;
+    color: var(--navy);
+    width: 22%;
+    white-space: nowrap;
+  }
+
+  /* ── TOPIC PILLS ── */
+  .topic-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+  .topic-pill {
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: all 0.2s;
+    user-select: none;
+  }
+  .topic-pill.teal { background: var(--teal-pale); color: var(--teal); border-color: var(--teal); }
+  .topic-pill.gold { background: var(--gold-pale); color: var(--gold); border-color: var(--gold); }
+  .topic-pill.navy { background: #e8edf5; color: var(--navy); border-color: var(--navy); }
+  .topic-pill.inactive { opacity: 0.4; border-color: transparent; }
+
+  /* ── SEARCH HIGHLIGHT ── */
+  .search-highlight {
+    background: #fff176;
+    color: #333;
+    border-radius: 2px;
+  }
+
+  /* ── MNEMONIC BOX ── */
+  .mnemonic-box {
+    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 100%);
+    color: white;
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-bottom: 20px;
+  }
+  .mnemonic-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 15px;
+    font-weight: 700;
+    opacity: 0.7;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-style: italic;
+  }
+  .mnemonic-letters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .mnemonic-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    min-width: 220px;
+    flex: 1;
+  }
+  .mnemonic-letter {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 900;
+    color: var(--teal-light);
+    line-height: 1;
+    min-width: 28px;
+  }
+  .mnemonic-word {
+    font-size: 13px;
+    line-height: 1.45;
+    padding-top: 2px;
+  }
+  .mnemonic-word strong {
+    display: block;
+    font-size: 14px;
+    color: var(--teal-light);
+  }
+
+  /* ── ACCORDION ── */
+  .accordion-item {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin-bottom: 8px;
+    overflow: hidden;
+  }
+  .accordion-header {
+    padding: 13px 16px;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    user-select: none;
+    color: var(--navy);
+    background: white;
+    transition: background 0.15s;
+  }
+  .accordion-header:hover { background: var(--bg); }
+  .accordion-arrow { transition: transform 0.25s; font-size: 16px; color: var(--slate); }
+  .accordion-header.open .accordion-arrow { transform: rotate(90deg); }
+  .accordion-body {
+    display: none;
+    padding: 14px 16px;
+    border-top: 1px solid var(--border);
+    background: #fcfdfe;
+  }
+  .accordion-body.open { display: block; }
+
+  /* ── ALERT BOX ── */
+  .alert-box {
+    border-radius: 8px;
+    padding: 12px 16px;
+    margin-bottom: 12px;
+    font-size: 13.5px;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .alert-box.gold { background: var(--gold-pale); border-left: 4px solid var(--gold); }
+  .alert-box.red { background: var(--red-pale); border-left: 4px solid var(--red); }
+  .alert-box.teal { background: var(--teal-pale); border-left: 4px solid var(--teal); }
+  .alert-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+  /* ── SUBHEADING ── */
+  .sub-heading {
+    font-family: 'Playfair Display', serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--navy);
+    margin: 22px 0 10px;
+    padding-left: 12px;
+    border-left: 4px solid var(--teal);
+  }
+
+  /* ── SEARCH RESULTS ── */
+  #search-panel {
+    display: none;
+  }
+  #search-panel.active { display: block; }
+  .search-result {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+  }
+  .search-result-source {
+    font-size: 11px;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--slate);
+    margin-bottom: 6px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+  .search-result-text { font-size: 14px; line-height: 1.55; }
+
+  /* ── MARKS BADGE ── */
+  .marks-badge {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 7px;
+    border-radius: 4px;
+    background: var(--gold-pale);
+    color: var(--gold);
+    border: 1px solid var(--gold);
+    margin-left: 8px;
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .cards-grid { grid-template-columns: 1fr; }
+    .header-search { display: none; }
+    .header-title { font-size: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="header-inner">
+    <div class="header-badge">SA1 · SP1</div>
+    <div class="header-title">Private Medical Insurance <span>— Comprehensive Revision</span></div>
+    <div class="header-search">
+      <input type="text" id="searchInput" placeholder="Search notes, terms, exam Qs…" oninput="doSearch(this.value)">
+      <button onclick="doSearch(document.getElementById('searchInput').value)">⌕</button>
+    </div>
+  </div>
+  <div style="background: var(--navy-mid);">
+    <div class="nav-tabs" id="navTabs">
+      <div class="nav-tab active" onclick="showTab('overview')">📋 Overview</div>
+      <div class="nav-tab" onclick="showTab('product')">🏥 Product Design</div>
+      <div class="nav-tab" onclick="showTab('pricing')">💰 Pricing</div>
+      <div class="nav-tab" onclick="showTab('uw-claims')">🔍 UW & Claims</div>
+      <div class="nav-tab" onclick="showTab('related')">🗂 Related Products</div>
+      <div class="nav-tab" onclick="showTab('risks')">⚠️ Risks</div>
+      <div class="nav-tab" onclick="showTab('flashcards')">🃏 Flashcards</div>
+      <div class="nav-tab" onclick="showTab('iai-qs')">📝 IAI Exam Qs</div>
+      <div class="nav-tab" onclick="showTab('ifoa-qs')">🎓 IFoA Exam Qs</div>
+      <div class="nav-tab" onclick="showTab('mnemonics')">🧠 Mnemonics</div>
+    </div>
+  </div>
+</header>
+
+<div class="main-content">
+
+  <!-- SEARCH PANEL -->
+  <div id="search-panel">
+    <div class="section-header">
+      <div class="section-icon" style="background:#e8edf5;">🔎</div>
+      <div>
+        <div class="section-title">Search Results</div>
+        <div class="section-subtitle" id="search-count">0 results</div>
+      </div>
+    </div>
+    <div id="search-results"></div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- TAB 1: OVERVIEW -->
+  <!-- ═══════════════════════════════════════════════════ -->
+  <div id="tab-overview" class="section-panel active">
+    <div class="section-header">
+      <div class="section-icon" style="background:var(--teal-pale);">📋</div>
+      <div>
+        <div class="section-title">PMI — Product Overview</div>
+        <div class="section-subtitle">SP1 Chapter 4 · Core Reading fundamentals</div>
+      </div>
+    </div>
+
+    <div class="alert-box gold">
+      <span class="alert-icon">💡</span>
+      <div><strong>Exam Lens:</strong> PMI questions frequently test your ability to apply core product features to novel scenarios (new markets, new regulations, new product variants). Always link features to their <em>rationale</em>, not just list them.</div>
+    </div>
+
+    <div class="cards-grid">
+      <div class="card">
+        <div class="card-header teal">🏥 Definition & Nature</div>
+        <div class="card-body">
+          <ul class="bullet-list">
+            <li>Indemnity-based — reimburses actual cost of private medical treatment (contrast with benefit-basis fixed sums)</li>
+            <li>Covers <strong>acute</strong> (curable) conditions only — NOT chronic (incurable) conditions which are State's responsibility</li>
+            <li><strong>Short-term, annually renewable</strong> — insurer can change premium and terms at each renewal; no re-underwriting at renewal</li>
+            <li>Individual premium does NOT normally depend on individual claims experience (though NCD schemes exist)</li>
+            <li>Insurer pays treatment provider directly (cashless settlement in India; reimbursement in UK)</li>
+            <li>Policy may be cancelled but entire product lines are rarely withdrawn; individual policies rarely cancelled mid-term</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header teal">✅ Typical Inclusions</div>
+        <div class="card-body">
+          <ul class="bullet-list">
+            <li>Acute condition treatment (inpatient and day-care)</li>
+            <li>In-patient tests and surgery</li>
+            <li>Hospital accommodation and nursing</li>
+            <li>Specialist consultations (OP)</li>
+            <li>Day-care procedures (no overnight stay)</li>
+            <li>Domiciliary care (treatment at home)</li>
+            <li>Overseas cover (for travel/expatriate)</li>
+            <li>AYUSH treatments (India: Ayurveda, Yoga, Unani, Siddha, Homeopathy — mandated at par since IRDAI 2024)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header red">❌ Typical Exclusions</div>
+        <div class="card-body">
+          <ul class="bullet-list">
+            <li><strong>Pre-existing conditions</strong> — at inception (FMU) or moratorium period applies</li>
+            <li>GP services (primary care)</li>
+            <li><strong>Chronic conditions</strong> — ongoing, incurable, State responsibility</li>
+            <li><strong>A&E treatment</strong> — State provides; prior auth impractical in emergency</li>
+            <li>Cosmetic surgery (no medical necessity)</li>
+            <li>Self-inflicted injuries</li>
+            <li>Experimental drugs / treatments</li>
+            <li>War risks, hazardous pursuits</li>
+            <li>Pregnancy / maternity (often excluded; may be covered under health cash plans)</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-header navy">🎯 Why Customers Buy PMI</div>
+        <div class="card-body">
+          <ul class="bullet-list">
+            <li>Access speedy diagnosis and treatment (avoid NHS/State waiting lists)</li>
+            <li>Choice of specialist and hospital</li>
+            <li>Better hospital environment and accommodation</li>
+            <li>Convenience — appointment times to suit</li>
+            <li>Access to treatments/drugs unavailable on State system</li>
+            <li>Peace of mind / financial security</li>
+            <li>Employer benefit (group PMI)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="sub-heading">Cost Control Mechanisms</div>
+    <table class="compare-table">
+      <tr>
+        <th>Mechanism</th><th>How It Works</th><th>Advantages</th><th>Disadvantages / Risks</th>
+      </tr>
+      <tr>
+        <td>Excess / Deductible</td>
+        <td>Policyholder meets the first tranche of each claim</td>
+        <td>Reduces premium; incentivises use of public system for minor conditions; reduces moral hazard</td>
+        <td>Policyholder dissatisfaction on small claims; may delay necessary treatment</td>
+      </tr>
+      <tr>
+        <td>Co-insurance</td>
+        <td>Claim shared in fixed proportions (e.g. insurer 75%, PH 25%)</td>
+        <td>Reduces moral hazard and claim exaggeration; lower premiums</td>
+        <td>Insurer involved in every claim (high admin cost); no cap on PH liability; potential for bad press</td>
+      </tr>
+      <tr>
+        <td>NCD Scheme</td>
+        <td>Premium discount / benefit increase for claim-free years</td>
+        <td>Encourages policyholders to absorb small claims; improves risk pool quality</td>
+        <td>Discourages legitimate claims; system complexity; selection effect — healthy lives get NCD, leave if premium rises</td>
+      </tr>
+      <tr>
+        <td>Policy Limit / AML</td>
+        <td>Maximum claim per year (Annual Maximum Limit)</td>
+        <td>Limits insurer liability; reduces premium</td>
+        <td>Bad publicity if limit breached during serious illness; policyholders may feel underprotected</td>
+      </tr>
+      <tr>
+        <td>Sub-limits</td>
+        <td>Caps on room rent, ICU, surgery, pharmacy, etc.</td>
+        <td>Controls specific cost drivers; incentivises cost-effective hospitals</td>
+        <td>Complexity; customer dissatisfaction; may not keep up with medical inflation</td>
+      </tr>
+      <tr>
+        <td>Pre-authorisation</td>
+        <td>Insurer approval required before treatment; 1-hr TAT mandated (IRDAI 2024)</td>
+        <td>Controls moral hazard; ensures appropriate care pathway; fraud prevention</td>
+        <td>Delays treatment; impractical in emergencies; admin burden</td>
+      </tr>
+      <tr>
+        <td>Preferred Provider Networks</td>
+        <td>Insurer directs policyholders to network hospitals; negotiated tariffs; cashless settlement</td>
+        <td>Bulk purchasing power; cost certainty; faster settlement</td>
+        <td>Restricts PH choice; provider quality risk; reputation risk if provider under-performs</td>
+      </tr>
+      <tr>
+        <td>Waiting Periods</td>
+        <td>Benefit not payable in initial period (e.g. 30 days general; 36 months PED under IRDAI 2024)</td>
+        <td>Reduces anti-selection where UW not done; reduces immediate claims</td>
+        <td>Customer dissatisfaction; potential miss-selling claims if not clearly disclosed</td>
+      </tr>
+    </table>
+
+    <div class="alert-box red">
+      <span class="alert-icon">⚠️</span>
+      <div><strong>Exam Trap — Why A&E is excluded:</strong> (1) State provides A&E free; (2) Private hospitals lack emergency infrastructure; (3) Pre-auth impractical in emergency; (4) Patient may be incapacitated — can't phone insurer; (5) Patient less concerned about comfort/choice in emergencies.</div>
+    </div>
+
+    <div class="alert-box teal">
+      <span class="alert-icon">🇮🇳</span>
+      <div><strong>India (IRDAI 2024) — Key Regulatory Points:</strong> Max PED waiting period 36 months continuous cover; Mental illness at par with physical; 100% cashless target; 1-hr pre-auth TAT; Claim denial only with CRC approval; No claim repudiated without citing specific policy terms; ABHA / electronic health records improving UW.</div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- TAB 2: PRODUCT DESIGN -->
+  <!-- ═══════════════════════════════════════════════════ -->
+  <div id="tab-product" class="section-panel">
+    <div class="section-header">
+      <div class="section-icon" style="background:var(--teal-pale);">🏥</div>
+      <div>
+        <div class="section-title">PMI — Product Design</div>
+        <div class="section-subtitle">Design features, variations, India-specific context</div>
+      </div>
+    </div>
+
+    <div class="sub-heading">Key Product Design Features</div>
+    <div class="cards-grid">
+      <div class="card">
+        <div class="card-header teal">📐 Benefit Structure</div>
+        <div class="card-body">
+          <ul class="bullet-list">
+            <li><strong>Indemnity basis</strong> — reimburses actual cost (life insurers in India: benefit basis only; GI/SAHI: both)</li>
+            <li><strong>Sum Insured (SI)</strong> — max reimbursement per year; must be adequate for serious illness</li>
+            <li><strong>SI Reinstatement</strong> — restores SI for new illnesses (not pre-existing); annual or per-claim; critical design choice affecting benefit adequacy</li>
+            <li><strong>Coverage scope</strong>: IP / OP / Day-care / Domiciliary / AYUSH — each must be explicitly defined</li>
+            <li>OP cover: high frequency, low severity — major operational readiness needed before OP launch</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header gold">💳 Premium Structure</div>
+        <div class="card-body">
+          <ul class="bullet-list">
+            <li><strong>Annual reviewable</strong> — rates/terms can change each year; essential given medical inflation</li>
+            <li>No guaranteed premium unless multi-year product (unusual)</li>
+            <li>Age-rated — premium typically increases with age at renewal</li>
+            <li><strong>Age at entry basis</strong> — some products keep premium level at entry age (cross-subsidy within product)</li>
+            <li>Community rating (Ireland model) — all policyholders same premium; requires risk equalisation mechanism</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header navy">🔄 No Claim Discount (NCD)</div>
+        <div class="card-body">
+          <ul class="bullet-list">
+            <li>Two forms: (1) cumulative bonus — increased SI without premium increase; (2) renewal premium discount</li>
+            <li>Policyholder chooses form at renewal</li>
+            <li>Self-selection by healthy lives — these are better risks → pricing must allow for selection benefit</li>
+            <li>NCD scales tend to be smaller in PMI than other short-term products (claim frequency is high)</li>
+            <li>Risk: encourages policyholders to forgo legitimate claims; ethical concern</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header red">📊 Rating Factors</div>
+        <div class="card-body">
+          <ul class="bullet-list">
+            <li>Age (strong driver — morbidity rises sharply with age)</li>
+            <li>Gender (where legislatively permitted; EU gender-neutral ruling 2012)</li>
+            <li>Smoker status (affects morbidity significantly)</li>
+            <li>Geographical location / hospital band (cost of care varies by region)</li>
+            <li>Occupation (risk of some occupational diseases; access to care)</li>
+            <li>UW method (moratorium vs FMU — different selection effects)</li>
+            <li>Sum insured / plan tier</li>
+            <li>NCD status</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="sub-heading">Budget / Lower-Cost Variants</div>
+    <table class="compare-table">
+      <tr><th>Product</th><th>Mechanism</th><th>Target Market</th><th>Key Trade-off</th></tr>
+      <tr>
+        <td>Full PMI</td>
+        <td>Broad indemnity cover: IP + OP + specialist + dental (optional)</td>
+        <td>Affluent individuals; large employers</td>
+        <td>High premium; broad coverage</td>
+      </tr>
+      <tr>
+        <td>Waiting List Plan</td>
+        <td>PMI benefits only if State cannot treat within specified period (e.g. 6 weeks)</td>
+        <td>Those who mainly want to avoid long waiting lists</td>
+        <td>Much lower premium; limited trigger conditions; insurer requires State system assessment</td>
+      </tr>
+      <tr>
+        <td>Budget PMI</td>
+        <td>Restrict OP coverage (monetary limits, time restrictions, initial consultation only); limit hospitals (PPO)</td>
+        <td>Lower socioeconomic groups priced out of full PMI</td>
+        <td>Wider distribution; lower margins; more restricted benefits</td>
+      </tr>
+      <tr>
+        <td>Major Medical Expenses (MME)</td>
+        <td>Fixed lump sum on specified surgery; no OP cover</td>
+        <td>Those needing protection against high-cost surgery only</td>
+        <td>Simple; predictable max liability; may not cover complications</td>
+      </tr>
+      <tr>
+        <td>Health Cash Plan</td>
+        <td>Fixed cash benefits on specified healthcare events; community-rated; no UW</td>
+        <td>All socioeconomic groups; especially lower income</td>
+        <td>Very low premium; defined benefit; high volume needed for profitability</td>
+      </tr>
+    </table>
+
+    <div class="sub-heading">OP vs IP — Design Differences</div>
+    <div class="alert-box teal">
+      <span class="alert-icon">📌</span>
+      <div><strong>IAI July 2022 tested this heavily.</strong> Key distinction: OP = high frequency, low severity. IP = low frequency, high severity. This drives different design, pricing, administration and reinsurance strategies.</div>
+    </div>
+    <table class="compare-table">
+      <tr><th>Dimension</th><th>IP Cover</th><th>OP Cover</th></tr>
+      <tr><td>Claim frequency</td><td>Low</td><td>High</td></tr>
+      <tr><td>Claim severity</td><td>High</td><td>Low</td></tr>
+      <tr><td>Pre-authorisation</td><td>Standard practice (pre-planned surgery)</td><td>Often not required; harder to implement</td></tr>
+      <tr><td>Fraud risk</td><td>Lower (hospitalisation verifiable)</td><td>Higher (waste, abuse, overbilling easy)</td></tr>
+      <tr><td>Admin systems</td><td>Low-volume, high-value</td><td>High-volume, low-value — major operational investment needed</td></tr>
+      <tr><td>Product launch approach</td><td>Launch with established benefit schedule</td><td>Start minimal; significant co-pay/deductible; annually reviewable</td></tr>
+      <tr><td>Reinsurance</td><td>Excess of Loss (XL) appropriate</td><td>Quota share more appropriate (volume risk, not severity risk)</td></tr>
+      <tr><td>Reserving challenge</td><td>IBNR with known pre-auth estimates</td><td>Seasonality; shorter/different reporting lag; IBNER harder</td></tr>
+      <tr><td>GP referral</td><td>Not always required</td><td>Restrict to GP-referred specialist consultations to control abuse</td></tr>
+    </table>
+
+    <div class="sub-heading">Wearables / Digital Health — Emerging Product Design</div>
+    <div class="accordion-item">
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        📱 Wearable Health Devices & Wellness Discounts (IFoA Sep 2025 / IAI Mar 2017) <span class="accordion-arrow">›</span>
+      </div>
+      <div class="accordion-body">
+        <table class="compare-table">
+          <tr><th>Perspective</th><th>Advantages</th><th>Disadvantages / Risks</th></tr>
+          <tr>
+            <td>Insurer</td>
+            <td>Better risk data; encourages healthier behaviours; improves morbidity; reduces claims; differentiates product; improves policyholder engagement; cross-sell opportunities</td>
+            <td>Data privacy risk (DPDP 2023); adverse selection if only healthy lives take up; device cost; regulatory uncertainty; reputational risk if data misused; IT/cyber risk; dependence on third party; valuation uncertainty on new data</td>
+          </tr>
+          <tr>
+            <td>Policyholders</td>
+            <td>Premium discount; better health awareness; free/subsidised device; improved health outcomes; sense of fairness (healthier pays less)</td>
+            <td>Privacy concerns (insurer sees personal health data); feel surveilled; discount may not materialise; technology not accessible to all; unfair on those with disabilities / poor access</td>
+          </tr>
+        </table>
+        <div class="alert-box gold">
+          <span class="alert-icon">⚠️</span>
+          <div><strong>Valuation impact (IFoA Sep 2025):</strong> Best estimate liabilities assumptions affected — claims frequency may fall (healthier lives); lapse rates may differ; uncertainty in new business volumes; claims trends; need to monitor closely for adverse selection. Mortality/morbidity loading may reduce.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- TAB 3: PRICING -->
+  <!-- ═══════════════════════════════════════════════════ -->
+  <div id="tab-pricing" class="section-panel">
+    <div class="section-header">
+      <div class="section-icon" style="background:var(--gold-pale);">💰</div>
+      <div>
+        <div class="section-title">PMI — Pricing</div>
+        <div class="section-subtitle">Risk premium, burning cost, medical inflation, rating</div>
+      </div>
+    </div>
+
+    <div class="sub-heading">Pricing Methodology</div>
+    <div class="mnemonic-box">
+      <div class="mnemonic-title">PMI Pricing Formula</div>
+      <div style="font-size:18px; font-family:'JetBrains Mono', monospace; color:var(--teal-light); margin-bottom:12px;">
+        Risk Premium = Σ<sub>k</sub> [ i<sub>k</sub> × AC<sub>k</sub> ]
+      </div>
+      <div style="font-size:13px; opacity:0.85;">
+        Where <strong style="color:var(--teal-light);">i<sub>k</sub></strong> = incidence rate for benefit/procedure class k &nbsp;|&nbsp; 
+        <strong style="color:var(--teal-light);">AC<sub>k</sub></strong> = average claim cost for class k &nbsp;|&nbsp;
+        Split by: age, gender, location, hospital band, smoker status, occupation
+      </div>
+    </div>
+
+    <div class="cards-grid">
+      <div class="card">
+        <div class="card-header teal">📊 Burning Cost Approach</div>
+        <div class="card-body">
+          <ul class="bullet-list">
+            <li><strong>Burning cost = frequency × severity</strong></li>
+            <li>Frequency: incidence rate per 1,000 covered lives per year, by age/gender/plan</li>
+            <li>Severity: average claim cost per claim, by diagnosis, procedure, network</li>
+            <li>Split IP from OP — very different profiles</li>
+            <li>Dental/optical/maternity priced separately (distinct frequency/severity)</li>
+            <li>Adjust for excesses, co-payments, sub-limits — both incidence and average cost</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header gold">📈 Medical Inflation</div>
+        <div class="card-body">
+          <ul class="bullet-list">
+            <li>Key risk for PMI — historically ~12-15% p.a. in India (varies by treatment)</li>
+            <li>Super-inflation trend: new treatments, advanced diagnostics, high-cost drugs</li>
+            <li>Failure to trend forward leads to rapid deterioration in loss ratio</li>
+            <li>Separate from general CPI/RPI — often far exceeds it</li>
+            <li>Must project claims forward to mid-point of policy year (at minimum)</li>
+            <li>Trend assumptions require regular review; reinsurer help often needed</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header navy">🏗 Premium Build-up</div>
+        <div class="card-body">
+          <ul class="bullet-list">
+            <li>Risk premium (expected claims cost) as base</li>
+            <li>+ Expense loading (initial + renewal; spread by expected policy years)</li>
+            <li>+ Profit margin (required return on capital)</li>
+            <li>+ Contingency / catastrophe loading</li>
+            <li>+ Reinsurance cost (net of recoveries)</li>
+            <li>= Office premium (gross premium)</li>
+            <li>Profit test: verify required return on capital at projected volumes</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header red">⚡ Adjustments Needed</div>
+        <div class="card-body">
+          <ul class="bullet-list">
+            <li>UW loading for substandard lives (disease loading by condition)</li>
+            <li>Gender-neutral weighting: weight gender-specific rates by expected male:female mix (anti-selection risk if one gender is cheaper)</li>
+            <li>NCD adjustment: model take-up, selection benefit, behavioural response</li>
+            <li>Age-banding or individual age rating</li>
+            <li>Lapse/persistency adjustments (expense recovery assumptions)</li>
+            <li>Selective lapsing adjustment (healthy lives more likely to lapse when repriced)</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="sub-heading">Data Sources for a New Insurer</div>
+    <div class="accordion-item">
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        IAI Sep 2018 Q2 — Pricing steps & challenges for new insurer <span class="accordion-arrow">›</span>
+      </div>
+      <div class="accordion-body">
+        <div class="sub-heading" style="margin-top:0;">Data Sources</div>
+        <ul class="bullet-list">
+          <li>IRDAI industry data (claim frequencies by age/gender/plan); GIC pooled data</li>
+          <li>Reinsurer data on Indian morbidity experience and international benchmarks adjusted for India</li>
+          <li>International data (WHO, industry studies) — adjusted for Indian conditions</li>
+          <li>Data from distribution partners (if any — e.g. bancassurance, TPA)</li>
+          <li>Public health statistics (NSSO, NFHS, hospital discharge data)</li>
+        </ul>
+        <div class="sub-heading">Key Challenges</div>
+        <ul class="bullet-list">
+          <li>No own-experience data → credibility concerns; must rely heavily on industry/reinsurer data</li>
+          <li>Industry data may not be granular enough for specific product design / target market</li>
+          <li>Cannot quantify anti-selection without historical experience of the UW approach chosen</li>
+          <li>Medical inflation trend assumption uncertain — highly sensitive to output</li>
+          <li>Expense and volume uncertainty — fixed costs may not be covered in early years</li>
+          <li>Selection effect in early years (good UW experience) wears off over time — need durational adjustment</li>
+          <li>If entering new territory: lifestyle/morbidity differences; demographic idiosyncracies; behavioral differences; currency risk</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="accordion-item">
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        Repricing Risks & When to Reprice <span class="accordion-arrow">›</span>
+      </div>
+      <div class="accordion-body">
+        <ul class="bullet-list">
+          <li>Annual repricing is essential for PMI given medical inflation and short-term nature</li>
+          <li>Risk of selective lapsing if competitor pricing lags — healthy lives leave; sick lives stay (anti-selection spiral)</li>
+          <li>If emerging risk (e.g. climate/flood, new disease) — consider: will claims deteriorate immediately or gradually? PMI's annual renewability reduces urgency vs long-term products</li>
+          <li>Weigh profitability risk of not repricing vs competitive/lapse risk of repricing ahead of market</li>
+          <li>Assess solvency position — can insurer absorb short-term losses while waiting for market to catch up?</li>
+          <li>Competitor response analysis critical — first-mover repricing disadvantage vs profitability protection</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="sub-heading">Community Rating vs Individual Rating</div>
+    <table class="compare-table">
+      <tr><th>Feature</th><th>Community Rating</th><th>Individual / Experience Rating</th></tr>
+      <tr><td>Premium variation</td><td>Same for all (or broad age bands only)</td><td>Varies by individual risk characteristics</td></tr>
+      <tr><td>Cross-subsidy</td><td>Old/sick subsidised by young/healthy</td><td>Each pays approximately own risk cost</td></tr>
+      <tr><td>Anti-selection</td><td>High risk — healthy lives switch to cheaper individual market</td><td>Lower — premiums reflect own risk</td></tr>
+      <tr><td>Mitigation needed</td><td>Open enrolment + risk equalisation mechanism</td><td>Underwriting (FMU or moratorium)</td></tr>
+      <tr><td>Example</td><td>Ireland; health cash plans</td><td>UK PMI (traditional); India PMI</td></tr>
+      <tr><td>Lifetime community rating</td><td colspan="2">Premiums vary by age at entry but remain level thereafter — reduces anti-selection by incentivising early joining</td></tr>
+    </table>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- TAB 4: UNDERWRITING & CLAIMS -->
+  <!-- ═══════════════════════════════════════════════════ -->
+  <div id="tab-uw-claims" class="section-panel">
+    <div class="section-header">
+      <div class="section-icon" style="background:var(--red-pale);">🔍</div>
+      <div>
+        <div class="section-title">Underwriting & Claims</div>
+        <div class="section-subtitle">UW approaches, claims management, capitation, cost control</div>
+      </div>
+    </div>
+
+    <div class="sub-heading">Underwriting Approaches</div>
+    <table class="compare-table">
+      <tr><th>Approach</th><th>How It Works</th><th>Pros</th><th>Cons</th></tr>
+      <tr>
+        <td>Full Medical Underwriting (FMU)</td>
+        <td>Detailed medical questionnaire; explicit exclusions applied to pre-existing conditions</td>
+        <td>Clearest policy position; fewer post-claim disputes; reduces adverse selection; pricing more accurate</td>
+        <td>High admin cost; delays acceptance; discourages applications; may deter older/sicker lives (adverse selection into other products)</td>
+      </tr>
+      <tr>
+        <td>Moratorium</td>
+        <td>No upfront questions; blanket exclusion for any conditions present in X years pre-inception; exclusion lifted after Y clean years</td>
+        <td>Simple; fast acceptance; lower admin cost; attractive to applicants</td>
+        <td>Claim disputes at point of claim (was condition pre-existing?); non-contestable after 60 months (except fraud) under IRDAI; higher uncertainty in claims</td>
+      </tr>
+      <tr>
+        <td>CPME (Continued Personal Medical Exclusion)</td>
+        <td>Exclusions carry over from previous insurer to new insurer on switching</td>
+        <td>Facilitates portability without loss of protection; prevents anti-selection on switch</td>
+        <td>Requires data transfer between insurers; complexity; trust in previous insurer's records</td>
+      </tr>
+      <tr>
+        <td>Community Rating (no UW)</td>
+        <td>No medical questions; all accepted</td>
+        <td>Maximum inclusivity; simple sales; mass market appeal</td>
+        <td>Maximum adverse selection; requires waiting periods and risk equalisation to be viable</td>
+      </tr>
+    </table>
+
+    <div class="sub-heading">Claims Management — Key Features</div>
+    <div class="cards-grid">
+      <div class="card">
+        <div class="card-header teal">🏥 Cashless Settlement (India)</div>
+        <div class="card-body">
+          <ul class="bullet-list">
+            <li>IRDAI 2024: 100% cashless target for all network hospitals</li>
+            <li>Pre-authorisation mandatory; 1-hour TAT for routine; 3-hour for emergency</li>
+            <li>No claim denied without CRC (Claim Review Committee) approval</li>
+            <li>Claim denial must cite specific policy terms</li>
+            <li>TPA (Third Party Administrator) often manages cashless interface</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header gold">📋 Claims Characteristics</div>
+        <div class="card-body">
+          <ul class="bullet-list">
+            <li>High complaint volumes are characteristic of PMI (complex policy terms, disputed exclusions)</li>
+            <li>OP claims: high-frequency, low-value; different reporting lag; fraud/waste higher</li>
+            <li>IP claims: lower frequency; easier to verify (hospitalisation evidence clear)</li>
+            <li>Chronic condition claims — boundary disputes with insurer; may require PMC review</li>
+            <li>Large claims (cancer, organ transplants, medical evacuation) — catastrophic tail risk</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="sub-heading">Capitation vs Fee-for-Service vs Bundled</div>
+    <div class="alert-box gold">
+      <span class="alert-icon">📌</span>
+      <div><strong>Tested in IAI July 2022 Q2vi and IAI Sep 2017 Q1.</strong> Core question: who bears utilisation risk?</div>
+    </div>
+    <table class="compare-table">
+      <tr><th>Model</th><th>Mechanism</th><th>Insurer Risk</th><th>Provider Risk</th><th>Best For</th></tr>
+      <tr>
+        <td>Capitation</td>
+        <td>Fixed per-member-per-year to provider; provider bears all utilisation risk</td>
+        <td>Low (cost certainty)</td>
+        <td>High (bears utilisation risk)</td>
+        <td>OP/dental where costs predictable; mass enrolment</td>
+      </tr>
+      <tr>
+        <td>Fee-for-Service</td>
+        <td>Insurer pays agreed tariff per procedure/consultation</td>
+        <td>High (bears utilisation risk)</td>
+        <td>Low</td>
+        <td>IP; specialist procedures; where volumes uncertain</td>
+      </tr>
+      <tr>
+        <td>Bundled Payment</td>
+        <td>Single payment for entire episode of care (e.g. hip replacement all-in)</td>
+        <td>Medium</td>
+        <td>Medium</td>
+        <td>Defined surgical episodes; controls complications costs</td>
+      </tr>
+    </table>
+
+    <div class="accordion-item">
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        Capitation — Merits & Challenges (IAI July 2022 Q2vi) <span class="accordion-arrow">›</span>
+      </div>
+      <div class="accordion-body">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+          <div>
+            <div class="card-header teal" style="border-radius:6px 6px 0 0;padding:8px 12px;">Merits</div>
+            <ul class="bullet-list" style="padding:10px 14px;background:white;border:1px solid var(--border);border-top:none;border-radius:0 0 6px 6px;">
+              <li>Provider receives fixed PMPY — cost certainty for insurer</li>
+              <li>OP is prone to waste/abuse/fraud — capitation emphasises efficiency of care (provider profits decrease with higher utilisation)</li>
+              <li>Particularly useful for new risks where insurer lacks own OP data</li>
+              <li>Predictable income for provider; enables long-term planning</li>
+              <li>Reduces admin (no per-claim billing)</li>
+            </ul>
+          </div>
+          <div>
+            <div class="card-header red" style="border-radius:6px 6px 0 0;padding:8px 12px;">Challenges</div>
+            <ul class="bullet-list" style="padding:10px 14px;background:white;border:1px solid var(--border);border-top:none;border-radius:0 0 6px 6px;">
+              <li>Hard to negotiate blanket capitation — provider needs to estimate expected utilisation</li>
+              <li>Policyholders may be unhappy if provider compromises on quality of care</li>
+              <li>Provider may convert OP to IP to manage their cost — adverse for insurer</li>
+              <li>Members may need to attend different providers for OP vs IP — inconvenient</li>
+              <li>Regulations may prohibit arrangement</li>
+              <li>Counterparty risk if provider financially distressed</li>
+              <li>Provider reputation damage reflects on insurer</li>
+              <li>Could cost more than fee-for-service if provider over-estimates capitation fee</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sub-heading">Experience Analysis — Poor PMI Performance</div>
+    <div class="accordion-item">
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        Causes of PMI Claims Deterioration <span class="accordion-arrow">›</span>
+      </div>
+      <div class="accordion-body">
+        <ul class="bullet-list">
+          <li>Business mix shifts (older or higher-risk lives entering pool; new distribution channels with different risk profile)</li>
+          <li>Selective lapsing — healthy lives lapse on repricing, leaving sicker pool behind</li>
+          <li>Higher-than-expected medical inflation (super-inflation effect)</li>
+          <li>New / more expensive treatment protocols (new drugs, diagnostics)</li>
+          <li>Large individual claims (cancer, medical evacuation, multi-organ failure)</li>
+          <li>Lax claims management / increased fraud</li>
+          <li>Provider price increases (tariff renegotiation, market power)</li>
+          <li>Reduction in State healthcare quality → demand shifts to private</li>
+          <li>Moral hazard (overclaiming; induced demand by providers under FFS)</li>
+          <li>Random fluctuation (especially for small portfolios)</li>
+          <li>Introduction of new coverage (mental illness, OP) — insufficient pricing data</li>
+        </ul>
+      </div>
+    </div>
+    <div class="accordion-item">
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        Actions to Reduce A/E Deterioration <span class="accordion-arrow">›</span>
+      </div>
+      <div class="accordion-body">
+        <ul class="bullet-list">
+          <li>Add pricing margins for anti-selection; review and tighten UW standards</li>
+          <li>Tighten claims management (GP referral requirements; pre-auth; second opinion)</li>
+          <li>Review benefit utilisation; introduce or increase deductibles/co-payments</li>
+          <li>Diversify business mix toward healthier segments (digital/younger lives)</li>
+          <li>Incentivise healthy behaviours (wellness programs, NCD)</li>
+          <li>Negotiate fixed-fee schedules with providers; preferred network expansion</li>
+          <li>Introduce managed care for chronic/high-risk patients</li>
+          <li>Review policy wording to limit unexpected claims; clarify chronic/acute boundary</li>
+          <li>Consider reinsurance (XL for catastrophic IP; QS for OP volume)</li>
+          <li>Run-off poor segments; withdraw products if unviable</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- TAB 5: RELATED PRODUCTS -->
+  <!-- ═══════════════════════════════════════════════════ -->
+  <div id="tab-related" class="section-panel">
+    <div class="section-header">
+      <div class="section-icon" style="background:#e8edf5;">🗂</div>
+      <div>
+        <div class="section-title">Related Products</div>
+        <div class="section-subtitle">Health Cash Plans, MME, Waiting List, Dental/Optical, Personal Accident</div>
+      </div>
+    </div>
+
+    <div class="sub-heading">Major Medical Expenses (MME) vs PMI vs CI</div>
+    <table class="compare-table">
+      <tr><th>Feature</th><th>PMI</th><th>MME</th><th>CI</th></tr>
+      <tr><td>Trigger</td><td>Any covered acute illness/treatment</td><td>Undergoing specified surgery (e.g. hip replacement, bypass)</td><td>Diagnosis of specified serious illness (e.g. cancer, heart attack, stroke)</td></tr>
+      <tr><td>Benefit type</td><td>Indemnity (actual cost)</td><td>Fixed lump sum by procedure class</td><td>Fixed lump sum on diagnosis</td></tr>
+      <tr><td>Surgery required?</td><td>No — covers medical treatment broadly</td><td>Yes — operation is the trigger</td><td>No — diagnosis is trigger; may or may not need surgery</td></tr>
+      <tr><td>Out-patient cover</td><td>Often included</td><td>No — in-patient only</td><td>N/A (lump sum, no treatment cost)</td></tr>
+      <tr><td>Premium relative</td><td>Highest</td><td>Medium</td><td>Depends on conditions covered</td></tr>
+      <tr><td>Admin complexity</td><td>High (indemnity)</td><td>Low (fixed schedule)</td><td>Low to Medium</td></tr>
+      <tr><td>Overlap area</td><td>–</td><td>Heart bypass (also a CI condition)</td><td>Heart bypass covers both; hip replacement covers neither CI</td></tr>
+    </table>
+
+    <div class="sub-heading">Health Cash Plans — Deep Dive</div>
+    <div class="cards-grid">
+      <div class="card">
+        <div class="card-header teal">💊 Product Features</div>
+        <div class="card-body">
+          <ul class="bullet-list">
+            <li>Defined cash benefits for: dental, optical, physiotherapy, maternity, hospitalisation, recuperation, hearing aids, consultations</li>
+            <li>Very low premiums (~£2/week or equivalent)</li>
+            <li>Benefits may be % of medical bill (e.g. 50%) — a form of co-insurance</li>
+            <li>Benefits bought in 'units' — higher unit = proportionally higher premium + benefit</li>
+            <li>Typically community-rated (no individual UW)</li>
+            <li>Waiting period often applies (6 months); no waiting on accidents</li>
+            <li>Moratorium may exclude pre-existing conditions</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header gold">📈 Why Community Rating?</div>
+        <div class="card-body">
+          <ul class="bullet-list">
+            <li>Full UW cost would be disproportionate to small premiums</li>
+            <li>UW delays are unacceptable — simplicity and speed are key selling points</li>
+            <li>Waiting period substitutes for UW to reduce anti-selection</li>
+            <li>Community rating creates cross-subsidy: older/sicker pay less than risk, subsidised by younger/healthier</li>
+            <li>Better risks may switch to individually-rated insurers → adverse selection spiral risk</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header navy">📊 Profitability Drivers</div>
+        <div class="card-body">
+          <ul class="bullet-list">
+            <li>Long-term policyholder loyalty — initial expenses spread over many years</li>
+            <li>Cost-efficient claims administration (high volume/low value — automation critical)</li>
+            <li>Large volumes in force to spread fixed costs</li>
+            <li>'Inertia' factor — people don't claim for small entitlements; adjust pricing if inertia not already in data</li>
+            <li>High renewal rates (persistency) essential for expense recovery</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="sub-heading">Dental Plans — Capitation vs Indemnity</div>
+    <table class="compare-table">
+      <tr><th>Feature</th><th>Capitation Basis</th><th>Indemnity Basis</th></tr>
+      <tr><td>Mechanism</td><td>Insurer pays dentist fixed annual amount per insured mouth; dentist bears utilisation risk</td><td>Insurer pays actual treatment costs (often with limits, excess, co-insurance)</td></tr>
+      <tr><td>Claims risk</td><td>Dentist bears it</td><td>Insurer bears it</td></tr>
+      <tr><td>Insurer admin</td><td>Low — mainly emergency treatment claims; no per-treatment billing</td><td>High — processes every treatment claim</td></tr>
+      <tr><td>Provider incentive</td><td>Minimise treatment (to maximise profit) — quality risk</td><td>Maximise treatment (moral hazard / induced demand)</td></tr>
+    </table>
+
+    <div class="sub-heading">Personal Accident Insurance</div>
+    <div class="cards-grid">
+      <div class="card">
+        <div class="card-header navy">📋 Key Features</div>
+        <div class="card-body">
+          <ul class="bullet-list">
+            <li>Short-term, annually renewable</li>
+            <li><strong>NOT indemnity</strong> — fixed benefit for specified injuries (loss of limb, sight, hearing, PTD, accidental death); financial value of physical loss cannot be objectively quantified</li>
+            <li>Benefits can cover policyholder's family; rider benefits for children common at lower level</li>
+            <li>Exposure measure: <strong>person-year</strong> (or member/employee-year)</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header teal">⚖️ Rating & Claims</div>
+        <div class="card-body">
+          <ul class="bullet-list">
+            <li>Rating factors: primarily <strong>occupation</strong> (demolition vs clerical); age/gender generally NOT used</li>
+            <li>Industry serves as proxy for occupation in group schemes</li>
+            <li>Claims usually reported and settled quickly — incidence clear; benefits predetermined</li>
+            <li>Exception: PTD (Permanent Total Disability) may take months/years to confirm</li>
+            <li>Claims can be very large; frequency tends to be stable</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- TAB 6: RISKS -->
+  <!-- ═══════════════════════════════════════════════════ -->
+  <div id="tab-risks" class="section-panel">
+    <div class="section-header">
+      <div class="section-icon" style="background:var(--red-pale);">⚠️</div>
+      <div>
+        <div class="section-title">PMI — Risks & Risk Management</div>
+        <div class="section-subtitle">Key risks, new market entry, government schemes, market dynamics</div>
+      </div>
+    </div>
+
+    <div class="sub-heading">Core PMI Risks</div>
+    <div class="cards-grid">
+      <div class="card">
+        <div class="card-header red">📉 Insurance/Morbidity Risk</div>
+        <div class="card-body">
+          <ul class="bullet-list">
+            <li>Higher-than-expected claim frequency or severity</li>
+            <li>Medical inflation exceeds pricing trend assumption</li>
+            <li>New treatments / expensive drugs emerge after pricing</li>
+            <li>Adverse business mix (age, channel, UW method)</li>
+            <li>Deterioration of State healthcare quality → demand shift</li>
+            <li>Catastrophic individual claims (cancer, organ transplants)</li>
+            <li>Epidemic / pandemic risks (sudden surge in claims)</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header gold">🔄 Anti-Selection Risk</div>
+        <div class="card-body">
+          <ul class="bullet-list">
+            <li>Lapse of healthy lives on repricing → sick lives stay → deteriorating pool</li>
+            <li>Community-rated products particularly vulnerable</li>
+            <li>New distribution channel (digital) attracts different risk profile</li>
+            <li>Gender-neutral pricing → adverse selection if one gender is cheaper</li>
+            <li>Portability (India) — waiting periods don't re-apply to transferred policies</li>
+            <li>Moratorium UW → dispute at claim time if condition was pre-existing</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header navy">⚙️ Operational / Model Risk</div>
+        <div class="card-body">
+          <ul class="bullet-list">
+            <li>High complaint volumes — regulatory scrutiny</li>
+            <li>OP launch operational readiness — high-volume low-value systems</li>
+            <li>Fraud: provider overbilling; policyholder fabrication; especially OP</li>
+            <li>Provider (capitation) counterparty risk</li>
+            <li>TPA dependency / data quality</li>
+            <li>Data privacy risk (wearables, ABHA, DPDP 2023)</li>
+            <li>Cyber risk (digital health records)</li>
+          </ul>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header red">🏛 Regulatory / Political Risk</div>
+        <div class="card-body">
+          <ul class="bullet-list">
+            <li>Government introduces free public healthcare → mass lapse risk</li>
+            <li>Government subsidy to healthcare providers → demand for low-tier PMI falls</li>
+            <li>IRDAI regulatory changes (waiting period caps, AYUSH parity, mental illness)</li>
+            <li>Gender-neutral pricing mandate → need to rebalance rates</li>
+            <li>PMJAY expansion → boundary with private PMI blurs</li>
+            <li>Community rating mandate (as in Ireland) → structural market change</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="sub-heading">New Market Entry Risks (IAI May 2023)</div>
+    <div class="accordion-item">
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        Entering a New Overseas PMI Market — Key Risks & Data Sources <span class="accordion-arrow">›</span>
+      </div>
+      <div class="accordion-body">
+        <div class="sub-heading" style="margin-top:0;">Risks</div>
+        <ul class="bullet-list">
+          <li>Lifestyle and morbidity prevalence differences from home market</li>
+          <li>Idiosyncratic demographics (e.g. aging population driving higher healthcare demand)</li>
+          <li>Medical innovation/technology costs — different from home market</li>
+          <li>Policyholder and healthcare provider behaviour differences</li>
+          <li>Claims control and fraud effectiveness — unfamiliar territory</li>
+          <li>Macro-economic factors (currency fluctuation, local medical inflation)</li>
+          <li>Regulatory uncertainty — different approval process, solvency requirements</li>
+          <li>Distribution channel risk — no established relationships</li>
+          <li>Expense uncertainty — no economies of scale initially</li>
+        </ul>
+        <div class="sub-heading">Possible Data Sources</div>
+        <ul class="bullet-list">
+          <li>Local regulator published statistics (equivalent of IRDAI data)</li>
+          <li>Global reinsurer databases (experience from similar markets)</li>
+          <li>WHO, World Bank health statistics</li>
+          <li>Local TPA / hospital discharge data</li>
+          <li>Academic/public health research on disease prevalence</li>
+          <li>Partnership with local insurer (joint venture) to access portfolio data</li>
+          <li>Own market experience adjusted by relativity indices</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="sub-heading">Government Subsidy Schemes — Impact on PMI Market</div>
+    <div class="accordion-item">
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        Government IP-only Healthcare Subsidy (IFoA Apr 2023) <span class="accordion-arrow">›</span>
+      </div>
+      <div class="accordion-body">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+          <div>
+            <div class="card-header teal" style="border-radius:6px;padding:8px 12px;margin-bottom:8px;">Why IP-only subsidy?</div>
+            <ul class="bullet-list">
+              <li>Target highest-cost needs (hospitalisation)</li>
+              <li>Limit fiscal exposure (OP volume is vast)</li>
+              <li>Contract with manageable number of hospital providers</li>
+              <li>Standardise fees for set procedures</li>
+              <li>Rely on readily available hospital cost data</li>
+              <li>OP subsidies harder to administer; more prone to fraud; broader cost base</li>
+            </ul>
+          </div>
+          <div>
+            <div class="card-header red" style="border-radius:6px;padding:8px 12px;margin-bottom:8px;">Impact on Insurers</div>
+            <ul class="bullet-list">
+              <li>Reduces demand for low-tier PMI / health cash plans (subsidised segment)</li>
+              <li>Selective lapsing among subsidised policyholders</li>
+              <li>Adverse volume and expense impact for insurers targeting low-income market</li>
+              <li>Potential opportunity: demand for top-up / supplementary cover grows</li>
+              <li>Means-tested: only affects certain income bands → partial market disruption</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sub-heading">Digital Distribution Risks</div>
+    <div class="accordion-item">
+      <div class="accordion-header" onclick="toggleAccordion(this)">
+        IFA Distribution / Online Sales — Specific Risks (IFoA Sep 2022) <span class="accordion-arrow">›</span>
+      </div>
+      <div class="accordion-body">
+        <ul class="bullet-list">
+          <li>Online distribution attracts younger, healthier lives — different risk profile vs traditional broker/agent</li>
+          <li>AI-based UW: regulatory concerns; IRDAI compliance required; transparency/fairness challenges</li>
+          <li><strong>IFA/financial advisor churning risk:</strong> advisors may move policyholders to competing insurers to earn fresh commission → selective lapses, reduced persistency</li>
+          <li>Commission clawback terms are the primary mitigant for churning</li>
+          <li>IFA-distributed business competes on both price AND policy terms — not price alone</li>
+          <li>New entrant could disrupt by offering more comprehensive terms at similar premium</li>
+          <li>If government introduces free public healthcare → market for short-term products may contract sharply; mitigation = product diversification and monitoring of policy developments</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- TAB 7: FLASHCARDS -->
+  <!-- ═══════════════════════════════════════════════════ -->
+  <div id="tab-flashcards" class="section-panel">
+    <div class="section-header">
+      <div class="section-icon" style="background:var(--teal-pale);">🃏</div>
+      <div>
+        <div class="section-title">Flashcards</div>
+        <div class="section-subtitle">Click any card to reveal the answer</div>
+      </div>
+    </div>
+    <div id="flashcard-container"></div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- TAB 8: IAI EXAM QUESTIONS -->
+  <!-- ═══════════════════════════════════════════════════ -->
+  <div id="tab-iai-qs" class="section-panel">
+    <div class="section-header">
+      <div class="section-icon" style="background:var(--teal-pale);">📝</div>
+      <div>
+        <div class="section-title">IAI Exam Questions — PMI</div>
+        <div class="section-subtitle">Questions and model answers from IAI SA1 papers</div>
+      </div>
+    </div>
+    <div id="iai-questions-container"></div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- TAB 9: IFoA EXAM QUESTIONS -->
+  <!-- ═══════════════════════════════════════════════════ -->
+  <div id="tab-ifoa-qs" class="section-panel">
+    <div class="section-header">
+      <div class="section-icon" style="background:var(--gold-pale);">🎓</div>
+      <div>
+        <div class="section-title">IFoA Exam Questions — PMI</div>
+        <div class="section-subtitle">SP1 papers with PMI focus (April 2004 – Sep 2025)</div>
+      </div>
+    </div>
+
+    <div class="alert-box teal">
+      <span class="alert-icon">📌</span>
+      <div>IFoA questions are scenario-based. The <strong>key skill</strong> is adapting PMI principles to the fictional country/context. Always look for the specific factors in the scenario before applying generic knowledge.</div>
+    </div>
+
+    <!-- IFoA Apr 2021 (PMI market) -->
+    <div class="exam-question">
+      <div class="eq-header" onclick="toggleEQ(this)">
+        <div class="eq-header-left">
+          <span class="eq-source-badge ifoa">IFoA Apr 2021 — Q1</span>
+          <span class="eq-marks">43 marks</span>
+        </div>
+        <div class="eq-question">PMI market — current healthcare assessment, community rating, rating restrictions, reserving for not-for-profit insurer</div>
+        <div class="eq-toggle">▾</div>
+      </div>
+      <div class="eq-scenario">Country A: PMI-based healthcare (limited State provision); aging population; rising treatment costs; new government wants to improve affordability and coverage via 3 options: (1) mandatory low-cost Health Cash Plan alternative; (2) restrict rating factors (no gender, limited age banding, no UW); (3) government not-for-profit PMI company with minimal UW.</div>
+      <div class="eq-body">
+        <div class="eq-section-title">Option 1 — Mandatory HCP alternative: Advantages / Disadvantages</div>
+        <ul class="bullet-list">
+          <li><strong>Citizens (Adv):</strong> Lower cost entry-level cover; wider access; defined certainty on benefit amounts; appeals to lower income; encourages healthcare engagement</li>
+          <li><strong>Citizens (Dis):</strong> Fixed cash benefit may not cover actual costs (inflation risk on policyholder); less comprehensive than PMI; may create two-tier system</li>
+          <li><strong>Insurers (Adv):</strong> New market segment; volume growth; simpler product to administer</li>
+          <li><strong>Insurers (Dis):</strong> Mandatory requirement may force cross-subsidy; may cannibalise PMI sales; adverse selection if mainly sick lives choose HCP; regulatory burden of compliance</li>
+        </ul>
+        <div class="eq-section-title">Option 2 — Rating Factor Restrictions (no gender; age cap 3:1; no medical UW)</div>
+        <ul class="bullet-list">
+          <li><strong>Citizens (impact):</strong> Younger lives pay more (subsidise older); women may pay more or less depending on current rating; policyholders with PECs benefit (no UW); overall affordability improves for older/sicker lives; affordability worsens for young/healthy</li>
+          <li><strong>Insurer concerns:</strong> Inability to rate by gender removes a key differentiator; restricted age banding creates cross-subsidy risk; without UW, anti-selection is acute; need open enrolment mandate + risk equalisation to survive</li>
+          <li><strong>Government actions:</strong> Mandate open enrolment (prevent cherry-picking); implement risk equalisation (redistribute premiums from low-risk to high-risk insurers); lifetime community rating to incentivise early joining</li>
+        </ul>
+        <div class="eq-section-title">Option 3 — Government not-for-profit PMI Reserving Considerations</div>
+        <ul class="bullet-list">
+          <li>No historical data → must use industry data, reinsurer data, international benchmarks</li>
+          <li>Minimal UW → higher adverse selection → heavier morbidity assumptions needed</li>
+          <li>Not-for-profit → no profit margin; but still need adequate reserves + capital</li>
+          <li>Government backing → implicit guarantee? Does this reduce capital requirement?</li>
+          <li>Aging population → future trend assumption critical; IBNR pattern uncertain without data</li>
+          <li>Medical inflation assumption → highly uncertain; must stress test</li>
+          <li>Lapse assumption → minimal UW products attract older/sicker who tend to persist → lower lapse rate than market average</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- IFoA Sep 2022 (PMI vs MME) -->
+    <div class="exam-question">
+      <div class="eq-header" onclick="toggleEQ(this)">
+        <div class="eq-header-left">
+          <span class="eq-source-badge ifoa">IFoA Sep 2022 — Q1</span>
+          <span class="eq-marks">34 marks</span>
+        </div>
+        <div class="eq-question">PMI vs MME — preference, distribution risk profiles, risk management; Company A (online) vs Company B (IFA/high-wealth)</div>
+        <div class="eq-toggle">▾</div>
+      </div>
+      <div class="eq-scenario">Country X: young/healthy population; private-only healthcare; main products PMI and MME (fixed sum on major surgery). Company A = online/social media (no advice). Company B = high-wealth credit card + IFA distribution.</div>
+      <div class="eq-body">
+        <div class="eq-section-title">Why prefer MME over PMI?</div>
+        <ul class="bullet-list">
+          <li>Lower premiums (MME is cheaper — limited scope of cover)</li>
+          <li>For young/healthy: PMI may cover more than needed; prefer self-funding minor costs</li>
+          <li>Simplicity — fixed benefit, simpler underwriting, faster acceptance</li>
+          <li>Fewer exclusions — medical UW for MME often less stringent</li>
+          <li>Belief that they won't need comprehensive cover</li>
+        </ul>
+        <div class="eq-section-title">Company A (Online) Risk Profile vs Company B (IFA/HNW)</div>
+        <ul class="bullet-list">
+          <li><strong>Company A:</strong> Younger ages; less financially sophisticated; less wealthy; MME and simplified PMI with moratorium UW; higher lapse risk; lower sum assured; ACI (Accelerated CI) for mortgage-linked younger lives</li>
+          <li><strong>Company B:</strong> Older/wealthier; PMI more common (can afford); higher sums assured; IFA advice → better matched products; LTC possible given HNW profile; better health (wealthier occupations); IFA churning risk</li>
+        </ul>
+        <div class="eq-section-title">Key Risk Differences</div>
+        <ul class="bullet-list">
+          <li>Company A: higher lapse risk; adverse selection (no advice, self-select); cyber/data risk; regulatory risk on non-advised sales; model risk (online UW algorithms)</li>
+          <li>Company B: IFA churning risk (selective lapses); concentration in HNW segment; competition on policy terms not just price; regulatory scrutiny on advice quality</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- IFoA Apr 2020 (PMI Q1) -->
+    <div class="exam-question">
+      <div class="eq-header" onclick="toggleEQ(this)">
+        <div class="eq-header-left">
+          <span class="eq-source-badge ifoa">IFoA Apr 2020 — Q1</span>
+          <span class="eq-marks">48 marks</span>
+        </div>
+        <div class="eq-question">Group A (global PMI group): Community Rating, Risk Equalisation, market entry modes, acquisition due diligence</div>
+        <div class="eq-toggle">▾</div>
+      </div>
+      <div class="eq-scenario">Group A: global PMI group considering Country X (community rating + risk equalisation). Group A considering 3 entry modes: (a) acquire existing insurer (Company B — competitor's subsidiary with static growth, declining profits); (b) JV with local non-health insurer; (c) set up new company.</div>
+      <div class="eq-body">
+        <div class="eq-section-title">Community Rating — Definition & Advantages/Disadvantages</div>
+        <ul class="bullet-list">
+          <li><strong>Definition:</strong> All policyholders (or a defined subset) charged same premium regardless of individual risk characteristics (age, gender, health status)</li>
+          <li><strong>Adv:</strong> Equitable — sicker/older pay affordable premiums; encourages broad participation; avoids underwriting cost/complexity; simpler product design; reduces stigma of illness</li>
+          <li><strong>Dis:</strong> Cross-subsidy → young/healthy subsidise old/sick → young may choose not to buy → adverse selection spiral; must mandate open enrolment or provide incentives to join young; requires risk equalisation to prevent insurer cherry-picking</li>
+        </ul>
+        <div class="eq-section-title">Risk Equalisation</div>
+        <ul class="bullet-list">
+          <li>Mechanism: transfers funds from insurers with lighter-than-average risk pools to those with heavier-than-average pools</li>
+          <li>Prevents adverse selection at insurer level (cherry-picking healthier lives)</li>
+          <li>Allows community rating to function sustainably</li>
+        </ul>
+        <div class="eq-section-title">Acquisition of Company B — Factors to Consider</div>
+        <ul class="bullet-list">
+          <li>Quality of claims/UW data; IBNR reserves adequacy; claims trends</li>
+          <li>Medical inflation trend embedded in pricing vs actual</li>
+          <li>Reinsurance treaties — what carries across; counterparty quality</li>
+          <li>Lapse rates and persistency; distribution relationships</li>
+          <li>IT systems compatibility; integration costs</li>
+          <li>Staff expertise; regulatory approvals required</li>
+          <li>Reason for sale — why is Group C selling? Hidden liabilities?</li>
+          <li>Regulatory capital requirements under Country X's local regime</li>
+          <li>Embedded value / appraisal value methodology</li>
+          <li>Distribution agreements; renewal terms</li>
+          <li>Litigation / complaints pipeline</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- IFoA Sep 2025 -->
+    <div class="exam-question">
+      <div class="eq-header" onclick="toggleEQ(this)">
+        <div class="eq-header-left">
+          <span class="eq-source-badge ifoa">IFoA Sep 2025 — Q1</span>
+          <span class="eq-marks">38 marks</span>
+        </div>
+        <div class="eq-question">Annual health check option with wearable device for PMI; Solvency II BEL impact; third-party outsourcing; annual charge introduction</div>
+        <div class="eq-toggle">▾</div>
+      </div>
+      <div class="eq-scenario">Company B (PMI provider, Solvency II): marketing director proposes annual health check (30-min with healthcare professional) + wearable device (step count, heart rate, calories, weight). Policyholders who use it get PMI premium discount. Data shared with Company B. No charge for health check; small upfront charge for device. Third-party company to administer the service.</div>
+      <div class="eq-body">
+        <div class="eq-section-title">Advantages / Disadvantages — Company B</div>
+        <ul class="bullet-list">
+          <li><strong>Adv:</strong> Healthier policyholders → lower claims; differentiates product; improves policyholder engagement; data for better pricing/UW; potential reduction in BEL; cross-sell opportunities; positive PR / wellness positioning</li>
+          <li><strong>Dis:</strong> Cost of health check (no charge to PH); device cost; only healthy lives likely take up → adverse selection by take-up (those NOT taking up may be sicker); complex administration; data privacy and cyber risk; regulatory scrutiny on data use; uncertainty in assumption changes; outsourcing risk to third party</li>
+        </ul>
+        <div class="eq-section-title">Advantages / Disadvantages — Policyholders</div>
+        <ul class="bullet-list">
+          <li><strong>Adv:</strong> Premium discount; improved health awareness; free health check; better health outcomes; sense of engagement and control</li>
+          <li><strong>Dis:</strong> Privacy concern (insurer sees personal health data); feel monitored/surveilled; discount uncertain; device upfront charge; not accessible to all (disability, remote area); unfair perception if discount is significant</li>
+        </ul>
+        <div class="eq-section-title">Solvency II BEL Impact</div>
+        <ul class="bullet-list">
+          <li>Morbidity/claims frequency assumptions may reduce for those using the health check (selection bias + genuine health improvement)</li>
+          <li>But take-up rate uncertain → assumption uncertainty increases</li>
+          <li>Lapse assumptions: those taking up are more engaged → potentially lower lapses; those not taking up may lapse if competitor offers similar discount</li>
+          <li>New business volume assumption affected (if product becomes more attractive)</li>
+          <li>Expense assumptions: cost of health check; device; third-party fee → increase in best estimate expense loading</li>
+          <li>Medical inflation assumption: unchanged short term; potentially lower long-term if policyholders genuinely healthier</li>
+          <li>Overall: BEL may decrease (if genuine claims reduction) but more uncertainty → risk margin may increase</li>
+        </ul>
+        <div class="eq-section-title">Third-Party Company Considerations</div>
+        <ul class="bullet-list">
+          <li>Due diligence on track record in similar markets</li>
+          <li>Data security and GDPR/privacy compliance</li>
+          <li>Service level agreements (SLA) — TAT, quality standards</li>
+          <li>Regulatory approval for outsourcing arrangement</li>
+          <li>Business continuity planning</li>
+          <li>Contractual termination rights; transition plan</li>
+          <li>Financial strength of third party (counterparty risk)</li>
+          <li>Number and location of medical centres — geographic coverage for policyholders</li>
+          <li>Staff qualifications and indemnity insurance</li>
+          <li>Data ownership and access rights</li>
+        </ul>
+        <div class="eq-section-title">Finance Director's Proposal: Annual Charge for Health Check</div>
+        <ul class="bullet-list">
+          <li><strong>For new business:</strong> Reasonable — clear pricing from outset; policyholders can evaluate cost vs benefit</li>
+          <li><strong>For existing business:</strong> Very problematic — changes terms mid-policy; may breach contract; adverse customer reaction; lapses; regulatory complaints; possible mis-selling allegation</li>
+          <li>Alternative: remove or reduce the premium discount instead; phase out device subsidy; redesign for new business only</li>
+          <li>Profitability concern legitimate but customer fairness (TCF) must be balanced; regulator likely to object to retrospective change</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- TAB 10: MNEMONICS -->
+  <!-- ═══════════════════════════════════════════════════ -->
+  <div id="tab-mnemonics" class="section-panel">
+    <div class="section-header">
+      <div class="section-icon" style="background:var(--navy);">🧠</div>
+      <div>
+        <div class="section-title">Mnemonics & Memory Aids</div>
+        <div class="section-subtitle">Quick-recall frameworks for exam conditions</div>
+      </div>
+    </div>
+
+    <div class="mnemonic-box">
+      <div class="mnemonic-title">PMI Exclusions — "SAGE PCC"</div>
+      <div class="mnemonic-letters">
+        <div class="mnemonic-item"><div class="mnemonic-letter">S</div><div class="mnemonic-word"><strong>Self-inflicted injuries</strong></div></div>
+        <div class="mnemonic-item"><div class="mnemonic-letter">A</div><div class="mnemonic-word"><strong>A&E / Accident & Emergency</strong></div></div>
+        <div class="mnemonic-item"><div class="mnemonic-letter">G</div><div class="mnemonic-word"><strong>GP services</strong> (primary care)</div></div>
+        <div class="mnemonic-item"><div class="mnemonic-letter">E</div><div class="mnemonic-word"><strong>Experimental drugs</strong> / war</div></div>
+        <div class="mnemonic-item"><div class="mnemonic-letter">P</div><div class="mnemonic-word"><strong>Pre-existing conditions</strong></div></div>
+        <div class="mnemonic-item"><div class="mnemonic-letter">C</div><div class="mnemonic-word"><strong>Chronic conditions</strong></div></div>
+        <div class="mnemonic-item"><div class="mnemonic-letter">C</div><div class="mnemonic-word"><strong>Cosmetic surgery</strong></div></div>
+      </div>
+    </div>
+
+    <div class="mnemonic-box">
+      <div class="mnemonic-title">Cost Control Mechanisms — "ENCODE P"</div>
+      <div class="mnemonic-letters">
+        <div class="mnemonic-item"><div class="mnemonic-letter">E</div><div class="mnemonic-word"><strong>Excess / Deductible</strong> — PH meets first tranche</div></div>
+        <div class="mnemonic-item"><div class="mnemonic-letter">N</div><div class="mnemonic-word"><strong>NCD Scheme</strong> — no-claim discount</div></div>
+        <div class="mnemonic-item"><div class="mnemonic-letter">C</div><div class="mnemonic-word"><strong>Co-insurance</strong> — shared proportion each claim</div></div>
+        <div class="mnemonic-item"><div class="mnemonic-letter">O</div><div class="mnemonic-word"><strong>Open-panel / PPO</strong> — preferred provider networks</div></div>
+        <div class="mnemonic-item"><div class="mnemonic-letter">D</div><div class="mnemonic-word"><strong>Day-care</strong> — incentivise over in-patient</div></div>
+        <div class="mnemonic-item"><div class="mnemonic-letter">E</div><div class="mnemonic-word"><strong>Entry waiting period</strong></div></div>
+        <div class="mnemonic-item"><div class="mnemonic-letter">P</div><div class="mnemonic-word"><strong>Pre-auth / Policy limits</strong> (AML, sub-limits)</div></div>
+      </div>
+    </div>
+
+    <div class="mnemonic-box">
+      <div class="mnemonic-title">PMI Claims Deterioration Causes — "BAD MIX FILM"</div>
+      <div class="mnemonic-letters">
+        <div class="mnemonic-item"><div class="mnemonic-letter">B</div><div class="mnemonic-word"><strong>Business mix shifts</strong> (older/higher-risk lives)</div></div>
+        <div class="mnemonic-item"><div class="mnemonic-letter">A</div><div class="mnemonic-word"><strong>Anti-selection</strong> (healthy lives lapse)</div></div>
+        <div class="mnemonic-item"><div class="mnemonic-letter">D</div><div class="mnemonic-word"><strong>Demand shift</strong> from State to private</div></div>
+        <div class="mnemonic-item"><div class="mnemonic-letter">M</div><div class="mnemonic-word"><strong>Medical inflation</strong> exceeds pricing trend</div></div>
+        <div class="mnemonic-item"><div class="mnemonic-letter">I</div><div class="mnemonic-word"><strong>Increased fraud</strong> / lax claims management</div></div>
+        <div class="mnemonic-item"><div class="mnemonic-letter">X</div><div class="mnemonic-word"><strong>X-large individual claims</strong> (catastrophic)</div></div>
+        <div class="mnemonic-item"><div class="mnemonic-letter">F</div><div class="mnemonic-word"><strong>Frequency / treatment costs</strong> (new protocols)</div></div>
+        <div class="mnemonic-item"><div class="mnemonic-letter">I</div><div class="mnemonic-word"><strong>Induced demand</strong> by providers</div></div>
+        <div class="mnemonic-item"><div class="mnemonic-letter">L</div><div class="mnemonic-word"><strong>Lapse of good risks</strong> (persistency poor)</div></div>
+        <div class="mnemonic-item"><div class="mnemonic-letter">M</div><div class="mnemonic-word"><strong>Mix of channel</strong> (digital vs traditional)</div></div>
+      </div>
+    </div>
+
+    <div class="mnemonic-box">
+      <div class="mnemonic-title">PMI Pricing Steps — "DATA PRICE"</div>
+      <div class="mnemonic-letters">
+        <div class="mnemonic-item"><div class="mnemonic-letter">D</div><div class="mnemonic-word"><strong>Data collection</strong> — industry / reinsurer / internal</div></div>
+        <div class="mnemonic-item"><div class="mnemonic-letter">A</div><div class="mnemonic-word"><strong>Analyse</strong> frequency × severity by rating factors</div></div>
+        <div class="mnemonic-item"><div class="mnemonic-letter">T</div><div class="mnemonic-word"><strong>Trend forward</strong> (medical inflation)</div></div>
+        <div class="mnemonic-item"><div class="mnemonic-letter">A</div><div class="mnemonic-word"><strong>Adjust</strong> for product design (excess, co-pay, sub-limits)</div></div>
+        <div class="mnemonic-item"><div class="mnemonic-letter">P</div><div class="mnemonic-word"><strong>Premium build-up</strong> (risk premium + loadings)</div></div>
+        <div class="mnemonic-item"><div class="mnemonic-letter">R</div><div class="mnemonic-word"><strong>Reinsurance</strong> cost / recoveries</div></div>
+        <div class="mnemonic-item"><div class="mnemonic-letter">I</div><div class="mnemonic-word"><strong>Internal model / profit test</strong></div></div>
+        <div class="mnemonic-item"><div class="mnemonic-letter">C</div><div class="mnemonic-word"><strong>Competitor benchmarking</strong></div></div>
+        <div class="mnemonic-item"><div class="mnemonic-letter">E</div><div class="mnemonic-word"><strong>IRDAI/Regulatory filing</strong></div></div>
+      </div>
+    </div>
+
+    <div class="sub-heading">Key Terms — Quick Reference</div>
+    <div class="key-terms-grid" id="key-terms-container"></div>
+  </div>
+
+</div><!-- /main-content -->
+
+<script>
+// ═══════════════════════════════════════════════════
+// DATA
+// ═══════════════════════════════════════════════════
+
+const FLASHCARDS = [
+  { q: "What is the key difference between acute and chronic conditions in PMI?", a: "Acute = expected to be cured through active treatment → PMI covers these. Chronic = no prospect of improvement (treatment may help symptoms only) → PMI excludes these; regarded as State's responsibility." },
+  { q: "Why does PMI usually exclude A&E treatment? (5 reasons)", a: "(1) A&E provided free by State. (2) Private hospitals lack emergency infrastructure. (3) Pre-auth impractical in emergency. (4) Patient may be incapacitated — cannot phone insurer. (5) Patient less concerned about comfort/choice in emergency." },
+  { q: "What is the difference between an excess (deductible) and co-insurance?", a: "Excess: policyholder meets the FIRST TRANCHE of each claim (e.g. first £200). Co-insurance: policyholder pays a FIXED PROPORTION of EVERY claim (e.g. 25% of each claim). Excess has no impact once breach threshold; co-insurance applies throughout." },
+  { q: "Under community rating, how does anti-selection arise?", a: "Better risks (younger, healthier) pay more than their expected cost → they switch to individually-rated insurers (where they get lower premiums). Community-rated insurer left with older/sicker pool → premiums must rise → more good risks leave → adverse selection spiral." },
+  { q: "Why is full medical underwriting (FMU) impractical for health cash plans?", a: "(1) Small premiums → UW cost is disproportionate loading. (2) Simplicity and speed of acceptance are key selling points → UW delays are unacceptable. (3) Waiting period substitutes for UW to reduce anti-selection." },
+  { q: "Explain the capitation model for dental/OP insurance.", a: "Insurer pays provider a FIXED ANNUAL AMOUNT PER INSURED LIFE (PMPY). Provider bears all utilisation risk — if policyholders use more treatment, provider's profit falls. Insurer gets cost certainty. Provider has incentive to minimise care (quality risk)." },
+  { q: "What is the burning cost formula for PMI pricing?", a: "Risk premium (per head) = Σ_k [ i_k × AC_k ] where i_k = incidence rate for benefit/procedure class k, and AC_k = average claim cost for class k. Must be split by IP/OP, age, gender, network, and adjusted for excesses, co-pays, sub-limits." },
+  { q: "What are the 3 main underwriting approaches for PMI? Key distinction?", a: "(1) FMU: detailed questionnaire; explicit exclusions for PECs. (2) Moratorium: no questions; blanket exclusion for conditions in X pre-inception years; exclusion lifted after Y clean years. (3) Community rating: no UW at all — open enrolment + waiting periods. Key distinction: when is the PEC risk assessed? FMU = at entry; Moratorium = at claim time." },
+  { q: "MME vs CI: what triggers the benefit?", a: "MME: triggered by UNDERGOING A SPECIFIED SURGICAL PROCEDURE (may not be life-threatening, e.g. hip replacement). CI: triggered by DIAGNOSIS of a specified serious illness (may not require surgery). Overlap: e.g. heart bypass (both). Non-overlap: hip replacement (MME only); cancer without surgery (CI only)." },
+  { q: "Why must OP cover be launched with minimal benefits and high co-pay?", a: "OP = high frequency, low severity → high fraud/waste/abuse risk; no prior experience data in new OP portfolio; high admin system requirements not yet built. Start minimal to build data, control exposure, understand utilisation before expanding benefits." },
+  { q: "What are the 4 main building blocks of an office PMI premium?", a: "Risk premium (expected claims) + Expense loading (initial + renewal) + Profit margin (required return on capital) + Contingency/reinsurance loading = Office premium." },
+  { q: "How does NCD differ from an excess in PMI?", a: "NCD: premium/benefit adjustment at RENEWAL based on prior year claim-free status. Excess: cost-sharing AT TIME OF CLAIM. NCD does not reduce benefit when a claim occurs; excess does. NCD provides future financial incentive to not claim; excess provides immediate incentive. Both discourage small claims but by different mechanisms." },
+  { q: "What is medical inflation and why is it so important in PMI pricing?", a: "Medical inflation = rate of increase in healthcare costs (treatment, drugs, diagnostics). In India historically 12-15% p.a. — far exceeds CPI. Key because PMI premiums must be set in advance; failure to trend claims forward leads to rapid deterioration in loss ratio. Super-inflation from new treatments/technology compounds the problem." },
+  { q: "What is an Annual Maximum Limit (AML) in PMI and why use it?", a: "AML = maximum amount the insurer will pay per policyholder per policy year. Limits insurer's liability on any one policy. Reduces premium. Risk: bad publicity if AML breached during serious illness (especially cancer, prolonged hospitalisation); policyholders may feel underprotected." },
+  { q: "What is Risk Equalisation and when is it needed?", a: "Risk Equalisation: mechanism that transfers funds from insurers with lighter-than-average risk pools to those with heavier-than-average pools. Needed when community rating is mandated — prevents insurers from cherry-picking younger/healthier lives (since all must charge same premium, profit is made by having good risks). Without it, rational behaviour destroys the community rating system." },
+  { q: "Under capitation, who bears the utilisation risk, and what is the key risk to the insurer?", a: "PROVIDER bears utilisation risk (they get fixed PMPY regardless of claims). Key risks to insurer: (1) Provider compromises care quality to maximise profit → reputational damage reflecting on insurer. (2) Counterparty risk if provider financially distressed. (3) Provider may convert OP claims to IP. (4) Could cost more than FFS if provider over-estimates the capitation fee." },
+  { q: "What is a moratorium and how long does it last before exclusion is lifted?", a: "Moratorium: at inception, all conditions present in X years pre-inception are excluded without individual assessment. Exclusion is LIFTED if policyholder completes Y years after inception with no symptoms/treatment/advice for that condition. Under IRDAI, policies become non-contestable after 60 months (except fraud)." },
+  { q: "Why does the IFoA argue that IP-only government subsidies make more sense than OP subsidies?", a: "(1) Target highest-cost needs efficiently. (2) Limit fiscal exposure (OP volume is vast). (3) Contract with manageable number of hospital providers. (4) Standardise fees for known procedures. (5) Readily available hospital cost data vs OP which is harder to administer, more fraud-prone, and has broader less-predictable cost base." },
+  { q: "What are the main reasons for an insurer choosing FMU over moratorium?", a: "FMU: (1) Clearer policy position → fewer disputes at claim time. (2) More accurate pricing (know exclusions upfront). (3) Better risk selection. (4) Lower IBNR uncertainty. Moratorium: cheaper/faster to accept; but disputes at claim time ('was condition pre-existing?') → higher complaint volumes; uncertainty in claims; IRDAI 60-month non-contestable rule increases risk." },
+  { q: "What does portability mean in Indian PMI and why does it matter for experience analysis?", a: "Portability: all credits (SI, NCB, waiting periods, moratorium progress) transfer when policyholder moves to new insurer. New insurer must decide within 5 days. Matters: waiting periods DO NOT re-apply → new insurer immediately exposed to PECs. Claims experience in new block is heavier than expected from a 'new' portfolio. Waiting period adjustment needed in pricing." },
+];
+
+const IAI_QUESTIONS = [
+  {
+    source: "IAI July 2022", qid: "Q2i", marks: 3,
+    scenario: "HealthX is an existing Indian health insurer with IP-only PMI. Board wants to add OP cover.",
+    question: "Outline the important features of a product covering IP benefits only.",
+    sections: {
+      "IP-only product features": [
+        "Reimburses medical expenses for hospitalisation due to sickness or injury. Requires minimum hours/days of hospitalisation — typically 24 hours.",
+        "Annually reviewable — premium rates/terms can vary year on year based on pool experience.",
+        "Annual Maximum Limit (AML) — maximum claim per year. Sub-limits on room charges, pharmacy etc. depending on network chosen.",
+        "Cashless settlement for network hospitals. Day-care procedures covered (no 24-hr stay required for listed procedures).",
+        "Co-pay/deductibles — claims up to a limit borne by insured. Cosmetic and other treatments without medical necessity excluded.",
+        "Waiting periods apply: PED (max 36 months), disease-specific (max 36 months), general (30 days).",
+        "Pre-authorisation mandatory; 1-hour TAT (IRDAI 2024).",
+      ]
+    }
+  },
+  {
+    source: "IAI July 2022", qid: "Q2ii", marks: 5,
+    scenario: "HealthX is adding OP cover to its IP-only PMI product.",
+    question: "Suggest the design features for the OP cover.",
+    sections: {
+      "OP cover design features": [
+        "No experience on OP — introduce minimal benefits to start with, with significant co-pay/deductible and a yearly reviewable structure with AML.",
+        "Cover consultation, labs and pharmacy costs; exclude cosmetic treatments. Consider allowing AYUSH treatments (Ayurvedic, homeopathy etc.) to increase market reach.",
+        "Allow specialist consultation only upon GP referral to minimise cost and avoid abuse.",
+        "Benchmark against market — do not offer benefits richer than market to avoid anti-selection.",
+        "Clearly define what is OP to avoid overlap with IP (e.g. day surgery). For individuals and voluntary group coverage, some level of UW required to control anti-selection.",
+        "No-claim bonus (premium reduction at renewal) as differentiator and fraud deterrent.",
+        "Health check-up packages to enhance appeal and reduce long-term morbidity.",
+        "Dental, optical and maternity to be priced separately with sub-limits or separate benefit schedules.",
+      ]
+    }
+  },
+  {
+    source: "IAI July 2022", qid: "Q2iii", marks: 10,
+    scenario: "HealthX is adding OP cover to its IP-only PMI product.",
+    question: "Describe the steps involved in pricing the OP cover.",
+    sections: {
+      "Pricing steps for OP cover": [
+        "Burning cost = frequency × severity. Frequency = incidence of claims; severity = size of claims.",
+        "Estimate frequency and severity by major risk factors: age, gender, network, occupation, location.",
+        "Dental/optical and maternity need to be considered separately.",
+        "Leverage industry studies on burning cost or take reinsurer's help. Align burning cost to product design — such as co-pay/deductibles adjustments.",
+        "Underwriting loading to reflect additional risk for substandard lives — work with UW and claims to estimate by disease category.",
+        "Add expense loading: initial (commission, onboarding) and renewal (admin, claim processing). OP has higher admin per rupee of premium than IP.",
+        "Add profit margin (required ROC at projected volumes); contingency loading; reinsurance cost (QS recommended for OP — not XL).",
+        "Perform profit test at expected volumes. Break-even volume analysis — fixed costs high for OP systems.",
+        "File with IRDAI under Use & File or File & Use as applicable.",
+        "Monitor A/E ratios from launch closely; reprice at first renewal if experience warrants.",
+      ]
+    }
+  },
+  {
+    source: "IAI July 2022", qid: "Q2vi", marks: 6,
+    scenario: "The board of HealthX suggests adopting capitation for OP providers.",
+    question: "Comment on the merits and challenges of the capitation suggestion.",
+    sections: {
+      "Merits of capitation": [
+        "Provider receives fixed PMPY — cost certainty for HealthX; predictable budget.",
+        "OP is prone to waste/abuse/fraud — capitation emphasises efficiency of care as provider profits decrease with higher utilisation.",
+        "Particularly valuable for HealthX which has no OP experience — removes utilisation risk.",
+        "Reduces per-claim admin burden.",
+      ],
+      "Challenges of capitation": [
+        "Hard to negotiate blanket capitation — provider needs to estimate expected utilisation, which is also unknown.",
+        "Policyholders may be unhappy if providers compromise on quality of care to maximise profit.",
+        "Provider could convert some OP into IP to manage their cost — adverse for HealthX.",
+        "Policyholders may need to attend different providers for OP and IP — inconvenient.",
+        "Regulations may not permit such an arrangement in India.",
+        "Counterparty risk if provider financially distressed.",
+        "Provider reputation damage reflects on HealthX.",
+        "Could cost more than fee-for-service if provider over-estimates capitation fee.",
+      ]
+    }
+  },
+  {
+    source: "IAI May 2024", qid: "Q1i", marks: 8,
+    scenario: "MedAll is an Indian health insurer with IP PMI. It offers a NCD scheme: 5% premium discount per claim-free year (max 25% after 5 years). A policyholder with NCD reverts to full premium in the first year a claim is made.",
+    question: "Discuss the advantages and disadvantages for the insurer of this NCD scheme.",
+    sections: {
+      "Advantages for the insurer": [
+        "Claims history indicates expected future claims. Those earning NCD are likely better risks → improved risk pool quality.",
+        "High risks pay premiums closer to their expected cost (less NCD); low risks pay less. Rating system becomes more equitable → reduces subsidies.",
+        "Encourages policyholders to absorb small claims → reduces claims frequency → lower claims cost and lower admin cost.",
+        "More competitive premiums for low-risk policyholders → improves retention of good risks vs competitors.",
+        "May attract new business from healthy lives seeking the NCD discount.",
+      ],
+      "Disadvantages for the insurer": [
+        "Requires system changes to keep claim records and update NCD premiums → higher admin cost.",
+        "Ethical concern: could encourage policyholders to delay or forgo necessary treatment (especially smaller claims). Regulatory scrutiny.",
+        "Complexity in customer communication; potential for complaints/disputes about NCD calculation.",
+        "Anti-selection on lapse: if competitor doesn't have NCD, healthy lives (who earn NCD) may still lapse if competitor is cheaper for other reasons.",
+        "NCD scales are smaller in PMI than motor — limited financial incentive for policyholders to absorb claims.",
+      ]
+    }
+  },
+  {
+    source: "IAI May 2024", qid: "Q1ii", marks: 6,
+    scenario: "",
+    question: "Compare and contrast the NCD scheme with a Rs 10,000 excess policy.",
+    sections: {
+      "Comparison": [
+        "Both reduce number of claims and overall costs → lower premiums.",
+        "Excess may be more effective at reducing frequency (immediate financial consequence per claim vs future NCD loss).",
+        "NCD gives access to FULL BENEFITS when a claim is made; excess REDUCES BENEFITS (policyholder bears first tranche).",
+        "Both attractive to those seeking lower premiums. NCD attractive to ALL market segments (promise of future discount). Excess attractive mainly to wealthier policyholders who can self-fund small claims.",
+        "Excess: insurer is not involved in every claim below the excess → admin saving. NCD: insurer involved in every claim but fewer claims made.",
+        "NCD: risk of 'unethical' deterrence to treatment is higher (policyholders may forgo care to preserve NCD). Excess: deterrence is immediate and per-claim.",
+        "Excess creates adverse customer experience at point of claim. NCD creates adverse experience only at renewal following a claim year.",
+      ]
+    }
+  },
+  {
+    source: "IAI September 2018", qid: "Q2i", marks: 8,
+    scenario: "New individual PMI product launch by an Indian health insurer.",
+    question: "Describe the key steps in the pricing process for a new individual PMI product.",
+    sections: {
+      "Data collection and analysis": [
+        "Collect: industry data from IRDAI/GIC; reinsurer Indian morbidity experience; international benchmarks adjusted for India.",
+        "Analyse to derive: claim incidence rates by age, gender, benefit type; average claim amounts by diagnosis/procedure; medical inflation trend.",
+      ],
+      "Assumptions": [
+        "Set: claim inception rates by age/gender/plan; average claim amounts; medical inflation; lapses/persistency; expenses (initial + renewal).",
+        "Document and sign off all assumptions. Perform sensitivity analysis on key assumptions.",
+      ],
+      "Premium calculation": [
+        "Risk premium = expected claims cost per policy year, allowing for: benefit design (deductibles, co-pays, sub-limits, waiting periods).",
+        "Add loadings: expenses; profit margin; contingency; reinsurance cost.",
+        "Profit test: verify required return on capital at projected volumes.",
+      ],
+      "Regulatory and competitive review": [
+        "Ensure compliance with IRDAI regulations including any premium requirements.",
+        "Benchmark against market products for competitiveness.",
+        "File product and premium rates with IRDAI under File & Use / Use & File.",
+      ]
+    }
+  },
+  {
+    source: "IAI September 2018", qid: "Q2ii", marks: 7,
+    scenario: "",
+    question: "Discuss the key challenges in pricing a PMI product for a new insurer with no prior experience data.",
+    sections: {
+      "Data challenges": [
+        "No own experience → rely on IRDAI industry data; reinsurer data; distribution partner data; public health statistics.",
+        "Industry data may lack granularity for specific product design / target market.",
+        "Data credibility low for low-frequency high-severity events (large claims, rare procedures).",
+      ],
+      "Anti-selection and behavioural": [
+        "Without prior experience, cannot quantify anti-selection risk from chosen UW approach.",
+        "Initial selection effect (UW makes early portfolio healthier) wears off over time — need durational adjustment.",
+      ],
+      "Medical inflation and trend": [
+        "Medical inflation in India has been well above CPI. Trend assumption uncertain; technology changes affect frequency and cost unpredictably.",
+      ],
+      "Volume and expense uncertainty": [
+        "No existing business → significant uncertainty on initial/renewal expense levels and volume of business (break-even volume uncertain).",
+        "Pricing pressure from fixed costs in early years.",
+      ]
+    }
+  },
+  {
+    source: "IAI November 2024", qid: "Q2a", marks: 5,
+    scenario: "",
+    question: "Outline the features of a PMI product.",
+    sections: {
+      "PMI product features": [
+        "Indemnity product — provides compensation for actual cost of private medical treatment.",
+        "Covers acute conditions only; chronic conditions excluded.",
+        "Insurer typically pays treatment provider directly (cashless).",
+        "Annually renewable — premium can change year to year.",
+        "Requires minimum period of hospitalisation (typically 24 hours) for IP claims.",
+        "Waiting periods for pre-existing conditions (IRDAI: max 36 months).",
+        "Sub-limits on room, ICU, surgery, pharmacy. Pre-authorisation required.",
+      ]
+    }
+  },
+  {
+    source: "IAI November 2024", qid: "Q2b", marks: 8,
+    scenario: "An Indian PMI insurer is entering a new overseas territory.",
+    question: "Outline why the insurer will have uncertainty in estimating PMI claims cost in the new market.",
+    sections: {
+      "Sources of uncertainty": [
+        "Lifestyle and prevalence of medical conditions differ — e.g. obesity levels, diet, pollution linked to cardiac disease and diabetes.",
+        "Demographic differences (e.g. aging population) → increased healthcare demand.",
+        "Medical innovation and technology costs may differ — more/less sophisticated diagnostics and treatments available.",
+        "Policyholder and provider behaviour differences — different propensity to claim; provider-induced demand patterns.",
+        "Claims control and fraud effectiveness — unfamiliar market; unknown fraud prevalence.",
+        "Macro-economic: currency fluctuation, local medical inflation rate, quality of State provision (affects private demand).",
+        "Regulatory environment — different policy terms required; different exclusions mandated.",
+        "No distribution relationships → uncertain volume → fixed costs per policy higher.",
+      ]
+    }
+  },
+  {
+    source: "IAI March 2022", qid: "Q1vi", marks: 10,
+    scenario: "MedAll also has a PMI portfolio (short-term product) alongside long-term IP and CI products.",
+    question: "Explain how the analysis of surplus for the PMI product would differ from that for a long-term insurance product.",
+    sections: {
+      "Key differences": [
+        "PMI is annually renewable (short-term) vs long-term (guaranteed premium for years/decades). PMI has no long-term reserves per policy (just UPR and IBNR); long-term has policy reserves discounting future benefit cashflows.",
+        "Surplus sources for PMI: interest on reserves negligible (short duration); no mortality/morbidity release from policy reserves. Main surplus = (earned premium — paid/IBNR claims — expenses).",
+        "For long-term: analysis of surplus includes release of reserves from deaths/lapses/maturities; interest surplus; expense surplus; morbidity/mortality surplus vs assumptions.",
+        "PMI analysis of surplus focuses on: claims ratio (actual vs expected); lapse/renewal rates; expense ratio; medical inflation variance; IBNR development.",
+        "PMI: renewal experience critically important (if healthy lives don't renew, claims ratio worsens). Long-term: lapse analysis differs (lapses release reserve; may have surrender values).",
+        "PMI: no guarantee risk / interest rate risk on liabilities (short-term). Long-term: significant ALM / interest rate risk.",
+        "Both: UW experience surplus (actual vs expected morbidity). But for long-term, this persists over many future years (affects reserve adequacy); for PMI, it resets each year at renewal repricing.",
+      ]
+    }
+  },
+  {
+    source: "IAI November 2025", qid: "Q2b", marks: 10,
+    scenario: "PMI insurer with deteriorating performance is proposing loyalty discounts and online sales.",
+    question: "Critically evaluate the proposed loyalty discounts and online sales initiatives.",
+    sections: {
+      "Loyalty discounts": [
+        "Examiner solution not yet published. Based on course notes: loyalty discounts reduce premium for long-duration policyholders → good for retention and brand; but healthy long-duration lives already self-select to stay → discount mainly rewards those who would have renewed anyway.",
+        "Risk: discounts reduce revenue on good risks; adverse selection if only healthy lives get discount and sick lives still renew (at full premium, no lapse).",
+        "Must model take-up rates, selection benefit, and impact on A/E ratio.",
+      ],
+      "Online sales initiatives": [
+        "Online distribution attracts younger, healthier lives → may improve risk pool quality if PMI deterioration is mix-related.",
+        "Lower acquisition cost per policy → expense ratio improvement.",
+        "Risks: different risk profile may require different UW approach; potential for fraud (no face-to-face); need robust digital claims processing; regulatory requirements for digital advice/no-advice sales.",
+        "May cannibalise existing broker/agent relationships.",
+        "If deterioration is due to medical inflation or claims management issues, online sales will not resolve root cause.",
+      ]
+    }
+  },
+];
+
+// ═══════════════════════════════════════════════════
+// KEY TERMS
+// ═══════════════════════════════════════════════════
+const KEY_TERMS = [
+  { term: "Acute Condition", def: "A condition expected to be cured through active treatment. PMI covers these." },
+  { term: "Chronic Condition", def: "No prospect of improvement through treatment (symptoms may be managed). Excluded from PMI — State's responsibility." },
+  { term: "Excess / Deductible", def: "The amount of each claim met by the policyholder before insurer pays. Reduces moral hazard and premium." },
+  { term: "Co-insurance", def: "Claim shared in fixed proportions (e.g. insurer 75%, PH 25%). Reduces moral hazard. No cap on PH liability." },
+  { term: "NCD", def: "No Claim Discount: premium discount or benefit increase given for claim-free years. Self-selection → healthy lives earn NCD." },
+  { term: "AML", def: "Annual Maximum Limit: maximum the insurer pays per policyholder per year. Caps insurer liability." },
+  { term: "Pre-authorisation", def: "Insurer approval required before treatment. Controls moral hazard; ensures care pathway. 1-hr TAT mandated (IRDAI 2024)." },
+  { term: "Capitation", def: "Fixed per-member-per-year to provider; provider bears all utilisation risk. Used for OP/dental." },
+  { term: "PPO", def: "Preferred Provider Organisation: network of hospitals with negotiated tariffs. Cashless settlement for network." },
+  { term: "Community Rating", def: "All policyholders charged same premium regardless of risk. Creates cross-subsidy; requires risk equalisation to prevent anti-selection spiral." },
+  { term: "Risk Equalisation", def: "Mechanism transferring funds from insurers with light risk pools to those with heavy risk pools. Enables community rating to function." },
+  { term: "Moratorium", def: "Initial exclusion period for conditions present pre-inception. Exclusion lifted after clean period. Non-contestable after 60 months (IRDAI)." },
+  { term: "FMU", def: "Full Medical Underwriting: detailed medical questionnaire at entry; explicit exclusions applied for PECs." },
+  { term: "PMJAY", def: "Ayushman Bharat: government scheme covering bottom 40% for basic indemnity. Complements private PMI for middle/upper income." },
+  { term: "SAHI", def: "Standalone Health Insurer (India): can offer both indemnity and benefit products. Life insurers: benefit basis only." },
+  { term: "Burning Cost", def: "Expected claims cost: Frequency × Severity. Core of PMI pricing." },
+  { term: "Medical Inflation", def: "Rate of increase in healthcare costs. Historically 12-15% p.a. in India. Far exceeds CPI. Key pricing risk." },
+  { term: "Portability", def: "Transfer of all policy credits (SI, NCB, waiting periods) when switching insurer. Waiting periods do NOT re-apply." },
+  { term: "MME", def: "Major Medical Expenses: fixed lump sum on undergoing specified surgery. Covers IP costs only. No OP cover." },
+  { term: "Waiting List Plan", def: "PMI benefits only if State cannot treat within specified period (e.g. 6 weeks). Cheaper than full PMI." },
+  { term: "IBNR", def: "Incurred But Not Reported: reserve for claims that have occurred but not yet notified to insurer." },
+  { term: "IBNER", def: "Incurred But Not Enough Reported: reserve for claims reported but not yet fully settled." },
+  { term: "Lifetime Community Rating", def: "Premiums vary by age at entry but remain level thereafter. Incentivises joining early; reduces anti-selection." },
+  { term: "Quota Share (QS)", def: "Reinsurance where insurer cedes fixed % of every risk. Suitable for OP (volume/frequency risk, not severity)." },
+  { term: "Excess of Loss (XL)", def: "Reinsurance where insurer retains losses up to retention; reinsurer pays above. Suitable for IP catastrophic claims." },
+];
+
+// ═══════════════════════════════════════════════════
+// RENDER FUNCTIONS
+// ═══════════════════════════════════════════════════
+
+function renderFlashcards() {
+  const container = document.getElementById('flashcard-container');
+  container.innerHTML = FLASHCARDS.map((fc, i) => `
+    <div class="flashcard-container" id="fc-${i}" onclick="this.classList.toggle('flipped')">
+      <div class="flashcard-inner">
+        <div class="flashcard-front">
+          <div class="fc-label">Question ${i+1} of ${FLASHCARDS.length}</div>
+          <div class="fc-q">${fc.q}</div>
+        </div>
+        <div class="flashcard-back">
+          <div class="fc-label">Answer</div>
+          <div class="fc-a">${fc.a}</div>
+        </div>
+      </div>
+    </div>
+    <div class="flashcard-hint">Click to flip</div>
+  `).join('');
+}
+
+function renderIAIQuestions() {
+  const container = document.getElementById('iai-questions-container');
+  container.innerHTML = IAI_QUESTIONS.map((q, i) => {
+    const sectionsHtml = Object.entries(q.sections).map(([title, bullets]) => `
+      <div class="eq-section-title">${title}</div>
+      <ul class="bullet-list">${bullets.map(b => `<li>${b}</li>`).join('')}</ul>
+    `).join('');
+    return `
+      <div class="exam-question">
+        <div class="eq-header" onclick="toggleEQ(this)">
+          <div class="eq-header-left">
+            <span class="eq-source-badge iai">${q.source} ${q.qid}</span>
+            <span class="eq-marks">${q.marks} marks</span>
+          </div>
+          <div class="eq-question">${q.question}</div>
+          <div class="eq-toggle">▾</div>
+        </div>
+        ${q.scenario ? `<div class="eq-scenario">${q.scenario}</div>` : ''}
+        <div class="eq-body">${sectionsHtml}</div>
+      </div>
+    `;
+  }).join('');
+}
+
+function renderKeyTerms() {
+  const container = document.getElementById('key-terms-container');
+  container.innerHTML = KEY_TERMS.map(kt => `
+    <div class="key-term">
+      <div class="key-term-name">${kt.term}</div>
+      <div class="key-term-def">${kt.def}</div>
+    </div>
+  `).join('');
+}
+
+// ═══════════════════════════════════════════════════
+// TAB NAVIGATION
+// ═══════════════════════════════════════════════════
+
+function showTab(tabName) {
+  document.getElementById('search-panel').classList.remove('active');
+  document.querySelectorAll('.section-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+  const panel = document.getElementById(`tab-${tabName}`);
+  if (panel) panel.classList.add('active');
+  event.currentTarget.classList.add('active');
+  document.getElementById('searchInput').value = '';
+}
+
+// ═══════════════════════════════════════════════════
+// ACCORDION
+// ═══════════════════════════════════════════════════
+
+function toggleAccordion(header) {
+  header.classList.toggle('open');
+  const body = header.nextElementSibling;
+  body.classList.toggle('open');
+}
+
+// ═══════════════════════════════════════════════════
+// EXAM QUESTION TOGGLE
+// ═══════════════════════════════════════════════════
+
+function toggleEQ(header) {
+  header.classList.toggle('open');
+  const body = header.parentElement.querySelector('.eq-body');
+  body.classList.toggle('open');
+}
+
+// ═══════════════════════════════════════════════════
+// SEARCH
+// ═══════════════════════════════════════════════════
+
+function buildSearchCorpus() {
+  const corpus = [];
+  // From flashcards
+  FLASHCARDS.forEach((fc, i) => {
+    corpus.push({ source: `Flashcard ${i+1}`, text: fc.q + ' ' + fc.a, display: `<strong>${fc.q}</strong><br>${fc.a}` });
+  });
+  // From IAI questions
+  IAI_QUESTIONS.forEach(q => {
+    Object.entries(q.sections).forEach(([title, bullets]) => {
+      bullets.forEach(b => {
+        corpus.push({ source: `${q.source} ${q.qid} — ${title}`, text: b, display: b });
+      });
+    });
+  });
+  // From key terms
+  KEY_TERMS.forEach(kt => {
+    corpus.push({ source: `Key Term: ${kt.term}`, text: kt.term + ' ' + kt.def, display: `<strong>${kt.term}:</strong> ${kt.def}` });
+  });
+  return corpus;
+}
+
+let searchCorpus = null;
+
+function doSearch(query) {
+  if (!query || query.length < 2) {
+    document.getElementById('search-panel').classList.remove('active');
+    document.querySelectorAll('.section-panel').forEach(p => {
+      if (p.id !== 'search-panel') p.classList.remove('active');
+    });
+    // Restore active tab
+    const activeTab = document.querySelector('.nav-tab.active');
+    if (activeTab) {
+      const tabName = activeTab.getAttribute('onclick').match(/showTab\('([^']+)'\)/)[1];
+      document.getElementById(`tab-${tabName}`).classList.add('active');
+    }
+    return;
+  }
+
+  if (!searchCorpus) searchCorpus = buildSearchCorpus();
+
+  const q = query.toLowerCase();
+  const results = searchCorpus.filter(item => item.text.toLowerCase().includes(q));
+
+  document.querySelectorAll('.section-panel').forEach(p => p.classList.remove('active'));
+  const sp = document.getElementById('search-panel');
+  sp.classList.add('active');
+
+  document.getElementById('search-count').textContent = `${results.length} result${results.length !== 1 ? 's' : ''} for "${query}"`;
+
+  const highlight = (text, q) => {
+    const re = new RegExp(`(${q.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+    return text.replace(re, '<mark class="search-highlight">$1</mark>');
+  };
+
+  document.getElementById('search-results').innerHTML = results.slice(0, 30).map(r => `
+    <div class="search-result">
+      <div class="search-result-source">${r.source}</div>
+      <div class="search-result-text">${highlight(r.display, query)}</div>
+    </div>
+  `).join('') || '<div class="search-result"><div class="search-result-text">No results found.</div></div>';
+}
+
+// ═══════════════════════════════════════════════════
+// INIT
+// ═══════════════════════════════════════════════════
+
+renderFlashcards();
+renderIAIQuestions();
+renderKeyTerms();
+</script>
+</body>
+</html>
