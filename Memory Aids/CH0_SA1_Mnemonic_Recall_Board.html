@@ -535,129 +535,14 @@ body.drill-mode .drill-bar-wrap { display: flex; align-items: center; gap: 16px;
 
 <script>
 // ══════════════════════════════════════════════
-// DATA  (sourced from Memory_Aids.json)
+// DATA — loaded from ../data/Memory_Aids.json
+// (single authorised source; never define mnemonics inline)
 // ══════════════════════════════════════════════
 
-const SKELETON = {
-  label: "SA1 Universal Exam Skeleton — 8 Dimensions",
-  description: "Apply to every exam question regardless of product or topic. Scan all 8 in order. Write on each dimension the question touches. Skip dimensions genuinely out of scope.",
-  dimensions: [
-    { id:1, code:"NEED",         label:"Customer Need",       prompt:"Why does this exist? Who buys it and why?",
-      sub:["Individual customer need","Employer / group need","Societal / State gap being filled","Self-employed / specific segment needs"] },
-    { id:2, code:"BENEFIT",      label:"Benefit Design",      prompt:"Amount · Timing · Definitions · Exclusions · Variations",
-      sub:["Benefit amount and limits (replacement ratio / sum insured)","Benefit timing (deferred period / survival period / expiry)","Trigger / incapacity definition","Exclusions and conditions covered","Escalation / inflation linkage","Options and variations (ROP, waiver, partial benefit)"] },
-    { id:3, code:"UNDERWRITING", label:"Underwriting",        prompt:"Rating factors · Medical triggers · Group: FCL and actively-at-work",
-      sub:["Key risk factors and corresponding rating factors","Individual UW: medical / non-medical thresholds","Group UW: free cover limit, actively-at-work, compulsory membership","Anti-selection controls","UW at claim stage (claims underwriting)"] },
-    { id:4, code:"PRICING",      label:"Pricing",             prompt:"Model · Data · Assumptions · Guaranteed vs reviewable",
-      sub:["Pricing approach / model (inception-annuity, multi-state, frequency-severity)","Key assumptions (morbidity/inception, recovery, lapse, expenses)","Data availability and credibility","Guaranteed vs reviewable premium structure","Profit testing and capital return requirement"] },
-    { id:5, code:"CLAIMS",       label:"Claims Management",   prompt:"Trigger · Benefit limitation · Moral hazard · Rehabilitation · In-claim monitoring",
-      sub:["Definition of insured event at claim stage","Benefit limitation formula (IP) / condition verification (CI) / pre-authorisation (PMI)","Moral hazard identification and control","Rehabilitation and return-to-work support","Ongoing claim monitoring and medical certification","Fraud detection"] },
-    { id:6, code:"MONITORING",   label:"Monitoring",          prompt:"Why monitor · What to investigate · How · Use of results",
-      sub:["Why monitor (actuarial control cycle, pricing update, EV, regulatory)","What to investigate (inception rates, recovery rates, lapses, expenses)","How to investigate (A vs E, exposure calculation, investigation period)","Use of results (re-price new business, improve in-force, reserve basis, EV assumptions)"] },
-    { id:7, code:"RISKS",        label:"Risks",               prompt:"Insurer financial · Operational · Policyholder behaviour · External",
-      sub:["Insurer financial risks (morbidity, pricing, reserving, capital)","Operational risks (systems, claims handling, distribution, fraud)","Policyholder behaviour risks (anti-selection, moral hazard, selective lapsing)","External risks (economic cycle, State benefit changes, medical advances, demographic trends, regulation)"] },
-    { id:8, code:"REGULATORY",   label:"Regulatory & Capital", prompt:"Solvency · TCF / Consumer Duty · Reporting · Product governance",
-      sub:["Solvency and capital requirements (Solvency II / IRDAI equivalent)","Treating Customers Fairly / Consumer Duty obligations","Regulatory reporting requirements","Product governance and target market review","Local IRDAI-specific rules (India context)"] },
-  ]
-};
-
-const CI_AIDS = [
-  {
-    id:"CI-01", code:"FDS", title:"Three Criteria for CI Condition Inclusion",
-    items:[
-      { letter:"F", word:"Frequent & serious",  detail:"Perceived as serious AND occurs frequently enough to generate data and meaningful claims" },
-      { letter:"D", word:"Defined clearly",     detail:"Precise medical criteria; no ambiguity at claim time; reduces disputes and windfall payments" },
-      { letter:"S", word:"Sufficient data",     detail:"Enough data to price accurately; reinsurer help if own data insufficient" },
-    ]
-  },
-  {
-    id:"CI-02", code:"COACH MS", title:"Core CI Conditions (≈90% of claims)",
-    items:[
-      { letter:"C", word:"Cancer",                           detail:"" },
-      { letter:"O", word:"Organ transplant (major)",         detail:"" },
-      { letter:"A", word:"Artery bypass (coronary)",         detail:"" },
-      { letter:"C", word:"Coronary / Cardiac (heart attack)",detail:"" },
-      { letter:"H", word:"Heart failure / Kidney failure",   detail:"Kidney = renal failure" },
-      { letter:"M", word:"Multiple sclerosis",               detail:"" },
-      { letter:"S", word:"Stroke",                           detail:"" },
-    ]
-  },
-  {
-    id:"CI-03", code:"FeDWToMoT", title:"Six Activities of Daily Living (ADLs)",
-    items:[
-      { letter:"Fe", word:"Feeding",               detail:"" },
-      { letter:"D",  word:"Dressing",              detail:"" },
-      { letter:"W",  word:"Washing",               detail:"" },
-      { letter:"To", word:"Toileting",             detail:"" },
-      { letter:"Mo", word:"Mobility",              detail:"" },
-      { letter:"T",  word:"Transferring (bed/chair)", detail:"" },
-    ]
-  },
-  {
-    id:"CI-04", code:"SCARED", title:"Adverse Effects of High Lapse Rates in CI",
-    items:[
-      { letter:"S", word:"Selective lapsing",         detail:"Healthier lives lapse → worse remaining risk pool → premium spiral" },
-      { letter:"C", word:"Costs unrecovered",         detail:"Initial expenses and commission not yet recouped from in-force premiums" },
-      { letter:"A", word:"Asset disinvestment",       detail:"Forced sale of assets at unfavourable prices (e.g. during recession)" },
-      { letter:"R", word:"Reinsurance cost rises",    detail:"More expensive per remaining policy as portfolio shrinks" },
-      { letter:"E", word:"Economies of scale lost",   detail:"Fixed costs spread over fewer policies → higher per-policy expenses" },
-      { letter:"D", word:"Distributor churning",      detail:"Extra commission earned on policyholder re-entry at lower new-business premium" },
-    ]
-  },
-  {
-    id:"CI-05", code:"SPEC FC", title:"Reasons to Reinsure CI",
-    items:[
-      { letter:"S", word:"Solvency protection",       detail:"Reduces capital strain and peak claims exposure" },
-      { letter:"P", word:"Pricing validation",        detail:"Reinsurer validates assumptions and provides market data" },
-      { letter:"E", word:"Experience smoothing",      detail:"Irons out random fluctuations in claims" },
-      { letter:"C", word:"Capacity increase",         detail:"Ability to write larger risks and greater volume" },
-      { letter:"F", word:"Financing new business strain", detail:"Reduces initial capital required for new business" },
-      { letter:"C", word:"Capability / expertise",   detail:"Condition definitions, UW guidance, claims assessment support" },
-    ]
-  },
-];
-
-const IP_AIDS = [
-  {
-    id:"IP-01", code:"DRIVE", title:"Core IP Benefit Design Elements",
-    items:[
-      { letter:"D", word:"Deferred Period",        detail:"Links with employer sick pay; shorter = higher inception rate; major rating factor" },
-      { letter:"R", word:"Replacement Ratio",      detail:"Must stay <100% net of tax; 1% rise ≈ 1% extra claim cost; core moral hazard control" },
-      { letter:"I", word:"Incapacity Definition",  detail:"Own occ → suited occ → any occ; changing definition after 2 years reduces long-term moral hazard" },
-      { letter:"V", word:"Variations",             detail:"Short-term A&S, MPPI, group IP, unit-linked; each has different UW/claims complexity" },
-      { letter:"E", word:"Escalation",             detail:"Benefits linked to RPI/NAEI; protects real value; also escalates premium; subject to max cap" },
-    ]
-  },
-  {
-    id:"IP-02", code:"MORPH", title:"Moral Hazard Controls in IP",
-    items:[
-      { letter:"M", word:"Maximum benefit cap",      detail:"X% of pre-disability income minus all continuing income; monetary maximum for high earners" },
-      { letter:"O", word:"Own → Any occ switch",     detail:"Definition becomes more restrictive after (e.g.) 2 years; reduces long-term claim incentive" },
-      { letter:"R", word:"Rehabilitation",           detail:"Counselling; vocational retraining; proportionate benefit on partial return — reduces claim duration" },
-      { letter:"P", word:"Proportionate benefit",    detail:"Part-time return or lower-paid role partially compensated; avoids cliff-edge loss of full benefit" },
-      { letter:"H", word:"Health certification",     detail:"Regular medical re-certification; insurer-checked not employer; income verification; monitoring" },
-    ]
-  },
-  {
-    id:"IP-03", code:"FARM", title:"Key IP Rating Factors",
-    items:[
-      { letter:"F", word:"Female / gender",            detail:"Where legislation permits; different morbidity patterns; often restricted in new markets" },
-      { letter:"A", word:"Age at entry",               detail:"Inception rates rise with age; claim duration also age-dependent; the primary driver" },
-      { letter:"R", word:"Ratio (replacement) & Region", detail:"Higher ratio = higher cost; geographic/zone variation significant; India: zone-based pricing" },
-      { letter:"M", word:"Manual / occupation class",  detail:"THE single most critical IP rating factor — affects inception probability AND claim duration" },
-    ]
-  },
-  {
-    id:"IP-04", code:"CLAIM", title:"Loss Ratio Investigation Framework",
-    items:[
-      { letter:"C", word:"Cause of claims",            detail:"Mix shift to mental health/stress; long-duration causes; change in claim type distribution" },
-      { letter:"L", word:"Lapses",                     detail:"Selective lapsing → healthier lives leaving; check by duration, channel, benefit level" },
-      { letter:"A", word:"Anti-selection / early claims", detail:"Early claims by notification date; abnormal large group schemes; new business mix changes" },
-      { letter:"I", word:"Inception & recovery rates", detail:"Study separately — actions differ; inception rise vs recovery fall have different solutions" },
-      { letter:"M", word:"Mix (business)",             detail:"Demographic shift; cross-subsidy breakdown; occupation class drift; scheme size changes" },
-    ]
-  },
-];
+// Module-level references populated after fetch
+let SKELETON = null;
+let CI_AIDS  = [];
+let IP_AIDS  = [];
 
 // ══════════════════════════════════════════════
 // RENDER SKELETON
@@ -785,13 +670,33 @@ function setMode(mode) {
 }
 
 // ══════════════════════════════════════════════
-// INIT
+// INIT — fetch from single authorised source
 // ══════════════════════════════════════════════
 
-renderSkeleton();
-renderMnGrid('ci-grid', CI_AIDS, 'ci');
-renderMnGrid('ip-grid', IP_AIDS, 'ip');
-updateProgress();
+fetch('../data/Memory_Aids.json')
+  .then(r => {
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    return r.json();
+  })
+  .then(data => {
+    // Map JSON structure to the variables used by the render functions
+    SKELETON = data.universal_skeleton;
+    CI_AIDS  = (data.product_aids.CI  && data.product_aids.CI.aids)  || [];
+    IP_AIDS  = (data.product_aids.IP  && data.product_aids.IP.aids)   || [];
+
+    renderSkeleton();
+    renderMnGrid('ci-grid', CI_AIDS, 'ci');
+    renderMnGrid('ip-grid', IP_AIDS, 'ip');
+    updateProgress();
+  })
+  .catch(err => {
+    document.body.innerHTML =
+      `<div style="padding:2rem;color:#c00;font-family:sans-serif;">
+        <strong>Failed to load Memory_Aids.json</strong><br>${err.message}<br><br>
+        Make sure you are serving the project from a local web server (e.g. <code>npx serve .</code>
+        from the repository root) and that <code>data/Memory_Aids.json</code> exists.
+      </div>`;
+  });
 </script>
 </body>
 </html>
