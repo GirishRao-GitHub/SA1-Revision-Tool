@@ -459,55 +459,6 @@
     border-radius: 2px;
   }
 
-  /* ── MNEMONIC BOX ── */
-  .mnemonic-box {
-    background: linear-gradient(135deg, var(--navy) 0%, var(--navy-mid) 100%);
-    color: white;
-    border-radius: 12px;
-    padding: 20px 24px;
-    margin-bottom: 20px;
-  }
-  .mnemonic-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 15px;
-    font-weight: 700;
-    opacity: 0.7;
-    margin-bottom: 12px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    font-style: italic;
-  }
-  .mnemonic-letters {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-  }
-  .mnemonic-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 8px;
-    min-width: 220px;
-    flex: 1;
-  }
-  .mnemonic-letter {
-    font-family: 'Playfair Display', serif;
-    font-size: 28px;
-    font-weight: 900;
-    color: var(--teal-light);
-    line-height: 1;
-    min-width: 28px;
-  }
-  .mnemonic-word {
-    font-size: 13px;
-    line-height: 1.45;
-    padding-top: 2px;
-  }
-  .mnemonic-word strong {
-    display: block;
-    font-size: 14px;
-    color: var(--teal-light);
-  }
-
   /* ── ACCORDION ── */
   .accordion-item {
     background: white;
@@ -959,14 +910,14 @@
     </div>
 
     <div class="sub-heading">Pricing Methodology</div>
-    <div class="mnemonic-box">
-      <div class="mnemonic-title">PMI Pricing Formula</div>
-      <div style="font-size:18px; font-family:'JetBrains Mono', monospace; color:var(--teal-light); margin-bottom:12px;">
+    <div style="background:#f5f4ef;border:1px solid #d3d1c7;border-radius:12px;padding:20px 24px;margin-bottom:20px;">
+      <div style="font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:1px;color:#888;margin-bottom:10px;">PMI Pricing Formula</div>
+      <div style="font-size:18px;font-family:'JetBrains Mono',monospace;color:#1a1a18;margin-bottom:12px;">
         Risk Premium = Σ<sub>k</sub> [ i<sub>k</sub> × AC<sub>k</sub> ]
       </div>
-      <div style="font-size:13px; opacity:0.85;">
-        Where <strong style="color:var(--teal-light);">i<sub>k</sub></strong> = incidence rate for benefit/procedure class k &nbsp;|&nbsp; 
-        <strong style="color:var(--teal-light);">AC<sub>k</sub></strong> = average claim cost for class k &nbsp;|&nbsp;
+      <div style="font-size:13px;color:#555;">
+        Where <strong>i<sub>k</sub></strong> = incidence rate for benefit/procedure class k &nbsp;|&nbsp;
+        <strong>AC<sub>k</sub></strong> = average claim cost for class k &nbsp;|&nbsp;
         Split by: age, gender, location, hospital band, smoker status, occupation
       </div>
     </div>
@@ -1733,69 +1684,14 @@
       <div class="section-icon" style="background:var(--navy);">🧠</div>
       <div>
         <div class="section-title">Mnemonics & Memory Aids</div>
-        <div class="section-subtitle">Quick-recall frameworks for exam conditions</div>
+        <div class="section-subtitle">All memory aids have moved to the central Recall Board</div>
       </div>
     </div>
-
-    <div class="mnemonic-box">
-      <div class="mnemonic-title">PMI Exclusions — "SAGE PCC"</div>
-      <div class="mnemonic-letters">
-        <div class="mnemonic-item"><div class="mnemonic-letter">S</div><div class="mnemonic-word"><strong>Self-inflicted injuries</strong></div></div>
-        <div class="mnemonic-item"><div class="mnemonic-letter">A</div><div class="mnemonic-word"><strong>A&E / Accident & Emergency</strong></div></div>
-        <div class="mnemonic-item"><div class="mnemonic-letter">G</div><div class="mnemonic-word"><strong>GP services</strong> (primary care)</div></div>
-        <div class="mnemonic-item"><div class="mnemonic-letter">E</div><div class="mnemonic-word"><strong>Experimental drugs</strong> / war</div></div>
-        <div class="mnemonic-item"><div class="mnemonic-letter">P</div><div class="mnemonic-word"><strong>Pre-existing conditions</strong></div></div>
-        <div class="mnemonic-item"><div class="mnemonic-letter">C</div><div class="mnemonic-word"><strong>Chronic conditions</strong></div></div>
-        <div class="mnemonic-item"><div class="mnemonic-letter">C</div><div class="mnemonic-word"><strong>Cosmetic surgery</strong></div></div>
-      </div>
-    </div>
-
-    <div class="mnemonic-box">
-      <div class="mnemonic-title">Cost Control Mechanisms — "ENCODE P"</div>
-      <div class="mnemonic-letters">
-        <div class="mnemonic-item"><div class="mnemonic-letter">E</div><div class="mnemonic-word"><strong>Excess / Deductible</strong> — PH meets first tranche</div></div>
-        <div class="mnemonic-item"><div class="mnemonic-letter">N</div><div class="mnemonic-word"><strong>NCD Scheme</strong> — no-claim discount</div></div>
-        <div class="mnemonic-item"><div class="mnemonic-letter">C</div><div class="mnemonic-word"><strong>Co-insurance</strong> — shared proportion each claim</div></div>
-        <div class="mnemonic-item"><div class="mnemonic-letter">O</div><div class="mnemonic-word"><strong>Open-panel / PPO</strong> — preferred provider networks</div></div>
-        <div class="mnemonic-item"><div class="mnemonic-letter">D</div><div class="mnemonic-word"><strong>Day-care</strong> — incentivise over in-patient</div></div>
-        <div class="mnemonic-item"><div class="mnemonic-letter">E</div><div class="mnemonic-word"><strong>Entry waiting period</strong></div></div>
-        <div class="mnemonic-item"><div class="mnemonic-letter">P</div><div class="mnemonic-word"><strong>Pre-auth / Policy limits</strong> (AML, sub-limits)</div></div>
-      </div>
-    </div>
-
-    <div class="mnemonic-box">
-      <div class="mnemonic-title">PMI Claims Deterioration Causes — "BAD MIX FILM"</div>
-      <div class="mnemonic-letters">
-        <div class="mnemonic-item"><div class="mnemonic-letter">B</div><div class="mnemonic-word"><strong>Business mix shifts</strong> (older/higher-risk lives)</div></div>
-        <div class="mnemonic-item"><div class="mnemonic-letter">A</div><div class="mnemonic-word"><strong>Anti-selection</strong> (healthy lives lapse)</div></div>
-        <div class="mnemonic-item"><div class="mnemonic-letter">D</div><div class="mnemonic-word"><strong>Demand shift</strong> from State to private</div></div>
-        <div class="mnemonic-item"><div class="mnemonic-letter">M</div><div class="mnemonic-word"><strong>Medical inflation</strong> exceeds pricing trend</div></div>
-        <div class="mnemonic-item"><div class="mnemonic-letter">I</div><div class="mnemonic-word"><strong>Increased fraud</strong> / lax claims management</div></div>
-        <div class="mnemonic-item"><div class="mnemonic-letter">X</div><div class="mnemonic-word"><strong>X-large individual claims</strong> (catastrophic)</div></div>
-        <div class="mnemonic-item"><div class="mnemonic-letter">F</div><div class="mnemonic-word"><strong>Frequency / treatment costs</strong> (new protocols)</div></div>
-        <div class="mnemonic-item"><div class="mnemonic-letter">I</div><div class="mnemonic-word"><strong>Induced demand</strong> by providers</div></div>
-        <div class="mnemonic-item"><div class="mnemonic-letter">L</div><div class="mnemonic-word"><strong>Lapse of good risks</strong> (persistency poor)</div></div>
-        <div class="mnemonic-item"><div class="mnemonic-letter">M</div><div class="mnemonic-word"><strong>Mix of channel</strong> (digital vs traditional)</div></div>
-      </div>
-    </div>
-
-    <div class="mnemonic-box">
-      <div class="mnemonic-title">PMI Pricing Steps — "DATA PRICE"</div>
-      <div class="mnemonic-letters">
-        <div class="mnemonic-item"><div class="mnemonic-letter">D</div><div class="mnemonic-word"><strong>Data collection</strong> — industry / reinsurer / internal</div></div>
-        <div class="mnemonic-item"><div class="mnemonic-letter">A</div><div class="mnemonic-word"><strong>Analyse</strong> frequency × severity by rating factors</div></div>
-        <div class="mnemonic-item"><div class="mnemonic-letter">T</div><div class="mnemonic-word"><strong>Trend forward</strong> (medical inflation)</div></div>
-        <div class="mnemonic-item"><div class="mnemonic-letter">A</div><div class="mnemonic-word"><strong>Adjust</strong> for product design (excess, co-pay, sub-limits)</div></div>
-        <div class="mnemonic-item"><div class="mnemonic-letter">P</div><div class="mnemonic-word"><strong>Premium build-up</strong> (risk premium + loadings)</div></div>
-        <div class="mnemonic-item"><div class="mnemonic-letter">R</div><div class="mnemonic-word"><strong>Reinsurance</strong> cost / recoveries</div></div>
-        <div class="mnemonic-item"><div class="mnemonic-letter">I</div><div class="mnemonic-word"><strong>Internal model / profit test</strong></div></div>
-        <div class="mnemonic-item"><div class="mnemonic-letter">C</div><div class="mnemonic-word"><strong>Competitor benchmarking</strong></div></div>
-        <div class="mnemonic-item"><div class="mnemonic-letter">E</div><div class="mnemonic-word"><strong>IRDAI/Regulatory filing</strong></div></div>
-      </div>
-    </div>
-
-    <div class="sub-heading">Key Terms — Quick Reference</div>
-    <div class="key-terms-grid" id="key-terms-container"></div>
+    <p style="margin:24px 0 16px;color:#555;">Open the <strong>Mnemonic Recall Board</strong> to view all PMI mnemonics (SAGE PCC, ENCODE P, BAD MIX FILM, DATA PRICE) alongside every other chapter.</p>
+    <a href="CH0_SA1_Mnemonic_Recall_Board.html" target="_blank"
+       style="display:inline-block;padding:10px 22px;background:#1a1a18;color:#f5f4ef;border-radius:8px;text-decoration:none;font-size:14px;">
+      Open Recall Board →
+    </a>
   </div>
 
 </div><!-- /main-content -->
@@ -2139,6 +2035,7 @@ function renderIAIQuestions() {
 
 function renderKeyTerms() {
   const container = document.getElementById('key-terms-container');
+  if (!container) return;
   container.innerHTML = KEY_TERMS.map(kt => `
     <div class="key-term">
       <div class="key-term-name">${kt.term}</div>

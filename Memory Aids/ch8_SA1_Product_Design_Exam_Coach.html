@@ -431,91 +431,8 @@
     margin-bottom: 14px;
   }
 
-  /* ════════════════════════════════════════════
-     SCREEN 3: MNEMONICS
-  ════════════════════════════════════════════ */
 
-  .mnemonic-hero {
-    background: linear-gradient(135deg, rgba(232,200,122,0.08), rgba(122,179,232,0.08));
-    border: 1px solid var(--border);
-    border-radius: var(--r-lg);
-    padding: 28px;
-    margin-bottom: 28px;
-    text-align: center;
-  }
-  .mnem-word {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(28px, 5vw, 44px);
-    font-weight: 900;
-    letter-spacing: 0.15em;
-    color: var(--gold);
-    margin-bottom: 8px;
-  }
-  .mnem-expansion {
-    font-size: 14px;
-    color: var(--text-dim);
-    font-style: italic;
-    margin-bottom: 4px;
-  }
-  .mnem-sentence {
-    font-family: 'DM Mono', monospace;
-    font-size: 13px;
-    color: var(--text-dimmer);
-    margin-top: 12px;
-  }
-
-  .mnem-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 12px;
-  }
-  .mnem-card {
-    border: 1px solid var(--border);
-    border-radius: var(--r-lg);
-    background: var(--surface);
-    overflow: hidden;
-    cursor: pointer;
-    transition: all 0.2s;
-  }
-  .mnem-card:hover { border-color: var(--accent); }
-  .mnem-card-head {
-    padding: 14px 18px;
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    border-bottom: 1px solid var(--border);
-  }
-  .mnem-letter {
-    width: 44px;
-    height: 44px;
-    border-radius: var(--r);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: 'Playfair Display', serif;
-    font-size: 24px;
-    font-weight: 900;
-    flex-shrink: 0;
-  }
-  .mnem-word-label { font-size: 15px; font-weight: 600; color: var(--text); }
-  .mnem-card-body {
-    padding: 14px 18px;
-    display: none;
-    background: var(--surface2);
-  }
-  .mnem-card.open .mnem-card-body { display: block; }
-  .mnem-hook {
-    font-size: 12px;
-    color: var(--accent);
-    font-style: italic;
-    padding: 8px 12px;
-    border-left: 2px solid var(--accent);
-    border-radius: 0 var(--r) var(--r) 0;
-    background: rgba(232,200,122,0.04);
-    margin-top: 10px;
-  }
-
-  /* ════════════════════════════════════════════
+    /* ════════════════════════════════════════════
      SCREEN 4: QUICK REFERENCE
   ════════════════════════════════════════════ */
 
@@ -718,27 +635,12 @@
   <!-- ════ SCREEN: MNEMONICS ════ -->
   <div id="screenMnemonics" class="screen">
     <div class="section-title">Memory Mnemonics</div>
-    <div class="section-sub">Two core frameworks to anchor your exam answers.</div>
-
-    <div class="mnemonic-hero">
-      <div style="font-size:11px;color:var(--text-dimmer);font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:0.12em;margin-bottom:8px;">Product Design Framework</div>
-      <div class="mnem-word">P·R·O·D·U·C·T</div>
-      <div class="mnem-expansion">Pricing · Reinsurance · Operations · Distribution · Underwriting · Coverage · Target Market</div>
-      <div class="mnem-sentence">"Every good actuary structures their answer around the product lifecycle."</div>
-    </div>
-
-    <div class="mnem-grid" id="mnemGrid"></div>
-
-    <div class="divider"></div>
-
-    <div class="mnemonic-hero" style="background: linear-gradient(135deg, rgba(122,179,232,0.08), rgba(122,232,179,0.08));">
-      <div style="font-size:11px;color:var(--text-dimmer);font-family:'DM Mono',monospace;text-transform:uppercase;letter-spacing:0.12em;margin-bottom:8px;">Pricing Process Mnemonic</div>
-      <div class="mnem-word" style="color:var(--blue);">D·A·M·R·L·P·R·O</div>
-      <div class="mnem-expansion">Data · Assumptions · Maturity · Risk Premium · Loadings · Profit Testing · Regulatory · Ongoing Monitoring</div>
-      <div class="mnem-sentence">"Data Always Makes Rates Look Perfectly Realistic, Obviously."</div>
-    </div>
-
-    <div class="mnem-grid" id="damrlGrid"></div>
+    <div class="section-sub">PRODUCT &amp; DAMRLPRO frameworks — open the central Recall Board.</div>
+    <p style="margin:20px 0 16px;color:var(--text-dim);font-size:14px;">All mnemonics have moved to the Mnemonic Recall Board so they stay in sync across all chapters.</p>
+    <a href="CH0_SA1_Mnemonic_Recall_Board.html" target="_blank"
+       style="display:inline-block;padding:10px 22px;background:var(--accent);color:#fff;border-radius:8px;text-decoration:none;font-size:14px;">
+      Open Recall Board →
+    </a>
   </div>
 
   <!-- ════ SCREEN: QUICK REFERENCE ════ -->
@@ -1238,60 +1140,6 @@ const THEMES = [
 ];
 
 // ═══════════════════════════════════════════════════════════════
-// DATA: PRODUCT MNEMONIC
-// ═══════════════════════════════════════════════════════════════
-
-const PRODUCT_DATA = [
-  { letter:'P', word:'Pricing & Data', color:'#e8c87a', bg:'rgba(232,200,122,0.1)',
-    sub:['Start with internal experience (credibility check)','Adjust claim severity: remove one-offs, product restrictions, IBNER','Adjust claim frequency: deductible, IBNR, trend','Project to future inception date with medical inflation','Allow for maturity effects: select lives, waiting periods, selective lapse','Profit-test: risk premium + expense loading + margin','Sensitivity & scenario testing'],
-    hook:'Burning cost = frequency × severity. Always start with own data.' },
-  { letter:'R', word:'Reinsurance & Capital', color:'#7ae8b3', bg:'rgba(122,232,179,0.1)',
-    sub:['Proportional (quota share): risk + capacity sharing','Non-proportional (XOL): protect against large single claims','Consider catastrophe/stop-loss for pandemic or aggregate risk','Capital adequacy: economic capital, solvency margins','Reinsurer can provide pricing data and technical support for new products','Review reinsurance need as experience develops'],
-    hook:'High severity new product → always explore RI. RI = data + capacity + protection.' },
-  { letter:'O', word:'Operations & Administration', color:'#e87ab3', bg:'rgba(232,122,179,0.1)',
-    sub:['Policy admin system: new fields, workflows, renewals','Claims system: pre-auth, cashless network, TPA vs in-house','IT integration: sales, underwriting, claims, MIS','One-time setup costs (must be priced in!)','Ongoing maintenance and scalability','IBNR/reserving: lag patterns, new product uncertainty'],
-    hook:'Every new feature = system change + training cost. Don\'t forget setup in pricing.' },
-  { letter:'D', word:'Distribution & Sales', color:'#e87a7a', bg:'rgba(232,122,122,0.1)',
-    sub:['Choose channels: agents, brokers, bancassurance, D2C, digital','Commission structure and incentives','Training: complex product → higher training cost','Marketing spend: aggressive launch vs slow build','Mis-selling risk: complex product → stronger governance','Target segment alignment with channel choice'],
-    hook:'Complex product → agents/brokers. Simple/online → D2C. Marketing = capital spend.' },
-  { letter:'U', word:'Underwriting', color:'#7ab3e8', bg:'rgba(122,179,232,0.1)',
-    sub:['Front-end (full UW) vs back-end (moratorium/exclusions)','Free cover limits for group; trigger levels for individual','Medical tests: cost vs benefit; age/SI thresholds','Anti-selection controls: waiting periods, deferred periods','Underwriting manual: new product → update required','PED exclusions, initial waiting periods, moratorium'],
-    hook:'Lower UW = faster sales but higher anti-selection risk. Balance cost vs selection benefit.' },
-  { letter:'C', word:'Coverage Design', color:'#e87ab3', bg:'rgba(232,122,179,0.1)',
-    sub:['Benefit type: indemnity vs lump-sum vs cash','Scope: IP / OP / OPD / global / critical illness','Sum insured, limits, sub-limits, co-pay, deductible','Exclusions: PED, cosmetic, self-inflicted, named conditions','Waiting periods, deferred periods, linking period','NCB / wellness rewards / premium incentives','Renewability: yearly, lifetime, guaranteed'],
-    hook:'SCREW: Scope, Co-pay, Renewability, Exclusions, Waiting periods.' },
-  { letter:'T', word:'Target Market & Regulation', color:'#7ae8b3', bg:'rgba(122,232,179,0.1)',
-    sub:['Define target segment: age, income, geography, occupation','Market research: customer need, willingness to pay','Competitive benchmarking: pricing, features, channels','Conflict with existing products (cannibalisation risk)','Regulatory approval: IRDAI File & Use / Use & File','Policyholder Reasonable Expectations (PRE)'],
-    hook:'Always start here. No market = no product. Regulation shapes everything else.' },
-];
-
-const DAMRL_DATA = [
-  { letter:'D', word:'Data Collection & Preparation', color:'#7ab3e8', bg:'rgba(122,179,232,0.1)',
-    sub:['Internal claims data: credibility check vs industry benchmarks','External sources: reinsurer tables, industry bodies, government statistics','Data adjustments: remove one-offs, correct for IBNR, IBNER','New products: use reinsurer / global data + wide uncertainty margins'],
-    hook:'Start with own data. If insufficient, use reinsurer data + uncertainty loading.' },
-  { letter:'A', word:'Assumption Setting', color:'#7ae8b3', bg:'rgba(122,232,179,0.1)',
-    sub:['Morbidity: incidence, severity, recovery rates, duration','Lapse: selective lapsing — healthier lives more likely to lapse','Expenses: admin, claims handling, one-off setup, ongoing','Investment returns: relevant for pre-funded products (LTC, ROP)'],
-    hook:'Each assumption needs a basis. New product → extra margin for uncertainty.' },
-  { letter:'M', word:'Maturity Adjustments', color:'#e8c87a', bg:'rgba(232,200,122,0.1)',
-    sub:['Select lives effect: new policyholders healthier than average initially','Waiting period: eliminates very early claims (anti-selection control)','Selective lapse: over time, higher-risk lives remain','Medical inflation trend: project from historical to future inception date'],
-    hook:'Never price on raw data — mature a new product\'s experience to expected steady state.' },
-  { letter:'R', word:'Risk Premium Calculation', color:'#e87ab3', bg:'rgba(232,122,179,0.1)',
-    sub:['Risk premium = expected claim cost = frequency × severity','Adjust for deductibles, excesses, claim definition changes','Allow for benefit structure: indemnity vs fixed vs income replacement','Separate IP, OP, day-care components for PMI products'],
-    hook:'Burning cost approach. Cross-check with competitor rates and reinsurer quote.' },
-  { letter:'L', word:'Loadings', color:'#e87a7a', bg:'rgba(232,122,122,0.1)',
-    sub:['Expense loading: admin, distribution commission, claims handling','One-off setup: IT systems, staff training, regulatory filing','Reinsurance premium loading','Contingency margin for model and parameter uncertainty'],
-    hook:'Don\'t forget one-off setup costs — frequently omitted but always available as a mark.' },
-  { letter:'P', word:'Profit Testing', color:'#7ab3e8', bg:'rgba(122,179,232,0.1)',
-    sub:['Project cash flows over product lifetime under best estimate assumptions','Apply required return on capital (hurdle rate)','Sensitivity test: key assumptions (morbidity +20%, lapse +10%)','Scenario test: adverse pandemic, economic downturn on IP claims'],
-    hook:'Profit test isn\'t just NPV — include sensitivity and stress scenarios.' },
-  { letter:'R', word:'Regulatory & Competitive Review', color:'#7ae8b3', bg:'rgba(122,232,179,0.1)',
-    sub:['File rates for regulatory approval: IRDAI File & Use / Use & File','Check compliance with community rating rules (if applicable)','Benchmark against market: price competitiveness analysis','Seek management and board sign-off on pricing basis'],
-    hook:'Regulatory review is not the last step in practice — involve compliance from day one.' },
-  { letter:'O', word:'Ongoing Monitoring', color:'#e8c87a', bg:'rgba(232,200,122,0.1)',
-    sub:['Actuarial control cycle: actual vs expected experience review (quarterly/annually)','Trigger points for premium review or product redesign','Management information (MI): claims frequency, severity, IBNR development','Feed experience back into assumption updates for next pricing cycle'],
-    hook:'Monitoring closes the loop. New product → more frequent review, tighter tolerances.' },
-];
-
 // ═══════════════════════════════════════════════════════════════
 // STATE
 // ═══════════════════════════════════════════════════════════════
@@ -1318,11 +1166,12 @@ const PRODUCT_LIST = [
 function switchMode(mode) {
   currentMode = mode;
   ['coach','themes','mnemonics','reference'].forEach(m => {
-    document.getElementById('screen' + m.charAt(0).toUpperCase() + m.slice(1)).classList.toggle('active', m === mode);
-    document.getElementById('mode' + m.charAt(0).toUpperCase() + m.slice(1)).classList.toggle('active', m === mode);
+    const scr = document.getElementById('screen' + m.charAt(0).toUpperCase() + m.slice(1));
+    const btn = document.getElementById('mode' + m.charAt(0).toUpperCase() + m.slice(1));
+    if (scr) scr.classList.toggle('active', m === mode);
+    if (btn) btn.classList.toggle('active', m === mode);
   });
   if (mode === 'themes' && !document.getElementById('themeGrid').children.length) buildThemes();
-  if (mode === 'mnemonics' && !document.getElementById('mnemGrid').children.length) buildMnemonics();
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -1467,57 +1316,6 @@ function closeDetail() {
   document.getElementById('detailPanel').classList.remove('open');
   document.querySelectorAll('.theme-card').forEach(c => c.classList.remove('selected'));
   selectedTheme = null;
-}
-
-// ═══════════════════════════════════════════════════════════════
-// MNEMONICS
-// ═══════════════════════════════════════════════════════════════
-
-function buildMnemonics() {
-  const grid = document.getElementById('mnemGrid');
-  grid.innerHTML = PRODUCT_DATA.map((d, i) => `
-    <div class="mnem-card" id="mc${i}" onclick="toggleMnem(${i})">
-      <div class="mnem-card-head">
-        <div class="mnem-letter" style="background:${d.bg};color:${d.color};">${d.letter}</div>
-        <div>
-          <div class="mnem-word-label">${d.word}</div>
-          <div style="font-size:12px;color:var(--text-dimmer);">click to expand</div>
-        </div>
-      </div>
-      <div class="mnem-card-body">
-        <ul class="bullet-list">
-          ${d.sub.map(s => `<li style="">${s}</li>`).join('')}
-        </ul>
-        <div class="mnem-hook">${d.hook}</div>
-      </div>
-    </div>
-  `).join('');
-
-  const dgrid = document.getElementById('damrlGrid');
-  dgrid.innerHTML = DAMRL_DATA.map((d, i) => `
-    <div class="mnem-card" id="dc${i}" onclick="toggleDamrl(${i})">
-      <div class="mnem-card-head">
-        <div class="mnem-letter" style="background:${d.bg};color:${d.color};">${d.letter}</div>
-        <div>
-          <div class="mnem-word-label">${d.word}</div>
-          <div style="font-size:12px;color:var(--text-dimmer);">click to expand</div>
-        </div>
-      </div>
-      <div class="mnem-card-body">
-        <ul class="bullet-list">
-          ${d.sub.map(s => `<li>${s}</li>`).join('')}
-        </ul>
-        <div class="mnem-hook">${d.hook}</div>
-      </div>
-    </div>
-  `).join('');
-}
-
-function toggleMnem(i) {
-  document.getElementById('mc' + i).classList.toggle('open');
-}
-function toggleDamrl(i) {
-  document.getElementById('dc' + i).classList.toggle('open');
 }
 
 // ═══════════════════════════════════════════════════════════════
