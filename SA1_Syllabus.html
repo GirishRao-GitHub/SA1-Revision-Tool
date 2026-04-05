@@ -2162,7 +2162,7 @@ function selectMemoryAid(url, label) {
         const blobUrl = URL.createObjectURL(blob);
         document.getElementById('memory-aid-body').innerHTML =
           `<iframe class="memory-aid-frame" src="${blobUrl}"
-            sandbox="allow-scripts allow-same-origin allow-forms allow-modals"
+            sandbox="allow-scripts allow-same-origin allow-forms allow-modals allow-top-navigation"
             title="${label}"></iframe>`;
       })
       .catch(() => {
