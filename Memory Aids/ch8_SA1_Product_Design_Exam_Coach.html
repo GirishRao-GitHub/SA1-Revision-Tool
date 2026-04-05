@@ -635,12 +635,17 @@
   <!-- ════ SCREEN: MNEMONICS ════ -->
   <div id="screenMnemonics" class="screen">
     <div class="section-title">Memory Mnemonics</div>
-    <div class="section-sub">PRODUCT &amp; DAMRLPRO frameworks — open the central Recall Board.</div>
-    <p style="margin:20px 0 16px;color:var(--text-dim);font-size:14px;">All mnemonics have moved to the Mnemonic Recall Board so they stay in sync across all chapters.</p>
-    <a href="CH0_SA1_Mnemonic_Recall_Board.html"
-       style="display:inline-block;padding:10px 22px;background:var(--accent);color:#fff;border-radius:8px;text-decoration:none;font-size:14px;">
-      Open Recall Board →
-    </a>
+    <div class="section-sub">Product Design relevant aids — fetched live from Memory_Aids.json</div>
+
+    <!-- Filter tabs -->
+    <div id="mn-filter-bar" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:28px;margin-top:6px;"></div>
+
+    <!-- Cards container -->
+    <div id="mn-cards" style="display:flex;flex-direction:column;gap:20px;">
+      <div style="color:var(--text-dimmer);font-family:'DM Mono',monospace;font-size:13px;padding:40px 0;text-align:center;">
+        Loading mnemonics…
+      </div>
+    </div>
   </div>
 
   <!-- ════ SCREEN: QUICK REFERENCE ════ -->
@@ -1172,6 +1177,7 @@ function switchMode(mode) {
     if (btn) btn.classList.toggle('active', m === mode);
   });
   if (mode === 'themes' && !document.getElementById('themeGrid').children.length) buildThemes();
+  if (mode === 'mnemonics' && !window._mnLoaded) loadMnemonics();
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -1333,6 +1339,266 @@ window.addEventListener('scroll', () => {
 // ═══════════════════════════════════════════════════════════════
 
 renderCoach();
+
+// ═══════════════════════════════════════════════════════════════
+// MNEMONICS — inline renderer from Memory_Aids.json
+// ═══════════════════════════════════════════════════════════════
+
+// Which aids to show for Product Design, in display order
+// Each entry: { label, color, colorBg, ids[] }
+const MN_SECTIONS = [
+  {
+    label: 'Product Design Frameworks',
+    color: '#e8c87a',
+    colorBg: 'rgba(232,200,122,0.08)',
+    borderColor: 'rgba(232,200,122,0.35)',
+    ids: ['PRICING-02', 'PRICING-01']   // PRODUCT, DAMRLPRO
+  },
+  {
+    label: 'Critical Illness (CI)',
+    color: '#e87ab3',
+    colorBg: 'rgba(232,122,179,0.07)',
+    borderColor: 'rgba(232,122,179,0.3)',
+    ids: ['CI-01', 'CI-02', 'CI-03', 'CI-04', 'CI-05']
+  },
+  {
+    label: 'Income Protection (IP)',
+    color: '#7ae8b3',
+    colorBg: 'rgba(122,232,179,0.07)',
+    borderColor: 'rgba(122,232,179,0.3)',
+    ids: ['IP-01', 'IP-02', 'IP-03', 'IP-04']
+  },
+  {
+    label: 'Private Medical Insurance (PMI)',
+    color: '#7ab3e8',
+    colorBg: 'rgba(122,179,232,0.07)',
+    borderColor: 'rgba(122,179,232,0.3)',
+    ids: ['PMI-01', 'PMI-02', 'PMI-03']
+  },
+  {
+    label: 'Long-Term Care Insurance (LTCI)',
+    color: '#c4a97a',
+    colorBg: 'rgba(196,169,122,0.07)',
+    borderColor: 'rgba(196,169,122,0.3)',
+    ids: ['LTCI-01', 'LTCI-02', 'LTCI-03']
+  },
+  {
+    label: 'Group Products',
+    color: '#a87ae8',
+    colorBg: 'rgba(168,122,232,0.07)',
+    borderColor: 'rgba(168,122,232,0.3)',
+    ids: ['GRP-01']
+  },
+];
+
+// Build a flat lookup: id → aid object
+function buildAidIndex(data) {
+  const idx = {};
+  const allSections = [
+    ...Object.values(data.product_aids || {}),
+    ...Object.values(data.topic_aids || {})
+  ];
+  allSections.forEach(sec => {
+    (sec.aids || []).forEach(aid => { idx[aid.id] = aid; });
+  });
+  return idx;
+}
+
+function renderMnCard(aid, color, colorBg, borderColor) {
+  const items = aid.items.map(item => `
+    <div style="display:flex;gap:0;align-items:stretch;border-radius:6px;overflow:hidden;border:1px solid ${borderColor};background:var(--surface2);">
+      <div style="
+        min-width:44px;width:44px;
+        display:flex;align-items:center;justify-content:center;
+        background:${colorBg};
+        border-right:1px solid ${borderColor};
+        font-family:'DM Mono',monospace;
+        font-size:17px;font-weight:700;
+        color:${color};
+        flex-shrink:0;
+        padding:10px 4px;
+        letter-spacing:-0.5px;
+      ">${item.letter}</div>
+      <div style="padding:10px 14px;flex:1;">
+        <div style="font-size:13.5px;font-weight:600;color:var(--text);line-height:1.35;">${item.word}</div>
+        ${item.detail ? `<div style="font-size:12px;color:var(--text-dimmer);margin-top:3px;line-height:1.5;">${item.detail}</div>` : ''}
+      </div>
+    </div>`).join('');
+
+  return `
+    <div class="mn-card-wrap" style="
+      border:1px solid ${borderColor};
+      border-left:3px solid ${color};
+      border-radius:10px;
+      background:var(--surface);
+      overflow:hidden;
+      margin-bottom:4px;
+    ">
+      <div style="
+        padding:12px 16px;
+        border-bottom:1px solid ${borderColor};
+        background:${colorBg};
+        display:flex;align-items:center;gap:12px;
+      ">
+        <span style="
+          font-family:'DM Mono',monospace;
+          font-size:12px;font-weight:700;
+          background:${color};color:#0d0f14;
+          padding:2px 9px;border-radius:4px;
+          letter-spacing:0.04em;flex-shrink:0;
+        ">${aid.code}</span>
+        <span style="font-size:14px;font-weight:600;color:var(--text);">${aid.title}</span>
+      </div>
+      <div style="padding:14px 16px;display:flex;flex-direction:column;gap:6px;">
+        ${items}
+      </div>
+    </div>`;
+}
+
+function renderMnSection(section, aidIndex) {
+  const cards = section.ids
+    .map(id => aidIndex[id])
+    .filter(Boolean)
+    .map(aid => renderMnCard(aid, section.color, section.colorBg, section.borderColor))
+    .join('');
+
+  if (!cards) return '';
+
+  return `
+    <div class="mn-section" data-section="${section.label}" style="
+      border:1px solid ${section.borderColor};
+      border-radius:12px;
+      overflow:hidden;
+    ">
+      <div style="
+        padding:12px 18px;
+        background:${section.colorBg};
+        border-bottom:1px solid ${section.borderColor};
+        display:flex;align-items:center;gap:10px;
+      ">
+        <span style="
+          width:8px;height:8px;border-radius:50%;
+          background:${section.color};flex-shrink:0;
+        "></span>
+        <span style="
+          font-family:'DM Mono',monospace;
+          font-size:11px;font-weight:700;
+          letter-spacing:0.08em;text-transform:uppercase;
+          color:${section.color};
+        ">${section.label}</span>
+        <span style="font-size:11px;color:var(--text-dimmer);margin-left:auto;font-family:'DM Mono',monospace;">
+          ${section.ids.length} aid${section.ids.length !== 1 ? 's' : ''}
+        </span>
+      </div>
+      <div style="padding:14px 16px;display:flex;flex-direction:column;gap:10px;">
+        ${cards}
+      </div>
+    </div>`;
+}
+
+function buildFilterBar(aidIndex) {
+  const bar = document.getElementById('mn-filter-bar');
+  // "All" button
+  const allBtn = document.createElement('button');
+  allBtn.textContent = 'All';
+  allBtn.dataset.filter = 'all';
+  Object.assign(allBtn.style, {
+    padding: '6px 16px', borderRadius: '20px',
+    border: '1px solid var(--accent)', background: 'rgba(232,200,122,0.12)',
+    color: 'var(--accent)', fontFamily: "'DM Mono',monospace",
+    fontSize: '11px', fontWeight: '700', cursor: 'pointer',
+    letterSpacing: '0.05em', textTransform: 'uppercase', transition: 'all 0.15s'
+  });
+  allBtn.classList.add('mn-filter-active');
+  bar.appendChild(allBtn);
+
+  MN_SECTIONS.forEach(sec => {
+    const btn = document.createElement('button');
+    btn.textContent = sec.label.split(' (')[0]; // short label
+    btn.dataset.filter = sec.label;
+    Object.assign(btn.style, {
+      padding: '6px 16px', borderRadius: '20px',
+      border: `1px solid ${sec.borderColor}`,
+      background: 'transparent', color: sec.color,
+      fontFamily: "'DM Mono',monospace",
+      fontSize: '11px', fontWeight: '600', cursor: 'pointer',
+      letterSpacing: '0.04em', textTransform: 'uppercase', transition: 'all 0.15s'
+    });
+    bar.appendChild(btn);
+  });
+
+  bar.addEventListener('click', e => {
+    const btn = e.target.closest('button[data-filter]');
+    if (!btn) return;
+    const filter = btn.dataset.filter;
+    // Update active style
+    bar.querySelectorAll('button').forEach(b => {
+      b.classList.remove('mn-filter-active');
+      b.style.fontWeight = '600';
+    });
+    btn.classList.add('mn-filter-active');
+    btn.style.fontWeight = '700';
+    // Show/hide sections
+    document.querySelectorAll('.mn-section').forEach(sec => {
+      if (filter === 'all' || sec.dataset.section === filter) {
+        sec.style.display = '';
+      } else {
+        sec.style.display = 'none';
+      }
+    });
+  });
+}
+
+function loadMnemonics() {
+  const DATA_URLS = [
+    'https://raw.githubusercontent.com/GirishRao-GitHub/SA1-Revision-Tool/main/data/Memory_Aids.json',
+    '../data/Memory_Aids.json',
+    'data/Memory_Aids.json'
+  ];
+
+  function tryFetch(urls) {
+    const [url, ...rest] = urls;
+    return fetch(url)
+      .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+      .catch(err => rest.length ? tryFetch(rest) : Promise.reject(err));
+  }
+
+  const container = document.getElementById('mn-cards');
+
+  tryFetch(DATA_URLS)
+    .then(data => {
+      window._mnLoaded = true;
+      const aidIndex = buildAidIndex(data);
+
+      // Build filter bar once
+      buildFilterBar(aidIndex);
+
+      // Render all sections
+      const html = MN_SECTIONS
+        .map(sec => renderMnSection(sec, aidIndex))
+        .filter(Boolean)
+        .join('');
+
+      container.innerHTML = html || `
+        <div style="color:var(--text-dimmer);font-family:'DM Mono',monospace;font-size:13px;padding:40px 0;text-align:center;">
+          No mnemonics found in Memory_Aids.json for the expected IDs.
+        </div>`;
+    })
+    .catch(err => {
+      container.innerHTML = `
+        <div style="
+          padding:20px 24px;border-radius:10px;
+          border:1px solid rgba(232,122,122,0.3);
+          background:rgba(232,122,122,0.07);
+          font-size:13px;color:#e87a7a;line-height:1.7;
+        ">
+          <strong>⚠ Could not load Memory_Aids.json</strong><br>
+          ${err.message}<br><br>
+          Make sure <code style="font-family:'DM Mono',monospace;">data/Memory_Aids.json</code> exists
+          in the project root (one level above the <em>Memory Aids</em> folder).
+        </div>`;
+    });
+}
 </script>
 </body>
 </html>
