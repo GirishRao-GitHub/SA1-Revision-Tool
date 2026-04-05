@@ -49,9 +49,8 @@
     display: flex;
     align-items: center;
     gap: 16px;
-    padding: 10px 24px;
-    max-width: 1400px;
-    margin: 0 auto;
+    padding: 10px 16px;
+    min-width: 0;
   }
   .header-badge {
     background: var(--crimson);
@@ -71,6 +70,10 @@
     color: white;
     flex: 1;
     font-style: italic;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
   .header-title span { color: #f8a0b0; }
   .header-search {
@@ -102,14 +105,28 @@
   }
 
   /* ── NAV ── */
-  .nav-strip {
+  .nav-outer {
     background: rgba(0,0,0,0.35);
-    max-width: 1400px;
-    margin: 0 auto;
+    position: relative;
+    overflow: hidden;
+  }
+  .nav-outer::after {
+    content: '';
+    position: absolute;
+    right: 0; top: 0; bottom: 0;
+    width: 36px;
+    background: linear-gradient(to right, transparent, rgba(20,5,10,0.85));
+    pointer-events: none;
+    z-index: 2;
+  }
+  .nav-strip {
     display: flex;
     overflow-x: auto;
     scrollbar-width: none;
-    padding: 0 24px;
+    -ms-overflow-style: none;
+    padding: 0 8px;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
   }
   .nav-strip::-webkit-scrollbar { display: none; }
   .nav-tab {
@@ -301,7 +318,7 @@
       <button onclick="doSearch(document.getElementById('searchInput').value)">⌕</button>
     </div>
   </div>
-  <div style="background:rgba(0,0,0,0.25);">
+  <div class="nav-outer">
     <div class="nav-strip">
       <div class="nav-tab active" onclick="showTab('overview')">📋 Overview</div>
       <div class="nav-tab" onclick="showTab('conditions')">🦠 Conditions</div>
@@ -1805,7 +1822,7 @@ function renderProductAids(aids) {
 }
 
 function loadMemoryAids() {
-  fetch('data/Memory_Aids.json')
+  fetch('/SA1-Revision-Tool/data/Memory_Aids.json')
     .then(r => r.json())
     .then(data => {
       renderSkeleton(data.universal_skeleton);
