@@ -394,6 +394,22 @@
     gap: 4px;
   }
   .memory-aid-open-btn:hover { color: var(--accent); border-color: var(--accent); background: var(--accent-lo); }
+  .memory-aid-back-btn {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-dim);
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 3px 8px;
+    cursor: pointer;
+    transition: all .15s;
+    display: none;
+    align-items: center;
+    gap: 4px;
+  }
+  .memory-aid-back-btn:hover { color: var(--green); border-color: var(--green); background: var(--green-lo); }
+  .memory-aid-back-btn.visible { display: inline-flex; }
 
   /* ── CANVAS ── */
   .canvas {
@@ -1371,6 +1387,7 @@ const MEMORY_AIDS_API = 'https://api.github.com/repos/GirishRao-GitHub/SA1-Revis
 const MEMORY_AIDS_RAW  = 'https://raw.githubusercontent.com/GirishRao-GitHub/SA1-Revision-Tool/main/Memory%20Aids/';
 const MEMORY_AIDS_BY_CHAPTER = {};  // { chapterNum (or 0) → [ { label, url, filename, ext }, … ] }
 let activeMemoryAid = null;  // { label, url }
+let previousMemoryAid = null; // { label, url } — for back navigation from recall board
 const openSections  = new Set(); // "chNum_secId" keys for expanded section rows
 
 // ── INIT ─────────────────────────────────────────────────
@@ -2117,12 +2134,16 @@ function selectMemoryAid(url, label) {
 
   const isSvg = url.toLowerCase().endsWith('.svg');
 
+  // When navigating via sidebar, clear any previous back-state
+  previousMemoryAid = null;
+
   // Render the topbar shell immediately
   document.getElementById('content-area').innerHTML = `
     <div class="memory-aid-wrapper">
       <div class="memory-aid-topbar">
+        <button class="memory-aid-back-btn" id="memory-aid-back" onclick="goBackMemoryAid()">← Back</button>
         <span class="memory-aid-badge">🧠 Memory Aid</span>
-        <span class="memory-aid-title">${label}</span>
+        <span class="memory-aid-title" id="memory-aid-label">${label}</span>
         <a class="memory-aid-open-btn" href="${url}" target="_blank">↗ Open in new tab</a>
       </div>
       <div id="memory-aid-body" style="flex:1;overflow:hidden;display:flex;align-items:center;justify-content:center;">
@@ -2152,42 +2173,54 @@ function selectMemoryAid(url, label) {
       });
   } else {
     // HTML files: fetch content and render via blob URL to bypass X-Frame-Options.
-    // Rewrite all local .html links to post a message to the parent instead of navigating,
-    // so clicking "Open Recall Board" loads it in the same iframe frame.
-    const ghPagesBase = 'https://girishrao-github.github.io/SA1-Revision-Tool/Memory%20Aids/';
-    fetch(url)
-      .then(r => {
-        if (!r.ok) throw new Error('HTTP ' + r.status);
-        return r.text();
-      })
-      .then(html => {
-        // Inject a script that intercepts local .html link clicks and sends a postMessage
-        // to the parent window with the full GitHub Pages URL to load in the frame.
-        const interceptScript = `
-          <script>
-            document.addEventListener('click', function(e) {
-              var a = e.target.closest('a');
-              if (!a) return;
-              var href = a.getAttribute('href');
-              if (href && !href.startsWith('http') && href.endsWith('.html')) {
-                e.preventDefault();
-                window.parent.postMessage({ type: 'loadMemoryAid', url: '${ghPagesBase}' + href }, '*');
-              }
-            });
-          <\/script>`;
-        const injected = html.replace(/<\/body>/i, interceptScript + '</body>');
-        const blob    = new Blob([injected], { type: 'text/html' });
-        const blobUrl = URL.createObjectURL(blob);
-        document.getElementById('memory-aid-body').innerHTML =
-          `<iframe class="memory-aid-frame" src="${blobUrl}"
-            sandbox="allow-scripts allow-same-origin allow-forms allow-modals"
-            title="${label}"></iframe>`;
-      })
-      .catch(() => {
-        document.getElementById('memory-aid-body').innerHTML =
-          `<div style="color:#f07070;font-family:var(--mono);font-size:12px;padding:20px;">Could not load memory aid.</div>`;
-      });
+    // Inject a click interceptor so local .html links post a message to the parent
+    // instead of navigating — parent loads the target in the same frame with a Back button.
+    fetchAndRenderMemoryAid(url, label);
   }
+}
+
+function fetchAndRenderMemoryAid(url, label) {
+  const ghPagesBase = 'https://girishrao-github.github.io/SA1-Revision-Tool/Memory%20Aids/';
+  const interceptScript = `<script>
+    document.addEventListener('click', function(e) {
+      var a = e.target.closest('a');
+      if (!a) return;
+      var href = a.getAttribute('href');
+      if (href && !href.startsWith('http') && !href.startsWith('#') && href.endsWith('.html')) {
+        e.preventDefault();
+        window.parent.postMessage({ type: 'loadMemoryAid', url: '${ghPagesBase}' + href }, '*');
+      }
+    });
+  <\/script>`;
+  fetch(url)
+    .then(r => {
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      return r.text();
+    })
+    .then(html => {
+      const injected = html.replace(/<\/body>/i, interceptScript + '</body>');
+      const blob    = new Blob([injected], { type: 'text/html' });
+      const blobUrl = URL.createObjectURL(blob);
+      document.getElementById('memory-aid-body').innerHTML =
+        `<iframe class="memory-aid-frame" src="${blobUrl}"
+          sandbox="allow-scripts allow-same-origin allow-forms allow-modals"
+          title="${label}"></iframe>`;
+    })
+    .catch(() => {
+      document.getElementById('memory-aid-body').innerHTML =
+        `<div style="color:#f07070;font-family:var(--mono);font-size:12px;padding:20px;">Could not load memory aid.</div>`;
+    });
+}
+
+function goBackMemoryAid() {
+  if (!previousMemoryAid) return;
+  const { url, label } = previousMemoryAid;
+  previousMemoryAid = null;
+  // Update topbar
+  document.getElementById('memory-aid-label').textContent = label;
+  document.getElementById('memory-aid-back').classList.remove('visible');
+  // Reload the previous memory aid in the frame
+  fetchAndRenderMemoryAid(url, label);
 }
 
 // Restore canvas padding when navigating away from a memory aid
@@ -2207,39 +2240,23 @@ function clearMemoryAidView() {
 // Kick off memory aids load
 loadMemoryAids();
 
-// Listen for postMessage from memory aid iframes requesting to load another memory aid in the frame
+// Listen for postMessage from memory aid iframes — load target in the same frame with Back button
 window.addEventListener('message', function(e) {
-  if (e.data && e.data.type === 'loadMemoryAid' && e.data.url) {
-    // Derive label from filename
-    const filename = decodeURIComponent(e.data.url.split('/').pop().replace('.html', ''));
-    const label = filename.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
-    // Fetch and render the requested memory aid into the same frame
-    fetch(e.data.url.replace('https://girishrao-github.github.io/SA1-Revision-Tool/', 'https://raw.githubusercontent.com/GirishRao-GitHub/SA1-Revision-Tool/main/'))
-      .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.text(); })
-      .then(html => {
-        const ghPagesBase = 'https://girishrao-github.github.io/SA1-Revision-Tool/Memory%20Aids/';
-        const interceptScript = `
-          <script>
-            document.addEventListener('click', function(e) {
-              var a = e.target.closest('a');
-              if (!a) return;
-              var href = a.getAttribute('href');
-              if (href && !href.startsWith('http') && href.endsWith('.html')) {
-                e.preventDefault();
-                window.parent.postMessage({ type: 'loadMemoryAid', url: '${ghPagesBase}' + href }, '*');
-              }
-            });
-          <\/script>`;
-        const injected = html.replace(/<\/body>/i, interceptScript + '</body>');
-        const blob = new Blob([injected], { type: 'text/html' });
-        const blobUrl = URL.createObjectURL(blob);
-        document.getElementById('memory-aid-body').innerHTML =
-          `<iframe class="memory-aid-frame" src="${blobUrl}"
-            sandbox="allow-scripts allow-same-origin allow-forms allow-modals"
-            title="${label}"></iframe>`;
-      })
-      .catch(() => {});
-  }
+  if (!e.data || e.data.type !== 'loadMemoryAid' || !e.data.url) return;
+  const targetUrl = e.data.url
+    .replace('https://girishrao-github.github.io/SA1-Revision-Tool/', 'https://raw.githubusercontent.com/GirishRao-GitHub/SA1-Revision-Tool/main/');
+  const filename = decodeURIComponent(e.data.url.split('/').pop().replace('.html', ''));
+  const targetLabel = filename.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+  // Save current memory aid so Back button can restore it
+  previousMemoryAid = activeMemoryAid ? { ...activeMemoryAid } : null;
+  activeMemoryAid = { url: targetUrl, label: targetLabel };
+  // Update topbar title and show Back button
+  const labelEl = document.getElementById('memory-aid-label');
+  const backBtn = document.getElementById('memory-aid-back');
+  if (labelEl) labelEl.textContent = targetLabel;
+  if (backBtn && previousMemoryAid) backBtn.classList.add('visible');
+  // Load the target into the frame
+  fetchAndRenderMemoryAid(targetUrl, targetLabel);
 });
 
 // ── FLASHCARDS ────────────────────────────────────────────
