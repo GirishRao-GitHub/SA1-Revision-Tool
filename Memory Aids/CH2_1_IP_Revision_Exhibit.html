@@ -2118,7 +2118,7 @@ function renderProductAids(aids) {
 }
 
 function loadMemoryAids() {
-  fetch('/SA1-Revision-Tool/data/Memory_Aids.json')
+  fetch(window.location.origin + '/SA1-Revision-Tool/data/Memory_Aids.json')
     .then(r => r.json())
     .then(data => {
       renderSkeleton(data.universal_skeleton);

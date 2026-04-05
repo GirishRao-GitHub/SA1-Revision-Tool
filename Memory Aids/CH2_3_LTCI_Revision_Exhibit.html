@@ -51,9 +51,8 @@
     display: flex;
     align-items: center;
     gap: 16px;
-    padding: 10px 24px;
-    max-width: 1400px;
-    margin: 0 auto;
+    padding: 10px 16px;
+    min-width: 0;
   }
   .header-badge {
     background: var(--violet);
@@ -72,6 +71,10 @@
     font-weight: 700;
     color: white;
     flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
   .header-title span { color: var(--teal-light); }
   .header-search {
@@ -103,23 +106,37 @@
   }
 
   /* ── NAV TABS ── */
-  .nav-tabs {
+  .nav-outer {
     background: var(--navy-mid);
+    position: relative;
+    overflow: hidden;
+  }
+  .nav-outer::after {
+    content: '';
+    position: absolute;
+    right: 0; top: 0; bottom: 0;
+    width: 36px;
+    background: linear-gradient(to right, transparent, rgba(15,20,40,0.85));
+    pointer-events: none;
+    z-index: 2;
+  }
+  .nav-tabs {
     display: flex;
     overflow-x: auto;
     scrollbar-width: none;
-    padding: 0 2px;
-    max-width: 1400px;
-    margin: 0 auto;
+    -ms-overflow-style: none;
+    padding: 0 8px;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
   }
   .nav-tabs::-webkit-scrollbar { display: none; }
   .nav-tab {
-    padding: 8px 5px;
+    padding: 9px 14px;
     color: rgba(255,255,255,0.65);
     cursor: pointer;
-    font-size: 12px;
+    font-size: 12.5px;
     font-weight: 600;
-    letter-spacing: 0;
+    letter-spacing: 0.3px;
     white-space: nowrap;
     border-bottom: 3px solid transparent;
     transition: all 0.2s;
@@ -220,6 +237,39 @@
     gap: 10px;
     margin-bottom: 24px;
   }
+  /* alias for JSON-rendered terms container */
+  .terms-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 10px;
+    margin-bottom: 24px;
+  }
+  .term {
+    background: white;
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--teal);
+    border-radius: 6px;
+    padding: 11px 14px;
+  }
+  .term-name { font-weight: 700; font-size: 13px; color: var(--teal); margin-bottom: 4px; font-family: 'JetBrains Mono', monospace; }
+  .term-def { font-size: 13px; color: var(--text-light); line-height: 1.5; }
+  /* mnemonic cards rendered from JSON */
+  .mnemonic {
+    background: linear-gradient(135deg, #0d1a30 0%, #1a2d50 100%);
+    color: white; border-radius: 12px; padding: 20px 24px; margin-bottom: 20px;
+  }
+  .mn-title { font-family: 'Playfair Display', serif; font-size: 13px; font-weight: 700; opacity: 0.65; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1.5px; font-style: italic; }
+  .mn-items { display: flex; flex-wrap: wrap; gap: 10px; }
+  .mn-item { display: flex; align-items: flex-start; gap: 8px; min-width: 200px; flex: 1; }
+  .mn-letter { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 700; color: var(--teal-light); line-height: 1; min-width: 26px; }
+  .mn-word { font-size: 13px; line-height: 1.45; padding-top: 2px; }
+  .mn-word strong { display: block; font-size: 13.5px; color: var(--teal-light); }
+  /* alert box for load errors */
+  .alert { border-radius: 8px; padding: 12px 16px; margin-bottom: 12px; font-size: 13.5px; display: flex; gap: 10px; align-items: flex-start; }
+  .alert.amber { background: #fdf4df; border-left: 4px solid #b07d1a; }
+  .alert-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+  /* sub-heading for sections inside mnemonics tab */
+  .sub-hd { font-family: 'Playfair Display', serif; font-size: 17px; font-weight: 700; color: var(--navy); margin: 22px 0 10px; padding-left: 12px; border-left: 4px solid var(--teal); font-style: italic; }
   .key-term {
     background: white;
     border: 1px solid var(--border);
@@ -474,7 +524,7 @@
       <button onclick="doSearch(document.getElementById('searchInput').value)">⌕</button>
     </div>
   </div>
-  <div style="background: var(--navy-mid);">
+  <div class="nav-outer">
     <div class="nav-tabs" id="navTabs">
       <div class="nav-tab active"   onclick="showTab('overview')">📋 Overview</div>
       <div class="nav-tab"          onclick="showTab('prefunded')">🏦 Pre-Funded</div>
@@ -1529,93 +1579,16 @@
       </div>
     </div>
 
-    <!-- ADLs -->
-    <div class="mnemonic-box">
-      <div class="mnemonic-title">The 6 ADLs — "Will Tom Forget My Dog Tonight?"</div>
-      <div class="mnemonic-letters">
-        <div class="mnemonic-item"><div class="mnemonic-letter">W</div><div class="mnemonic-word"><strong>Washing</strong>Maintain adequate cleanliness and personal hygiene</div></div>
-        <div class="mnemonic-item"><div class="mnemonic-letter">T</div><div class="mnemonic-word"><strong>Toileting</strong>Manage bowel and bladder function at adequate hygiene</div></div>
-        <div class="mnemonic-item"><div class="mnemonic-letter">F</div><div class="mnemonic-word"><strong>Feeding</strong>Transfer food from plate to mouth (once prepared)</div></div>
-        <div class="mnemonic-item"><div class="mnemonic-letter">M</div><div class="mnemonic-word"><strong>Mobility</strong>Move indoors from room to room on level surfaces</div></div>
-        <div class="mnemonic-item"><div class="mnemonic-letter">D</div><div class="mnemonic-word"><strong>Dressing</strong>Put on/take off garments and surgical appliances</div></div>
-        <div class="mnemonic-item"><div class="mnemonic-letter">T</div><div class="mnemonic-word"><strong>Transferring</strong>Move from lying in bed to sitting in chair and back</div></div>
-      </div>
-    </div>
+    <!-- UNIVERSAL SKELETON — loaded from Memory_Aids.json -->
+    <div id="skeleton-container"></div>
 
-    <!-- Risks -->
-    <div class="mnemonic-box">
-      <div class="mnemonic-title">LTCI Insurer Risks — "CLIMPAD"</div>
-      <div class="mnemonic-letters">
-        <div class="mnemonic-item"><div class="mnemonic-letter">C</div><div class="mnemonic-word"><strong>Care cost Inflation</strong>Staff-based costs rise with wage inflation; care market supply/demand</div></div>
-        <div class="mnemonic-item"><div class="mnemonic-letter">L</div><div class="mnemonic-word"><strong>Longevity</strong>Policyholders surviving longer than priced (key for immediate needs)</div></div>
-        <div class="mnemonic-item"><div class="mnemonic-letter">I</div><div class="mnemonic-word"><strong>Inadequate data</strong>Scarce insured-population morbidity data → large contingency margins</div></div>
-        <div class="mnemonic-item"><div class="mnemonic-letter">M</div><div class="mnemonic-word"><strong>Morbidity deterioration</strong>Higher disability incidence or longer claim duration than priced</div></div>
-        <div class="mnemonic-item"><div class="mnemonic-letter">P</div><div class="mnemonic-word"><strong>Political / regulatory risk</strong>State changes provision; regulator reinterprets benefit promise</div></div>
-        <div class="mnemonic-item"><div class="mnemonic-letter">A</div><div class="mnemonic-word"><strong>Anti-selection</strong>Selective lapsing when premiums rise; adverse lives retain</div></div>
-        <div class="mnemonic-item"><div class="mnemonic-letter">D</div><div class="mnemonic-word"><strong>Data / pricing risk</strong>Model error; future care patterns differ from assumptions</div></div>
-      </div>
-    </div>
+    <!-- PRODUCT-SPECIFIC AIDS — LTCI section from Memory_Aids.json -->
+    <div class="sub-hd" style="margin-top:28px;">LTCI-Specific Memory Aids</div>
+    <div id="product-aids-container"></div>
 
-    <!-- Pre-funded vs Immediate Needs -->
-    <div class="mnemonic-box">
-      <div class="mnemonic-title">Pre-funded vs Immediate Needs — "SHIP vs CASH"</div>
-      <div class="mnemonic-letters">
-        <div class="mnemonic-item"><div class="mnemonic-letter">S</div><div class="mnemonic-word"><strong>Single or regular premium</strong>Pre-funded = either; Immediate = single only</div></div>
-        <div class="mnemonic-item"><div class="mnemonic-letter">H</div><div class="mnemonic-word"><strong>Health at entry</strong>Pre-funded = healthy; Immediate = already in poor health</div></div>
-        <div class="mnemonic-item"><div class="mnemonic-letter">I</div><div class="mnemonic-word"><strong>Incidence vs annuity risk</strong>Pre-funded faces disability incidence risk; Immediate faces longevity of impaired lives</div></div>
-        <div class="mnemonic-item"><div class="mnemonic-letter">P</div><div class="mnemonic-word"><strong>Possibly no benefit</strong>Pre-funded: risk of no benefit if never claiming; Immediate: always receives income</div></div>
-        <div class="mnemonic-item"><div class="mnemonic-letter">C</div><div class="mnemonic-word"><strong>Cash or indemnity</strong>Both can provide either; cash predominates due to insurer's inability to forecast care inflation</div></div>
-        <div class="mnemonic-item"><div class="mnemonic-letter">A</div><div class="mnemonic-word"><strong>Adverse health effect</strong>Pre-funded: poor health ↑ premium; Immediate: poor health ↓ premium</div></div>
-        <div class="mnemonic-item"><div class="mnemonic-letter">S</div><div class="mnemonic-word"><strong>Surrender / paid-up</strong>Pre-funded: possible paid-up after min period; Immediate: no surrender</div></div>
-        <div class="mnemonic-item"><div class="mnemonic-letter">H</div><div class="mnemonic-word"><strong>Healthier lives at inception</strong>Pre-funded underwriting selects in healthy; Immediate by definition insures unhealthy</div></div>
-      </div>
-    </div>
-
-    <!-- Unit-Linked Flow -->
-    <div class="mnemonic-box">
-      <div class="mnemonic-title">Unit-Linked LTCI — Fund Protection Spectrum</div>
-      <div class="mnemonic-letters">
-        <div class="mnemonic-item"><div class="mnemonic-letter">F</div><div class="mnemonic-word"><strong>Full protection</strong>Entire fund (premium + growth) protected → highest risk charges → insurer bears most risk → shortest effective deferred period</div></div>
-        <div class="mnemonic-item"><div class="mnemonic-letter">I</div><div class="mnemonic-word"><strong>Initial investment only</strong>Growth available to pay some LTC benefit → medium risk charges → medium effective deferred period</div></div>
-        <div class="mnemonic-item"><div class="mnemonic-letter">E</div><div class="mnemonic-word"><strong>Exhaustion (no protection)</strong>Full fund pays LTC benefit first → lowest risk charges → policyholder bears most investment risk → longest effective deferred period</div></div>
-      </div>
-    </div>
-
-    <!-- Rider fit -->
-    <div class="mnemonic-box">
-      <div class="mnemonic-title">LTCI Rider Fit — "CWP (good) vs I (weak)"</div>
-      <div class="mnemonic-letters">
-        <div class="mnemonic-item"><div class="mnemonic-letter">C</div><div class="mnemonic-word"><strong>CI rider — GOOD FIT</strong>Many CIs (Alzheimer's, stroke, Parkinson's) lead to LTC → natural overlap; CI death benefit = resource for LTC</div></div>
-        <div class="mnemonic-item"><div class="mnemonic-letter">W</div><div class="mnemonic-word"><strong>Whole of life — GOOD FIT</strong>LTC benefits = accelerated death benefits; conceptually clean</div></div>
-        <div class="mnemonic-item"><div class="mnemonic-letter">P</div><div class="mnemonic-word"><strong>PMI rider — GOOD FIT</strong>PMI (acute) + LTC rider (chronic) = natural complement; consumers may expect this link</div></div>
-        <div class="mnemonic-item"><div class="mnemonic-letter">I</div><div class="mnemonic-word"><strong>IP rider — WEAK FIT</strong>IP benefit based on salary; LTC benefit based on care costs — no natural link; feels like two separate products</div></div>
-      </div>
-    </div>
-
-    <!-- Accordion: Quick-fire facts -->
-    <h2 class="sub-heading" style="margin-top:24px;">Quick-Fire Facts</h2>
-    <div class="accordion-item">
-      <div class="accordion-header" onclick="toggleAccordion(this)">Standard deferred periods for pre-funded plans <span class="accordion-arrow">▶</span></div>
-      <div class="accordion-body"><strong>3 months</strong> and <strong>12 months</strong> are the two standard options. Longer = lower premium. Purpose: initial care typically self-funded / informal; allows adjustment period for policyholder.</div>
-    </div>
-    <div class="accordion-item">
-      <div class="accordion-header" onclick="toggleAccordion(this)">Why do most LTCI insurers prefer cash over indemnity benefits? <span class="accordion-arrow">▶</span></div>
-      <div class="accordion-body">Insurer cannot reliably forecast care cost inflation (staff-based costs rising with wages). Indemnity means open-ended claims exposure. Cash benefits cap the insurer's payment obligation at a fixed amount; care cost inflation risk transfers to policyholder.</div>
-    </div>
-    <div class="accordion-item">
-      <div class="accordion-header" onclick="toggleAccordion(this)">What is the mental impairment trigger and why is it "overriding"? <span class="accordion-arrow">▶</span></div>
-      <div class="accordion-body">Mental impairment = deterioration in memory, orientation, problem-solving, rational decisions from an organic cause (Alzheimer's, irreversible dementia). It is "overriding" because benefit is payable when this condition is satisfied <em>regardless</em> of ADL status — a cognitively impaired person may still physically be able to dress/wash themselves.</div>
-    </div>
-    <div class="accordion-item">
-      <div class="accordion-header" onclick="toggleAccordion(this)">Why do reviewable LTCI premiums cause more problems than reviewable IP premiums? <span class="accordion-arrow">▶</span></div>
-      <div class="accordion-body">IP policyholders are working-age with growing income — premium increases are affordable. LTCI policyholders in retirement have fixed (pension) income growing only at price inflation, not wage inflation. A care cost-driven premium review may make premiums unaffordable, leading to forced lapse when the person needs cover most. Solution: guarantee premiums from a certain age (e.g. 80).</div>
-    </div>
-    <div class="accordion-item">
-      <div class="accordion-header" onclick="toggleAccordion(this)">Why is the LTCI + IP rider combination weak? <span class="accordion-arrow">▶</span></div>
-      <div class="accordion-body">IP benefit level is based on salary (replacing pre-disability income). LTC benefit needed depends on the cost of care (unrelated to salary). No natural link. The combined policy resembles two separate products bolted together with limited synergy. Additional issue: neither IP nor LTCI is individually very popular with consumers, so combining two unpopular products is unlikely to generate a large market.</div>
-    </div>
+    <div class="sub-hd">Key Terms Reference</div>
+    <div id="terms-container" class="terms-grid"></div>
   </div>
-
 </div><!-- /main-content -->
 
 <script>
@@ -2099,11 +2072,76 @@ function doSearch(query) {
 }
 
 // ═══════════════════════════════════════════════════
+// MEMORY AIDS — fetch from Memory_Aids.json
+// ═══════════════════════════════════════════════════
+
+function renderSkeleton(skel) {
+  const dims = skel.dimensions.map(d => `
+    <div class="acc">
+      <div class="acc-hd" onclick="toggleAccordion(this)">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:12px;background:var(--navy);color:white;padding:2px 8px;border-radius:4px;margin-right:10px;">${d.id}</span>
+        <strong>${d.code}</strong> — ${d.label}
+        <span class="accordion-arrow" style="margin-left:auto;">›</span>
+      </div>
+      <div class="accordion-body">
+        <div style="font-size:13px;color:var(--text-light);margin-bottom:8px;font-style:italic;">${d.prompt}</div>
+        <ul class="bullet-list">${d.sub.map(s => `<li>${s}</li>`).join('')}</ul>
+      </div>
+    </div>`).join('');
+
+  document.getElementById('skeleton-container').innerHTML = `
+    <div class="mnemonic" style="margin-bottom:20px;">
+      <div class="mn-title">${skel.label}</div>
+      <div style="font-size:13px;opacity:0.75;margin-bottom:14px;">${skel.description}</div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;">
+        ${skel.dimensions.map(d => `
+          <div style="background:rgba(255,255,255,0.12);border-radius:6px;padding:6px 14px;font-size:12.5px;">
+            <span style="font-family:'JetBrains Mono',monospace;color:var(--teal-light);font-weight:700;margin-right:6px;">${d.id}</span>
+            <strong>${d.code}</strong>
+            <span style="opacity:0.65;font-size:11.5px;margin-left:6px;">— ${d.label}</span>
+          </div>`).join('')}
+      </div>
+    </div>
+    <div style="margin-bottom:8px;font-size:12px;color:var(--text-light);font-style:italic;">Click any dimension to expand sub-prompts</div>
+    ${dims}`;
+}
+
+function renderProductAids(aids) {
+  document.getElementById('product-aids-container').innerHTML = aids.map(aid => `
+    <div class="mnemonic" style="margin-bottom:16px;">
+      <div class="mn-title">${aid.title} — <span style="font-family:'JetBrains Mono',monospace;font-size:14px;">"${aid.code}"</span></div>
+      <div class="mn-items">
+        ${aid.items.map(item => `
+          <div class="mn-item">
+            <div class="mn-letter">${item.letter}</div>
+            <div class="mn-word"><strong>${item.word}</strong>${item.detail ? '<br><span style="opacity:0.8;font-size:12px;">'+item.detail+'</span>' : ''}</div>
+          </div>`).join('')}
+      </div>
+    </div>`).join('');
+}
+
+function loadMemoryAids() {
+  fetch(window.location.origin + '/SA1-Revision-Tool/data/Memory_Aids.json')
+    .then(r => { if (!r.ok) throw new Error(r.status); return r.json(); })
+    .then(data => {
+      renderSkeleton(data.universal_skeleton);
+      if (data.product_aids && data.product_aids.LTCI) {
+        renderProductAids(data.product_aids.LTCI.aids);
+      }
+    })
+    .catch(() => {
+      document.getElementById('skeleton-container').innerHTML =
+        '<div class="alert amber"><span class="alert-icon">⚠️</span><div>Memory_Aids.json not found. Ensure the file exists at <code>data/Memory_Aids.json</code> in the repository root.</div></div>';
+    });
+}
+
+// ═══════════════════════════════════════════════════
 // INIT
 // ═══════════════════════════════════════════════════
 renderFlashcards();
 renderIAIQuestions();
 renderKeyTerms();
+loadMemoryAids();
 </script>
 </body>
 </html>
