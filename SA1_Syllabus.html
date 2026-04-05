@@ -2152,17 +2152,19 @@ function selectMemoryAid(url, label) {
       });
   } else {
     // HTML files: fetch content and render via blob URL to bypass X-Frame-Options.
-    // Inject a <base> tag so that relative links inside the blob (e.g. "Open Recall Board")
-    // resolve against the correct GitHub Pages directory, and target="_top" ensures
-    // those links break out of the iframe and navigate the top-level window.
-    const pageDir = url.substring(0, url.lastIndexOf('/') + 1);
+    // Inject a <base> tag pointing to the GitHub Pages URL (not raw) so that relative
+    // links inside the blob resolve to rendered pages, not raw text.
+    // target="_top" ensures links break out of the iframe into the top-level window.
+    const ghPagesDir = url
+      .replace('https://raw.githubusercontent.com/GirishRao-GitHub/SA1-Revision-Tool/main/', 'https://girishrao-github.github.io/SA1-Revision-Tool/')
+      .substring(0, url.replace('https://raw.githubusercontent.com/GirishRao-GitHub/SA1-Revision-Tool/main/', 'https://girishrao-github.github.io/SA1-Revision-Tool/').lastIndexOf('/') + 1);
     fetch(url)
       .then(r => {
         if (!r.ok) throw new Error('HTTP ' + r.status);
         return r.text();
       })
       .then(html => {
-        const baseTag = `<base href="${pageDir}" target="_top">`;
+        const baseTag = `<base href="${ghPagesDir}" target="_top">`;
         const injected = html.replace(/<head>/i, '<head>' + baseTag);
         const blob    = new Blob([injected], { type: 'text/html' });
         const blobUrl = URL.createObjectURL(blob);
