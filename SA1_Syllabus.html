@@ -2152,25 +2152,35 @@ function selectMemoryAid(url, label) {
       });
   } else {
     // HTML files: fetch content and render via blob URL to bypass X-Frame-Options.
-    // Inject a <base> tag pointing to the GitHub Pages URL (not raw) so that relative
-    // links inside the blob resolve to rendered pages, not raw text.
-    // target="_top" ensures links break out of the iframe into the top-level window.
-    const ghPagesDir = url
-      .replace('https://raw.githubusercontent.com/GirishRao-GitHub/SA1-Revision-Tool/main/', 'https://girishrao-github.github.io/SA1-Revision-Tool/')
-      .substring(0, url.replace('https://raw.githubusercontent.com/GirishRao-GitHub/SA1-Revision-Tool/main/', 'https://girishrao-github.github.io/SA1-Revision-Tool/').lastIndexOf('/') + 1);
+    // Rewrite all local .html links to post a message to the parent instead of navigating,
+    // so clicking "Open Recall Board" loads it in the same iframe frame.
+    const ghPagesBase = 'https://girishrao-github.github.io/SA1-Revision-Tool/Memory%20Aids/';
     fetch(url)
       .then(r => {
         if (!r.ok) throw new Error('HTTP ' + r.status);
         return r.text();
       })
       .then(html => {
-        const baseTag = `<base href="${ghPagesDir}" target="_top">`;
-        const injected = html.replace(/<head>/i, '<head>' + baseTag);
+        // Inject a script that intercepts local .html link clicks and sends a postMessage
+        // to the parent window with the full GitHub Pages URL to load in the frame.
+        const interceptScript = `
+          <script>
+            document.addEventListener('click', function(e) {
+              var a = e.target.closest('a');
+              if (!a) return;
+              var href = a.getAttribute('href');
+              if (href && !href.startsWith('http') && href.endsWith('.html')) {
+                e.preventDefault();
+                window.parent.postMessage({ type: 'loadMemoryAid', url: '${ghPagesBase}' + href }, '*');
+              }
+            });
+          <\/script>`;
+        const injected = html.replace(/<\/body>/i, interceptScript + '</body>');
         const blob    = new Blob([injected], { type: 'text/html' });
         const blobUrl = URL.createObjectURL(blob);
         document.getElementById('memory-aid-body').innerHTML =
           `<iframe class="memory-aid-frame" src="${blobUrl}"
-            sandbox="allow-scripts allow-same-origin allow-forms allow-modals allow-top-navigation"
+            sandbox="allow-scripts allow-same-origin allow-forms allow-modals"
             title="${label}"></iframe>`;
       })
       .catch(() => {
@@ -2196,6 +2206,41 @@ function clearMemoryAidView() {
 
 // Kick off memory aids load
 loadMemoryAids();
+
+// Listen for postMessage from memory aid iframes requesting to load another memory aid in the frame
+window.addEventListener('message', function(e) {
+  if (e.data && e.data.type === 'loadMemoryAid' && e.data.url) {
+    // Derive label from filename
+    const filename = decodeURIComponent(e.data.url.split('/').pop().replace('.html', ''));
+    const label = filename.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+    // Fetch and render the requested memory aid into the same frame
+    fetch(e.data.url.replace('https://girishrao-github.github.io/SA1-Revision-Tool/', 'https://raw.githubusercontent.com/GirishRao-GitHub/SA1-Revision-Tool/main/'))
+      .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.text(); })
+      .then(html => {
+        const ghPagesBase = 'https://girishrao-github.github.io/SA1-Revision-Tool/Memory%20Aids/';
+        const interceptScript = `
+          <script>
+            document.addEventListener('click', function(e) {
+              var a = e.target.closest('a');
+              if (!a) return;
+              var href = a.getAttribute('href');
+              if (href && !href.startsWith('http') && href.endsWith('.html')) {
+                e.preventDefault();
+                window.parent.postMessage({ type: 'loadMemoryAid', url: '${ghPagesBase}' + href }, '*');
+              }
+            });
+          <\/script>`;
+        const injected = html.replace(/<\/body>/i, interceptScript + '</body>');
+        const blob = new Blob([injected], { type: 'text/html' });
+        const blobUrl = URL.createObjectURL(blob);
+        document.getElementById('memory-aid-body').innerHTML =
+          `<iframe class="memory-aid-frame" src="${blobUrl}"
+            sandbox="allow-scripts allow-same-origin allow-forms allow-modals"
+            title="${label}"></iframe>`;
+      })
+      .catch(() => {});
+  }
+});
 
 // ── FLASHCARDS ────────────────────────────────────────────
 function renderFlashcards(sec, chapterLabel) {
