@@ -49,9 +49,8 @@
     display: flex;
     align-items: center;
     gap: 16px;
-    padding: 10px 24px;
-    max-width: 1400px;
-    margin: 0 auto;
+    padding: 10px 16px;
+    min-width: 0;
   }
   .header-badge {
     background: var(--blue);
@@ -71,6 +70,10 @@
     color: white;
     flex: 1;
     font-style: italic;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
   .header-title span { color: #90c4f8; }
   .header-search {
@@ -101,26 +104,29 @@
     font-size: 14px;
   }
 
+  /* ── NAV ── */
   .nav-outer {
     background: rgba(0,0,0,0.25);
     position: relative;
+    overflow: hidden;
   }
   .nav-outer::after {
     content: '';
     position: absolute;
     right: 0; top: 0; bottom: 0;
-    width: 40px;
-    background: linear-gradient(to right, transparent, rgba(0,0,0,0.5));
+    width: 36px;
+    background: linear-gradient(to right, transparent, rgba(5,15,35,0.85));
     pointer-events: none;
+    z-index: 2;
   }
   .nav-strip {
-    max-width: 1400px;
-    margin: 0 auto;
     display: flex;
     overflow-x: auto;
     scrollbar-width: none;
-    padding: 0 24px;
+    -ms-overflow-style: none;
+    padding: 0 8px;
     scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
   }
   .nav-strip::-webkit-scrollbar { display: none; }
   .nav-tab {
@@ -2112,7 +2118,7 @@ function renderProductAids(aids) {
 }
 
 function loadMemoryAids() {
-  fetch('../data/Memory_Aids.json')
+  fetch('/SA1-Revision-Tool/data/Memory_Aids.json')
     .then(r => r.json())
     .then(data => {
       renderSkeleton(data.universal_skeleton);
@@ -2122,7 +2128,7 @@ function loadMemoryAids() {
     })
     .catch(() => {
       document.getElementById('skeleton-container').innerHTML =
-        '<div class="alert amber"><span class="alert-icon">⚠️</span><div>Memory_Aids.json not found. Place the file at <code>../data/Memory_Aids.json</code> relative to this exhibit.</div></div>';
+        '<div class="alert amber"><span class="alert-icon">⚠️</span><div>Memory_Aids.json not found. Ensure the file exists at <code>data/Memory_Aids.json</code> in the repository root.</div></div>';
     });
 }
 
