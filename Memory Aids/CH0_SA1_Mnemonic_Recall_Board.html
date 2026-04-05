@@ -484,8 +484,8 @@ body.drill-mode .drill-bar-wrap { display: flex; align-items: center; gap: 16px;
     </div>
     <div class="hdr-right">
       <div class="mode-wrap">
-        <button class="mode-btn active" onclick="setMode('reference')">Reference</button>
-        <button class="mode-btn" onclick="setMode('drill')">Drill Mode</button>
+        <button class="mode-btn active" onclick="setMode('reference', this)">Reference</button>
+        <button class="mode-btn" onclick="setMode('drill', this)">Drill Mode</button>
       </div>
       <button class="reveal-btn" onclick="revealAll()">Reveal All</button>
     </div>
@@ -658,9 +658,9 @@ function resetDrill() {
 // MODE SWITCHING
 // ══════════════════════════════════════════════
 
-function setMode(mode) {
+function setMode(mode, btn) {
   document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
-  event.currentTarget.classList.add('active');
+  btn.classList.add('active');
   if (mode === 'drill') {
     document.body.classList.add('drill-mode');
     resetDrill();
