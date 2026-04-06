@@ -46,6 +46,79 @@
     overflow: hidden;
   }
 
+  /* ── SIDEBAR COLLAPSE ── */
+  .sidebar {
+    transition: width .25s ease, min-width .25s ease;
+  }
+  .sidebar-collapsed .sidebar {
+    width: 0;
+    min-width: 0;
+    overflow: hidden;
+    border-right: none;
+  }
+  .sidebar-collapsed .progress-bar {
+    left: 0;
+  }
+
+  /* Header toggle button */
+  .sidebar-toggle-btn {
+    display: inline-flex;
+    align-items: center;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text-dim);
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 4px 8px;
+    cursor: pointer;
+    transition: all .15s;
+    flex-shrink: 0;
+    line-height: 1;
+  }
+  .sidebar-toggle-btn:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+    background: var(--accent-lo);
+  }
+
+  /* Sidebar edge tab */
+  .sidebar-edge-tab {
+    position: fixed;
+    top: 50%;
+    left: 260px;
+    transform: translateY(-50%);
+    width: 14px;
+    height: 52px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: none;
+    border-radius: 0 6px 6px 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 30;
+    transition: left .25s ease, background .15s, border-color .15s, color .15s;
+    color: var(--text-dim);
+    font-size: 9px;
+    font-family: var(--mono);
+    user-select: none;
+  }
+  .sidebar-edge-tab:hover {
+    background: var(--accent-lo);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .sidebar-collapsed .sidebar-edge-tab {
+    left: 0;
+    border-left: 1px solid var(--border);
+    border-radius: 0 6px 6px 0;
+  }
+  .sidebar-collapsed .sidebar-edge-tab:hover {
+    border-color: var(--accent);
+  }
+
   /* ── TOP BAR ── */
   header {
     display: flex;
@@ -816,6 +889,7 @@
     </svg>
     SA1ity Check
   </a>
+  <button class="sidebar-toggle-btn" onclick="toggleSidebar()" title="Toggle sidebar" id="header-toggle-btn">◀</button>
   <div class="header-sep"></div>
   <div class="logo">SP1 <span>·</span> REVISION NOTES</div>
   <div class="header-sep"></div>
@@ -838,6 +912,7 @@
     </div>
     <nav class="nav-tree" id="nav-tree"></nav>
   </aside>
+  <div class="sidebar-edge-tab" onclick="toggleSidebar()" id="edge-tab" title="Toggle sidebar">◀</div>
 
   <main class="canvas" id="canvas" onscroll="handleScroll()">
     <div id="content-area"></div>
@@ -845,6 +920,14 @@
 </div>
 
 <script>
+// ── SIDEBAR COLLAPSE ─────────────────────────────────────
+function toggleSidebar() {
+  const collapsed = document.body.classList.toggle('sidebar-collapsed');
+  const icon = collapsed ? '▶' : '◀';
+  document.getElementById('header-toggle-btn').textContent = icon;
+  document.getElementById('edge-tab').textContent = icon;
+}
+
 // ── CHAPTER MANIFEST ─────────────────────────────────────
 // Full SA1 syllabus — 27 chapters across 4 parts
 // Data for chapters is loaded from CHAPTER_DATA below.
