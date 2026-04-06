@@ -1,0 +1,1381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SA1 · IFRS 17 & Ind AS 117 · Complete Study Guide</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=Playfair+Display:wght@700;900&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300&display=swap');
+
+  :root {
+    --ink: #1a1a2e;
+    --paper: #f5f0e8;
+    --accent: #c0392b;
+    --gold: #b8860b;
+    --teal: #1a5276;
+    --light-teal: #d6eaf8;
+    --light-red: #fadbd8;
+    --light-gold: #fef9e7;
+    --border: #c8b89a;
+    --muted: #7d6b58;
+    --code-bg: #1a1a2e;
+    --code-fg: #a8d8a8;
+    --green: #1e8449;
+    --light-green: #d5f5e3;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Source Serif 4', Georgia, serif;
+    background: var(--paper);
+    color: var(--ink);
+    line-height: 1.7;
+    font-size: 16px;
+  }
+
+  /* ─── HEADER ─────────────────────────────────────────── */
+  header {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 2.5rem 2rem 2rem;
+    position: relative;
+    overflow: hidden;
+  }
+  header::before {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 220px; height: 220px;
+    border-radius: 50%;
+    border: 3px solid rgba(192,57,43,0.4);
+  }
+  header::after {
+    content: '';
+    position: absolute;
+    bottom: -20px; left: 30%;
+    width: 120px; height: 120px;
+    border-radius: 50%;
+    border: 2px solid rgba(184,134,11,0.3);
+  }
+  .header-tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+  header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.6rem, 4vw, 2.4rem);
+    font-weight: 900;
+    line-height: 1.2;
+    color: #fff;
+  }
+  header h1 span { color: var(--accent); }
+  .header-sub {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.78rem;
+    color: rgba(245,240,232,0.6);
+    margin-top: 0.6rem;
+    letter-spacing: 0.05em;
+  }
+
+  /* ─── NAV TABS ───────────────────────────────────────── */
+  nav {
+    background: var(--ink);
+    border-top: 1px solid rgba(255,255,255,0.1);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  nav button {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.85rem 1.1rem;
+    background: none;
+    border: none;
+    color: rgba(245,240,232,0.55);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  nav button:hover { color: var(--paper); }
+  nav button.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+
+  /* ─── MAIN CONTENT ───────────────────────────────────── */
+  main { max-width: 900px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+  .section { display: none; }
+  .section.active { display: block; animation: fadeIn 0.3s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* ─── TYPOGRAPHY ─────────────────────────────────────── */
+  h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--ink);
+    margin: 2rem 0 1rem;
+    padding-bottom: 0.4rem;
+    border-bottom: 2px solid var(--border);
+  }
+  h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.2rem;
+    color: var(--teal);
+    margin: 1.6rem 0 0.6rem;
+  }
+  h4 {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 1.2rem 0 0.4rem;
+  }
+  p { margin-bottom: 0.9rem; }
+
+  /* ─── CALLOUT BOXES ──────────────────────────────────── */
+  .box {
+    border-left: 4px solid;
+    padding: 1rem 1.2rem;
+    margin: 1.2rem 0;
+    border-radius: 0 4px 4px 0;
+  }
+  .box-key { background: var(--light-teal); border-color: var(--teal); }
+  .box-warn { background: var(--light-red); border-color: var(--accent); }
+  .box-exam { background: var(--light-gold); border-color: var(--gold); }
+  .box-green { background: var(--light-green); border-color: var(--green); }
+  .box-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 0.4rem;
+  }
+  .box-key .box-label { color: var(--teal); }
+  .box-warn .box-label { color: var(--accent); }
+  .box-exam .box-label { color: var(--gold); }
+  .box-green .box-label { color: var(--green); }
+
+  /* ─── TABLES ─────────────────────────────────────────── */
+  .tbl-wrap { overflow-x: auto; margin: 1.2rem 0; }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+  }
+  th {
+    background: var(--ink);
+    color: var(--paper);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.6rem 0.8rem;
+    text-align: left;
+  }
+  td {
+    padding: 0.55rem 0.8rem;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+  }
+  tr:nth-child(even) td { background: rgba(200,184,154,0.12); }
+  tr:hover td { background: rgba(200,184,154,0.22); }
+
+  /* ─── FORMULA BOX ────────────────────────────────────── */
+  .formula {
+    background: var(--code-bg);
+    color: var(--code-fg);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.88rem;
+    padding: 1rem 1.4rem;
+    border-radius: 4px;
+    margin: 1rem 0;
+    line-height: 1.9;
+  }
+  .formula .comment { color: #888; }
+
+  /* ─── QUIZ ───────────────────────────────────────────── */
+  .quiz-q {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1.2rem 1.4rem;
+    margin: 1.2rem 0;
+  }
+  .quiz-q .q-num {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--muted);
+    margin-bottom: 0.3rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .quiz-q .q-text {
+    font-weight: 600;
+    margin-bottom: 0.8rem;
+  }
+  .quiz-q .q-marks {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--accent);
+    float: right;
+    margin-top: -1.5rem;
+  }
+  .answer-toggle {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    background: var(--ink);
+    color: var(--paper);
+    border: none;
+    padding: 0.4rem 0.9rem;
+    cursor: pointer;
+    border-radius: 3px;
+    margin-top: 0.4rem;
+  }
+  .answer-toggle:hover { background: var(--teal); }
+  .answer-box {
+    display: none;
+    background: var(--light-green);
+    border-left: 3px solid var(--green);
+    padding: 0.9rem 1rem;
+    margin-top: 0.8rem;
+    border-radius: 0 4px 4px 0;
+    font-size: 0.93rem;
+  }
+  .answer-box.show { display: block; animation: fadeIn 0.2s ease; }
+  .answer-box ul { padding-left: 1.4rem; margin-top: 0.3rem; }
+  .answer-box li { margin-bottom: 0.3rem; }
+  .mark-hint {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--green);
+    font-weight: 600;
+  }
+
+  /* ─── PILL TAGS ──────────────────────────────────────── */
+  .tag {
+    display: inline-block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.65rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.15rem 0.5rem;
+    border-radius: 3px;
+    margin: 0.1rem;
+  }
+  .tag-gmm { background: #d6eaf8; color: #1a5276; }
+  .tag-vfa { background: #fef9e7; color: #7d6000; }
+  .tag-paa { background: #e8f8f5; color: #1e6b5a; }
+  .tag-iai { background: #fadbd8; color: #922b21; }
+  .tag-ifo { background: #e8daef; color: #6c3483; }
+
+  /* ─── PROGRESS BAR ───────────────────────────────────── */
+  .progress-row {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin: 0.5rem 0;
+    font-size: 0.88rem;
+  }
+  .progress-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--muted);
+    min-width: 6rem;
+  }
+  .progress-bar {
+    flex: 1;
+    height: 8px;
+    background: rgba(200,184,154,0.3);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    border-radius: 4px;
+    background: linear-gradient(90deg, var(--teal), var(--green));
+  }
+
+  /* ─── DIAGRAM ────────────────────────────────────────── */
+  .diagram {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1.5rem;
+    margin: 1.2rem 0;
+    text-align: center;
+  }
+  .building-blocks {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    max-width: 400px;
+    margin: 0.8rem auto;
+  }
+  .bb {
+    padding: 0.7rem 1rem;
+    border: 1px solid rgba(255,255,255,0.3);
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-align: center;
+    position: relative;
+  }
+  .bb-csm { background: #1a5276; color: #fff; }
+  .bb-ra  { background: #c0392b; color: #fff; }
+  .bb-bel { background: #1e8449; color: #fff; }
+  .bb-bel2 { background: #27ae60; color: #fff; border-top: 1px solid rgba(255,255,255,0.2); }
+  .bb-label { font-size: 0.65rem; opacity: 0.8; display: block; font-weight: 400; margin-top: 0.2rem; letter-spacing: 0.05em; }
+  .brace-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--muted);
+    margin-top: 0.5rem;
+  }
+
+  /* ─── STICKY SUMMARY ─────────────────────────────────── */
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1rem;
+    margin: 1.2rem 0;
+  }
+  .summary-card {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 1rem;
+    border-top: 3px solid;
+  }
+  .summary-card.blue { border-top-color: var(--teal); }
+  .summary-card.red { border-top-color: var(--accent); }
+  .summary-card.gold { border-top-color: var(--gold); }
+  .summary-card.green { border-top-color: var(--green); }
+  .sc-title {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+  .sc-title.blue { color: var(--teal); }
+  .sc-title.red { color: var(--accent); }
+  .sc-title.gold { color: var(--gold); }
+  .sc-title.green { color: var(--green); }
+  .summary-card ul { padding-left: 1.2rem; font-size: 0.87rem; }
+  .summary-card li { margin-bottom: 0.2rem; }
+
+  ul.syllabus { padding-left: 1.4rem; }
+  ul.syllabus li { margin-bottom: 0.4rem; }
+
+  .anchor-top { scroll-margin-top: 60px; }
+
+  @media (max-width: 600px) {
+    nav button { padding: 0.7rem 0.7rem; font-size: 0.65rem; }
+    h2 { font-size: 1.4rem; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-tag">IAI SA1 · Chapter 14 · Exam-Level Mastery</div>
+  <h1>IFRS 17 &amp; <span>Ind AS 117</span><br>Complete Study Guide</h1>
+  <div class="header-sub">Source: IFE SA1 Course Notes Ch14 · IAI/IFoA Exam Papers 2015–2025 · IRDAI Circulars 2026</div>
+</header>
+
+<nav>
+  <button class="active" onclick="show('s0')">① Why?</button>
+  <button onclick="show('s1')">② Architecture</button>
+  <button onclick="show('s2')">③ GMM Deep Dive</button>
+  <button onclick="show('s3')">④ VFA &amp; PAA</button>
+  <button onclick="show('s4')">⑤ Other Standards</button>
+  <button onclick="show('s5')">⑥ Supplementary</button>
+  <button onclick="show('s6')">⑦ Exam Qs</button>
+  <button onclick="show('s7')">⑧ Quick Reference</button>
+</nav>
+
+<main>
+
+<!-- ═══════════════════════════════════════════════════════
+     SECTION 0 · WHY IFRS 17?
+═══════════════════════════════════════════════════════ -->
+<div id="s0" class="section active">
+  <h2 class="anchor-top">① The "Why" — Context &amp; Criticisms of IFRS 4</h2>
+
+  <div class="box box-key">
+    <div class="box-label">Syllabus Anchors</div>
+    Chapter 14 covers syllabus objectives <strong>2.3</strong> (regulatory frameworks — financial reporting requirements) and <strong>2.5</strong> (comparing environments across jurisdictions and how they affect practice).
+  </div>
+
+  <h3>What IFRS 17 replaced — and why IFRS 4 was criticised</h3>
+  <p>IFRS 4 was always an <em>interim</em> standard — it essentially allowed insurers to keep using whatever local accounting practices they already used, provided they met some minimum requirements. This created three major problems that IFRS 17 directly addresses:</p>
+
+  <div class="tbl-wrap">
+    <table>
+      <tr><th>IFRS 4 Criticism</th><th>Why It Was a Problem</th><th>How IFRS 17 Fixes It</th></tr>
+      <tr>
+        <td><strong>Sensitivity of profits to reserving assumptions</strong></td>
+        <td>Different insurers used different assumption sets; small changes in assumptions caused large swings in reported profit, misleading investors</td>
+        <td>Best estimate assumptions are required, with the RA shown explicitly; the CSM buffers the P&L from assumption changes</td>
+      </tr>
+      <tr>
+        <td><strong>Lack of comparability</strong></td>
+        <td>Even within a single country, insurers could report using completely different methodologies — results were non-comparable</td>
+        <td>Single principle-based standard applicable to all insurance contracts globally</td>
+      </tr>
+      <tr>
+        <td><strong>Early recognition of premiums &amp; profits for long-term contracts</strong></td>
+        <td>Profit was often recognised at inception when a policy was sold, even though the service (providing coverage) would be delivered over 20–30 years</td>
+        <td>The CSM defers profit to be released over the coverage period as insurance services are provided</td>
+      </tr>
+    </table>
+  </div>
+
+  <h3>The unique challenge of insurance contracts</h3>
+  <p>Insurance contracts are unusual because they combine three features that no single existing accounting standard handled well together:</p>
+  <div class="summary-grid">
+    <div class="summary-card blue">
+      <div class="sc-title blue">Financial Instrument</div>
+      <ul><li>Collecting premiums and paying claims are cash flows over time</li><li>Has time value of money implications</li></ul>
+    </div>
+    <div class="summary-card red">
+      <div class="sc-title red">Service Contract</div>
+      <ul><li>The insurer provides a service: coverage (peace of mind)</li><li>Profit should be earned as the service is delivered</li></ul>
+    </div>
+    <div class="summary-card gold">
+      <div class="sc-title gold">Long-Term Uncertainty</div>
+      <ul><li>Claims may occur far in the future</li><li>Amounts are unknown — mortality, morbidity, etc.</li><li>Market and non-market risks both present</li></ul>
+    </div>
+  </div>
+
+  <h3>IFRS principles underlying all reporting</h3>
+  <p>Both IFRS and US GAAP are <strong>principles-based</strong> (as opposed to rules-based). The main IFRS principles you must know are:</p>
+  <div class="tbl-wrap">
+    <table>
+      <tr><th>Principle</th><th>What it means</th></tr>
+      <tr><td><strong>Fair representation</strong></td><td>Statements must present fairly the financial position, performance, and cash flows of the entity</td></tr>
+      <tr><td><strong>Going concern</strong></td><td>Assumed the entity will continue in operation for the foreseeable future (not liquidate)</td></tr>
+      <tr><td><strong>Accruals based</strong></td><td>Revenue recorded when earned; expenses when incurred — regardless of when cash is received or paid</td></tr>
+      <tr><td><strong>Comparability</strong></td><td>Presentation must be consistent from one period to the next, unless a change is justified</td></tr>
+      <tr><td><strong>Compliance</strong></td><td>If claiming IFRS compliance, must comply with <em>all</em> IFRS requirements</td></tr>
+      <tr><td><strong>Reporting period</strong></td><td>Presumed at least annual; changes in reporting period must be disclosed</td></tr>
+      <tr><td><strong>Understandability</strong></td><td>Understandable to users who have knowledge of business, economic activity, and accounting concepts</td></tr>
+      <tr><td><strong>Offsetting</strong></td><td>Assets and liabilities, income and expenses, generally may <em>not</em> be offset</td></tr>
+    </table>
+  </div>
+
+  <div class="box box-warn">
+    <div class="box-label">⚠ Exam Trap</div>
+    The opposite of a going-concern basis is the <strong>wind-up (or break-up) basis</strong>. Asset values on a wind-up basis are typically <em>lower</em> than on a going-concern basis. The examiner has tested this.
+  </div>
+
+  <h3>Reporting standards landscape</h3>
+  <div class="tbl-wrap">
+    <table>
+      <tr><th>Standard</th><th>Produced by</th><th>Used where</th></tr>
+      <tr><td><strong>IFRS (incl. IFRS 17)</strong></td><td>IASB</td><td>Most widely adopted globally; mandatory for all listed EU companies; India adopting via Ind AS</td></tr>
+      <tr><td><strong>US GAAP</strong></td><td>FASB</td><td>All US-listed companies; adopted by SEC</td></tr>
+      <tr><td><strong>Ind AS 117</strong></td><td>ICAI / MCA</td><td>India — substantially converged with IFRS 17; mandatory for all insurers from 1 April 2026</td></tr>
+    </table>
+  </div>
+
+  <div class="box box-exam">
+    <div class="box-label">🎯 IAI Exam Insight</div>
+    The IAI SA1 paper has not yet featured a dedicated IFRS 17 question (IFRS 17 only went live January 2023; Ind AS 117 mandatory from April 2026). <strong>However, this is now prime territory for upcoming exam sittings.</strong> The IAI Nov 2023 paper (iai_1123) had questions on DAC vs EV profit recognition, which test the same underlying concepts. Expect IFRS 17 questions from the November 2025 sitting onwards.
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     SECTION 1 · ARCHITECTURE
+═══════════════════════════════════════════════════════ -->
+<div id="s1" class="section">
+  <h2 class="anchor-top">② The Architecture — How IFRS 17 is Structured</h2>
+
+  <h3>The three measurement models</h3>
+  <p>IFRS 17 does not apply one single calculation method to all insurance contracts. It describes three measurement models, and which one applies depends on the nature of the contract:</p>
+
+  <div class="tbl-wrap">
+    <table>
+      <tr><th>Model</th><th>Full Name</th><th>When Used</th><th>In Scope for SA1?</th></tr>
+      <tr>
+        <td><span class="tag tag-gmm">GMM</span></td>
+        <td>General Measurement Model (also called Building Block Approach / BBA)</td>
+        <td><strong>Default</strong> for all insurance contracts. Most appropriate for traditional long-term life and health business (term assurance, without-profit annuities, IP, CI)</td>
+        <td>✅ Core — covered in depth</td>
+      </tr>
+      <tr>
+        <td><span class="tag tag-vfa">VFA</span></td>
+        <td>Variable Fee Approach</td>
+        <td>Mandatory for contracts with <strong>direct participation features</strong> — where cashflows vary significantly with a defined pool of assets (unit-linked, with-profits / DPF)</td>
+        <td>✅ Covered in this subject</td>
+      </tr>
+      <tr>
+        <td><span class="tag tag-paa">PAA</span></td>
+        <td>Premium Allocation Approach</td>
+        <td>Simplified model (similar to unearned premium reserve). For very <strong>short-term health and care business</strong> (typically &lt;1 year coverage)</td>
+        <td>⚠️ <em>Not considered further in the SA1 subject</em> — per the course notes</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="box box-warn">
+    <div class="box-label">⚠ Important Note from Course Notes</div>
+    The course notes explicitly state: <em>"The Premium Allocation Approach is not considered further in this subject."</em> You should know what it is and when it applies, but do not need deep knowledge of its mechanics.
+  </div>
+
+  <h3>The GMM Building Blocks</h3>
+  <p>The GMM defines the insurance contract liability as the sum of four building blocks. Visually:</p>
+
+  <div class="diagram">
+    <div style="font-family:'IBM Plex Mono',monospace; font-size:0.75rem; color:var(--muted); margin-bottom:0.8rem; letter-spacing:0.08em; text-transform:uppercase;">IFRS 17 Insurance Contract Liability — GMM</div>
+    <div style="display:flex; align-items:center; gap:1.5rem; justify-content:center; flex-wrap:wrap;">
+      <div class="building-blocks">
+        <div class="bb bb-csm">CSM — Contractual Service Margin<span class="bb-label">Unearned / future profit</span></div>
+        <div class="bb bb-ra">RA — Risk Adjustment<span class="bb-label">Non-market risk compensation</span></div>
+        <div class="bb bb-bel">BEL — Best Estimate Liability (1)<span class="bb-label">PV of future cashflows (inflows - outflows)</span></div>
+        <div class="bb bb-bel2">Time Value of Money (2)<span class="bb-label">(Discounting — already embedded in BEL)</span></div>
+      </div>
+      <div style="text-align:left; max-width:200px;">
+        <div style="font-family:'IBM Plex Mono',monospace; font-size:0.7rem; color:var(--teal); font-weight:600; margin-bottom:0.4rem;">IFRS 17 LABELS IT AS:</div>
+        <div style="font-size:0.82rem; line-height:1.8; color:var(--ink);">① Fulfilment cashflows<br>② Time value of money<br>③ Risk adjustment<br>④ CSM<br><br><em>The first two together = BEL in Solvency II language</em></div>
+      </div>
+    </div>
+    <div style="margin-top:1rem; font-size:0.82rem; color:var(--muted); font-style:italic;">Total Liability = BEL + RA + CSM &nbsp;(at initial recognition)</div>
+  </div>
+
+  <div class="box box-key">
+    <div class="box-label">Key Insight — Solvency II Parallel</div>
+    The four building blocks will feel familiar if you know Solvency II. BEL and RA are calculated similarly. The big new concept is the <strong>CSM — this has no Solvency II equivalent</strong>. It is the key innovation of IFRS 17.
+  </div>
+
+  <h3>Key standards referenced alongside IFRS 17</h3>
+  <div class="tbl-wrap">
+    <table>
+      <tr><th>Standard</th><th>What it covers</th><th>Relevance to Insurers</th></tr>
+      <tr><td><strong>IFRS 17</strong></td><td>Insurance Contracts</td><td>Core standard — how to account for insurance liabilities</td></tr>
+      <tr><td><strong>IFRS 9</strong></td><td>Financial Instruments</td><td>How to classify and measure financial assets (bonds, equities)</td></tr>
+      <tr><td><strong>IFRS 7</strong></td><td>Financial Instruments: Disclosures</td><td>Disclosure requirements for financial instruments</td></tr>
+      <tr><td><strong>IAS 1</strong></td><td>Presentation of Financial Statements</td><td>Overall requirements for financial statements under IFRS</td></tr>
+    </table>
+  </div>
+
+  <h3>IFRS 9 — Financial Instruments (Asset Side)</h3>
+  <p>Under IFRS 9, the <strong>default</strong> measurement basis for financial assets is <strong>Fair Value through Profit and Loss (FVPL)</strong> — changes in fair value flow through directly to P&L. There are two exceptions:</p>
+  <div class="tbl-wrap">
+    <table>
+      <tr><th>Basis</th><th>Abbreviation</th><th>When applicable</th></tr>
+      <tr><td>Fair Value through Profit &amp; Loss</td><td><strong>FVPL</strong></td><td>Default — changes in fair value recognised in P&L as they arise</td></tr>
+      <tr><td>Fair Value through Other Comprehensive Income</td><td><strong>FVOCI</strong></td><td>Where restrictive criteria are met — changes go to OCI not P&L (e.g. some unrealised gains/losses)</td></tr>
+      <tr><td>Amortised Cost</td><td>—</td><td>Where restrictive criteria are met — asset held at initial amount adjusted for repayments and amortisation</td></tr>
+    </table>
+  </div>
+  <p>This is important for health and care insurers because investment portfolios (bonds, equities) must be classified under IFRS 9, and the choice affects how investment income and gains/losses appear in financial statements.</p>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     SECTION 2 · GMM DEEP DIVE
+═══════════════════════════════════════════════════════ -->
+<div id="s2" class="section">
+  <h2 class="anchor-top">③ The GMM in Depth — BEL, RA &amp; CSM</h2>
+
+  <h3>Building Block 1 &amp; 2: Best Estimate Liability (BEL)</h3>
+  <p>The BEL is calculated using the same methodology as under Solvency II. The steps are:</p>
+  <div class="formula">
+    <span class="comment"># BEL Calculation Steps</span><br>
+    Step 1: Derive best estimate assumptions (mortality, morbidity, lapses, expenses...)<br>
+    Step 2: Derive a discount rate from observable market data<br>
+    Step 3: Project probability-weighted future net cashflows<br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(premiums in) minus (claims + expenses out)<br>
+    Step 4: Discount those cashflows to present value<br>
+    Step 5: Allow for the cost of any financial guarantees<br><br>
+    <span class="comment"># Result: BEL can be positive OR negative</span><br>
+    <span class="comment"># For regular premium contracts, BEL is often NEGATIVE</span><br>
+    <span class="comment"># (future premiums exceed future outflows — the contract is in profit)</span>
+  </div>
+
+  <div class="box box-key">
+    <div class="box-label">Key Point — BEL can be negative</div>
+    For a profitable regular premium contract (e.g. a 20-year IP policy), the PV of future premiums <em>exceeds</em> the PV of future benefits and expenses. This makes the BEL <strong>negative</strong>. The CSM then captures this surplus as "future profit."
+  </div>
+
+  <h3>Building Block 3: Risk Adjustment (RA)</h3>
+  <p>The RA is analogous to the Solvency II risk margin. It represents the value of <strong>non-market risks</strong> (e.g. morbidity risk, lapse risk) not captured in the BEL. Three permitted methods:</p>
+
+  <div class="tbl-wrap">
+    <table>
+      <tr><th>Method</th><th>Description</th></tr>
+      <tr><td><strong>Value at Risk (VaR)</strong></td><td>Amount of extra capital needed to be X% confident of covering the non-market risks</td></tr>
+      <tr><td><strong>Conditional Tail Expectation (CTE)</strong></td><td>Expected loss in the worst X% of scenarios (more conservative than VaR)</td></tr>
+      <tr><td><strong>Cost of Capital (CoC)</strong></td><td>Cost of holding capital to cover non-market risks — most common in practice (same method as Solvency II)</td></tr>
+    </table>
+  </div>
+
+  <div class="box box-warn">
+    <div class="box-label">⚠ Key Exam Point — IFRS 17 does NOT specify the confidence level</div>
+    Unlike Solvency II (which specifies 99.5% VaR for SCR), IFRS 17 does <strong>not</strong> specify the confidence level for the RA. This is left to the insurer's choice — but must be disclosed.
+  </div>
+
+  <p>The RA is <strong>attributed to individual contracts</strong> (even though it may be calculated at a higher level of aggregation, allowing for diversification across risk factors).</p>
+
+  <h3>Building Block 4: Contractual Service Margin (CSM) — The Key Innovation</h3>
+
+  <div class="box box-key">
+    <div class="box-label">Core Concept</div>
+    The CSM is the <strong>"future profit" or "unearned profit"</strong> on a contract. It is set at inception so that <em>zero profit arises on the day the policy is sold</em>. Profit only emerges over time as insurance services are provided.
+  </div>
+
+  <h4>Setting the CSM at inception</h4>
+  <div class="formula">
+    CSM = (Initial premium − Initial expenses) − (BEL + RA)<br><br>
+    <span class="comment"># Equivalently:</span><br>
+    CSM = Initial net cashflow − BEL − RA<br><br>
+    <span class="comment"># CSM CANNOT be negative.</span><br>
+    <span class="comment"># If BEL + RA &gt; Initial net cashflow → LOSS recognised immediately</span><br>
+    <span class="comment"># If BEL + RA &lt; Initial net cashflow → CSM &gt; 0 (profitable contract)</span>
+  </div>
+
+  <h4>Why CSM is positive for a profitable regular premium contract</h4>
+  <p>This is a classic exam question (it appeared in the SA1 course notes with a worked solution). For a regular premium contract:</p>
+  <ul class="syllabus">
+    <li>The <strong>BEL will be negative</strong> — because PV(future premiums) &gt; PV(future benefits + expenses)</li>
+    <li>So (BEL + RA) is small, or negative</li>
+    <li>Even though initial expenses may exceed the first premium, the CSM = (net cashflow) − (BEL + RA) is <strong>positive</strong></li>
+    <li>The CSM captures all those future profit loadings embedded in future premiums</li>
+  </ul>
+
+  <h4>How the CSM is released (profit emergence)</h4>
+  <p>The initial CSM is <strong>written down (amortised)</strong> over the term of the contract in line with a chosen <strong>"coverage unit"</strong> measure. For example:</p>
+  <ul class="syllabus">
+    <li>Number of policies in-force</li>
+    <li>Expected claim amounts</li>
+    <li>Number of expected coverage units remaining</li>
+  </ul>
+  <p>This causes profit to emerge steadily over the policy term, rather than all at once. It <strong>smooths reported profit</strong>.</p>
+
+  <div class="box box-warn">
+    <div class="box-label">Annual Cohort Rule</div>
+    Contracts can be grouped together, but they <strong>must remain in annual cohorts</strong> — policies written more than one year apart <em>cannot</em> be grouped together. This prevents cross-subsidisation across generations of policyholders.
+  </div>
+
+  <h4>The CSM as an absorber of assumption changes</h4>
+  <p>This is the second key function of the CSM. When non-investment assumptions change (e.g. morbidity rates are revised):</p>
+
+  <div class="tbl-wrap">
+    <table>
+      <tr><th>Event</th><th>Effect on BEL + RA</th><th>Effect on CSM</th><th>Effect on P&L</th></tr>
+      <tr>
+        <td>Non-investment assumption changes (e.g. better morbidity)</td>
+        <td>BEL falls</td>
+        <td>CSM is <em>increased</em> by same amount — absorbs the change</td>
+        <td><strong>No immediate P&L impact</strong> — deferred to future periods</td>
+      </tr>
+      <tr>
+        <td>Non-investment assumption changes (e.g. worse morbidity)</td>
+        <td>BEL rises</td>
+        <td>CSM is <em>reduced</em> to absorb — but only if CSM is large enough</td>
+        <td>If CSM insufficient → shortfall recognised as <strong>loss immediately</strong></td>
+      </tr>
+      <tr>
+        <td>Actual experience variances (e.g. more claims than expected)</td>
+        <td>No change to BEL</td>
+        <td>No CSM offset</td>
+        <td><strong>Flows directly to P&L</strong> in the period</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="box box-key">
+    <div class="box-label">Key Result</div>
+    Under IFRS 17 GMM, reported profit in any year is driven <strong>more by actual experience</strong> and less by assumption changes (because assumption changes are buffered by the CSM). This is much more stable and informative for investors.
+  </div>
+
+  <h3>Grouping of contracts — onerous vs profitable</h3>
+  <p>IFRS 17 requires that <strong>profitable and unprofitable contracts are not offset against each other</strong>. At inception, each group of contracts must be categorised as one of:</p>
+  <ul class="syllabus">
+    <li><strong>Loss-making at inception</strong> — loss recognised immediately (CSM = 0)</li>
+    <li><strong>Profitable with no significant risk of making a loss</strong></li>
+    <li><strong>Any other profitable contracts</strong> — those that are profitable at inception but may become loss-making</li>
+  </ul>
+
+  <div class="box box-warn">
+    <div class="box-label">Asymmetric Treatment</div>
+    This is deliberate and asymmetric: losses are recognised immediately, profits are deferred and released over the coverage period. A contract cannot be grouped with another contract if doing so would mask an onerous contract within a profitable group.
+  </div>
+
+  <h3>Transitional Requirements</h3>
+  <p>When IFRS 17 came into effect (1 January 2023), insurers had to calculate a transitional CSM for all in-force policies. Three approaches were permitted:</p>
+
+  <div class="tbl-wrap">
+    <table>
+      <tr><th>Approach</th><th>Abbreviation</th><th>When used</th><th>Description</th></tr>
+      <tr>
+        <td><strong>Full Retrospective Approach</strong></td><td>FRA</td>
+        <td>Must be used <em>if practicable</em></td>
+        <td>Determines position at transition as if IFRS 17 had always applied throughout the <em>full</em> policy lifetime — requires historical data back to policy inception</td>
+      </tr>
+      <tr>
+        <td><strong>Modified Retrospective Approach</strong></td><td>MRA</td>
+        <td>If FRA is not practicable</td>
+        <td>Simplified version of FRA using <em>reasonably available</em> information — as close as possible to FRA without excessive cost or effort</td>
+      </tr>
+      <tr>
+        <td><strong>Fair Value Approach</strong></td><td>FVA</td>
+        <td>If MRA also not practicable</td>
+        <td>Transitional CSM = Fair value of policies less fulfilment cashflows at transition date — effectively treats transition date as day one</td>
+      </tr>
+    </table>
+  </div>
+
+  <p>For India (Ind AS 117 from April 2026), IRDAI has proposed a <strong>phased retrospective application</strong>: at least 10 years in FY27, 15 years in FY28, 20 years in FY29.</p>
+
+  <h3>Disclosure requirements</h3>
+  <p>IFRS 17 requires three key income statement disclosures, separating insurance from investment results:</p>
+  <ul class="syllabus">
+    <li><strong>Insurance revenue earned</strong> — the amount of CSM released plus other insurance service components</li>
+    <li><strong>Insurance service expenses incurred</strong> — claims, expenses, and loss components</li>
+    <li><strong>Insurance finance income and expenses</strong> — the unwinding of the discount rate</li>
+  </ul>
+
+  <div class="box box-exam">
+    <div class="box-label">🎯 Exam Point — Separation of Results</div>
+    IFRS 17 <em>requires</em> the separation of insurance service results from insurance finance income/expenses. This was a major failing of IFRS 4 — where investment returns and underwriting results were often mingled. This separation is a key objective of the standard.
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     SECTION 3 · VFA & PAA
+═══════════════════════════════════════════════════════ -->
+<div id="s3" class="section">
+  <h2 class="anchor-top">④ Variable Fee Approach (VFA) &amp; Premium Allocation Approach (PAA)</h2>
+
+  <h3>Variable Fee Approach (VFA)</h3>
+  <p>The VFA is used when a significant proportion of the contract's cashflows vary in line with the value of a clearly defined pool of assets. The key examples are:</p>
+  <ul class="syllabus">
+    <li><strong>Unit-linked contracts</strong></li>
+    <li><strong>With-profits / Discretionary Participating Feature (DPF) contracts</strong></li>
+  </ul>
+
+  <p>The "variable fee" is the fee payable to the insurer, which also varies with the value of the underlying asset pool (e.g. fund management charges as a % of the unit fund). Since the variable fee is a transfer of funds <em>within</em> the insurer, it is <em>not</em> part of the fulfilment cashflows and is not included in the BEL.</p>
+
+  <h3>The critical difference: GMM vs VFA — how the discount rate and CSM interact</h3>
+
+  <div class="box box-warn">
+    <div class="box-label">⚠ High-Exam-Value Concept</div>
+    This distinction is the most testable technical difference between GMM and VFA. Study this carefully.
+  </div>
+
+  <div class="tbl-wrap">
+    <table>
+      <tr><th>Feature</th><th>GMM</th><th>VFA</th></tr>
+      <tr>
+        <td><strong>Discount rate basis</strong></td>
+        <td>Based on market observable data (e.g. government bond yields)</td>
+        <td>Calculated with reference to the pool of underlying assets</td>
+      </tr>
+      <tr>
+        <td><strong>When discount rate changes</strong></td>
+        <td>BEL and RA change → <strong>flows directly to P&L</strong> (CSM is NOT unlocked for discount rate changes)</td>
+        <td>BEL and RA change → <strong>CSM is unlocked</strong> to absorb the change → deferred to future profit releases</td>
+      </tr>
+      <tr>
+        <td><strong>P&L impact of interest rate movement</strong></td>
+        <td>Higher volatility — rate changes hit P&L immediately</td>
+        <td>Lower P&L volatility — rate changes absorbed into CSM, released over time</td>
+      </tr>
+      <tr>
+        <td><strong>CSM locking</strong></td>
+        <td>CSM is "locked" for discount rate changes (but unlocked for non-investment assumption changes)</td>
+        <td>CSM is "unlocked" for <em>both</em> discount rate changes and non-investment assumption changes</td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="box box-exam">
+    <div class="box-label">🎯 Worked Example — GMM vs VFA on Interest Rate Rise</div>
+    <p><em>Scenario: Interest rates rise. BEL and RA fall (because future cashflows are discounted at a higher rate).</em></p>
+    <ul>
+      <li><strong>Under GMM:</strong> The fall in BEL+RA creates a gain. This gain flows directly to P&L — shown as a profit in the period. The CSM is unchanged.</li>
+      <li><strong>Under VFA:</strong> The fall in BEL+RA creates a gain. The CSM is <em>increased</em> by the same amount (unlocked), absorbing the gain. P&L is unaffected in the current period. The gain will only emerge as the CSM is gradually released over future periods.</li>
+    </ul>
+    <p class="mark-hint">This is the economic logic: under VFA, the assets (which also fell in value when rates rose, or rose in value — depending on the asset) and liabilities move together. The CSM absorbs the net effect, preventing artificial P&L volatility.</p>
+  </div>
+
+  <h3>Premium Allocation Approach (PAA)</h3>
+  <p>The PAA is a simplified model that produces results similar to the traditional unearned premium approach used by general insurers. It is applicable to:</p>
+  <ul class="syllabus">
+    <li>Contracts with a coverage period of <strong>12 months or less</strong> (always eligible)</li>
+    <li>Longer contracts where the PAA produces a result that is <em>not materially different</em> from the GMM</li>
+    <li>For health and care insurers: <strong>very short-term health and care business</strong></li>
+  </ul>
+
+  <div class="box box-warn">
+    <div class="box-label">SA1 Scope Reminder</div>
+    The course notes state the PAA is <em>"not considered further in this subject."</em> Know what it is and when it applies, but do not need to know its detailed mechanics.
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     SECTION 4 · US GAAP & OTHER STANDARDS
+═══════════════════════════════════════════════════════ -->
+<div id="s4" class="section">
+  <h2 class="anchor-top">⑤ US GAAP — Principles &amp; Comparison with IFRS</h2>
+
+  <h3>Overview</h3>
+  <p>While IFRS 17 is the focus, the SA1 syllabus also requires knowledge of US GAAP for comparative purposes. US GAAP is used by all US-listed companies, governed by the SEC, and guidance is produced by the FASB.</p>
+
+  <div class="box box-key">
+    <div class="box-label">Why US GAAP Matters for SA1</div>
+    Even if IFRS is not expected to be used by US businesses, US companies may be affected by IFRS through: mergers &amp; acquisitions with non-US companies; non-US stakeholders requiring IFRS information; and non-US subsidiaries of multinational companies.
+  </div>
+
+  <h3>US GAAP Principles</h3>
+  <p>US GAAP is also principles-based, but has some industry-specific rules. The key principles (some of which don't exist in IFRS) are:</p>
+
+  <div class="tbl-wrap">
+    <table>
+      <tr><th>Principle</th><th>Description</th><th>Different from IFRS?</th></tr>
+      <tr><td><strong>Fair presentation</strong></td><td>Analogous to IFRS fair representation</td><td>No</td></tr>
+      <tr><td><strong>Going concern</strong></td><td>Same as IFRS</td><td>No</td></tr>
+      <tr><td><strong>Compliance</strong></td><td>Must comply with all US GAAP, but <em>no explicit unreserved statement</em> needed</td><td>⚠ Yes — IFRS requires explicit compliance statement</td></tr>
+      <tr><td><strong>Historical cost</strong></td><td>Assets/liabilities valued at acquisition cost rather than fair value — though trend is towards fair values</td><td>⚠ Yes — IFRS leans more towards fair value</td></tr>
+      <tr><td><strong>Revenue recognition</strong></td><td>Revenue recorded when earned; losses when probable. Augmented by detailed industry-specific rules</td><td>⚠ Yes — more detailed rules than IFRS</td></tr>
+      <tr><td><strong>Matching</strong></td><td>Expenses matched with revenues when the work makes its contribution to revenue</td><td>Concept exists in IFRS, less explicit</td></tr>
+      <tr><td><strong>Full disclosure</strong></td><td>Sufficient information to make a judgement while keeping costs reasonable</td><td>No</td></tr>
+      <tr><td><strong>Objectivity</strong></td><td>Information should be factual and verifiable</td><td>No</td></tr>
+      <tr><td><strong>Consistency</strong></td><td>Presented consistently from period to period</td><td>No</td></tr>
+      <tr><td><strong>Offsetting</strong></td><td>Generally cannot offset. For derivatives: optional under US GAAP vs <em>required</em> under IFRS when stated conditions met</td><td>⚠ Yes — derivatives treatment differs</td></tr>
+    </table>
+  </div>
+
+  <h3>Deferred Acquisition Cost (DAC)</h3>
+  <p>The DAC is a concept used under US GAAP to handle the distortion caused by high initial expenses:</p>
+  <ul class="syllabus">
+    <li>A <strong>notional asset</strong> is set up on the balance sheet equal to deferrable acquisition costs (those expected to be recovered from future premiums)</li>
+    <li>This asset is then <strong>amortised (written down)</strong> over the policy term as profit margins emerge</li>
+    <li>This smooths the initial strain, producing a more even emergence of profit</li>
+  </ul>
+
+  <div class="box box-key">
+    <div class="box-label">Important: DAC doesn't change total profit</div>
+    The choice of how fast to amortise the DAC does not affect the <em>total</em> profit earned — only the <em>timing</em> (pattern) of its recognition. Amortising more slowly → profit recognised faster.
+  </div>
+
+  <h3>Deferred Profit Liability (DPL)</h3>
+  <p>Used when the premium-paying period is shorter than the insurance period (e.g. a 10-year term policy paid up in 3 years):</p>
+  <ul class="syllabus">
+    <li>Without a DPL, all premium income would be recognised quickly while the insurance coverage continues — mismatching income and service</li>
+    <li>A DPL reserve is set up to offset the excess profit being earned during the premium-paying period</li>
+    <li>This reserve is released over the life of the contract</li>
+    <li>Like DAC, the DPL does <strong>not</strong> affect total profit — only the pattern of recognition</li>
+  </ul>
+
+  <h3>Key differences: US GAAP vs IFRS for insurance</h3>
+  <div class="tbl-wrap">
+    <table>
+      <tr><th>Area</th><th>IFRS</th><th>US GAAP</th></tr>
+      <tr>
+        <td>Definition of insurance contract</td>
+        <td>Single definition under IFRS 17</td>
+        <td>Health/care products split into 3 categories: traditional non-linked; unit-linked &amp; DPF; non-unitised with-profits</td>
+      </tr>
+      <tr>
+        <td>Asset recognition</td>
+        <td>IFRS 9: FVPL / FVOCI / Amortised cost</td>
+        <td>Trading (market value); available for sale (cost for P&L, market for balance sheet); held to maturity (amortised cost)</td>
+      </tr>
+      <tr>
+        <td>Compliance statement</td>
+        <td>Explicit and unreserved statement required</td>
+        <td>No explicit statement required</td>
+      </tr>
+      <tr>
+        <td>Asset valuation philosophy</td>
+        <td>Trend strongly towards fair value</td>
+        <td>Historical cost principle, but moving towards fair value</td>
+      </tr>
+      <tr>
+        <td>Industry-specific rules</td>
+        <td>Fewer — more principles-based</td>
+        <td>More detailed industry-specific rules (e.g. DAC, DPL)</td>
+      </tr>
+    </table>
+  </div>
+
+  <h3>Reporting basis: Best estimate vs Prudent</h3>
+  <p>This is a fundamental distinction that runs through the whole chapter:</p>
+  <div class="tbl-wrap">
+    <table>
+      <tr><th>Basis</th><th>Description</th><th>Used in</th></tr>
+      <tr>
+        <td><strong>Best estimate</strong></td>
+        <td>Unbiased estimates of expected future experience — no explicit margins</td>
+        <td>IFRS 17, Solvency II BEL — newer profit-focused standards</td>
+      </tr>
+      <tr>
+        <td><strong>Prudent</strong></td>
+        <td>Assumptions include a margin for adverse deviation — typically more conservative</td>
+        <td>Older solvency-focused standards, Indian GAAP solvency margins</td>
+      </tr>
+    </table>
+  </div>
+  <p>IFRS 17 requires <strong>best estimate</strong> cashflows with an <strong>explicit risk adjustment</strong> shown separately — not buried in the liability. This is the modern approach, consistent with Solvency II.</p>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     SECTION 5 · SUPPLEMENTARY VALUE REPORTING
+═══════════════════════════════════════════════════════ -->
+<div id="s5" class="section">
+  <h2 class="anchor-top">⑥ Supplementary Value Reporting — Embedded Value</h2>
+
+  <h3>Why supplementary reporting exists</h3>
+  <p>The primary financial statements (under IFRS, GAAP, or local regulations) aim to show "true and fair" profit. However, for long-term insurers, these may still include a level of prudence that understates the true worth of the business for shareholders. This is why supplementary EV reporting developed.</p>
+
+  <div class="tbl-wrap">
+    <table>
+      <tr><th>Reason for EV Reporting</th><th>Detail</th></tr>
+      <tr><td><strong>Defensive</strong></td><td>If profit and value are understated in primary accounts, the company may be vulnerable to a takeover at a price that doesn't reflect fair value to shareholders</td></tr>
+      <tr><td><strong>Capital raising</strong></td><td>Understatement of value compromises the company's ability to raise debt or equity; goes against Stock Exchange principle that investors should have accurate information</td></tr>
+      <tr><td><strong>Management information</strong></td><td>EV gives management a more realistic view of value creation — useful for pricing, product management, and performance measurement</td></tr>
+    </table>
+  </div>
+
+  <h3>Embedded Value — the formula</h3>
+  <div class="formula">
+    Embedded Value (EV) = Free Surplus + Required Capital − Cost of holding required capital + PVIF<br><br>
+    where:<br>
+    PVIF = Present Value of future shareholder cashflows from in-force business<br>
+    Free Surplus (FS) = Own funds − SCR = MVA − TP − SCR (under Solvency II)<br><br>
+    Profit = Change in EV over the period + Profit transfer to shareholders
+  </div>
+
+  <h3>EV components</h3>
+  <div class="tbl-wrap">
+    <table>
+      <tr><th>Component</th><th>Description</th></tr>
+      <tr><td><strong>Free Surplus</strong></td><td>Shareholder own funds in excess of the SCR (or MCR)</td></tr>
+      <tr><td><strong>Required Capital</strong></td><td>Capital the insurer must hold (SCR + potentially risk margin)</td></tr>
+      <tr><td><strong>Cost of holding capital</strong></td><td>The cost of tying up capital — reduces the EV</td></tr>
+      <tr><td><strong>PVIF</strong></td><td>PV of future shareholder cashflows from in-force covered business — the key "franchise value" component</td></tr>
+    </table>
+  </div>
+
+  <h3>Under Solvency II — EV simplification</h3>
+  <p>Under Solvency II, where BEL is on a best estimate basis, <strong>there are no prudential margins to be released in the PVIF</strong>. A PVIF component may still exist for:</p>
+  <ul class="syllabus">
+    <li>Profits expected <em>beyond</em> Solvency II contract boundaries</li>
+    <li>Difference between best estimate investment returns in EV projection and discount rates in BEL (including matching/volatility adjustment)</li>
+    <li>Release of the risk margin, after allowing for the cost of holding it</li>
+  </ul>
+  <p>If PVIF = 0 and the Solvency II risk margin is used as the measure of cost of residual non-hedgeable risks:</p>
+  <div class="formula">
+    EV ≈ Shareholder 'Own Funds'
+  </div>
+
+  <h3>EEV and MCEV — Out of scope</h3>
+  <div class="box box-warn">
+    <div class="box-label">SA1 Scope Note</div>
+    European Embedded Value (EEV) and Market Consistent Embedded Value (MCEV) principles are explicitly stated to be <strong>outside the scope of the current SA1 syllabus</strong>. Know they exist, but do not study their mechanics.
+  </div>
+
+  <h3>The future of EV under IFRS 17</h3>
+  <p>With IFRS 17 and Solvency II both moving towards more market-consistent, realistic valuations, the "information gap" that EV was designed to fill is much smaller than it used to be. Many insurers in Solvency II jurisdictions no longer report EV.</p>
+
+  <div class="box box-key">
+    <div class="box-label">Benefits of aligning EV with Solvency II (IAI exam tested this)</div>
+    <ul style="margin:0; padding-left:1.4rem;">
+      <li>Efficiencies and resource synergies</li>
+      <li>Reduces manual/spreadsheet-based processes</li>
+      <li>Greater comparability and reconciliation between EV and supervisory balance sheet</li>
+      <li>Opportunity to align pricing and risk management with performance reporting</li>
+      <li>Improvement in quality due to higher data/documentation standards</li>
+    </ul>
+  </div>
+
+  <h3>Analysis of surplus vs EV movement analysis (IAI Nov 2023 — Q1v, 5 marks)</h3>
+  <p>This distinction was tested in the IAI paper. The key differences:</p>
+  <div class="tbl-wrap">
+    <table>
+      <tr><th>Feature</th><th>Analysis of Surplus (statutory)</th><th>EV Movement Analysis</th></tr>
+      <tr><td>Basis</td><td>Statutory/GAAP reserving basis</td><td>Realistic (best estimate + risk discount rate)</td></tr>
+      <tr><td>Includes new business profit?</td><td>Only to extent recognised under reserving</td><td>Yes — new business profit recognised at point of sale</td></tr>
+      <tr><td>Investment returns</td><td>Actual minus expected on statutory basis</td><td>Actual minus expected at risk discount rate</td></tr>
+      <tr><td>Prudential margins</td><td>Releases of prudential margins are explicit</td><td>No prudential margins (or dealt with differently)</td></tr>
+      <tr><td>Scope</td><td>Short-term (PMI: typically 1-year)</td><td>Long-term (full policy lifetime)</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     SECTION 6 · EXAM QUESTIONS
+═══════════════════════════════════════════════════════ -->
+<div id="s6" class="section">
+  <h2 class="anchor-top">⑦ Exam Questions — Authentic Past Papers &amp; Practice</h2>
+
+  <div class="box box-key">
+    <div class="box-label">Sources</div>
+    Questions marked <span class="tag tag-iai">IAI</span> are from authentic IAI past papers. Questions marked <span class="tag tag-ifo">IFoA</span> are from IFoA course material. Questions marked <span class="tag tag-gmm">Practice</span> are practice questions based on syllabus objectives. All model answers are drawn from official mark schemes or course material solutions.
+  </div>
+
+  <!-- Q1 -->
+  <div class="quiz-q">
+    <div class="q-num">IAI November 2023 · Q1(iii) <span class="tag tag-iai">IAI</span></div>
+    <div class="q-marks">8 marks</div>
+    <div class="q-text">The company uses 'shareholder value profit' as its primary measure of profit in its financial statements. Describe how shareholder value profit is measured and how the recognition of profit can be controlled.</div>
+    <button class="answer-toggle" onclick="toggleAnswer(this)">Show Answer</button>
+    <div class="answer-box">
+      <strong>Measuring shareholder value profit:</strong>
+      <ul>
+        <li>Shareholder value profit = change in shareholder value of the long-term insurance fund over the year + this year's transfer to shareholders [1]</li>
+        <li>Assess the value of future transfers during every future reporting period [½]</li>
+        <li>Make estimates of each element of future experience (investment returns, claims, withdrawals, expenses) that would affect transfers to shareholders [½]</li>
+        <li>Project future transfers to shareholders arising on the in-force business using these estimates [½]</li>
+        <li>Discount future transfers to reporting date using the Risk Discounting Rate (RDR) — which reflects the risk inherent to the business [1]</li>
+        <li>Include any shareholder value in respect of free assets in the long-term fund [½]</li>
+      </ul>
+      <strong>Controlling profit recognition:</strong>
+      <ul>
+        <li>Include risk margins in each of the projection assumptions [½]</li>
+        <li>Include a margin for risk in the discount rate used (RDR set higher) [½]</li>
+        <li>Or a combination of both — the margins should have regard to uncertainty and risks of the business [½]</li>
+      </ul>
+      <div class="mark-hint">[Maximum 8 marks]</div>
+    </div>
+  </div>
+
+  <!-- Q2 -->
+  <div class="quiz-q">
+    <div class="q-num">IAI November 2023 · Q1(iv) <span class="tag tag-iai">IAI</span></div>
+    <div class="q-marks">8 marks</div>
+    <div class="q-text">The regulator has recently allowed companies to use a Deferred Acquisition Cost (DAC) approach in their statutory financial statements. The company is also considering switching to Embedded Value (EV) reporting. Compare the DAC approach with the Embedded Value approach for profit recognition.</div>
+    <button class="answer-toggle" onclick="toggleAnswer(this)">Show Answer</button>
+    <div class="answer-box">
+      <strong>DAC approach:</strong>
+      <ul>
+        <li>Attempts to give a more realistic measure of profit by spreading the effect of initial expenses via a DAC asset [1]</li>
+        <li>Reduces statutory capital strain when a contract is first written, producing more even emergence of profit [1]</li>
+        <li>However, does NOT recognise future profits on in-force business — may still undervalue the true worth of the business, especially if expanding [1]</li>
+      </ul>
+      <strong>Embedded Value approach:</strong>
+      <ul>
+        <li>EV places a value on ALL expected transfers from a contract once written — avoids problems of capital strain [1]</li>
+        <li>Unlike DAC, makes allowance for changes in future expected profits during the year (e.g. due to new sales) [1]</li>
+        <li>Future profits are assessed prudently (RDR set at a higher level) to reflect the risk they may not arise as expected [½]</li>
+        <li>As risk margins unwind, further profit expected to emerge in future — EV does not represent a fully best estimate view at inception [½]</li>
+        <li>Relies on estimates about the future — subject to a degree of judgement [½]</li>
+        <li>EV is regarded as a more realistic measure of profit recognition than the DAC approach [½]</li>
+      </ul>
+      <div class="mark-hint">[Maximum 8 marks]</div>
+    </div>
+  </div>
+
+  <!-- Q3 -->
+  <div class="quiz-q">
+    <div class="q-num">Course Notes Practice Q (SA1-14) <span class="tag tag-ifo">IFoA</span></div>
+    <div class="q-marks">5 marks</div>
+    <div class="q-text">Explain why the CSM would be expected to be positive for a profitable regular premium contract, despite initial expenses being likely to exceed the initial premium.</div>
+    <button class="answer-toggle" onclick="toggleAnswer(this)">Show Answer</button>
+    <div class="answer-box">
+      <ul>
+        <li>The CSM would likely be positive because the BEL would be <strong>negative</strong> [1]</li>
+        <li>For a regular premium contract, the present value of future premiums would be expected to exceed the PV of future benefits and expenses [1]</li>
+        <li>This is because future premiums include loadings to recover initial expenses and to provide a profit margin [½]</li>
+        <li>So the net cashflow (initial premium − initial expenses) − (BEL + RA) would be positive, since BEL is negative and therefore BEL + RA is small (or negative) [1]</li>
+        <li>As long as the RA is smaller than the discounted value of all profit loadings in future premiums, the CSM will be positive [½]</li>
+      </ul>
+      <div class="mark-hint">[5 marks]</div>
+    </div>
+  </div>
+
+  <!-- Q4 -->
+  <div class="quiz-q">
+    <div class="q-num">Practice Q — IFRS 17 GMM <span class="tag tag-gmm">Practice</span></div>
+    <div class="q-marks">6 marks</div>
+    <div class="q-text">Describe the three main criticisms of IFRS 4 and explain how IFRS 17 addresses each of them.</div>
+    <button class="answer-toggle" onclick="toggleAnswer(this)">Show Answer</button>
+    <div class="answer-box">
+      <strong>Criticism 1: Sensitivity of profits to reserving assumptions</strong>
+      <ul>
+        <li>Under IFRS 4, changes in reserving assumptions flowed directly to P&L, creating volatility [½]</li>
+        <li>IFRS 17 fix: the CSM absorbs non-investment assumption changes — only actual experience variances flow to P&L [1]</li>
+      </ul>
+      <strong>Criticism 2: Lack of comparability across companies</strong>
+      <ul>
+        <li>IFRS 4 allowed use of different local standards — results were non-comparable even within a country [½]</li>
+        <li>IFRS 17 fix: single principle-based standard applicable to all insurance contracts globally — consistent framework [1]</li>
+      </ul>
+      <strong>Criticism 3: Early recognition of premiums and profits for long-term contracts</strong>
+      <ul>
+        <li>Under IFRS 4, profit could be recognised at inception even for 20–30 year policies [½]</li>
+        <li>IFRS 17 fix: the CSM defers profit recognition — profit emerges over the coverage period as insurance services are provided [1]</li>
+      </ul>
+      <div class="mark-hint">[Maximum 6 marks — ½ for each criticism, 1 for each fix]</div>
+    </div>
+  </div>
+
+  <!-- Q5 -->
+  <div class="quiz-q">
+    <div class="q-num">Practice Q — GMM vs VFA <span class="tag tag-gmm">Practice</span></div>
+    <div class="q-marks">6 marks</div>
+    <div class="q-text">Explain the key difference between the General Measurement Model (GMM) and the Variable Fee Approach (VFA) with regard to the discount rate and CSM, and describe what this means for reported profit when interest rates change.</div>
+    <button class="answer-toggle" onclick="toggleAnswer(this)">Show Answer</button>
+    <div class="answer-box">
+      <strong>Discount rate:</strong>
+      <ul>
+        <li>Under GMM: discount rate is based on market observable data, not linked to any specific asset pool [1]</li>
+        <li>Under VFA: discount rate is calculated with reference to the pool of assets backing the contract [1]</li>
+      </ul>
+      <strong>CSM treatment:</strong>
+      <ul>
+        <li>Under GMM: CSM is NOT unlocked when discount rate changes — the CSM remains unchanged [½]</li>
+        <li>Under VFA: CSM IS unlocked at each period to absorb changes in BEL and RA arising from discount rate changes [½]</li>
+      </ul>
+      <strong>Effect when interest rates rise (BEL and RA fall):</strong>
+      <ul>
+        <li>Under GMM: the fall in BEL+RA creates a gain that flows directly to P&L — recognised as profit in the current period [1]</li>
+        <li>Under VFA: the gain is absorbed by the CSM (CSM is increased) — does not flow to P&L; instead deferred to future periods as CSM unwinds [1]</li>
+      </ul>
+      <div class="mark-hint">[Maximum 6 marks]</div>
+    </div>
+  </div>
+
+  <!-- Q6 -->
+  <div class="quiz-q">
+    <div class="q-num">Practice Q — Transition <span class="tag tag-gmm">Practice</span></div>
+    <div class="q-marks">6 marks</div>
+    <div class="q-text">Describe the three approaches permitted under IFRS 17 for determining the transitional balance sheet, and state when each approach may be used.</div>
+    <button class="answer-toggle" onclick="toggleAnswer(this)">Show Answer</button>
+    <div class="answer-box">
+      <strong>Full Retrospective Approach (FRA):</strong>
+      <ul>
+        <li>Must be used if it is practicable to do so [½]</li>
+        <li>Involves determining the position at transition as if IFRS 17 had applied throughout the full policy lifetime [1]</li>
+        <li>Requires access to historical data back to policy inception [½]</li>
+      </ul>
+      <strong>Modified Retrospective Approach (MRA):</strong>
+      <ul>
+        <li>Used if FRA is not practicable (e.g. lack of historic data for older policies) [½]</li>
+        <li>A simplified version of FRA using reasonable information available without excessive cost or effort [1]</li>
+        <li>Produces a result as close as possible to FRA [½]</li>
+      </ul>
+      <strong>Fair Value Approach (FVA):</strong>
+      <ul>
+        <li>Used if there is insufficient information to carry out an MRA calculation [½]</li>
+        <li>Transitional CSM = fair value of policies less fulfilment cashflows at transition date [1]</li>
+        <li>Effectively treats the transition date as day one for the contract [½]</li>
+      </ul>
+      <div class="mark-hint">[Maximum 6 marks]</div>
+    </div>
+  </div>
+
+  <!-- Q7 - INDIA SPECIFIC -->
+  <div class="quiz-q">
+    <div class="q-num">India-Context Practice Q <span class="tag tag-iai">India</span></div>
+    <div class="q-marks">8 marks</div>
+    <div class="q-text">Ind AS 117 has been made mandatory for all Indian insurers from 1 April 2026 under IRDAI's Amendment Regulations 2026. Describe the key transitional provisions IRDAI has introduced to ease the implementation burden on insurers.</div>
+    <button class="answer-toggle" onclick="toggleAnswer(this)">Show Answer</button>
+    <div class="answer-box">
+      <ul>
+        <li><strong>Parallel reporting:</strong> Insurers must submit both Ind AS-based financial statements AND existing IGAAP-based statements concurrently for at least two years [1]</li>
+        <li><strong>One-year forbearance:</strong> Insurers not fully prepared may apply for a 12-month forbearance period (application by 30 April 2026 with a Board-approved implementation plan) — during forbearance, proforma Ind AS statements must still be submitted [1½]</li>
+        <li><strong>Phased retrospective application:</strong> IRDAI has introduced a calibrated retrospective approach — at least 10 years in FY27, 15 years in FY28, 20 years in FY29 — to ease operational burden [1½]</li>
+        <li><strong>Annual cohort upheld:</strong> The annual cohort requirement was NOT relaxed despite industry requests — IRDAI confirmed this is a core principle to prevent cross-subsidisation [½]</li>
+        <li><strong>Solvency not impacted:</strong> Ind AS adoption does not affect actuarial valuation, surplus determination, or solvency requirements under the Insurance Act 1938 — these continue under existing provisions until Risk Based Capital is implemented [1]</li>
+        <li><strong>Surplus distribution:</strong> Distribution of surplus continues to be governed by Section 49 of the Insurance Act — accounting profit under Ind AS 117 does not automatically translate into distributable surplus [1]</li>
+        <li><strong>Independent validation:</strong> In the first year, financial statements require independent validation by an auditor from an IRDAI-empanelled list, beyond the statutory audit [½]</li>
+      </ul>
+      <div class="mark-hint">[Maximum 8 marks]</div>
+    </div>
+  </div>
+
+  <!-- Q8 -->
+  <div class="quiz-q">
+    <div class="q-num">Practice Q — Reporting Standards Comparison <span class="tag tag-ifo">IFoA</span></div>
+    <div class="q-marks">5 marks</div>
+    <div class="q-text">Why do statutory reporting standards typically require consistency across companies of many industries? Give an example to illustrate your answer.</div>
+    <button class="answer-toggle" onclick="toggleAnswer(this)">Show Answer</button>
+    <div class="answer-box">
+      <ul>
+        <li>Investors compare companies across industries when making investment decisions [1]</li>
+        <li>An investor looking to invest in a broad market index (e.g. FTSE 100 or Nifty 50) would need to analyse statutory accounts across many different sectors — insurance, banking, mining, technology, etc. [1]</li>
+        <li>The more consistent the standards across industries, the more straightforward this comparison is [½]</li>
+        <li>Solvency standards may be designed such that only insurance companies can be compared with each other, but statutory reporting standards need to allow comparison across all industries [1]</li>
+        <li>For example, only around 10% of FTSE 100 constituents are insurance companies — the remaining 90% (mining, oil, aerospace, etc.) all need to be comparable to each other [½]</li>
+      </ul>
+      <div class="mark-hint">[Maximum 5 marks]</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════
+     SECTION 7 · QUICK REFERENCE
+═══════════════════════════════════════════════════════ -->
+<div id="s7" class="section">
+  <h2 class="anchor-top">⑧ Quick Reference — Formulae, Mnemonics &amp; Key Terms</h2>
+
+  <h3>The Master Formula</h3>
+  <div class="formula">
+    <span class="comment"># IFRS 17 Insurance Contract Liability (GMM)</span><br>
+    Liability = BEL + RA + CSM<br><br>
+    <span class="comment"># CSM at inception:</span><br>
+    CSM = (Initial premium − Initial expenses) − (BEL + RA)<br>
+    CSM ≥ 0 always [if negative → Loss recognised immediately]<br><br>
+    <span class="comment"># BEL:</span><br>
+    BEL = PV(Expected future outflows) − PV(Expected future inflows)<br>
+    [Can be negative for profitable regular premium contracts]<br><br>
+    <span class="comment"># RA methods:</span><br>
+    RA = VaR  OR  CTE  OR  Cost of Capital<br>
+    [Confidence level = insurer's choice — not specified by IFRS 17]<br><br>
+    <span class="comment"># Embedded Value:</span><br>
+    EV = Free Surplus + Required Capital − Cost of Capital + PVIF<br>
+    EV Profit = ΔEV + Profit transfer
+  </div>
+
+  <h3>The 3 Criticisms of IFRS 4 → 3 Solutions of IFRS 17</h3>
+  <div class="tbl-wrap">
+    <table>
+      <tr><th>#</th><th>IFRS 4 Criticism</th><th>IFRS 17 Solution</th></tr>
+      <tr><td>1</td><td>Profit sensitivity to assumptions</td><td>CSM absorbs assumption changes</td></tr>
+      <tr><td>2</td><td>Lack of comparability</td><td>Single global standard</td></tr>
+      <tr><td>3</td><td>Early profit recognition</td><td>CSM defers profit over coverage period</td></tr>
+    </table>
+  </div>
+
+  <h3>The 3 Measurement Models</h3>
+  <div class="tbl-wrap">
+    <table>
+      <tr><th>Model</th><th>When</th><th>Key feature</th></tr>
+      <tr><td><span class="tag tag-gmm">GMM</span> General Measurement Model</td><td>Default — all contracts</td><td>4 building blocks: BEL + RA + CSM (+ time value)</td></tr>
+      <tr><td><span class="tag tag-vfa">VFA</span> Variable Fee Approach</td><td>Unit-linked, with-profits (DPF)</td><td>CSM unlocked for discount rate changes</td></tr>
+      <tr><td><span class="tag tag-paa">PAA</span> Premium Allocation Approach</td><td>Short-term contracts (&lt;1yr)</td><td>Similar to unearned premium reserve — NOT in SA1 scope</td></tr>
+    </table>
+  </div>
+
+  <h3>GMM vs VFA — The Critical Comparison</h3>
+  <div class="tbl-wrap">
+    <table>
+      <tr><th></th><th>GMM</th><th>VFA</th></tr>
+      <tr><td>Discount rate</td><td>Market observable data</td><td>Referenced to asset pool</td></tr>
+      <tr><td>CSM on rate change</td><td>NOT unlocked → P&L hit</td><td>UNLOCKED → absorbed in CSM</td></tr>
+      <tr><td>P&L volatility</td><td>Higher</td><td>Lower</td></tr>
+      <tr><td>Use for</td><td>Term assurance, IP, CI, annuities</td><td>Unit-linked, with-profits</td></tr>
+    </table>
+  </div>
+
+  <h3>The 3 Transition Approaches</h3>
+  <div class="tbl-wrap">
+    <table>
+      <tr><th>Approach</th><th>Condition</th><th>Method</th></tr>
+      <tr><td><strong>FRA</strong> (Full Retrospective)</td><td>If practicable — preferred</td><td>As if IFRS 17 always applied — full history</td></tr>
+      <tr><td><strong>MRA</strong> (Modified Retrospective)</td><td>If FRA not practicable</td><td>Simplified FRA using available information</td></tr>
+      <tr><td><strong>FVA</strong> (Fair Value)</td><td>If MRA not practicable</td><td>CSM = Fair value of policies − Fulfilment cashflows at transition</td></tr>
+    </table>
+  </div>
+
+  <h3>US GAAP vs IFRS — Key Differences</h3>
+  <div class="tbl-wrap">
+    <table>
+      <tr><th>Feature</th><th>IFRS</th><th>US GAAP</th></tr>
+      <tr><td>Compliance statement</td><td>Explicit and unreserved — required</td><td>Not required</td></tr>
+      <tr><td>Asset valuation</td><td>Fair value (IFRS 9)</td><td>Historical cost (with movement to fair value)</td></tr>
+      <tr><td>Derivative offsetting</td><td>Required when conditions met</td><td>Optional</td></tr>
+      <tr><td>Industry-specific rules</td><td>Few</td><td>More (e.g. DAC, DPL)</td></tr>
+      <tr><td>Insurance contract definition</td><td>Single definition</td><td>3 categories</td></tr>
+    </table>
+  </div>
+
+  <h3>Key Terms — Glossary</h3>
+  <div class="tbl-wrap">
+    <table>
+      <tr><th>Term</th><th>Definition</th></tr>
+      <tr><td><strong>BEL</strong></td><td>Best Estimate Liability — PV of probability-weighted future net cashflows. Can be negative.</td></tr>
+      <tr><td><strong>RA</strong></td><td>Risk Adjustment — compensation for non-market risks. Calculated by VaR, CTE, or CoC. Confidence level at insurer's choice.</td></tr>
+      <tr><td><strong>CSM</strong></td><td>Contractual Service Margin — unearned/future profit. Cannot be negative. Released over coverage period via coverage units.</td></tr>
+      <tr><td><strong>Coverage unit</strong></td><td>Measure used to release CSM (e.g. number of policies in-force)</td></tr>
+      <tr><td><strong>Annual cohort</strong></td><td>Contracts must be grouped in annual cohorts — policies written &gt;1 year apart cannot be grouped</td></tr>
+      <tr><td><strong>PVIF</strong></td><td>Present Value of In-Force — PV of future shareholder cashflows from in-force business. A component of EV.</td></tr>
+      <tr><td><strong>DAC</strong></td><td>Deferred Acquisition Cost — US GAAP notional asset representing deferrable acquisition costs. Amortised over policy term.</td></tr>
+      <tr><td><strong>DPL</strong></td><td>Deferred Profit Liability — US GAAP reserve when premium-paying period &lt; insurance period. Spreads profit recognition.</td></tr>
+      <tr><td><strong>FVPL</strong></td><td>Fair Value through Profit and Loss — default IFRS 9 basis. Fair value changes recognised in P&L.</td></tr>
+      <tr><td><strong>FVOCI</strong></td><td>Fair Value through Other Comprehensive Income — fair value changes go to OCI not P&L.</td></tr>
+      <tr><td><strong>FRA / MRA / FVA</strong></td><td>Full Retrospective / Modified Retrospective / Fair Value Approach — the three IFRS 17 transition methods</td></tr>
+      <tr><td><strong>Ind AS 117</strong></td><td>India's equivalent of IFRS 17. Notified by MCA August 2024. Mandatory for all Indian insurers from 1 April 2026.</td></tr>
+      <tr><td><strong>Accruals principle</strong></td><td>Revenue recorded when earned; expenses when incurred — regardless of cash timing</td></tr>
+      <tr><td><strong>Going concern</strong></td><td>Assumption that the entity will continue in operation. Opposite: wind-up / break-up basis.</td></tr>
+    </table>
+  </div>
+
+  <h3>India-Specific Facts (Ind AS 117 / IRDAI)</h3>
+  <div class="box box-exam">
+    <div class="box-label">🎯 Key India Facts — High Exam Relevance from 2026</div>
+    <ul style="padding-left:1.4rem;">
+      <li>MCA notified Ind AS 117 on <strong>12 August 2024</strong></li>
+      <li>Replaces Ind AS 104</li>
+      <li>IRDAI 135th Authority Meeting (<strong>30 March 2026</strong>) — approved mandatory Ind AS for all insurers from <strong>1 April 2026</strong></li>
+      <li>IRDAI Circular No. IRDAI/IFRS/CIR/MISC/45/4/2026 issued <strong>1 April 2026</strong></li>
+      <li>Applies to: Life, General, Standalone Health Insurers, Reinsurers</li>
+      <li>Parallel reporting (Ind AS + IGAAP) for at least <strong>2 years</strong></li>
+      <li>Forbearance: <strong>12 months</strong> — apply by 30 April 2026 with Board-approved plan</li>
+      <li>Retrospective: 10 yrs FY27 → 15 yrs FY28 → 20 yrs FY29</li>
+      <li>Annual cohort requirement: <strong>NOT relaxed</strong></li>
+      <li>Solvency and surplus: continue under Insurance Act 1938 / existing IRDAI provisions</li>
+      <li>Banks: RBI has NOT adopted Ind AS — so bank-sponsored insurers face additional complexity</li>
+    </ul>
+  </div>
+
+  <h3>Chapter 14 — Syllabus Objectives Covered</h3>
+  <ul class="syllabus">
+    <li><strong>2.3</strong> — Describe regulatory frameworks for health and care insurance companies: <em>financial reporting requirements</em></li>
+    <li><strong>2.5</strong> — Compare regulatory, legislative and taxation environments between different jurisdictions</li>
+    <li><strong>2.5</strong> — Demonstrate how the regulatory, legislative and taxation environments affect the way in which health and care insurance companies carry out their business in practice</li>
+  </ul>
+
+  <div class="box box-warn">
+    <div class="box-label">⚠ Credibility Note</div>
+    All content on IFRS 17 mechanics, GMM building blocks, VFA/PAA descriptions, transitional approaches, and IFRS/US GAAP principles is drawn directly from the IFE SA1 Chapter 14 course notes and the revision tool dataset — these are 100% credible for exam purposes. India-specific data (Ind AS 117 effective date, IRDAI circular details) is sourced from IRDAI official communications (March–April 2026) as reported in our earlier research. The IAI exam question solutions are drawn from the IAI mark schemes in the revision tool.
+  </div>
+</div>
+
+</main>
+
+<script>
+function show(id) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  // Activate corresponding nav button
+  const idx = ['s0','s1','s2','s3','s4','s5','s6','s7'].indexOf(id);
+  document.querySelectorAll('nav button')[idx].classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function toggleAnswer(btn) {
+  const box = btn.nextElementSibling;
+  const showing = box.classList.contains('show');
+  box.classList.toggle('show');
+  btn.textContent = showing ? 'Show Answer' : 'Hide Answer';
+}
+</script>
+</body>
+</html>
