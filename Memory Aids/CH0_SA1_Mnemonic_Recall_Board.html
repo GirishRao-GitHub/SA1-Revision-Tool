@@ -270,19 +270,13 @@ body.drill-mode .reveal-btn { display: block; }
 }
 .section-divider.open .divider-chevron { transform: rotate(90deg); }
 
-/* Grids collapsed by default */
-.mn-grid { display: none; }
-.mn-grid.open { display: grid; }
-.divider-label.ci { color: var(--rose); border-color: var(--rose-dim); background: var(--rose-dim); }
-.divider-label.ip { color: var(--blue); border-color: var(--blue-dim); background: var(--blue-dim); }
-.divider-label.shared { color: var(--teal); border-color: var(--teal-dim); background: var(--teal-dim); }
-
 /* ── MNEMONIC GRID ───────────────────────── */
 .mn-grid {
-  display: grid;
+  display: none;
   grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
   gap: 16px;
 }
+.mn-grid.open { display: grid; }
 
 /* ── MNEMONIC CARD ───────────────────────── */
 .mn-card {
@@ -291,6 +285,7 @@ body.drill-mode .reveal-btn { display: block; }
   border-radius: 12px;
   overflow: hidden;
   transition: border-color 0.2s;
+  animation: fadeUp 0.3s ease both;
 }
 .mn-card:hover { border-color: rgba(255,255,255,0.15); }
 
@@ -310,11 +305,8 @@ body.drill-mode .reveal-btn { display: block; }
   white-space: nowrap;
   flex-shrink: 0;
   letter-spacing: 0.5px;
+  /* colour applied via inline style */
 }
-.mn-badge.ci { background: var(--rose-dim); color: var(--rose); border: 1px solid rgba(196,90,106,0.3); }
-.mn-badge.ip { background: var(--blue-dim); color: var(--blue); border: 1px solid rgba(74,143,196,0.3); }
-.mn-badge.shared { background: var(--teal-dim); color: var(--teal); border: 1px solid rgba(58,173,160,0.3); }
-
 .mn-card-title {
   font-size: 12.5px;
   font-weight: 500;
@@ -353,6 +345,7 @@ body.drill-mode .mn-item.revealed { border-color: rgba(255,255,255,0.08); }
   line-height: 1;
   min-height: 40px;
   flex-shrink: 0;
+  /* colour applied via inline style */
 }
 .mn-content-cell {
   background: var(--ink-soft);
@@ -465,69 +458,6 @@ body.drill-mode .drill-bar-wrap { display: flex; align-items: center; gap: 16px;
   from { opacity: 0; transform: translateY(12px); }
   to   { opacity: 1; transform: translateY(0); }
 }
-.mn-card { animation: fadeUp 0.3s ease both; }
-.mn-card:nth-child(1) { animation-delay: 0.05s; }
-.mn-card:nth-child(2) { animation-delay: 0.10s; }
-.mn-card:nth-child(3) { animation-delay: 0.15s; }
-.mn-card:nth-child(4) { animation-delay: 0.20s; }
-.mn-card:nth-child(5) { animation-delay: 0.25s; }
-.mn-card:nth-child(6) { animation-delay: 0.30s; }
-.mn-card:nth-child(7) { animation-delay: 0.35s; }
-.mn-card:nth-child(8) { animation-delay: 0.40s; }
-.mn-card:nth-child(9) { animation-delay: 0.45s; }
-
-/* ── COLOR ASSIGNMENTS ───────────────── */
-.letter-ci      { color: var(--rose); }
-.letter-ip      { color: var(--blue); }
-.letter-pmi     { color: var(--teal); }
-.letter-ltci    { color: var(--sage); }
-.letter-grp     { color: var(--amber); }
-.letter-gen     { color: var(--teal); }
-.letter-pricing { color: var(--gold); }
-.letter-exp     { color: var(--sage); }
-.letter-rein    { color: var(--blue); }
-.letter-cap     { color: var(--rose); }
-.letter-reg     { color: var(--teal); }
-.letter-alm     { color: var(--amber); }
-.letter-gbe     { color: var(--sage); }
-.letter-str     { color: var(--gold); }
-.letter-ifrs17  { color: var(--blue); }
-.letter-skel    { color: var(--gold); }
-
-/* ── BADGE COLOURS ───────────────────── */
-.mn-badge.ci      { background: var(--rose-dim); color: var(--rose); border: 1px solid rgba(196,90,106,0.3); }
-.mn-badge.ip      { background: var(--blue-dim); color: var(--blue); border: 1px solid rgba(74,143,196,0.3); }
-.mn-badge.pmi     { background: var(--teal-dim); color: var(--teal); border: 1px solid rgba(58,173,160,0.3); }
-.mn-badge.ltci    { background: var(--sage-dim); color: var(--sage); border: 1px solid rgba(90,158,110,0.3); }
-.mn-badge.grp     { background: #1c1408; color: var(--amber); border: 1px solid rgba(201,138,58,0.3); }
-.mn-badge.gen     { background: var(--teal-dim); color: var(--teal); border: 1px solid rgba(58,173,160,0.3); }
-.mn-badge.pricing { background: var(--gold-pale); color: var(--gold); border: 1px solid rgba(201,151,58,0.3); }
-.mn-badge.exp     { background: var(--sage-dim); color: var(--sage); border: 1px solid rgba(90,158,110,0.3); }
-.mn-badge.rein    { background: var(--blue-dim); color: var(--blue); border: 1px solid rgba(74,143,196,0.3); }
-.mn-badge.cap     { background: var(--rose-dim); color: var(--rose); border: 1px solid rgba(196,90,106,0.3); }
-.mn-badge.reg     { background: var(--teal-dim); color: var(--teal); border: 1px solid rgba(58,173,160,0.3); }
-.mn-badge.alm     { background: #1c1408; color: var(--amber); border: 1px solid rgba(201,138,58,0.3); }
-.mn-badge.gbe     { background: var(--sage-dim); color: var(--sage); border: 1px solid rgba(90,158,110,0.3); }
-.mn-badge.str     { background: var(--gold-pale); color: var(--gold); border: 1px solid rgba(201,151,58,0.3); }
-.mn-badge.ifrs17  { background: var(--blue-dim);  color: var(--blue); border: 1px solid rgba(74,143,196,0.3); }
-
-/* ── DIVIDER LABEL COLOURS ───────────── */
-.divider-label.ci      { color: var(--rose); border-color: var(--rose-dim); background: var(--rose-dim); }
-.divider-label.ip      { color: var(--blue); border-color: var(--blue-dim); background: var(--blue-dim); }
-.divider-label.pmi     { color: var(--teal); border-color: var(--teal-dim); background: var(--teal-dim); }
-.divider-label.ltci    { color: var(--sage); border-color: var(--sage-dim); background: var(--sage-dim); }
-.divider-label.grp     { color: var(--amber); border-color: #2a1e08; background: #1c1408; }
-.divider-label.gen     { color: var(--teal); border-color: var(--teal-dim); background: var(--teal-dim); }
-.divider-label.pricing { color: var(--gold); border-color: var(--gold-dim); background: var(--gold-pale); }
-.divider-label.exp     { color: var(--sage); border-color: var(--sage-dim); background: var(--sage-dim); }
-.divider-label.rein    { color: var(--blue); border-color: var(--blue-dim); background: var(--blue-dim); }
-.divider-label.cap     { color: var(--rose); border-color: var(--rose-dim); background: var(--rose-dim); }
-.divider-label.reg     { color: var(--teal); border-color: var(--teal-dim); background: var(--teal-dim); }
-.divider-label.alm     { color: var(--amber); border-color: #2a1e08; background: #1c1408; }
-.divider-label.gbe     { color: var(--sage); border-color: var(--sage-dim); background: var(--sage-dim); }
-.divider-label.str     { color: var(--gold); border-color: var(--gold-dim); background: var(--gold-pale); }
-.divider-label.ifrs17  { color: var(--blue); border-color: var(--blue-dim); background: var(--blue-dim); }
-.divider-label.shared  { color: var(--teal); border-color: var(--teal-dim); background: var(--teal-dim); }
 
 /* ── TOPIC SECTION HEADER ─────────────── */
 .topic-section-hdr {
@@ -584,131 +514,12 @@ body.drill-mode .drill-bar-wrap { display: flex; align-items: center; gap: 16px;
     <div class="sk-dims" id="skeleton-dims"></div>
   </div>
 
-  <!-- ── PRODUCT AIDS ─────────────────────────── -->
-  <div class="topic-section-hdr">Product-Specific Mnemonics</div>
+  <!-- Sections rendered here dynamically from JSON -->
+  <div id="product-sections-hdr" class="topic-section-hdr">Product-Specific Mnemonics</div>
+  <div id="product-sections"></div>
 
-  <!-- CI -->
-  <div class="section-divider">
-    <div class="divider-line"></div>
-    <div class="divider-label ci">Critical Illness</div>
-    <div class="divider-line"></div>
-  </div>
-  <div class="mn-grid" id="ci-grid"></div>
-
-  <!-- IP -->
-  <div class="section-divider">
-    <div class="divider-line"></div>
-    <div class="divider-label ip">Income Protection</div>
-    <div class="divider-line"></div>
-  </div>
-  <div class="mn-grid" id="ip-grid"></div>
-
-  <!-- PMI -->
-  <div class="section-divider">
-    <div class="divider-line"></div>
-    <div class="divider-label pmi">Private Medical Insurance</div>
-    <div class="divider-line"></div>
-  </div>
-  <div class="mn-grid" id="pmi-grid"></div>
-
-  <!-- LTCI -->
-  <div class="section-divider">
-    <div class="divider-line"></div>
-    <div class="divider-label ltci">Long-Term Care Insurance</div>
-    <div class="divider-line"></div>
-  </div>
-  <div class="mn-grid" id="ltci-grid"></div>
-
-  <!-- GRP -->
-  <div class="section-divider">
-    <div class="divider-line"></div>
-    <div class="divider-label grp">Group Risk</div>
-    <div class="divider-line"></div>
-  </div>
-  <div class="mn-grid" id="grp-grid"></div>
-
-  <!-- GEN -->
-  <div class="section-divider">
-    <div class="divider-line"></div>
-    <div class="divider-label gen">General / Cross-Cutting</div>
-    <div class="divider-line"></div>
-  </div>
-  <div class="mn-grid" id="gen-grid"></div>
-
-  <!-- ── TOPIC AIDS ──────────────────────────── -->
-  <div class="topic-section-hdr">Topic Mnemonics</div>
-
-  <!-- PRICING -->
-  <div class="section-divider">
-    <div class="divider-line"></div>
-    <div class="divider-label pricing">Pricing &amp; Product Design</div>
-    <div class="divider-line"></div>
-  </div>
-  <div class="mn-grid" id="pricing-grid"></div>
-
-  <!-- EXP -->
-  <div class="section-divider">
-    <div class="divider-line"></div>
-    <div class="divider-label exp">Experience Analysis</div>
-    <div class="divider-line"></div>
-  </div>
-  <div class="mn-grid" id="exp-grid"></div>
-
-  <!-- REIN -->
-  <div class="section-divider">
-    <div class="divider-line"></div>
-    <div class="divider-label rein">Reinsurance</div>
-    <div class="divider-line"></div>
-  </div>
-  <div class="mn-grid" id="rein-grid"></div>
-
-  <!-- CAP -->
-  <div class="section-divider">
-    <div class="divider-line"></div>
-    <div class="divider-label cap">Capital Management</div>
-    <div class="divider-line"></div>
-  </div>
-  <div class="mn-grid" id="cap-grid"></div>
-
-  <!-- REG -->
-  <div class="section-divider">
-    <div class="divider-line"></div>
-    <div class="divider-label reg">Regulation</div>
-    <div class="divider-line"></div>
-  </div>
-  <div class="mn-grid" id="reg-grid"></div>
-
-  <!-- ALM -->
-  <div class="section-divider">
-    <div class="divider-line"></div>
-    <div class="divider-label alm">ALM &amp; Investment</div>
-    <div class="divider-line"></div>
-  </div>
-  <div class="mn-grid" id="alm-grid"></div>
-
-  <!-- GBE -->
-  <div class="section-divider">
-    <div class="divider-line"></div>
-    <div class="divider-label gbe">General Business Environment</div>
-    <div class="divider-line"></div>
-  </div>
-  <div class="mn-grid" id="gbe-grid"></div>
-
-  <!-- STR -->
-  <div class="section-divider">
-    <div class="divider-line"></div>
-    <div class="divider-label str">Strategy &amp; Overseas Markets</div>
-    <div class="divider-line"></div>
-  </div>
-  <div class="mn-grid" id="str-grid"></div>
-
-  <!-- IFRS17 -->
-  <div class="section-divider">
-    <div class="divider-line"></div>
-    <div class="divider-label ifrs17">IFRS 17 / Ind AS 117</div>
-    <div class="divider-line"></div>
-  </div>
-  <div class="mn-grid" id="ifrs17-grid"></div>
+  <div id="topic-sections-hdr" class="topic-section-hdr">Topic Mnemonics</div>
+  <div id="topic-sections"></div>
 
 </div>
 
@@ -724,33 +535,24 @@ body.drill-mode .drill-bar-wrap { display: flex; align-items: center; gap: 16px;
 
 <script>
 // ══════════════════════════════════════════════
-// DATA — loaded from ../data/Memory_Aids.json
+// DATA — loaded from Memory_Aids.json at runtime
 // (single authorised source; never define mnemonics inline)
+// Adding a new section to the JSON automatically appears here —
+// no HTML or JS changes required.
 // ══════════════════════════════════════════════
 
-// Section display configuration — order controls render order on page
-const SECTION_CONFIG = [
-  // product_aids
-  { key: 'CI',      source: 'product', containerId: 'ci-grid',      color: 'ci'      },
-  { key: 'IP',      source: 'product', containerId: 'ip-grid',      color: 'ip'      },
-  { key: 'PMI',     source: 'product', containerId: 'pmi-grid',     color: 'pmi'     },
-  { key: 'LTCI',    source: 'product', containerId: 'ltci-grid',    color: 'ltci'    },
-  { key: 'GRP',     source: 'product', containerId: 'grp-grid',     color: 'grp'     },
-  { key: 'GEN',     source: 'product', containerId: 'gen-grid',     color: 'gen'     },
-  // topic_aids
-  { key: 'PRICING', source: 'topic',   containerId: 'pricing-grid', color: 'pricing' },
-  { key: 'EXP',     source: 'topic',   containerId: 'exp-grid',     color: 'exp'     },
-  { key: 'REIN',    source: 'topic',   containerId: 'rein-grid',    color: 'rein'    },
-  { key: 'CAP',     source: 'topic',   containerId: 'cap-grid',     color: 'cap'     },
-  { key: 'REG',     source: 'topic',   containerId: 'reg-grid',     color: 'reg'     },
-  { key: 'ALM',     source: 'topic',   containerId: 'alm-grid',     color: 'alm'     },
-  { key: 'GBE',     source: 'topic',   containerId: 'gbe-grid',     color: 'gbe'     },
-  { key: 'STR',     source: 'topic',   containerId: 'str-grid',     color: 'str'     },
-  { key: 'IFRS17',  source: 'topic',   containerId: 'ifrs17-grid',  color: 'ifrs17'  },
+// Colour palette — cycles automatically across however many sections exist
+const PALETTE = [
+  { fg: 'var(--rose)',  bg: 'var(--rose-dim)',  border: 'rgba(196,90,106,0.3)'  },
+  { fg: 'var(--blue)',  bg: 'var(--blue-dim)',  border: 'rgba(74,143,196,0.3)'  },
+  { fg: 'var(--teal)',  bg: 'var(--teal-dim)',  border: 'rgba(58,173,160,0.3)'  },
+  { fg: 'var(--sage)',  bg: 'var(--sage-dim)',  border: 'rgba(90,158,110,0.3)'  },
+  { fg: 'var(--amber)', bg: '#1c1408',          border: 'rgba(201,138,58,0.3)'  },
+  { fg: 'var(--gold)',  bg: 'var(--gold-pale)', border: 'rgba(201,151,58,0.3)'  },
 ];
 
 let SKELETON  = null;
-let ALL_AIDS  = {};   // key → aids array (flat, all sections)
+let ALL_AIDS  = {};   // key → aids array
 
 // ══════════════════════════════════════════════
 // RENDER SKELETON
@@ -778,20 +580,42 @@ function toggleSk(id) {
 }
 
 // ══════════════════════════════════════════════
-// RENDER MNEMONIC CARDS
+// RENDER SECTIONS — fully data-driven
 // ══════════════════════════════════════════════
 
 let totalItems    = 0;
 let revealedItems = 0;
+let paletteIndex  = 0;
 
-function renderMnGrid(containerId, aids, colorClass) {
-  const container = document.getElementById(containerId);
-  if (!container) return;
-  container.innerHTML = aids.map(aid => {
+function renderSection(container, key, sectionData) {
+  const aids  = sectionData.aids || [];
+  if (!aids.length) return;
+
+  const pal   = PALETTE[paletteIndex % PALETTE.length];
+  paletteIndex++;
+
+  const gridId = `grid-${key}`;
+
+  // Section divider
+  const divider = document.createElement('div');
+  divider.className = 'section-divider';
+  divider.innerHTML = `
+    <div class="divider-line"></div>
+    <div class="divider-label" style="color:${pal.fg}; background:${pal.bg}; border-color:${pal.bg}">
+      <span class="divider-chevron">›</span>
+      ${sectionData.label || key}
+    </div>
+    <div class="divider-line"></div>`;
+
+  // Cards grid
+  const grid = document.createElement('div');
+  grid.className = 'mn-grid';
+  grid.id = gridId;
+  grid.innerHTML = aids.map(aid => {
     totalItems += aid.items.length;
     const items = aid.items.map((item, i) => `
       <div class="mn-item" id="${aid.id}-${i}" onclick="revealItem('${aid.id}-${i}', '${aid.id}')">
-        <div class="mn-letter-cell letter-${colorClass}">${item.letter}</div>
+        <div class="mn-letter-cell" style="color:${pal.fg}">${item.letter}</div>
         <div class="mn-content-cell">
           <div class="mn-word">${item.word}</div>
           ${item.detail ? `<div class="mn-detail">${item.detail}</div>` : ''}
@@ -801,7 +625,7 @@ function renderMnGrid(containerId, aids, colorClass) {
     return `
       <div class="mn-card">
         <div class="mn-card-hd">
-          <span class="mn-badge ${colorClass}">${aid.code}</span>
+          <span class="mn-badge" style="background:${pal.bg}; color:${pal.fg}; border:1px solid ${pal.border}">${aid.code}</span>
           <span class="mn-card-title">${aid.title}</span>
         </div>
         <div class="mn-items-wrap" id="${aid.id}-wrap">${items}</div>
@@ -809,6 +633,16 @@ function renderMnGrid(containerId, aids, colorClass) {
         <div class="mn-drill-hint">↑ Click each row to reveal</div>
       </div>`;
   }).join('');
+
+  // Collapse toggle
+  divider.addEventListener('click', () => {
+    const isOpen = divider.classList.toggle('open');
+    grid.classList.toggle('open', isOpen);
+  });
+
+  container.appendChild(divider);
+  container.appendChild(grid);
+  ALL_AIDS[key] = aids;
 }
 
 // ══════════════════════════════════════════════
@@ -863,7 +697,7 @@ function resetDrill() {
 }
 
 // ══════════════════════════════════════════════
-// MODE SWITCHING  (fix: pass `this` from onclick)
+// MODE SWITCHING
 // ══════════════════════════════════════════════
 
 function setMode(mode, btn) {
@@ -898,45 +732,22 @@ fetchFirst(DATA_URLS)
   .then(data => {
     SKELETON = data.universal_skeleton;
 
-    // Collect all aids from both product_aids and topic_aids
-    ALL_AIDS = {};
+    const productContainer = document.getElementById('product-sections');
+    const topicContainer   = document.getElementById('topic-sections');
+
     if (data.product_aids) {
-      Object.keys(data.product_aids).forEach(key => {
-        ALL_AIDS[key] = (data.product_aids[key] && data.product_aids[key].aids) || [];
+      Object.entries(data.product_aids).forEach(([key, section]) => {
+        renderSection(productContainer, key, section);
       });
     }
     if (data.topic_aids) {
-      Object.keys(data.topic_aids).forEach(key => {
-        ALL_AIDS[key] = (data.topic_aids[key] && data.topic_aids[key].aids) || [];
+      Object.entries(data.topic_aids).forEach(([key, section]) => {
+        renderSection(topicContainer, key, section);
       });
     }
 
     renderSkeleton();
-    SECTION_CONFIG.forEach(cfg => {
-      const aids = ALL_AIDS[cfg.key];
-      if (aids && aids.length > 0) {
-        renderMnGrid(cfg.containerId, aids, cfg.color);
-      }
-    });
     updateProgress();
-
-    // Wire up collapsible section dividers
-    document.querySelectorAll('.section-divider').forEach(divider => {
-      const label = divider.querySelector('.divider-label');
-      if (label) {
-        const chevron = document.createElement('span');
-        chevron.className = 'divider-chevron';
-        chevron.textContent = '\u203a'; // ›
-        label.insertBefore(chevron, label.firstChild);
-      }
-      const grid = divider.nextElementSibling;
-      divider.addEventListener('click', () => {
-        const isOpen = divider.classList.toggle('open');
-        if (grid && grid.classList.contains('mn-grid')) {
-          grid.classList.toggle('open', isOpen);
-        }
-      });
-    });
   })
   .catch(err => {
     document.body.innerHTML =
