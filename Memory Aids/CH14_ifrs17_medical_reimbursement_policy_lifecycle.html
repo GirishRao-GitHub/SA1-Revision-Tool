@@ -1,0 +1,659 @@
+
+<style>
+  :root { --accent: var(--color-text-info); }
+  * { box-sizing: border-box; }
+  body { margin: 0; }
+
+  .shell { font-family: var(--font-sans); padding: 1rem 0; }
+
+  /* Nav pills */
+  .nav { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 1.5rem; }
+  .nav button {
+    font-size: 12px; padding: 5px 12px; border-radius: 99px;
+    border: 0.5px solid var(--color-border-secondary);
+    background: var(--color-background-secondary);
+    color: var(--color-text-secondary); cursor: pointer;
+    transition: all .15s;
+  }
+  .nav button.active {
+    background: var(--color-background-info);
+    color: var(--color-text-info);
+    border-color: var(--color-border-info);
+    font-weight: 500;
+  }
+
+  /* Section */
+  .section { display: none; }
+  .section.visible { display: block; }
+
+  /* Phase header */
+  .phase-hdr {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 1.25rem;
+  }
+  .phase-num {
+    width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 500;
+    background: var(--color-background-info); color: var(--color-text-info);
+  }
+  .phase-title { font-size: 16px; font-weight: 500; color: var(--color-text-primary); }
+  .phase-sub { font-size: 12px; color: var(--color-text-secondary); margin-top: 1px; }
+
+  /* Cards grid */
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px; margin-bottom: 1.25rem; }
+  .card {
+    background: var(--color-background-primary);
+    border: 0.5px solid var(--color-border-tertiary);
+    border-radius: var(--border-radius-lg);
+    padding: .85rem 1rem;
+  }
+  .card-label { font-size: 11px; color: var(--color-text-tertiary); text-transform: uppercase; letter-spacing: .04em; margin-bottom: 4px; }
+  .card-val { font-size: 20px; font-weight: 500; color: var(--color-text-primary); }
+  .card-sub { font-size: 12px; color: var(--color-text-secondary); margin-top: 3px; }
+
+  /* Info block */
+  .info-block {
+    background: var(--color-background-secondary);
+    border-left: 2px solid var(--color-border-info);
+    border-radius: 0 var(--border-radius-md) var(--border-radius-md) 0;
+    padding: .75rem 1rem; margin-bottom: 1rem;
+    font-size: 13px; color: var(--color-text-secondary); line-height: 1.6;
+  }
+  .info-block strong { color: var(--color-text-primary); font-weight: 500; }
+
+  /* Warning block */
+  .warn-block {
+    background: var(--color-background-warning);
+    border-left: 2px solid var(--color-border-warning);
+    border-radius: 0 var(--border-radius-md) var(--border-radius-md) 0;
+    padding: .75rem 1rem; margin-bottom: 1rem;
+    font-size: 13px; color: var(--color-text-warning); line-height: 1.6;
+  }
+
+  /* Table */
+  .tbl { width: 100%; font-size: 13px; border-collapse: collapse; margin-bottom: 1.25rem; }
+  .tbl th { text-align: left; font-weight: 500; font-size: 11px; color: var(--color-text-tertiary); text-transform: uppercase; letter-spacing: .04em; padding: 6px 8px; border-bottom: 0.5px solid var(--color-border-tertiary); }
+  .tbl td { padding: 7px 8px; border-bottom: 0.5px solid var(--color-border-tertiary); color: var(--color-text-secondary); vertical-align: top; }
+  .tbl tr:last-child td { border-bottom: none; }
+  .tbl td:first-child { color: var(--color-text-primary); font-weight: 500; }
+  .pos { color: var(--color-text-success) !important; }
+  .neg { color: var(--color-text-danger) !important; }
+  .neu { color: var(--color-text-secondary) !important; }
+
+  /* Badge */
+  .badge { display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 99px; font-weight: 500; }
+  .badge-b { background: var(--color-background-info); color: var(--color-text-info); }
+  .badge-g { background: var(--color-background-success); color: var(--color-text-success); }
+  .badge-a { background: var(--color-background-warning); color: var(--color-text-warning); }
+  .badge-r { background: var(--color-background-danger); color: var(--color-text-danger); }
+
+  /* Timeline */
+  .timeline { position: relative; padding-left: 24px; margin-bottom: 1.25rem; }
+  .timeline::before { content:''; position:absolute; left:7px; top:6px; bottom:6px; width:1px; background: var(--color-border-secondary); }
+  .tl-item { position: relative; margin-bottom: 14px; }
+  .tl-item::before { content:''; position:absolute; left:-20px; top:5px; width:8px; height:8px; border-radius:50%; background: var(--color-background-info); border: 1.5px solid var(--color-text-info); }
+  .tl-head { font-size: 13px; font-weight: 500; color: var(--color-text-primary); }
+  .tl-body { font-size: 12px; color: var(--color-text-secondary); line-height: 1.5; margin-top: 2px; }
+
+  /* JE block */
+  .je { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: .75rem 1rem; font-family: var(--font-mono); font-size: 12px; color: var(--color-text-secondary); line-height: 1.8; margin-bottom: 1rem; }
+  .je .dr { color: var(--color-text-danger); }
+  .je .cr { color: var(--color-text-success); }
+  .je .hd { color: var(--color-text-primary); font-weight: 500; font-family: var(--font-sans); font-size: 11px; text-transform: uppercase; letter-spacing: .04em; margin-bottom: 4px; }
+
+  .section-title { font-size: 14px; font-weight: 500; color: var(--color-text-primary); margin: 1.25rem 0 .5rem; }
+  .divider { border: none; border-top: 0.5px solid var(--color-border-tertiary); margin: 1.25rem 0; }
+
+  /* GMM waterfall */
+  .waterfall { display: flex; gap: 6px; align-items: flex-end; margin: 1rem 0; height: 140px; }
+  .wf-col { display: flex; flex-direction: column; align-items: center; flex: 1; }
+  .wf-bar { width: 100%; border-radius: 4px 4px 0 0; }
+  .wf-lbl { font-size: 10px; color: var(--color-text-tertiary); text-align: center; margin-top: 4px; line-height: 1.3; }
+
+  /* CSM tracker */
+  .csm-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .csm-label { font-size: 12px; color: var(--color-text-secondary); width: 160px; flex-shrink: 0; }
+  .csm-bar-bg { flex: 1; height: 8px; background: var(--color-border-tertiary); border-radius: 4px; }
+  .csm-bar { height: 100%; border-radius: 4px; transition: width .4s; }
+  .csm-val { font-size: 12px; font-weight: 500; color: var(--color-text-primary); width: 50px; text-align: right; }
+
+  /* solvency gauge */
+  .sol-gauge { display: flex; gap: 10px; align-items: center; margin: 1rem 0; }
+  .sol-track { flex: 1; height: 12px; background: var(--color-border-tertiary); border-radius: 6px; position: relative; overflow: hidden; }
+  .sol-fill { height: 100%; border-radius: 6px; background: linear-gradient(90deg, #3B8BD4 0%, #1D9E75 70%, #D85A30 100%); transition: width .4s; }
+  .sol-marker { position: absolute; top: -4px; width: 2px; height: 20px; background: var(--color-text-warning); border-radius: 1px; }
+  .sol-labels { display: flex; justify-content: space-between; font-size: 11px; color: var(--color-text-tertiary); margin-top: 3px; }
+</style>
+
+<div class="shell">
+  <div style="margin-bottom: 1.25rem;">
+    <div style="font-size: 18px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 4px;">Medical Reimbursement Policy — Full Lifecycle</div>
+    <div style="font-size: 13px; color: var(--color-text-secondary);">IFRS 17 (GMM) · IRDAI Solvency Framework · Indian Insurer perspective</div>
+  </div>
+
+  <div class="nav" id="nav">
+    <button class="active" onclick="show(0)">1. Policy Inception</button>
+    <button onclick="show(1)">2. Measurement Model</button>
+    <button onclick="show(2)">3. Premium Accounting</button>
+    <button onclick="show(3)">4. Claims & Reserving</button>
+    <button onclick="show(4)">4b. IBNR Deep-dive</button>
+    <button onclick="show(5)">5. CSM Unwind</button>
+    <button onclick="show(6)">6. P&L & OCI</button>
+    <button onclick="show(7)">7. Solvency (IRDAI)</button>
+    <button onclick="show(8)">8. Reinsurance</button>
+    <button onclick="show(9)">9. Reporting & Disc.</button>
+  </div>
+
+  <!-- SECTION 0: Policy Inception -->
+  <div class="section visible" id="s0">
+    <div class="phase-hdr">
+      <div class="phase-num">1</div>
+      <div><div class="phase-title">Policy Inception & Contract Boundary</div><div class="phase-sub">Day 1 recognition under IFRS 17</div></div>
+    </div>
+    <div class="info-block">
+      <strong>Policy parameters used throughout this walkthrough:</strong> A 1-year individual medical reimbursement policy. Annual premium ₹15,000. Sum Insured ₹5,00,000. Policy date: 1 April. Insurer: Indian composite / standalone health insurer. Accounting currency: INR.
+    </div>
+    <div class="grid">
+      <div class="card"><div class="card-label">Annual Premium</div><div class="card-val">₹15,000</div><div class="card-sub">Net of GST (18%)</div></div>
+      <div class="card"><div class="card-label">Sum Insured</div><div class="card-val">₹5,00,000</div><div class="card-sub">Reimbursement basis</div></div>
+      <div class="card"><div class="card-label">Policy term</div><div class="card-val">1 Year</div><div class="card-sub">1 Apr – 31 Mar</div></div>
+      <div class="card"><div class="card-label">Measurement model</div><div class="card-val">GMM</div><div class="card-sub">General Measurement Model</div></div>
+    </div>
+
+    <div class="section-title">Contract Boundary (IFRS 17.34)</div>
+    <div class="info-block">
+      The contract boundary is <strong>1 year</strong>. Since the insurer has the practical ability to reprice or reject at renewal, the boundary ends at the anniversary date. All cash flows beyond this boundary are excluded from the measurement of the group. This is critical for annual health policies — unlike multi-year products, no future renewals are included.
+    </div>
+
+    <div class="section-title">Grouping of Contracts (IFRS 17.14–24)</div>
+    <table class="tbl">
+      <tr><th>Grouping dimension</th><th>This policy</th><th>Rationale</th></tr>
+      <tr><td>Portfolio</td><td>Individual health reimbursement</td><td>Similar risks, managed together</td></tr>
+      <tr><td>Cohort (annual)</td><td>FY 2024-25 (Apr–Mar)</td><td>No more than 1 year of issue date apart</td></tr>
+      <tr><td>Profitability bucket</td><td>Profitable at inception (PAD positive)</td><td>Separate from onerous contracts</td></tr>
+    </table>
+    <div class="warn-block">
+      <strong>Onerous contract test:</strong> If the fulfilment cash flows exceed the premium, the contract is onerous at inception and a Loss Component is recognised immediately in P&amp;L — no CSM is created.
+    </div>
+
+    <div class="section-title">Day 1 Cash Flow Estimation</div>
+    <table class="tbl">
+      <tr><th>Cash flow component</th><th>Amount (₹)</th><th>Notes</th></tr>
+      <tr><td>Premium received</td><td class="pos">+15,000</td><td>Single annual premium, received upfront</td></tr>
+      <tr><td>Expected claims (PV)</td><td class="neg">-7,800</td><td>Loss ratio ~52%, discounted</td></tr>
+      <tr><td>Claims handling expenses</td><td class="neg">-780</td><td>10% of expected claims</td></tr>
+      <tr><td>Policy admin expenses</td><td class="neg">-1,500</td><td>10% of premium</td></tr>
+      <tr><td>Acquisition costs</td><td class="neg">-2,250</td><td>15% of premium (agent commission etc.)</td></tr>
+      <tr><td>Risk Adjustment (RA)</td><td class="neg">-600</td><td>Non-financial risk margin (~4%)</td></tr>
+      <tr><td style="font-weight:500">Fulfilment Cash Flows (FCF)</td><td class="neg" style="font-weight:500">-12,930</td><td>Sum of above outflows</td></tr>
+      <tr><td style="font-weight:500">Contractual Service Margin (CSM)</td><td class="pos" style="font-weight:500">+2,070</td><td>Residual profit deferred</td></tr>
+    </table>
+  </div>
+
+  <!-- SECTION 1: Measurement Model -->
+  <div class="section" id="s1">
+    <div class="phase-hdr">
+      <div class="phase-num">2</div>
+      <div><div class="phase-title">IFRS 17 Measurement Model (GMM)</div><div class="phase-sub">Building blocks of the insurance contract liability</div></div>
+    </div>
+    <div class="info-block">
+      Under the <strong>General Measurement Model (GMM)</strong>, the insurance contract liability = <strong>FCF + CSM</strong>. For annual health policies, the <strong>Premium Allocation Approach (PAA)</strong> is often permitted as a simplification if it approximates GMM. We walk through GMM here for completeness.
+    </div>
+
+    <div class="section-title">Three Building Blocks</div>
+    <div class="grid">
+      <div class="card">
+        <div class="card-label">Building Block 1</div>
+        <div class="card-val" style="font-size:15px">Present Value of FCF</div>
+        <div class="card-sub">Best estimate of all future cash flows (premiums, claims, expenses) discounted at a current risk-free rate + illiquidity premium</div>
+      </div>
+      <div class="card">
+        <div class="card-label">Building Block 2</div>
+        <div class="card-val" style="font-size:15px">Risk Adjustment (RA)</div>
+        <div class="card-sub">Compensation for non-financial uncertainty. Typically set using a confidence interval (e.g. 75th percentile). Disclosed as equivalent confidence level.</div>
+      </div>
+      <div class="card">
+        <div class="card-label">Building Block 3</div>
+        <div class="card-val" style="font-size:15px">CSM</div>
+        <div class="card-sub">Unearned profit for future coverage. Released over coverage units as services are provided. Never negative (floor at zero — surplus = Loss Component).</div>
+      </div>
+    </div>
+
+    <div class="section-title">Liability for Remaining Coverage (LRC) vs Liability for Incurred Claims (LIC)</div>
+    <table class="tbl">
+      <tr><th>Component</th><th>Covers</th><th>Measurement</th><th>Day 1 (₹)</th></tr>
+      <tr><td>LRC</td><td>Future coverage not yet provided</td><td>FCF (future) + RA (future) + CSM</td><td>12,930 + 2,070 = 15,000</td></tr>
+      <tr><td>LIC</td><td>Claims incurred but not settled</td><td>FCF (past events) + RA (settlement risk)</td><td>Nil at inception</td></tr>
+    </table>
+
+    <div class="section-title">PAA Simplification — Eligibility for Health Policies</div>
+    <div class="info-block">
+      Most individual annual health policies qualify for PAA because: (a) coverage period ≤ 1 year, or (b) the PAA liability approximates GMM. Under PAA, the LRC is simply the <strong>unearned premium reserve</strong> — a straight-line or pattern-based amortisation. LIC is still measured on a full FCF basis. Indian insurers widely use PAA for annual health products.
+    </div>
+    <table class="tbl">
+      <tr><th></th><th>GMM</th><th>PAA</th></tr>
+      <tr><td>LRC</td><td>PV(FCF) + RA + CSM</td><td>Unearned premium (less acq. costs)</td></tr>
+      <tr><td>Discount on LRC</td><td>Yes</td><td>Only if coverage > 1yr</td></tr>
+      <tr><td>CSM tracking</td><td>Explicit</td><td>Implicit in unearned premium</td></tr>
+      <tr><td>Onerous test</td><td>At inception & each period</td><td>Each period (Loss Component)</td></tr>
+    </table>
+  </div>
+
+  <!-- SECTION 2: Premium Accounting -->
+  <div class="section" id="s2">
+    <div class="phase-hdr">
+      <div class="phase-num">3</div>
+      <div><div class="phase-title">Premium & Acquisition Cost Accounting</div><div class="phase-sub">Recognition through the coverage period</div></div>
+    </div>
+
+    <div class="info-block">
+      Under IFRS 17, there is <strong>no premium income line</strong> in the traditional sense. The P&amp;L shows <strong>Insurance Revenue</strong> (services provided) and <strong>Insurance Service Expenses</strong> — not gross premium. This is a fundamental shift from the old Ind AS / IRDAI basis.
+    </div>
+
+    <div class="section-title">Journal Entry: Day 1 — Premium Receipt</div>
+    <div class="je">
+      <div class="hd">Day 1 — 1 April: Premium received & liability recognised</div>
+      <span class="dr">Dr  Cash / Bank                      ₹15,000</span><br>
+      <span class="cr">  Cr  Insurance Contract Liability (LRC)   ₹15,000</span><br>
+      <br>
+      <span style="color:var(--color-text-tertiary)">// LRC = FCF ₹12,930 + CSM ₹2,070 = ₹15,000</span>
+    </div>
+
+    <div class="section-title">Journal Entry: Day 1 — Acquisition Costs</div>
+    <div class="je">
+      <div class="hd">Agent commission paid (₹2,250)</div>
+      <span class="dr">Dr  Insurance Acquisition Cash Flows (asset)  ₹2,250</span><br>
+      <span class="cr">  Cr  Cash / Payable                          ₹2,250</span><br>
+      <br>
+      <span style="color:var(--color-text-tertiary)">// Deferred as an asset; amortised over coverage period</span>
+    </div>
+
+    <div class="section-title">Monthly Revenue Recognition (PAA basis)</div>
+    <div class="info-block">
+      Insurance Revenue is recognised on a straight-line basis each month (₹15,000 ÷ 12 = <strong>₹1,250/month</strong>). Simultaneously, the acquisition cost asset is amortised (₹2,250 ÷ 12 = <strong>₹187.50/month</strong>).
+    </div>
+    <div class="je">
+      <div class="hd">Each month: Revenue recognition</div>
+      <span class="dr">Dr  Insurance Contract Liability (LRC)       ₹1,250</span><br>
+      <span class="cr">  Cr  Insurance Revenue                       ₹1,250</span><br>
+      <br>
+      <span class="dr">Dr  Insurance Service Expense (acq. amort.)  ₹187.50</span><br>
+      <span class="cr">  Cr  Insurance Acquisition Cash Flows (asset) ₹187.50</span>
+    </div>
+
+    <div class="section-title">GST Treatment</div>
+    <div class="info-block">
+      Health insurance attracts <strong>18% GST</strong> in India. GST collected (₹15,000 × 18% = ₹2,700) is <strong>not included</strong> in IFRS 17 premium — it is a pass-through to the government. The ₹15,000 in this walkthrough is the <strong>net premium</strong> (ex-GST). Input Tax Credit on business expenses follows GST law separately.
+    </div>
+
+    <div class="section-title">Mid-Year Revenue Schedule</div>
+    <table class="tbl">
+      <tr><th>Period</th><th>Insurance Revenue (₹)</th><th>LRC Balance (₹)</th><th>Acq. Cost Asset (₹)</th></tr>
+      <tr><td>Apr (Mth 1)</td><td>1,250</td><td>13,750</td><td>2,062</td></tr>
+      <tr><td>Jun (Mth 3)</td><td>1,250</td><td>11,250</td><td>1,688</td></tr>
+      <tr><td>Sep (Mth 6)</td><td>1,250</td><td>7,500</td><td>1,125</td></tr>
+      <tr><td>Dec (Mth 9)</td><td>1,250</td><td>3,750</td><td>563</td></tr>
+      <tr><td>Mar (Mth 12)</td><td>1,250</td><td>0</td><td>0</td></tr>
+    </table>
+  </div>
+
+  <!-- SECTION 3: Claims & Reserving -->
+  <div class="section" id="s3">
+    <div class="phase-hdr">
+      <div class="phase-num">4</div>
+      <div><div class="phase-title">Claims Management & Reserving</div><div class="phase-sub">Incurred claims, IBNR, and LIC measurement</div></div>
+    </div>
+
+    <div class="info-block">
+      A claim occurs on 10 August. The insured undergoes hospitalisation. Total hospital bill: <strong>₹1,20,000</strong>. The insurer receives the claim intimation on 15 August. After investigation and processing, ₹1,15,000 is approved (after deductible/co-pay); ₹5,000 is rejected. Payment is made on 5 September.
+    </div>
+
+    <div class="section-title">Claims Life Cycle</div>
+    <div class="timeline">
+      <div class="tl-item"><div class="tl-head">10 Aug — Loss event (hospitalisation begins)</div><div class="tl-body">Claim is "incurred". IBNR reserve covers this until intimation.</div></div>
+      <div class="tl-item"><div class="tl-head">15 Aug — Claim intimation received</div><div class="tl-body">Claim is registered. IBNER (Incurred But Not Enough Reserved) tracking begins. TPA forwards documents.</div></div>
+      <div class="tl-item"><div class="tl-head">20–28 Aug — Investigation & adjudication</div><div class="tl-body">TPA scrutinises bills, verifies policy terms, exclusions, sub-limits. Cashless not applicable (reimbursement policy).</div></div>
+      <div class="tl-item"><div class="tl-head">30 Aug — Claim sanctioned</div><div class="tl-body">₹1,15,000 approved. Case reserve established. ₹5,000 repudiated (non-medical expense).</div></div>
+      <div class="tl-item"><div class="tl-head">5 Sep — Payment made</div><div class="tl-body">Claim settled. LIC reduced. Any residual reserve released.</div></div>
+    </div>
+
+    <div class="section-title">Reserving Components under IFRS 17 (LIC)</div>
+    <table class="tbl">
+      <tr><th>Reserve component</th><th>Definition</th><th>Basis</th></tr>
+      <tr><td>RBNS (Reserve for Reported but Not Settled)</td><td>Known claims in pipeline</td><td>Case-by-case + pattern adjustment</td></tr>
+      <tr><td>IBNR (Incurred But Not Reported)</td><td>Events occurred, not yet intimated</td><td>Actuarial: CL, BF, or CL-BF blend</td></tr>
+      <tr><td>IBNER</td><td>Reopening / re-estimation of open cases</td><td>Development factor on RBNS</td></tr>
+      <tr><td>Risk Adjustment (LIC)</td><td>Non-financial uncertainty on settlement</td><td>Confidence interval or cost of capital</td></tr>
+      <tr><td>Discounting</td><td>Time value if settlement &gt; 1 year</td><td>For health: usually immaterial (&lt;1 yr)</td></tr>
+    </table>
+
+    <div class="section-title">Journal Entries — Claim Event</div>
+    <div class="je">
+      <div class="hd">15 Aug — Claim intimated (case reserve set up)</div>
+      <span class="dr">Dr  Insurance Service Expense          ₹1,20,000</span><br>
+      <span class="cr">  Cr  Insurance Contract Liability (LIC)  ₹1,20,000</span><br>
+    </div>
+    <div class="je">
+      <div class="hd">30 Aug — Adjudication: reserve reduced by repudiated amount</div>
+      <span class="dr">Dr  Insurance Contract Liability (LIC)  ₹5,000</span><br>
+      <span class="cr">  Cr  Insurance Service Expense           ₹5,000</span><br>
+    </div>
+    <div class="je">
+      <div class="hd">5 Sep — Settlement of approved claim</div>
+      <span class="dr">Dr  Insurance Contract Liability (LIC)  ₹1,15,000</span><br>
+      <span class="cr">  Cr  Cash / Bank                         ₹1,15,000</span><br>
+    </div>
+
+    <div class="section-title">IRDAI Reserving Requirements (Ind AS / IRDAI basis alongside IFRS 17)</div>
+    <div class="warn-block">
+      Indian insurers must maintain reserves per <strong>IRDAI (Assets, Liabilities and Solvency Margin of Health Insurers) Regulations 2016</strong> alongside IFRS 17. The IRDAI basis (Ind AS 104 / IRDAI circulars) uses Unearned Premium Reserve (UPR) + Unexpired Risk Reserve (URR) + IBNR. Solvency is computed on the statutory basis, not IFRS 17.
+    </div>
+  </div>
+
+  <!-- SECTION 4b: IBNR Deep-dive -->
+  <div class="section" id="s4">
+    <div class="phase-hdr">
+      <div class="phase-num">4b</div>
+      <div><div class="phase-title">IBNR Estimation — Actuarial Methods</div><div class="phase-sub">Chain Ladder and Bornhuetter-Ferguson</div></div>
+    </div>
+
+    <div class="info-block">
+      IBNR is estimated by the Appointed Actuary using development triangle methods. For medical reimbursement, the <strong>paid claims development triangle</strong> is the primary tool. The example below uses a simplified 3-year triangle.
+    </div>
+
+    <div class="section-title">Simplified Paid Claims Development Triangle (₹ Lakhs, cohort by accident year)</div>
+    <table class="tbl">
+      <tr><th>Accident Year</th><th>12 months</th><th>24 months</th><th>36 months (ult.)</th></tr>
+      <tr><td>AY 2022-23</td><td>42</td><td>56</td><td>59</td></tr>
+      <tr><td>AY 2023-24</td><td>48</td><td>63</td><td>—</td></tr>
+      <tr><td>AY 2024-25</td><td>52</td><td>—</td><td>—</td></tr>
+    </table>
+
+    <div class="section-title">Chain Ladder Development Factors</div>
+    <table class="tbl">
+      <tr><th>Development factor</th><th>Calculation</th><th>Factor</th></tr>
+      <tr><td>f(12→24)</td><td>(56+63)/(42+48)</td><td>1.322</td></tr>
+      <tr><td>f(24→36)</td><td>59/56</td><td>1.054</td></tr>
+      <tr><td>f(12→ult)</td><td>1.322 × 1.054</td><td>1.393</td></tr>
+      <tr><td>f(24→ult)</td><td>1.054</td><td>1.054</td></tr>
+    </table>
+
+    <div class="section-title">IBNR Estimate (Chain Ladder)</div>
+    <table class="tbl">
+      <tr><th>AY</th><th>Paid to date</th><th>CDF to ult.</th><th>Ultimate</th><th>IBNR = Ult − Paid</th></tr>
+      <tr><td>2023-24</td><td>₹63L</td><td>1.054</td><td>₹66.4L</td><td class="neg">₹3.4L</td></tr>
+      <tr><td>2024-25</td><td>₹52L</td><td>1.393</td><td>₹72.4L</td><td class="neg">₹20.4L</td></tr>
+      <tr><td><strong>Total IBNR</strong></td><td></td><td></td><td></td><td class="neg"><strong>₹23.8L</strong></td></tr>
+    </table>
+
+    <div class="section-title">Bornhuetter-Ferguson (BF) Method</div>
+    <div class="info-block">
+      BF blends the Chain Ladder with an <em>a priori</em> expected loss ratio. For new / thin cohorts, BF is more stable. Formula: <strong>IBNR_BF = Expected Ultimate × % Unreported</strong>. If expected ultimate for AY 2024-25 is ₹70L and % unreported = (1 − 1/1.393) = 28.2%, then IBNR_BF = ₹70L × 28.2% = <strong>₹19.7L</strong>.
+    </div>
+    <div class="info-block">
+      <strong>IFRS 17 requirement:</strong> The Appointed Actuary certifies the IBNR. Under IFRS 17.B36, the estimate must be unbiased, probability-weighted, and include a <strong>Risk Adjustment</strong> for non-financial risk. The RA on LIC is typically 5–10% of the IBNR for health.
+    </div>
+
+    <div class="section-title">Reserve Adequacy Test (IRDAI regulation)</div>
+    <div class="info-block">
+      IRDAI mandates that the <strong>Unexpired Risk Reserve (URR)</strong> must be the <em>higher</em> of 50% of net premium or the expected claims under outstanding policies. If the UPR is insufficient, a top-up known as the <strong>Additional Unexpired Risk Reserve (AURR)</strong> is maintained. This is the statutory equivalent of IFRS 17's Loss Component.
+    </div>
+  </div>
+
+  <!-- SECTION 5: CSM Unwind -->
+  <div class="section" id="s5">
+    <div class="phase-hdr">
+      <div class="phase-num">5</div>
+      <div><div class="phase-title">CSM Movement & Release</div><div class="phase-sub">Profit recognition over coverage period</div></div>
+    </div>
+
+    <div class="info-block">
+      The CSM of <strong>₹2,070</strong> at inception is released into profit as insurance services are provided. For a 1-year policy, the <strong>coverage unit</strong> is typically the policy month. CSM is also adjusted each period for changes in estimates of future cash flows.
+    </div>
+
+    <div class="section-title">CSM Roll-forward (₹)</div>
+    <div class="csm-row"><div class="csm-label">Opening CSM (1 Apr)</div><div class="csm-bar-bg"><div class="csm-bar" style="width:100%;background:#3B8BD4"></div></div><div class="csm-val">₹2,070</div></div>
+    <div class="csm-row"><div class="csm-label">Interest accretion</div><div class="csm-bar-bg"><div class="csm-bar" style="width:3%;background:#1D9E75"></div></div><div class="csm-val">+₹62</div></div>
+    <div class="csm-row"><div class="csm-label">Changes in FCF (favourable)</div><div class="csm-bar-bg"><div class="csm-bar" style="width:8%;background:#1D9E75"></div></div><div class="csm-val">+₹150</div></div>
+    <div class="csm-row"><div class="csm-label">CSM released to revenue</div><div class="csm-bar-bg"><div class="csm-bar" style="width:100%;background:#D85A30"></div></div><div class="csm-val">−₹2,282</div></div>
+    <div class="csm-row"><div class="csm-label">Closing CSM (31 Mar)</div><div class="csm-bar-bg"><div class="csm-bar" style="width:0%;background:#3B8BD4"></div></div><div class="csm-val">₹0</div></div>
+
+    <div class="section-title">CSM Mechanics</div>
+    <table class="tbl">
+      <tr><th>Event</th><th>Effect on CSM</th><th>Effect on P&amp;L</th></tr>
+      <tr><td>Interest accretion (locked-in rate)</td><td>Increase</td><td>None (until release)</td></tr>
+      <tr><td>Favourable change in future FCF estimates</td><td>Increase</td><td>None</td></tr>
+      <tr><td>Unfavourable change in future FCF estimates</td><td>Decrease (floor: 0)</td><td>None until floor hit</td></tr>
+      <tr><td>CSM released (coverage unit method)</td><td>Decrease</td><td>Insurance Revenue ↑</td></tr>
+      <tr><td>Experience adjustment (current period)</td><td>No effect</td><td>Directly in P&amp;L</td></tr>
+      <tr><td>Contract becomes onerous</td><td>Zero (Loss Component)</td><td>Loss in P&amp;L immediately</td></tr>
+    </table>
+
+    <div class="section-title">Coverage Units</div>
+    <div class="info-block">
+      For medical reimbursement: <strong>1 coverage unit = 1 policy month of coverage</strong>. CSM released per month = CSM ÷ remaining months. If the policy lapses mid-year, coverage units cease and remaining CSM is released. If the policy is cancelled, any unearned CSM is derecognised and the refund of premium is processed.
+    </div>
+
+    <div class="section-title">Journal: Monthly CSM Release</div>
+    <div class="je">
+      <div class="hd">Each month: CSM release into Insurance Revenue</div>
+      <span class="dr">Dr  Insurance Contract Liability (CSM)     ₹190</span><br>
+      <span class="cr">  Cr  Insurance Revenue (CSM component)      ₹190</span><br>
+      <br>
+      <span style="color:var(--color-text-tertiary)">// ₹2,282 / 12 months ≈ ₹190 per month</span>
+    </div>
+  </div>
+
+  <!-- SECTION 6: P&L & OCI -->
+  <div class="section" id="s6">
+    <div class="phase-hdr">
+      <div class="phase-num">6</div>
+      <div><div class="phase-title">P&amp;L Statement & OCI under IFRS 17</div><div class="phase-sub">Annual income statement presentation</div></div>
+    </div>
+
+    <div class="info-block">
+      IFRS 17 restructures the P&amp;L. The Insurance Service Result is separated from the Insurance Finance Income/Expense. Insurers may elect to disaggregate Insurance Finance Income/Expense between P&amp;L and OCI.
+    </div>
+
+    <div class="section-title">Illustrative Annual P&amp;L (Single Policy, ₹)</div>
+    <table class="tbl">
+      <tr><th colspan="2">Insurance Service Result</th><th></th></tr>
+      <tr><td>Insurance Revenue</td><td></td><td class="pos">15,000</td></tr>
+      <tr><td style="padding-left:16px;font-weight:400">→ Release of LRC / unearned premium</td><td class="pos">12,728</td><td></td></tr>
+      <tr><td style="padding-left:16px;font-weight:400">→ CSM released to P&amp;L</td><td class="pos">2,272</td><td></td></tr>
+      <tr><td>Insurance Service Expenses</td><td></td><td class="neg">(11,695)</td></tr>
+      <tr><td style="padding-left:16px;font-weight:400">→ Incurred claims (paid + reserve movement)</td><td class="neg">(8,900)</td><td></td></tr>
+      <tr><td style="padding-left:16px;font-weight:400">→ Claim handling expenses</td><td class="neg">(890)</td><td></td></tr>
+      <tr><td style="padding-left:16px;font-weight:400">→ Policy admin expenses</td><td class="neg">(1,500)</td><td></td></tr>
+      <tr><td style="padding-left:16px;font-weight:400">→ Acquisition cost amortisation</td><td class="neg">(405)</td><td></td></tr>
+      <tr><td><strong>Insurance Service Result</strong></td><td></td><td class="pos"><strong>3,305</strong></td></tr>
+      <tr><td colspan="3" style="padding:4px 0"></td></tr>
+      <tr><th colspan="2">Insurance Finance Income / Expense</th><th></th></tr>
+      <tr><td>Finance income on assets</td><td></td><td class="pos">600</td></tr>
+      <tr><td>Finance expense on liabilities (unwinding)</td><td></td><td class="neg">(62)</td></tr>
+      <tr><td><strong>Net finance income</strong></td><td></td><td class="pos"><strong>538</strong></td></tr>
+      <tr><td colspan="3" style="padding:4px 0"></td></tr>
+      <tr><td><strong>Net profit before tax (single policy)</strong></td><td></td><td class="pos"><strong>3,843</strong></td></tr>
+    </table>
+
+    <div class="section-title">OCI — Disaggregation Election</div>
+    <div class="info-block">
+      If the insurer elects OCI disaggregation: the difference between current-year discount rates and locked-in rates on the LIC is routed through <strong>OCI</strong> (not P&amp;L). This reduces P&amp;L volatility from interest rate changes. For short-duration health policies, this difference is typically small.
+    </div>
+
+    <div class="section-title">Risk Adjustment Release</div>
+    <div class="info-block">
+      The RA is released as claims are settled or the uncertainty is resolved. The RA release is shown separately in <strong>Insurance Service Expenses</strong> (negative expense = income). If actual claims were better than expected, RA releases faster — a favourable experience variance.
+    </div>
+  </div>
+
+  <!-- SECTION 7: Solvency -->
+  <div class="section" id="s7">
+    <div class="phase-hdr">
+      <div class="phase-num">7</div>
+      <div><div class="phase-title">IRDAI Solvency Framework</div><div class="phase-sub">Indian statutory capital & solvency requirements</div></div>
+    </div>
+
+    <div class="info-block">
+      IRDAI mandates a minimum <strong>Solvency Ratio of 1.5x</strong> (150%) at all times. The Solvency Ratio = Available Solvency Margin (ASM) ÷ Required Solvency Margin (RSM). This is computed on the <strong>IRDAI statutory basis</strong> — not IFRS 17. Solvency is reported quarterly.
+    </div>
+
+    <div class="section-title">Solvency Ratio Gauge (Illustrative — Portfolio Level)</div>
+    <div style="margin: 1rem 0;">
+      <div class="sol-gauge">
+        <div style="font-size:12px;color:var(--color-text-secondary);width:30px">0×</div>
+        <div style="flex:1;position:relative;">
+          <div class="sol-track">
+            <div class="sol-fill" style="width:75%"></div>
+            <div class="sol-marker" style="left:50%"></div>
+          </div>
+          <div class="sol-labels"><span>0×</span><span>1.5× (min)</span><span>2×</span></div>
+        </div>
+        <div style="font-size:14px;font-weight:500;color:var(--color-text-primary);width:40px">1.87×</div>
+      </div>
+      <div style="font-size:11px;color:var(--color-text-tertiary);margin-top:4px">Yellow marker = IRDAI minimum (1.5×). Bar = illustrative portfolio ratio of 1.87×.</div>
+    </div>
+
+    <div class="section-title">Required Solvency Margin (RSM) — Health Insurer</div>
+    <div class="info-block">
+      Per IRDAI (Assets, Liabilities and Solvency Margin of Health Insurers) Regulations 2016, the RSM is the <strong>higher</strong> of: (a) ₹50 crore (minimum capital), or (b) the sum of the following factor-based charges:
+    </div>
+    <table class="tbl">
+      <tr><th>Risk charge</th><th>Factor</th><th>Base</th></tr>
+      <tr><td>Insurance risk charge (C1)</td><td>20% of net premium (yr 1) / 20% of net claims (yr 2+)</td><td>Net premium / claims</td></tr>
+      <tr><td>Asset default risk charge (C2)</td><td>Based on investment category (e.g. 0.5% govt securities, 10% equities)</td><td>Investment portfolio</td></tr>
+      <tr><td>Catastrophe reserve</td><td>Required for health insurers in epidemic-prone states</td><td>Policy count × factor</td></tr>
+    </table>
+
+    <div class="section-title">Available Solvency Margin (ASM)</div>
+    <table class="tbl">
+      <tr><th>Component</th><th>Include?</th><th>Notes</th></tr>
+      <tr><td>Paid-up equity capital</td><td><span class="badge badge-g">Yes</span></td><td>Full value</td></tr>
+      <tr><td>Free reserves (including retained surplus)</td><td><span class="badge badge-g">Yes</span></td><td>Per IRDAI limits</td></tr>
+      <tr><td>Revaluation reserves</td><td><span class="badge badge-a">Partial</span></td><td>50% of surplus over book</td></tr>
+      <tr><td>IFRS 17 CSM (statutory treatment)</td><td><span class="badge badge-r">Excluded</span></td><td>IRDAI uses its own liability basis</td></tr>
+      <tr><td>Subordinated debt</td><td><span class="badge badge-a">Limited</span></td><td>Up to 25% of ASM, IRDAI approval required</td></tr>
+      <tr><td>Deferred tax liabilities</td><td><span class="badge badge-r">Deducted</span></td><td>Net of DTA</td></tr>
+    </table>
+
+    <div class="section-title">IFRS 17 vs IRDAI Statutory — Key Divergences</div>
+    <table class="tbl">
+      <tr><th>Item</th><th>IFRS 17</th><th>IRDAI statutory</th></tr>
+      <tr><td>Premium recognition</td><td>Insurance Revenue (earned)</td><td>Gross written premium, then UPR</td></tr>
+      <tr><td>Liabilities</td><td>LRC + LIC (FCF + RA + CSM)</td><td>UPR + URR/AURR + IBNR</td></tr>
+      <tr><td>Acquisition costs</td><td>Deferred asset (IACF)</td><td>Expensed immediately</td></tr>
+      <tr><td>Discounting claims</td><td>Required if material</td><td>Not discounted (statutory)</td></tr>
+      <tr><td>Profit emergence</td><td>CSM unwind over coverage</td><td>Earned premium less incurred</td></tr>
+      <tr><td>Solvency basis</td><td>Not used for solvency</td><td>This is the solvency basis</td></tr>
+    </table>
+    <div class="warn-block">
+      Indian insurers maintain <strong>two sets of accounts</strong>: IFRS 17 (financial reporting to shareholders / international investors) and IRDAI statutory basis (regulatory filings, solvency, dividend payouts). The Appointed Actuary certifies both.
+    </div>
+  </div>
+
+  <!-- SECTION 8: Reinsurance -->
+  <div class="section" id="s8">
+    <div class="phase-hdr">
+      <div class="phase-num">8</div>
+      <div><div class="phase-title">Reinsurance Accounting</div><div class="phase-sub">Reinsurance contracts held — IFRS 17.60–70A</div></div>
+    </div>
+
+    <div class="info-block">
+      Assume the insurer cedes 20% of risk to a reinsurer under a <strong>proportional quota share treaty</strong>. Ceded premium = ₹3,000. Reinsurance commission (RI commission) received = ₹450 (15% of ceded premium).
+    </div>
+
+    <div class="info-block">
+      Under IFRS 17, reinsurance contracts held are measured <strong>separately</strong> from the underlying contracts — they are <strong>assets</strong> (not netted against liabilities). The RI asset follows the same building blocks (FCF of RI, RA of RI, CSM of RI — here called the Loss Recovery Component or Net Cost).
+    </div>
+
+    <div class="section-title">Day 1 — Reinsurance Asset</div>
+    <div class="je">
+      <div class="hd">Day 1: Cession of 20% risk to reinsurer</div>
+      <span class="dr">Dr  Reinsurance Contract Asset (RI-LRC)  ₹3,000</span><br>
+      <span class="cr">  Cr  Cash / Reinsurance payable             ₹3,000</span><br>
+      <br>
+      <span class="dr">Dr  Cash / RI Commission receivable       ₹450</span><br>
+      <span class="cr">  Cr  Reinsurance Contract Asset (RI-LRC)  ₹450</span><br>
+      <br>
+      <span style="color:var(--color-text-tertiary)">// Net RI asset = ₹2,550. Represents expected RI recoveries (FCF of RI).</span>
+    </div>
+
+    <div class="section-title">Claim Recovery</div>
+    <div class="je">
+      <div class="hd">On claim of ₹1,15,000 — recover 20% from RI</div>
+      <span class="dr">Dr  RI Commission / Reinsurer receivable  ₹23,000</span><br>
+      <span class="cr">  Cr  Reinsurance Contract Asset (RI-LIC)  ₹23,000</span>
+    </div>
+
+    <div class="section-title">P&amp;L Presentation — Reinsurance</div>
+    <table class="tbl">
+      <tr><th>Line item</th><th>Amount (₹)</th><th>Placement</th></tr>
+      <tr><td>Reinsurance premium ceded</td><td class="neg">(3,000)</td><td>Netted in Insurance Revenue (or separate line)</td></tr>
+      <tr><td>RI commission income</td><td class="pos">450</td><td>Insurance Service Expenses (reduction)</td></tr>
+      <tr><td>RI claims recovered</td><td class="pos">23,000 (on ₹1,15,000 claim)</td><td>Insurance Service Expenses (reduction)</td></tr>
+    </table>
+
+    <div class="section-title">IRDAI Reinsurance Rules</div>
+    <div class="info-block">
+      IRDAI mandates that health insurers must first offer reinsurance to <strong>GIC Re</strong> (Indian market). For medical reimbursement products, IRDAI's reinsurance regulations require: (a) mandatory cession to GIC Re; (b) programme filed annually; (c) reinsurance with Indian reinsurers preferred before offshore placements. Offshore RI requires IRDAI approval above certain thresholds.
+    </div>
+  </div>
+
+  <!-- SECTION 9: Reporting -->
+  <div class="section" id="s9">
+    <div class="phase-hdr">
+      <div class="phase-num">9</div>
+      <div><div class="phase-title">Reporting, Disclosures & Governance</div><div class="phase-sub">Financial statements, actuarial certification, IRDAI filings</div></div>
+    </div>
+
+    <div class="section-title">IFRS 17 Disclosures Required</div>
+    <table class="tbl">
+      <tr><th>Disclosure area</th><th>Key items</th></tr>
+      <tr><td>Reconciliations</td><td>LRC & LIC roll-forward; CSM movement; RA movement</td></tr>
+      <tr><td>Insurance Revenue decomposition</td><td>CSM release, RA release, claims experience</td></tr>
+      <tr><td>Significant judgements</td><td>Grouping methodology, discount rates, RA methodology, coverage units</td></tr>
+      <tr><td>Sensitivity analysis</td><td>Impact of ±1% claims ratio, ±50 bps discount rate on LIC</td></tr>
+      <tr><td>Onerous contracts</td><td>Loss component movements, portfolios identified as onerous</td></tr>
+      <tr><td>Reinsurance</td><td>RI asset reconciliation, amounts recoverable from reinsurers</td></tr>
+    </table>
+
+    <div class="section-title">IRDAI Regulatory Filings (Periodic)</div>
+    <table class="tbl">
+      <tr><th>Filing</th><th>Frequency</th><th>Key contents</th></tr>
+      <tr><td>L-42 (Financial condition report)</td><td>Annual</td><td>Appointed Actuary's FCR on reserves, solvency, pricing adequacy</td></tr>
+      <tr><td>Solvency return</td><td>Quarterly</td><td>ASM, RSM, ratio; investment schedule</td></tr>
+      <tr><td>Annual report (IRDAI format)</td><td>Annual</td><td>Revenue account, P&amp;L, Balance Sheet (Form B-RA, B-PL, B-BS)</td></tr>
+      <tr><td>Claims data submission</td><td>Monthly</td><td>Incurred claims, IBNR, TPA-wise breakup</td></tr>
+      <tr><td>Actuarial report & abstract</td><td>Annual</td><td>Product-level reserve certification</td></tr>
+    </table>
+
+    <div class="section-title">Appointed Actuary — Dual Certification</div>
+    <div class="info-block">
+      The Appointed Actuary (AA) must certify: (a) <strong>IRDAI basis</strong> — adequacy of UPR, URR, IBNR, and solvency; (b) <strong>IFRS 17 basis</strong> — FCF estimates, RA methodology, coverage unit definition, CSM adequacy, onerous contract identification. The AA's report forms part of the Board submission and is reviewed by IRDAI.
+    </div>
+
+    <div class="section-title">End-to-End Policy Lifecycle Summary</div>
+    <div class="timeline">
+      <div class="tl-item"><div class="tl-head">Day 1 — Inception</div><div class="tl-body">Contract boundary set. Groups formed. FCF estimated. CSM = ₹2,070. LRC = ₹15,000. Solvency RSM charge updated.</div></div>
+      <div class="tl-item"><div class="tl-head">Monthly — Coverage period</div><div class="tl-body">Insurance Revenue recognised (₹1,250/month). CSM unwound (₹190/month). Acq. cost amortised. IBNR updated by actuary each quarter.</div></div>
+      <div class="tl-item"><div class="tl-head">Aug — Claim event</div><div class="tl-body">LIC created (₹1,20,000). Adjudicated to ₹1,15,000. RI recovery ₹23,000. Net claim cost = ₹92,000. CSM adjusted for changes in estimates.</div></div>
+      <div class="tl-item"><div class="tl-head">Quarter-end</div><div class="tl-body">Solvency ratio computed (IRDAI basis). IBNR refreshed. RA reassessed. FCF re-estimated. Onerous contract test run.</div></div>
+      <div class="tl-item"><div class="tl-head">31 March — Policy expiry</div><div class="tl-body">LRC = 0. CSM = 0. Any residual IBNR (LIC) retained. RI settlements finalised. Annual statutory & IFRS 17 accounts filed. AA certifies.</div></div>
+      <div class="tl-item"><div class="tl-head">Renewal — New contract</div><div class="tl-body">New contract. New group (if different cohort year). Fresh FCF estimate, possibly with experience adjustments. Pricing reviewed by AA for adequacy.</div></div>
+    </div>
+
+    <div class="warn-block" style="margin-top:1rem">
+      <strong>Upcoming change:</strong> IRDAI is working on aligning its regulatory framework with IFRS 17 over the medium term. Insurers should expect convergence in solvency computation and liability measurement, potentially transitioning to an economic-value-based solvency regime (similar to Solvency II) in the coming years.
+    </div>
+  </div>
+</div>
+
+<script>
+  const sections = document.querySelectorAll('.section');
+  const buttons = document.querySelectorAll('.nav button');
+  function show(i) {
+    sections.forEach((s,j) => s.classList.toggle('visible', i===j));
+    buttons.forEach((b,j) => b.classList.toggle('active', i===j));
+  }
+</script>
