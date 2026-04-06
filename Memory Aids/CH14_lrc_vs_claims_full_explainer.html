@@ -1,0 +1,331 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans);font-size:14px;color:var(--color-text-primary);line-height:1.6}
+.wrap{padding:1rem 0}
+.title{font-size:18px;font-weight:500;margin-bottom:4px}
+.subtitle{font-size:13px;color:var(--color-text-secondary);margin-bottom:1.5rem;line-height:1.5}
+.section-head{font-size:15px;font-weight:500;margin:1.5rem 0 .5rem}
+.section-sub{font-size:13px;color:var(--color-text-secondary);margin-bottom:1rem;line-height:1.5}
+.kpi-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:1.25rem}
+.kpi{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:.75rem 1rem}
+.kpi-label{font-size:11px;color:var(--color-text-secondary);margin-bottom:3px}
+.kpi-val{font-size:20px;font-weight:500}
+.kpi-sub{font-size:11px;color:var(--color-text-secondary);margin-top:2px}
+.bar-label-row{display:flex;justify-content:space-between;font-size:12px;color:var(--color-text-secondary);margin-bottom:5px}
+.bar-track{height:40px;border-radius:var(--border-radius-md);overflow:hidden;display:flex;margin-bottom:8px}
+.bar-track.thin{height:28px}
+.seg{display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;transition:width .5s ease;white-space:nowrap;overflow:hidden;padding:0 6px}
+.s-claims{background:#9FE1CB;color:#085041}
+.s-exp{background:#C0DD97;color:#27500A}
+.s-ra{background:#FAC775;color:#412402}
+.s-csm{background:#F4C0D1;color:#4B1528}
+.s-lic{background:#B5D4F4;color:#0C447C}
+.leg{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:1rem}
+.leg-item{display:flex;align-items:center;gap:5px;font-size:12px;color:var(--color-text-secondary)}
+.leg-sq{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+.divider{height:0.5px;background:var(--color-border-tertiary);margin:1.5rem 0}
+.hl{border-radius:var(--border-radius-md);padding:.8rem 1rem;font-size:13px;line-height:1.6;margin:.75rem 0}
+.hl-teal{background:#E1F5EE;color:#085041}
+.hl-amber{background:#FAEEDA;color:#633806}
+.hl-blue{background:#E6F1FB;color:#0C447C}
+.hl-pink{background:#FBEAF0;color:#4B1528}
+.hl-green{background:#EAF3DE;color:#27500A}
+.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.25rem;margin-bottom:10px}
+.card-title{font-size:13px;font-weight:500;margin-bottom:.6rem}
+.card-sub{font-size:12px;color:var(--color-text-secondary);margin-bottom:.75rem;line-height:1.5}
+.row-item{display:flex;justify-content:space-between;align-items:baseline;padding:5px 0;border-bottom:0.5px solid var(--color-border-tertiary);font-size:13px;gap:8px}
+.row-item:last-child{border-bottom:none}
+.row-item.subtotal{font-weight:500;border-top:0.5px solid var(--color-border-primary);border-bottom:none;padding-top:7px;margin-top:2px}
+.row-item.grand{font-size:14px;font-weight:500;border-top:1.5px solid var(--color-border-primary);border-bottom:none;padding-top:8px;margin-top:2px}
+.row-item .ind{padding-left:14px;color:var(--color-text-secondary);font-size:12px}
+.row-item .amt{font-variant-numeric:tabular-nums;white-space:nowrap}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.tag{display:inline-block;font-size:11px;padding:2px 8px;border-radius:var(--border-radius-md)}
+.t-teal{background:#E1F5EE;color:#085041}
+.t-green{background:#EAF3DE;color:#27500A}
+.t-amber{background:#FAEEDA;color:#412402}
+.t-pink{background:#FBEAF0;color:#4B1528}
+.t-blue{background:#E6F1FB;color:#0C447C}
+.slider-row{display:flex;align-items:center;gap:10px;margin:1rem 0;font-size:13px}
+.slider-row label{min-width:100px;color:var(--color-text-secondary)}
+.slider-row input{flex:1}
+.slider-row span{min-width:52px;text-align:right;font-weight:500}
+.month-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:1rem}
+.note-box{border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-tertiary);padding:.75rem 1rem;font-size:12px;color:var(--color-text-secondary);line-height:1.5;margin-top:1rem}
+.note-box strong{color:var(--color-text-primary);font-weight:500}
+</style>
+
+<div class="wrap">
+
+<div class="title">Why LRC is not the same as expected claims</div>
+<div class="subtitle">A self-contained explainer using one policy: Ramesh pays ₹12,000 annual health premium on 1 April 2026. All amounts in ₹.</div>
+
+<div class="divider"></div>
+
+<div class="section-head">Part 1 — The starting question</div>
+<div class="section-sub">When Ramesh pays ₹12,000, what is the insurer actually promising? Three distinct promises, not one.</div>
+
+<div class="kpi-row">
+  <div class="kpi"><div class="kpi-label">Premium received</div><div class="kpi-val">₹12,000</div><div class="kpi-sub">Cash in on 1 Apr 2026</div></div>
+  <div class="kpi"><div class="kpi-label">Policy period</div><div class="kpi-val">12 months</div><div class="kpi-sub">Apr 2026 – Mar 2027</div></div>
+  <div class="kpi"><div class="kpi-label">Expected claims</div><div class="kpi-val">₹7,500</div><div class="kpi-sub">Best estimate only</div></div>
+  <div class="kpi"><div class="kpi-label">Expected expenses</div><div class="kpi-val">₹500</div><div class="kpi-sub">Cost to service policy</div></div>
+</div>
+
+<div class="hl hl-blue">
+  <strong>The insurer's three promises to Ramesh:</strong><br>
+  1. Pay his claims (up to the sum insured) — expected to cost ₹7,500.<br>
+  2. Bear the uncertainty that claims could be more than ₹7,500 — this is a real service, and it has a cost.<br>
+  3. Administer his policy for 12 months — process claims, maintain the panel, send renewal notices.
+</div>
+
+<div class="divider"></div>
+
+<div class="section-head">Part 2 — How the ₹12,000 splits under Ind AS 117</div>
+<div class="section-sub">The premium is not one lump. Ind AS 117 requires the insurer to decompose it into four economic layers. The key insight: LRC contains claims AND expenses, not just claims.</div>
+
+<div class="bar-label-row"><span>₹12,000 premium = four layers</span><span>Total ₹12,000</span></div>
+<div class="bar-track">
+  <div class="seg s-claims" style="width:62.5%">Claims ₹7,500</div>
+  <div class="seg s-exp" style="width:4.2%">Exp</div>
+  <div class="seg s-ra" style="width:16.7%">RA ₹2,000</div>
+  <div class="seg s-csm" style="width:16.7%">CSM ₹2,000</div>
+</div>
+<div class="leg">
+  <div class="leg-item"><div class="leg-sq" style="background:#9FE1CB"></div>Expected claims ₹7,500</div>
+  <div class="leg-item"><div class="leg-sq" style="background:#C0DD97"></div>Future expenses ₹500</div>
+  <div class="leg-item"><div class="leg-sq" style="background:#FAC775"></div>Risk adjustment (RA) ₹2,000</div>
+  <div class="leg-item"><div class="leg-sq" style="background:#F4C0D1"></div>Contractual service margin (CSM) ₹2,000</div>
+</div>
+
+<div class="two-col">
+  <div class="card">
+    <div class="card-title">LRC — Liability for Remaining Coverage</div>
+    <div class="card-sub">LRC = expected claims + expected future expenses. It is called "fulfilment cash flows" in the standard — all the cash the insurer expects to pay out to fulfil its promise.</div>
+    <div class="row-item"><span class="ind">Expected claims</span><span class="amt" style="color:#0F6E56">₹7,500</span></div>
+    <div class="row-item"><span class="ind">+ Expected future expenses</span><span class="amt" style="color:#0F6E56">₹500</span></div>
+    <div class="row-item subtotal"><span>LRC (fulfilment cash flows)</span><span class="amt" style="color:#0F6E56">₹8,000</span></div>
+    <div style="margin-top:.6rem"><span class="tag t-teal">shown on balance sheet</span></div>
+  </div>
+  <div class="card">
+    <div class="card-title">RA + CSM — the remaining ₹4,000</div>
+    <div class="card-sub">After covering fulfilment costs (₹8,000), the remaining ₹4,000 is split between the price of risk and the profit margin.</div>
+    <div class="row-item"><span class="ind">Risk adjustment (RA)</span><span class="amt" style="color:#BA7517">₹2,000</span></div>
+    <div class="row-item"><span class="ind">Contractual service margin (CSM)</span><span class="amt" style="color:#993556">₹2,000</span></div>
+    <div class="row-item subtotal"><span>Total balance sheet liability</span><span class="amt">₹12,000</span></div>
+    <div style="margin-top:.6rem"><span class="tag t-amber">RA = price of uncertainty</span> <span class="tag t-pink">CSM = locked profit</span></div>
+  </div>
+</div>
+
+<div class="hl hl-amber">
+  <strong>Why are LRC and expected claims different?</strong><br>
+  Because the insurer does more than just pay claims. It also runs the claims department, maintains the hospital network, sends letters, employs doctors on its panel — all of this costs money. Under Ind AS 117, those future servicing costs (₹500 here) must be included in the LRC alongside the claims estimate. So: LRC = ₹7,500 claims + ₹500 expenses = ₹8,000.
+</div>
+
+<div class="divider"></div>
+
+<div class="section-head">Part 3 — What each component means in plain words</div>
+<div class="section-sub">Each of the four layers has a specific purpose. Understanding the purpose makes the accounting logic clear.</div>
+
+<div class="card">
+  <div class="card-title">Expected claims — ₹7,500 <span class="tag t-teal" style="margin-left:6px">inside LRC</span></div>
+  <div class="card-sub">The actuary's best guess of what Ramesh will actually claim over 12 months. It is the central estimate — a 50th percentile view, with no cushion for bad luck. In a portfolio of 10,000 Rameshes, this is the average expected payout per policy.</div>
+  <div class="hl hl-teal" style="font-size:12px">Example: if Ramesh has a history of one hospitalisation every two years costing ₹15,000, the annual expected claim is ₹7,500. Simple probability math.</div>
+</div>
+
+<div class="card">
+  <div class="card-title">Future expenses — ₹500 <span class="tag t-green" style="margin-left:6px">inside LRC</span></div>
+  <div class="card-sub">These are the directly attributable costs of servicing Ramesh's policy over the next 12 months — the portion of claims-processing salaries, TPA fees, hospital empanelment costs, and renewal administration that can be directly linked to his policy. General overheads (CEO salary, rent, IT) are NOT included here — they go to the P&L as period costs.</div>
+  <div class="hl hl-green" style="font-size:12px">Under old IGAAP, these expenses were just charged to P&L when incurred. Under Ind AS 117, they are estimated upfront and included in the fulfilment cash flows, giving a truer picture of what the policy actually costs to deliver.</div>
+</div>
+
+<div class="card">
+  <div class="card-title">Risk adjustment (RA) — ₹2,000 <span class="tag t-amber" style="margin-left:6px">separate component</span></div>
+  <div class="card-sub">Claims could be higher than ₹7,500. Maybe Ramesh gets cancer. Maybe there's a dengue outbreak. The RA is the extra amount the insurer holds to compensate itself for bearing this uncertainty. It is NOT a claims reserve — it is the price of uncertainty, similar to the "risk loading" in actuarial pricing. Under Ind AS 117, it must be calculated at a specified confidence level (IRDAI has not yet prescribed the method, but the 75th percentile is common internationally).</div>
+  <div class="hl hl-amber" style="font-size:12px">
+    <strong>Why does this matter?</strong> Under old IGAAP, the risk loading was hidden inside the unearned premium reserve. Nobody could see it separately. Now it is explicit — investors can see exactly how much cushion the insurer holds, and how conservative or aggressive its risk assumptions are. As months pass without a major claim, the RA releases to profit, rewarding the insurer for bearing risk that did not materialise.
+  </div>
+</div>
+
+<div class="card">
+  <div class="card-title">Contractual service margin (CSM) — ₹2,000 <span class="tag t-pink" style="margin-left:6px">profit in a box</span></div>
+  <div class="card-sub">After covering fulfilment costs (₹8,000) and the risk charge (₹2,000), the remaining ₹2,000 is the profit margin the insurer locked in when it wrote this policy. Under old IGAAP, an insurer could book a portion of this profit on day one. Ind AS 117 says: no — you must hold it on the balance sheet as a liability (the CSM) and release it to the P&L gradually as you actually provide cover each month.</div>
+  <div class="hl hl-pink" style="font-size:12px">
+    <strong>The discipline this creates:</strong> If the policy turns out to be loss-making (claims > premium), there is no CSM — instead, the loss is recognised immediately. Profitable and loss-making policies can no longer offset each other at the portfolio level. Each cohort stands on its own.
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<div class="section-head">Part 4 — Watch it unwind over 12 months</div>
+<div class="section-sub">Drag the slider to move through the policy year. The bar shows how the ICL shrinks as cover is provided. The table shows what flows into the P&L each month.</div>
+
+<div class="slider-row">
+  <label>Month elapsed</label>
+  <input type="range" min="0" max="12" value="0" step="1" id="mslider" oninput="upd(this.value)">
+  <span id="mout">Month 0 — Apr 2026</span>
+</div>
+
+<div class="bar-label-row"><span>Remaining insurance contract liability (ICL)</span><span id="icl-tot" style="font-weight:500">₹12,000</span></div>
+<div class="bar-track" id="icl-bar">
+  <div class="seg s-claims" id="b-claims" style="width:62.5%">Claims ₹7,500</div>
+  <div class="seg s-exp" id="b-exp" style="width:4.2%"></div>
+  <div class="seg s-ra" id="b-ra" style="width:16.7%">RA ₹2,000</div>
+  <div class="seg s-csm" id="b-csm" style="width:16.7%">CSM ₹2,000</div>
+  <div class="seg s-lic" id="b-lic" style="width:0%"></div>
+</div>
+<div class="leg">
+  <div class="leg-item"><div class="leg-sq" style="background:#9FE1CB"></div>Claims portion of LRC: <span id="l-claims" style="font-weight:500;margin-left:3px">₹7,500</span></div>
+  <div class="leg-item"><div class="leg-sq" style="background:#C0DD97"></div>Expense portion of LRC: <span id="l-exp" style="font-weight:500;margin-left:3px">₹500</span></div>
+  <div class="leg-item"><div class="leg-sq" style="background:#FAC775"></div>RA: <span id="l-ra" style="font-weight:500;margin-left:3px">₹2,000</span></div>
+  <div class="leg-item"><div class="leg-sq" style="background:#F4C0D1"></div>CSM: <span id="l-csm" style="font-weight:500;margin-left:3px">₹2,000</span></div>
+  <div class="leg-item"><div class="leg-sq" style="background:#B5D4F4"></div>LIC (incurred claims): <span id="l-lic" style="font-weight:500;margin-left:3px">₹0</span></div>
+</div>
+
+<div class="month-grid">
+  <div class="card">
+    <div class="card-title">This month's P&L entries</div>
+    <div class="row-item"><span>Claims portion of LRC released</span><span class="amt" id="p-claims" style="color:#0F6E56">₹0</span></div>
+    <div class="row-item"><span>Expense portion released</span><span class="amt" id="p-exp" style="color:#0F6E56">₹0</span></div>
+    <div class="row-item"><span>RA released to revenue</span><span class="amt" id="p-ra" style="color:#0F6E56">₹0</span></div>
+    <div class="row-item"><span>CSM released to revenue</span><span class="amt" id="p-csm" style="color:#0F6E56">₹0</span></div>
+    <div class="row-item subtotal"><span>Insurance revenue</span><span class="amt" id="p-rev" style="color:#0F6E56">₹0</span></div>
+    <div class="row-item"><span>Claims incurred (expense)</span><span class="amt" id="p-clmx" style="color:#993C1D">₹0</span></div>
+    <div class="row-item"><span>Service expenses incurred</span><span class="amt" id="p-expx" style="color:#993C1D">₹0</span></div>
+    <div class="row-item grand"><span>Monthly insurance service result</span><span class="amt" id="p-isr">₹0</span></div>
+  </div>
+  <div class="card">
+    <div class="card-title">Cumulative P&L (year to date)</div>
+    <div class="row-item"><span>Revenue recognised so far</span><span class="amt" id="c-rev" style="color:#0F6E56">₹0</span></div>
+    <div class="row-item"><span>Claims incurred so far</span><span class="amt" id="c-clm" style="color:#993C1D">₹0</span></div>
+    <div class="row-item"><span>Service expenses so far</span><span class="amt" id="c-exp" style="color:#993C1D">₹0</span></div>
+    <div class="row-item grand"><span>Cumulative ISR</span><span class="amt" id="c-isr">₹0</span></div>
+  </div>
+</div>
+
+<div class="hl hl-teal" id="insight-box" style="margin-top:.75rem;font-size:13px">
+  Move the slider to see what happens each month.
+</div>
+
+<div class="note-box">
+  <strong>Why monthly revenue = ₹1,000 (not ₹625)?</strong> Because revenue under Ind AS 117 is not just claims — it is the full service provided. Each month the insurer earns: ₹625 (claims portion) + ₹42 (expense portion) + ₹167 (RA release) + ₹167 (CSM release) = ₹1,000. The insurer provided cover worth ₹1,000 that month — that is the revenue. The claims cost of ₹625 is a separate expense line. The difference (₹375) is the monthly insurance service result — the profit from underwriting that month.
+</div>
+
+<div class="divider"></div>
+
+<div class="section-head">Part 5 — The key equation to remember</div>
+
+<div class="hl hl-blue" style="font-size:13px">
+  <strong>Premium (₹12,000)</strong><br>
+  = Fulfilment cash flows [LRC] (₹8,000) + Risk adjustment [RA] (₹2,000) + Contractual service margin [CSM] (₹2,000)<br><br>
+  <strong>Fulfilment cash flows [LRC] (₹8,000)</strong><br>
+  = Expected claims (₹7,500) + Expected future expenses (₹500)<br><br>
+  <strong>So: Expected claims ≠ LRC</strong><br>
+  LRC is larger than expected claims because it also includes the cost of servicing the policy. The gap between them (₹500 here) is small for simple annual health policies but can be much larger for complex products with significant ongoing administration.
+</div>
+
+<div class="section-head" style="margin-top:1.5rem">Part 6 — How this looked under old IGAAP</div>
+<div class="section-sub">Under IGAAP, none of these components existed separately. The whole ₹12,000 went into one pot — the Unearned Premium Reserve (UPR) — and drained out mechanically over 12 months.</div>
+
+<div class="two-col">
+  <div class="card">
+    <div class="card-title" style="color:#633806">IGAAP — what you saw</div>
+    <div class="card-sub">One liability line. No visibility into what it contained.</div>
+    <div class="row-item"><span>Unearned Premium Reserve (UPR)</span><span class="amt">₹12,000</span></div>
+    <div class="row-item"><span style="color:var(--color-text-secondary);font-size:12px">Expected claims hidden inside</span><span class="amt" style="color:var(--color-text-secondary);font-size:12px">?</span></div>
+    <div class="row-item"><span style="color:var(--color-text-secondary);font-size:12px">Risk loading hidden inside</span><span class="amt" style="color:var(--color-text-secondary);font-size:12px">?</span></div>
+    <div class="row-item"><span style="color:var(--color-text-secondary);font-size:12px">Profit hidden inside</span><span class="amt" style="color:var(--color-text-secondary);font-size:12px">?</span></div>
+    <div class="row-item"><span style="color:var(--color-text-secondary);font-size:12px">Expense loading hidden inside</span><span class="amt" style="color:var(--color-text-secondary);font-size:12px">?</span></div>
+  </div>
+  <div class="card">
+    <div class="card-title" style="color:#085041">Ind AS 117 — what you now see</div>
+    <div class="card-sub">Four explicit components. Every rupee accounted for.</div>
+    <div class="row-item"><span>Expected claims (in LRC)</span><span class="amt" style="color:#0F6E56">₹7,500</span></div>
+    <div class="row-item"><span>Future expenses (in LRC)</span><span class="amt" style="color:#0F6E56">₹500</span></div>
+    <div class="row-item"><span>Risk adjustment (RA)</span><span class="amt" style="color:#BA7517">₹2,000</span></div>
+    <div class="row-item"><span>Contractual service margin (CSM)</span><span class="amt" style="color:#993556">₹2,000</span></div>
+    <div class="row-item grand"><span>Total ICL</span><span class="amt">₹12,000</span></div>
+  </div>
+</div>
+
+</div>
+
+<script>
+const mnames = ['Apr 2026','May 2026','Jun 2026','Jul 2026','Aug 2026','Sep 2026','Oct 2026','Nov 2026','Dec 2026','Jan 2027','Feb 2027','Mar 2027','Mar 2027 (end)'];
+const insights = [
+  'Move the slider to see what happens each month.',
+  'Month 1 (May 2026): 1/12th of each component releases. Revenue = ₹1,000. Claims cost = ₹625. Monthly profit = ₹375. The ICL drops from ₹12,000 to ₹11,000.',
+  'Month 2 (Jun 2026): Same pattern. Note that revenue (₹1,000) is always higher than the claims cost (₹625) — because revenue includes the RA and CSM release, not just claims.',
+  'Month 3 (Jul 2026): Quarter done. ₹3,000 revenue earned. ₹1,875 claims incurred. ₹1,125 cumulative profit. The LRC has shrunk by ₹2,000 (the claims + expense portions released).',
+  'Month 4 (Aug 2026): The LIC (blue) grows as claims are incurred but not yet paid. This is RBNS + IBNR — known and unknown claims.',
+  'Month 5 (Sep 2026): The RA (amber) releasing each month tells investors: the risk is resolving safely. No catastrophic claims this month.',
+  'Month 6 (Oct 2026): Half-year mark. ₹6,000 revenue earned out of ₹12,000. The insurer has earned exactly half its premium. The ICL is exactly half of what it started at.',
+  'Month 7 (Nov 2026): Second half. The pattern is symmetrical — same release every month under PAA for a simple annual policy.',
+  'Month 8 (Dec 2026): The CSM (pink) is the locked-in profit being unlocked month by month. Each ₹167 release is the reward for providing one month of cover.',
+  'Month 9 (Jan 2027): Three months left. ₹9,000 revenue earned. ₹5,625 claims incurred. ₹3,375 cumulative profit so far.',
+  'Month 10 (Feb 2027): Near the end. The RA is almost fully released — meaning the uncertainty of the full policy year is almost fully resolved.',
+  'Month 11 (Mar 2027 pre-end): One month left. Almost all profit earned. The CSM nearly at zero.',
+  'Month 12 complete: Policy finished. ICL = zero. Total revenue = ₹12,000. Total claims = ₹7,500. Total expenses = ₹500. Total profit = ₹4,000. Every rupee accounted for, earned gradually over 12 months.'
+];
+
+function r(v){return '₹'+Math.round(v).toLocaleString('en-IN')}
+function rn(v){return (v<0?'-₹':'₹')+Math.abs(Math.round(v)).toLocaleString('en-IN')}
+
+function upd(m){
+  m=parseInt(m);
+  const claimsPerM=7500/12, expPerM=500/12, raPerM=2000/12, csmPerM=2000/12, clmCostPerM=625, expCostPerM=500/12;
+  const rClaims=Math.max(0,7500-m*claimsPerM);
+  const rExp=Math.max(0,500-m*expPerM);
+  const rRa=Math.max(0,2000-m*raPerM);
+  const rCsm=Math.max(0,2000-m*csmPerM);
+  const rLic=Math.min(m*clmCostPerM,7500);
+  const tot=rClaims+rExp+rRa+rCsm+rLic;
+  const pClaims=tot>0?rClaims/tot*100:0;
+  const pExp=tot>0?rExp/tot*100:0;
+  const pRa=tot>0?rRa/tot*100:0;
+  const pCsm=tot>0?rCsm/tot*100:0;
+  const pLic=tot>0?rLic/tot*100:0;
+  document.getElementById('b-claims').style.width=pClaims.toFixed(1)+'%';
+  document.getElementById('b-exp').style.width=pExp.toFixed(1)+'%';
+  document.getElementById('b-ra').style.width=pRa.toFixed(1)+'%';
+  document.getElementById('b-csm').style.width=pCsm.toFixed(1)+'%';
+  document.getElementById('b-lic').style.width=pLic.toFixed(1)+'%';
+  document.getElementById('b-claims').textContent=pClaims>8?'Claims '+r(rClaims):'';
+  document.getElementById('b-ra').textContent=pRa>8?'RA '+r(rRa):'';
+  document.getElementById('b-csm').textContent=pCsm>8?'CSM '+r(rCsm):'';
+  document.getElementById('b-lic').textContent=pLic>8?'LIC '+r(rLic):'';
+  document.getElementById('icl-tot').textContent=r(tot);
+  document.getElementById('l-claims').textContent=r(rClaims);
+  document.getElementById('l-exp').textContent=r(rExp);
+  document.getElementById('l-ra').textContent=r(rRa);
+  document.getElementById('l-csm').textContent=r(rCsm);
+  document.getElementById('l-lic').textContent=r(rLic);
+  document.getElementById('mout').textContent='Month '+m+' — '+mnames[Math.min(m,12)];
+  const rev=m>0?claimsPerM+expPerM+raPerM+csmPerM:0;
+  const clmx=m>0?clmCostPerM:0;
+  const expx=m>0?expCostPerM:0;
+  const isr=rev-clmx-expx;
+  document.getElementById('p-claims').textContent=m>0?r(claimsPerM):'₹0';
+  document.getElementById('p-exp').textContent=m>0?r(expPerM):'₹0';
+  document.getElementById('p-ra').textContent=m>0?r(raPerM):'₹0';
+  document.getElementById('p-csm').textContent=m>0?r(csmPerM):'₹0';
+  document.getElementById('p-rev').textContent=m>0?r(rev):'₹0';
+  document.getElementById('p-clmx').textContent=m>0?'-'+r(clmx):'₹0';
+  document.getElementById('p-expx').textContent=m>0?'-'+r(expx):'₹0';
+  const isrEl=document.getElementById('p-isr');
+  isrEl.textContent=m>0?rn(isr):'₹0';
+  isrEl.style.color=isr>0?'#0F6E56':'#993C1D';
+  const cRev=m*(claimsPerM+expPerM+raPerM+csmPerM);
+  const cClm=m*clmCostPerM;
+  const cExp=m*expCostPerM;
+  const cIsr=cRev-cClm-cExp;
+  document.getElementById('c-rev').textContent=r(cRev);
+  document.getElementById('c-clm').textContent='-'+r(cClm);
+  document.getElementById('c-exp').textContent='-'+r(cExp);
+  const cisrEl=document.getElementById('c-isr');
+  cisrEl.textContent=rn(cIsr);
+  cisrEl.style.color=cIsr>=0?'#0F6E56':'#993C1D';
+  document.getElementById('insight-box').textContent=insights[Math.min(m,12)];
+}
+</script>

@@ -1,0 +1,399 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans);font-size:14px;color:var(--color-text-primary)}
+.wrap{padding:1rem 0}
+.step-nav{display:flex;gap:6px;margin-bottom:1.5rem;flex-wrap:wrap;align-items:center}
+.dot{width:10px;height:10px;border-radius:50%;border:0.5px solid var(--color-border-secondary);background:transparent;cursor:pointer;transition:background .2s}
+.dot.active{background:var(--color-text-primary)}
+.step-label{font-size:12px;color:var(--color-text-secondary);margin-left:4px}
+.nav-btns{display:flex;gap:8px;margin-left:auto}
+.step{display:none}.step.active{display:block}
+.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.25rem;margin-bottom:1rem}
+.card-title{font-size:13px;font-weight:500;margin-bottom:.5rem;color:var(--color-text-secondary)}
+.big{font-size:22px;font-weight:500;margin-bottom:2px}
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.three-col{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.tag{display:inline-block;font-size:11px;padding:2px 8px;border-radius:var(--border-radius-md);margin-top:4px}
+.tag-old{background:#FAEEDA;color:#633806}
+.tag-new{background:#EAF3DE;color:#27500A}
+.tag-info{background:#E6F1FB;color:#0C447C}
+.bar-wrap{margin:1rem 0}
+.bar-label{display:flex;justify-content:space-between;font-size:12px;color:var(--color-text-secondary);margin-bottom:4px}
+.bar-track{height:20px;background:var(--color-background-secondary);border-radius:var(--border-radius-md);overflow:hidden;position:relative}
+.bar-fill{height:100%;border-radius:var(--border-radius-md);transition:width .6s ease;display:flex;align-items:center;padding-left:8px;font-size:11px;font-weight:500}
+.bar-igaap{background:#B5D4F4;color:#0C447C}
+.bar-ind{background:#9FE1CB;color:#085041}
+.bar-ra{background:#FAC775;color:#412402}
+.bar-csm{background:#F4C0D1;color:#4B1528}
+.timeline{position:relative;padding-left:28px;margin:1rem 0}
+.tl-line{position:absolute;left:9px;top:0;bottom:0;width:1px;background:var(--color-border-secondary)}
+.tl-item{position:relative;margin-bottom:1.25rem}
+.tl-dot{position:absolute;left:-23px;top:3px;width:10px;height:10px;border-radius:50%;border:2px solid var(--color-border-secondary);background:var(--color-background-primary)}
+.tl-dot.active{background:#1D9E75;border-color:#1D9E75}
+.tl-dot.pending{background:#FAC775;border-color:#BA7517}
+.tl-head{font-size:13px;font-weight:500;margin-bottom:2px}
+.tl-body{font-size:12px;color:var(--color-text-secondary);line-height:1.5}
+.vs{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:1rem 0}
+.vs-box{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:.75rem 1rem}
+.vs-title{font-size:11px;font-weight:500;color:var(--color-text-secondary);margin-bottom:.5rem;text-transform:uppercase;letter-spacing:.04em}
+.vs-item{font-size:13px;padding:4px 0;border-bottom:0.5px solid var(--color-border-tertiary);display:flex;justify-content:space-between;gap:8px}
+.vs-item:last-child{border-bottom:none}
+.money-flow{margin:1rem 0}
+.mf-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;font-size:13px}
+.mf-box{padding:6px 14px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-tertiary);font-weight:500;min-width:80px;text-align:center}
+.mf-arrow{font-size:16px;color:var(--color-text-tertiary)}
+.mf-label{font-size:12px;color:var(--color-text-secondary)}
+.highlight-box{border-radius:var(--border-radius-md);padding:.75rem 1rem;margin:.75rem 0;font-size:13px;line-height:1.6}
+.hl-teal{background:#E1F5EE;color:#085041}
+.hl-amber{background:#FAEEDA;color:#633806}
+.hl-blue{background:#E6F1FB;color:#0C447C}
+.hl-pink{background:#FBEAF0;color:#4B1528}
+.slider-row{display:flex;align-items:center;gap:10px;margin:1rem 0;font-size:13px}
+.slider-row label{min-width:120px;color:var(--color-text-secondary)}
+.slider-row input{flex:1}
+.slider-row span{min-width:48px;text-align:right;font-weight:500}
+.icl-display{margin:1rem 0}
+.icl-bar{height:32px;display:flex;border-radius:var(--border-radius-md);overflow:hidden;margin-bottom:6px}
+.icl-seg{display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;transition:width .4s ease}
+.icl-lrc{background:#9FE1CB;color:#085041}
+.icl-ra{background:#FAC775;color:#412402}
+.icl-csm{background:#F4C0D1;color:#4B1528}
+.icl-lic{background:#B5D4F4;color:#0C447C}
+.icl-leg{display:flex;gap:12px;flex-wrap:wrap;margin-top:4px}
+.icl-leg-item{display:flex;align-items:center;gap:4px;font-size:11px;color:var(--color-text-secondary)}
+.icl-leg-sq{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+.step-heading{font-size:16px;font-weight:500;margin-bottom:.25rem}
+.step-sub{font-size:13px;color:var(--color-text-secondary);margin-bottom:1.25rem;line-height:1.5}
+</style>
+
+<div class="wrap">
+  <div class="step-nav">
+    <div class="dot active" onclick="goStep(0)"></div>
+    <div class="dot" onclick="goStep(1)"></div>
+    <div class="dot" onclick="goStep(2)"></div>
+    <div class="dot" onclick="goStep(3)"></div>
+    <div class="dot" onclick="goStep(4)"></div>
+    <div class="dot" onclick="goStep(5)"></div>
+    <span class="step-label" id="step-label">1 of 6</span>
+    <div class="nav-btns">
+      <button onclick="goStep(cur-1)">&#8592; Back</button>
+      <button onclick="goStep(cur+1)">Next &#8594;</button>
+    </div>
+  </div>
+
+  <!-- STEP 0: THE SINGLE POLICY -->
+  <div class="step active" id="s0">
+    <div class="step-heading">Start simple: one health insurance policy</div>
+    <div class="step-sub">Ramesh pays ₹12,000 premium on 1 April for a 1-year health cover. Let's watch what happens to that money — first the old way, then the new way.</div>
+
+    <div class="three-col">
+      <div class="card"><div class="card-title">Premium paid</div><div class="big">₹12,000</div><div style="font-size:12px;color:var(--color-text-secondary)">On 1 April 2026</div></div>
+      <div class="card"><div class="card-title">Cover period</div><div class="big">12 months</div><div style="font-size:12px;color:var(--color-text-secondary)">Apr 2026 → Mar 2027</div></div>
+      <div class="card"><div class="card-title">Expected claim</div><div class="big">₹7,500</div><div style="font-size:12px;color:var(--color-text-secondary)">₹625 per month</div></div>
+    </div>
+
+    <div class="highlight-box hl-blue">Think of the insurer as a shopkeeper. Ramesh has paid for 12 months of protection in advance. The question is: when does the shopkeeper get to call it "income"?</div>
+
+    <div class="money-flow">
+      <div class="mf-row">
+        <div class="mf-box" style="background:#E6F1FB;color:#0C447C;border-color:#B5D4F4">Ramesh pays ₹12,000</div>
+        <div class="mf-arrow">→</div>
+        <div class="mf-box" style="background:#EAF3DE;color:#27500A;border-color:#C0DD97">Insurer's bank account</div>
+        <div class="mf-arrow">→</div>
+        <div class="mf-box" style="background:#FAEEDA;color:#412402;border-color:#FAC775">Covers claims over 12 months</div>
+      </div>
+    </div>
+
+    <div class="highlight-box hl-teal">The old IGAAP said: book ₹12,000 as revenue on day 1.<br>The new Ind AS 117 says: earn it gradually as you provide cover each month.<br><br>This is the single biggest change.</div>
+  </div>
+
+  <!-- STEP 1: IGAAP WAY -->
+  <div class="step" id="s1">
+    <div class="step-heading">The old way — IGAAP</div>
+    <div class="step-sub">Under old Indian GAAP, the insurer split the premium into "earned" and "unearned" portions based on time. Simple. Mechanical. But it missed a lot of economic reality.</div>
+
+    <div class="vs">
+      <div class="vs-box">
+        <div class="vs-title" style="color:#633806">IGAAP balance sheet (1 Apr 2026)</div>
+        <div class="vs-item"><span>Cash received</span><span style="color:#0F6E56">+₹12,000</span></div>
+        <div class="vs-item"><span>Unearned premium reserve</span><span style="color:#993C1D">-₹12,000</span></div>
+        <div class="vs-item"><span>Net equity impact</span><span>₹0</span></div>
+      </div>
+      <div class="vs-box">
+        <div class="vs-title" style="color:#633806">IGAAP P&L (per month)</div>
+        <div class="vs-item"><span>Premium earned (1/12)</span><span style="color:#0F6E56">+₹1,000</span></div>
+        <div class="vs-item"><span>Claims incurred</span><span style="color:#993C1D">-₹625</span></div>
+        <div class="vs-item"><span>Monthly profit</span><span style="color:#0F6E56">+₹375</span></div>
+      </div>
+    </div>
+
+    <div class="bar-wrap">
+      <div class="bar-label"><span>Unearned premium reserve (falls each month)</span><span id="upr-val">₹12,000</span></div>
+      <div class="bar-track"><div class="bar-fill bar-igaap" id="upr-bar" style="width:100%">₹12,000 remaining</div></div>
+    </div>
+
+    <div class="slider-row">
+      <label>Months elapsed</label>
+      <input type="range" min="0" max="12" value="0" step="1" oninput="updateUPR(this.value)">
+      <span id="upr-month">Month 0</span>
+    </div>
+
+    <div class="highlight-box hl-amber">
+      <strong>What IGAAP missed:</strong> It did not separately show (1) how much risk the insurer was actually bearing, (2) the profit locked in on future months, or (3) whether the policy was profitable at all. Regulators and investors were flying blind.
+    </div>
+  </div>
+
+  <!-- STEP 2: IND AS 117 WAY -->
+  <div class="step" id="s2">
+    <div class="step-heading">The new way — Ind AS 117</div>
+    <div class="step-sub">Ind AS 117 breaks the ₹12,000 premium into three distinct economic components on day 1. Each tells a different story about the insurer's financial position.</div>
+
+    <div class="icl-display">
+      <div style="font-size:12px;color:var(--color-text-secondary);margin-bottom:6px">Insurance contract liability (ICL) on day 1 = ₹12,000</div>
+      <div class="icl-bar">
+        <div class="icl-seg icl-lrc" style="width:66.7%">LRC ₹8,000</div>
+        <div class="icl-seg icl-ra" style="width:16.7%">RA ₹2,000</div>
+        <div class="icl-seg icl-csm" style="width:16.7%">CSM ₹2,000</div>
+      </div>
+      <div class="icl-leg">
+        <div class="icl-leg-item"><div class="icl-leg-sq" style="background:#9FE1CB"></div>LRC — liability for remaining coverage</div>
+        <div class="icl-leg-item"><div class="icl-leg-sq" style="background:#FAC775"></div>RA — risk adjustment</div>
+        <div class="icl-leg-item"><div class="icl-leg-sq" style="background:#F4C0D1"></div>CSM — contractual service margin (profit)</div>
+      </div>
+    </div>
+
+    <div class="three-col" style="margin-top:1rem">
+      <div class="card">
+        <div class="card-title">LRC — ₹8,000</div>
+        <div style="font-size:12px;line-height:1.5;color:var(--color-text-secondary)">"We still owe Ramesh cover." This is the pure cost of future claims — the best estimate of what will be paid out over the remaining months.</div>
+        <span class="tag tag-new">like old UPR, but richer</span>
+      </div>
+      <div class="card">
+        <div class="card-title">RA — ₹2,000</div>
+        <div style="font-size:12px;line-height:1.5;color:var(--color-text-secondary)">"Claims could be higher than expected." This is extra capital set aside for uncertainty — shown explicitly for the first time. Released to profit as months pass safely.</div>
+        <span class="tag tag-new">entirely new concept</span>
+      </div>
+      <div class="card">
+        <div class="card-title">CSM — ₹2,000</div>
+        <div style="font-size:12px;line-height:1.5;color:var(--color-text-secondary)">"The profit we have already locked in, but have not yet earned." Released to the P&L each month as cover is provided. Stops insurers from booking future profits today.</div>
+        <span class="tag tag-new">entirely new concept</span>
+      </div>
+    </div>
+
+    <div class="highlight-box hl-teal">Notice: on day 1, there is zero profit on the P&L. The ₹2,000 profit sits in the CSM — a liability on the balance sheet — until it is earned month by month. This is the key discipline Ind AS 117 introduces.</div>
+  </div>
+
+  <!-- STEP 3: WATCH IT MOVE -->
+  <div class="step" id="s3">
+    <div class="step-heading">Watch the ICL unwind over the policy year</div>
+    <div class="step-sub">Drag the slider to move through the year. See how each component of the ICL shrinks and flows into the P&L as cover is provided each month.</div>
+
+    <div class="slider-row">
+      <label>Month</label>
+      <input type="range" min="0" max="12" value="0" step="1" id="month-slider" oninput="updateICL(this.value)">
+      <span id="month-out">Apr 2026</span>
+    </div>
+
+    <div class="icl-display">
+      <div style="font-size:12px;color:var(--color-text-secondary);margin-bottom:6px">Remaining ICL = <span id="icl-total" style="font-weight:500;color:var(--color-text-primary)">₹12,000</span></div>
+      <div class="icl-bar">
+        <div class="icl-seg icl-lrc" id="seg-lrc" style="width:66.7%">LRC</div>
+        <div class="icl-seg icl-ra" id="seg-ra" style="width:16.7%">RA</div>
+        <div class="icl-seg icl-csm" id="seg-csm" style="width:16.7%">CSM</div>
+        <div class="icl-seg icl-lic" id="seg-lic" style="width:0%"></div>
+      </div>
+      <div class="icl-leg">
+        <div class="icl-leg-item"><div class="icl-leg-sq" style="background:#9FE1CB"></div>LRC <span id="lrc-val" style="font-weight:500">₹8,000</span></div>
+        <div class="icl-leg-item"><div class="icl-leg-sq" style="background:#FAC775"></div>RA <span id="ra-val" style="font-weight:500">₹2,000</span></div>
+        <div class="icl-leg-item"><div class="icl-leg-sq" style="background:#F4C0D1"></div>CSM <span id="csm-val" style="font-weight:500">₹2,000</span></div>
+        <div class="icl-leg-item"><div class="icl-leg-sq" style="background:#B5D4F4"></div>LIC (claims due) <span id="lic-val" style="font-weight:500">₹0</span></div>
+      </div>
+    </div>
+
+    <div class="two-col" style="margin-top:1rem">
+      <div class="card">
+        <div class="card-title">Cumulative P&L so far</div>
+        <div class="vs-item"><span>Revenue recognised</span><span id="rev-cum" style="color:#0F6E56">₹0</span></div>
+        <div class="vs-item"><span>Claims incurred</span><span id="clm-cum" style="color:#993C1D">₹0</span></div>
+        <div class="vs-item"><span style="font-weight:500">Insurance service result</span><span id="isr-cum" style="font-weight:500">₹0</span></div>
+      </div>
+      <div class="card">
+        <div class="card-title">This month's P&L</div>
+        <div class="vs-item"><span>LRC released to revenue</span><span id="rev-m" style="color:#0F6E56">₹0</span></div>
+        <div class="vs-item"><span>RA released to revenue</span><span id="ra-m" style="color:#0F6E56">₹0</span></div>
+        <div class="vs-item"><span>CSM released to revenue</span><span id="csm-m" style="color:#0F6E56">₹0</span></div>
+        <div class="vs-item"><span>Claims expense</span><span id="clm-m" style="color:#993C1D">₹0</span></div>
+      </div>
+    </div>
+
+    <div class="highlight-box hl-blue" id="month-insight">Move the slider to see each month's entries.</div>
+  </div>
+
+  <!-- STEP 4: THE WORDS -->
+  <div class="step" id="s4">
+    <div class="step-heading">The jargon — plain English</div>
+    <div class="step-sub">Every new term in Ind AS 117 has a simple idea behind it. Here they are, translated.</div>
+
+    <div class="timeline">
+      <div class="tl-line"></div>
+      <div class="tl-item"><div class="tl-dot active"></div>
+        <div class="tl-head">ICL — Insurance Contract Liability</div>
+        <div class="tl-body">Simply: "what the insurer owes." It replaces the old words "reserves" and "unearned premium." It has three parts: LRC, RA, and CSM (for profitable contracts).</div>
+      </div>
+      <div class="tl-item"><div class="tl-dot active"></div>
+        <div class="tl-head">LRC — Liability for Remaining Coverage</div>
+        <div class="tl-body">Simply: "the cover we still have to provide." This is the best estimate of what future claims will cost. It shrinks each month as cover is given. Think of it as the "cost" portion of the old unearned premium.</div>
+      </div>
+      <div class="tl-item"><div class="tl-dot active"></div>
+        <div class="tl-head">LIC — Liability for Incurred Claims</div>
+        <div class="tl-body">Simply: "claims we know about but haven't paid yet." This includes RBNS (reported but not settled) and IBNR (incurred but not yet reported). Under Ind AS 117, IBNR is discounted to present value.</div>
+      </div>
+      <div class="tl-item"><div class="tl-dot active"></div>
+        <div class="tl-head">RA — Risk Adjustment</div>
+        <div class="tl-body">Simply: "a cushion for uncertainty." Claims could be worse than expected — this buffer is held on the balance sheet and released to profit only as time passes safely. It makes the insurer's risk-bearing visible for the first time.</div>
+      </div>
+      <div class="tl-item"><div class="tl-dot active"></div>
+        <div class="tl-head">CSM — Contractual Service Margin</div>
+        <div class="tl-body">Simply: "profit held in a box until it is earned." When a policy is written at a profit, that profit goes into the CSM (a liability). It is released to the P&L each month as cover is provided. A loss-making policy has no CSM — it has a "loss component" instead, recognised immediately.</div>
+      </div>
+      <div class="tl-item"><div class="tl-dot active"></div>
+        <div class="tl-head">PAA — Premium Allocation Approach</div>
+        <div class="tl-body">Simply: "the simplified method for short policies." Annual health policies qualify for PAA because the cover period is 12 months or less. Under PAA, you don't need to separately calculate CSM — it works much like the old unearned premium approach, but you still show the RA and LIC separately.</div>
+      </div>
+      <div class="tl-item"><div class="tl-dot active"></div>
+        <div class="tl-head">GMM — General Measurement Model</div>
+        <div class="tl-body">Simply: "the full method for long-term policies." Used for critical illness riders, multi-year top-up covers. Requires explicit CSM calculation and discounting. More complex but gives a richer picture of long-term profitability.</div>
+      </div>
+      <div class="tl-item"><div class="tl-dot active"></div>
+        <div class="tl-head">Insurance revenue (not GWP)</div>
+        <div class="tl-body">Simply: "the portion of premium you have actually earned this period." Under old IGAAP, the top line was Gross Written Premium — all cash collected. Under Ind AS 117, the top line is only what has been earned by providing cover. A company with ₹4,500 Cr GWP might show only ₹4,200 Cr as revenue. Neither is wrong — they measure different things.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STEP 5: THE BIG PICTURE -->
+  <div class="step" id="s5">
+    <div class="step-heading">Why does all this matter?</div>
+    <div class="step-sub">Ind AS 117 changes what numbers investors and regulators can see. Here is what becomes visible that was hidden before.</div>
+
+    <div class="two-col">
+      <div>
+        <div style="font-size:13px;font-weight:500;margin-bottom:.75rem;color:var(--color-text-secondary)">Before (IGAAP) — what you could see</div>
+        <div class="vs-box" style="margin-bottom:8px">
+          <div class="vs-item"><span>Total premium collected</span><span class="tag tag-old">GWP</span></div>
+          <div class="vs-item"><span>Unearned premium (one number)</span><span class="tag tag-old">UPR</span></div>
+          <div class="vs-item"><span>Claims reserve (one number)</span><span class="tag tag-old">OCR</span></div>
+          <div class="vs-item"><span>Profit or loss</span><span class="tag tag-old">upfront</span></div>
+          <div class="vs-item"><span>How much uncertainty exists?</span><span style="color:#993C1D;font-size:12px">Not shown</span></div>
+          <div class="vs-item"><span>Future locked-in profit?</span><span style="color:#993C1D;font-size:12px">Not shown</span></div>
+          <div class="vs-item"><span>Is each cohort profitable?</span><span style="color:#993C1D;font-size:12px">Not shown</span></div>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:13px;font-weight:500;margin-bottom:.75rem;color:var(--color-text-secondary)">After (Ind AS 117) — what you can see</div>
+        <div class="vs-box">
+          <div class="vs-item"><span>Cover earned this period</span><span class="tag tag-new">revenue</span></div>
+          <div class="vs-item"><span>Pure cost of future cover</span><span class="tag tag-new">LRC</span></div>
+          <div class="vs-item"><span>Uncertainty buffer held</span><span class="tag tag-new">RA</span></div>
+          <div class="vs-item"><span>Future profit locked in</span><span class="tag tag-new">CSM</span></div>
+          <div class="vs-item"><span>Known + unknown claims</span><span class="tag tag-new">LIC</span></div>
+          <div class="vs-item"><span>Profit earned gradually</span><span class="tag tag-new">CSM release</span></div>
+          <div class="vs-item"><span>Loss policies flagged now</span><span class="tag tag-new">loss component</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="highlight-box hl-teal" style="margin-top:1rem">
+      <strong>The one-sentence summary:</strong> Ind AS 117 forces insurers to show three things that IGAAP hid — (1) how uncertain their claims are, (2) what future profit they have already locked in, and (3) whether each batch of policies is profitable from day one.
+    </div>
+
+    <div style="margin-top:1rem;display:flex;gap:8px;flex-wrap:wrap">
+      <button onclick="sendPrompt('Can you explain the CSM in more detail with an example? ↗')">Explain CSM further ↗</button>
+      <button onclick="sendPrompt('What does the risk adjustment mean in practice for a health insurer? ↗')">What is the RA in practice? ↗</button>
+      <button onclick="sendPrompt('How does PAA work for annual health policies vs GMM for long-term riders? ↗')">PAA vs GMM ↗</button>
+    </div>
+  </div>
+</div>
+
+<script>
+let cur = 0;
+const months = ['Apr 2026','May 2026','Jun 2026','Jul 2026','Aug 2026','Sep 2026','Oct 2026','Nov 2026','Dec 2026','Jan 2027','Feb 2027','Mar 2027','Policy end'];
+
+function goStep(n) {
+  if (n < 0 || n > 5) return;
+  document.getElementById('s'+cur).classList.remove('active');
+  document.querySelectorAll('.dot')[cur].classList.remove('active');
+  cur = n;
+  document.getElementById('s'+cur).classList.add('active');
+  document.querySelectorAll('.dot')[cur].classList.add('active');
+  document.getElementById('step-label').textContent = (cur+1)+' of 6';
+}
+
+function fmt(v) { return '₹'+Math.round(v).toLocaleString('en-IN'); }
+
+function updateUPR(m) {
+  m = parseInt(m);
+  const rem = Math.max(0, 12000 - m*1000);
+  const pct = (rem/12000*100).toFixed(1);
+  document.getElementById('upr-val').textContent = fmt(rem);
+  document.getElementById('upr-bar').style.width = pct+'%';
+  document.getElementById('upr-bar').textContent = fmt(rem)+' remaining';
+  document.getElementById('upr-month').textContent = 'Month '+m;
+}
+
+function updateICL(m) {
+  m = parseInt(m);
+  const totalLRC = 8000, totalRA = 2000, totalCSM = 2000;
+  const lrc = Math.max(0, totalLRC - m*(totalLRC/12));
+  const ra  = Math.max(0, totalRA  - m*(totalRA/12));
+  const csm = Math.max(0, totalCSM - m*(totalCSM/12));
+  const lic = Math.min(m * 625, 7500);
+  const total = lrc + ra + csm + lic;
+  const pLRC = total > 0 ? lrc/total*100 : 0;
+  const pRA  = total > 0 ? ra/total*100  : 0;
+  const pCSM = total > 0 ? csm/total*100 : 0;
+  const pLIC = total > 0 ? lic/total*100 : 0;
+
+  document.getElementById('seg-lrc').style.width = pLRC.toFixed(1)+'%';
+  document.getElementById('seg-ra').style.width  = pRA.toFixed(1)+'%';
+  document.getElementById('seg-csm').style.width = pCSM.toFixed(1)+'%';
+  document.getElementById('seg-lic').style.width = pLIC.toFixed(1)+'%';
+  document.getElementById('lrc-val').textContent = fmt(lrc);
+  document.getElementById('ra-val').textContent  = fmt(ra);
+  document.getElementById('csm-val').textContent = fmt(csm);
+  document.getElementById('lic-val').textContent = fmt(lic);
+  document.getElementById('icl-total').textContent = fmt(total);
+  document.getElementById('month-out').textContent = months[Math.min(m,12)];
+
+  const revCum = m * (8000/12 + 2000/12 + 2000/12);
+  const clmCum = m * 625;
+  document.getElementById('rev-cum').textContent = fmt(revCum);
+  document.getElementById('clm-cum').textContent = '-'+fmt(clmCum);
+  const isr = revCum - clmCum;
+  document.getElementById('isr-cum').textContent = (isr>=0?'+':'')+fmt(isr);
+  document.getElementById('isr-cum').style.color = isr>=0 ? '#0F6E56' : '#993C1D';
+
+  document.getElementById('rev-m').textContent  = m > 0 ? fmt(8000/12)  : '₹0';
+  document.getElementById('ra-m').textContent   = m > 0 ? fmt(2000/12)  : '₹0';
+  document.getElementById('csm-m').textContent  = m > 0 ? fmt(2000/12)  : '₹0';
+  document.getElementById('clm-m').textContent  = m > 0 ? '-'+fmt(625)  : '₹0';
+
+  const insights = [
+    'Move the slider to see each month\'s entries.',
+    'Month 1: ₹1,000 LRC + ₹167 RA + ₹167 CSM = ₹1,334 revenue recognised. Claims of ₹625 incurred. Monthly profit ₹709.',
+    'Month 2: Same revenue pattern. The ICL bar shrinks steadily as cover is provided.',
+    'Month 3: Notice the LIC (blue) growing — these are claims incurred but not yet paid.',
+    'Month 4: The CSM (pink) is the "locked-in profit" releasing to revenue. Each month it earns its share.',
+    'Month 5: The RA (amber) releasing tells investors the risk is resolving as months pass safely.',
+    'Month 6: Half-year. ₹6,000 revenue recognised. The balance sheet liability is exactly half of what it started at.',
+    'Month 7: Second half of the year. Same smooth pattern continues.',
+    'Month 8: Under IGAAP, this all looked identical — same numbers. Under Ind AS 117, we can see WHY it\'s profitable.',
+    'Month 9: If claims were suddenly higher, the RA would absorb it first before hitting the CSM.',
+    'Month 10: CSM nearly depleted. The profit is almost fully earned.',
+    'Month 11: One month left. Nearly all cover provided, nearly all revenue earned.',
+    'Month 12: Policy complete. ICL = ₹0. Total revenue ₹12,000 earned. Total claims ₹7,500. Profit ₹4,500.'
+  ];
+  document.getElementById('month-insight').textContent = insights[Math.min(m,12)];
+}
+</script>
