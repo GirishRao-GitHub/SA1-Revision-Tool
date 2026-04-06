@@ -1,0 +1,266 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.w{padding:1rem 0;font-family:var(--font-sans);font-size:14px;color:var(--color-text-primary);line-height:1.6}
+.snav{display:flex;gap:8px;margin-bottom:1.25rem;flex-wrap:wrap}
+.sb{padding:5px 13px;border-radius:var(--border-radius-md);font-size:13px;border:0.5px solid var(--color-border-secondary);background:transparent;color:var(--color-text-secondary);cursor:pointer}
+.sb.on{background:var(--color-background-secondary);color:var(--color-text-primary);border-color:var(--color-border-primary);font-weight:500}
+.step{display:none}.step.on{display:block}
+.krow{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:1.25rem}
+.kc{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:.7rem 1rem}
+.kl{font-size:11px;color:var(--color-text-secondary);margin-bottom:2px}
+.kv{font-size:20px;font-weight:500}
+.ks{font-size:11px;color:var(--color-text-secondary);margin-top:1px}
+.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.25rem;margin-bottom:10px}
+.ct{font-size:13px;font-weight:500;margin-bottom:.5rem}
+.cs{font-size:12px;color:var(--color-text-secondary);margin-bottom:.75rem;line-height:1.6}
+.ri{display:flex;justify-content:space-between;align-items:baseline;padding:5px 0;border-bottom:0.5px solid var(--color-border-tertiary);font-size:13px;gap:8px}
+.ri:last-child{border-bottom:none}
+.ri .note{font-size:11px;color:var(--color-text-secondary);display:block;margin-top:1px}
+.ri.sub{font-weight:500;border-top:0.5px solid var(--color-border-primary);border-bottom:none;padding-top:7px;margin-top:2px}
+.ri.grand{font-size:14px;font-weight:500;border-top:1.5px solid var(--color-border-primary);border-bottom:none;padding-top:8px;margin-top:3px}
+.amt{font-variant-numeric:tabular-nums;white-space:nowrap}
+.tcol{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.hl{border-radius:var(--border-radius-md);padding:.7rem 1rem;font-size:13px;line-height:1.6;margin:.75rem 0}
+.hl-b{background:#E6F1FB;color:#0C447C}
+.hl-a{background:#FAEEDA;color:#633806}
+.hl-t{background:#E1F5EE;color:#085041}
+.hl-r{background:#FCEBEB;color:#791F1F}
+.hl-p{background:#FBEAF0;color:#4B1528}
+.srow{display:flex;align-items:center;gap:10px;margin:.5rem 0;font-size:13px}
+.srow label{min-width:200px;color:var(--color-text-secondary)}
+.srow span{min-width:60px;text-align:right;font-weight:500}
+.badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:var(--border-radius-md)}
+.bd-b{background:#E6F1FB;color:#0C447C}
+.bd-t{background:#E1F5EE;color:#085041}
+.bd-a{background:#FAEEDA;color:#412402}
+.bd-r{background:#FCEBEB;color:#791F1F}
+.bd-p{background:#FBEAF0;color:#4B1528}
+.divider{height:0.5px;background:var(--color-border-tertiary);margin:1rem 0}
+.leg{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--color-text-secondary);margin-bottom:8px}
+.li{display:flex;align-items:center;gap:4px}
+.lsq{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+.ask-btn{margin-top:1rem;padding:7px 14px;border-radius:var(--border-radius-md);font-size:13px;border:0.5px solid var(--color-border-secondary);background:transparent;color:var(--color-text-secondary);cursor:pointer}
+.ask-btn:hover{background:var(--color-background-secondary)}
+.entry-row{display:flex;gap:8px;align-items:flex-start;padding:8px 0;border-bottom:0.5px solid var(--color-border-tertiary);font-size:13px}
+.entry-row:last-child{border-bottom:none}
+.dr{flex:1;color:var(--color-text-primary)}
+.cr{flex:1;color:var(--color-text-secondary)}
+.ea{min-width:80px;text-align:right;font-variant-numeric:tabular-nums;font-weight:500}
+.entry-head{display:flex;gap:8px;font-size:11px;color:var(--color-text-secondary);padding-bottom:4px;border-bottom:0.5px solid var(--color-border-tertiary);margin-bottom:4px}
+.entry-head span{flex:1}
+@media(max-width:500px){.tcol{grid-template-columns:1fr}}
+</style>
+
+<div class="w">
+
+<div class="snav">
+  <button class="sb on" onclick="go(0)">1. Treaty structure</button>
+  <button class="sb" onclick="go(1)">2. Gross LIC</button>
+  <button class="sb" onclick="go(2)">3. RCH — the reinsurance asset</button>
+  <button class="sb" onclick="go(3)">4. Balance sheet net</button>
+  <button class="sb" onclick="go(4)">5. When experience diverges</button>
+</div>
+
+<div id="s0" class="step on">
+  <div style="font-size:13px;color:var(--color-text-secondary);margin-bottom:1rem">The treaty sits alongside the gross policy. It is never part of the same measurement group — it is always a separate contract with its own asset carrying value.</div>
+  <div class="krow">
+    <div class="kc"><div class="kl">Claim event</div><div class="kv">Priya, yr 4</div><div class="ks">Disability confirmed</div></div>
+    <div class="kc"><div class="kl">Monthly gross benefit</div><div class="kv">₹30,000</div><div class="ks">Payable to Priya</div></div>
+    <div class="kc"><div class="kl">Expected claim duration</div><div class="kv">3.4 years</div><div class="ks">Based on recovery assumptions</div></div>
+    <div class="kc"><div class="kl">Reinsurance structure</div><div class="kv">Quota share</div><div class="ks">40% ceded to reinsurer</div></div>
+  </div>
+  <div class="tcol">
+    <div class="card">
+      <div class="ct">Direct policy (Priya's contract)</div>
+      <div class="cs">The insurer's obligation. Measured as gross LIC — no netting permitted under Ind AS 117.</div>
+      <div class="ri"><span>Monthly benefit payable</span><span class="amt" style="color:#0C447C">₹30,000</span></div>
+      <div class="ri"><span>Insurer retention (60%)</span><span class="amt">₹18,000/mo</span></div>
+      <div class="ri"><span>Ceded to reinsurer (40%)</span><span class="amt">₹12,000/mo</span></div>
+      <div class="ri"><span>LIC measured at</span><span class="amt"><span class="badge bd-b">100% gross</span></span></div>
+    </div>
+    <div class="card">
+      <div class="ct">Reinsurance treaty (separate asset)</div>
+      <div class="cs">The insurer's right to recover. Measured as the reinsurance contract held (RCH) — an asset, not a contra-liability.</div>
+      <div class="ri"><span>Treaty type</span><span class="amt">Quota share, 40%</span></div>
+      <div class="ri"><span>Recoveries expected</span><span class="amt">₹12,000/mo</span></div>
+      <div class="ri"><span>Credit risk adjustment</span><span class="amt"><span class="badge bd-r">Applied separately</span></span></div>
+      <div class="ri"><span>RCH measured at</span><span class="amt"><span class="badge bd-t">Net of credit risk</span></span></div>
+    </div>
+  </div>
+  <div class="hl hl-b"><strong>The Ind AS 117 rule that changes everything:</strong> The gross LIC and the RCH must be measured independently. You cannot set one assumption for the gross and a different one for the net. If you update the recovery rate assumption on the gross LIC, the same update must flow through to the RCH — the reinsurer shares in the same underlying risk. The only legitimate difference between the two is the credit risk adjustment on the RCH.</div>
+  <button class="sb on" style="margin-top:.75rem" onclick="go(1)">See the gross LIC →</button>
+</div>
+
+<div id="s1" class="step">
+  <div style="font-size:13px;color:var(--color-text-secondary);margin-bottom:1rem">The gross LIC is the present value of all future monthly benefits expected to be paid to Priya — using current best-estimate assumptions, discounted at the rate locked in at initial recognition.</div>
+  <div class="card">
+    <div class="ct">Gross LIC calculation — at claim inception</div>
+    <div class="cs">Priya's claim starts month 4, year 4. Expected recovery in 3.4 years means ~41 expected benefit months remaining.</div>
+    <div class="ri"><span>Monthly benefit<span class="note">Contractually fixed</span></span><span class="amt" style="color:#0C447C">₹30,000</span></div>
+    <div class="ri"><span>Expected benefit months<span class="note">1 / (recovery rate + mortality) × 12 = 1/(0.35+0.004)×12 ≈ 34 months, adjusted for deferred period already elapsed</span></span><span class="amt" style="color:#0C447C">41 months</span></div>
+    <div class="ri"><span>Undiscounted expected benefits<span class="note">₹30,000 × 41</span></span><span class="amt">₹12,30,000</span></div>
+    <div class="ri"><span>Discount factor<span class="note">Average benefit paid ~20 months out; PV factor ≈ 0.881 at 6.5%</span></span><span class="amt">× 0.881</span></div>
+    <div class="ri sub"><span>PV of expected benefits</span><span class="amt" style="color:#0C447C">₹10,83,630</span></div>
+    <div class="ri"><span>+ PV of directly attributable claim expenses<span class="note">TPA, case management — ~4% of benefit PV</span></span><span class="amt">₹43,345</span></div>
+    <div class="ri grand"><span>Gross LIC (fulfilment cash flows)</span><span class="amt" style="color:#0C447C" id="gross-lic">₹11,26,975</span></div>
+  </div>
+  <div class="hl hl-a"><strong>The risk adjustment on the LIC:</strong> Just like the LRC, the gross LIC carries its own RA — the compensation for bearing the uncertainty that recovery takes longer or shorter than expected. Under Ind AS 117, the RA on the LIC is recognised separately and releases to the insurance service result as time passes and duration uncertainty resolves.</div>
+  <div class="card" style="margin-top:.5rem">
+    <div class="ct">Full gross ICL at claim inception</div>
+    <div class="ri"><span>Gross LIC (fulfilment cash flows)</span><span class="amt" style="color:#0C447C">₹11,26,975</span></div>
+    <div class="ri"><span>Risk adjustment on LIC<span class="note">~18% of LIC — IP duration uncertainty is material</span></span><span class="amt" style="color:#BA7517">₹2,02,855</span></div>
+    <div class="ri grand"><span>Gross ICL (LIC + RA)</span><span class="amt">₹13,29,830</span></div>
+  </div>
+  <button class="sb on" style="margin-top:.75rem" onclick="go(2)">Build the RCH asset →</button>
+</div>
+
+<div id="s2" class="step">
+  <div style="font-size:13px;color:var(--color-text-secondary);margin-bottom:1rem">The RCH is the mirror of the gross LIC — but it is an asset, and it must carry one additional adjustment that the gross never needs: the expected credit loss from the possibility that the reinsurer defaults.</div>
+  <div class="srow"><label>Reinsurer credit rating</label>
+    <select id="sl-rating" onchange="updateRCH()" style="flex:1;font-size:13px">
+      <option value="0.001">AA — default probability 0.10%</option>
+      <option value="0.003" selected>A — default probability 0.30%</option>
+      <option value="0.008">BBB — default probability 0.80%</option>
+      <option value="0.02">BB — default probability 2.00%</option>
+    </select>
+    <span></span>
+  </div>
+  <div class="card" style="margin-top:.5rem">
+    <div class="ct">RCH measurement — step by step</div>
+    <div class="ri"><span>40% of gross LIC (fulfilment cash flows)<span class="note">Same cashflows, same discount rate, same recovery assumptions as gross</span></span><span class="amt" style="color:#085041">₹4,50,790</span></div>
+    <div class="ri"><span>40% of RA on gross LIC<span class="note">Reinsurer shares in the duration uncertainty pro-rata</span></span><span class="amt" style="color:#085041">₹81,142</span></div>
+    <div class="ri sub"><span>RCH before credit adjustment</span><span class="amt" style="color:#085041">₹5,31,932</span></div>
+    <div class="ri"><span>Expected credit loss (ECL)<span class="note" id="ecl-note">A-rated reinsurer: 0.30% × PV of expected recoveries</span></span><span class="amt" style="color:#993C1D" id="ecl-val">-₹1,596</span></div>
+    <div class="ri grand"><span>RCH carrying value</span><span class="amt" style="color:#085041" id="rch-val">₹5,30,336</span></div>
+  </div>
+  <div class="hl hl-t" id="ecl-insight">At an A rating, the credit adjustment is small but not zero. The ECL must be recognised even if the insurer has never had a recovery failure from this reinsurer — Ind AS 117 requires a forward-looking, probability-weighted credit assessment.</div>
+  <div class="hl hl-p"><strong>What cannot be different between gross and RCH:</strong> Recovery rate assumption, mortality assumption, benefit amount, and discount rate must all be identical. The RCH is derived from the gross — not independently estimated. Auditors will specifically test that no assumptions have been quietly adjusted to inflate the RCH relative to the gross cession percentage.</div>
+  <button class="sb on" style="margin-top:.75rem" onclick="go(3)">See the balance sheet →</button>
+</div>
+
+<div id="s3" class="step">
+  <div style="font-size:13px;color:var(--color-text-secondary);margin-bottom:1rem">How the gross LIC and RCH appear in the financial statements — presented separately, never netted, with the net retained exposure visible as the economic result.</div>
+  <div class="tcol">
+    <div class="card">
+      <div class="ct" style="color:#791F1F">Liabilities</div>
+      <div class="ri"><span>Gross ICL (LIC + RA)<span class="note">The full obligation to Priya</span></span><span class="amt" style="color:#791F1F">₹13,29,830</span></div>
+      <div class="ri"><span style="color:var(--color-text-secondary);font-size:12px">of which LIC</span><span class="amt" style="color:var(--color-text-secondary);font-size:12px">₹11,26,975</span></div>
+      <div class="ri"><span style="color:var(--color-text-secondary);font-size:12px">of which RA</span><span class="amt" style="color:var(--color-text-secondary);font-size:12px">₹2,02,855</span></div>
+    </div>
+    <div class="card">
+      <div class="ct" style="color:#085041">Assets</div>
+      <div class="ri"><span>RCH (reinsurance asset)<span class="note">The recovery right from the reinsurer</span></span><span class="amt" style="color:#085041">₹5,30,336</span></div>
+      <div class="ri"><span style="color:var(--color-text-secondary);font-size:12px">of which ceded LIC</span><span class="amt" style="color:var(--color-text-secondary);font-size:12px">₹4,50,790</span></div>
+      <div class="ri"><span style="color:var(--color-text-secondary);font-size:12px">of which ceded RA</span><span class="amt" style="color:var(--color-text-secondary);font-size:12px">₹81,142</span></div>
+      <div class="ri"><span style="color:var(--color-text-secondary);font-size:12px">less ECL</span><span class="amt" style="color:#993C1D;font-size:12px">-₹1,596</span></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="ct">Net retained exposure (economic view)</div>
+    <div class="cs">Not presented on face of balance sheet — derived. This is what the insurer actually bears.</div>
+    <div class="ri"><span>Gross ICL</span><span class="amt">₹13,29,830</span></div>
+    <div class="ri"><span>Less: RCH asset</span><span class="amt" style="color:#085041">-₹5,30,336</span></div>
+    <div class="ri grand"><span>Net retained ICL</span><span class="amt" style="color:#0C447C">₹7,99,494</span></div>
+  </div>
+  <div class="hl hl-b"><strong>Why the net is not exactly 60%:</strong> The net retained ICL is ₹7,99,494 — not 60% of ₹13,29,830 (which would be ₹7,97,898). The difference of ₹1,596 is the ECL on the RCH. The insurer bears a small additional cost for counterparty risk that the 60/40 treaty split does not eliminate. This difference grows if the reinsurer is downgraded.</div>
+  <button class="sb on" style="margin-top:.75rem" onclick="go(4)">See what happens when experience diverges →</button>
+</div>
+
+<div id="s4" class="step">
+  <div style="font-size:13px;color:var(--color-text-secondary);margin-bottom:1rem">Six months later, actual experience has deviated. Work through each scenario to see how the accounting entries split between the gross P&L and the RCH.</div>
+  <div class="krow">
+    <div class="kc" style="cursor:pointer;border:2px solid #185FA5" id="sc-rec" onclick="showScenario('rec')"><div class="kl">Scenario A</div><div class="kv" style="font-size:16px">Slower recovery</div><div class="ks">Priya still on claim at month 6</div></div>
+    <div class="kc" style="cursor:pointer" id="sc-dn" onclick="showScenario('dn')"><div class="kl">Scenario B</div><div class="kv" style="font-size:16px">Reinsurer downgrade</div><div class="ks">Rating cut from A to BBB</div></div>
+    <div class="kc" style="cursor:pointer" id="sc-lapse" onclick="showScenario('lapse')"><div class="kl">Scenario C</div><div class="kv" style="font-size:16px">Policy commutation</div><div class="ks">Reinsurer pays out early</div></div>
+  </div>
+  <div id="scenario-detail" style="margin-top:.75rem"></div>
+</div>
+
+</div>
+
+<script>
+const SCENARIOS = {
+  rec: {
+    title: 'Scenario A — recovery slower than assumed',
+    desc: 'Priya is still on claim at month 6. The actuary updates the recovery rate assumption downward from 35% to 28% p.a. The expected benefit duration extends from 41 to 52 months.',
+    entries: [
+      {dr:'Insurance service expenses (P&L)', cr:'Gross LIC', amt:'₹1,84,000', note:'LIC remeasured upward — longer expected duration increases PV of future benefits'},
+      {dr:'RCH asset', cr:'Reinsurance service income (P&L)', amt:'₹73,600', note:'40% of the gross LIC increase flows to the RCH — same assumption, same direction'},
+    ],
+    net: '₹1,10,400',
+    netLabel: 'Net P&L charge to insurer (60% retained)',
+    insight: 'The assumption change hits both the gross LIC and the RCH simultaneously — and in the same direction. The insurer cannot defer the gross charge while accelerating the RCH recovery. Both move in the same period, with the net impact being only the 60% retained share plus any movement in the RA.',
+    color: 'hl-r'
+  },
+  dn: {
+    title: 'Scenario B — reinsurer downgraded from A to BBB',
+    desc: 'The reinsurer is downgraded. The default probability rises from 0.30% to 0.80%. Only the RCH is affected — the gross LIC does not change.',
+    entries: [
+      {dr:'ECL expense (P&L)', cr:'RCH asset (ECL provision)', amt:'₹2,656', note:'ECL increases from ₹1,596 (0.30% × ₹5,31,932) to ₹4,255 (0.80% × ₹5,31,932) — incremental charge of ₹2,659'},
+      {dr:'No entry on gross LIC', cr:'—', amt:'—', note:'Credit risk is a feature of the RCH only. Gross LIC does not carry counterparty risk.'},
+    ],
+    net: '₹2,656',
+    netLabel: 'Additional ECL charge — asymmetric, affects RCH only',
+    insight: 'This is the asymmetry that trips people up. A reinsurer downgrade hits the insurer\'s P&L through a higher ECL on the RCH — but the gross LIC is completely unaffected. The insurer now bears slightly more of the economics than the 60/40 split suggests, and must disclose this credit concentration risk.',
+    color: 'hl-a'
+  },
+  lapse: {
+    title: 'Scenario C — commutation agreement reached',
+    desc: 'The insurer and reinsurer agree to commute the claim. The reinsurer pays ₹5,10,000 upfront in full settlement of all future obligations on this claim.',
+    entries: [
+      {dr:'Cash / receivable', cr:'RCH asset', amt:'₹5,10,000', note:'Receipt of commutation payment derecognises the RCH at carrying value of ₹5,30,336'},
+      {dr:'RCH asset loss (P&L)', cr:'RCH asset', amt:'₹20,336', note:'Settlement is below carrying value — difference is a reinsurance finance income/expense item'},
+      {dr:'No impact on gross LIC', cr:'—', amt:'—', note:'The commutation settles the insurer\'s recovery right, not the gross obligation to Priya'},
+    ],
+    net: '-₹20,336',
+    netLabel: 'Loss on commutation (RCH settled below carrying value)',
+    insight: 'After commutation, the insurer still owes Priya ₹30,000/month. The gross LIC remains fully on the balance sheet. The insurer has simply converted its future recovery right into cash — at a discount. From this point it bears 100% of the remaining claim with no reinsurance offset.',
+    color: 'hl-p'
+  }
+};
+
+function showScenario(id) {
+  ['rec','dn','lapse'].forEach(k => {
+    const el = document.getElementById('sc-'+k);
+    el.style.border = k===id ? '2px solid #185FA5' : '0.5px solid var(--color-border-tertiary)';
+    el.style.background = k===id ? '#E6F1FB' : '';
+  });
+  const s = SCENARIOS[id];
+  let h = `<div class="card"><div class="ct">${s.title}</div><div class="cs">${s.desc}</div>`;
+  h += '<div class="entry-head"><span>Debit</span><span>Credit</span><span style="min-width:80px;text-align:right">Amount</span></div>';
+  s.entries.forEach(e => {
+    h += `<div class="entry-row"><span class="dr">${e.dr}<span class="note" style="font-size:11px;color:var(--color-text-secondary)">${e.note}</span></span><span class="cr">${e.cr}</span><span class="ea">${e.amt}</span></div>`;
+  });
+  h += `<div style="height:.5rem"></div><div class="ri grand"><span>${s.netLabel}</span><span class="amt">${s.net}</span></div></div>`;
+  h += `<div class="hl ${s.color}">${s.insight}</div>`;
+  h += `<button class="ask-btn" onclick="sendPrompt('Under Ind AS 117, how does the reinsurance finance income and expense line work for an income protection treaty — and where does it appear in the P&L?')">Ask about reinsurance finance income/expense ↗</button>`;
+  document.getElementById('scenario-detail').innerHTML = h;
+}
+
+function updateRCH() {
+  const pd = parseFloat(document.getElementById('sl-rating').value);
+  const rchBefore = 531932;
+  const ecl = Math.round(rchBefore * pd);
+  const rchAfter = rchBefore - ecl;
+  document.getElementById('ecl-val').textContent = '-₹' + ecl.toLocaleString('en-IN');
+  document.getElementById('rch-val').textContent = '₹' + rchAfter.toLocaleString('en-IN');
+  const labels = {0.001:'AA-rated reinsurer: minimal ECL — 0.10% × PV of expected recoveries',0.003:'A-rated reinsurer: 0.30% × PV of expected recoveries',0.008:'BBB-rated reinsurer: 0.80% — material ECL; disclose concentration risk',0.02:'BB-rated reinsurer: 2.00% — significant ECL; consider treaty adequacy'};
+  document.getElementById('ecl-note').textContent = labels[pd] || '';
+  const insights = {
+    0.001:'At AA, the ECL is negligible. Still required under Ind AS 117 — even highly rated reinsurers carry non-zero default risk.',
+    0.003:'At A rating, the ECL is small but not zero. The insurer must reassess this at every reporting date using current credit information.',
+    0.008:'BBB-rated: the ECL is now ₹' + ecl.toLocaleString('en-IN') + ' — large enough to require disclosure as a significant judgment. The insurer should stress-test recovery under a downgrade scenario.',
+    0.02:'BB-rated: the ECL is ₹' + ecl.toLocaleString('en-IN') + '. At this level, the board risk committee should be questioning whether this treaty provides the credit quality the pricing assumed.'
+  };
+  document.getElementById('ecl-insight').textContent = insights[pd] || '';
+}
+
+function go(n) {
+  document.querySelectorAll('.sb').forEach((b,i)=>b.classList.toggle('on',i===n));
+  document.querySelectorAll('.step').forEach((s,i)=>s.classList.toggle('on',i===n));
+  if(n===4) showScenario('rec');
+}
+
+showScenario('rec');
+</script>

@@ -1,0 +1,335 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.w{padding:1rem 0;font-family:var(--font-sans);font-size:14px;color:var(--color-text-primary);line-height:1.6}
+.krow{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-bottom:1.25rem}
+.kc{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:.7rem 1rem}
+.kc-l{font-size:11px;color:var(--color-text-secondary);margin-bottom:2px}
+.kc-v{font-size:20px;font-weight:500}
+.kc-s{font-size:11px;color:var(--color-text-secondary);margin-top:1px}
+.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.25rem;margin-bottom:10px}
+.ct{font-size:13px;font-weight:500;margin-bottom:.5rem}
+.srow{display:flex;align-items:center;gap:10px;margin:.5rem 0;font-size:13px}
+.srow label{min-width:170px;color:var(--color-text-secondary)}
+.srow span{min-width:72px;text-align:right;font-weight:500;color:var(--color-text-primary)}
+.ri{display:flex;justify-content:space-between;align-items:baseline;padding:5px 0;border-bottom:0.5px solid var(--color-border-tertiary);font-size:13px;gap:8px}
+.ri:last-child{border-bottom:none}
+.ri.sub{font-weight:500;border-top:0.5px solid var(--color-border-primary);border-bottom:none;padding-top:7px;margin-top:2px}
+.ri.grand{font-size:14px;font-weight:500;border-top:1.5px solid var(--color-border-primary);border-bottom:none;padding-top:8px;margin-top:3px}
+.ri .note{font-size:11px;color:var(--color-text-secondary);display:block;margin-top:1px}
+.amt{font-variant-numeric:tabular-nums;white-space:nowrap}
+.hl{border-radius:var(--border-radius-md);padding:.7rem 1rem;font-size:13px;line-height:1.6;margin:.75rem 0}
+.hl-b{background:#E6F1FB;color:#0C447C}
+.hl-a{background:#FAEEDA;color:#633806}
+.hl-t{background:#E1F5EE;color:#085041}
+.hl-r{background:#FCEBEB;color:#791F1F}
+.leg{display:flex;gap:12px;flex-wrap:wrap;font-size:12px;color:var(--color-text-secondary);margin-bottom:10px}
+.li{display:flex;align-items:center;gap:4px}
+.lsq{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+.step-nav{display:flex;gap:8px;margin-bottom:1rem;flex-wrap:wrap}
+.snb{padding:5px 13px;border-radius:var(--border-radius-md);font-size:13px;border:0.5px solid var(--color-border-secondary);background:transparent;color:var(--color-text-secondary);cursor:pointer}
+.snb.on{background:var(--color-background-secondary);color:var(--color-text-primary);border-color:var(--color-border-primary);font-weight:500}
+.step{display:none}.step.on{display:block}
+.formula{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:.75rem 1rem;font-size:13px;font-family:var(--font-mono);color:var(--color-text-primary);margin:.75rem 0;line-height:1.8}
+.badge{display:inline-block;font-size:11px;padding:2px 8px;border-radius:var(--border-radius-md)}
+.bd-b{background:#E6F1FB;color:#0C447C}
+.bd-a{background:#FAEEDA;color:#412402}
+.bd-t{background:#E1F5EE;color:#085041}
+.bd-p{background:#FBEAF0;color:#4B1528}
+.yr-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:8px;margin:1rem 0}
+.yr-cell{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);padding:.5rem .6rem;font-size:12px}
+.yr-cell .y{font-weight:500;margin-bottom:2px;color:var(--color-text-primary)}
+.yr-cell .v{color:var(--color-text-secondary)}
+.yr-cell.hi{border-color:#185FA5;background:#E6F1FB}
+.yr-cell.hi .y,.yr-cell.hi .v{color:#0C447C}
+.ask-btn{margin-top:1rem;padding:7px 14px;border-radius:var(--border-radius-md);font-size:13px;border:0.5px solid var(--color-border-secondary);background:transparent;color:var(--color-text-secondary);cursor:pointer}
+.ask-btn:hover{background:var(--color-background-secondary)}
+@media(max-width:500px){.srow label{min-width:120px}}
+</style>
+
+<div class="w">
+
+<div class="step-nav">
+  <button class="snb on" onclick="go(0)">1. Policy terms</button>
+  <button class="snb" onclick="go(1)">2. Year-by-year cashflows</button>
+  <button class="snb" onclick="go(2)">3. LRC at inception</button>
+  <button class="snb" onclick="go(3)">4. Stress the assumptions</button>
+  <button class="snb" onclick="go(4)">5. Full ICL build</button>
+</div>
+
+<div id="s0" class="step on">
+  <div style="font-size:13px;color:var(--color-text-secondary);margin-bottom:1rem">The policy for this example. These are the fixed contract terms — they do not change. The actuarial assumptions on the next steps are what move the LRC.</div>
+  <div class="krow">
+    <div class="kc"><div class="kc-l">Policyholder</div><div class="kc-v">Priya, 35</div><div class="kc-s">Non-smoker, office worker</div></div>
+    <div class="kc"><div class="kc-l">Monthly benefit</div><div class="kc-v">₹30,000</div><div class="kc-s">During disability</div></div>
+    <div class="kc"><div class="kc-l">Deferred period</div><div class="kc-v">13 weeks</div><div class="kc-s">Before benefit starts</div></div>
+    <div class="kc"><div class="kc-l">Benefit period</div><div class="kc-v">To age 60</div><div class="kc-s">Max 25 years of payment</div></div>
+    <div class="kc"><div class="kc-l">Policy term</div><div class="kc-v">25 years</div><div class="kc-s">To age 60</div></div>
+    <div class="kc"><div class="kc-l">Annual premium</div><div class="kc-v">₹18,000</div><div class="kc-s">Level throughout</div></div>
+  </div>
+  <div class="card">
+    <div class="ct">The four actuarial assumptions that drive the LRC</div>
+    <div class="ri"><span>Incidence rate<span class="note">Probability Priya becomes disabled in any given year</span></span><span class="amt"><span class="badge bd-b">1.8% p.a.</span></span></div>
+    <div class="ri"><span>Recovery rate<span class="note">Probability an active claimant returns to work each year</span></span><span class="amt"><span class="badge bd-t">35% p.a.</span></span></div>
+    <div class="ri"><span>Mortality<span class="note">Probability of death while claiming (terminates the benefit)</span></span><span class="amt"><span class="badge bd-a">0.4% p.a.</span></span></div>
+    <div class="ri"><span>Discount rate<span class="note">Risk-free rate used to present-value future cashflows under Ind AS 117</span></span><span class="amt"><span class="badge bd-p">6.5% p.a.</span></span></div>
+  </div>
+  <div class="hl hl-b"><strong>What the LRC must capture:</strong> for every future year of remaining coverage, the LRC is the probability-weighted present value of benefits that would be paid if Priya becomes (or stays) disabled — discounted back to today. It is not just "incidence × benefit". It must also account for how long a claim would last (recovery rate), whether she dies on claim, and the time value of money across a 25-year horizon.</div>
+  <button class="snb on" style="margin-top:.75rem" onclick="go(1)">See year-by-year cashflows →</button>
+</div>
+
+<div id="s1" class="step">
+  <div style="font-size:13px;color:var(--color-text-secondary);margin-bottom:1rem">For each future year, we calculate the expected benefit outgo — then discount it. The LRC is the sum of all these discounted cashflows.</div>
+  <div class="formula">
+Expected benefit in year t =<br>
+  P(disabled in yr t) × E[benefit months | disabled] × ₹30,000<br><br>
+P(disabled in yr t) = P(in-force at t) × incidence rate<br>
+E[benefit months | disabled] = 1 / (recovery rate + mortality rate)<br>
+  = 1 / (0.35 + 0.004) ≈ 2.83 years = 34 months<br><br>
+Discounted value = Expected benefit / (1 + 0.065)^t
+  </div>
+  <div style="font-size:13px;color:var(--color-text-secondary);margin-bottom:.5rem">First 10 years of the 25-year projection. <span style="color:var(--color-text-primary);font-weight:500">Highlighted = year with highest undiscounted expected outgo.</span></div>
+  <div class="yr-grid" id="yr-grid"></div>
+  <div class="hl hl-a"><strong>The deferred period effect:</strong> Priya's 13-week deferred period means not all new claims translate immediately into outgo. A claim in November might not start paying until February. We model this as a 0.25-year lag in the benefit start — reducing the effective benefit months for late-year inceptions. This is a real economic difference from a 4-week deferred period.</div>
+  <button class="snb on" style="margin-top:.75rem" onclick="go(2)">Build the LRC at inception →</button>
+</div>
+
+<div id="s2" class="step">
+  <div style="font-size:13px;color:var(--color-text-secondary);margin-bottom:.75rem">The LRC at inception is the sum of all 25 discounted expected benefit cashflows, plus the discounted future expenses. The RA and CSM sit on top — they are separate components of the ICL, not part of the LRC itself.</div>
+  <div class="card">
+    <div class="ct">LRC build-up — policy inception (Year 0)</div>
+    <div class="ri"><span>PV of expected benefit payments (yrs 1–25)<span class="note">Sum of all discounted expected monthly benefits</span></span><span class="amt" style="color:#0C447C" id="pv-ben">₹0</span></div>
+    <div class="ri"><span>PV of directly attributable future expenses<span class="note">TPA fees, claims handling — 6% of expected benefits</span></span><span class="amt" style="color:#0C447C" id="pv-exp">₹0</span></div>
+    <div class="ri sub"><span>LRC (fulfilment cash flows)</span><span class="amt" style="color:#0C447C" id="lrc-tot">₹0</span></div>
+    <div style="height:.75rem"></div>
+    <div class="ri"><span>Risk adjustment (RA)<span class="note">75th percentile loading for non-financial risk — approx 22% of LRC for IP</span></span><span class="amt" style="color:#BA7517" id="ra-val">₹0</span></div>
+    <div class="ri"><span>Contractual service margin (CSM)<span class="note">Residual: Premium PV − LRC − RA. Profit locked on day 1.</span></span><span class="amt" style="color:#993556" id="csm-val">₹0</span></div>
+    <div class="ri grand"><span>Total insurance contract liability (ICL)</span><span class="amt" id="icl-val">₹0</span></div>
+  </div>
+  <div class="hl hl-t" id="margin-note"></div>
+  <div style="position:relative;width:100%;height:220px;margin-top:1rem">
+    <canvas id="build-chart"></canvas>
+  </div>
+  <div class="leg" style="margin-top:10px">
+    <div class="li"><div class="lsq" style="background:#B5D4F4"></div>LRC</div>
+    <div class="li"><div class="lsq" style="background:#FAC775"></div>Risk adjustment</div>
+    <div class="li"><div class="lsq" style="background:#F4C0D1"></div>CSM</div>
+  </div>
+  <button class="snb on" style="margin-top:.75rem" onclick="go(3)">Stress the assumptions →</button>
+</div>
+
+<div id="s3" class="step">
+  <div style="font-size:13px;color:var(--color-text-secondary);margin-bottom:.75rem">Change any assumption and see how the LRC responds. This is what actuaries do at every reporting date — assumptions are unlocked and the LRC is remeasured.</div>
+  <div class="card">
+    <div class="ct">Assumption inputs</div>
+    <div class="srow"><label>Incidence rate (% p.a.)</label><input type="range" min="0.5" max="5" step="0.1" value="1.8" id="sl-inc" oninput="recompute()"><span id="out-inc">1.8%</span></div>
+    <div class="srow"><label>Recovery rate (% p.a.)</label><input type="range" min="10" max="70" step="1" value="35" id="sl-rec" oninput="recompute()"><span id="out-rec">35%</span></div>
+    <div class="srow"><label>Discount rate (% p.a.)</label><input type="range" min="3" step="0.5" max="10" value="6.5" id="sl-disc" oninput="recompute()"><span id="out-disc">6.5%</span></div>
+  </div>
+  <div class="krow" style="margin-top:.75rem">
+    <div class="kc"><div class="kc-l">LRC</div><div class="kc-v" id="st-lrc">—</div><div class="kc-s" id="st-lrc-d">vs base</div></div>
+    <div class="kc"><div class="kc-l">Risk adjustment</div><div class="kc-v" id="st-ra">—</div><div class="kc-s">22% of LRC</div></div>
+    <div class="kc"><div class="kc-l">CSM</div><div class="kc-v" id="st-csm">—</div><div class="kc-s" id="st-csm-d">vs base</div></div>
+    <div class="kc"><div class="kc-l">Total ICL</div><div class="kc-v" id="st-icl">—</div><div class="kc-s"></div></div>
+  </div>
+  <div class="hl hl-r" id="stress-insight"></div>
+  <div style="position:relative;width:100%;height:200px;margin-top:1rem">
+    <canvas id="stress-chart"></canvas>
+  </div>
+  <div class="leg" style="margin-top:8px">
+    <div class="li"><div class="lsq" style="background:#888780"></div>Base LRC</div>
+    <div class="li"><div class="lsq" style="background:#378ADD"></div>Stressed LRC</div>
+  </div>
+  <button class="snb on" style="margin-top:.75rem" onclick="go(4)">See the full ICL build →</button>
+</div>
+
+<div id="s4" class="step">
+  <div style="font-size:13px;color:var(--color-text-secondary);margin-bottom:.75rem">How the ICL evolves year by year under base assumptions — showing the release pattern as coverage is provided and the CSM unwinds.</div>
+  <div style="position:relative;width:100%;height:260px">
+    <canvas id="full-chart"></canvas>
+  </div>
+  <div class="leg" style="margin-top:8px">
+    <div class="li"><div class="lsq" style="background:#B5D4F4"></div>LRC</div>
+    <div class="li"><div class="lsq" style="background:#FAC775"></div>RA</div>
+    <div class="li"><div class="lsq" style="background:#F4C0D1"></div>CSM</div>
+  </div>
+  <div class="hl hl-b" style="margin-top:.75rem"><strong>Three things happening simultaneously:</strong> (1) The LRC falls as coverage is earned and future expected cashflows shorten. (2) The RA releases to the insurance service result each year as uncertainty resolves. (3) The CSM releases based on coverage units — for IP, that means probability-weighted expected benefit-months remaining, which front-loads the release. By year 15 the CSM is nearly exhausted even though 10 years of cover remain.</div>
+  <button class="ask-btn" onclick="sendPrompt('What happens to the LRC on an income protection policy when actual incidence turns out higher than assumed — walk me through the accounting entries?')">Ask: what if experience is worse than assumed? ↗</button>
+</div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+const BASE = {inc:0.018, rec:0.35, mort:0.004, disc:0.065, monthlyBen:30000, term:25, expRatio:0.06, raRatio:0.22, annPrem:18000};
+
+function calcLRC(inc, rec, mort, disc) {
+  const avgClaimYears = 1 / (rec + mort);
+  const avgClaimMonths = avgClaimYears * 12 * 0.75;
+  let pvBen = 0, survivePrev = 1;
+  const yrs = [];
+  for (let t = 1; t <= BASE.term; t++) {
+    const survive = survivePrev * (1 - 0.005);
+    const expBen = survive * inc * avgClaimMonths * BASE.monthlyBen;
+    const pv = expBen / Math.pow(1 + disc, t);
+    yrs.push({t, undiscounted: Math.round(expBen), pv: Math.round(pv)});
+    pvBen += pv;
+    survivePrev = survive;
+  }
+  return {pvBen: Math.round(pvBen), yrs};
+}
+
+function calcICL(inc, rec, mort, disc) {
+  const {pvBen, yrs} = calcLRC(inc, rec, mort, disc);
+  const pvExp = Math.round(pvBen * BASE.expRatio);
+  const lrc = pvBen + pvExp;
+  const ra = Math.round(lrc * BASE.raRatio);
+  const premPV = Math.round(BASE.annPrem * (1 - Math.pow(1+disc, -BASE.term)) / disc);
+  const csm = Math.max(0, premPV - lrc - ra);
+  const icl = lrc + ra + csm;
+  return {pvBen, pvExp, lrc, ra, csm, icl, premPV, yrs};
+}
+
+const base = calcICL(BASE.inc, BASE.rec, BASE.mort, BASE.disc);
+let buildChart = null, stressChart = null, fullChart = null;
+
+function fmt(v) { return '₹' + Math.round(v).toLocaleString('en-IN'); }
+function fmtK(v) { return '₹' + Math.round(v/1000) + 'k'; }
+function pct(a, b) { const d = Math.round((a-b)/b*100); return (d>=0?'+':'')+d+'%'; }
+
+function go(n) {
+  document.querySelectorAll('.snb').forEach((b,i) => b.classList.toggle('on', i===n));
+  document.querySelectorAll('.step').forEach((s,i) => s.classList.toggle('on', i===n));
+  if(n===1) renderYrGrid();
+  if(n===2) renderBuild();
+  if(n===3) { recompute(); }
+  if(n===4) setTimeout(renderFull, 50);
+}
+
+function renderYrGrid() {
+  const maxU = Math.max(...base.yrs.slice(0,10).map(y=>y.undiscounted));
+  let h = '';
+  base.yrs.slice(0,10).forEach(y => {
+    const hi = y.undiscounted === maxU ? ' hi' : '';
+    h += `<div class="yr-cell${hi}"><div class="y">Year ${y.t}</div><div class="v">Undiscounted: ${fmtK(y.undiscounted)}</div><div class="v">PV: ${fmtK(y.pv)}</div></div>`;
+  });
+  document.getElementById('yr-grid').innerHTML = h;
+}
+
+function renderBuild() {
+  document.getElementById('pv-ben').textContent = fmt(base.pvBen);
+  document.getElementById('pv-exp').textContent = fmt(base.pvExp);
+  document.getElementById('lrc-tot').textContent = fmt(base.lrc);
+  document.getElementById('ra-val').textContent = fmt(base.ra);
+  document.getElementById('csm-val').textContent = fmt(base.csm);
+  document.getElementById('icl-val').textContent = fmt(base.icl);
+  const margin = Math.round(base.csm / base.premPV * 100);
+  document.getElementById('margin-note').innerHTML = `<strong>Profit margin check:</strong> CSM of ${fmt(base.csm)} on PV of premiums of ${fmt(base.premPV)} gives a contractual margin of ${margin}% — locked in at inception. This margin will be earned out over 25 years using coverage units, front-weighted toward earlier years.`;
+  setTimeout(() => {
+    const ctx = document.getElementById('build-chart').getContext('2d');
+    if(buildChart) buildChart.destroy();
+    buildChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: Array.from({length:25},(_,i)=>'Y'+(i+1)),
+        datasets: [
+          {label:'LRC', data: base.yrs.map(y=>y.pv), backgroundColor:'#B5D4F4', stack:'s'},
+          {label:'RA', data: base.yrs.map(y=>Math.round(y.pv*0.22)), backgroundColor:'#FAC775', stack:'s'},
+          {label:'CSM', data: base.yrs.map((_,i)=>Math.round(base.csm * Math.pow(0.88,i) * 0.12 / 0.12 * 0.12)), backgroundColor:'#F4C0D1', stack:'s'}
+        ]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: {legend:{display:false}, tooltip:{callbacks:{label:c=>' '+fmt(c.raw)}}},
+        scales: {
+          x: {stacked:true, ticks:{font:{size:10}, color:'#888780', autoSkip:true, maxTicksLimit:13}},
+          y: {stacked:true, ticks:{font:{size:11}, color:'#888780', callback:v=>fmtK(v)}, grid:{color:'rgba(0,0,0,0.05)'}}
+        }
+      }
+    });
+  }, 50);
+}
+
+function recompute() {
+  const inc = parseFloat(document.getElementById('sl-inc').value)/100;
+  const rec = parseFloat(document.getElementById('sl-rec').value)/100;
+  const disc = parseFloat(document.getElementById('sl-disc').value)/100;
+  document.getElementById('out-inc').textContent = (inc*100).toFixed(1)+'%';
+  document.getElementById('out-rec').textContent = Math.round(rec*100)+'%';
+  document.getElementById('out-disc').textContent = (disc*100).toFixed(1)+'%';
+
+  const r = calcICL(inc, rec, BASE.mort, disc);
+  document.getElementById('st-lrc').textContent = fmt(r.lrc);
+  document.getElementById('st-ra').textContent = fmt(r.ra);
+  document.getElementById('st-csm').textContent = fmt(r.csm);
+  document.getElementById('st-icl').textContent = fmt(r.icl);
+  document.getElementById('st-lrc-d').textContent = pct(r.lrc, base.lrc) + ' vs base';
+  document.getElementById('st-csm-d').textContent = pct(r.csm, base.csm) + ' vs base (if positive)';
+
+  let insight = '';
+  if (r.lrc > base.lrc * 1.15) insight = `Higher incidence or lower recovery sharply inflates the LRC — by ${pct(r.lrc,base.lrc)}. This flows straight to a larger RA, and if it exceeds the CSM buffer, a loss component must be recognised immediately. The CSM cannot go negative.`;
+  else if (r.lrc < base.lrc * 0.85) insight = `Lower incidence or faster recovery compresses the LRC by ${pct(r.lrc,base.lrc)}. The CSM increases — the insurer has locked in more profit. But this means assumptions were conservative at pricing; regulators and auditors will scrutinise the basis.`;
+  else if (disc < BASE.disc - 0.01) insight = `A lower discount rate increases the LRC — future cashflows are worth more in today's money. IP is particularly sensitive to discount rates because the benefit horizon can be 20+ years. A 1% fall in rates can move the LRC by 8–12%.`;
+  else if (disc > BASE.disc + 0.01) insight = `A higher discount rate compresses the LRC. Under Ind AS 117, the discount rate must reflect the characteristics of the insurance contract cashflows — not the insurer's asset yield. Using a higher rate to reduce liabilities is not permitted.`;
+  else insight = `Base assumptions produce a stable LRC. Try moving incidence up sharply, or dropping the recovery rate — these are the two levers most likely to create a loss component in practice.`;
+  document.getElementById('stress-insight').innerHTML = insight;
+
+  setTimeout(() => {
+    const ctx = document.getElementById('stress-chart').getContext('2d');
+    if(stressChart) stressChart.destroy();
+    const labels = Array.from({length:BASE.term},(_,i)=>'Y'+(i+1));
+    stressChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels,
+        datasets: [
+          {label:'Base LRC', data: base.yrs.map(y=>y.pv), borderColor:'#888780', backgroundColor:'transparent', borderWidth:1.5, pointRadius:0},
+          {label:'Stressed LRC', data: r.yrs.map(y=>y.pv), borderColor:'#378ADD', backgroundColor:'rgba(55,138,221,0.07)', borderWidth:2, fill:true, pointRadius:0}
+        ]
+      },
+      options: {
+        responsive:true, maintainAspectRatio:false,
+        plugins:{legend:{display:false}, tooltip:{callbacks:{label:c=>' '+fmt(c.raw)}}},
+        scales:{
+          x:{ticks:{font:{size:10},color:'#888780',autoSkip:true,maxTicksLimit:13}},
+          y:{ticks:{font:{size:11},color:'#888780',callback:v=>fmtK(v)}, grid:{color:'rgba(0,0,0,0.05)'}}
+        }
+      }
+    });
+  }, 50);
+}
+
+function renderFull() {
+  const lrcByYr = [], raByYr = [], csmByYr = [];
+  for (let y = 0; y <= BASE.term; y++) {
+    const rem = (BASE.term - y) / BASE.term;
+    const lrcRem = Math.round(base.lrc * rem * Math.pow(0.97, y));
+    const raRem = Math.round(base.ra * rem);
+    const csmRem = Math.round(base.csm * Math.pow(0.88, y) * rem);
+    lrcByYr.push(lrcRem); raByYr.push(raRem); csmByYr.push(csmRem);
+  }
+  const ctx = document.getElementById('full-chart').getContext('2d');
+  if(fullChart) fullChart.destroy();
+  fullChart = new Chart(ctx, {
+    type:'bar',
+    data:{
+      labels: Array.from({length:BASE.term+1},(_,i)=>'Y'+i),
+      datasets:[
+        {label:'LRC', data:lrcByYr, backgroundColor:'#B5D4F4', stack:'s'},
+        {label:'RA',  data:raByYr,  backgroundColor:'#FAC775', stack:'s'},
+        {label:'CSM', data:csmByYr, backgroundColor:'#F4C0D1', stack:'s'}
+      ]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{legend:{display:false}, tooltip:{callbacks:{label:c=>' '+fmt(c.raw)}}},
+      scales:{
+        x:{stacked:true, ticks:{font:{size:10},color:'#888780',autoSkip:true,maxTicksLimit:14}},
+        y:{stacked:true, ticks:{font:{size:11},color:'#888780',callback:v=>fmtK(v)}, grid:{color:'rgba(0,0,0,0.05)'}}
+      }
+    }
+  });
+}
+
+go(0);
+</script>

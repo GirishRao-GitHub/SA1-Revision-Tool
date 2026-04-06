@@ -1,0 +1,389 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+.wrap{padding:1rem 0;font-family:var(--font-sans);font-size:14px;color:var(--color-text-primary);line-height:1.6}
+.seg-row{display:flex;gap:8px;margin-bottom:1.25rem;flex-wrap:wrap}
+.seg-btn{padding:6px 14px;border-radius:var(--border-radius-md);font-size:13px;border:0.5px solid var(--color-border-secondary);background:transparent;color:var(--color-text-secondary);cursor:pointer}
+.seg-btn.on{background:var(--color-background-secondary);color:var(--color-text-primary);border-color:var(--color-border-primary);font-weight:500}
+.pane{display:none}.pane.on{display:block}
+.krow{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:1.25rem}
+.kc{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:.75rem 1rem}
+.kc-lbl{font-size:11px;color:var(--color-text-secondary);margin-bottom:3px}
+.kc-val{font-size:21px;font-weight:500}
+.kc-sub{font-size:11px;color:var(--color-text-secondary);margin-top:2px}
+.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.25rem;margin-bottom:10px}
+.ct{font-size:13px;font-weight:500;margin-bottom:.4rem}
+.cs{font-size:12px;color:var(--color-text-secondary);line-height:1.6;margin-bottom:.6rem}
+.hl{border-radius:var(--border-radius-md);padding:.7rem 1rem;font-size:13px;line-height:1.6;margin:.75rem 0}
+.hl-b{background:#E6F1FB;color:#0C447C}
+.hl-a{background:#FAEEDA;color:#633806}
+.hl-t{background:#E1F5EE;color:#085041}
+.hl-p{background:#FBEAF0;color:#4B1528}
+.hl-r{background:#FCEBEB;color:#791F1F}
+.ri{display:flex;justify-content:space-between;padding:5px 0;border-bottom:0.5px solid var(--color-border-tertiary);font-size:13px;gap:8px}
+.ri:last-child{border-bottom:none}
+.ri.tot{font-weight:500;border-top:1px solid var(--color-border-primary);border-bottom:none;padding-top:7px;margin-top:2px}
+.amt{font-variant-numeric:tabular-nums;white-space:nowrap}
+.tcol{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.srow{display:flex;align-items:center;gap:10px;margin:.75rem 0;font-size:13px}
+.srow label{min-width:130px;color:var(--color-text-secondary)}
+.srow span{min-width:90px;font-weight:500;text-align:right}
+.tag{display:inline-block;font-size:11px;padding:2px 8px;border-radius:var(--border-radius-md);margin:2px 2px 0}
+.tg-b{background:#E6F1FB;color:#0C447C}
+.tg-a{background:#FAEEDA;color:#412402}
+.tg-t{background:#E1F5EE;color:#085041}
+.tg-p{background:#FBEAF0;color:#4B1528}
+.tg-r{background:#FCEBEB;color:#791F1F}
+.timeline{position:relative;margin:1.25rem 0}
+.tl-track{height:8px;border-radius:4px;background:var(--color-background-secondary);position:relative;overflow:visible;margin-bottom:32px}
+.tl-seg{position:absolute;height:8px;top:0;border-radius:4px}
+.tl-label{position:absolute;top:12px;font-size:11px;color:var(--color-text-secondary);white-space:nowrap;transform:translateX(-50%)}
+.tl-event{position:absolute;top:-5px;width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;transform:translateX(-50%);border:2px solid var(--color-background-primary)}
+.phase-legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--color-text-secondary);margin-bottom:1rem}
+.pl-item{display:flex;align-items:center;gap:5px}
+.pl-sq{width:10px;height:10px;border-radius:2px;flex-shrink:0}
+.ask-btn{margin-top:1rem;padding:7px 14px;border-radius:var(--border-radius-md);font-size:13px;border:0.5px solid var(--color-border-secondary);background:transparent;color:var(--color-text-secondary);cursor:pointer}
+.ask-btn:hover{background:var(--color-background-secondary)}
+.scenario-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin:1rem 0}
+.sc-card{border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:.75rem 1rem;cursor:pointer;transition:border-color .15s}
+.sc-card:hover{border-color:var(--color-border-primary)}
+.sc-card.sel{border:2px solid #185FA5}
+.sc-title{font-size:13px;font-weight:500;margin-bottom:.3rem}
+.sc-sub{font-size:12px;color:var(--color-text-secondary);line-height:1.5}
+.diff-row{display:flex;gap:10px;margin:.75rem 0;align-items:flex-start;flex-wrap:wrap}
+.diff-col{flex:1;min-width:200px}
+.diff-head{font-size:12px;font-weight:500;color:var(--color-text-secondary);margin-bottom:.5rem;padding-bottom:.3rem;border-bottom:0.5px solid var(--color-border-tertiary)}
+.diff-item{font-size:12px;color:var(--color-text-secondary);padding:3px 0;line-height:1.5}
+.diff-item strong{color:var(--color-text-primary);font-weight:500}
+@media(max-width:480px){.tcol{grid-template-columns:1fr}}
+</style>
+
+<div class="wrap">
+
+<div style="font-size:20px;font-weight:500;margin-bottom:4px">Long-term health insurance: how the liability really works</div>
+<div style="font-size:13px;color:var(--color-text-secondary);margin-bottom:1.25rem">Critical illness (CI) and income protection (IP) have multi-year coverage, deferred claims, and benefit periods — making their accounting very different from annual health policies.</div>
+
+<div class="seg-row">
+  <button class="seg-btn on" onclick="tab('product')">Product anatomy</button>
+  <button class="seg-btn" onclick="tab('timeline')">Liability over time</button>
+  <button class="seg-btn" onclick="tab('claim')">When a claim hits</button>
+  <button class="seg-btn" onclick="tab('csm')">CSM & profit emergence</button>
+</div>
+
+<div id="p-product" class="pane on">
+  <div style="font-size:13px;color:var(--color-text-secondary);margin-bottom:1rem">Choose a product to see its structural features. These drive everything about how the liability is measured.</div>
+  <div class="scenario-grid">
+    <div class="sc-card sel" id="sc-ci" onclick="selectProduct('ci')">
+      <div class="sc-title">Critical illness (CI)</div>
+      <div class="sc-sub">Lump-sum on diagnosis of a covered condition. Single payment, then cover ends. High-severity, low-frequency.</div>
+    </div>
+    <div class="sc-card" id="sc-ip" onclick="selectProduct('ip')">
+      <div class="sc-title">Income protection (IP)</div>
+      <div class="sc-sub">Monthly benefit paid throughout a disability. Benefit period can run years — even to retirement. Frequency moderate, duration uncertain.</div>
+    </div>
+  </div>
+
+  <div id="prod-detail"></div>
+</div>
+
+<div id="p-timeline" class="pane">
+  <div style="font-size:13px;color:var(--color-text-secondary);margin-bottom:1rem">The liability profile of a long-term health policy is not a straight line. It peaks, then falls — shaped by claim probabilities, discount rates, and benefit obligations.</div>
+
+  <div class="srow">
+    <label>Policy term (years)</label>
+    <input type="range" min="5" max="30" value="20" step="1" id="sl-term" oninput="drawTimeline()">
+    <span id="out-term">20 yrs</span>
+  </div>
+  <div class="srow">
+    <label>Annual premium</label>
+    <input type="range" min="5000" max="50000" value="18000" step="1000" id="sl-prem" oninput="drawTimeline()">
+    <span id="out-prem">₹18,000</span>
+  </div>
+  <div class="srow">
+    <label>Product</label>
+    <select id="sl-prod" onchange="drawTimeline()" style="flex:1;font-size:13px">
+      <option value="ci">Critical illness</option>
+      <option value="ip">Income protection</option>
+    </select>
+    <span></span>
+  </div>
+
+  <div class="phase-legend">
+    <div class="pl-item"><div class="pl-sq" style="background:#B5D4F4"></div>LRC (fulfilment cash flows)</div>
+    <div class="pl-item"><div class="pl-sq" style="background:#FAC775"></div>Risk adjustment</div>
+    <div class="pl-item"><div class="pl-sq" style="background:#F4C0D1"></div>CSM</div>
+    <div class="pl-item"><div class="pl-sq" style="background:#9FE1CB"></div>LIC (incurred claim liability)</div>
+  </div>
+
+  <div style="position:relative;width:100%;height:260px">
+    <canvas id="tl-chart"></canvas>
+  </div>
+  <div id="tl-insight" class="hl hl-b" style="margin-top:1rem;font-size:13px"></div>
+</div>
+
+<div id="p-claim" class="pane">
+  <div style="font-size:13px;color:var(--color-text-secondary);margin-bottom:1rem">A claim event transforms the accounting. The LRC for that policyholder collapses — and a new liability (the LIC) rises in its place.</div>
+
+  <div class="scenario-grid">
+    <div class="sc-card sel" id="cl-ci" onclick="selectClaim('ci')">
+      <div class="sc-title">CI claim — year 7</div>
+      <div class="sc-sub">Policyholder diagnosed with cancer. Lump sum triggered immediately.</div>
+    </div>
+    <div class="sc-card" id="cl-ip" onclick="selectClaim('ip')">
+      <div class="sc-title">IP claim — year 4</div>
+      <div class="sc-sub">Policyholder becomes disabled. Monthly benefit starts after deferred period ends.</div>
+    </div>
+  </div>
+  <div id="claim-detail" style="margin-top:.75rem"></div>
+</div>
+
+<div id="p-csm" class="pane">
+  <div style="font-size:13px;color:var(--color-text-secondary);margin-bottom:1rem">For long-term products, the CSM is not released evenly. Coverage units — the basis for release — change as the remaining risk profile changes year by year.</div>
+
+  <div class="tcol">
+    <div class="card">
+      <div class="ct">Annual health (PAA) — straight line</div>
+      <div class="cs">12-month policy. Each month is identical. CSM release = 1/12 per month.</div>
+      <div style="position:relative;height:120px"><canvas id="csm-flat"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="ct">CI / IP (GMM) — front-weighted</div>
+      <div class="cs">20-year policy. Earlier years carry more risk per unit. CSM release accelerates in early years.</div>
+      <div style="position:relative;height:120px"><canvas id="csm-curve"></canvas></div>
+    </div>
+  </div>
+
+  <div class="hl hl-a" style="margin-top:.5rem">
+    <strong>Why does it matter?</strong> Under PAA (short-term policies), profit is earned straight-line. Under GMM (long-term CI/IP), profit is earned faster early — because the insurer is bearing more risk in year 1 than year 15. If you benchmark the two without understanding this, CI/IP books look artificially profitable early and thin late.
+  </div>
+
+  <div class="card" style="margin-top:1rem">
+    <div class="ct">What unlocks the CSM each year</div>
+    <div style="height:0.5px;background:var(--color-border-tertiary);margin:.5rem 0"></div>
+    <div class="ri"><span style="color:var(--color-text-secondary);font-size:12px">Coverage unit</span><span class="amt" style="color:var(--color-text-secondary);font-size:12px">What it represents</span></div>
+    <div class="ri"><span>CI — probability-weighted benefit</span><span class="tag tg-p">Claim likelihood × sum assured</span></div>
+    <div class="ri"><span>IP — expected benefit-months remaining</span><span class="tag tg-b">Duration × monthly benefit</span></div>
+    <div class="ri"><span>Both — discount unwinding</span><span class="tag tg-a">Time value of money accretes to P&L</span></div>
+    <div class="ri"><span>Experience variance</span><span class="tag tg-t">Actual vs assumed — CSM adjusted</span></div>
+  </div>
+
+  <button class="ask-btn" onclick="sendPrompt('How does coverage unit determination work under IFRS 17 for a critical illness product with a fixed sum assured?')">Ask about coverage units ↗</button>
+</div>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+let activeProduct = 'ci';
+let activeClaim = 'ci';
+let tlChart = null;
+let csmFlat = null;
+let csmCurve = null;
+
+function tab(id) {
+  document.querySelectorAll('.seg-btn').forEach((b,i)=>{
+    b.classList.toggle('on',['product','timeline','claim','csm'][i]===id);
+  });
+  document.querySelectorAll('.pane').forEach(p=>p.classList.remove('on'));
+  document.getElementById('p-'+id).classList.add('on');
+  if(id==='timeline') setTimeout(drawTimeline,50);
+  if(id==='csm') setTimeout(drawCSM,50);
+}
+
+const products = {
+  ci: {
+    kpis:[
+      {lbl:'Cover type',val:'Lump sum',sub:'Single payment on diagnosis'},
+      {lbl:'Typical term',val:'20–30 yrs',sub:'Or to age 65/70'},
+      {lbl:'Claim frequency',val:'~1–3%',sub:'Per year of exposure'},
+      {lbl:'Benefit amount',val:'₹25L',sub:'Fixed sum assured'}
+    ],
+    features:[
+      {title:'No ongoing benefit obligation',body:'Once the lump sum is paid, all liability extinguishes. Unlike IP, there is no tail risk from prolonged benefit payments.',color:'hl-t'},
+      {title:'LRC dominated by future claim probability',body:'The LRC is the present value of (claim probability × sum assured) for each future year. High sum assured makes the LRC sensitive to small changes in morbidity assumptions.',color:'hl-b'},
+      {title:'Risk adjustment is high relative to expected claims',body:'Because CI events are rare but costly, the distribution of outcomes is highly skewed. The RA must cover the 75th+ percentile scenario — which can be 2–4× the best-estimate LRC.',color:'hl-a'},
+      {title:'Premium allocation approach (PAA) not available',body:'PAA is only permitted if coverage period ≤ 12 months or if PAA is a reasonable approximation to GMM. For a 20-year CI policy, GMM is required — bringing full discounting, RA, and CSM measurement.',color:'hl-p'}
+    ]
+  },
+  ip: {
+    kpis:[
+      {lbl:'Cover type',val:'Monthly benefit',sub:'During disability'},
+      {lbl:'Benefit period',val:'2 yr / to 65',sub:'Short or long-tail'},
+      {lbl:'Deferred period',val:'4 or 13 wks',sub:'Before benefit starts'},
+      {lbl:'Claim frequency',val:'~2–5%',sub:'Per year in force'}
+    ],
+    features:[
+      {title:'The LIC can be larger than the LRC',body:'Once a claimant enters a long-tail benefit payment, the LIC (the present value of all future monthly payments) can dwarf the remaining LRC on the in-force book. This is the defining feature of IP accounting.',color:'hl-r'},
+      {title:'Deferred period creates a lag before liability emerges',body:'A policyholder who becomes disabled does not trigger the LIC immediately. The deferred period (typically 4 or 13 weeks) acts as a buffer — the LRC persists until the benefit period begins.',color:'hl-b'},
+      {title:'Lapse and recovery assumptions are critical',body:'IP LRCs depend heavily on the probability a claimant recovers and returns to work. Small changes in recovery rates can shift the LIC by 20–40%. Unlike CI, the liability can improve as well as deteriorate.',color:'hl-a'},
+      {title:'Reinsurance commutation is common',body:'Long-tail IP claims are often reinsured on a quota-share basis. Under Ind AS 117, the reinsurance contract is measured separately — you cannot net it against the gross LIC.',color:'hl-t'}
+    ]
+  }
+};
+
+function selectProduct(id) {
+  activeProduct = id;
+  document.getElementById('sc-ci').classList.toggle('sel',id==='ci');
+  document.getElementById('sc-ip').classList.toggle('sel',id==='ip');
+  renderProduct();
+}
+
+function renderProduct() {
+  const p = products[activeProduct];
+  let html = '<div class="krow">';
+  p.kpis.forEach(k=>{
+    html+=`<div class="kc"><div class="kc-lbl">${k.lbl}</div><div class="kc-val">${k.val}</div><div class="kc-sub">${k.sub}</div></div>`;
+  });
+  html+='</div>';
+  p.features.forEach(f=>{
+    html+=`<div class="hl ${f.color}"><strong>${f.title}</strong><br>${f.body}</div>`;
+  });
+  html+=`<button class="ask-btn" onclick="sendPrompt('How does Ind AS 117 measure the LRC for a ${activeProduct==='ci'?'critical illness':'income protection'} product — walk me through a numerical example.')">Ask for a worked example ↗</button>`;
+  document.getElementById('prod-detail').innerHTML = html;
+}
+
+function drawTimeline() {
+  const term = parseInt(document.getElementById('sl-term').value);
+  const prem = parseInt(document.getElementById('sl-prem').value);
+  const prod = document.getElementById('sl-prod').value;
+  document.getElementById('out-term').textContent = term+' yrs';
+  document.getElementById('out-prem').textContent = '₹'+prem.toLocaleString('en-IN');
+
+  const labels = Array.from({length:term+1},(_,i)=>'Yr '+i);
+  const lrc=[],ra=[],csm=[],lic=[];
+
+  for(let y=0;y<=term;y++){
+    const rem = (term-y)/term;
+    const claimProb = prod==='ci' ? 0.02 : 0.035;
+    const benefitMult = prod==='ci' ? 14 : 8;
+    const lrcVal = prem * benefitMult * claimProb * rem * Math.pow(0.94, y);
+    const raVal = lrcVal * (prod==='ci' ? 0.35 : 0.25) * rem;
+    const csmVal = prem * 0.18 * rem * Math.pow(0.97, y);
+    let licVal = 0;
+    if(prod==='ip' && y >= Math.floor(term*0.4) && y <= Math.floor(term*0.7)){
+      licVal = prem * 1.8 * ((y - Math.floor(term*0.4))/(Math.floor(term*0.7)-Math.floor(term*0.4)+1));
+    }
+    lrc.push(Math.round(Math.max(0,lrcVal)));
+    ra.push(Math.round(Math.max(0,raVal)));
+    csm.push(Math.round(Math.max(0,csmVal)));
+    lic.push(Math.round(Math.max(0,licVal)));
+  }
+
+  const ctx = document.getElementById('tl-chart').getContext('2d');
+  if(tlChart) tlChart.destroy();
+  tlChart = new Chart(ctx,{
+    type:'bar',
+    data:{
+      labels,
+      datasets:[
+        {label:'LRC',data:lrc,backgroundColor:'#B5D4F4',stack:'s'},
+        {label:'RA',data:ra,backgroundColor:'#FAC775',stack:'s'},
+        {label:'CSM',data:csm,backgroundColor:'#F4C0D1',stack:'s'},
+        {label:'LIC',data:lic,backgroundColor:'#9FE1CB',stack:'s'}
+      ]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>' ₹'+c.raw.toLocaleString('en-IN')}}},
+      scales:{
+        x:{stacked:true,ticks:{font:{size:11},color:'#888780',maxRotation:0,autoSkip:true,maxTicksLimit:10}},
+        y:{stacked:true,ticks:{font:{size:11},color:'#888780',callback:v=>'₹'+(v/1000).toFixed(0)+'k'},grid:{color:'rgba(0,0,0,0.06)'}}
+      }
+    }
+  });
+
+  const insight = prod==='ci'
+    ? `For this ${term}-year CI policy at ₹${prem.toLocaleString('en-IN')}/yr, the liability peaks early then falls steadily as the remaining coverage period shrinks. The RA is proportionally large because CI outcomes are highly skewed — a single claim is catastrophic relative to expected values. The CSM front-loads profit to earlier years.`
+    : `For this ${term}-year IP policy, notice the LIC hump in the mid-years. This represents a cohort of claimants entering long-tail benefit payment. The LRC falls as coverage is earned, while the LIC rises as active claims build — creating a liability crossover point that doesn't exist in CI or annual health.`;
+  document.getElementById('tl-insight').innerHTML = insight;
+}
+
+const claimScenarios = {
+  ci: {
+    pre: [
+      {lbl:'LRC at start of year 7',amt:'₹3,20,000',clr:'#0C447C'},
+      {lbl:'Risk adjustment (RA)',amt:'₹1,10,000',clr:'#BA7517'},
+      {lbl:'CSM remaining',amt:'₹80,000',clr:'#993556'},
+      {lbl:'Total ICL pre-claim',amt:'₹5,10,000',clr:'#444441'}
+    ],
+    event: 'Diagnosis confirmed — cancer (covered condition). Lump sum of ₹25,00,000 triggered.',
+    post: [
+      {lbl:'LRC',amt:'₹0',note:'Coverage obligation extinguishes immediately on diagnosis'},
+      {lbl:'CSM',amt:'₹0',note:'Unearned profit cannot be held — recognised to P&L as loss offset'},
+      {lbl:'RA released',amt:'₹1,10,000 cr',note:'Uncertainty resolved — released to insurance service result'},
+      {lbl:'LIC raised',amt:'₹25,00,000',note:'Best estimate of the lump sum payable, discounted if not yet settled'},
+      {lbl:'Net P&L impact',amt:'-₹23,90,000',note:'Claims expense net of RA release and CSM derecognition'}
+    ],
+    color:'hl-r',
+    insight:'For CI, the accounting is clean but brutal: the entire forward-looking LRC collapses to zero at the moment of diagnosis. The CSM — representing years of future locked-in profit — must be reversed. This is why CI books can show large P&L swings from a single high-incidence period.'
+  },
+  ip: {
+    pre: [
+      {lbl:'LRC at start of year 4',amt:'₹4,80,000',clr:'#0C447C'},
+      {lbl:'Risk adjustment (RA)',amt:'₹1,20,000',clr:'#BA7517'},
+      {lbl:'CSM remaining',amt:'₹1,60,000',clr:'#993556'},
+      {lbl:'Total ICL pre-claim',amt:'₹7,60,000',clr:'#444441'}
+    ],
+    event: 'Policyholder becomes disabled (back injury). 13-week deferred period begins. Monthly benefit of ₹30,000 will be payable from week 14.',
+    post: [
+      {lbl:'During deferred period',amt:'No change yet',note:'LRC continues earning; claim is IBNR until deferred period ends'},
+      {lbl:'LIC raised at week 14',amt:'₹18,00,000+',note:'PV of expected monthly benefits × expected duration to recovery or benefit expiry'},
+      {lbl:'LRC reduced',amt:'Partial',note:'Remaining LRC for this policyholder written down — they may still recover and lapse'},
+      {lbl:'RA on LIC',amt:'Separate RA raised',note:'Uncertainty on recovery date, longevity, and future medical costs requires its own RA'},
+      {lbl:'CSM impact',amt:'Loss component',note:'If LIC > remaining LRC + RA, a loss component is recognised immediately — no deferral'}
+    ],
+    color:'hl-a',
+    insight:'IP claims create a secondary liability measurement problem: the LIC is an annuity-like present value, not a fixed lump sum. It must be remeasured every period using updated assumptions on recovery, mortality, and discount rates — meaning IP balance sheets breathe in a way CI and annual health do not.'
+  }
+};
+
+function selectClaim(id) {
+  activeClaim = id;
+  document.getElementById('cl-ci').classList.toggle('sel',id==='ci');
+  document.getElementById('cl-ip').classList.toggle('sel',id==='ip');
+  renderClaim();
+}
+
+function renderClaim() {
+  const s = claimScenarios[activeClaim];
+  let html = '<div class="card"><div class="ct">Pre-claim balance sheet (per policy)</div>';
+  s.pre.forEach(r=>{
+    html+=`<div class="ri"><span>${r.lbl}</span><span class="amt" style="color:${r.clr}">${r.amt}</span></div>`;
+  });
+  html+='</div>';
+  html+=`<div class="hl hl-r"><strong>Claim event:</strong> ${s.event}</div>`;
+  html+='<div class="card"><div class="ct">Post-claim accounting entries</div>';
+  s.post.forEach(r=>{
+    html+=`<div class="ri"><span>${r.lbl}<br><span style="font-size:11px;color:var(--color-text-secondary)">${r.note}</span></span><span class="amt" style="font-weight:500">${r.amt}</span></div>`;
+  });
+  html+='</div>';
+  html+=`<div class="hl ${s.color}">${s.insight}</div>`;
+  html+=`<button class="ask-btn" onclick="sendPrompt('Walk me through how a reinsurance treaty affects the LIC measurement for an income protection claim under Ind AS 117.')">Ask about reinsurance treatment ↗</button>`;
+  document.getElementById('claim-detail').innerHTML = html;
+}
+
+function drawCSM() {
+  const n = 12;
+  const flatData = Array(n).fill(Math.round(100/n));
+  const curveData = Array.from({length:20},(_,i)=>Math.round(100 * Math.pow(0.88,i) * 0.12));
+  const totalCurve = curveData.reduce((a,b)=>a+b,0);
+  const normCurve = curveData.map(v=>Math.round(v/totalCurve*100));
+
+  if(csmFlat) csmFlat.destroy();
+  csmFlat = new Chart(document.getElementById('csm-flat').getContext('2d'),{
+    type:'bar',
+    data:{labels:['J','F','M','A','M','J','J','A','S','O','N','D'],datasets:[{data:flatData,backgroundColor:'#F4C0D1'}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{enabled:false}},scales:{x:{ticks:{font:{size:10},color:'#888780'}},y:{display:false}}}
+  });
+
+  if(csmCurve) csmCurve.destroy();
+  csmCurve = new Chart(document.getElementById('csm-curve').getContext('2d'),{
+    type:'bar',
+    data:{labels:Array.from({length:20},(_,i)=>'Y'+(i+1)),datasets:[{data:normCurve,backgroundColor:'#F4C0D1'}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{enabled:false}},scales:{x:{ticks:{font:{size:10},color:'#888780',autoSkip:true,maxTicksLimit:10}},y:{display:false}}}
+  });
+}
+
+renderProduct();
+renderClaim();
+</script>
