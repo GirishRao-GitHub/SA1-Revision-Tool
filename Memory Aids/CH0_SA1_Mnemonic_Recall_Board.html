@@ -242,19 +242,37 @@ body.drill-mode .reveal-btn { display: block; }
   align-items: center;
   gap: 14px;
   margin: 36px 0 20px;
+  cursor: pointer;
+  user-select: none;
 }
-.divider-line { flex: 1; height: 1px; background: var(--rule); }
+.section-divider:hover .divider-line { background: rgba(255,255,255,0.12); }
+.divider-line { flex: 1; height: 1px; background: var(--rule); transition: background 0.2s; }
 .divider-label {
   font-family: 'IBM Plex Mono', monospace;
   font-size: 10px;
   font-weight: 600;
   letter-spacing: 2.5px;
   text-transform: uppercase;
-  padding: 4px 14px;
+  padding: 4px 14px 4px 10px;
   border: 1px solid var(--rule);
   border-radius: 20px;
   white-space: nowrap;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
+.divider-chevron {
+  display: inline-block;
+  font-size: 10px;
+  transition: transform 0.2s;
+  opacity: 0.7;
+  transform: rotate(0deg);
+}
+.section-divider.open .divider-chevron { transform: rotate(90deg); }
+
+/* Grids collapsed by default */
+.mn-grid { display: none; }
+.mn-grid.open { display: grid; }
 .divider-label.ci { color: var(--rose); border-color: var(--rose-dim); background: var(--rose-dim); }
 .divider-label.ip { color: var(--blue); border-color: var(--blue-dim); background: var(--blue-dim); }
 .divider-label.shared { color: var(--teal); border-color: var(--teal-dim); background: var(--teal-dim); }
@@ -473,6 +491,7 @@ body.drill-mode .drill-bar-wrap { display: flex; align-items: center; gap: 16px;
 .letter-alm     { color: var(--amber); }
 .letter-gbe     { color: var(--sage); }
 .letter-str     { color: var(--gold); }
+.letter-ifrs17  { color: var(--blue); }
 .letter-skel    { color: var(--gold); }
 
 /* ── BADGE COLOURS ───────────────────── */
@@ -490,6 +509,7 @@ body.drill-mode .drill-bar-wrap { display: flex; align-items: center; gap: 16px;
 .mn-badge.alm     { background: #1c1408; color: var(--amber); border: 1px solid rgba(201,138,58,0.3); }
 .mn-badge.gbe     { background: var(--sage-dim); color: var(--sage); border: 1px solid rgba(90,158,110,0.3); }
 .mn-badge.str     { background: var(--gold-pale); color: var(--gold); border: 1px solid rgba(201,151,58,0.3); }
+.mn-badge.ifrs17  { background: var(--blue-dim);  color: var(--blue); border: 1px solid rgba(74,143,196,0.3); }
 
 /* ── DIVIDER LABEL COLOURS ───────────── */
 .divider-label.ci      { color: var(--rose); border-color: var(--rose-dim); background: var(--rose-dim); }
@@ -506,6 +526,7 @@ body.drill-mode .drill-bar-wrap { display: flex; align-items: center; gap: 16px;
 .divider-label.alm     { color: var(--amber); border-color: #2a1e08; background: #1c1408; }
 .divider-label.gbe     { color: var(--sage); border-color: var(--sage-dim); background: var(--sage-dim); }
 .divider-label.str     { color: var(--gold); border-color: var(--gold-dim); background: var(--gold-pale); }
+.divider-label.ifrs17  { color: var(--blue); border-color: var(--blue-dim); background: var(--blue-dim); }
 .divider-label.shared  { color: var(--teal); border-color: var(--teal-dim); background: var(--teal-dim); }
 
 /* ── TOPIC SECTION HEADER ─────────────── */
@@ -681,6 +702,14 @@ body.drill-mode .drill-bar-wrap { display: flex; align-items: center; gap: 16px;
   </div>
   <div class="mn-grid" id="str-grid"></div>
 
+  <!-- IFRS17 -->
+  <div class="section-divider">
+    <div class="divider-line"></div>
+    <div class="divider-label ifrs17">IFRS 17 / Ind AS 117</div>
+    <div class="divider-line"></div>
+  </div>
+  <div class="mn-grid" id="ifrs17-grid"></div>
+
 </div>
 
 <!-- DRILL MODE PROGRESS BAR -->
@@ -717,6 +746,7 @@ const SECTION_CONFIG = [
   { key: 'ALM',     source: 'topic',   containerId: 'alm-grid',     color: 'alm'     },
   { key: 'GBE',     source: 'topic',   containerId: 'gbe-grid',     color: 'gbe'     },
   { key: 'STR',     source: 'topic',   containerId: 'str-grid',     color: 'str'     },
+  { key: 'IFRS17',  source: 'topic',   containerId: 'ifrs17-grid',  color: 'ifrs17'  },
 ];
 
 let SKELETON  = null;
@@ -889,6 +919,24 @@ fetchFirst(DATA_URLS)
       }
     });
     updateProgress();
+
+    // Wire up collapsible section dividers
+    document.querySelectorAll('.section-divider').forEach(divider => {
+      const label = divider.querySelector('.divider-label');
+      if (label) {
+        const chevron = document.createElement('span');
+        chevron.className = 'divider-chevron';
+        chevron.textContent = '\u203a'; // ›
+        label.insertBefore(chevron, label.firstChild);
+      }
+      const grid = divider.nextElementSibling;
+      divider.addEventListener('click', () => {
+        const isOpen = divider.classList.toggle('open');
+        if (grid && grid.classList.contains('mn-grid')) {
+          grid.classList.toggle('open', isOpen);
+        }
+      });
+    });
   })
   .catch(err => {
     document.body.innerHTML =
