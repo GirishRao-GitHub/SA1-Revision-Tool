@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SA1 Revision — Chapter Flowcharts</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #0d1b2a;
+    --ink: #1a2e45;
+    --teal: #0e7c7b;
+    --teal-light: #12a39e;
+    --amber: #e07b39;
+    --amber-light: #f2a56a;
+    --cream: #f5f0e8;
+    --paper: #faf8f4;
+    --muted: #8a9ab5;
+    --border: #ddd8cc;
+    --section-bg: #edf6f6;
+    --section-border: #0e7c7b;
+    --sub-bg: #fff;
+    --sub-border: #c8e6e6;
+    --connector: #0e7c7b;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--navy);
+    color: var(--ink);
+    min-height: 100vh;
+  }
+
+  /* ─── HEADER ─── */
+  header {
+    background: var(--navy);
+    padding: 28px 40px 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  header h1 {
+    font-family: 'DM Serif Display', serif;
+    color: #fff;
+    font-size: 28px;
+    letter-spacing: -0.5px;
+  }
+  header .subtitle {
+    color: var(--muted);
+    font-size: 14px;
+    font-weight: 300;
+    letter-spacing: 0.5px;
+  }
+  header .badge {
+    margin-left: auto;
+    background: var(--teal);
+    color: #fff;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    letter-spacing: 0.5px;
+  }
+
+  /* ─── LAYOUT ─── */
+  .layout {
+    display: flex;
+    min-height: calc(100vh - 77px);
+  }
+
+  /* ─── SIDEBAR ─── */
+  .sidebar {
+    width: 240px;
+    flex-shrink: 0;
+    background: #0b1623;
+    border-right: 1px solid rgba(255,255,255,0.06);
+    overflow-y: auto;
+    max-height: calc(100vh - 77px);
+    position: sticky;
+    top: 0;
+  }
+  .sidebar-inner { padding: 12px 0; }
+  .sidebar-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+    color: var(--muted);
+    padding: 12px 20px 6px;
+    text-transform: uppercase;
+  }
+  .ch-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 8px 20px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    text-align: left;
+    transition: background 0.15s;
+    color: rgba(255,255,255,0.55);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 12.5px;
+    font-weight: 400;
+    line-height: 1.3;
+  }
+  .ch-btn:hover { background: rgba(255,255,255,0.05); color: rgba(255,255,255,0.85); }
+  .ch-btn.active {
+    background: rgba(14,124,123,0.18);
+    color: #7ee8e8;
+    font-weight: 500;
+  }
+  .ch-btn .tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--teal-light);
+    flex-shrink: 0;
+    min-width: 30px;
+    opacity: 0.8;
+  }
+  .ch-btn.active .tag { opacity: 1; }
+
+  /* ─── CONTENT ─── */
+  .content {
+    flex: 1;
+    background: var(--paper);
+    overflow-y: auto;
+    padding: 40px 48px 60px;
+  }
+
+  .chapter-panel { display: none; animation: fadeIn 0.25s ease; }
+  .chapter-panel.active { display: block; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ─── CHAPTER HEADER BOX ─── */
+  .ch-header {
+    background: var(--navy);
+    border-radius: 12px;
+    padding: 22px 32px;
+    margin-bottom: 32px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    box-shadow: 0 4px 20px rgba(13,27,42,0.18);
+  }
+  .ch-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--teal-light);
+    background: rgba(14,124,123,0.2);
+    padding: 6px 12px;
+    border-radius: 6px;
+    flex-shrink: 0;
+    letter-spacing: 1px;
+  }
+  .ch-title-text {
+    font-family: 'DM Serif Display', serif;
+    font-size: 22px;
+    color: #fff;
+    letter-spacing: -0.3px;
+    line-height: 1.25;
+  }
+  .ch-meta {
+    margin-left: auto;
+    text-align: right;
+    flex-shrink: 0;
+  }
+  .ch-meta .count {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 0.5px;
+  }
+
+  /* ─── FLOW CONNECTOR ─── */
+  .flow-arrow {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 28px;
+    margin-bottom: 4px;
+  }
+  .flow-arrow svg { display: block; }
+
+  /* ─── SECTIONS GRID ─── */
+  .sections-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 20px;
+  }
+
+  /* ─── SECTION CARD ─── */
+  .section-card {
+    background: #fff;
+    border-radius: 10px;
+    border: 1.5px solid var(--border);
+    overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    transition: box-shadow 0.2s, border-color 0.2s;
+  }
+  .section-card:hover {
+    box-shadow: 0 6px 20px rgba(14,124,123,0.12);
+    border-color: var(--teal-light);
+  }
+  .section-head {
+    background: linear-gradient(135deg, var(--teal) 0%, #0a6160 100%);
+    padding: 12px 16px;
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .section-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    background: rgba(255,255,255,0.15);
+    color: #fff;
+    padding: 2px 7px;
+    border-radius: 4px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+  .section-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #fff;
+    line-height: 1.35;
+    letter-spacing: -0.1px;
+  }
+  .section-body { padding: 0; }
+
+  /* ─── SUBSECTION ITEMS ─── */
+  .sub-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 9px 16px;
+    border-bottom: 1px solid #f0ebe2;
+    transition: background 0.12s;
+  }
+  .sub-item:last-child { border-bottom: none; }
+  .sub-item:hover { background: #f5fafa; }
+  .sub-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--amber);
+    flex-shrink: 0;
+    margin-top: 6px;
+  }
+  .sub-id {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    flex-shrink: 0;
+    min-width: 30px;
+    margin-top: 2px;
+  }
+  .sub-name {
+    font-size: 12.5px;
+    color: var(--ink);
+    line-height: 1.4;
+    font-weight: 400;
+  }
+
+  /* ─── EMPTY STATE ─── */
+  .empty {
+    text-align: center;
+    padding: 40px;
+    color: var(--muted);
+    font-size: 13px;
+  }
+
+  /* ─── SCROLLBAR ─── */
+  .sidebar::-webkit-scrollbar,
+  .content::-webkit-scrollbar { width: 5px; }
+  .sidebar::-webkit-scrollbar-track { background: transparent; }
+  .sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }
+  .content::-webkit-scrollbar-track { background: transparent; }
+  .content::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.12); border-radius: 4px; }
+
+  @media (max-width: 700px) {
+    .layout { flex-direction: column; }
+    .sidebar { width: 100%; max-height: 220px; position: relative; }
+    .content { padding: 24px 20px 40px; }
+    .sections-row { grid-template-columns: 1fr; }
+    .ch-header { flex-wrap: wrap; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>SA1 Revision Notes</h1>
+  <span class="subtitle">Chapter Structure Flowcharts</span>
+  <span class="badge">27 Chapters</span>
+</header>
+
+<div class="layout">
+  <nav class="sidebar" id="sidebar">
+    <div class="sidebar-inner" id="sidebarInner"></div>
+  </nav>
+  <main class="content" id="content"></main>
+</div>
+
+<script>
+const DATA = [{"chapter":"Ch1","title":"Introduction to Subject SA1","sections":[{"id":"0","title":"Introduction","subsections":[{"id":"0.1","title":"Chapter Overview"}]},{"id":"1","title":"Advice to Help You Pass Subject SA1","subsections":[{"id":"1.0","title":"Overview"},{"id":"1.1","title":"Higher Skills"},{"id":"1.2","title":"Problem Solving"}]},{"id":"2","title":"Links with Subject SP1","subsections":[{"id":"2.1","title":"SP1 as Foundation for SA1"}]},{"id":"3","title":"Control and Product Cycles","subsections":[{"id":"3.0","title":"Overview"},{"id":"3.1","title":"The Actuarial Control Cycle"},{"id":"3.2","title":"The Product Cycle"}]},{"id":"4","title":"Suggested Further Reading","subsections":[{"id":"4.1","title":"Introduction"},{"id":"4.2","title":"Further Reading Mentioned in the Core Reading"},{"id":"4.3","title":"Example Papers"},{"id":"4.4","title":"Some Other Possibilities"}]}]},{"chapter":"Ch2","title":"Long-Term Health & Care Insurance Products","sections":[{"id":"0","title":"Introduction","subsections":[{"id":"0.1","title":"Overview of Long-Term Health & Care Products"}]},{"id":"1","title":"Income Protection (IP) Insurance","subsections":[{"id":"1.1","title":"Benefits and Features"},{"id":"1.2","title":"Insurer's Perspective"},{"id":"1.3","title":"Meeting Customer Needs"}]},{"id":"2","title":"Critical Illness (CI) Insurance","subsections":[{"id":"2.1","title":"Benefits and Features"},{"id":"2.2","title":"Insurer's Perspective"},{"id":"2.3","title":"Meeting Customer Needs"}]},{"id":"3","title":"Long-Term Care Insurance (LTCI)","subsections":[{"id":"3.1","title":"Benefits and Features"},{"id":"3.2","title":"Insurer's Perspective"},{"id":"3.3","title":"Meeting Customer Needs"}]}]},{"chapter":"Ch3","title":"Short-term Health & Care Insurance Products","sections":[{"id":"1","title":"Private Medical Insurance (PMI)","subsections":[{"id":"1.1","title":"Benefits and Features"},{"id":"1.2","title":"Insurer's Perspective"},{"id":"1.3","title":"Meeting Customer Needs"}]},{"id":"2","title":"Health Cash Plans","subsections":[{"id":"2.1","title":"Benefits and Features"},{"id":"2.2","title":"Insurer's Perspective"},{"id":"2.3","title":"Meeting Customer Needs"}]},{"id":"3","title":"Major Medical Expense Insurance","subsections":[{"id":"3.1","title":"Benefits and Features"},{"id":"3.2","title":"Insurer's Perspective"},{"id":"3.3","title":"Meeting Customer Needs"}]}]},{"chapter":"Ch4","title":"Product Analysis","sections":[{"id":"0","title":"Introduction","subsections":[{"id":"0.1","title":"Overview of Chapter 4"}]},{"id":"1","title":"Other Customers Needs","subsections":[{"id":"1.1","title":"Intermediaries Needs"},{"id":"1.2","title":"Employers Needs"},{"id":"1.3","title":"Microinsurance: Meeting the Needs of Low-Income Customers"}]},{"id":"2","title":"Interaction with State Provision","subsections":[{"id":"2.1","title":"Introduction"},{"id":"2.2","title":"What Could the State Provide?"},{"id":"2.3","title":"Government Agenda"},{"id":"2.4","title":"Are Insurers Competing or Complementing?"},{"id":"2.5","title":"Future Demographics \u2014 The Demographic Time Bomb"},{"id":"2.6","title":"Taxation of State Benefits"}]},{"id":"3","title":"Higher-Order Insurer Risk Considerations","subsections":[{"id":"3.1","title":"Introduction"},{"id":"3.2","title":"Knowledge of Risk and Availability of Statistics"},{"id":"3.3","title":"Avoidance of Anti-Selection"},{"id":"3.4","title":"Costing of Moral Hazard"},{"id":"3.5","title":"Retrospective Regulatory / Legislative Changes"},{"id":"3.6","title":"Guarantees and Options \u2014 Adequate Costing"},{"id":"3.7","title":"Competitors Actions"},{"id":"3.8","title":"External Advice"}]},{"id":"4","title":"Bundling and Unbundling","subsections":[{"id":"4.1","title":"Customer Preferences"},{"id":"4.2","title":"Broker Preferences"},{"id":"4.3","title":"Pricing Actuary Preferences"},{"id":"4.4","title":"Administrator Preferences"},{"id":"4.5","title":"Insurer Preferences"}]},{"id":"5","title":"Impact of Unit-Linked Wrappers","subsections":[{"id":"5.1","title":"Introduction"},{"id":"5.2","title":"Reviewability"},{"id":"5.3","title":"Complexity of Benefit Design"},{"id":"5.4","title":"Customer Understanding"}]}]},{"chapter":"Ch5","title":"General Business Environment (1)","sections":[{"id":"0","title":"Introduction","subsections":[{"id":"0.1","title":"Overview of Chapter 5"}]},{"id":"1","title":"The Healthcare Insurance Market Place","subsections":[{"id":"1.1","title":"Introduction"},{"id":"1.2","title":"Key Drivers"},{"id":"1.3","title":"Demand for Health and Care Insurance"},{"id":"1.4","title":"Customer Perception of the Industry"},{"id":"1.5","title":"Competition"},{"id":"1.6","title":"Lessons from Other Markets"},{"id":"1.7","title":"Technology"},{"id":"1.8","title":"Data Science"},{"id":"1.9","title":"Climate Change"},{"id":"1.10","title":"Pandemics"}]},{"id":"2","title":"Methods of Sale","subsections":[{"id":"2.1","title":"The Main Channels"},{"id":"2.2","title":"Form of Remuneration"},{"id":"2.3","title":"Regulation"}]},{"id":"3","title":"Mis-selling in Health and Care Insurance","subsections":[{"id":"3.0","title":"Overview of Mis-selling"},{"id":"3.1","title":"IP Insurance"},{"id":"3.2","title":"CI Insurance"},{"id":"3.3","title":"Long-Term Care Insurance (LTCI)"},{"id":"3.4","title":"PMI"},{"id":"3.5","title":"Product Types Confused"},{"id":"3.6","title":"Distribution Through Technology"}]},{"id":"4","title":"The Role of the State in Healthcare Provision","subsections":[{"id":"4.1","title":"Complementary Roles of State and Insurers"},{"id":"4.2","title":"Means Testing"},{"id":"4.3","title":"Future Role of the State"}]},{"id":"5","title":"The Role of Employers in the Provision of Health and Care Benefits","subsections":[{"id":"5.0","title":"Overview"},{"id":"5.1","title":"Valued Benefits"},{"id":"5.2","title":"Tax Efficiency"},{"id":"5.3","title":"Relative Cost"}]}]},{"chapter":"Ch6","title":"General Business Environment (2)","sections":[{"id":"0","title":"Introduction","subsections":[{"id":"0.1","title":"Overview of Chapter 6"}]},{"id":"1","title":"Use of Medical Underwriting versus Pre-existing Condition Clauses","subsections":[{"id":"1.1","title":"Introduction"},{"id":"1.2","title":"Underwriting as a Deterrent"},{"id":"1.3","title":"Advantages and Disadvantages of Front-end and Back-end Underwriting"},{"id":"1.4","title":"Pre-existing Condition (PEC) Exclusions"},{"id":"1.5","title":"Size of Benefit"},{"id":"1.6","title":"Psychosocial Factors in Underwriting IP Insurance"},{"id":"1.7","title":"'Once Only' Underwriting on Group IP Insurance"}]},{"id":"2","title":"Genetics","subsections":[{"id":"2.1","title":"Genetic Testing"},{"id":"2.2","title":"Anti-selection"},{"id":"2.3","title":"Increased Availability and Cheapness of Testing"},{"id":"2.4","title":"Implications for Insurance Products"},{"id":"2.5","title":"Regulatory Restrictions on Genetics and Insurance"}]},{"id":"3","title":"Use of Counterparties","subsections":[{"id":"3.0","title":"Overview of Counterparty Risk"},{"id":"3.1","title":"Third Party Outsourcers"},{"id":"3.2","title":"Brokers"},{"id":"3.3","title":"Hospitals and Consultants"},{"id":"3.4","title":"Other Medical and Care Providers"},{"id":"3.5","title":"Independent Investigators and Assessors"}]},{"id":"4","title":"External Influences","subsections":[{"id":"4.0","title":"Overview of External Influences"},{"id":"4.1","title":"Demographic Influences"},{"id":"4.2","title":"Medical Influences"},{"id":"4.3","title":"Economic Influences"},{"id":"4.4","title":"Political Influences"},{"id":"4.5","title":"Social Influences"},{"id":"4.6","title":"Pandemics"},{"id":"4.7","title":"Climate Change"},{"id":"4.8","title":"Environmental Factors"},{"id":"4.9","title":"Mental Health"}]},{"id":"5","title":"Key Medical Conditions","subsections":[{"id":"5.1","title":"Key Medical Conditions Affecting Mortality and Morbidity"},{"id":"5.2","title":"Specific Diseases"},{"id":"5.3","title":"Variations by Region"}]}]},{"chapter":"Ch7","title":"Product Design and Pricing (1)","sections":[{"id":"0","title":"Introduction","subsections":[{"id":"0.1","title":"Overview"}]},{"id":"1","title":"Policy Conditions","subsections":[{"id":"1.0","title":"Overview"},{"id":"1.1","title":"Income Protection Insurance \u2014 Claim Definition"},{"id":"1.1b","title":"Income Protection Insurance \u2014 Claims Management"},{"id":"1.2","title":"Critical Illness Insurance \u2014 Claim Definition"},{"id":"1.3","title":"Long-Term Care Insurance \u2014 Claim Definition and Claims Management"},{"id":"1.4","title":"Private Medical Insurance \u2014 Claim Definition and Claims Management"},{"id":"1.5","title":"Cash Plans \u2014 Claim Definition and Claims Management"}]},{"id":"2","title":"Marketability, Competition and Distribution","subsections":[{"id":"2.1","title":"Consumer Demand and Competition"},{"id":"2.2","title":"Distribution"},{"id":"2.3","title":"Loss Leaders"},{"id":"2.4","title":"Cross-Selling"}]},{"id":"3","title":"Underwriting","subsections":[{"id":"3.0","title":"Overview"},{"id":"3.1","title":"Consistency"},{"id":"3.2","title":"Meeting Pricing Objectives"},{"id":"3.3","title":"Linking with Claims"},{"id":"3.4","title":"Legal Restrictions on Underwriting"}]}]},{"chapter":"Ch8","title":"Product Design and Pricing (2)","sections":[{"id":"0","title":"Introduction","subsections":[{"id":"0.1","title":"Overview"}]},{"id":"1","title":"Capital Requirements and Return on Capital","subsections":[{"id":"1.1","title":"The Need for Capital"},{"id":"1.2","title":"The Cost of Capital"},{"id":"1.3","title":"Return on Capital"},{"id":"1.4","title":"Market-Consistent Pricing"}]},{"id":"2","title":"Management of the Risks","subsections":[{"id":"2.1","title":"Underlying Risk"},{"id":"2.2","title":"Cost of Risk"},{"id":"2.3","title":"Claims Management"},{"id":"2.4","title":"Customer Risk Awareness"},{"id":"2.5","title":"Availability of Data"}]},{"id":"3","title":"Reinsurance","subsections":[{"id":"3.0","title":"Overview"},{"id":"3.1","title":"Risk Appetite"},{"id":"3.2","title":"Cost versus Benefit"},{"id":"3.3","title":"Arbitrage"},{"id":"3.4","title":"Capital Assistance"},{"id":"3.5","title":"Technical Assistance"}]},{"id":"4","title":"Investment Policy","subsections":[{"id":"4.0","title":"Overview"},{"id":"4.1","title":"Maximise Return"},{"id":"4.2","title":"Asset-Liability Matching"},{"id":"4.3","title":"Type of Investment"},{"id":"4.4","title":"Liquidity"},{"id":"4.5","title":"Consistency with Inflation"},{"id":"4.6","title":"Short Term or Long Term"}]},{"id":"5","title":"The Renewal Process and Options","subsections":[{"id":"5.1","title":"Renewability"},{"id":"5.2","title":"Reviewability"},{"id":"5.3","title":"Example of a Statement of Good Practice"},{"id":"5.4","title":"Increase Options"},{"id":"5.5","title":"Pricing Guarantees and Options"},{"id":"5.6","title":"Converting the Form of Benefits"}]},{"id":"6","title":"Regulatory Requirements","subsections":[{"id":"6.1","title":"Regulatory Requirements"}]},{"id":"7","title":"Environmental, Social and Governance (ESG) Considerations","subsections":[{"id":"7.1","title":"ESG Considerations"}]},{"id":"8","title":"Other Considerations","subsections":[{"id":"8.1","title":"Removal of Barriers for Consumers"},{"id":"8.2","title":"Administration"},{"id":"8.3","title":"Expenses"},{"id":"8.4","title":"Lapses"}]}]},{"chapter":"Ch9","title":"Taxation Environment","sections":[{"id":"0","title":"Introduction","subsections":[{"id":"0.1","title":"Taxation in General"},{"id":"0.2","title":"Impact of the Taxation Regime"},{"id":"0.3","title":"Remainder of the Chapter"}]},{"id":"1","title":"UK Tax Environment","subsections":[{"id":"1.1","title":"Introduction"},{"id":"1.2","title":"Product Features"},{"id":"1.3","title":"Types of Insurer"}]},{"id":"2","title":"Taxation of UK Long-Term Business","subsections":[{"id":"2.1","title":"Products Taxed as Long-Term Business"},{"id":"2.2","title":"Post-2013 Taxation"},{"id":"2.3","title":"Pre-2013 Taxation (I-E Basis)"}]},{"id":"3","title":"Taxation of a UK Proprietary Short-Term Business","subsections":[{"id":"3.1","title":"Introduction"},{"id":"3.2","title":"Investment Return"},{"id":"3.3","title":"The Underwriting Result and Technical Provisions"},{"id":"3.4","title":"Other Items"},{"id":"3.5","title":"Overseas Profits"},{"id":"3.6","title":"Tax Losses"},{"id":"3.7","title":"Differences in Taxation Treatment of Mutual, Health Provident and Proprietary Insurers"}]},{"id":"4","title":"Taxation of Health and Care Business for Policyholders","subsections":[{"id":"4.1","title":"Overview"},{"id":"4.2","title":"UK Policyholder Taxation"},{"id":"4.3","title":"Critical Illness Insurance"},{"id":"4.4","title":"Income Protection Insurance"},{"id":"4.5","title":"Private Medical Insurance (PMI)"}]}]},{"chapter":"Ch10","title":"Approaches to Regulation","sections":[{"id":"0","title":"Introduction","subsections":[{"id":"0.1","title":"Why Insurance is Regulated"}]},{"id":"1","title":"Regulatory Objectives","subsections":[{"id":"1.1","title":"Overview of Regulatory Objectives"}]},{"id":"2","title":"Regulatory Responsibilities","subsections":[{"id":"2.1","title":"Overview"},{"id":"2.2","title":"Authorisation"},{"id":"2.3","title":"Business Standards"},{"id":"2.4","title":"Supervisory Reporting"},{"id":"2.5","title":"Monitoring"},{"id":"2.6","title":"Valuation and Capital Requirements"},{"id":"2.7","title":"Fit and Proper Persons and Statutory Actuarial Roles"},{"id":"2.8","title":"Actions Taken by Regulators"},{"id":"2.9","title":"Treatment of Groups"},{"id":"2.10","title":"Transfers of Surplus"},{"id":"2.11","title":"Transfer of Liabilities from One Health and Care Insurance Company to Another"}]},{"id":"3","title":"Other Legislation and Guidance","subsections":[{"id":"3.1","title":"Professional Guidance"},{"id":"3.2","title":"Consumer Legislation"},{"id":"3.3","title":"Equality Legislation"},{"id":"3.4","title":"Climate Change"}]},{"id":"4","title":"Regulatory Approach by Jurisdiction","subsections":[{"id":"4.1","title":"Introduction"},{"id":"4.2","title":"United Kingdom"},{"id":"4.3","title":"United States"},{"id":"4.4","title":"China"},{"id":"4.5","title":"Australia"},{"id":"4.6","title":"South Africa"}]}]},{"chapter":"Ch11","title":"Solvency II (1)","sections":[{"id":"0","title":"Introduction","subsections":[{"id":"0.1","title":"Overview"}]},{"id":"1","title":"Solvency II Overview","subsections":[{"id":"1.1","title":"Background and Scope"},{"id":"1.2","title":"Structure \u2014 The Three-Pillar Framework"}]},{"id":"2","title":"Solvency II Pillar 2","subsections":[{"id":"2.1","title":"Governance Requirements"},{"id":"2.2","title":"Own Risk and Solvency Assessment (ORSA)"}]},{"id":"3","title":"Solvency II Pillar 3","subsections":[{"id":"3.1","title":"Disclosure and Reporting Requirements"}]},{"id":"4","title":"Other Solvency II Issues","subsections":[{"id":"4.1","title":"Group Reporting Requirements"},{"id":"4.2","title":"Impact on Business Culture and Strategy"},{"id":"4.3","title":"Statutory Actuarial Roles under Solvency II"}]}]},{"chapter":"Ch12","title":"Solvency II (2)","sections":[{"id":"0","title":"Introduction","subsections":[{"id":"0.1","title":"Overview"}]},{"id":"1","title":"Valuation of Assets","subsections":[{"id":"1.1","title":"Prudent Person Principle"},{"id":"1.2","title":"Method of Valuation"}]},{"id":"2","title":"Valuation of Technical Provisions","subsections":[{"id":"2.0","title":"Overview of Technical Provisions"},{"id":"2.1","title":"Best Estimate Liability (BEL)"},{"id":"2.2","title":"Risk-Free Discount Rates"},{"id":"2.3","title":"Risk Margin"}]},{"id":"3","title":"Capital Requirements \u2014 Solvency Capital Requirement (SCR)","subsections":[{"id":"3.1","title":"Overview of the SCR"},{"id":"3.2","title":"Standard Formula"},{"id":"3.3","title":"Internal Model"}]},{"id":"4","title":"Capital Requirements \u2014 Minimum Capital Requirement (MCR)","subsections":[{"id":"4.1","title":"MCR Overview and Calculation"}]},{"id":"5","title":"Supervisory Intervention Levels","subsections":[{"id":"5.1","title":"Ladder of Supervisory Intervention"}]},{"id":"6","title":"Quality of Capital Resources","subsections":[{"id":"6.1","title":"Own Funds and Tiering"}]},{"id":"7","title":"Data Quality","subsections":[{"id":"7.1","title":"Data Quality Standards"}]}]},{"chapter":"Ch13","title":"Other Approaches to Solvency Regulation","sections":[{"id":"0","title":"Overview","subsections":[{"id":"0.1","title":"Overview"}]},{"id":"1","title":"United Kingdom","subsections":[{"id":"1.1","title":"Overview"}]},{"id":"2","title":"USA","subsections":[{"id":"2.1","title":"Overview"},{"id":"2.2","title":"Risk-Based Capital and Reserves"},{"id":"2.3","title":"Solvency Modernisation Initiative"},{"id":"2.4","title":"Principle-Based Reserving"},{"id":"2.5","title":"ORSA"},{"id":"2.6","title":"Key Differences in US and EU Solvency Valuations"}]},{"id":"3","title":"China","subsections":[{"id":"3.1","title":"Introduction"},{"id":"3.2","title":"C-ROSS Framework"},{"id":"3.3","title":"Differences to Solvency II"}]},{"id":"4","title":"Australia","subsections":[{"id":"4.1","title":"Introduction"},{"id":"4.2","title":"Life and General Insurance Capital Standards"}]},{"id":"5","title":"South Africa","subsections":[{"id":"5.1","title":"Introduction"},{"id":"5.2","title":"Solvency Assessment and Management Framework"}]},{"id":"6","title":"Asia / Pacific","subsections":[{"id":"6.1","title":"Overview"}]},{"id":"7","title":"Latin America","subsections":[{"id":"7.1","title":"Overview"}]},{"id":"8","title":"Background References","subsections":[{"id":"8.1","title":"Non-Examinable Background References"}]}]},{"chapter":"Ch14","title":"Profit Reporting","sections":[{"id":"0","title":"Introduction","subsections":[{"id":"0.1","title":"Overview of Financial Reporting"}]},{"id":"1","title":"Statutory Reporting","subsections":[{"id":"1.1","title":"Overview"},{"id":"1.2","title":"Different Approaches to Company Reporting Standards"}]},{"id":"2","title":"International Financial Reporting Standards ('IFRS')","subsections":[{"id":"2.1","title":"Overview"},{"id":"2.2","title":"IFRS Principles"},{"id":"2.3","title":"Accounting for Insurance Contracts \u2013 IFRS 17"},{"id":"2.4","title":"Accounting for Financial Instruments"}]},{"id":"3","title":"US GAAP","subsections":[{"id":"3.1","title":"Overview"},{"id":"3.2","title":"Principles"},{"id":"3.3","title":"Differences Between US GAAP and IFRS"}]},{"id":"4","title":"Supplementary Value Based Reporting (Long-Term Business Only)","subsections":[{"id":"4.1","title":"Background"},{"id":"4.2","title":"Development of Supplementary Financial Reporting"},{"id":"4.3","title":"Implications of Solvency Regime"}]}]},{"chapter":"Ch15","title":"Professional Standards and Guidance","sections":[{"id":"0","title":"Overview","subsections":[{"id":"0.1","title":"Overview"}]},{"id":"1","title":"Principles of Professional Conduct","subsections":[{"id":"1.0","title":"Core Principles"},{"id":"1.1","title":"Scope"}]},{"id":"2","title":"Professional Standards Framework \u2013 United Kingdom","subsections":[{"id":"2.1","title":"Overview"},{"id":"2.2","title":"The Actuaries' Code"},{"id":"2.3","title":"Actuarial Profession Standards (APSs)"},{"id":"2.4","title":"Guidance Notes"},{"id":"2.5","title":"Other Non-Mandatory Resource Material"},{"id":"2.6","title":"New TAS Framework"}]},{"id":"3","title":"International Actuarial Professional Standards","subsections":[{"id":"3.1","title":"Introduction"},{"id":"3.2","title":"International Actuarial Association (IAA)"},{"id":"3.3","title":"Actuarial Association of Europe (AAE)"}]}]},{"chapter":"Ch16","title":"Capital Management","sections":[{"id":"0","title":"Introduction","subsections":[{"id":"0.1","title":"Chapter Overview"}]},{"id":"1","title":"Capital Requirements","subsections":[{"id":"1.1","title":"Perspectives on Capital and Types of Required Capital Assessment"}]},{"id":"2","title":"Reasons for Projecting Solvency","subsections":[{"id":"2.1","title":"Why Solvency Projections Are Fundamental"}]},{"id":"3","title":"Available Capital","subsections":[{"id":"3.1","title":"Sources of Available Capital"},{"id":"3.2","title":"Assessing Available Capital \u2014 Market-Consistent Valuations"}]},{"id":"4","title":"Assessing Ongoing Solvency","subsections":[{"id":"4.1","title":"Economic Capital"},{"id":"4.2","title":"Regulatory Capital"},{"id":"4.3","title":"Rating Agency Capital"},{"id":"4.4","title":"Modelling \u2014 Practical Considerations and Proxy Models"}]},{"id":"5","title":"The Relationship Between Capital, Risk and Economic Value","subsections":[{"id":"5.1","title":"The Inextricable Link: Risk, Capital and Economic Value"}]},{"id":"6","title":"Methods of Managing the Capital Position","subsections":[{"id":"6.1","title":"Equity"},{"id":"6.2","title":"Subordinated Loan Stock"},{"id":"6.3","title":"Securitisation"},{"id":"6.4","title":"Reinsurance"},{"id":"6.5","title":"Derivatives"},{"id":"6.6","title":"Asset-Liability Matching"}]}]},{"chapter":"Ch17","title":"Uses and Benefits of Reinsurance","sections":[{"id":"0","title":"Introduction","subsections":[{"id":"0.1","title":"Chapter Overview"}]},{"id":"1","title":"Types of Reinsurance","subsections":[{"id":"1.1","title":"Reinsurance Types Overview"}]},{"id":"2","title":"Control of Risks","subsections":[{"id":"2.1","title":"Limitation of Exposure to Risk"},{"id":"2.2","title":"Large Risks and Smoothing of Profit"},{"id":"2.3","title":"Technical Assistance (within Risk Control)"},{"id":"2.4","title":"Group Schemes"},{"id":"2.5","title":"Concentration of Risks"},{"id":"2.6","title":"Control of Portfolio Risk"}]},{"id":"3","title":"Financial Reinsurance","subsections":[{"id":"3.1","title":"Financing of New Business Strain"},{"id":"3.2","title":"Solvency"},{"id":"3.3","title":"Financing of Takeovers"},{"id":"3.4","title":"Securitisation"}]},{"id":"4","title":"Technical Assistance","subsections":[{"id":"4.1","title":"Product Development and Data Provision"},{"id":"4.2","title":"Risk Management"},{"id":"4.3","title":"Overseas Developments"},{"id":"4.4","title":"IT Software"}]},{"id":"5","title":"Reinsurance Impact","subsections":[{"id":"5.1","title":"Tax Arbitrage"},{"id":"5.2","title":"Regulatory Arbitrage"},{"id":"5.3","title":"New Markets"},{"id":"5.4","title":"Consultancy Fees vs Risk Share"},{"id":"5.5","title":"Predictability of Results"},{"id":"5.6","title":"Difference of Interests"}]},{"id":"6","title":"Badging","subsections":[{"id":"6.1","title":"Badging as an Alternative to Reinsurance"}]}]},{"chapter":"Ch18","title":"Asset-Liability Management","sections":[{"id":"0","title":"Introduction","subsections":[{"id":"0.1","title":"Overview and Steps in ALM Modelling"}]},{"id":"1","title":"Investment Principles","subsections":[{"id":"1.1","title":"The Basic Investment Principle"}]},{"id":"2","title":"Aim of Asset-Liability Management","subsections":[{"id":"2.1","title":"Main Aims and Risk Budget"}]},{"id":"3","title":"The Effect of the Liabilities on Asset Selection","subsections":[{"id":"3.1","title":"Principles"},{"id":"3.2","title":"Features of Health and Care Insurance Liabilities"},{"id":"3.3","title":"Currency"},{"id":"3.4","title":"Free Assets"},{"id":"3.5","title":"Regulatory Framework"},{"id":"3.6","title":"The Mean Term of Assets and Liabilities"},{"id":"3.7","title":"Inflation"},{"id":"3.8","title":"Liquidity Requirements"},{"id":"3.9","title":"The Effect of Capital Requirements on Asset Selection"},{"id":"3.10","title":"Matching by Business Type"}]},{"id":"4","title":"The Asset-Liability Management Process","subsections":[{"id":"4.1","title":"ALM Process and Model Types"},{"id":"4.2","title":"Economic Scenario Generators (ESGs)"},{"id":"4.3","title":"Allowing for Solvency Requirements"}]},{"id":"5","title":"Derivatives","subsections":[{"id":"5.1","title":"Use of Derivatives in ALM"}]},{"id":"6","title":"The Effect of Free Assets on Asset Selection","subsections":[{"id":"6.1","title":"Free Assets and Investment Freedom"}]},{"id":"7","title":"Estimating the Investment Income in Future Time Periods","subsections":[{"id":"7.1","title":"Fixed-Interest Securities"},{"id":"7.2","title":"Index-Linked Securities"},{"id":"7.3","title":"Equities"},{"id":"7.4","title":"Property"},{"id":"7.5","title":"Cash and Other Money-Market Investments"},{"id":"7.6","title":"Overseas Investments"}]},{"id":"8","title":"Volatility of Capital Values and Investment Income for Different Asset Types","subsections":[{"id":"8.1","title":"Fixed-Interest Securities"},{"id":"8.2","title":"Index-Linked Gilts"},{"id":"8.3","title":"Equities"},{"id":"8.4","title":"Property"},{"id":"8.5","title":"Cash and Other Money-Market Investments"},{"id":"8.6","title":"Overseas Investments"}]},{"id":"9","title":"Suitability of Particular Types of Assets","subsections":[{"id":"9.1","title":"Asset Features Affecting Suitability"}]}]},{"chapter":"Ch19","title":"Analysis of Experience","sections":[{"id":"0","title":"Introduction","subsections":[{"id":"0.1","title":"Overview"}]},{"id":"1","title":"Overview of Analyses","subsections":[{"id":"1.1","title":"Frequency of Investigation"},{"id":"1.2","title":"Sub-division of Data"},{"id":"1.3","title":"Communication of Results"}]},{"id":"2","title":"Claims and Exposure","subsections":[{"id":"2.1","title":"Mortality"},{"id":"2.2","title":"Morbidity Experience"},{"id":"2.3","title":"Exposed to Risk"},{"id":"2.4","title":"Claim Amount"},{"id":"2.5","title":"IBNR and RBNS Bases"},{"id":"2.6","title":"Seasonality"},{"id":"2.7","title":"Reinsurance"}]},{"id":"3","title":"The Effect of Early Claims, Non-Disclosure and Anti-Selection","subsections":[{"id":"3.1","title":"The Effect on Claims Experience"},{"id":"3.2","title":"Estimating the Impact"}]},{"id":"4","title":"Other Factors Influencing Experience","subsections":[{"id":"4.1","title":"Impact of Economic Conditions on Claims Experience"},{"id":"4.2","title":"Inter-company Comparisons (Competition)"},{"id":"4.3","title":"The Insurance Cycle"}]},{"id":"5","title":"Expenses","subsections":[{"id":"5.1","title":"Actual versus Expected"},{"id":"5.2","title":"Expenses Allocation Between Fixed and Variable"},{"id":"5.3","title":"Product Contributions Against Expenses Incurred"},{"id":"5.4","title":"Inflation Re-examined"},{"id":"5.5","title":"Treatment of Significant Individual Expenditures"}]},{"id":"6","title":"Investment Income","subsections":[{"id":"6.1","title":"Actual versus Expected"},{"id":"6.2","title":"Other Analyses"}]},{"id":"7","title":"Analysis of Movements","subsections":[{"id":"7.1","title":"Purpose"},{"id":"7.2","title":"Calculation of Movement Rates"},{"id":"7.3","title":"Example Calculation of Lapse Rates"}]},{"id":"8","title":"Portfolio Analysis","subsections":[{"id":"8.1","title":"Purposes"},{"id":"8.2","title":"Portfolio Analysis Between Classes"},{"id":"8.3","title":"Portfolio Analysis by Risk Group"}]}]},{"chapter":"Ch20","title":"Analysis of Surplus, Embedded Value and Profit","sections":[{"id":"0","title":"Introduction","subsections":[{"id":"0.1","title":"Overview"}]},{"id":"1","title":"Analysis of Supervisory Valuation Surplus","subsections":[{"id":"1.1","title":"Purpose and Definition"}]},{"id":"2","title":"Sources of Surplus","subsections":[{"id":"2.1","title":"The Sources of Surplus"}]},{"id":"3","title":"Quantifying the Surplus Arising from Each Source","subsections":[{"id":"3.1","title":"The Balance Sheet Projection Approach"}]},{"id":"4","title":"Analysing Solvency II Balance Sheet Surplus","subsections":[{"id":"4.1","title":"Impact of the Definition of Surplus"}]},{"id":"5","title":"Using Analysis of Surplus Results","subsections":[{"id":"5.1","title":"Business Applications"}]},{"id":"6","title":"Analysing the Change in Embedded Value","subsections":[{"id":"6.1","title":"Components of Analysis of Change"},{"id":"6.2","title":"Impact of Solvency Regime on Analysis of Change in Embedded Value"}]},{"id":"7","title":"The Analysis of Profit in a Short-Term Insurance Portfolio","subsections":[{"id":"7.1","title":"Approach and Key Indices"}]},{"id":"8","title":"Customer Value","subsections":[{"id":"8.1","title":"Customer Value Measurement and Management"}]}]},{"chapter":"Ch21","title":"Assessing Strategies","sections":[{"id":"0","title":"Introduction","subsections":[{"id":"0.1","title":"Overview"}]},{"id":"1","title":"Assessment of the Market for a New Company Launch","subsections":[{"id":"1.1","title":"Consumer Demand"},{"id":"1.2","title":"Other Launch Considerations"}]},{"id":"2","title":"Assessment of Overseas Markets","subsections":[{"id":"2.1","title":"Introduction"},{"id":"2.2","title":"Level and Type of Competition"},{"id":"2.3","title":"State Provision"},{"id":"2.4","title":"Distribution Channels Available"},{"id":"2.5","title":"Local Representation and Assistance"},{"id":"2.6","title":"Culture"},{"id":"2.7","title":"Regulation and Legal Matters"},{"id":"2.8","title":"Reinsurance"},{"id":"2.9","title":"Example: Microinsurance"}]},{"id":"3","title":"Assessment of a Company or Portfolio for Takeover","subsections":[{"id":"3.0","title":"Overview"},{"id":"3.1","title":"Willing Buyer and/or Willing Seller"},{"id":"3.2","title":"Data Availability and Quality"},{"id":"3.3","title":"Models"},{"id":"3.4","title":"Precedents in Market"},{"id":"3.5","title":"Regulatory Issues"},{"id":"3.6","title":"Adequacy of Reserves"},{"id":"3.7","title":"Certain Liabilities Ring-Fenced"},{"id":"3.8","title":"Synergies"},{"id":"3.9","title":"Market Timing"},{"id":"3.10","title":"Shareholder Approval"},{"id":"3.11","title":"Ability to Service Claims and Administration"},{"id":"3.12","title":"Monopoly Considerations"}]},{"id":"4","title":"Finding Appropriate Data / Information","subsections":[{"id":"4.1","title":"Introduction and Sources Overview"},{"id":"4.2","title":"Own Experience"},{"id":"4.3","title":"Wider Published Market Experience"},{"id":"4.4","title":"Population / Health Statistics"},{"id":"4.5","title":"Supervisory Reports of Key Players or Targets"},{"id":"4.6","title":"Reinsurer Information"},{"id":"4.7","title":"Data from Consultants and Overseas Market Data"}]}]},{"chapter":"Ch22","title":"Recommending Strategies: Full Synthesis","sections":[{"id":"0","title":"Introduction","subsections":[{"id":"0.1","title":"Overview"}]},{"id":"1","title":"Introducing New Products","subsections":[{"id":"1.1","title":"When and Why"},{"id":"1.2","title":"Sources of New Product Ideas"}]},{"id":"2","title":"Abandoning a Product","subsections":[{"id":"2.1","title":"Reasons for Abandonment"},{"id":"2.2","title":"Mechanics of Abandonment"},{"id":"2.3","title":"Market Perception"},{"id":"2.4","title":"Implications of a Declining Portfolio"},{"id":"2.5","title":"Reinsurer Reaction"}]},{"id":"3","title":"Changing Policy Conditions","subsections":[{"id":"3.1","title":"Reasons for Changing the Contract"},{"id":"3.2","title":"Legality"},{"id":"3.3","title":"Market Perception"},{"id":"3.4","title":"Treating Customers Fairly (TCF)"},{"id":"3.5","title":"Administration"},{"id":"3.6","title":"Choice or Compulsion"},{"id":"3.7","title":"Projected Volumes and Profitability"},{"id":"3.8","title":"Reinsurance"}]},{"id":"4","title":"Improving the Risk Environment","subsections":[{"id":"4.0","title":"Overview"},{"id":"4.1","title":"Free Health Checks"},{"id":"4.2","title":"Group Risks"}]},{"id":"5","title":"Changing Distributor Remuneration Structures","subsections":[{"id":"5.0","title":"Overview"},{"id":"5.1","title":"Reducing Remuneration"},{"id":"5.2","title":"Rewarding Better Business"},{"id":"5.3","title":"Penalising Worse Experience"},{"id":"5.4","title":"Improving Persistency (Non-Commission Tactics)"}]},{"id":"6","title":"Changing Medical Underwriting","subsections":[{"id":"6.1","title":"Changing Mix of Business"},{"id":"6.2","title":"Improving Questions"},{"id":"6.3","title":"Internal Control Levels"},{"id":"6.4","title":"Automation"}]},{"id":"7","title":"Changing Claims Management","subsections":[{"id":"7.1","title":"The Claims Process"},{"id":"7.2","title":"Training"},{"id":"7.3","title":"More Accurate Information"},{"id":"7.4","title":"Involving All Parties in the Claims Process"},{"id":"7.5","title":"Controlling Claims Costs (PMI)"}]},{"id":"8","title":"Changing Investment Policy and/or Managers","subsections":[{"id":"8.1","title":"Market Analysis"},{"id":"8.2","title":"Comparing with Product Needs"},{"id":"8.3","title":"Selecting Investment Managers"},{"id":"8.4","title":"Changing Investment Strategy"}]},{"id":"9","title":"Changing IT Structures","subsections":[{"id":"9.1","title":"Requirements and Considerations"}]},{"id":"10","title":"Changing Office Personnel and Competence Balance","subsections":[{"id":"10.1","title":"Recruiting or Promoting"},{"id":"10.2","title":"Training"},{"id":"10.3","title":"External Expertise"}]}]},{"chapter":"Ch23","title":"Implications of Strategies","sections":[{"id":"0","title":"Introduction","subsections":[{"id":"0.1","title":"Overview"}]},{"id":"1","title":"Capital Management","subsections":[{"id":"1.1","title":"Capital Required"},{"id":"1.2","title":"Sources of Capital"},{"id":"1.3","title":"Reviewing Risk Levels"},{"id":"1.4","title":"Use of Reinsurance"},{"id":"1.5","title":"Projecting Solvency"},{"id":"1.6","title":"Economic Capital"}]},{"id":"2","title":"Analysis of Alternative Strategies","subsections":[{"id":"2.1","title":"Profitability"},{"id":"2.2","title":"Competition"},{"id":"2.3","title":"Tax"},{"id":"2.4","title":"Legal"}]},{"id":"3","title":"Modelling Considerations","subsections":[{"id":"3.1","title":"Model Risk"}]}]},{"chapter":"Ch24","title":"National Healthcare Systems","sections":[{"id":"0","title":"Introduction","subsections":[{"id":"0.1","title":"Healthcare Systems"},{"id":"0.2","title":"Structure of Chapter"}]},{"id":"1","title":"The Importance of Healthcare Provision","subsections":[{"id":"1.1","title":"Aims of Healthcare Provision"},{"id":"1.2","title":"Government Responsibility"}]},{"id":"2","title":"Healthcare Systems Worldwide","subsections":[{"id":"2.1","title":"Objectives of Healthcare Systems"},{"id":"2.2","title":"History of Healthcare Systems"},{"id":"2.3","title":"Role of Private Health Insurance"}]},{"id":"3","title":"The Demand for Healthcare","subsections":[{"id":"3.1","title":"Characteristics of Healthcare Demand"}]},{"id":"4","title":"Measurement of Population Health Levels","subsections":[{"id":"4.1","title":"Measuring Health Life Expectancy"},{"id":"4.2","title":"Prioritisation"}]},{"id":"5","title":"QALYs \u2014 Quality Adjusted Life Years","subsections":[{"id":"5.1","title":"Introduction"},{"id":"5.2","title":"Uses of QALYs"},{"id":"5.3","title":"Opinions on QALYs"}]},{"id":"6","title":"Healthcare Financing Approaches","subsections":[{"id":"6.1","title":"Purpose of Healthcare Financing"},{"id":"6.2","title":"Functions of Health System Financing"},{"id":"6.3","title":"Other Considerations in Financing"},{"id":"6.4","title":"Global Funding Systems"},{"id":"6.5","title":"Funding Pressures"}]}]},{"chapter":"Ch25","title":"Best Practice","sections":[{"id":"0","title":"Introduction","subsections":[{"id":"0.1","title":"Overview"}]},{"id":"1","title":"General Areas of Best Practice","subsections":[{"id":"1.1","title":"Sales"},{"id":"1.2","title":"Continual Monitoring of Treating Customers Fairly (TCF)"},{"id":"1.3","title":"Product Design / Standardisation of Definitions"},{"id":"1.4","title":"Data Sharing"},{"id":"1.5","title":"Pricing"},{"id":"1.6","title":"Regular Review"}]},{"id":"2","title":"Examples of Industry Guidelines","subsections":[{"id":"2.0","title":"Overview"},{"id":"2.1","title":"Best Practice \u2014 Income Protection Insurance"},{"id":"2.2","title":"Best Practice \u2014 Critical Illness Cover"},{"id":"2.3","title":"Best Practice \u2014 Sales of Individual and Group PMI"},{"id":"2.4","title":"Misrepresentation and Treating Customers Fairly"}]}]},{"chapter":"Ch26","title":"Solving Complex Issues","sections":[{"id":"0","title":"Introduction","subsections":[{"id":"0.1","title":"Chapter Overview"}]},{"id":"1","title":"Examples of Complex Question Topics","subsections":[{"id":"1.0","title":"Overview"},{"id":"1.1","title":"Examples of Likely Exam Topics"}]},{"id":"2","title":"The Subject SA1 Examination","subsections":[{"id":"2.0","title":"Nature of the Exam"}]},{"id":"3","title":"In the Exam","subsections":[{"id":"3.0","title":"Overview of Exam Process"},{"id":"3.1","title":"Reading the Question"},{"id":"3.2","title":"Planning Your Time"},{"id":"3.3","title":"Generating Ideas"},{"id":"3.4","title":"Filtering and Prioritising Your Ideas"},{"id":"3.5","title":"Structuring Your Answer"},{"id":"3.6","title":"Writing Out Your Answer"}]},{"id":"4","title":"Example Question","subsections":[{"id":"4.1","title":"The Car Manufacturer Question"}]},{"id":"5","title":"Planning an Answer","subsections":[{"id":"5.1","title":"Reading (Applied to the Example)"},{"id":"5.2","title":"Generating Ideas (Applied to the Example)"},{"id":"5.3","title":"Filtering and Arranging Ideas to Plan an Answer"}]},{"id":"6","title":"Example Solution","subsections":[{"id":"6.1","title":"Introduction (of the Report)"},{"id":"6.2","title":"Market Information"},{"id":"6.3","title":"Objective When Redesigning the Car"},{"id":"6.4","title":"Possible Strategies"},{"id":"6.5","title":"Addressing the Problem of Engine Performance"},{"id":"6.6","title":"Other Factors"},{"id":"6.7","title":"Short-term Strategies"},{"id":"6.8","title":"Recommendations"}]}]},{"chapter":"Ch27","title":"Glossary","sections":[{"id":"1","title":"Definitions","subsections":[{"id":"1.1","title":"All Terms"}]}]}];
+
+function totalSubs(ch) {
+  return ch.sections.reduce((a, s) => a + s.subsections.length, 0);
+}
+
+function buildSidebar() {
+  const inner = document.getElementById('sidebarInner');
+  inner.innerHTML = '<div class="sidebar-label">Chapters</div>';
+  DATA.forEach((ch, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'ch-btn' + (i === 0 ? ' active' : '');
+    btn.dataset.idx = i;
+    btn.innerHTML = `<span class="tag">${ch.chapter}</span><span>${ch.title}</span>`;
+    btn.addEventListener('click', () => switchChapter(i));
+    inner.appendChild(btn);
+  });
+}
+
+function buildPanels() {
+  const content = document.getElementById('content');
+  DATA.forEach((ch, i) => {
+    const panel = document.createElement('div');
+    panel.className = 'chapter-panel' + (i === 0 ? ' active' : '');
+    panel.id = `panel-${i}`;
+
+    const totalSubsCount = totalSubs(ch);
+    const sectCount = ch.sections.length;
+
+    // Chapter header
+    panel.innerHTML = `
+      <div class="ch-header">
+        <span class="ch-num">${ch.chapter}</span>
+        <span class="ch-title-text">${ch.title}</span>
+        <div class="ch-meta">
+          <div class="count">${sectCount} section${sectCount !== 1 ? 's' : ''}</div>
+          <div class="count">${totalSubsCount} subsection${totalSubsCount !== 1 ? 's' : ''}</div>
+        </div>
+      </div>
+      <div class="flow-arrow">
+        <svg width="2" height="28" viewBox="0 0 2 28"><line x1="1" y1="0" x2="1" y2="20" stroke="#0e7c7b" stroke-width="2"/><polygon points="1,28 -3,18 5,18" fill="#0e7c7b"/></svg>
+      </div>
+    `;
+
+    // Sections grid
+    const grid = document.createElement('div');
+    grid.className = 'sections-row';
+
+    ch.sections.forEach(sec => {
+      const card = document.createElement('div');
+      card.className = 'section-card';
+
+      const head = document.createElement('div');
+      head.className = 'section-head';
+      head.innerHTML = `<span class="section-num">§${sec.id}</span><span class="section-title">${sec.title}</span>`;
+
+      const body = document.createElement('div');
+      body.className = 'section-body';
+
+      sec.subsections.forEach(sub => {
+        const item = document.createElement('div');
+        item.className = 'sub-item';
+        item.innerHTML = `<span class="sub-dot"></span><span class="sub-id">${sub.id}</span><span class="sub-name">${sub.title}</span>`;
+        body.appendChild(item);
+      });
+
+      card.appendChild(head);
+      card.appendChild(body);
+      grid.appendChild(card);
+    });
+
+    panel.appendChild(grid);
+    content.appendChild(panel);
+  });
+}
+
+function switchChapter(idx) {
+  document.querySelectorAll('.ch-btn').forEach((b, i) => {
+    b.classList.toggle('active', i === idx);
+  });
+  document.querySelectorAll('.chapter-panel').forEach((p, i) => {
+    p.classList.toggle('active', i === idx);
+  });
+  document.getElementById('content').scrollTop = 0;
+}
+
+buildSidebar();
+buildPanels();
+</script>
+</body>
+</html>
