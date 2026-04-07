@@ -1611,6 +1611,11 @@ function toggleChapter(num) {
   activeChapterNum = num;
   activeSectionId  = null;
   activeSubId      = null;
+  // Auto-open all sections for the newly selected chapter
+  const _autoData = CHAPTER_DATA[String(num)];
+  if (_autoData && _autoData.sections) {
+    _autoData.sections.forEach(sec => openSections.add(`${num}_${sec.id}`));
+  }
   renderNav();
 
   const data = CHAPTER_DATA[String(num)];
