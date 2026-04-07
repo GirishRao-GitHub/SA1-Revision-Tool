@@ -1,0 +1,1252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>SA1 — Risks Revision Exhibit (CH 23–25)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Spectral:ital,wght@0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;700&family=Nunito+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:        #f4f1ec;
+  --surface:   #ffffff;
+  --ink:       #1c1a17;
+  --ink-mid:   #4a4540;
+  --ink-light: #7a7570;
+  --rule:      #ddd9d2;
+  --accent:    #8b3a00;
+  --accent2:   #1a4a7c;
+  --accent3:   #2d6b3a;
+  --accent4:   #6b1a5a;
+
+  /* product colours */
+  --pmi:    #1a4a7c; --pmi-bg: #eaf0f9;
+  --ci:     #8b1a1a; --ci-bg:  #f9eaea;
+  --ip:     #2d6b3a; --ip-bg:  #eaf5ee;
+  --ltci:   #6b3a1a; --ltci-bg:#f5ede8;
+  --grp:    #1a3a6b; --grp-bg: #e8eef8;
+  --gen:    #3a1a6b; --gen-bg: #eee8f8;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 13px; line-height: 1.65;
+  background: var(--bg); color: var(--ink);
+  min-height: 100vh;
+}
+
+/* ═══════════ HEADER ═══════════ */
+header {
+  background: var(--ink);
+  padding: 22px 28px 18px;
+  border-bottom: 3px solid var(--accent);
+}
+header h1 {
+  font-family: 'Spectral', serif;
+  font-size: 20px; font-weight: 700;
+  color: #fff; letter-spacing: 0.01em;
+}
+header .sub {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; color: #aaa;
+  margin-top: 4px; letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+header .source-tag {
+  display: inline-block; margin-top: 6px;
+  font-size: 10px; background: var(--accent);
+  color: #fff; padding: 2px 8px; border-radius: 2px;
+  font-family: 'JetBrains Mono', monospace; letter-spacing: 0.05em;
+}
+
+/* ═══════════ TAB BAR ═══════════ */
+.tabs {
+  display: flex; background: var(--ink);
+  border-bottom: 1px solid #333;
+  overflow-x: auto; gap: 0;
+}
+.tab-btn {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10.5px; letter-spacing: 0.06em;
+  text-transform: uppercase; font-weight: 700;
+  padding: 10px 18px; border: none; cursor: pointer;
+  background: transparent; color: #888;
+  border-bottom: 3px solid transparent;
+  white-space: nowrap; transition: all 0.18s;
+}
+.tab-btn:hover { color: #ccc; }
+.tab-btn.active { color: #fff; border-bottom-color: var(--accent); }
+
+/* ═══════════ MAIN ═══════════ */
+main { padding: 20px 22px 48px; max-width: 1400px; margin: auto; }
+
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* ═══════════ PANEL: MATRIX ═══════════ */
+.matrix-intro {
+  background: #fff8f3;
+  border-left: 4px solid var(--accent);
+  padding: 12px 16px; margin-bottom: 18px;
+  font-size: 12.5px; color: var(--ink-mid);
+  border-radius: 0 4px 4px 0;
+}
+.matrix-intro strong { color: var(--accent); }
+
+.scroll-wrap { overflow-x: auto; }
+
+table.risk-matrix {
+  border-collapse: collapse; width: 100%;
+  min-width: 960px; background: #fff;
+  border: 1px solid var(--rule);
+  border-radius: 4px; overflow: hidden;
+  box-shadow: 0 2px 14px rgba(0,0,0,0.07);
+}
+table.risk-matrix th, table.risk-matrix td {
+  border: 1px solid var(--rule); padding: 9px 12px;
+  vertical-align: top; font-size: 11.5px;
+}
+thead th {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; text-transform: uppercase;
+  letter-spacing: 0.07em; font-weight: 700;
+  text-align: center;
+}
+th.col-risk {
+  background: var(--ink); color: #fff; text-align: left;
+  width: 150px; font-size: 9.5px;
+}
+th.col-pmi  { background: var(--pmi-bg);  color: var(--pmi);  border-top: 3px solid var(--pmi); }
+th.col-ci   { background: var(--ci-bg);   color: var(--ci);   border-top: 3px solid var(--ci);  }
+th.col-ip   { background: var(--ip-bg);   color: var(--ip);   border-top: 3px solid var(--ip);  }
+th.col-ltci { background: var(--ltci-bg); color: var(--ltci); border-top: 3px solid var(--ltci);}
+th.col-grp  { background: var(--grp-bg);  color: var(--grp);  border-top: 3px solid var(--grp); }
+
+td.risk-cat {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; font-weight: 700;
+  background: #f0ede8; color: var(--ink);
+  border-right: 2px solid var(--rule);
+  vertical-align: middle; line-height: 1.4;
+}
+td.risk-cat .cat-num {
+  display: block; font-size: 17px;
+  color: #ccc9c2; line-height: 1; margin-bottom: 3px;
+}
+td.risk-cat .cat-label { font-size: 9.5px; letter-spacing: 0.06em; text-transform: uppercase; }
+td.risk-cat .cat-sub   { font-size: 8.5px; color: var(--ink-light); font-weight: 400; margin-top: 2px; }
+
+td.cell-pmi  { background: #fafcff; }
+td.cell-ci   { background: #fffafa; }
+td.cell-ip   { background: #fafffe; }
+td.cell-ltci { background: #fffaf7; }
+td.cell-grp  { background: #fafaff; }
+
+td ul { list-style: none; padding: 0; margin: 0; }
+td li {
+  padding-left: 14px; position: relative;
+  margin-bottom: 5px; font-size: 11.5px;
+  color: var(--ink); line-height: 1.5;
+}
+td li::before {
+  content: "▸"; position: absolute; left: 0; top: 0;
+  color: var(--rule); font-size: 9px; line-height: 1.9;
+}
+td li strong { font-weight: 700; }
+
+.tag-high   { display: inline-block; font-size: 8px; font-family: 'JetBrains Mono', monospace;
+  padding: 1px 5px; border-radius: 2px;
+  background: #fde8e8; color: #8b1a1a; vertical-align: middle; }
+.tag-med    { background: #fdf5e0; color: #7a5800; font-size: 8px; font-family: 'JetBrains Mono', monospace;
+  display: inline-block; padding: 1px 5px; border-radius: 2px; vertical-align: middle; }
+.tag-low    { background: #e8f5ee; color: #1a5c30; font-size: 8px; font-family: 'JetBrains Mono', monospace;
+  display: inline-block; padding: 1px 5px; border-radius: 2px; vertical-align: middle; }
+
+tbody tr:nth-child(odd) td.risk-cat { background: #ebe7e0; }
+tbody tr:hover td { background-color: rgba(0,0,0,0.015); }
+tbody tr:hover td.risk-cat { background: #e0dbd4; }
+
+/* ═══════════ PANEL: DETAIL ═══════════ */
+.risk-cards { display: flex; flex-direction: column; gap: 14px; }
+
+.risk-card {
+  background: #fff; border: 1px solid var(--rule);
+  border-radius: 6px; overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+.risk-card-header {
+  display: flex; align-items: center; gap: 14px;
+  padding: 13px 18px; cursor: pointer;
+  border-bottom: 1px solid transparent;
+  transition: background 0.15s;
+}
+.risk-card-header:hover { background: #f9f7f4; }
+.risk-card-header.open { border-bottom-color: var(--rule); background: #f4f1ec; }
+
+.risk-num {
+  font-family: 'Spectral', serif; font-size: 28px;
+  font-weight: 700; color: var(--rule); line-height: 1;
+  flex-shrink: 0; width: 36px;
+}
+.risk-title-block { flex: 1; }
+.risk-title-block h3 {
+  font-family: 'Spectral', serif; font-size: 15px;
+  font-weight: 600; color: var(--ink); line-height: 1.3;
+}
+.risk-title-block .risk-sub {
+  font-size: 11px; color: var(--ink-light);
+  font-family: 'JetBrains Mono', monospace; margin-top: 2px;
+}
+.risk-expand-icon { font-size: 12px; color: var(--ink-light); flex-shrink: 0; }
+
+.risk-card-body { display: none; padding: 16px 18px 18px; }
+.risk-card-body.open { display: block; }
+
+.risk-body-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+@media(max-width: 720px) { .risk-body-grid { grid-template-columns: 1fr; } }
+
+.risk-section-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px; font-weight: 700; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--accent);
+  border-bottom: 1px solid var(--rule); padding-bottom: 4px;
+  margin-bottom: 8px;
+}
+
+.explanation-box {
+  background: #fdf9f6; border: 1px solid #e8e0d8;
+  border-radius: 4px; padding: 12px 14px; margin-bottom: 14px;
+  font-size: 12.5px; line-height: 1.7;
+}
+.explanation-box p { margin-bottom: 6px; }
+.explanation-box p:last-child { margin-bottom: 0; }
+
+.product-pill {
+  display: inline-block;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px; font-weight: 700; letter-spacing: 0.05em;
+  padding: 2px 8px; border-radius: 3px; margin: 2px;
+  cursor: pointer; border: 1px solid transparent;
+  transition: all 0.15s;
+}
+.pill-pmi  { background: var(--pmi-bg);  color: var(--pmi);  border-color: #b8cfe8; }
+.pill-ci   { background: var(--ci-bg);   color: var(--ci);   border-color: #e8b8b8; }
+.pill-ip   { background: var(--ip-bg);   color: var(--ip);   border-color: #b8dcc6; }
+.pill-ltci { background: var(--ltci-bg); color: var(--ltci); border-color: #d8c4b8; }
+.pill-grp  { background: var(--grp-bg);  color: var(--grp);  border-color: #b8c8e8; }
+
+.product-specific-notes {
+  font-size: 11.5px; line-height: 1.6;
+}
+.product-note { display: none; margin-top: 8px; }
+.product-note.visible {
+  display: block; padding: 10px 12px;
+  border-radius: 4px; border: 1px solid var(--rule);
+  background: #fafafa;
+}
+.product-note-header {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px; font-weight: 700; letter-spacing: 0.06em;
+  text-transform: uppercase; margin-bottom: 6px;
+}
+
+.sub-cat-list { margin: 0; padding: 0; list-style: none; }
+.sub-cat-list li {
+  padding: 5px 0 5px 16px; position: relative;
+  border-bottom: 1px dashed var(--rule); font-size: 12px;
+  line-height: 1.6;
+}
+.sub-cat-list li:last-child { border-bottom: none; }
+.sub-cat-list li::before {
+  content: "›"; position: absolute; left: 4px;
+  color: var(--accent); font-weight: 700;
+}
+
+/* ═══════════ PANEL: MNEMONICS ═══════════ */
+.mnemonics-grid { display: flex; flex-direction: column; gap: 14px; }
+.mnemonic-card {
+  background: #fff; border: 1px solid var(--rule);
+  border-radius: 6px; padding: 18px 20px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+}
+.mnemonic-header {
+  display: flex; align-items: baseline; gap: 12px;
+  margin-bottom: 14px;
+}
+.mnemonic-id {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9.5px; font-weight: 700; color: var(--ink-light);
+  letter-spacing: 0.08em;
+}
+.mnemonic-title {
+  font-family: 'Spectral', serif;
+  font-size: 14px; font-weight: 600; color: var(--ink);
+}
+.mnemonic-code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 22px; font-weight: 700;
+  letter-spacing: 0.12em; color: var(--accent);
+  margin-bottom: 12px;
+}
+.mnemonic-rows { border-top: 1px solid var(--rule); }
+.mnemonic-row {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 9px 0; border-bottom: 1px solid var(--rule);
+}
+.mnemonic-row:last-child { border-bottom: none; }
+.mnemonic-letter {
+  font-family: 'Spectral', serif; font-size: 22px;
+  font-weight: 700; color: var(--accent); line-height: 1;
+  flex-shrink: 0; width: 26px; text-align: center;
+}
+.mnemonic-word { font-weight: 700; font-size: 12.5px; margin-bottom: 2px; }
+.mnemonic-detail { font-size: 11.5px; color: var(--ink-mid); line-height: 1.55; }
+
+.mnemonics-loading {
+  text-align: center; padding: 40px;
+  color: var(--ink-light); font-style: italic;
+  font-size: 13px;
+}
+.mnemonics-note {
+  background: #fff8f3; border: 1px solid #e8d0c0;
+  border-radius: 4px; padding: 10px 14px; margin-bottom: 16px;
+  font-size: 11.5px; color: var(--ink-mid);
+}
+.mnemonics-note strong { color: var(--accent); }
+
+/* ═══════════ FILTER BAR ═══════════ */
+.filter-bar {
+  display: flex; align-items: center; flex-wrap: wrap;
+  gap: 8px; margin-bottom: 16px;
+}
+.filter-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; color: var(--ink-light);
+  letter-spacing: 0.06em; text-transform: uppercase;
+}
+.filter-btn {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; font-weight: 700; letter-spacing: 0.05em;
+  padding: 4px 12px; border-radius: 3px; border: 1px solid var(--rule);
+  background: #fff; color: var(--ink-mid); cursor: pointer;
+  transition: all 0.14s;
+}
+.filter-btn:hover { border-color: var(--accent); color: var(--accent); }
+.filter-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+/* search */
+.search-box {
+  margin-bottom: 14px; display: flex; gap: 0;
+}
+.search-box input {
+  flex: 1; padding: 8px 12px;
+  border: 1px solid var(--rule); border-right: none;
+  border-radius: 4px 0 0 4px; font-size: 12.5px;
+  font-family: 'Nunito Sans', sans-serif;
+  color: var(--ink); background: #fff;
+  outline: none;
+}
+.search-box input:focus { border-color: var(--accent2); }
+.search-box button {
+  padding: 8px 14px; background: var(--accent);
+  color: #fff; border: none; cursor: pointer;
+  border-radius: 0 4px 4px 0; font-size: 12px;
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 0.05em;
+}
+
+/* skeleton rule notice */
+.skeleton-callout {
+  background: var(--ink); color: #ddd;
+  border-radius: 4px; padding: 14px 18px; margin-bottom: 18px;
+  font-size: 12px; line-height: 1.7;
+}
+.skeleton-callout strong { color: #fff; font-family: 'JetBrains Mono', monospace; }
+.skeleton-callout .dim-row {
+  display: flex; gap: 10px; margin-top: 8px; flex-wrap: wrap;
+}
+.skeleton-callout .dim-chip {
+  background: #333; border-radius: 3px; padding: 3px 10px;
+  font-family: 'JetBrains Mono', monospace; font-size: 9.5px;
+  letter-spacing: 0.06em;
+}
+.skeleton-callout .dim-chip.highlight {
+  background: var(--accent); color: #fff;
+}
+
+</style>
+</head>
+<body>
+
+<header>
+  <h1>SA1 — Risks: Interactive Revision Exhibit</h1>
+  <div class="sub">Chapters 23 · 24 · 25 — SP1 Course Material</div>
+  <span class="source-tag">SOURCE: SP1 CH23–25</span>
+</header>
+
+<div class="tabs">
+  <button class="tab-btn active" data-tab="matrix">Matrix View</button>
+  <button class="tab-btn" data-tab="detail">Risk Deep-Dive</button>
+  <button class="tab-btn" data-tab="mnemonics">Mnemonics</button>
+</div>
+
+<main>
+
+  <!-- ══════════════════════════════════
+       TAB 1: MATRIX
+  ══════════════════════════════════ -->
+  <div id="tab-matrix" class="tab-panel active">
+
+    <div class="skeleton-callout">
+      <strong>SA1 Universal Skeleton — Dimension 7: RISKS</strong>
+      <div>Apply to every exam question. Scan all four sub-categories in order.</div>
+      <div class="dim-row">
+        <span class="dim-chip">1 NEED</span>
+        <span class="dim-chip">2 BENEFIT</span>
+        <span class="dim-chip">3 UW</span>
+        <span class="dim-chip">4 PRICING</span>
+        <span class="dim-chip">5 CLAIMS</span>
+        <span class="dim-chip">6 MONITORING</span>
+        <span class="dim-chip highlight">7 RISKS ◀ YOU ARE HERE</span>
+        <span class="dim-chip">8 REGULATORY</span>
+      </div>
+    </div>
+
+    <div class="matrix-intro">
+      <strong>How to read this matrix:</strong> Each row is a major risk category (source: SP1 Ch 23–25). Columns show how each risk manifests differently across products. Use the filter buttons to highlight specific products. Click any cell content for expanded notes in the Detail tab.
+    </div>
+
+    <div class="filter-bar">
+      <span class="filter-label">Show product:</span>
+      <button class="filter-btn active" data-product="all">All</button>
+      <button class="filter-btn" data-product="pmi">PMI</button>
+      <button class="filter-btn" data-product="ci">CI</button>
+      <button class="filter-btn" data-product="ip">IP</button>
+      <button class="filter-btn" data-product="ltci">LTCI</button>
+      <button class="filter-btn" data-product="grp">Group</button>
+    </div>
+
+    <div class="scroll-wrap">
+    <table class="risk-matrix" id="riskTable">
+      <thead>
+        <tr>
+          <th class="col-risk">Risk Category</th>
+          <th class="col-pmi" data-col="pmi">PMI</th>
+          <th class="col-ci"  data-col="ci">Critical Illness</th>
+          <th class="col-ip"  data-col="ip">Income Protection</th>
+          <th class="col-ltci" data-col="ltci">Long-Term Care</th>
+          <th class="col-grp" data-col="grp">Group (all)</th>
+        </tr>
+      </thead>
+      <tbody>
+
+        <!-- ROW 1: Policy & Data Risk -->
+        <tr>
+          <td class="risk-cat">
+            <span class="cat-num">01</span>
+            <span class="cat-label">Policy &amp; Data</span>
+            <span class="cat-sub">Insurer database; accuracy; availability</span>
+          </td>
+          <td class="cell-pmi" data-col="pmi"><ul>
+            <li>Renewal data must capture <strong>claims history, benefit utilisation, and demographic shifts</strong> — incomplete data prevents credible experience rating at renewal.</li>
+            <li>Network provider data (charges, procedure codes) essential for claims pricing; <strong>data latency</strong> in cashless settlement systems creates IBNR exposure.</li>
+          </ul></td>
+          <td class="cell-ci" data-col="ci"><ul>
+            <li><strong>Condition code accuracy</strong> at claim stage is critical — misclassified CI conditions undermine experience monitoring and morbidity assumption updates.</li>
+            <li>Policy data must record <strong>underwriting exclusions applied</strong>; omission leads to contested claims and regulatory complaints at claim stage.</li>
+          </ul></td>
+          <td class="cell-ip" data-col="ip"><ul>
+            <li>Salary data must be <strong>refreshed periodically</strong> to avoid replacement ratio exceeding the contractual cap — data quality failure is a source of over-insurance.</li>
+            <li>Occupation class recorded at inception is a primary pricing factor; <strong>occupation changes during the policy term</strong> may not be reported, creating mis-rating.</li>
+          </ul></td>
+          <td class="cell-ltci" data-col="ltci"><ul>
+            <li>Long policy duration (30–40 years) makes <strong>policyholder contact data</strong> especially prone to becoming stale — critical for claim notification and ADL assessment scheduling.</li>
+            <li>ADL assessment results must be recorded with precision; subjective assessments create <strong>data inconsistency</strong> across a claims portfolio.</li>
+          </ul></td>
+          <td class="cell-grp" data-col="grp"><ul>
+            <li>Group schemes require <strong>member-level data feeds</strong> from the employer's HR/payroll system — feed failures cause membership mis-counts and premium miscalculation.</li>
+            <li><strong>Joiner/leaver notifications</strong> must be timely; delayed notifications create cover-without-premium or premium-without-cover gaps.</li>
+          </ul></td>
+        </tr>
+
+        <!-- ROW 2: Claims Risk (Rates) -->
+        <tr>
+          <td class="risk-cat">
+            <span class="cat-num">02</span>
+            <span class="cat-label">Claims — Rates</span>
+            <span class="cat-sub">Model · Parameter · Random fluctuation</span>
+          </td>
+          <td class="cell-pmi" data-col="pmi"><ul>
+            <li><strong>Model risk:</strong> frequency–severity model may not capture the non-linearity of high-cost, low-frequency PMI claims (e.g. oncology, cardiac surgery).</li>
+            <li><strong>Parameter risk:</strong> utilisation rates by treatment category, age-band, and network tier are highly sensitive assumptions; small errors compound over a large book.</li>
+            <li><strong>Random fluctuation:</strong> even if the model and parameters are correct, actual claims in a small PMI portfolio can deviate materially from expected in any single year. <span class="tag-high">HIGH</span></li>
+          </ul></td>
+          <td class="cell-ci" data-col="ci"><ul>
+            <li><strong>Model risk:</strong> multi-state model must distinguish between no-claim, CI claim, and post-CI mortality states — failure to model survival-period lapse distorts claim rates.</li>
+            <li><strong>Parameter risk:</strong> condition-specific incidence rates (especially cancer by stage) are sensitive to population health trends and medical advances; reinsurer data may lag. <span class="tag-high">HIGH</span></li>
+            <li><strong>Random fluctuation:</strong> for small CI books, a cluster of high-severity claims in a single condition can dominate the annual result.</li>
+          </ul></td>
+          <td class="cell-ip" data-col="ip"><ul>
+            <li><strong>Model risk:</strong> two-state (sick/well) inception-annuity models may fail to capture <strong>partial recovery</strong> and rehabilitation, understating expected claim duration.</li>
+            <li><strong>Parameter risk:</strong> <em>both</em> incidence and recovery rates are uncertain; a 10% worsening in recovery rates compounds claim duration significantly. <span class="tag-high">HIGH</span></li>
+            <li><strong>Random fluctuation:</strong> economic cycle correlation with incidence and recovery creates systemic year-on-year volatility beyond random.</li>
+          </ul></td>
+          <td class="cell-ltci" data-col="ltci"><ul>
+            <li>All three claim rate risks are acutely present over the very long policy duration; <strong>longevity changes</strong> alter both the timing and severity of LTCI claims. <span class="tag-high">HIGH</span></li>
+            <li>Morbidity improvement trends are poorly understood — <strong>compression of morbidity</strong> (people staying healthy longer) vs <strong>expansion</strong> (longer disability periods) creates fundamental model uncertainty.</li>
+          </ul></td>
+          <td class="cell-grp" data-col="grp"><ul>
+            <li>Group claim rates depend on the employer's <strong>industry, workforce age profile, and absence culture</strong>; parameter risk is partly mitigated by experience rating.</li>
+            <li>Random fluctuation is lower for large groups (law of large numbers) but <strong>concentration risk</strong> from a single large employer can dominate.</li>
+          </ul></td>
+        </tr>
+
+        <!-- ROW 3: Claims Risk (Amounts) -->
+        <tr>
+          <td class="risk-cat">
+            <span class="cat-num">03</span>
+            <span class="cat-label">Claims — Amounts</span>
+            <span class="cat-sub">Severity; medical inflation; limits</span>
+          </td>
+          <td class="cell-pmi" data-col="pmi"><ul>
+            <li><strong>Medical inflation</strong> — driven by new treatments, technology, and hospital cost structures — is the dominant severity risk in indemnity PMI; reviewable premiums are the primary mitigation. <span class="tag-high">HIGH</span></li>
+            <li><strong>Unbounded indemnity exposure</strong> for catastrophic claims (e.g. complex cancer protocols) is mitigated only by per-claim or aggregate reinsurance.</li>
+          </ul></td>
+          <td class="cell-ci" data-col="ci"><ul>
+            <li>CI pays a <strong>fixed lump sum</strong> — claim amount risk is eliminated for the insurer. The risk instead relates to <strong>frequency</strong> and the accuracy of the sum assured assessed at underwriting.</li>
+            <li>Severity risk re-enters via <strong>severity-tiered structures</strong> where the payment percentage depends on clinical stage — classification errors affect the pay-out amount. <span class="tag-med">MEDIUM</span></li>
+          </ul></td>
+          <td class="cell-ip" data-col="ip"><ul>
+            <li>Claim amount is a function of <strong>the replacement ratio × pre-disability salary × benefit duration</strong>; all three components have uncertainty.</li>
+            <li><strong>Wage inflation during the claim period</strong> increases claim cost if benefit escalates with earnings — an underappreciated severity risk on long-duration claims. <span class="tag-med">MEDIUM</span></li>
+          </ul></td>
+          <td class="cell-ltci" data-col="ltci"><ul>
+            <li><strong>Care cost inflation</strong> (labour-intensive, exceeds CPI) on indemnity LTCI is the dominant severity risk; the risk is compounded over a potential 10–20 year claim duration. <span class="tag-high">HIGH</span></li>
+            <li>Residential vs nursing home vs home care have <strong>materially different cost levels</strong>; care setting mix may differ from the pricing assumption.</li>
+          </ul></td>
+          <td class="cell-grp" data-col="grp"><ul>
+            <li>Group PMI claim amounts face same <strong>medical inflation</strong> risk as individual; group IP claim amounts depend on the salary distribution of the covered workforce.</li>
+            <li><strong>High earners dominate aggregate claim cost</strong> in group IP and CI — one high-salary long-term disability can dwarf many routine claims.</li>
+          </ul></td>
+        </tr>
+
+        <!-- ROW 4: Discontinuance / Lapse Risk -->
+        <tr>
+          <td class="risk-cat">
+            <span class="cat-num">04</span>
+            <span class="cat-label">Discontinuance</span>
+            <span class="cat-sub">Anti-selective lapsing; selective withdrawal</span>
+          </td>
+          <td class="cell-pmi" data-col="pmi"><ul>
+            <li>Under community rating, <strong>healthy lives lapse</strong> to cheaper risk-rated alternatives, leaving a progressively adverse pool — the <em>death spiral</em> risk.</li>
+            <li><strong>No-claims discounts and loyalty incentives</strong> are standard tools to retain good risks before they lapse.</li>
+          </ul></td>
+          <td class="cell-ci" data-col="ci"><ul>
+            <li><strong>Selective lapsing</strong>: policyholders in good health are more likely to lapse when prices rise; those who know or suspect a claim is coming tend to persist. <span class="tag-high">HIGH</span></li>
+            <li>Unit-linked CI: a large <strong>charge review</strong> triggers lapse spikes among healthy lives, worsening the morbidity of the remaining book.</li>
+          </ul></td>
+          <td class="cell-ip" data-col="ip"><ul>
+            <li>IP lapse experience is relatively low; however <strong>policyholders in good health lapse</strong> when premiums rise (e.g. reviewable products), leaving a worse risk pool. <span class="tag-med">MEDIUM</span></li>
+            <li>Economic downturns drive involuntary lapse as policyholders cannot afford premiums — correlated with the period when IP claims are already rising.</li>
+          </ul></td>
+          <td class="cell-ltci" data-col="ltci"><ul>
+            <li>Pre-funded LTCI: lapses by <strong>healthier lives who reassess affordability</strong> worsen the remaining pool; older lapsers with large surrender values create cash-flow risk.</li>
+            <li><strong>Premium increase at repricing</strong> can trigger a lapse spike specifically among better risks, creating a feedback loop of worsening pool and further increases. <span class="tag-high">HIGH</span></li>
+          </ul></td>
+          <td class="cell-grp" data-col="grp"><ul>
+            <li>Group lapse is driven at the <strong>employer level</strong> — loss of one large corporate can be equivalent to thousands of individual lapses in one event.</li>
+            <li>Group IP: employer insolvency or M&amp;A can cause abrupt large-scale discontinuance; the insurer must manage <strong>run-off of in-force claims</strong> from ceased groups.</li>
+          </ul></td>
+        </tr>
+
+        <!-- ROW 5: Expense Risk -->
+        <tr>
+          <td class="risk-cat">
+            <span class="cat-num">05</span>
+            <span class="cat-label">Expense Risk</span>
+            <span class="cat-sub">Unit costs; inflation; volume mis-estimation</span>
+          </td>
+          <td class="cell-pmi" data-col="pmi"><ul>
+            <li><strong>Claims handling costs</strong> per episode are high in PMI due to pre-authorisation, network management, and cashless settlement administration — cost overruns erode margins.</li>
+            <li><strong>Expense over-run</strong> on distribution (panel broker fees, bancassurance commissions) is amplified if new business volumes fall below the budgeted level.</li>
+          </ul></td>
+          <td class="cell-ci" data-col="ci"><ul>
+            <li>CI expense risk is moderate — claims are discrete lump sums with lower per-claim administration cost than PMI; however <strong>contested CI claims</strong> can generate significant legal and assessment expense. <span class="tag-med">MEDIUM</span></li>
+            <li>Expense inflation on medical evidence gathering (GP reports, specialist assessments) adds to per-claim cost.</li>
+          </ul></td>
+          <td class="cell-ip" data-col="ip"><ul>
+            <li><strong>Claims management expenses</strong> are high for long-duration IP claims — regular medical reviews, rehabilitation co-ordination, and periodic benefit recalculation all add cost.</li>
+            <li>Unit expenses must be estimated for the full <strong>in-force management period</strong> (potentially decades); expense inflation assumptions compound significantly over long durations. <span class="tag-med">MEDIUM</span></li>
+          </ul></td>
+          <td class="cell-ltci" data-col="ltci"><ul>
+            <li>ADL assessment costs (requiring qualified assessors) are a <strong>substantial per-claim overhead</strong> on LTCI — more so than other H&amp;C lines.</li>
+            <li>Expense inflation over a 20–30 year claim period is very difficult to forecast; <strong>wage inflation in care professions</strong> exceeds general CPI. <span class="tag-high">HIGH</span></li>
+          </ul></td>
+          <td class="cell-grp" data-col="grp"><ul>
+            <li>Group schemes benefit from <strong>per-member expense economies of scale</strong>; however, employer HR integration and customised reporting add fixed costs that may exceed projections for small groups.</li>
+            <li><strong>Tender process costs</strong> (actuarial, legal, systems) are a significant pre-inception sunk cost that must be recovered from the scheme's margin.</li>
+          </ul></td>
+        </tr>
+
+        <!-- ROW 6: Investment / ALM Risk -->
+        <tr>
+          <td class="risk-cat">
+            <span class="cat-num">06</span>
+            <span class="cat-label">Investment / ALM</span>
+            <span class="cat-sub">Return risk; liability matching; liquidity</span>
+          </td>
+          <td class="cell-pmi" data-col="pmi"><ul>
+            <li>PMI liabilities are <strong>short-tail</strong> — most claims are settled within 12 months — so investment risk is moderate; short-duration assets are appropriate and mismatching is limited. <span class="tag-low">LOW–MED</span></li>
+            <li>However, IBNR reserves require some medium-term investment; <strong>interest rate falls</strong> reduce discount rate and increase reserve values.</li>
+          </ul></td>
+          <td class="cell-ci" data-col="ci"><ul>
+            <li>CI liabilities are also relatively short-tail (lump sum on diagnosis); <strong>investment risk is limited</strong> versus long-tail products. <span class="tag-low">LOW</span></li>
+            <li>Unit-linked CI: the <strong>investment component</strong> is policyholder-borne; the insurer retains only morbidity charge risk, not fund performance risk.</li>
+          </ul></td>
+          <td class="cell-ip" data-col="ip"><ul>
+            <li>Long-duration IP claims create <strong>long-tail liabilities</strong> requiring investment in longer-dated assets — mismatching creates interest rate sensitivity on the reserve. <span class="tag-med">MEDIUM</span></li>
+            <li>Benefits linked to wage inflation require <strong>inflation-hedging assets</strong> (index-linked gilts, infrastructure); illiquid assets limit the insurer's ability to pay benefit if asset sales are needed.</li>
+          </ul></td>
+          <td class="cell-ltci" data-col="ltci"><ul>
+            <li>LTCI has the <strong>most acute ALM challenge</strong> across all H&amp;C products: very long-duration liabilities (30–40 years) must be matched to similarly long-duration assets. <span class="tag-high">HIGH</span></li>
+            <li><strong>Low interest rate environments</strong> squeeze the margin between asset return and care cost inflation — a key systemic risk for the LTCI market.</li>
+            <li>Illiquid asset investment (infrastructure, private credit) can improve yield but creates <strong>liquidity mismatch</strong> if claims accelerate unexpectedly.</li>
+          </ul></td>
+          <td class="cell-grp" data-col="grp"><ul>
+            <li>Group PMI/CI: investment risk profile mirrors individual (short-tail). Group IP: same long-tail ALM considerations as individual IP, potentially at larger scale.</li>
+            <li><strong>Self-funded group schemes</strong> managed by the insurer create an additional ALM risk: if the employer's own funds are insufficient, the insurer may face credit risk on deferred claim settlement.</li>
+          </ul></td>
+        </tr>
+
+        <!-- ROW 7: Reserving Risk -->
+        <tr>
+          <td class="risk-cat">
+            <span class="cat-num">07</span>
+            <span class="cat-label">Reserving</span>
+            <span class="cat-sub">IBNR; adequacy; basis risk</span>
+          </td>
+          <td class="cell-pmi" data-col="pmi"><ul>
+            <li><strong>IBNR estimation</strong> is significant for PMI — healthcare claims are often notified weeks after treatment; development patterns must be estimated from historical reporting lags.</li>
+            <li><strong>Basis change risk</strong>: if medical inflation accelerates after the reserving date, IBNR held at old cost levels will be deficient. <span class="tag-med">MEDIUM</span></li>
+          </ul></td>
+          <td class="cell-ci" data-col="ci"><ul>
+            <li>CI reserves cover <strong>claims incurred but not yet reported and claims in the process of assessment</strong>; the survival period (typically 28 days) creates a reservoir of near-claim cases that must be estimated.</li>
+            <li>If <strong>claim assessment is protracted</strong> (contested conditions, medical dispute), reserves held for in-assessment claims may be held for longer than assumed. <span class="tag-low">LOW–MED</span></li>
+          </ul></td>
+          <td class="cell-ip" data-col="ip"><ul>
+            <li>IP claim reserves are complex: the insurer must estimate <strong>the expected future benefit stream</strong> for each open claim, requiring assumptions on recovery rates, future salary inflation, and mortality. <span class="tag-high">HIGH</span></li>
+            <li><strong>Deterioration in recovery rates</strong> post-reserving date (e.g. due to economic downturn) makes reserves deficient — a source of reserve strengthening.</li>
+          </ul></td>
+          <td class="cell-ltci" data-col="ltci"><ul>
+            <li>LTCI in-claim reserves require projecting care costs and claim duration over decades — <strong>longevity improvement and care cost inflation</strong> can make initial claim reserves materially deficient. <span class="tag-high">HIGH</span></li>
+            <li><strong>Changes in regulatory reserving standards</strong> (e.g. IFRS 17 adoption) can trigger significant reserve re-measurement that affects capital position.</li>
+          </ul></td>
+          <td class="cell-grp" data-col="grp"><ul>
+            <li>Group PMI IBNR: timing of employer premium payment and claim notification creates <strong>data cut-off mismatches</strong> that complicate IBNR estimation.</li>
+            <li>Group IP claim reserves face the same long-tail challenge as individual IP; <strong>large individual claims within a group</strong> dominate the portfolio reserve.</li>
+          </ul></td>
+        </tr>
+
+        <!-- ROW 8: Reinsurance Risk -->
+        <tr>
+          <td class="risk-cat">
+            <span class="cat-num">08</span>
+            <span class="cat-label">Reinsurance</span>
+            <span class="cat-sub">Counter-party; basis; availability</span>
+          </td>
+          <td class="cell-pmi" data-col="pmi"><ul>
+            <li><strong>Counter-party risk</strong>: if the reinsurer becomes insolvent, the cedant retains the full gross risk — reinsurer credit ratings must be monitored continuously.</li>
+            <li><strong>Basis risk</strong>: if the reinsurance treaty definition of covered conditions differs from the cedant's policy wording, some claims may fall in the gap between retained and reinsured risk. <span class="tag-med">MEDIUM</span></li>
+          </ul></td>
+          <td class="cell-ci" data-col="ci"><ul>
+            <li>Reinsurance is <strong>essential for CI</strong> given the large sum assureds and limited own data on condition-specific incidence — counter-party risk is therefore more acute. <span class="tag-high">HIGH</span></li>
+            <li><strong>New condition extensions</strong> may not be covered under existing reinsurance treaties; new specific agreements may be required, at cost and possibly with restrictive terms.</li>
+          </ul></td>
+          <td class="cell-ip" data-col="ip"><ul>
+            <li>XL reinsurance on IP is essential for very long-duration claims; <strong>reinsurer appetite</strong> for long-tail disability risk may reduce at renewal in adverse market conditions. <span class="tag-med">MEDIUM</span></li>
+            <li><strong>Quota share arrangements</strong> improve capital position but transfer underwriting profit — the balance between capital relief and profit retention is a strategic choice.</li>
+          </ul></td>
+          <td class="cell-ltci" data-col="ltci"><ul>
+            <li><strong>Reinsurance availability is structurally limited</strong> for LTCI — few reinsurers offer long-tail LTC cover at commercial rates; cedants may have no choice but to retain risk. <span class="tag-high">HIGH</span></li>
+            <li>Any available reinsurance is likely to be at <strong>significant cost with restrictive terms</strong>, limiting its effectiveness as a risk mitigation tool.</li>
+          </ul></td>
+          <td class="cell-grp" data-col="grp"><ul>
+            <li>Group schemes frequently use <strong>stop-loss reinsurance</strong> capping aggregate claims in a year above a threshold — basis risk arises if the aggregate definition excludes some claim types.</li>
+            <li><strong>Per-risk XL</strong> limits the insurer's exposure to a single large claim (e.g. a very high-earning long-term IP claimant); these treaties are essential for large salary multiples in group CI/IP.</li>
+          </ul></td>
+        </tr>
+
+        <!-- ROW 9: Moral Hazard & Fraud -->
+        <tr>
+          <td class="risk-cat">
+            <span class="cat-num">09</span>
+            <span class="cat-label">Moral Hazard &amp; Fraud</span>
+            <span class="cat-sub">Policyholder behaviour; over-utilisation</span>
+          </td>
+          <td class="cell-pmi" data-col="pmi"><ul>
+            <li><strong>Over-utilisation</strong>: insured individuals tend to use more healthcare than uninsured individuals — insurer must use excesses, co-payments, and pre-authorisation to manage demand. <span class="tag-high">HIGH</span></li>
+            <li><strong>Provider-induced demand</strong>: networks with fee-for-service structures incentivise providers to recommend additional tests and procedures not clinically necessary.</li>
+            <li>Fraud: <strong>falsified bills, duplicate claims, and non-existent treatments</strong> in cashless networks are a material source of claim inflation in markets with weak provider governance.</li>
+          </ul></td>
+          <td class="cell-ci" data-col="ci"><ul>
+            <li>Moral hazard is limited post-claim (the event either happened or it didn't); however, <strong>manufactured diagnosis</strong> (paying a doctor to certify a CI condition prematurely) is a fraud risk. <span class="tag-low">LOW–MED</span></li>
+            <li><strong>Non-disclosure at inception</strong> (hiding a pre-existing condition related to a CI) is a more common fraud vector and is addressed through claim-stage underwriting.</li>
+          </ul></td>
+          <td class="cell-ip" data-col="ip"><ul>
+            <li><strong>Malingering</strong>: policyholders may extend their disability period beyond genuine incapacity — this risk increases when the replacement ratio is close to or at 100% of net income. <span class="tag-high">HIGH</span></li>
+            <li><strong>Moral hazard at inception</strong>: individuals with known health concerns may deliberately purchase IP cover knowing a claim is likely — addressed by medical underwriting and deferred periods.</li>
+          </ul></td>
+          <td class="cell-ltci" data-col="ltci"><ul>
+            <li><strong>ADL manipulation</strong>: care providers or family members may assist or encourage claimants to fail ADL assessments that they could manage independently — difficult to detect and prove. <span class="tag-med">MEDIUM</span></li>
+            <li><strong>Benefit-to-care-provider payment</strong> creates a moral hazard if the provider has an incentive to maintain the claimant in a more dependent state to preserve their income.</li>
+          </ul></td>
+          <td class="cell-grp" data-col="grp"><ul>
+            <li>Group moral hazard is lower than individual because the <strong>employer has a reputational and commercial incentive to manage absence</strong> within the group scheme.</li>
+            <li>However, <strong>claims culture within a specific employer</strong> (industry norms, union influence on absence management) can create elevated claim rates for that group.</li>
+          </ul></td>
+        </tr>
+
+        <!-- ROW 10: Regulatory & Legal Risk -->
+        <tr>
+          <td class="risk-cat">
+            <span class="cat-num">10</span>
+            <span class="cat-label">Regulatory &amp; Legal</span>
+            <span class="cat-sub">Capital; TCF; product governance; litigation</span>
+          </td>
+          <td class="cell-pmi" data-col="pmi"><ul>
+            <li><strong>Community rating mandates</strong> (where imposed by regulation) constrain the insurer's ability to price for individual risk — a regulatory risk that limits profit potential and creates sustainability pressure.</li>
+            <li><strong>IRDAI product filing requirements</strong> in India mandate prior approval of rates and benefits; delays in approval create time-to-market risk and may leave the insurer with an uncompetitive product. <span class="tag-med">MEDIUM</span></li>
+          </ul></td>
+          <td class="cell-ci" data-col="ci"><ul>
+            <li><strong>Consumer Duty / TCF obligations</strong> require CI product governance to ensure the target market is appropriate and the product delivers fair value — regulatory risk of enforcement action if CI is mis-sold. <span class="tag-med">MEDIUM</span></li>
+            <li>Definition standardisation imposed by regulators (e.g. mandatory minimum conditions list) reduces product differentiation and may make existing products non-compliant.</li>
+          </ul></td>
+          <td class="cell-ip" data-col="ip"><ul>
+            <li><strong>State benefit change risk</strong>: changes in government sick pay or disability benefit levels alter the replacement ratio arithmetic and may reduce demand for IP or change which deferred period is most popular. <span class="tag-med">MEDIUM</span></li>
+            <li>Employment law changes affecting the definition of disability or reasonable adjustments may influence claim eligibility in ways the policy wording did not anticipate.</li>
+          </ul></td>
+          <td class="cell-ltci" data-col="ltci"><ul>
+            <li><strong>Means-testing changes</strong> in state care funding (e.g. raising the asset threshold at which the state pays) reduce the incentive to purchase private LTCI — a demand-side regulatory risk. <span class="tag-high">HIGH</span></li>
+            <li><strong>Care quality regulation</strong> raising minimum standards in care homes increases care costs, amplifying the severity risk on indemnity LTCI policies.</li>
+          </ul></td>
+          <td class="cell-grp" data-col="grp"><ul>
+            <li><strong>Employment legislation</strong> (e.g. obligations on employers regarding long-term absence, return-to-work adjustments) creates a changing context that affects how group IP benefits interact with employer obligations.</li>
+            <li>Data protection regulation (GDPR/equivalent) constrains the insurer's use of employee health data in group scheme administration and claims management. <span class="tag-med">MEDIUM</span></li>
+          </ul></td>
+        </tr>
+
+        <!-- ROW 11: External / Systemic Risk -->
+        <tr>
+          <td class="risk-cat">
+            <span class="cat-num">11</span>
+            <span class="cat-label">External / Systemic</span>
+            <span class="cat-sub">Economic; pandemic; medical advances; demographic</span>
+          </td>
+          <td class="cell-pmi" data-col="pmi"><ul>
+            <li><strong>Pandemic / catastrophe</strong>: a systemic health event (e.g. pandemic) generates correlated large-scale PMI claims across the entire portfolio simultaneously — standard diversification offers no protection. <span class="tag-high">HIGH</span></li>
+            <li><strong>Medical advance risk</strong>: new treatments that are highly effective but very expensive (e.g. gene therapies, targeted oncology) create claim cost inflation the insurer did not price for.</li>
+          </ul></td>
+          <td class="cell-ci" data-col="ci"><ul>
+            <li><strong>Medical advance risk</strong>: earlier detection of CI conditions (e.g. liquid biopsy for cancer) increases claim rates as more conditions are detected within the policy term without worsening actual morbidity. <span class="tag-high">HIGH</span></li>
+            <li>Longer survival post-diagnosis (medical improvement) increases the proportion of policyholders who survive 28 days and therefore claim — increases incidence without being a worsening health event.</li>
+          </ul></td>
+          <td class="cell-ip" data-col="ip"><ul>
+            <li><strong>Economic cycle</strong>: recessions increase IP incidence (more people become disabled or claim) and lengthen recovery rates (policyholders defer return to a weak labour market). <span class="tag-high">HIGH</span></li>
+            <li><strong>Demographic change</strong>: ageing workforce and increasing prevalence of chronic conditions (diabetes, musculoskeletal) shifts the risk profile of the in-force book without premium adjustment.</li>
+          </ul></td>
+          <td class="cell-ltci" data-col="ltci"><ul>
+            <li><strong>Longevity improvement</strong>: people living longer means more individuals survive to require care — a core systemic risk for LTCI. <span class="tag-high">HIGH</span></li>
+            <li><strong>Demographic cliff</strong>: a wave of Baby Boomers entering care age creates a surge in LTCI claims over a compressed time window, testing reserves and capital simultaneously.</li>
+            <li><strong>Medical advance</strong>: treatments that prevent or delay dementia onset would significantly reduce LTCI claims — a positive but uncertain scenario that makes it difficult to price conservatively.</li>
+          </ul></td>
+          <td class="cell-grp" data-col="grp"><ul>
+            <li><strong>Pandemic</strong> creates simultaneous elevated absence across the entire group portfolio — correlated claims that overwhelm both individual group stop-loss and aggregate XL reinsurance. <span class="tag-high">HIGH</span></li>
+            <li><strong>Industry concentration risk</strong>: a downturn in a specific sector (e.g. financial services, manufacturing) affects multiple group schemes in that industry simultaneously.</li>
+          </ul></td>
+        </tr>
+
+        <!-- ROW 12: Product-Specific / Unit-linked CI -->
+        <tr>
+          <td class="risk-cat">
+            <span class="cat-num">12</span>
+            <span class="cat-label">Product-Specific</span>
+            <span class="cat-sub">Unit-linked CI; reviewable premium mechanics</span>
+          </td>
+          <td class="cell-pmi" data-col="pmi"><ul>
+            <li><strong>Reviewable premium risk</strong>: inability to increase premiums sufficiently (due to competitive or regulatory pressure) means the insurer absorbs medical inflation in its margin.</li>
+            <li><strong>Network break-down risk</strong>: if key hospital network providers withdraw from the cashless network, PMI benefit value is impaired and lapses may increase.</li>
+          </ul></td>
+          <td class="cell-ci" data-col="ci"><ul>
+            <li><strong>Unit-linked CI specific risk</strong>: reviewable morbidity charge must be re-priced periodically; if the charge review triggers policyholder lapses (selective against insurer), the in-force book deteriorates. <span class="tag-high">HIGH</span></li>
+            <li><strong>Charge communication risk</strong>: increases in the morbidity charge must be communicated clearly; failure to communicate clearly leads to regulatory scrutiny and mis-selling complaints.</li>
+            <li>Investment performance (policyholder-borne) affects the policy's remaining fund value — if low fund value leads to policy lapse, the insurer loses future morbidity charge income. <em>[inferred: logical extension of unit-linked mechanics]</em></li>
+          </ul></td>
+          <td class="cell-ip" data-col="ip"><ul>
+            <li><strong>Reviewable premium IP</strong>: same anti-selective lapse risk as CI on premium review; additionally, occupation class changes that the policyholder has not reported create mis-rating risk on the in-force book. <span class="tag-med">MEDIUM</span></li>
+          </ul></td>
+          <td class="cell-ltci" data-col="ltci"><ul>
+            <li><strong>Immediate-needs annuity specific</strong>: the insurer must assess whether the claimant genuinely requires care and at what level — adverse selection at the point of purchase is high as only those already in care buy.</li>
+            <li><strong>Pre-funded LTCI</strong>: premium holiday provisions (where policyholders stop paying in difficult financial periods) create cash-flow strain and potentially increase lapse rates.</li>
+          </ul></td>
+          <td class="cell-grp" data-col="grp"><ul>
+            <li><strong>Free cover limit breaches</strong>: if a group's average benefit exceeds the FCL (due to salary inflation) without individual UW being updated, the insurer takes on unintended risk above the FCL. <span class="tag-med">MEDIUM</span></li>
+            <li><strong>Self-funded scheme administration risk</strong>: errors in claims payments or benefit calculations by the insurer acting as TPA create legal liability to the employer.</li>
+          </ul></td>
+        </tr>
+
+      </tbody>
+    </table>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       TAB 2: DETAIL / DEEP-DIVE
+  ══════════════════════════════════ -->
+  <div id="tab-detail" class="tab-panel">
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="Search risks, products, concepts…" />
+      <button onclick="doSearch()">Search</button>
+    </div>
+
+    <div class="risk-cards" id="riskCards">
+
+      <!-- CARD 1 -->
+      <div class="risk-card">
+        <div class="risk-card-header" onclick="toggleCard(this)">
+          <div class="risk-num">01</div>
+          <div class="risk-title-block">
+            <h3>Policy &amp; Other Data Risk</h3>
+            <div class="risk-sub">DATABASE INTEGRITY · ACCURACY · AVAILABILITY · LATENCY</div>
+          </div>
+          <div class="risk-expand-icon">▼</div>
+        </div>
+        <div class="risk-card-body">
+          <div class="explanation-box">
+            <p>The insurer's database is the foundation of every actuarial process — pricing, reserving, experience monitoring, and claims management all depend on accurate, complete, and timely policy and claims data. Data risk is systemic: it propagates errors into every downstream process.</p>
+            <p>Three dimensions of data risk: <strong>(1) Accuracy</strong> — individual policy records contain errors at inception or introduction (e.g. wrong age, wrong occupation class, exclusions not recorded). <strong>(2) Completeness</strong> — missing fields (e.g. no benefit in-force at claim date) prevent claims assessment. <strong>(3) Timeliness</strong> — late data updates mean the insurer's view of its in-force book lags reality, particularly critical for group scheme joiner/leaver lists.</p>
+          </div>
+          <div class="risk-body-grid">
+            <div>
+              <div class="risk-section-label">Sub-categories of data risk</div>
+              <ul class="sub-cat-list">
+                <li><strong>Inception data errors:</strong> wrong age, occupation class, sum assured recorded — mis-pricing, incorrect reserves, contested claims.</li>
+                <li><strong>Claims data integrity:</strong> incorrect condition codes, IBNR mis-estimation if claims reporting dates are wrong.</li>
+                <li><strong>Exclusion recording failures:</strong> UW exclusions not attached to policy record — claims paid that should have been declined.</li>
+                <li><strong>Group data feeds:</strong> HR/payroll system feed failures — members covered without being charged or charged without being covered.</li>
+                <li><strong>Experience monitoring accuracy:</strong> if data used for A vs E investigation is different from pricing data, the comparison is invalid.</li>
+              </ul>
+            </div>
+            <div>
+              <div class="risk-section-label">Product relevance — click to filter</div>
+              <div>
+                <span class="product-pill pill-pmi" onclick="toggleProductNote(this,'data-pmi')">PMI</span>
+                <span class="product-pill pill-ci"  onclick="toggleProductNote(this,'data-ci')">CI</span>
+                <span class="product-pill pill-ip"  onclick="toggleProductNote(this,'data-ip')">IP / PHI</span>
+                <span class="product-pill pill-ltci" onclick="toggleProductNote(this,'data-ltci')">LTCI</span>
+                <span class="product-pill pill-grp"  onclick="toggleProductNote(this,'data-grp')">Group</span>
+              </div>
+              <div id="data-pmi" class="product-note">
+                <div class="product-note-header" style="color:var(--pmi)">PMI</div>
+                Network provider data (procedure codes, episode data) is critical for claims cost trend analysis. Cashless settlement creates a lag between treatment and cost data receipt — IBNR must account for this.
+              </div>
+              <div id="data-ci" class="product-note">
+                <div class="product-note-header" style="color:var(--ci)">Critical Illness</div>
+                Condition classification accuracy at claim stage feeds experience monitoring. Underwriting exclusion records must be complete to defend contested claims.
+              </div>
+              <div id="data-ip" class="product-note">
+                <div class="product-note-header" style="color:var(--ip)">Income Protection</div>
+                Salary data must be kept current; occupation class changes must be reported by policyholders. Both feed into the replacement ratio and pricing basis.
+              </div>
+              <div id="data-ltci" class="product-note">
+                <div class="product-note-header" style="color:var(--ltci)">Long-Term Care</div>
+                Very long policy durations mean policyholder contact data becomes stale over decades. ADL assessment records must be stored with clinical precision.
+              </div>
+              <div id="data-grp" class="product-note">
+                <div class="product-note-header" style="color:var(--grp)">Group</div>
+                Real-time HR/payroll feeds are critical. Delayed joiner/leaver notifications create cover gaps or premium over-charge, and regulatory disputes with the employer.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARD 2 -->
+      <div class="risk-card">
+        <div class="risk-card-header" onclick="toggleCard(this)">
+          <div class="risk-num">02</div>
+          <div class="risk-title-block">
+            <h3>Claims Risk — Rates</h3>
+            <div class="risk-sub">MODEL RISK · PARAMETER RISK · RANDOM FLUCTUATION RISK</div>
+          </div>
+          <div class="risk-expand-icon">▼</div>
+        </div>
+        <div class="risk-card-body">
+          <div class="explanation-box">
+            <p>Three distinct risks attach to claims <em>rates</em> (incidence / inception / frequency):</p>
+            <p><strong>Model risk:</strong> the mathematical model used to project claim rates is structurally wrong (e.g. using a two-state model when a multi-state model is more appropriate for IP).</p>
+            <p><strong>Parameter risk:</strong> the model is correctly specified but the input assumptions (e.g. incidence rates by age and condition) are estimated incorrectly — the most common source of pricing inadequacy.</p>
+            <p><strong>Random fluctuation risk:</strong> even with the perfect model and parameters, actual claims in any given year deviate from expected due to statistical randomness — especially in small portfolios. This is the irreducible risk of insurance.</p>
+          </div>
+          <div class="risk-body-grid">
+            <div>
+              <div class="risk-section-label">The three claim rate risks — exam point</div>
+              <ul class="sub-cat-list">
+                <li><strong>Model risk:</strong> wrong functional form for how age, duration, and occupation interact in an IP pricing model; use of static tables when trends are non-stationary.</li>
+                <li><strong>Parameter risk:</strong> morbidity/incidence tables derived from inadequate or unrepresentative data; reliance on reinsurer tables that don't reflect the insurer's target market.</li>
+                <li><strong>Random fluctuation:</strong> in a small book (e.g. fewer than 1,000 policyholders), a single catastrophic year can be two standard deviations from the mean — standard reinsurance does not help unless aggregate stop-loss is in place.</li>
+                <li><strong>Correlation:</strong> in a pandemic or economic downturn, all three risks manifest simultaneously — the economic event both increases true incidence (parameter shift) and reveals model inadequacy.</li>
+              </ul>
+            </div>
+            <div>
+              <div class="risk-section-label">Product — click to highlight</div>
+              <div>
+                <span class="product-pill pill-pmi" onclick="toggleProductNote(this,'rates-pmi')">PMI</span>
+                <span class="product-pill pill-ci"  onclick="toggleProductNote(this,'rates-ci')">CI</span>
+                <span class="product-pill pill-ip"  onclick="toggleProductNote(this,'rates-ip')">IP / PHI</span>
+                <span class="product-pill pill-ltci" onclick="toggleProductNote(this,'rates-ltci')">LTCI</span>
+              </div>
+              <div id="rates-pmi" class="product-note">
+                <div class="product-note-header" style="color:var(--pmi)">PMI</div>
+                Frequency–severity model required. Model risk: non-linearities in high-cost, low-frequency claims. Parameter risk: utilisation rates by procedure category.
+              </div>
+              <div id="rates-ci" class="product-note">
+                <div class="product-note-header" style="color:var(--ci)">Critical Illness</div>
+                Multi-state model (alive well / CI claim / post-CI mortality). Parameter risk is highest for rare conditions and new extensions. Survival period creates a data lag in incidence measurement.
+              </div>
+              <div id="rates-ip" class="product-note">
+                <div class="product-note-header" style="color:var(--ip)">Income Protection</div>
+                Both incidence AND recovery rates are uncertain. Inception-annuity model: errors in recovery rates compound over the claim duration. Economic cycle creates systemic parameter shifts.
+              </div>
+              <div id="rates-ltci" class="product-note">
+                <div class="product-note-header" style="color:var(--ltci)">Long-Term Care</div>
+                All three risks are most severe in LTCI due to the very long duration and sparse data history. Morbidity compression vs expansion is fundamentally unresolved in the literature.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARD 3 -->
+      <div class="risk-card">
+        <div class="risk-card-header" onclick="toggleCard(this)">
+          <div class="risk-num">03</div>
+          <div class="risk-title-block">
+            <h3>Claims Risk — Amounts</h3>
+            <div class="risk-sub">SEVERITY · MEDICAL INFLATION · CARE COST · SALARY INFLATION</div>
+          </div>
+          <div class="risk-expand-icon">▼</div>
+        </div>
+        <div class="risk-card-body">
+          <div class="explanation-box">
+            <p>Distinct from claims rate risk, claims <em>amount</em> risk concerns the cost per claim once it arises. This is most acute in indemnity products (PMI, indemnity LTCI) where the insurer has no fixed cap on the per-claim outflow.</p>
+            <p>Fixed-benefit products (CI, defined IP benefit) transfer amount risk to the policyholder — the insurer's exposure per claim is contractually capped. However, severity risk re-enters in severity-tiered CI structures and salary-linked IP.</p>
+          </div>
+          <div class="risk-body-grid">
+            <div>
+              <div class="risk-section-label">Key dimensions of claim amount risk</div>
+              <ul class="sub-cat-list">
+                <li><strong>Medical inflation (PMI):</strong> structural driver above general CPI; new treatments, hospital cost structures, clinician fees.</li>
+                <li><strong>Care cost inflation (LTCI):</strong> labour-intensive sector; care worker wages, regulatory quality standards, property costs of residential homes.</li>
+                <li><strong>Salary inflation (IP):</strong> if benefit is earnings-linked, claim cost grows with wage inflation over a long claim duration.</li>
+                <li><strong>Severity-tier classification errors (CI):</strong> wrong clinical stage assigned at claim → wrong benefit percentage → reserving error.</li>
+                <li><strong>Treatment technology change:</strong> a new, highly effective but expensive treatment (gene therapy, precision oncology) creates a step-change in claim cost that pricing did not anticipate.</li>
+              </ul>
+            </div>
+            <div>
+              <div class="risk-section-label">Product — click to expand</div>
+              <div>
+                <span class="product-pill pill-pmi" onclick="toggleProductNote(this,'amt-pmi')">PMI</span>
+                <span class="product-pill pill-ci"  onclick="toggleProductNote(this,'amt-ci')">CI</span>
+                <span class="product-pill pill-ip"  onclick="toggleProductNote(this,'amt-ip')">IP</span>
+                <span class="product-pill pill-ltci" onclick="toggleProductNote(this,'amt-ltci')">LTCI</span>
+              </div>
+              <div id="amt-pmi" class="product-note">
+                <div class="product-note-header" style="color:var(--pmi)">PMI — HIGHEST amount risk</div>
+                Unlimited indemnity exposure. Medical inflation is the single biggest pricing risk. Reviewable premiums are the primary mitigation. Reinsurance caps the tail.
+              </div>
+              <div id="amt-ci" class="product-note">
+                <div class="product-note-header" style="color:var(--ci)">CI — Limited amount risk</div>
+                Fixed lump sum → no medical inflation exposure. Amount risk reintroduced by tiered severity structures. Main risk is frequency, not severity.
+              </div>
+              <div id="amt-ip" class="product-note">
+                <div class="product-note-header" style="color:var(--ip)">IP — Moderate amount risk</div>
+                Benefit = replacement ratio × salary × duration. All three components uncertain. Salary inflation assumption for long-duration claims is most underestimated risk.
+              </div>
+              <div id="amt-ltci" class="product-note">
+                <div class="product-note-header" style="color:var(--ltci)">LTCI — HIGHEST amount risk (indemnity)</div>
+                Care cost inflation over 10–20 year claim duration compounds enormously. Care setting mix also affects per-claim cost. Very limited hedging instruments available.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CARD 4 -->
+      <div class="risk-card">
+        <div class="risk-card-header" onclick="toggleCard(this)">
+          <div class="risk-num">04–12</div>
+          <div class="risk-title-block">
+            <h3>Further Risk Categories</h3>
+            <div class="risk-sub">SEE MATRIX TAB FOR FULL PRODUCT-BY-RISK ANALYSIS · ROWS 4–12</div>
+          </div>
+          <div class="risk-expand-icon">▼</div>
+        </div>
+        <div class="risk-card-body">
+          <div class="explanation-box">
+            <p>Rows 4–12 of the Matrix tab cover: <strong>Discontinuance/Lapse · Expense · Investment/ALM · Reserving · Reinsurance · Moral Hazard/Fraud · Regulatory/Legal · External/Systemic · Product-Specific risks</strong>.</p>
+            <p>For exam purposes, the most commonly tested risk categories are: <strong>Claims Rates (model/parameter/random)</strong>, <strong>Medical Inflation</strong>, <strong>Selective Lapsing</strong>, <strong>Moral Hazard</strong>, <strong>Regulatory/State benefit changes</strong>, and <strong>External/Systemic (pandemic, medical advance)</strong>.</p>
+            <p>When constructing an exam answer on risks, always apply the <strong>Dimension 7 sub-structure</strong> shown in the Skeleton callout: (1) Insurer financial · (2) Operational · (3) Policyholder behaviour · (4) External.</p>
+          </div>
+          <div class="risk-section-label" style="margin-top:10px">Quick-reference: which products face which key risks most acutely</div>
+          <table style="width:100%; font-size:11.5px; border-collapse:collapse; margin-top:8px;">
+            <thead>
+              <tr style="background:var(--ink); color:#fff;">
+                <th style="padding:7px 10px; text-align:left; font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:0.06em;">Risk</th>
+                <th style="padding:7px 10px; font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:0.06em;">PMI</th>
+                <th style="padding:7px 10px; font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:0.06em;">CI</th>
+                <th style="padding:7px 10px; font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:0.06em;">IP</th>
+                <th style="padding:7px 10px; font-family:'JetBrains Mono',monospace; font-size:9px; letter-spacing:0.06em;">LTCI</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr style="border-bottom:1px solid var(--rule);">
+                <td style="padding:6px 10px; font-weight:700;">Medical/care inflation</td>
+                <td style="padding:6px 10px; text-align:center;"><span class="tag-high">HIGH</span></td>
+                <td style="padding:6px 10px; text-align:center;"><span class="tag-low">LOW</span></td>
+                <td style="padding:6px 10px; text-align:center;"><span class="tag-low">LOW</span></td>
+                <td style="padding:6px 10px; text-align:center;"><span class="tag-high">HIGH</span></td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--rule);">
+                <td style="padding:6px 10px; font-weight:700;">Selective lapsing</td>
+                <td style="padding:6px 10px; text-align:center;"><span class="tag-high">HIGH</span></td>
+                <td style="padding:6px 10px; text-align:center;"><span class="tag-high">HIGH</span></td>
+                <td style="padding:6px 10px; text-align:center;"><span class="tag-med">MED</span></td>
+                <td style="padding:6px 10px; text-align:center;"><span class="tag-high">HIGH</span></td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--rule);">
+                <td style="padding:6px 10px; font-weight:700;">Moral hazard</td>
+                <td style="padding:6px 10px; text-align:center;"><span class="tag-high">HIGH</span></td>
+                <td style="padding:6px 10px; text-align:center;"><span class="tag-low">LOW</span></td>
+                <td style="padding:6px 10px; text-align:center;"><span class="tag-high">HIGH</span></td>
+                <td style="padding:6px 10px; text-align:center;"><span class="tag-med">MED</span></td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--rule);">
+                <td style="padding:6px 10px; font-weight:700;">ALM / investment</td>
+                <td style="padding:6px 10px; text-align:center;"><span class="tag-low">LOW</span></td>
+                <td style="padding:6px 10px; text-align:center;"><span class="tag-low">LOW</span></td>
+                <td style="padding:6px 10px; text-align:center;"><span class="tag-med">MED</span></td>
+                <td style="padding:6px 10px; text-align:center;"><span class="tag-high">HIGH</span></td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--rule);">
+                <td style="padding:6px 10px; font-weight:700;">Pandemic / systemic</td>
+                <td style="padding:6px 10px; text-align:center;"><span class="tag-high">HIGH</span></td>
+                <td style="padding:6px 10px; text-align:center;"><span class="tag-med">MED</span></td>
+                <td style="padding:6px 10px; text-align:center;"><span class="tag-high">HIGH</span></td>
+                <td style="padding:6px 10px; text-align:center;"><span class="tag-med">MED</span></td>
+              </tr>
+              <tr>
+                <td style="padding:6px 10px; font-weight:700;">Longevity</td>
+                <td style="padding:6px 10px; text-align:center;"><span class="tag-low">LOW</span></td>
+                <td style="padding:6px 10px; text-align:center;"><span class="tag-low">LOW</span></td>
+                <td style="padding:6px 10px; text-align:center;"><span class="tag-low">LOW</span></td>
+                <td style="padding:6px 10px; text-align:center;"><span class="tag-high">HIGH</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════
+       TAB 3: MNEMONICS
+  ══════════════════════════════════ -->
+  <div id="tab-mnemonics" class="tab-panel">
+    <div class="mnemonics-note">
+      <strong>Source rule:</strong> All mnemonics on this tab are fetched exclusively from <code>Memory_Aids.json</code> (frozen 2026-04-05, maintainer: Girish Rao). No mnemonic is defined inline in this HTML. Only aids relevant to Risks, or to the products most examined in CH23–25 context, are shown.
+    </div>
+    <div id="mnemonicsContainer">
+      <div class="mnemonics-loading">Loading mnemonics from Memory_Aids.json…</div>
+    </div>
+  </div>
+
+</main>
+
+<script>
+/* ═══════════ TAB SWITCHING ═══════════ */
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+    if (btn.dataset.tab === 'mnemonics' && !window._mnemonicsLoaded) loadMnemonics();
+  });
+});
+
+/* ═══════════ PRODUCT FILTER (MATRIX TAB) ═══════════ */
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const prod = btn.dataset.product;
+    const table = document.getElementById('riskTable');
+    // show/hide columns
+    const cols = ['pmi','ci','ip','ltci','grp'];
+    cols.forEach(c => {
+      const cells = table.querySelectorAll('[data-col="' + c + '"]');
+      cells.forEach(cell => {
+        cell.style.display = (prod === 'all' || prod === c) ? '' : 'none';
+      });
+    });
+  });
+});
+
+/* ═══════════ CARD TOGGLE (DETAIL TAB) ═══════════ */
+function toggleCard(header) {
+  const body = header.nextElementSibling;
+  const icon = header.querySelector('.risk-expand-icon');
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  header.classList.toggle('open', !isOpen);
+  icon.textContent = isOpen ? '▼' : '▲';
+}
+
+/* ═══════════ PRODUCT NOTE TOGGLE ═══════════ */
+function toggleProductNote(pill, noteId) {
+  const note = document.getElementById(noteId);
+  const isVisible = note.classList.contains('visible');
+  // hide all notes in same card
+  const card = pill.closest('.risk-card-body');
+  card.querySelectorAll('.product-note').forEach(n => n.classList.remove('visible'));
+  card.querySelectorAll('.product-pill').forEach(p => p.style.fontWeight = '700');
+  if (!isVisible) {
+    note.classList.add('visible');
+    pill.style.outline = '2px solid currentColor';
+  }
+}
+
+/* ═══════════ SEARCH ═══════════ */
+function doSearch() {
+  const q = document.getElementById('searchInput').value.trim().toLowerCase();
+  if (!q) return;
+  // switch to matrix tab and highlight
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelector('[data-tab="matrix"]').classList.add('active');
+  document.getElementById('tab-matrix').classList.add('active');
+
+  const cells = document.querySelectorAll('#riskTable td');
+  cells.forEach(cell => {
+    cell.style.outline = '';
+    cell.style.backgroundColor = '';
+  });
+  let found = 0;
+  cells.forEach(cell => {
+    if (cell.textContent.toLowerCase().includes(q)) {
+      cell.style.outline = '2px solid var(--accent)';
+      cell.style.backgroundColor = '#fff8f0';
+      found++;
+    }
+  });
+  if (!found) alert('No matches found for "' + q + '" in the matrix. Try a different term.');
+}
+document.getElementById('searchInput').addEventListener('keypress', e => {
+  if (e.key === 'Enter') doSearch();
+});
+
+/* ═══════════ MNEMONICS LOADER ═══════════ */
+window._mnemonicsLoaded = false;
+
+async function loadMnemonics() {
+  window._mnemonicsLoaded = true;
+  const container = document.getElementById('mnemonicsContainer');
+
+  // Relevant aid IDs for risks context: LTCI-01 (GLING), CI-04 (SCARED), CI-05 (SPEC FC),
+  // IP-02 (MORPH), PMI-01 (CHANGE mapped to PMI cost controls), universal skeleton dim 7,
+  // GEN-01, GEN-02, PRICING-03, EXP-01
+  const RELEVANT_IDS = [
+    'LTCI-01','CI-04','CI-05','IP-02','IP-04','PMI-03','GEN-02','PRICING-03','EXP-01'
+  ];
+
+  try {
+    const resp = await fetch('Memory_Aids.json');
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    const data = await resp.json();
+
+    // Collect all aids
+    const allAids = [];
+    const sections = [...Object.values(data.topic_aids || {}), ...Object.values(data.product_aids || {})];
+    sections.forEach(sec => {
+      (sec.aids || []).forEach(aid => {
+        if (RELEVANT_IDS.includes(aid.id)) allAids.push(aid);
+      });
+    });
+
+    // Also add the RISKS dimension from universal_skeleton as a special card
+    const risksDim = (data.universal_skeleton?.dimensions || []).find(d => d.code === 'RISKS');
+
+    // Render
+    let html = '';
+
+    // Skeleton RISKS dimension card
+    if (risksDim) {
+      html += `
+      <div class="mnemonic-card" style="border-left:4px solid var(--accent)">
+        <div class="mnemonic-header">
+          <span class="mnemonic-id">SKELETON · DIM 7</span>
+          <span class="mnemonic-title">${risksDim.label}</span>
+        </div>
+        <div style="font-size:11.5px; color:var(--ink-mid); margin-bottom:10px; font-style:italic;">${risksDim.prompt}</div>
+        <div class="mnemonic-rows">
+          ${risksDim.sub.map(s => `
+          <div class="mnemonic-row">
+            <div style="flex:1; font-size:12px; padding:2px 0;">${s}</div>
+          </div>`).join('')}
+        </div>
+      </div>`;
+    }
+
+    // Sort by RELEVANT_IDS order
+    allAids.sort((a, b) => RELEVANT_IDS.indexOf(a.id) - RELEVANT_IDS.indexOf(b.id));
+
+    allAids.forEach(aid => {
+      const letters = aid.items.map(item => `
+        <div class="mnemonic-row">
+          <div class="mnemonic-letter">${item.letter}</div>
+          <div>
+            <div class="mnemonic-word">${item.word}</div>
+            <div class="mnemonic-detail">${item.detail}</div>
+          </div>
+        </div>`).join('');
+
+      html += `
+      <div class="mnemonic-card">
+        <div class="mnemonic-header">
+          <span class="mnemonic-id">${aid.id}</span>
+          <span class="mnemonic-title">${aid.title}</span>
+        </div>
+        <div class="mnemonic-code">${aid.code}</div>
+        <div class="mnemonic-rows">${letters}</div>
+      </div>`;
+    });
+
+    container.innerHTML = html;
+
+  } catch (err) {
+    container.innerHTML = `<div class="mnemonics-loading" style="color:#c00;">
+      Could not load Memory_Aids.json. Ensure the file is in the same folder as this HTML.<br>
+      <small>Error: ${err.message}</small>
+    </div>`;
+  }
+}
+</script>
+
+</body>
+</html>
