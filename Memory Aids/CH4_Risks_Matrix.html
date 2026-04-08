@@ -1,0 +1,1211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Risks Matrix · SA1ity Check</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap');
+
+:root {
+  --bg: #0d0f14;
+  --surface: #151923;
+  --surface2: #1c2230;
+  --surface3: #242b3d;
+  --border: #2a324b;
+  --border2: #363f5f;
+  --text: #e2e4ed;
+  --text2: #949ebf;
+  --text3: #565f80;
+  --accent: #8b5cf6;
+  --accentbg: #221a3a;
+  --red: #e74c3c;
+  --redbg: #2a0f0f;
+  --amber: #f1c40f;
+  --amberbg: #2a1f00;
+  --green: #2ecc71;
+  --greenbg: #0a2a1a;
+  --blue: #3b82f6;
+  --bluebg: #0a1628;
+  --cyan: #06b6d4;
+  --cyanbg: #051a20;
+  --orange: #f97316;
+  --orangebg: #2a1000;
+  --pink: #ec4899;
+  --pinkbg: #2a0a18;
+  --teal: #14b8a6;
+  --tealbg: #051a18;
+  --indigo: #6366f1;
+  --indigobg: #0f1030;
+  --radius: 6px;
+  --radius2: 10px;
+  --mono: 'IBM Plex Mono', monospace;
+  --sans: 'IBM Plex Sans', sans-serif;
+}
+
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh;}
+
+/* TOPBAR */
+.topbar{position:fixed;top:0;left:0;width:100%;background:var(--surface);border-bottom:1px solid var(--border);padding:10px 20px;display:flex;align-items:center;gap:16px;z-index:200;}
+.logo{font-family:var(--mono);font-weight:600;font-size:15px;color:var(--accent);letter-spacing:.05em;}
+.logo span{color:var(--text3);}
+.tagline{font-size:12px;color:var(--text3);font-family:var(--mono);}
+.back-btn{margin-left:auto;font-family:var(--mono);font-size:11px;font-weight:600;padding:4px 12px;border-radius:4px;cursor:pointer;background:var(--surface2);border:1px solid var(--border);color:var(--text2);transition:all .2s;text-decoration:none;}
+.back-btn:hover{background:var(--surface3);color:var(--text);}
+
+/* TABS */
+.tab-bar{display:flex;gap:0;border-bottom:1px solid var(--border);background:var(--surface);padding:0 24px;position:fixed;top:45px;left:0;width:100%;z-index:199;}
+.tab{font-family:var(--mono);font-size:12px;font-weight:600;padding:10px 18px;cursor:pointer;color:var(--text3);border-bottom:2px solid transparent;transition:all .2s;background:none;border-top:none;border-left:none;border-right:none;}
+.tab:hover{color:var(--text2);}
+.tab.active{color:var(--accent);border-bottom-color:var(--accent);}
+
+/* MAIN CONTENT */
+.main{padding:108px 24px 48px;max-width:1600px;margin:0 auto;}
+
+/* PAGE HEADER */
+.page-header{margin-bottom:20px;}
+.page-title{font-family:var(--mono);font-size:18px;font-weight:700;color:var(--accent);letter-spacing:.04em;margin-bottom:6px;}
+.page-sub{font-size:12px;color:var(--text2);line-height:1.6;max-width:900px;}
+.source-tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;}
+.src-tag{font-family:var(--mono);font-size:10px;padding:2px 8px;border-radius:3px;background:var(--surface2);border:1px solid var(--border);color:var(--text3);}
+
+/* FILTER BAR */
+.filter-bar{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:20px;align-items:center;}
+.filter-label{font-family:var(--mono);font-size:11px;color:var(--text3);}
+.filter-btn{font-family:var(--mono);font-size:11px;font-weight:600;padding:4px 12px;border-radius:4px;cursor:pointer;background:var(--surface2);border:1px solid var(--border);color:var(--text2);transition:all .2s;}
+.filter-btn:hover{background:var(--surface3);color:var(--text);}
+.filter-btn.active{background:var(--accentbg);color:var(--accent);border-color:var(--accent);}
+.search-box{font-family:var(--mono);font-size:12px;padding:5px 12px;border-radius:4px;background:var(--surface2);border:1px solid var(--border);color:var(--text);outline:none;width:200px;margin-left:auto;}
+.search-box:focus{border-color:var(--border2);}
+.search-box::placeholder{color:var(--text3);}
+
+/* TABLE WRAPPER */
+.table-wrapper{overflow-x:auto;border-radius:var(--radius2);border:1px solid var(--border);}
+
+table{border-collapse:collapse;width:100%;min-width:1100px;font-size:12.5px;}
+thead tr{background:var(--surface2);}
+th{font-family:var(--mono);font-size:11px;font-weight:600;color:var(--text2);padding:10px 12px;text-align:left;border-bottom:1px solid var(--border);border-right:1px solid var(--border);white-space:nowrap;position:sticky;top:0;background:var(--surface2);}
+th:last-child{border-right:none;}
+
+/* Column width hints */
+th.col-risk{min-width:160px;max-width:180px;}
+th.col-expl{min-width:260px;max-width:340px;}
+th.col-prod{min-width:55px;max-width:70px;text-align:center;}
+th.col-var{min-width:200px;max-width:260px;}
+
+/* Category header rows */
+tr.cat-header td{background:var(--surface3);font-family:var(--mono);font-size:11px;font-weight:700;color:var(--text2);padding:8px 12px;letter-spacing:.06em;text-transform:uppercase;border-bottom:1px solid var(--border);}
+
+/* Data rows */
+tr.risk-row{border-bottom:1px solid var(--border);transition:background .15s;cursor:pointer;}
+tr.risk-row:hover{background:var(--surface2);}
+tr.risk-row.expanded{background:var(--surface2);}
+tr.risk-row.hidden{display:none;}
+
+td{padding:10px 12px;vertical-align:top;border-right:1px solid var(--border);line-height:1.55;}
+td:last-child{border-right:none;}
+
+/* Risk name cell */
+.risk-name{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--text);line-height:1.4;}
+.risk-acronym{display:inline-block;margin-top:4px;font-family:var(--mono);font-size:10px;padding:2px 6px;border-radius:3px;background:var(--accentbg);color:var(--accent);border:1px solid var(--accentbg);}
+
+/* Explanation cell */
+.expl-short{font-size:12px;color:var(--text2);line-height:1.55;}
+.expl-full{display:none;margin-top:10px;padding-top:10px;border-top:1px solid var(--border);}
+.expl-full.visible{display:block;}
+.bullet-list{list-style:none;padding:0;}
+.bullet-list li{font-size:11.5px;color:var(--text2);padding:3px 0 3px 14px;position:relative;line-height:1.5;}
+.bullet-list li::before{content:'·';position:absolute;left:4px;color:var(--accent);}
+.expand-hint{font-family:var(--mono);font-size:10px;color:var(--text3);margin-top:6px;display:flex;align-items:center;gap:4px;}
+.expand-hint svg{transition:transform .2s;}
+tr.expanded .expand-hint svg{transform:rotate(180deg);}
+
+/* Product tick cells */
+td.prod-cell{text-align:center;vertical-align:middle;}
+.tick{color:var(--green);font-size:14px;}
+.dash{color:var(--text3);font-size:14px;}
+.partial{color:var(--amber);font-size:11px;font-family:var(--mono);}
+
+/* Variant cells */
+.variant-cell{font-size:11.5px;color:var(--text2);line-height:1.55;}
+.variant-empty{color:var(--text3);font-size:11px;font-family:var(--mono);}
+.exam-badge{display:inline-block;font-family:var(--mono);font-size:9px;padding:1px 5px;border-radius:2px;background:var(--surface3);border:1px solid var(--border);color:var(--text3);margin-bottom:4px;margin-right:3px;}
+.delta-list{list-style:none;padding:0;margin-top:4px;}
+.delta-list li{font-size:11.5px;color:var(--text2);padding:2px 0 2px 14px;position:relative;}
+.delta-list li::before{content:'△';position:absolute;left:2px;color:var(--amber);font-size:9px;top:4px;}
+
+/* Variant column header label */
+.var-header-label{font-size:10px;color:var(--accent);font-family:var(--mono);}
+.var-sub{font-size:9px;color:var(--text3);font-weight:400;display:block;margin-top:2px;}
+
+/* Section panel (expanded detail) */
+tr.detail-row td{padding:0;background:var(--surface2);}
+.detail-panel{padding:16px 20px;border-top:1px solid var(--border2);}
+.detail-section{margin-bottom:12px;}
+.detail-section-title{font-family:var(--mono);font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px;}
+
+/* MNEMONICS TAB */
+#mnemonicPanel{display:none;padding:0 0 40px;}
+#mnemonicPanel.visible{display:block;}
+.mnem-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px;margin-top:20px;}
+.mnem-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius2);padding:16px;transition:border-color .2s;}
+.mnem-card:hover{border-color:var(--border2);}
+.mnem-code{font-family:var(--mono);font-size:22px;font-weight:700;color:var(--accent);letter-spacing:.06em;margin-bottom:6px;}
+.mnem-title{font-size:13px;color:var(--text);font-weight:600;margin-bottom:10px;}
+.mnem-rows{list-style:none;}
+.mnem-rows li{display:grid;grid-template-columns:22px 1fr;gap:8px;padding:5px 0;border-bottom:1px solid var(--border);}
+.mnem-rows li:last-child{border-bottom:none;}
+.mnem-letter{font-family:var(--mono);font-size:14px;font-weight:700;color:var(--accent);}
+.mnem-word{font-size:12px;color:var(--text2);font-weight:600;}
+.mnem-detail{font-size:11px;color:var(--text3);margin-top:1px;line-height:1.4;}
+
+/* Loading / error states */
+.status-msg{font-family:var(--mono);font-size:12px;color:var(--text3);padding:40px 0;text-align:center;}
+
+/* Scrollbar */
+::-webkit-scrollbar{width:6px;height:6px;}
+::-webkit-scrollbar-track{background:var(--surface);}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px;}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="logo">Risks Matrix <span>//</span> SA1ity Check</div>
+  <div class="tagline">SP1 Ch23·24·25 &amp; SA1 Ch4 · Exam Variants</div>
+  <a class="back-btn" href="SA1ity_Check.html">← Back to Main</a>
+</div>
+
+<div class="tab-bar">
+  <button class="tab active" onclick="switchTab('matrix',this)">Matrix</button>
+  <button class="tab" onclick="switchTab('mnemonics',this)">Mnemonics</button>
+</div>
+
+<div class="main">
+  <!-- MATRIX TAB -->
+  <div id="matrixPanel">
+    <div class="page-header">
+      <div class="page-title">Nature of Risks — Product Matrix</div>
+      <div class="page-sub">Each row is a risk category from SP1 Chapters 23–24, with higher-order considerations from SA1 Ch4. Tick columns show applicability across standard products. Variant columns show <em>only the deltas</em> — additional or modified risk considerations for that specific product variant as it has appeared in exam papers.</div>
+      <div class="source-tags">
+        <span class="src-tag">SP1 Ch23: Nature of Risks (1)</span>
+        <span class="src-tag">SP1 Ch24: Nature of Risks (2)</span>
+        <span class="src-tag">SA1 Ch4.3: Higher-Order Risk Considerations</span>
+        <span class="src-tag">IFoA 2018–2025</span>
+        <span class="src-tag">IAI 2016–2025</span>
+      </div>
+    </div>
+
+    <div class="filter-bar">
+      <span class="filter-label">Show:</span>
+      <button class="filter-btn active" onclick="filterRows('all',this)">All</button>
+      <button class="filter-btn" style="color:var(--red)" onclick="filterRows('claims',this)">Claims</button>
+      <button class="filter-btn" style="color:var(--blue)" onclick="filterRows('invest',this)">Investment</button>
+      <button class="filter-btn" style="color:var(--amber)" onclick="filterRows('expense',this)">Expense</button>
+      <button class="filter-btn" style="color:var(--green)" onclick="filterRows('persist',this)">Persistency</button>
+      <button class="filter-btn" style="color:var(--orange)" onclick="filterRows('operational',this)">Operational</button>
+      <button class="filter-btn" style="color:var(--cyan)" onclick="filterRows('product',this)">Product-Specific</button>
+      <button class="filter-btn" style="color:var(--accent)" onclick="filterRows('higher',this)">Higher-Order</button>
+      <input class="search-box" id="searchBox" placeholder="Search risks…" oninput="searchRows(this.value)"/>
+    </div>
+
+    <div class="table-wrapper">
+      <table id="riskTable">
+        <thead>
+          <tr>
+            <th class="col-risk">Risk</th>
+            <th class="col-expl">Explanation</th>
+            <th class="col-prod" title="Income Protection">IP</th>
+            <th class="col-prod" title="Critical Illness">CI</th>
+            <th class="col-prod" title="Long-Term Care Insurance">LTCI</th>
+            <th class="col-prod" title="Private Medical Insurance">PMI</th>
+            <th class="col-var"><span class="var-header-label">Unit-linked CI</span><span class="var-sub">IFoA S'18·IAI S'18,D'22</span></th>
+            <th class="col-var"><span class="var-header-label">Group CI</span><span class="var-sub">IFoA A'22·IAI S'17</span></th>
+            <th class="col-var"><span class="var-header-label">Group IP</span><span class="var-sub">IFoA S'20,S'23,S'24·IAI M'21</span></th>
+            <th class="col-var"><span class="var-header-label">Group PMI</span><span class="var-sub">IFoA A'20,A'21,S'21·IAI M'23</span></th>
+            <th class="col-var"><span class="var-header-label">Pre-funded LTCI</span><span class="var-sub">IFoA S'19,A'21,S'22·IAI N'19</span></th>
+            <th class="col-var"><span class="var-header-label">Immediate Needs Annuity</span><span class="var-sub">IFoA S'18 Q3·IAI N'19</span></th>
+          </tr>
+        </thead>
+        <tbody id="riskBody">
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- MNEMONICS TAB -->
+  <div id="mnemonicPanel">
+    <div class="page-header">
+      <div class="page-title">Memory Aids</div>
+      <div class="page-sub">Mnemonics fetched from <code style="color:var(--accent);font-size:11px">data/Memory_Aids.json</code>. All content is source-data only.</div>
+    </div>
+    <div id="mnemonicContent"><div class="status-msg">Loading memory aids…</div></div>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// DATA — sourced directly from SP1 Ch23, Ch24, SA1 Ch4 JSON
+// and exam sitting JSONs. Explanations are faithful to source
+// bullet text. Variant deltas are from exam model answers only.
+// ============================================================
+
+const RISKS = [
+
+  // ───────────────────────────────────────────────────────────
+  // CATEGORY: Policy & Data
+  // ───────────────────────────────────────────────────────────
+  { _cat: 'Policy & Data', _catId: 'data' },
+
+  {
+    id: 'r01',
+    cat: 'data',
+    name: 'Policy & Other Data',
+    acronym: 'POD',
+    short: 'Insurer\'s policy database may be inaccurate, inadequate, or incomplete — leading to incorrect valuations. Distinct from claims data quality issues.',
+    bullets: [
+      'Policy database records: age at entry, date of entry, policy term, date of diagnosis. High-quality data is vital for good management.',
+      'Used for regular valuations of liabilities. Actuary typically does not control this data directly — risk of incorrectness, potentially declaring solvency when insolvent, or vice versa.',
+      'Two distinct aspects: (i) Data risk — underlying policy data may itself be inaccurate; (ii) Systems risk — the IT systems used to store/process the data.',
+      'Other data includes asset holdings and external data (population statistics, industry tables). Internal data may be inadequate due to missing records, inaccuracy, or insufficient volume for credibility.',
+      'External data risk: population data unrepresentative; overseas data may not translate; even pooled insurer data may not apply to own portfolio.',
+      'For LTCI, data typically split by: age, gender, smoker status, type (pre-funded vs immediate needs), size of benefit, distribution channel, location, underwriting status.'
+    ],
+    ip: true, ci: true, ltci: true, pmi: true,
+    variants: {
+      'ul_ci': { badges: ['IFoA S\'18 Q1(ii)'], deltas: [
+        'Unit pricing errors in the investment fund create an additional layer of data/systems risk beyond standard policy records.',
+        'Fund allocation data must be accurate — errors in allocating premiums to unit funds affect both fund value and risk charge calculations.',
+        'Data on policyholder fund choice needed to model income (management charges) from each fund type.'
+      ]},
+      'grp_ci': { badges: ['IFoA A\'22 Q1'], deltas: [
+        'Group-level data aggregation risk: scheme-level experience may mask deteriorating sub-groups (employer, industry sector).',
+        'Redundancy-driven lapses alter the data picture mid-year; need to track reasons for exit to avoid mis-modelling future experience.'
+      ]},
+      'grp_ip': { badges: ['IFoA S\'20 Q1(ii)'], deltas: [
+        'Large amounts of personal health data collected via wearables/technology — heightened data security and cyber risk.',
+        'Data governance requirements increase; staff training needed; risk of cyber-attack causing lost/corrupted data or reputational damage.',
+        'Wearable device data must be validated before use in underwriting or claims; data accuracy of third-party devices may be uncertain.'
+      ]},
+      'grp_pmi': { badges: ['IFoA A\'20,A\'21'], deltas: [
+        'Group-level data: employer size and composition can shift significantly; mid-year M&A by employer changes risk profile.',
+        'Capitation/network provider data must be separately maintained; claims data from third-party networks may arrive late or incomplete.'
+      ]},
+      'pf_ltci': { badges: ['IFoA S\'19 Q1', 'IAI N\'19 Q1'], deltas: [
+        'Very scarce LTCI-specific data; insurer may be first-mover with no own-experience at all.',
+        'US data may be available but requires adjustment for UK/Indian conditions, benefit types, and healthcare systems.',
+        'Data split needed by: disability type, severity level, care setting (home vs care home), duration in claim — more dimensions than IP or CI.'
+      ]},
+      'ina': { badges: ['IAI N\'19 Q1ii'], deltas: [
+        'Immediate-needs policyholders are already in claim at policy inception — no pre-claim data history; all uncertainty focuses on duration and severity going forward.',
+        'Mortality rates post-disability are critical and distinct from healthy-life mortality tables.'
+      ]}
+    }
+  },
+
+  // ───────────────────────────────────────────────────────────
+  // CATEGORY: Claims
+  // ───────────────────────────────────────────────────────────
+  { _cat: 'Claims', _catId: 'claims' },
+
+  {
+    id: 'r02',
+    cat: 'claims',
+    name: 'Claims — Rates',
+    acronym: 'CR',
+    short: 'Three risk types attach to claim rate assumptions: model risk, parameter risk, and random fluctuations. Morbidity/mortality worse than assumed is the primary concern.',
+    bullets: [
+      'Model risk: chosen probability distribution for morbidity/mortality is wrong.',
+      'Parameter risk: distribution is appropriate but parameters estimated incorrectly.',
+      'Random fluctuations risk: even if model and parameters are correct, actual outturn deviates from expected.',
+      'These three are mutually non-exclusive; relative importance is not always clear-cut.',
+      'Main risk: mortality or morbidity turns out more adverse than assumed. Likelihood depends on product type, volume, and homogeneity of portfolio.',
+      'IP uses a multi-state model — inception rates and recovery rates are both uncertain. "Unfit to work" is less well-defined than "dead", making IP experience inherently harder to predict.'
+    ],
+    ip: true, ci: true, ltci: true, pmi: true,
+    variants: {
+      'ul_ci': { badges: ['IFoA S\'18 Q1(ii)'], deltas: [
+        'Morbidity risk is non-reviewable under the standard fixed-premium design — premium cannot be increased if CI rates deteriorate, unlike reviewable products.',
+        'Anti-selection risk at exercise of the Guaranteed Insurability Option (GIO) on 10th/20th anniversary: poor-health lives more likely to increase sum assured.',
+        'Medical advances (earlier screening, national screening programmes) may increase diagnosed CI rates without increasing true incidence.'
+      ]},
+      'grp_ci': { badges: ['IFoA A\'22 Q1(v)'], deltas: [
+        'Redundancy causes selective exits: younger/healthier employees more likely to be kept on, leaving a riskier residual pool.',
+        'Multi-morbidity, ethnicity, socioeconomic mix may shift within a group following economic downturn — need to update business mix assumptions.',
+        'Economic downturn may also increase stress-related CI claims (e.g. heart disease, stroke) beyond pricing assumptions.'
+      ]},
+      'grp_ip': { badges: ['IFoA S\'20 Q1(iii)', 'IAI M\'21'], deltas: [
+        'Group IP claim inception rates are correlated with employer industry and economic cycle — a systemic recession increases claims across the entire portfolio simultaneously.',
+        'Recovery rates may be more difficult to predict at group level; employer rehabilitation involvement affects outcomes.',
+        '"Unable to perform own occupation" definition is employer-linked; definition may vary across group schemes.'
+      ]},
+      'grp_pmi': { badges: ['IFoA A\'21,S\'21'], deltas: [
+        'Claim frequency driven by GP referral pattern (outside insurer control) applies at group level; employer benefit design (e.g. excess per claim) modifies the trigger.',
+        'Utilisation rates for group schemes may differ from individual PMI — employer-sponsored cover may drive higher claim consciousness.'
+      ]},
+      'pf_ltci': { badges: ['IFoA S\'19 Q1(iv)'], deltas: [
+        'Transition probabilities in multi-state model (healthy → own-home care → residential care → dead) are poorly evidenced; model risk is therefore substantially higher than CI or IP.',
+        'Longevity risk is compounding: claims last longer than expected if mortality of claimants improves.',
+        'High proportion of LTCI policyholders eventually claim — unlike CI or IP where many never claim — leading to greater aggregate risk.'
+      ]},
+      'ina': { badges: ['IAI N\'19 Q1ii'], deltas: [
+        'No inception risk — policyholder is already in a care state at policy issue.',
+        'Key uncertainty is disability duration (recovery is rare or zero for severe long-term care needs) and mortality whilst in claim.',
+        'Adverse selection at point of purchase is severe: only those who genuinely need immediate care will buy — selection is 100% adverse.'
+      ]}
+    }
+  },
+
+  {
+    id: 'r03',
+    cat: 'claims',
+    name: 'Claims — Amounts',
+    acronym: 'CA',
+    short: 'Uncertainty in average claim amounts per event. Specific risks: PMI (procedure charges outside insurer control), CI (earlier screening), LTCI (care costs).',
+    bullets: [
+      'Under PMI, estimation of future average claim amounts per procedure is uncertain because: consultants/anaesthetists set their own charges independently; different procedures have different costs; medical technology changes the mix of procedures.',
+      'Claim costs also vary with: different medical procedures being adopted; healthcare inflation; changes in insured mix.',
+      'Earlier screening / diagnosis risk (most relevant to CI): if medical technology advances diagnostically, more early-stage conditions are diagnosed. Insurers may face claims for conditions that would previously have gone undetected. If policy wording covers early-stage diagnosis, this accelerates claims.'
+    ],
+    ip: false, ci: true, ltci: true, pmi: true,
+    variants: {
+      'ul_ci': { badges: ['IFoA S\'18 Q1(ii)'], deltas: [
+        'Sum assured is fixed at outset (not inflation-linked), so amounts risk is primarily on the insurance side. However, if policyholders exercise the GIO, the sum assured increases, amplifying amounts risk.',
+        'Medical advances that reclassify conditions as CI (e.g. less severe strokes, certain cancers at earlier stages) expand the claims base beyond original pricing.'
+      ]},
+      'grp_ci': { badges: ['IFoA A\'22'], deltas: [
+        'Group CI sum assureds are often linked to salary multiples — so claims amounts increase with wage inflation, adding a systemic amounts risk not present in fixed sum assured individual business.'
+      ]},
+      'pf_ltci': { badges: ['IFoA S\'19 Q1(iv)'], deltas: [
+        'Care costs are inflation-sensitive (wage inflation for care workers is often higher than general CPI); amounts risk has a long tail.',
+        'Type of care required (home care vs care home vs specialist nursing) has very different cost profiles; transition between care settings is uncertain.',
+        'Benefit may be fixed income or indemnity — indemnity LTCI has open-ended amounts risk.'
+      ]},
+      'ina': { badges: ['IAI N\'19 Q1iv'], deltas: [
+        'Benefit amount is typically fixed income — but care costs may exceed the fixed income if care inflation accelerates, creating a basis risk for the policyholder (not the insurer under a fixed-payment design).',
+        'If benefit is indemnity-based, the insurer faces direct care cost inflation risk on an already-in-force claim book.'
+      ]}
+    }
+  },
+
+  // ───────────────────────────────────────────────────────────
+  // CATEGORY: Investment
+  // ───────────────────────────────────────────────────────────
+  { _cat: 'Investment Performance', _catId: 'invest' },
+
+  {
+    id: 'r04',
+    cat: 'invest',
+    name: 'Investment Performance',
+    acronym: 'INV',
+    short: 'Investment return assumptions give rise to model, parameter, and random fluctuations risk. Significance varies greatly by product type.',
+    bullets: [
+      'Investment return assumptions required for: amounts to be invested in future; expected reinvestment rates of proceeds from existing assets; expected returns on new asset purchases.',
+      'Historically deterministic assumptions used, with sensitivity testing. Stochastic models now preferred — model risk arises if probability distribution for returns is misspecified.',
+      'PMI: investment risk is of lesser significance due to short claims settlement tail (typically no more than 1–2 years); premiums collected and claims paid within a relatively short period.',
+      'Pre-funded LTCI: investment assumptions and risks may be major considerations — premiums invested over a long accumulation phase before claims are payable; investment risk is compounded with longevity and morbidity risks.',
+      'Standard CI: investment risk usually small because claim probability is relatively low, leading to small reserves relative to premium income.',
+      'IP: investment risk moderate — reserves are required for claims in payment (sick lives) and for deferred period liabilities; matching of long-tailed liabilities is important.'
+    ],
+    ip: true, ci: true, ltci: true, pmi: false,
+    variants: {
+      'ul_ci': { badges: ['IFoA S\'18 Q1(ii)'], deltas: [
+        'Fund performance directly affects income to insurer: if unit fund grows slowly, the management charge (percentage of fund) is lower, potentially insufficient to cover risk charges.',
+        'If fund is exhausted (units fall to zero before policy expires), the insurer must still pay claims but has no income from charges — a severe residual risk.',
+        'Policyholder fund choice (riskier funds → greater fund volatility → higher capital requirements for the insurer under Solvency II).',
+        'Capital requirements increase disproportionately if fund holds equities; SCR equity module stresses apply.'
+      ]},
+      'grp_ci': { badges: ['IFoA A\'22 Q1(viii)'], deltas: [
+        'Volatile financial markets reduce the discount rate (if derived from gilt yields) → increase in liability values on a Solvency II basis.',
+        'Insurers holding less gilts face a larger duration mismatch if interest rates fall; this is a secondary but relevant concern for group CI with multi-year policy terms.'
+      ]},
+      'grp_pmi': { badges: ['IFoA A\'20 Q1'], deltas: [
+        'As a short-tail product, PMI investment risk is minimal for the insurer; the main investment consideration is liquidity (premiums must fund claims within the same year).'
+      ]},
+      'pf_ltci': { badges: ['IFoA S\'19 Q1(vii)', 'IAI N\'19 Q1iv'], deltas: [
+        'Asset-liability matching is critical given the long duration of LTCI liabilities; mismatching interest rate risk is a major concern.',
+        'Equity allocation may provide partial hedge against care cost inflation (wage inflation component), but introduces volatility.',
+        'If matching adjustment is applied under Solvency II, any change in asset mix may invalidate the matching adjustment, increasing technical provisions immediately.'
+      ]},
+      'ina': { badges: ['IAI N\'19 Q1iv'], deltas: [
+        'Investment horizon is shorter than pre-funded LTCI (policyholder already in claim); but the duration of remaining claims may still be long for younger severely disabled lives.',
+        'ALM is still important: fixed income benefit payment must be matched against invested assets; mismatch risk exists if assets are shorter duration than liabilities.'
+      ]}
+    }
+  },
+
+  // ───────────────────────────────────────────────────────────
+  // CATEGORY: Expenses
+  // ───────────────────────────────────────────────────────────
+  { _cat: 'Expenses & Inflation', _catId: 'expense' },
+
+  {
+    id: 'r05',
+    cat: 'expense',
+    name: 'Expenses & Inflation',
+    acronym: 'EXP',
+    short: 'Deterministic or stochastic expense assumptions give rise to parameter and model risk. Premium charges are often fixed while expenses change over time.',
+    bullets: [
+      'Assumptions about future expenses give rise to parameter risk and (if stochastic) model risk.',
+      'Premium charges designed to cover expenses are typically fixed or semi-fixed, while actual expenses change over time.',
+      'Expense mismatch situations: (i) initial expenses recouped over policy term — insurer vulnerable to early lapses; (ii) per-policy fixed costs — if volumes fall, unit costs per policy rise.',
+      'Medical cost inflation (relevant to PMI and LTCI) tends to exceed general price inflation — a persistent structural risk.',
+      'Salary inflation affects expense assumptions, especially for claims management and administration staff.',
+      'New business volumes affect expense allocation: too little NB means fixed costs not covered; too much NB causes capital strain.'
+    ],
+    ip: true, ci: true, ltci: true, pmi: true,
+    variants: {
+      'ul_ci': { badges: ['IFoA S\'18 Q1(ii)'], deltas: [
+        'Three distinct expense streams must be managed: fund administration expenses (unit-linked), risk charge expenses, and policy administration expenses.',
+        'Charges may not cover administration costs if premium is non-reviewable and expenses increase beyond pricing assumptions over a long term (potentially up to age 65).',
+        'Unit pricing must include expense loadings accurately — errors in unit pricing create remediation costs and regulatory risk.'
+      ]},
+      'grp_ip': { badges: ['IFoA S\'20 Q1(vi)'], deltas: [
+        'Technology investment (wearables, data systems) creates significant upfront fixed costs — if new business volumes do not materialise, unit cost per policy is much higher than priced.',
+        'Staff training costs and ongoing compliance costs (data governance, cyber security) are higher than individual IP due to data volume.'
+      ]},
+      'grp_pmi': { badges: ['IFoA A\'21 Q1'], deltas: [
+        'Group PMI: claims handling costs per claim may be lower (economies of scale) but aggregate exposure per employer group creates concentration in expense budgets.',
+        'Regular scheme renewals require actuary/pricing time — renewal expense per policy may be higher than individual PMI if scheme-specific analysis is required.'
+      ]},
+      'pf_ltci': { badges: ['IFoA S\'19 Q1'], deltas: [
+        'Care cost inflation (primarily wage inflation of care workers) is the dominant expense risk — often running 1–3% above general CPI.',
+        'If LTCI benefit is indemnity-linked to actual care costs, expense inflation directly increases claim amounts.',
+        'Long accumulation phase means expense assumptions must project many decades; small systematic errors compound materially.'
+      ]}
+    }
+  },
+
+  // ───────────────────────────────────────────────────────────
+  // CATEGORY: Persistency
+  // ───────────────────────────────────────────────────────────
+  { _cat: 'Persistency', _catId: 'persist' },
+
+  {
+    id: 'r06',
+    cat: 'persist',
+    name: 'Persistency',
+    acronym: 'PER',
+    short: 'Lapse/renewal rates are a source of parameter risk and potentially model risk. Selective withdrawals leave behind a substandard remaining group.',
+    bullets: [
+      'Persistency = lapse rates (long-term business) or renewal rates (short-term business). Source of parameter risk and potentially model risk if bimodal or regime-changing behaviour occurs.',
+      'Selective withdrawals: policyholders who know they are lower-risk tend to lapse when they can get cheaper cover elsewhere — leaving behind a higher-risk pool. Most relevant to long-term products (IP, CI, LTCI).',
+      'Biased lapses differ from selective lapses: they occur when lapses have systematic features not driven by policyholder health status — e.g. lapses correlated with economic recession affecting all income groups.',
+      'Mismatches between assumed and actual lapses affect: (i) expense recovery (initial expenses recouped over term); (ii) reserve adequacy; (iii) future volume projections.',
+      'Short-term products (PMI): renewal rates are the relevant metric. Non-renewal of high-risk individuals (insurer-driven, where permitted) is also a risk to insurer reputation and volume.'
+    ],
+    ip: true, ci: true, ltci: true, pmi: true,
+    variants: {
+      'ul_ci': { badges: ['IFoA S\'18 Q1(ii)'], deltas: [
+        'Withdrawal risk is compounded by the unit-linked feature: healthier lives may lapse when fund value has grown, leaving the insurer with a worse risk pool and lower fund-based income.',
+        'Anti-selection at lapse is particularly acute if policyholders can compare their health status to the insured pool — the GIO mechanism may attract high-risk lives, worsening selective lapse dynamics.'
+      ]},
+      'grp_ci': { badges: ['IFoA A\'22 Q1(i)(ii)'], deltas: [
+        'Mass lapse risk is specific to group CI: economic recession can trigger simultaneous lapse of many policyholders, leading to cash flow crisis and rapid deterioration of the risk pool.',
+        'Anti-selection: those less likely to claim (healthier, younger) lapse first; those remaining are higher-risk, worsening future claims experience.',
+        'Recovery from mass lapse is slow — customer retention strategy must act pre-emptively; premium holidays may be offered as a retention tool.',
+        'For group policies, redundancy affects mid-year persistency: employer-level group policies may not allow lapse during the year, but redundancies remove covered lives from the scheme.'
+      ]},
+      'grp_ip': { badges: ['IFoA S\'20 Q1', 'IFoA S\'23 Q3'], deltas: [
+        'Group IP renewal is employer-driven, not policyholder-driven; risk is non-renewal at scheme anniversary rather than individual lapse.',
+        'Competitive pricing from rivals at renewal creates anti-selective non-renewal: well-performing (low-claims) employers switch to cheaper providers, leaving the insurer with worse schemes.'
+      ]},
+      'grp_pmi': { badges: ['IFoA A\'21,S\'21'], deltas: [
+        'Employer-driven non-renewal: if employer cuts benefits to save costs (e.g. during recession), the insurer loses the entire group simultaneously.',
+        'Adverse selective renewals: high-utilisation employers are less likely to lapse (they are getting good value); low-utilisation employers may switch for cheaper cover.'
+      ]},
+      'pf_ltci': { badges: ['IFoA S\'22 Q1', 'IFoA A\'21 Q3(v)'], deltas: [
+        'Surrender value risk: if a surrender value option is added, healthy lives may surrender in the pre-claim phase (self-select out), worsening the remaining pool.',
+        'In the claim phase, lives near death may request surrender — mortality anti-selection means insurers pay out to those who would have died with few remaining benefit payments.',
+        'Persistency until claim is unusually high for LTCI (most policyholders stay in-force and eventually claim) — so low-lapse assumptions need to hold over very long periods.'
+      ]}
+    }
+  },
+
+  // ───────────────────────────────────────────────────────────
+  // CATEGORY: Mix & Volume
+  // ───────────────────────────────────────────────────────────
+  { _cat: 'Mix & Volume of New Business', _catId: 'data' },
+
+  {
+    id: 'r07',
+    cat: 'data',
+    name: 'Mix & Volume of New Business',
+    acronym: 'MVB',
+    short: 'Unintended changes in NB mix (by class, size, source) or volume (too much or too little) create expense and pricing mismatches.',
+    bullets: [
+      'Mix risk: unintended change in NB by nature (class, contract type, design, premium frequency) or size can cause expenses to differ from assumed.',
+      'If contracts are smaller on average than assumed: per-policy fixed charges rise relative to premium income.',
+      'A change in mix by nature and size may create a mismatch between charges and actual expenses — e.g. if mix shifts to higher-risk lives than priced for.',
+      'Volume too high: capital and administrative requirements may exceed available resources; new business strain.',
+      'Volume too low: failure to recover fixed development costs; over-stretched resources from too many product launches simultaneously.',
+      'Expense assumptions are based on modelled future NB volumes; if actual volumes diverge materially, both new-business and in-force expense ratios deteriorate simultaneously.'
+    ],
+    ip: true, ci: true, ltci: true, pmi: true,
+    variants: {
+      'grp_ci': { badges: ['IFoA A\'22 Q1(vi)'], deltas: [
+        'Redundancy-driven changes in employer workforce composition change the group\'s risk profile mid-year: age, occupation, industry sector mix all shift without the insurer\'s pricing model updating.',
+        'Loss of large group accounts has a step-change effect on expenses and fixed cost recovery — unlike individual CI where lapses occur gradually.'
+      ]},
+      'grp_ip': { badges: ['IFoA S\'20 Q1(iii)'], deltas: [
+        'Technology-led distribution may attract a different customer profile than traditional group IP distribution; the mix by industry and employer size may shift unpredictably.',
+        'If volume targets are set by both market share and profitability, achieving one at the expense of the other is a specific group IP risk in competitive markets.'
+      ]},
+      'pf_ltci': { badges: ['IFoA S\'19 Q1(ii)', 'IAI N\'19'], deltas: [
+        'First-mover product: no market volume benchmarks exist; volume uncertainty is extremely high.',
+        'If NB volumes are low, the insurer cannot build sufficient data for credible claims experience investigation, creating a persistent data risk.',
+        'May change new business mix — GIO or surrender value features may make product more attractive to healthier lives, improving mix but reducing expected claim volume (and data quality).'
+      ]}
+    }
+  },
+
+  // ───────────────────────────────────────────────────────────
+  // CATEGORY: Guarantees & Options
+  // ───────────────────────────────────────────────────────────
+  { _cat: 'Guarantees & Options', _catId: 'invest' },
+
+  {
+    id: 'r08',
+    cat: 'invest',
+    name: 'Guarantees & Options',
+    acronym: 'G&O',
+    short: 'Insurer commits to terms before triggering event. Health/care events are less predictable than life events, making option pricing harder. Stochastic modelling required.',
+    bullets: [
+      'When a guarantee/option is offered, the insurer commits to terms before the triggering event. Model and parameter risk are compounded by the nonlinear payoff structure.',
+      'Health and care events are inherently less predictable than life insurance events — option pricing is more uncertain.',
+      'A deterministic model can make a guarantee appear costless if an optimistic single scenario is chosen; a range of deterministic scenarios or stochastic modelling is needed.',
+      'Options on H&C products: renewal options (right to renew; insurer cannot cancel); Guaranteed Insurability Options (GIOs — increase cover without re-underwriting); guaranteed premiums.',
+      'Options must be modelled for frequency of exercise and degree of advantage to the policyholder; some offset available for those who do not exercise (apathy or forgetting).',
+      '12-month waiting period on CI buy-back life cover: justified because mortality in months following a CI event is heavier and more uncertain; waiting period protects the insurer.'
+    ],
+    ip: true, ci: true, ltci: true, pmi: false,
+    variants: {
+      'ul_ci': { badges: ['IFoA S\'18 Q1(ii)', 'IAI D\'22'], deltas: [
+        'GIO on 10th/20th anniversary — anti-selection risk: poor-health lives exercise the option; healthy lives do not.',
+        'Option cost must be modelled stochastically (morbidity, lapse rates, and fund value uncertainty all interact with the option payoff).',
+        'Unit-linked wrapper adds investment guarantee risk if the fund value falls below a minimum (e.g. if a guaranteed minimum benefit is attached to the policy).'
+      ]},
+      'pf_ltci': { badges: ['IFoA S\'19 Q1(iii)', 'IFoA A\'21 Q3'], deltas: [
+        'Reviewability of premiums is critical for LTCI because of the long accumulation phase; guaranteed premium LTCI exposes the insurer to 30–40 years of uncertain care cost trends.',
+        'Escalation options (e.g. benefit increasing at RPI) must be stochastically priced against uncertain care cost inflation over the entire policy term.'
+      ]}
+    }
+  },
+
+  // ───────────────────────────────────────────────────────────
+  // CATEGORY: Operational Risks
+  // ───────────────────────────────────────────────────────────
+  { _cat: 'Operational Risks', _catId: 'operational' },
+
+  {
+    id: 'r09',
+    cat: 'operational',
+    name: 'Competition',
+    acronym: 'COMP',
+    short: 'Competitive pressure may lead management to increase risk profile, reduce pricing margins, or accept anti-selective business.',
+    bullets: [
+      'Competitive pressure may lead management to take decisions that increase the insurer\'s risk profile beyond what its resources and experience justify.',
+      'These decisions can be compounded if they succeed in attracting higher volumes of new business — amplifying capital and risk management strain.',
+      'Competitors\' actions can also reduce NB volumes or cause selective non-renewals on short-term products; cheaper competitors attract lower-risk lives leaving the insurer with an adverse selection problem.',
+      'Competition is a reasonable guide to collective wisdom but each insurer must assess risk fully against its own circumstances — available capital, target market, distribution method.'
+    ],
+    ip: true, ci: true, ltci: true, pmi: true,
+    variants: {
+      'grp_ip': { badges: ['IFoA S\'20 Q1(iii)'], deltas: [
+        'New technology entrant (Company XYZ-style scenario): established players may respond with aggressive repricing or bundled solutions, compressing margins for new entrants.',
+        'Competitive pressure to achieve market share targets may lead to under-pricing in a less-mature group IP market.'
+      ]},
+      'grp_pmi': { badges: ['IFoA A\'20 Q1'], deltas: [
+        'Dominant players in Group PMI market have scale advantages; new entrants face significant competitive barriers in employer scheme sales.',
+        'Price comparison portals increase price transparency — competition intensifies at renewal, narrowing margins.'
+      ]}
+    }
+  },
+
+  {
+    id: 'r10',
+    cat: 'operational',
+    name: 'Actions of Management',
+    acronym: 'MAN',
+    short: 'Management may not follow actuarial risk recommendations. Fundamental conflict possible between shareholder and policyholder interests.',
+    bullets: [
+      'Management may choose not to follow the actuary\'s risk recommendations for competitive reasons, to achieve strategic goals, or due to short-term financial pressure.',
+      'Fundamental conflict: shareholders benefit from higher risk-taking (upside retained); without-profits policyholders bear the downside.',
+      'The actuary may have both regulatory and professional responsibility to ensure inappropriate risks are not taken — particularly in systems where the actuary certifies solvency.',
+      'Actions of management include: investment strategy decisions, reinsurance purchase, pricing stance, product design choices, and capital allocation.'
+    ],
+    ip: true, ci: true, ltci: true, pmi: true,
+    variants: {
+      'grp_ci': { badges: ['IFoA A\'22 Q1(iv)'], deltas: [
+        'Chief Actuary\'s professional duty during mass lapse event: must balance insurer\'s financial interests against obligations to policyholders who are surrendering.',
+        'Management may be tempted to offer premium holidays that are self-funding for lapsed policies but create adverse selection in the retained pool — actuary must model this risk explicitly.'
+      ]},
+      'pf_ltci': { badges: ['IFoA S\'19 Q1(vii)'], deltas: [
+        'Investment Director decisions on asset mix (e.g. introducing equities) may improve expected return but increase capital requirements and volatility — actuarial challenge to model and communicate.',
+        'Board pressure to expand into LTCI for growth may underestimate model risk given data scarcity — management must be advised of the tail risks explicitly.'
+      ]}
+    }
+  },
+
+  {
+    id: 'r11',
+    cat: 'operational',
+    name: 'Counterparties',
+    acronym: 'CTP',
+    short: 'Risk that another party to an agreement fully or partially defaults. Includes reinsurers, investment counterparties, distributors, and medical service providers.',
+    bullets: [
+      'Counterparty (credit) risk: the risk that another party fully or partially defaults on its obligations.',
+      'Reinsurance counterparty risk: cedant remains fully liable to policyholders if reinsurer defaults; concentration in a single reinsurer amplifies this risk.',
+      'Investment counterparty risk: corporate bonds and deposits expose the insurer to issuer default; mitigated by investment grade constraints and diversification.',
+      'Distributor counterparty risks: distributor may commit the insurer to unintended policy conditions; mis-selling by broker may create consumer redress liability.',
+      'Third-party medical services (underwriting agencies, claims assessors, disability counsellors) may commit expenditure or make coverage decisions inconsistently with insurer\'s intended policy.',
+      'Under medical expenses and some LTCI covers, benefit is provided by third parties on an indemnity basis — the insurer cannot control unit costs of that benefit directly.'
+    ],
+    ip: true, ci: true, ltci: true, pmi: true,
+    variants: {
+      'ul_ci': { badges: ['IFoA S\'18 Q1(ii)'], deltas: [
+        'Investment counterparty risk is enhanced: unit funds are invested in external fund managers; failure of the fund management house is an additional counterparty exposure beyond standard bond default risk.',
+        'If policyholder can select funds, the insurer has counterparty exposure to multiple fund managers simultaneously.'
+      ]},
+      'grp_ip': { badges: ['IFoA S\'20 Q1(vi)'], deltas: [
+        'Technology provider counterparty risk: if wearable device supplier or data platform fails, key underwriting and claims management data become unavailable.',
+        'Third-party rehabilitation service providers are critical to Group IP claims management — failure to perform by these counterparties directly increases claim duration and cost.'
+      ]},
+      'grp_pmi': { badges: ['IFoA A\'21'], deltas: [
+        'Hospital network and consultant fee negotiation failure is a direct counterparty risk in managed care PMI models; if the network contract breaks down, claims costs increase immediately.',
+        'Capitation arrangement counterparty risk: if the provider is paid upfront (capitation), their failure leaves the insurer with no service but a premium obligation.'
+      ]},
+      'pf_ltci': { badges: ['IAI N\'19 Q1iv'], deltas: [
+        'Care home operators as counterparties: if an insurer has indemnity LTCI, the care home operator\'s viability directly affects claims management. Care home closures create policyholder redress risk.',
+        'Reinsurance counterparty risk is amplified given the long duration of LTCI liabilities — reinsurers must remain solvent for 30–40 years.'
+      ]}
+    }
+  },
+
+  {
+    id: 'r12',
+    cat: 'operational',
+    name: 'Other Sources of Risk',
+    acronym: 'OSR',
+    short: 'Legal/Regulatory/Tax, Reputation, Internal Fraud, Physical Risks, Aggregation/Concentration, Catastrophes.',
+    bullets: [
+      'Legal/regulatory/tax: local law may override policy conditions; new legislation can apply to in-force policies retrospectively. LTCI is particularly vulnerable to mandatory legal changes due to state societal expectations.',
+      'Reputational risk: poor customer service — whether via formal legal actions or negative consumer press — reduces NB volumes and triggers regulatory scrutiny.',
+      'Internal fraud: deliberate non-disclosure, falsifying claims extent. Anti-fraud efforts must be balanced against distress caused by questioning valid claims.',
+      'Physical risks: fire, flood, loss of key staff. Business continuity procedures essential.',
+      'Aggregation and concentration: over-exposure to a particular risk type, geography, or industry sector. Mitigation: broader geographical marketing, reinsurance, coinsurance.',
+      'Catastrophes: pandemic or other systemic event causing simultaneous widespread claims across the portfolio.'
+    ],
+    ip: true, ci: true, ltci: true, pmi: true,
+    variants: {
+      'ul_ci': { badges: ['IFoA S\'18 Q1(ii)', 'IAI D\'22'], deltas: [
+        'Regulatory risk specific to unit-linked wrappers: any change in regulation around use of investment vehicles in risk benefits (e.g. unit-linked fund regulations) would have a significant impact on product viability.',
+        'Tax regulation changes affecting unit fund returns or risk benefit tax treatment could undermine product competitiveness.'
+      ]},
+      'grp_ip': { badges: ['IFoA S\'20 Q1(ii)'], deltas: [
+        'Cyber risk and data protection regulation: collecting personal health data via wearables creates heightened GDPR/data breach risk and associated reputational damage.',
+        'Industry concentration risk: a portfolio heavily weighted towards one industry sector (e.g. financial services) suffers correlated claims during sector-specific downturns.'
+      ]},
+      'pf_ltci': { badges: ['IFoA S\'19 Q1', 'IAI N\'19'], deltas: [
+        'LTCI most vulnerable to retrospective legislative changes — state care funding rules can change suddenly, altering the insured\'s need for the product and the policy\'s relevance.',
+        'Pandemic/catastrophe risk: a pandemic affecting older, frailer people could simultaneously trigger claims across the entire LTCI in-force book.',
+        'Aggregation risk is especially high because all policyholders share similar age profiles and similar risk factors (e.g. same cohort exposed to the same care funding regime changes).'
+      ]},
+      'ina': { badges: ['IAI N\'19'], deltas: [
+        'Concentrated longevity risk: all policyholders are already in claim; a systematic improvement in mortality for disabled lives directly increases liabilities.',
+        'Any reduction in state care funding immediately increases the care costs the insurer is expected to top up (for indemnity products).'
+      ]}
+    }
+  },
+
+  // ───────────────────────────────────────────────────────────
+  // CATEGORY: Product-Specific
+  // ───────────────────────────────────────────────────────────
+  { _cat: 'Product-Specific Risks (SP1 Ch24)', _catId: 'product' },
+
+  {
+    id: 'r13',
+    cat: 'product',
+    name: 'IP — Specific Risks',
+    acronym: 'IP-SP',
+    short: 'Definition of disability; transition probabilities in multi-state model; "own occupation" vs "any occupation" definitions; lenient claims management.',
+    bullets: [
+      'Main IP risk: sickness transition probabilities — specifically inception rates (healthy→sick) and recovery rates (sick→healthy). Both are uncertain.',
+      'Simple IP multi-state model: 3 states — healthy, sick, dead. Transition probabilities: healthy-to-sick (inception), sick-to-healthy (recovery), sick-to-dead, healthy-to-dead.',
+      '"Unfit to work" is less well-defined than "dead" — IP claim experience is inherently harder to predict. More lenient claims management or a change in the social/economic environment can increase claim inception rates and reduce recovery rates.',
+      'Definition of disability matters critically: "own occupation" gives rise to higher inception rates than "any occupation" for skilled workers.',
+      'Deferred period is a design lever affecting both inception and the cost of claims — shorter deferred periods attract more marginal claimants.',
+      'Recovery rates in IP are particularly uncertain during and after recessions; also affected by claimant age, occupation, and social environment.'
+    ],
+    ip: true, ci: false, ltci: false, pmi: false,
+    variants: {
+      'grp_ip': { badges: ['IFoA S\'20,S\'23,S\'24', 'IAI M\'21'], deltas: [
+        'Group IP inception rates correlate with employer industry and economic cycle — systemic recession risk creates correlated claims across the portfolio.',
+        'Definition of disability in group IP may be standardised across all members of a scheme but differ from individual policies — less granular risk segmentation.',
+        'Rehabilitation is a key claims management tool for Group IP; employer cooperation is essential but not guaranteed.',
+        'The deferred period is often set at the end of the employer\'s sick pay period — creating a direct link between HR policy changes and claim inception.'
+      ]}
+    }
+  },
+
+  {
+    id: 'r14',
+    cat: 'product',
+    name: 'CI — Specific Risks',
+    acronym: 'CI-SP',
+    short: 'Diagnosis rates of specified conditions; data scarcity due to product novelty; medical advances causing more early-stage claims; heterogeneous industry definitions.',
+    bullets: [
+      'Main CI risk: rates of diagnosis of specified critical illnesses. Because CI is relatively new in most markets, industry data are scarce and own-experience data may be insufficient for credibility.',
+      'Heterogeneity in CI industry data: different insurers cover different conditions and use different claim definitions — pooled industry data may be hard to use.',
+      'Medical advances create CI-specific risks: (i) prolonging life → more illnesses survive to be diagnosed → more stand-alone claims (and potentially more concurrent claims); (ii) earlier diagnosis → diagnosis occurs at a less severe stage than covered by the original policy wording → policy wording risk.',
+      'Policy wording risk: if definitions are not updated as medical practice evolves, claims may be paid that were not intended (or valid claims may be refused, creating legal risk).',
+      'CI/life link: if CI is a rider to life cover, a CI claim accelerates the death benefit and removes the residual mortality risk — but the CI accelerates a benefit that was otherwise expected, affecting reserving.',
+      'Stand-alone CI leaves the insurer exposed to the full CI claim without the offset from any life benefit reduction.'
+    ],
+    ip: false, ci: true, ltci: false, pmi: false,
+    variants: {
+      'ul_ci': { badges: ['IFoA S\'18 Q1(ii)', 'IAI S\'18 Q1i', 'IAI D\'22'], deltas: [
+        'Unit-linked mechanism: risk charges (deducted from unit fund) must remain sufficient to cover CI risk as the fund grows — unit charge design risk.',
+        'Policy wording risk is amplified: a unit-linked CI policy may survive as a long-term contract; wording that was current at issue may become outdated over a 30+ year term.',
+        'Mix risk by fund type: profitability of the risk element may vary by investment fund selected; insurer bears the fund performance risk through the charge mechanism.',
+        'Anti-selection at GIO exercise — only unhealthy lives exercise the option to increase CI sum assured at anniversaries.'
+      ]},
+      'grp_ci': { badges: ['IFoA A\'22 Q1'], deltas: [
+        'Group CI: group definitions may be less bespoke than individual CI — standardised wordings across the employer group may lead to unanticipated claims if member circumstances are diverse.',
+        'Multi-morbidity risk: group members who have already had one CI event may be more likely to have another; group CI designs rarely exclude second events explicitly.'
+      ]}
+    }
+  },
+
+  {
+    id: 'r15',
+    cat: 'product',
+    name: 'LTCI — Specific Risks',
+    acronym: 'LT-SP',
+    short: 'Transition probabilities in multi-state care model; data scarcity; high eventual claim proportion; government care funding changes; long-term morbidity/mortality interaction.',
+    bullets: [
+      'Main LTCI risk: transition probabilities in multi-state model (healthy → own-home care → residential care → nursing care → dead). All transitions are uncertain.',
+      'LTCI data shortage: reliable data are scarce in most markets — products are relatively new. US data may require significant adjustment for different care systems.',
+      'High proportion of LTCI policyholders eventually make a claim (many people need some form of care before death) — leading to high aggregate claim frequency and correlation between policyholders (all age together).',
+      'Government intervention risk: LTCI particularly vulnerable to sudden mandatory legal changes because of societal expectation that the state should care for its citizens. New state care provision directly erodes the insured need.',
+      'Longevity interacts with morbidity: improved survival rates in older age increase the duration (and cost) of care claims.',
+      'Moral hazard: insured individuals may seek more/better quality care than they would if uninsured — especially under indemnity designs.'
+    ],
+    ip: false, ci: false, ltci: true, pmi: false,
+    variants: {
+      'pf_ltci': { badges: ['IFoA S\'19,A\'21,S\'22', 'IAI N\'19'], deltas: [
+        'Investment return risk is critical and interacts with morbidity risk over the long accumulation phase — much more material than for immediate needs LTCI.',
+        'Surrender value designs (if offered) create anti-selection at surrender: healthiest lives surrender before claiming; the residual pool deteriorates.',
+        'First-mover product: no competitor benchmark; pricing and reserving basis must be set without market validation.'
+      ]},
+      'ina': { badges: ['IFoA S\'18 Q3', 'IAI N\'19 Q1ii'], deltas: [
+        'No inception risk and no investment accumulation phase — the only risk parameters are: mortality of disabled lives, recovery rates (if any), care cost inflation.',
+        'Immediate adverse selection at purchase: only people who actually need care immediately will buy — the entire portfolio is already in a deteriorated health state.',
+        'Mortality whilst in claim is the dominant risk driver: if lives live longer than expected, claim costs escalate rapidly.',
+        'Premium is paid as a single premium or annuity — no lapse risk in the conventional sense, but surrender (see above under LTCI surrenders) may apply.'
+      ]}
+    }
+  },
+
+  {
+    id: 'r16',
+    cat: 'product',
+    name: 'PMI — Specific Risks',
+    acronym: 'PM-SP',
+    short: 'Limited control over benefit payments; GP referral drives claims (outside insurer control); consultant fee-setting is independent; annual renewable feature.',
+    bullets: [
+      'Main PMI risk: limited control over benefit payments. Consultants and anaesthetists set their own charges independently; hospital charges are often negotiated but not fixed.',
+      'Claim frequency risk: the primary trigger for a PMI claim is the GP\'s referral decision — entirely outside the insurer\'s control.',
+      'Claim cost: once referred, the consultant\'s treatment plan determines the claim cost. The insurer has little direct ability to control the specific treatment used (though benefit schedules can cap specific items).',
+      'Anti-selection risk exists for individual and small-group PMI — mitigated by medical underwriting at inception. Some plans use moratorium-based underwriting which may increase anti-selection.',
+      'Claims consciousness risk: customers become increasingly aware of their policy benefits and more willing to claim for conditions they might previously have ignored.',
+      'Short-tail nature: PMI claims typically settled within 1–2 years, reducing investment risk but requiring rapid premium adjustments if experience deteriorates.'
+    ],
+    ip: false, ci: false, ltci: false, pmi: true,
+    variants: {
+      'grp_pmi': { badges: ['IFoA A\'20,A\'21,S\'21', 'IAI M\'23'], deltas: [
+        'Scale: group PMI may give insurer more negotiating power over hospital networks and consultant fees — partially mitigating the primary PMI risk.',
+        'Employer benefit design: excess per claim, co-payment, and list of covered hospitals are often employer-designed at scheme level — the insurer has less product control than in individual PMI.',
+        'Annual renewal cycle is employer-driven; significant claims in the first year of a scheme directly affect the renewal premium negotiation — more transparent pricing pressure than individual PMI.',
+        'Group health initiatives (wellness programmes, early intervention) may be employer-sponsored and improve claims experience in ways not assumed in standard pricing.'
+      ]}
+    }
+  },
+
+  // ───────────────────────────────────────────────────────────
+  // CATEGORY: Higher-Order (SA1 Ch4)
+  // ───────────────────────────────────────────────────────────
+  { _cat: 'Higher-Order Insurer Risk Considerations (SA1 Ch4.3)', _catId: 'higher' },
+
+  {
+    id: 'r17',
+    cat: 'higher',
+    name: 'Knowledge of Risk & Statistics',
+    acronym: 'KRS',
+    short: 'Insurer must model risk accurately for pricing, reserving, and capital. Own experience is most relevant but may lack credibility; external data carries representativeness risk.',
+    bullets: [
+      'The insurer must model risk accurately for premium rating and for reserving and capital requirements. Most relevant data: own experience, subject to credibility.',
+      'Own data may not be used if: insufficient volume (especially for new products); data no longer relevant due to product/underwriting changes; data corrupted or incomplete.',
+      'For premium rating, the insurer must also predict future volume and mix of new and renewing business.',
+      'Cross-subsidies between risk cells are common where data per cell is insufficient — e.g. UK PMI historically not rated by gender despite different male/female experience.',
+      'Estimation of future healthcare experience is complex and depends on external influences (claims consciousness, economic welfare, medical technology). Wide variation is possible; appropriate scenario testing is essential.',
+      'Claim consciousness — the general awareness of customers about their ability and willingness to claim — is generally increasing and adds a positive trend to observed claim rates.'
+    ],
+    ip: true, ci: true, ltci: true, pmi: true,
+    variants: {
+      'pf_ltci': { badges: ['IFoA S\'19 Q1', 'IAI N\'19'], deltas: [
+        'LTCI data is particularly sparse — being new, no insurer has long-run own experience; US/overseas data requires heavy adjustment.',
+        'The data split needed (age, gender, severity, setting, distribution channel, underwriting status, disability type) is more complex than for other products, reducing credibility per cell further.'
+      ]}
+    }
+  },
+
+  {
+    id: 'r18',
+    cat: 'higher',
+    name: 'Anti-Selection Avoidance',
+    acronym: 'ANTI',
+    short: 'Policyholders have superior knowledge of their own risk. Insurer must ask all appropriate questions explicitly and require medical information before acceptance.',
+    bullets: [
+      'Anti-selection arises because policyholders have choice over: (a) whether to take out cover; (b) in many cases, the level of cover. Those who believe they have a higher risk of claiming are more likely to buy.',
+      'Mitigation: ask all appropriate questions explicitly at application stage; require medical information before accepting the risk. A vague catch-all question is rarely sufficient.',
+      'Anti-selection may also be present during the policy term if options are available to extend or increase cover (GIOs, renewal options).',
+      'If using own data, the effect of anti-selection is already embedded in claims data — only potential trends in the degree of anti-selection need to be separately modelled.',
+      'Anti-selection must also be controlled operationally — otherwise its impact may escalate. A small IP insurer asking few medical questions will attract higher-risk lives, progressively worsening its experience.'
+    ],
+    ip: true, ci: true, ltci: true, pmi: true,
+    variants: {
+      'ul_ci': { badges: ['IFoA S\'18 Q1(ii)', 'IAI D\'22'], deltas: [
+        'Anti-selection at GIO exercise: unhealthy lives exercise the option to increase sum assured; healthy lives do not. This is a form of in-force anti-selection, distinct from point-of-sale anti-selection.'
+      ]},
+      'ina': { badges: ['IAI N\'19 Q1ii'], deltas: [
+        'Anti-selection is at its maximum for INA: all purchasers are already disabled and seeking insurance for an ongoing need. There is no pool of healthy lives to cross-subsidise.',
+        'The only underwriting is at inception (to verify the care need and set the benefit level); the insurer cannot reject business without undermining the product concept.'
+      ]}
+    }
+  },
+
+  {
+    id: 'r19',
+    cat: 'higher',
+    name: 'Moral Hazard',
+    acronym: 'MH',
+    short: 'Individuals undertake more potentially claim-inducing activities because they are insured. Not immoral but must be priced and controlled.',
+    bullets: [
+      'Moral hazard: individuals undertake more potentially claim-inducing activities because they are insured. Examples: using private rather than state healthcare (PMI); seeking to remain on claim (IP); self-selecting into care (LTCI).',
+      'This behaviour is not necessarily immoral — it is a natural consequence of having insurance. The insurer must assess its prevalence within the insured population relative to the general population.',
+      'If using own data, the effect is already embedded in claims data — only trends in moral hazard need to be separately modelled.',
+      'Fraud (deliberate non-disclosure, falsifying claim) is sometimes attributed to moral hazard but should be treated separately.',
+      'Anti-fraud efforts must be balanced against distress caused to genuinely ill policyholders.'
+    ],
+    ip: true, ci: false, ltci: true, pmi: true,
+    variants: {
+      'grp_ip': { badges: ['IFoA S\'20,S\'23'], deltas: [
+        'In group IP, the employer\'s rehabilitation programme and return-to-work culture moderate moral hazard — moral hazard risk is partly employer-dependent, not just insurer-dependent.',
+        'Wearable device data may create new forms of moral hazard: policyholders may game activity metrics to avoid premium loadings.'
+      ]},
+      'grp_pmi': { badges: ['IFoA A\'21'], deltas: [
+        'Employer-sponsored PMI creates moral hazard: employees perceive the benefit as "free" and claim more readily than individual PMI policyholders who pay their own premiums.',
+        'Wellness programmes partially offset this by incentivising healthier behaviour, but the insurer has limited control over employer wellness spending.'
+      ]}
+    }
+  },
+
+  {
+    id: 'r20',
+    cat: 'higher',
+    name: 'Retrospective Regulatory / Legislative Changes',
+    acronym: 'RRL',
+    short: 'Legislation imposed on in-force portfolios affects the nature and cost of the insurer-policyholder relationship. Reviewable products can adapt; guaranteed products cannot.',
+    bullets: [
+      'Legislation or regulation may occasionally be imposed on a portfolio already in force, affecting the nature and/or future cost of the insurer-policyholder relationship.',
+      'Where cover is guaranteed, the insurer can only meet additional costs from surplus capital. Where the cover is reviewable, the premium/benefit relationship can be changed prospectively.',
+      'Even if legislation does not change, if the interpretation of legislation and policy wording changes through court decisions on disputed claims, this creates precedent that applies to the entire in-force book.',
+      'LTCI is particularly vulnerable: societal expectation that the state should care for its citizens means political will to change care funding rules is high. New state provision directly competes with LTCI benefits.',
+      'Tax regulation changes can affect product attractiveness and customer behaviour (e.g. tax relief on premiums, tax treatment of benefits).'
+    ],
+    ip: true, ci: true, ltci: true, pmi: true,
+    variants: {
+      'pf_ltci': { badges: ['IFoA S\'19 Q1', 'IAI N\'19'], deltas: [
+        'Pre-funded LTCI is the product most exposed to this risk: a 40-year accumulation phase during which care funding policy may change multiple times.',
+        'A sudden state take-over of care provision would strand accumulated LTCI reserves and destroy demand for the product entirely.'
+      ]},
+      'ul_ci': { badges: ['IFoA S\'18 Q1(ii)'], deltas: [
+        'Regulatory changes specific to unit-linked investment vehicles (e.g. fund regulation, charges cap) directly affect the unit-linked mechanism independent of the CI risk.'
+      ]}
+    }
+  },
+
+  {
+    id: 'r21',
+    cat: 'higher',
+    name: 'Guarantees & Options — Adequate Costing',
+    acronym: 'GOC',
+    short: 'Seven key principles for pricing guarantees. Stochastic modelling required. Options must be costed for exercise frequency AND degree of advantage to policyholder.',
+    bullets: [
+      'Seven key principles for guarantees: (1) ensure customer need; (2) price as accurately as possible over a range of scenarios; (3) charge cost of capital for holding required reserves; (4) set reserving approach before launch; (5) incorporate cost in premium/benefit from the outset; (6) establish risk management framework including reinsurance; (7) monitor experience continuously.',
+      'Options on H&C products: renewal options; GIOs; guaranteed premiums; escalation options.',
+      'Options must be modelled for: (i) frequency of exercise; (ii) degree of advantage to policyholder; (iii) offsetting behaviour of those who forget or choose not to exercise.',
+      'Stochastic modelling required to estimate probability of guarantee coming into the money; deterministic models can make guarantees appear costless under optimistic scenarios.',
+      '12-month waiting period on CI buy-back life cover justified: mortality immediately following CI event is heavier and more uncertain; waiting period protects the insurer from paying disproportionate early death claims in the months following a CI.'
+    ],
+    ip: true, ci: true, ltci: true, pmi: false,
+    variants: {
+      'ul_ci': { badges: ['IFoA S\'18 Q1(ii)', 'IAI D\'22'], deltas: [
+        'GIO exercise is more frequent than anticipated when health deteriorates — the insurer must dynamically model the relationship between the GIO exercise rate and the deterioration in morbidity.',
+        'The unit-linked mechanism interacts with the GIO: if fund value has grown, the increased sum assured may be partly funded by the policyholder\'s own fund — but if fund is low, the insurer bears the full additional risk charge.'
+      ]},
+      'pf_ltci': { badges: ['IFoA S\'22,A\'21'], deltas: [
+        'Benefit escalation options (RPI-linked benefits) require stochastic inflation modelling over the full policy term — care cost inflation may diverge significantly from general RPI.',
+        'Premium reviewability is the main risk management lever for LTCI guarantees; where premiums are guaranteed, the insurer must hold significantly more capital.'
+      ]}
+    }
+  },
+
+  {
+    id: 'r22',
+    cat: 'higher',
+    name: "Competitors' Actions",
+    acronym: 'CA',
+    short: 'Competition as a guide to collective wisdom but each insurer must assess risk against its own circumstances. Financial effect of standing alone must be modelled.',
+    bullets: [
+      'Competition is a reasonable guide to collective wisdom, but an individual insurer must assess risk fully against its own circumstances — available capital, target market, method of distribution.',
+      'The financial effect of standing alone (strategy not in line with the majority) must be carefully modelled, including negative aspects.',
+      'If a competitor launches a new product feature that attracts low-risk lives away from the market, the insurer\'s risk pool may deteriorate even without any change in its own pricing or underwriting.'
+    ],
+    ip: true, ci: true, ltci: true, pmi: true,
+    variants: {}
+  },
+
+  {
+    id: 'r23',
+    cat: 'higher',
+    name: 'External Advice',
+    acronym: 'EXT',
+    short: 'Changes proposed by reinsurers or consultants — new products, outsourcing, new territories — must undergo rigorous cost/benefit/risk analysis before acceptance.',
+    bullets: [
+      'Changes proposed by reinsurers or consultants — new products, new methods of servicing, outsourcing, new forms of distribution, or new territories — must undergo a rigorous cost/benefit/risk analysis before acceptance.',
+      'The fact that an approach is recommended by an experienced reinsurer or consultant does not exempt the insurer from its own assessment of fit to its circumstances.'
+    ],
+    ip: true, ci: true, ltci: true, pmi: true,
+    variants: {}
+  }
+
+];
+
+// ============================================================
+// VARIANT COLUMN CONFIG — must match thead order
+// ============================================================
+const VARIANT_COLS = [
+  { key: 'ul_ci',   label: 'Unit-linked CI'      },
+  { key: 'grp_ci',  label: 'Group CI'             },
+  { key: 'grp_ip',  label: 'Group IP'             },
+  { key: 'grp_pmi', label: 'Group PMI'            },
+  { key: 'pf_ltci', label: 'Pre-funded LTCI'      },
+  { key: 'ina',     label: 'Immediate Needs Ann.' }
+];
+
+// ============================================================
+// RENDER TABLE
+// ============================================================
+function buildTable() {
+  const tbody = document.getElementById('riskBody');
+  tbody.innerHTML = '';
+
+  RISKS.forEach(item => {
+    if (item._cat) {
+      // Category header row
+      const tr = document.createElement('tr');
+      tr.className = 'cat-header';
+      tr.dataset.catid = item._catId || '';
+      const td = document.createElement('td');
+      td.colSpan = 4 + 2 + VARIANT_COLS.length; // risk + expl + 4 products + colspan
+      td.colSpan = 2 + 4 + VARIANT_COLS.length;
+      td.textContent = item._cat;
+      tr.appendChild(td);
+      tbody.appendChild(tr);
+      return;
+    }
+
+    const tr = document.createElement('tr');
+    tr.className = 'risk-row';
+    tr.dataset.cat = item.cat;
+    tr.dataset.id = item.id;
+    tr.onclick = () => toggleRow(item.id);
+
+    // Risk name + acronym
+    const tdName = document.createElement('td');
+    tdName.innerHTML = `<div class="risk-name">${item.name}</div><div class="risk-acronym">${item.acronym}</div>`;
+    tr.appendChild(tdName);
+
+    // Explanation
+    const tdExpl = document.createElement('td');
+    const bulletHtml = item.bullets.map(b => `<li>${b}</li>`).join('');
+    tdExpl.innerHTML = `
+      <div class="expl-short">${item.short}</div>
+      <div class="expl-full" id="expl-${item.id}">
+        <ul class="bullet-list">${bulletHtml}</ul>
+      </div>
+      <div class="expand-hint">
+        <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+          <path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+        </svg>
+        click to expand
+      </div>`;
+    tr.appendChild(tdExpl);
+
+    // Product ticks
+    ['ip','ci','ltci','pmi'].forEach(prod => {
+      const td = document.createElement('td');
+      td.className = 'prod-cell';
+      td.innerHTML = item[prod]
+        ? '<span class="tick">✓</span>'
+        : '<span class="dash">–</span>';
+      tr.appendChild(td);
+    });
+
+    // Variant delta columns
+    VARIANT_COLS.forEach(vc => {
+      const td = document.createElement('td');
+      td.className = 'variant-cell';
+      const v = item.variants && item.variants[vc.key];
+      if (v && v.deltas && v.deltas.length) {
+        const badges = (v.badges || []).map(b => `<span class="exam-badge">${b}</span>`).join('');
+        const deltas = v.deltas.map(d => `<li>${d}</li>`).join('');
+        td.innerHTML = `${badges}<ul class="delta-list">${deltas}</ul>`;
+      } else {
+        td.innerHTML = '<span class="variant-empty">—</span>';
+      }
+      tr.appendChild(td);
+    });
+
+    tbody.appendChild(tr);
+  });
+}
+
+function toggleRow(id) {
+  const tr = document.querySelector(`tr[data-id="${id}"]`);
+  const panel = document.getElementById(`expl-${id}`);
+  if (!tr || !panel) return;
+  tr.classList.toggle('expanded');
+  panel.classList.toggle('visible');
+}
+
+// ============================================================
+// FILTER / SEARCH
+// ============================================================
+function filterRows(cat, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+
+  document.querySelectorAll('#riskBody tr.risk-row').forEach(tr => {
+    if (cat === 'all' || tr.dataset.cat === cat) {
+      tr.classList.remove('hidden');
+    } else {
+      tr.classList.add('hidden');
+    }
+  });
+
+  // Also show/hide category headers
+  document.querySelectorAll('#riskBody tr.cat-header').forEach(tr => {
+    tr.style.display = '';
+  });
+}
+
+function searchRows(q) {
+  q = q.toLowerCase();
+  document.querySelectorAll('#riskBody tr.risk-row').forEach(tr => {
+    const text = tr.textContent.toLowerCase();
+    if (!q || text.includes(q)) {
+      tr.classList.remove('hidden');
+    } else {
+      tr.classList.add('hidden');
+    }
+  });
+}
+
+// ============================================================
+// TAB SWITCHING
+// ============================================================
+function switchTab(tab, btn) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('matrixPanel').style.display = tab === 'matrix' ? '' : 'none';
+  const mp = document.getElementById('mnemonicPanel');
+  mp.style.display = tab === 'mnemonics' ? 'block' : 'none';
+  if (tab === 'mnemonics') loadMnemonics();
+}
+
+// ============================================================
+// MNEMONICS — fetch from data/Memory_Aids.json only
+// No inline mnemonic definitions anywhere in this file.
+// ============================================================
+let mnemonicsLoaded = false;
+
+async function loadMnemonics() {
+  if (mnemonicsLoaded) return;
+  const container = document.getElementById('mnemonicContent');
+  try {
+    const resp = await fetch('data/Memory_Aids.json');
+    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+    const ma = await resp.json();
+    renderMnemonics(ma, container);
+    mnemonicsLoaded = true;
+  } catch (e) {
+    container.innerHTML = `<div class="status-msg">Could not load Memory_Aids.json: ${e.message}<br><small>Ensure this page is served from the repository root (not opened as a local file).</small></div>`;
+  }
+}
+
+function renderMnemonics(ma, container) {
+  let html = '<div class="mnem-grid">';
+
+  // Render topic aids
+  const topicAids = ma.topic_aids || {};
+  Object.values(topicAids).forEach(section => {
+    (section.aids || []).forEach(aid => {
+      html += renderAidCard(aid);
+    });
+  });
+
+  // Render product aids
+  const productAids = ma.product_aids || {};
+  Object.entries(productAids).forEach(([prodKey, section]) => {
+    (section.aids || []).forEach(aid => {
+      html += renderAidCard(aid, prodKey);
+    });
+  });
+
+  html += '</div>';
+  container.innerHTML = html || '<div class="status-msg">No memory aids found in Memory_Aids.json.</div>';
+}
+
+function renderAidCard(aid, prodKey) {
+  const items = (aid.items || []).map(item => `
+    <li>
+      <span class="mnem-letter">${item.letter || ''}</span>
+      <div>
+        <div class="mnem-word">${item.word || ''}</div>
+        <div class="mnem-detail">${item.detail || ''}</div>
+      </div>
+    </li>`).join('');
+
+  const tag = prodKey ? `<span class="exam-badge" style="margin-bottom:6px;display:inline-block">${prodKey}</span>` : '';
+
+  return `
+    <div class="mnem-card">
+      ${tag}
+      <div class="mnem-code">${aid.code || ''}</div>
+      <div class="mnem-title">${aid.title || ''}</div>
+      <ul class="mnem-rows">${items}</ul>
+    </div>`;
+}
+
+// ============================================================
+// INIT
+// ============================================================
+buildTable();
+</script>
+</body>
+</html>
