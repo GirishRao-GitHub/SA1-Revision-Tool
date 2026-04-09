@@ -22,607 +22,244 @@
   --accent2: #7c3aed;
   --accentbg: #221a3a;
   --radius: 6px;
-  --radius2: 10px;
   --mono: 'IBM Plex Mono', monospace;
   --sans: 'IBM Plex Sans', sans-serif;
 }
-
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { height: 100%; }
-body {
-  font-family: var(--sans);
-  background: var(--bg);
-  color: var(--text);
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
+body { font-family: var(--sans); background: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; }
 
-/* ── TOPBAR ── */
-.topbar {
-  background: var(--surface);
-  border-bottom: 1px solid var(--border);
-  padding: 10px 20px;
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  flex-wrap: wrap;
-  flex-shrink: 0;
-}
-.logo {
-  font-family: var(--mono);
-  font-weight: 600;
-  font-size: 15px;
-  color: var(--accent);
-  letter-spacing: .05em;
-  white-space: nowrap;
-}
-.tagline { font-size: 12px; color: var(--text3); }
+/* TOPBAR */
+.topbar { background: var(--surface); border-bottom: 1px solid var(--border); padding: 8px 16px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; flex-shrink: 0; }
+.logo { font-family: var(--mono); font-weight: 600; font-size: 14px; color: var(--accent); letter-spacing: .05em; white-space: nowrap; }
+#pillar-btn-group, #src-filter-group { display: flex; gap: 2px; align-items: center; background: var(--surface2); padding: 2px; border-radius: 6px; border: 1px solid var(--border); flex-shrink: 0; }
+.p-btn { padding: 3px 9px; font-size: 11px; font-weight: 700; border-radius: 4px; border: 1px solid transparent; background: transparent; color: var(--text2); cursor: pointer; transition: all 0.15s; min-width: 34px; height: 26px; display: flex; align-items: center; justify-content: center; }
+.p-btn:hover { background: var(--surface3); color: var(--text); }
+.p-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+.src-btn { padding: 3px 9px; font-size: 11px; font-weight: 700; font-family: var(--mono); border-radius: 4px; border: 1px solid transparent; background: transparent; color: var(--text2); cursor: pointer; transition: all 0.15s; height: 26px; display: flex; align-items: center; }
+.src-btn:hover { background: var(--surface3); }
+.src-btn[data-src="ALL"].active { background: var(--surface3); color: var(--text); }
+.src-btn[data-src="IAI"].active { background: #1a2a22; color: #34d399; border-color: #34d399; }
+.src-btn[data-src="IFoA"].active { background: #1a222a; color: #60a5fa; border-color: #60a5fa; }
+.topbar-right { margin-left: auto; display: flex; align-items: center; gap: 6px; }
+.icon-btn { background: transparent; border: none; color: var(--text2); cursor: pointer; font-size: 15px; padding: 4px 6px; border-radius: 4px; }
+.icon-btn:hover { color: var(--text); }
+.back-btn { font-family: var(--mono); font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 4px; border: 1px solid var(--border2); background: var(--surface2); color: var(--text2); cursor: pointer; transition: all 0.2s; }
+.back-btn:hover { border-color: var(--accent); color: var(--accent); }
 
-/* Pillar filter buttons */
-#pillar-btn-group {
-  display: flex;
-  gap: 2px;
-  align-items: center;
-  background: var(--surface2);
-  padding: 2px;
-  border-radius: 6px;
-  border: 1px solid var(--border);
-  margin-left: 4px;
-  flex-shrink: 0;
-}
-.src-btn {
-  padding: 3px 10px;
-  font-size: 11px;
-  font-weight: 700;
-  font-family: var(--sans);
-  border-radius: 4px;
-  border: 1px solid var(--border2);
-  background: var(--surface2);
-  color: var(--text2);
-  cursor: pointer;
-  transition: all 0.2s;
-  text-transform: uppercase;
-  letter-spacing: 0.02em;
-  min-width: 44px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  white-space: nowrap;
-}
-.src-btn:hover { background: var(--surface3); color: var(--text); border-color: var(--text3); }
-.src-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); box-shadow: 0 1px 6px rgba(139,92,246,0.15); }
-
-.p-filter {
-  font-size: 13px !important;
-  font-weight: 800 !important;
-  transition: all 0.2s cubic-bezier(0.4,0,0.2,1) !important;
-  text-shadow: 0 0 10px rgba(0,0,0,0.5);
-}
-.p-filter:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-  background: var(--surface3) !important;
-}
-.p-filter.active {
-  background: var(--accent) !important;
-  color: #fff !important;
-  border-color: var(--accent) !important;
-  box-shadow: 0 0 15px rgba(139,92,246,0.4) !important;
-}
-
-/* Src filter buttons (IAI / IFoA) */
-#src-filter-group {
-  display: flex;
-  gap: 2px;
-  align-items: center;
-  background: var(--surface2);
-  padding: 2px;
-  border-radius: 6px;
-  border: 1px solid var(--border);
-  flex-shrink: 0;
-}
-.src-filter-btn {
-  padding: 3px 10px;
-  font-size: 11px;
-  font-weight: 700;
-  font-family: var(--mono);
-  border-radius: 4px;
-  border: 1px solid var(--border2);
-  background: var(--surface2);
-  color: var(--text2);
-  cursor: pointer;
-  transition: all 0.2s;
-  letter-spacing: 0.04em;
-  min-width: 40px;
-  height: 32px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-.src-filter-btn:hover { background: var(--surface3); }
-.src-filter-btn[data-src="ALL"].active  { background: var(--surface3); color: var(--text);    border-color: var(--text3); }
-.src-filter-btn[data-src="IAI"].active  { background: #1a2a22;         color: #34d399;         border-color: #34d399; box-shadow: 0 0 10px rgba(52,211,153,0.25); }
-.src-filter-btn[data-src="IFoA"].active { background: #1a222a;         color: #60a5fa;         border-color: #60a5fa; box-shadow: 0 0 10px rgba(96,165,250,0.25); }
-
-/* Controls group right side */
-.topbar-actions { margin-left: auto; display: flex; align-items: center; gap: 6px; }
-.mode-btn {
-  padding: 4px 12px;
-  font-size: 11px;
-  font-weight: 600;
-  font-family: var(--sans);
-  border-radius: 4px;
-  border: none;
-  cursor: pointer;
-  transition: all 0.2s;
-  background: transparent;
-  color: var(--text2);
-}
-.mode-btn:hover { color: var(--text); }
-
-/* Recall toggle */
-#btn-recall {
-  font-family: var(--sans);
-  font-size: 11px;
-  font-weight: 600;
-  padding: 4px 12px;
-  border-radius: 4px;
-  border: 1px solid var(--border);
-  cursor: pointer;
-  transition: all 0.2s;
-  background: var(--surface3);
-  color: var(--text2);
-}
-
-/* Hide/show sub-themes toggle */
-#btn-toggle-sub {
-  font-family: var(--sans);
-  font-size: 11px;
-  font-weight: 600;
-  padding: 4px 10px;
-  border-radius: 4px;
-  border: 1px solid var(--border);
-  cursor: pointer;
-  transition: all 0.2s;
-  background: var(--surface3);
-  color: var(--text2);
-}
-
-/* ── TOOLTIP ── */
-.fw-tooltip {
-  position: fixed;
-  z-index: 10000;
-  background: rgba(21,25,35,0.97);
-  backdrop-filter: blur(8px);
-  border: 1px solid var(--border2);
-  border-radius: 8px;
-  padding: 10px 14px;
-  color: var(--text);
-  font-size: 13px;
-  pointer-events: none;
-  opacity: 0;
-  transform: translateY(5px);
-  transition: opacity 0.2s, transform 0.2s;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.05);
-  max-width: 250px;
-  line-height: 1.4;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
+/* TOOLTIP */
+.fw-tooltip { position: fixed; z-index: 10000; background: rgba(21,25,35,0.97); backdrop-filter: blur(8px); border: 1px solid var(--border2); border-radius: 8px; padding: 8px 12px; color: var(--text); font-size: 12px; pointer-events: none; opacity: 0; transform: translateY(5px); transition: opacity 0.2s, transform 0.2s; max-width: 200px; line-height: 1.4; display: flex; flex-direction: column; gap: 3px; }
 .fw-tooltip.visible { opacity: 1; transform: translateY(0); }
-.fw-tooltip-tag {
-  font-family: var(--mono);
-  font-size: 10px;
-  font-weight: 700;
-  text-transform: uppercase;
-  color: var(--accent);
-  letter-spacing: 0.05em;
-}
-.fw-tooltip-desc { font-weight: 500; }
+.fw-tooltip-tag { font-family: var(--mono); font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--accent); }
 
-/* ── PILLAR TAGS ── */
-.pillar-tag {
-  font-family: var(--mono);
-  font-size: 9px;
-  font-weight: 700;
-  padding: 1px 4px;
-  border-radius: 3px;
-  background: var(--surface3);
-  color: var(--text3);
-  border: 1px solid var(--border);
-  text-transform: uppercase;
-  display: inline-block;
-  flex-shrink: 0;
-}
-.pillar-tag.p1 { color: #f87171; border-color: #f87171; background: #2a1a1a; }
-.pillar-tag.p2 { color: #fbbf24; border-color: #fbbf24; background: #2a241a; }
-.pillar-tag.p3 { color: #34d399; border-color: #34d399; background: #1a2a22; }
-.pillar-tag.p4 { color: #60a5fa; border-color: #60a5fa; background: #1a222a; }
-.pillar-tag.p5 { color: #a78bfa; border-color: #a78bfa; background: #221a2a; }
-.pillar-tag.p6 { color: #f472b6; border-color: #f472b6; background: #2a1a24; }
+/* PILLAR TAGS */
+.ptag { font-family: var(--mono); font-size: 9px; font-weight: 700; padding: 1px 4px; border-radius: 3px; border: 1px solid; text-transform: uppercase; display: inline-block; flex-shrink: 0; }
+.ptag.p1 { color: #f87171; border-color: #f87171; background: rgba(248,113,113,0.1); }
+.ptag.p2 { color: #fbbf24; border-color: #fbbf24; background: rgba(251,191,36,0.1); }
+.ptag.p3 { color: #34d399; border-color: #34d399; background: rgba(52,211,153,0.1); }
+.ptag.p4 { color: #60a5fa; border-color: #60a5fa; background: rgba(96,165,250,0.1); }
+.ptag.p5 { color: #a78bfa; border-color: #a78bfa; background: rgba(167,139,250,0.1); }
+.ptag.p6 { color: #f472b6; border-color: #f472b6; background: rgba(244,114,182,0.1); }
 
-/* ── SOURCE BADGES ── */
-.src-badge {
-  font-family: var(--mono);
-  font-size: 7px;
-  font-weight: 700;
-  padding: 1px 5px;
-  border-radius: 3px;
-  border: 1px solid;
-  display: inline-block;
-  vertical-align: middle;
-  position: relative;
-  top: -1px;
-  white-space: nowrap;
-  flex-shrink: 0;
-  letter-spacing: 0.02em;
-  cursor: default;
-}
+/* SOURCE BADGES */
+.src-badge { font-family: var(--mono); font-size: 7px; font-weight: 700; padding: 1px 5px; border-radius: 3px; border: 1px solid; display: inline-block; vertical-align: middle; position: relative; top: -1px; white-space: nowrap; }
 .src-badge.iai  { color: #34d399; border-color: #34d399; background: #1a2a22; }
 .src-badge.ifoa { color: #60a5fa; border-color: #60a5fa; background: #1a222a; }
-.src-badges-wrap {
-  display: inline-flex;
-  gap: 3px;
-  align-items: center;
-  flex-shrink: 0;
-  margin-left: 5px;
-}
+.src-badges-wrap { display: inline-flex; gap: 3px; align-items: center; margin-left: 5px; }
 
-/* ── MAIN LAYOUT ── */
-.main {
-  flex: 1;
-  display: flex;
-  min-height: 0;
-  overflow: hidden;
-}
+/* LAYOUT */
+.main { flex: 1; display: flex; min-height: 0; overflow: hidden; }
 
-/* ── LEFT PANE (Master Themes) ── */
-#fw-left-pane {
-  background: var(--surface2);
-  border-right: 1px solid var(--border);
-  overflow-y: auto;
-  flex: 0 0 250px;
-  display: flex;
-  flex-direction: column;
-  scrollbar-width: thin;
-  scrollbar-color: var(--border2) transparent;
-}
-#fw-left-pane::-webkit-scrollbar { width: 4px; }
-#fw-left-pane::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+/* LEFT PANE */
+#fw-left-pane { background: var(--surface2); border-right: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; flex-shrink: 0; width: 210px; transition: width 0.22s cubic-bezier(0.4,0,0.2,1); }
+#fw-left-pane.collapsed { width: 40px; }
+.pane-header { padding: 8px 8px 8px 12px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; background: var(--surface2); }
+.pane-title { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: .08em; color: var(--accent); white-space: nowrap; overflow: hidden; }
+.collapse-btn { width: 22px; height: 22px; border-radius: 4px; border: 1px solid var(--border2); background: var(--surface3); color: var(--text2); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 11px; flex-shrink: 0; transition: all 0.15s; }
+.collapse-btn:hover { border-color: var(--accent); color: var(--accent); }
+#fw-groups-list { padding: 8px; display: flex; flex-direction: column; gap: 3px; overflow-y: auto; overflow-x: hidden; scrollbar-width: thin; scrollbar-color: var(--border2) transparent; }
+#fw-left-pane.collapsed #fw-groups-list { padding: 8px 4px; align-items: center; }
+.group-item { padding: 7px 9px; border-radius: 6px; font-size: 11px; font-weight: 600; color: var(--text2); cursor: pointer; border: 1px solid transparent; display: flex; align-items: center; justify-content: space-between; gap: 6px; white-space: nowrap; overflow: hidden; transition: all 0.15s; }
+.group-item:hover { border-color: var(--border2); color: var(--text); background: var(--surface3); }
+.group-item.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+.group-item.active .ptag { border-color: rgba(255,255,255,0.4); color: rgba(255,255,255,0.85); background: rgba(255,255,255,0.15); }
+.group-item-label { overflow: hidden; text-overflow: ellipsis; flex: 1; min-width: 0; }
+.collapsed-tag { width: 28px; height: 22px; border-radius: 3px; border: 1px solid; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 700; cursor: pointer; font-family: var(--mono); flex-shrink: 0; margin-bottom: 2px; transition: all 0.15s; }
 
-.pane-header {
-  padding: 10px 12px;
-  border-bottom: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-shrink: 0;
-  position: sticky;
-  top: 0;
-  z-index: 5;
-  background: var(--surface2);
-}
-.pane-title {
-  font-size: 11px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: .08em;
-}
-#fw-topics-list {
-  padding: 10px;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
-}
+/* MID PANE */
+#fw-mid-pane { background: var(--surface); border-right: 1px solid var(--border); overflow-y: auto; flex: 0 0 220px; display: flex; flex-direction: column; scrollbar-width: thin; scrollbar-color: var(--border2) transparent; }
+.mid-header { padding: 8px 10px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; position: sticky; top: 0; z-index: 5; background: var(--surface); gap: 6px; }
+.mid-title-text { font-size: 11px; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; flex: 1; }
+.recall-sm { font-family: var(--sans); font-size: 9px; font-weight: 600; padding: 2px 7px; border-radius: 4px; border: 1px solid var(--border); background: var(--surface3); color: var(--text2); cursor: pointer; transition: all 0.2s; white-space: nowrap; flex-shrink: 0; }
+.recall-sm.on { background: var(--accent); color: #fff; border-color: var(--accent); }
+#fw-topics-list { padding: 8px; display: flex; flex-direction: column; gap: 3px; }
+.topic-item { padding: 8px 10px; border-radius: 6px; font-size: 11px; font-weight: 600; color: var(--text2); cursor: pointer; border: 1px solid transparent; border-left: 2px solid transparent; display: flex; align-items: center; gap: 6px; transition: all 0.15s; }
+.topic-item:hover { background: var(--surface2); color: var(--text); }
+.topic-item.active { background: var(--accentbg); color: var(--accent); border-left-color: var(--accent); }
+.v-badge { font-size: 10px; border-radius: 3px; padding: 1px 5px; font-family: var(--mono); font-weight: 700; flex-shrink: 0; }
+.v-badge.error { background: #3d1a1a; color: #f87171; border: 1px solid #f87171; }
+.v-badge.warn  { background: #3d330a; color: #fbbf24; border: 1px solid #fbbf24; }
 
-/* ── MID PANE (Subtopics) ── */
-#fw-mid-pane {
-  background: var(--surface);
-  border-right: 1px solid var(--border);
-  overflow-y: auto;
-  flex: 0 0 300px;
-  display: flex;
-  flex-direction: column;
-  scrollbar-width: thin;
-  scrollbar-color: var(--border2) transparent;
-}
-#fw-mid-pane::-webkit-scrollbar { width: 4px; }
-#fw-mid-pane::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+/* RIGHT PANE */
+#fw-right-pane { flex: 1; display: flex; flex-direction: column; background: var(--bg); overflow: hidden; min-width: 0; }
+.right-topbar { padding: 7px 16px; border-bottom: 1px solid var(--border); background: var(--surface); flex-shrink: 0; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.breadcrumb { display: flex; align-items: center; gap: 5px; font-size: 10px; color: var(--text3); overflow: hidden; flex: 1; font-family: var(--mono); }
+.bc-seg { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.bc-seg.active { color: var(--text2); }
+.bc-arrow { color: var(--text3); flex-shrink: 0; }
+.right-controls { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+.progress-wrap { display: flex; align-items: center; gap: 5px; }
+.prog-dots { display: flex; gap: 3px; flex-wrap: wrap; max-width: 120px; }
+.prog-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--surface3); border: 1px solid var(--border2); flex-shrink: 0; }
+.prog-dot.done { background: var(--accent); border-color: var(--accent); }
+.prog-frac { font-size: 10px; color: var(--text3); font-family: var(--mono); white-space: nowrap; }
 
-.mid-header {
-  padding: 10px 12px;
-  border-bottom: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-shrink: 0;
-  position: sticky;
-  top: 0;
-  z-index: 5;
-  background: var(--surface);
-}
-#fw-subtopics-list {
-  padding: 12px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
+/* SUBTOPIC STRIP */
+.subtopic-strip { padding: 10px 14px; border-bottom: 1px solid var(--border); background: var(--surface2); flex-shrink: 0; display: flex; flex-wrap: wrap; gap: 6px; }
+.st-btn { padding: 4px 12px; font-size: 10px; font-weight: 600; border-radius: 20px; border: 1px solid var(--border2); background: var(--surface3); color: var(--text2); cursor: pointer; white-space: nowrap; display: flex; align-items: center; gap: 4px; transition: all 0.15s; font-family: var(--sans); }
+.st-btn:hover { border-color: var(--accent); color: var(--text); }
+.st-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+.st-btn-count { font-size: 9px; opacity: 0.6; font-family: var(--mono); }
+.st-btn.active .st-btn-count { opacity: 0.8; }
 
-/* ── RIGHT PANE (Content) ── */
-#fw-right-pane {
-  flex: 1;
-  overflow-y: auto;
-  background: var(--bg);
-  padding: 40px;
-  scrollbar-width: thin;
-  scrollbar-color: var(--accent) transparent;
-}
-#fw-right-pane::-webkit-scrollbar { width: 6px; }
-#fw-right-pane::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 3px; }
+/* CONTENT */
+#fw-content { flex: 1; padding: 28px 36px; overflow-y: auto; max-width: 860px; margin: 0 auto; width: 100%; scrollbar-width: thin; scrollbar-color: var(--accent) transparent; color: var(--text); font-size: 15px; line-height: 1.7; }
+#fw-content::-webkit-scrollbar { width: 5px; }
+#fw-content::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 3px; }
+.fw-bullets-container { background: var(--surface2); border-left: 4px solid var(--accent); padding: 20px; border-radius: 0 var(--radius) var(--radius) 0; font-size: 14px; line-height: 1.75; position: relative; }
+.recall-overlay { color: var(--text3); font-style: italic; font-size: 12px; margin-bottom: 12px; line-height: 1.5; max-width: 70%; }
+.recall-reveal-wrap { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; background: var(--surface3); padding: 4px 8px; border-radius: 4px; border: 1px solid var(--border); width: fit-content; }
+.recall-reveal-label { font-size: 10px; font-weight: 700; color: var(--text3); text-transform: uppercase; letter-spacing: 0.04em; }
 
-#fw-content {
-  max-width: 800px;
-  margin: 0 auto;
-  color: var(--text);
-  font-size: 15px;
-  line-height: 1.7;
-}
-
-/* Reveal animation */
-@keyframes reveal-pulse {
-  0%   { transform: scale(1);    background: var(--surface3); }
-  50%  { transform: scale(1.01); background: var(--accentbg); }
-  100% { transform: scale(1);    background: var(--surface2); }
-}
-
-/* Loading overlay */
-#loading-overlay {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 16px;
-  position: absolute;
-  inset: 0;
-  background: var(--bg);
-  z-index: 100;
-}
-.loading-text { font-size: 14px; color: var(--text2); }
+/* Loading */
+#loading-overlay { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; position: absolute; inset: 0; background: var(--bg); z-index: 100; }
+.loading-text { font-size: 13px; color: var(--text2); }
 .dots { display: flex; gap: 6px; }
 .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); animation: pulse 1.2s ease-in-out infinite; }
 .dot:nth-child(2) { animation-delay: .2s; }
 .dot:nth-child(3) { animation-delay: .4s; }
 @keyframes pulse { 0%,100%{opacity:.2} 50%{opacity:1} }
+@keyframes reveal-pulse { 0%{background:var(--surface3);} 50%{background:var(--accentbg);} 100%{background:var(--surface2);} }
 </style>
 </head>
 <body>
 
 <!-- TOPBAR -->
 <div class="topbar">
-  <!-- Pillar filter buttons -->
   <div id="pillar-btn-group">
-    <button class="src-btn p-filter active" onclick="filterPillar('ALL')">ALL</button>
-    <button class="src-btn p-filter" style="color:#f87171;" onclick="filterPillar('P1')" onmouseover="showTooltip(this,'P1','Product Design & Distribution')" onmouseout="hideTooltip()">P1</button>
-    <button class="src-btn p-filter" style="color:#fbbf24;" onclick="filterPillar('P2')" onmouseover="showTooltip(this,'P2','Pricing & Underwriting')" onmouseout="hideTooltip()">P2</button>
-    <button class="src-btn p-filter" style="color:#34d399;" onclick="filterPillar('P3')" onmouseover="showTooltip(this,'P3','Claims Management')" onmouseout="hideTooltip()">P3</button>
-    <button class="src-btn p-filter" style="color:#60a5fa;" onclick="filterPillar('P4')" onmouseover="showTooltip(this,'P4','Risk Management & Reinsurance')" onmouseout="hideTooltip()">P4</button>
-    <button class="src-btn p-filter" style="color:#a78bfa;" onclick="filterPillar('P5')" onmouseover="showTooltip(this,'P5','Valuation & Data')" onmouseout="hideTooltip()">P5</button>
-    <button class="src-btn p-filter" style="color:#f472b6;" onclick="filterPillar('P6')" onmouseover="showTooltip(this,'P6','Regulation & Ethics')" onmouseout="hideTooltip()">P6</button>
+    <button class="p-btn active" onclick="filterPillar('ALL')">ALL</button>
+    <button class="p-btn" style="color:#f87171;" onclick="filterPillar('P1')" onmouseover="showTooltip(this,'P1','Product Design & Distribution')" onmouseout="hideTooltip()">P1</button>
+    <button class="p-btn" style="color:#fbbf24;" onclick="filterPillar('P2')" onmouseover="showTooltip(this,'P2','Pricing & Underwriting')" onmouseout="hideTooltip()">P2</button>
+    <button class="p-btn" style="color:#34d399;" onclick="filterPillar('P3')" onmouseover="showTooltip(this,'P3','Claims Management')" onmouseout="hideTooltip()">P3</button>
+    <button class="p-btn" style="color:#60a5fa;" onclick="filterPillar('P4')" onmouseover="showTooltip(this,'P4','Risk Management & Reinsurance')" onmouseout="hideTooltip()">P4</button>
+    <button class="p-btn" style="color:#a78bfa;" onclick="filterPillar('P5')" onmouseover="showTooltip(this,'P5','Valuation & Data')" onmouseout="hideTooltip()">P5</button>
+    <button class="p-btn" style="color:#f472b6;" onclick="filterPillar('P6')" onmouseover="showTooltip(this,'P6','Regulation & Ethics')" onmouseout="hideTooltip()">P6</button>
   </div>
-
-  <!-- Source filter buttons -->
   <div id="src-filter-group">
-    <button class="src-filter-btn" data-src="ALL"  onclick="filterSrc('ALL')" >ALL</button>
-    <button class="src-filter-btn" data-src="IAI"  onclick="filterSrc('IAI')" style="color:#34d399;">IAI</button>
-    <button class="src-filter-btn" data-src="IFoA" onclick="filterSrc('IFoA')" style="color:#60a5fa;">IFoA</button>
+    <button class="src-btn active" data-src="ALL" onclick="filterSrc('ALL')">ALL</button>
+    <button class="src-btn" data-src="IAI"  onclick="filterSrc('IAI')"  style="color:#34d399;">IAI</button>
+    <button class="src-btn" data-src="IFoA" onclick="filterSrc('IFoA')" style="color:#60a5fa;">IFoA</button>
   </div>
-
-  <!-- Title -->
-  <div style="flex:1; text-align:center;">
+  <div style="flex:1;text-align:center;">
     <span class="logo">Master Exam Frameworks</span>
-    <span style="font-size:12px; color:var(--text3); margin-left:10px; font-family:var(--mono);" id="live-clock"></span>
+    <span style="font-size:11px;color:var(--text3);margin-left:10px;font-family:var(--mono);" id="live-clock"></span>
   </div>
-
-  <!-- Right controls -->
-  <div class="topbar-actions">
-    <button class="mode-btn" onclick="toggleFullscreen()" title="Full Screen" style="font-size:15px;">⛶</button>
-    <div style="width:1px; height:24px; background:var(--border); margin:0 4px;"></div>
-    <button onclick="window.location.href='SA1ity_Check.html'" title="Back to SA1ity Check" style="font-family:var(--mono);font-size:11px;font-weight:600;padding:4px 12px;border-radius:4px;border:1px solid var(--border2);background:var(--surface2);color:var(--text2);cursor:pointer;transition:all 0.2s;white-space:nowrap;" onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent)';" onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--text2)';">← Back</button>
+  <div class="topbar-right">
+    <button class="icon-btn" onclick="toggleFullscreen()" title="Fullscreen">⛶</button>
+    <div style="width:1px;height:22px;background:var(--border);margin:0 2px;"></div>
+    <button class="back-btn" onclick="window.location.href='SA1ity_Check.html'">← Back</button>
   </div>
 </div>
 
 <!-- TOOLTIP -->
 <div class="fw-tooltip" id="fw-tooltip">
   <span class="fw-tooltip-tag" id="fw-tooltip-tag"></span>
-  <span class="fw-tooltip-desc" id="fw-tooltip-desc"></span>
+  <span id="fw-tooltip-desc" style="font-size:11px;color:var(--text2);"></span>
 </div>
 
 <!-- MAIN -->
 <div class="main" style="position:relative;">
 
-  <!-- Loading overlay -->
   <div id="loading-overlay">
     <div class="loading-text">Loading frameworks…</div>
     <div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
   </div>
 
-  <!-- LEFT: Master Themes -->
+  <!-- LEFT: Groups -->
   <div id="fw-left-pane">
     <div class="pane-header">
-      <div class="pane-title" style="color:var(--accent);">Master Themes</div>
-      <button id="btn-recall-left" onclick="toggleRecallLeft()" style="font-family:var(--sans);font-size:10px;font-weight:600;padding:2px 8px;border-radius:4px;border:1px solid var(--border);background:var(--surface3);color:var(--text2);cursor:pointer;transition:all 0.2s;white-space:nowrap;">Recall: OFF</button>
+      <span class="pane-title" id="left-pane-label">Groups</span>
+      <button class="collapse-btn" id="collapse-btn" onclick="toggleLeftPane()">‹</button>
     </div>
-    <div id="fw-topics-list"></div>
+    <div id="fw-groups-list"></div>
   </div>
 
-  <!-- MID: Subtopics -->
+  <!-- MID: Topics within selected group -->
   <div id="fw-mid-pane">
     <div class="mid-header">
-      <div class="pane-title" id="fw-mid-title" style="color:var(--text);">Subtopics</div>
-      <button id="btn-recall-mid" onclick="toggleRecallMid()" style="font-family:var(--sans);font-size:10px;font-weight:600;padding:2px 8px;border-radius:4px;border:1px solid var(--border);background:var(--surface3);color:var(--text2);cursor:pointer;transition:all 0.2s;white-space:nowrap;">Recall: OFF</button>
+      <span class="mid-title-text" id="fw-mid-title">Topics</span>
+      <button class="recall-sm" id="btn-recall-left" onclick="toggleRecallLeft()">Recall: OFF</button>
     </div>
-    <div id="fw-subtopics-list">
-      <div style="color:var(--text3); font-size:13px; text-align:center; margin-top:40px;">Select a Master Theme first</div>
+    <div id="fw-topics-list">
+      <div style="color:var(--text3);font-size:12px;text-align:center;margin-top:40px;">Select a group first</div>
     </div>
   </div>
 
-  <!-- RIGHT: Content -->
+  <!-- RIGHT: Subtopic buttons + content -->
   <div id="fw-right-pane">
-    <div id="fw-content">
-      <h2 style="color:var(--text3); text-align:center; margin-top:100px;">Select a Subtopic to view details</h2>
-    </div>
-  </div>
 
+    <div class="right-topbar">
+      <div class="breadcrumb" id="fw-breadcrumb">
+        <span class="bc-seg" id="bc-group">—</span>
+        <span class="bc-arrow">›</span>
+        <span class="bc-seg" id="bc-topic">—</span>
+        <span class="bc-arrow">›</span>
+        <span class="bc-seg active" id="bc-subtopic">—</span>
+      </div>
+      <div class="right-controls">
+        <div class="progress-wrap" id="fw-progress-wrap" style="display:none;">
+          <div class="prog-dots" id="fw-prog-dots"></div>
+          <span class="prog-frac" id="fw-prog-frac">0/0</span>
+        </div>
+        <button class="recall-sm" id="btn-recall-mid" onclick="toggleRecallMid()">Recall: OFF</button>
+      </div>
+    </div>
+
+    <div class="subtopic-strip" id="fw-subtopic-strip">
+      <div style="color:var(--text3);font-size:12px;">Select a topic to see subtopics</div>
+    </div>
+
+    <div id="fw-content">
+      <div style="color:var(--text3);text-align:center;margin-top:80px;font-size:13px;">Select a topic from the middle pane</div>
+    </div>
+
+  </div>
 </div>
 
 <script>
-// ── SA1 Keyword list for highlighting ──────────────────────────────────────
-const SA1_KEYWORDS = [
-  "Solvency II","SCR","Best Estimate","Risk Margin","PMI","Income Protection",
-  "Morbidity","Mortality","Lapse","Anti-selection","Moral Hazard","Diversification",
-  "Technical Provisions","Capital","Underwriting","Claims Management","Product Design",
-  "Pricing","Expenses","Taxation","Regulation","State Provision","Reinsurance",
-  "Social Care","Long Term Care","Critical Illness","IP","CI","LTC","IRDAI","PMJAY",
-  "Treating Customers Fairly","Genetic Testing","Yield Curve","Asset Liability","QALYs",
-  "Value at Risk","Run-off","Bornhuetter","IBNR"
-];
-
+const SA1_KEYWORDS = ["Solvency II","SCR","Best Estimate","Risk Margin","PMI","Income Protection","Morbidity","Mortality","Lapse","Anti-selection","Moral Hazard","Diversification","Technical Provisions","Capital","Underwriting","Claims Management","Product Design","Pricing","Expenses","Taxation","Regulation","State Provision","Reinsurance","Social Care","Long Term Care","Critical Illness","IP","CI","LTC","IRDAI","PMJAY","Treating Customers Fairly","Genetic Testing","Yield Curve","Asset Liability","QALYs","Value at Risk","Run-off","Bornhuetter","IBNR"];
 function highlightKeywords(text) {
   SA1_KEYWORDS.forEach(kw => {
     const re = new RegExp('\\b(' + kw.replace(/[.*+?^${}()|[\]\\]/g,'\\$&') + ')\\b','g');
-    text = text.replace(re, '<span style="font-weight:700;color:#fff;text-decoration:underline;text-decoration-color:var(--accent);text-underline-offset:2px;">$1</span>');
+    text = text.replace(re,'<span style="font-weight:700;color:#fff;text-decoration:underline;text-decoration-color:var(--accent);text-underline-offset:2px;">$1</span>');
   });
   return text;
 }
 
-// ── Source-tag helpers ─────────────────────────────────────────────────────
-// Bullets may end with [src:IAI_0722,IFoA_0923] — extract tags and return
-// { cleanText: string, badgesHtml: string }
 function parseSrcTags(rawText) {
   const match = rawText.match(/\[src:([^\]]+)\]\s*$/);
   if (!match) return { cleanText: rawText, badgesHtml: '' };
-
   const cleanText = rawText.slice(0, match.index).trimEnd();
   const codes = match[1].split(',').map(s => s.trim()).filter(Boolean);
-
   const badges = codes.map(code => {
-    // code format: IAI_MMYY or IFoA_MMYY  (e.g. IAI_0722, IFoA_0923)
     const m = code.match(/^(IAI|IFoA)_(\d{2})(\d{2})$/i);
     if (!m) return '';
-    const org   = m[1].toUpperCase() === 'IFOA' ? 'IFoA' : 'IAI';
-    const month = m[2];
-    const year  = m[3];
-    const cls   = org === 'IFoA' ? 'ifoa' : 'iai';
-    const label = org + '\u00a0' + month + '/' + year;   // e.g. "IAI 07/22"
-    return '<span class="src-badge ' + cls + '" title="' + org + ' exam sitting ' + month + '/' + year + '">' + label + '</span>';
+    const org = m[1].toUpperCase() === 'IFOA' ? 'IFoA' : 'IAI';
+    const cls = org === 'IFoA' ? 'ifoa' : 'iai';
+    return '<span class="src-badge ' + cls + '" title="' + org + ' ' + m[2] + '/' + m[3] + '">' + org + '\u00a0' + m[2] + '/' + m[3] + '</span>';
   }).join('');
-
-  const badgesHtml = badges ? '<span class="src-badges-wrap">' + badges + '</span>' : '';
-  return { cleanText, badgesHtml };
+  return { cleanText, badgesHtml: badges ? '<span class="src-badges-wrap">' + badges + '</span>' : '' };
 }
-
-// ── State ──────────────────────────────────────────────────────────────────
-let TOPIC_FRAMEWORKS = {};
-let currentPillarFilter = 'ALL';
-let currentSrcFilter = 'ALL';
-let currentFrameworkData = null;
-let checkboxState = {};      // { subtopicIdx: { bulletIdx: bool } }
-let currentSubtopicIdx = null;
-let recallLeft = false;   // hides subtopic names in mid pane
-let recallMid  = false;   // hides bullet text in right pane
-
-// ── Boot ───────────────────────────────────────────────────────────────────
-window.onload = async function() {
-  // Load localStorage prefs
-  recallLeft = localStorage.getItem('rv_recall_left') === 'true';
-  recallMid  = localStorage.getItem('rv_recall_mid')  === 'true';
-
-  applyRecallLeftUI();
-  applyRecallMidUI();
-  applySrcFilterUI();
-
-  // Try to fetch Topic_Frameworks.json
-  let loaded = false;
-  const paths = ['data/Topic_Frameworks.json', 'Topic_Frameworks.json'];
-  for (const p of paths) {
-    try {
-      const res = await fetch(p + '?t=' + Date.now());
-      if (res.ok) { TOPIC_FRAMEWORKS = await res.json(); loaded = true; break; }
-    } catch(e) {}
-  }
-
-  document.getElementById('loading-overlay').style.display = 'none';
-
-  if (!loaded || Object.keys(TOPIC_FRAMEWORKS).length === 0) {
-    document.getElementById('fw-content').innerHTML =
-      '<div style="color:var(--text3);text-align:center;margin-top:80px;font-size:14px;">' +
-      '⚠️ Could not load <code>Topic_Frameworks.json</code>.<br><br>' +
-      'Make sure this file is in the same folder as <code>Revision.html</code><br>' +
-      'and open via a local server (e.g. <code>python -m http.server 8080</code>).</div>';
-    return;
-  }
-
-  validateAllEntries();
-  renderFrameworkList();
-  startLiveClock();
-};
-
-// ── Clock ──────────────────────────────────────────────────────────────────
-// ── Validation ──────────────────────────────────────────────────────────────────────────
-// Runs once on load. Stores { status, reasons } per key in VALIDATION.
-let VALIDATION = {};
-
-function validateAllEntries() {
-  VALIDATION = {};
-  Object.entries(TOPIC_FRAMEWORKS).forEach(function([key, entry]) {
-    const content = entry.content || [];
-    const reasons = [];
-
-    if (!content.length) {
-      reasons.push({ level: 'error', msg: 'No content array — entry will render blank.' });
-      VALIDATION[key] = { status: 'error', reasons };
-      return;
-    }
-
-    // Node-based validation logic
-    const h3nodes = content.filter(n => n.type === 'h3');
-    const h4nodes = content.filter(n => n.type === 'h4');
-    const pointNodes = content.filter(n => ['point', 'sub', 'numbered', 'text'].includes(n.type));
-
-    // Detect missing subtopics (h4)
-    if (h3nodes.length >= 1 && h4nodes.length === 0 && pointNodes.length >= 4) {
-      reasons.push({ level: 'error', msg: 'All points collapse into 1 subtopic. Add h4 subheadings.' });
-    }
-
-    if (h4nodes.length === 0 && pointNodes.length > 0) {
-        // Technically it will show up as "Overview" but usually we want structured h4s
-        reasons.push({ level: 'warn', msg: 'No h4 subtopics found; content will default to Overview.' });
-    }
-
-    const worst = reasons.some(r => r.level === 'error') ? 'error'
-                : reasons.some(r => r.level === 'warn')  ? 'warn' : 'ok';
-    VALIDATION[key] = { status: worst, reasons };
-  });
-}
-
-function startLiveClock() {
-  updateClock(); setInterval(updateClock, 1000);
-}
-function updateClock() {
-  const now = new Date();
-  const days   = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-  const h = String(now.getHours()).padStart(2,'0');
-  const m = String(now.getMinutes()).padStart(2,'0');
-  const s = String(now.getSeconds()).padStart(2,'0');
-  const el = document.getElementById('live-clock');
-  if (el) el.textContent = `${days[now.getDay()]}, ${now.getDate()} ${months[now.getMonth()]} ${h}:${m}:${s}`;
-}
-
-// ── Source Filter (IAI / IFoA) ─────────────────────────────────────────────
 function bulletMatchesSrc(line, srcFilter) {
   if (srcFilter === 'ALL') return true;
   const m = line.match(/\[src:([^\]]+)\]/);
@@ -630,350 +267,275 @@ function bulletMatchesSrc(line, srcFilter) {
   return m[1].split(',').some(c => c.trim().toUpperCase().startsWith(srcFilter.toUpperCase() + '_'));
 }
 
-function filterSrc(s) {
-  currentSrcFilter = s;
-  applySrcFilterUI();
-  renderFrameworkList();
+// State
+let TOPIC_FRAMEWORKS = {}, GROUPS = {};
+let currentPillarFilter = 'ALL', currentSrcFilter = 'ALL';
+let currentGroup = null, currentTopic = null, currentSubtopicIdx = null;
+let currentFrameworkData = null;
+let checkboxState = {};
+let recallLeft = false, recallMid = false, leftPaneCollapsed = false;
+let VALIDATION = {};
+
+const PILLAR_COLORS = { P1:'#f87171', P2:'#fbbf24', P3:'#34d399', P4:'#60a5fa', P5:'#a78bfa', P6:'#f472b6' };
+
+// Boot
+window.onload = async function() {
+  recallLeft = localStorage.getItem('rv_recall_left') === 'true';
+  recallMid  = localStorage.getItem('rv_recall_mid')  === 'true';
+  leftPaneCollapsed = localStorage.getItem('rv_left_collapsed') === 'true';
+  applyRecallLeftUI(); applyRecallMidUI(); applySrcFilterUI();
+  if (leftPaneCollapsed) { document.getElementById('fw-left-pane').classList.add('collapsed'); document.getElementById('collapse-btn').textContent = '›'; document.getElementById('left-pane-label').style.display = 'none'; }
+
+  let loaded = false;
+  for (const p of ['data/Topic_Frameworks.json','Topic_Frameworks.json']) {
+    try { const res = await fetch(p+'?t='+Date.now()); if (res.ok) { TOPIC_FRAMEWORKS = await res.json(); loaded = true; break; } } catch(e) {}
+  }
+  document.getElementById('loading-overlay').style.display = 'none';
+  if (!loaded || !Object.keys(TOPIC_FRAMEWORKS).length) {
+    document.getElementById('fw-content').innerHTML = '<div style="color:var(--text3);text-align:center;margin-top:80px;font-size:13px;">⚠️ Could not load Topic_Frameworks.json.<br><br>Serve via local server (e.g. python -m http.server 8080).</div>';
+    return;
+  }
+  GROUPS = TOPIC_FRAMEWORKS['_groups'] || {};
+  validateAllEntries();
+  renderGroupList();
+  startLiveClock();
+};
+
+function startLiveClock() { updateClock(); setInterval(updateClock,1000); }
+function updateClock() {
+  const now = new Date();
+  const el = document.getElementById('live-clock');
+  if (!el) return;
+  const days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'], months=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  el.textContent = days[now.getDay()]+', '+now.getDate()+' '+months[now.getMonth()]+' '+String(now.getHours()).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0')+':'+String(now.getSeconds()).padStart(2,'0');
 }
 
-function applySrcFilterUI() {
-  document.querySelectorAll('.src-filter-btn').forEach(btn => {
-    const val = btn.dataset.src;
-    const isActive = val === currentSrcFilter;
-    btn.classList.toggle('active', isActive);
-    if (!isActive) {
-      // restore default colour when inactive
-      if (val === 'IAI')       btn.style.color = '#34d399';
-      else if (val === 'IFoA') btn.style.color = '#60a5fa';
-      else                     btn.style.color = 'var(--text2)';
-      btn.style.background  = '';
-      btn.style.borderColor = '';
-    }
+function validateAllEntries() {
+  VALIDATION = {};
+  Object.entries(TOPIC_FRAMEWORKS).forEach(([key,entry]) => {
+    if (key === '_groups') return;
+    const content = entry.content || [], reasons = [];
+    if (!content.length) { reasons.push({level:'error',msg:'No content array.'}); VALIDATION[key]={status:'error',reasons}; return; }
+    const h4 = content.filter(n=>n.type==='h4'), pts = content.filter(n=>['point','sub','numbered','text'].includes(n.type));
+    if (!h4.length && pts.length>=4) reasons.push({level:'warn',msg:'No h4 subtopics; defaults to Overview.'});
+    VALIDATION[key] = { status: reasons.some(r=>r.level==='error')?'error':reasons.some(r=>r.level==='warn')?'warn':'ok', reasons };
   });
 }
 
-// ── Pillar Filter ──────────────────────────────────────────────────────────
+// Pillar filter
 function filterPillar(p) {
   currentPillarFilter = p;
-  document.querySelectorAll('.p-filter').forEach(btn => {
-    const txt = btn.textContent.trim();
-    const isActive = (p === 'ALL' && txt === 'ALL') || txt === p;
+  document.querySelectorAll('.p-btn').forEach(btn => {
+    const txt = btn.textContent.trim(), isActive = (p==='ALL'&&txt==='ALL')||txt===p;
     btn.classList.toggle('active', isActive);
-    if (isActive) {
-      btn.style.background = 'var(--accent)';
-      btn.style.color = '#fff';
-      btn.style.borderColor = 'var(--accent)';
-    } else {
-      btn.style.background = '';
-      btn.style.borderColor = '';
-      const c = { P1:'#f87171', P2:'#fbbf24', P3:'#34d399', P4:'#60a5fa', P5:'#a78bfa', P6:'#f472b6' };
-      btn.style.color = c[txt] || '';
-    }
+    if (!isActive) { btn.style.color=PILLAR_COLORS[txt]||''; btn.style.background=''; btn.style.borderColor=''; }
+    else btn.style.color='';
   });
-  renderFrameworkList();
+  renderGroupList();
 }
 
-// ── Render Left Pane ────────────────────────────────────────────────────────
-function renderFrameworkList() {
-  const listEl = document.getElementById('fw-topics-list');
-  listEl.innerHTML = '';
-  let themes = Object.keys(TOPIC_FRAMEWORKS).sort();
-
-  if (currentPillarFilter !== 'ALL') {
-    themes = themes.filter(t => {
-      const entry = TOPIC_FRAMEWORKS[t];
-      return entry && entry._meta && entry._meta.pillar === currentPillarFilter;
-    });
-  }
-
-  if (currentSrcFilter !== 'ALL') {
-    themes = themes.filter(t => {
-      const entry = TOPIC_FRAMEWORKS[t];
-      const content = entry && entry.content ? entry.content : [];
-      return content.some(n => {
-          const text = (n.text || '') + (n.bold || '');
-          return bulletMatchesSrc(text, currentSrcFilter);
-      });
-    });
-  }
-
-  if (themes.length === 0) {
-    listEl.innerHTML = '<div style="color:var(--text3);font-size:13px;text-align:center;margin-top:30px;">No topics for this pillar.</div>';
-    return;
-  }
-
-  themes.forEach(t => {
-    const btn = document.createElement('div');
-    btn.style.cssText = 'padding:10px 12px; border-radius:6px; cursor:pointer; font-size:12px; font-weight:600; color:var(--text); border:1px solid var(--border); transition:all 0.2s; background:var(--surface); display:flex; align-items:center; justify-content:space-between; gap:8px;';
-
-    const entry = TOPIC_FRAMEWORKS[t];
-    const pillar = (entry && entry._meta && entry._meta.pillar) ? entry._meta.pillar : '';
-    const icon   = (entry && entry._meta && entry._meta.icon)   ? entry._meta.icon   : '';
-    const tagHtml = pillar ? `<span class="pillar-tag ${pillar.toLowerCase()}">${pillar}</span>` : '';
-
-    const vResult = VALIDATION[t];
-    let vBadge = '';
-    if (vResult && vResult.status !== 'ok') {
-      const vTip   = vResult.reasons.map(r => r.msg).join('&#10;');
-      const vColor = vResult.status === 'error' ? '#f87171' : '#fbbf24';
-      const vBg    = vResult.status === 'error' ? '#3d1a1a' : '#3d330a';
-      const vLabel = vResult.status === 'error' ? '⚠ ERR' : '⚠ WARN';
-      vBadge = '<span title="' + vTip + '" style="font-size:10px;background:' + vBg + ';color:' + vColor + ';border:1px solid ' + vColor + ';border-radius:3px;padding:1px 5px;font-family:var(--mono);font-weight:700;flex-shrink:0;">' + vLabel + '</span>';
-    }
-    btn.innerHTML = `<span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;">${icon ? icon + ' ' : ''}${t}</span>${tagHtml}` + vBadge;
-
-    btn.onmouseover = () => { if (!btn.classList.contains('active')) btn.style.borderColor = 'var(--accent)'; };
-    btn.onmouseout  = () => { if (!btn.classList.contains('active')) btn.style.borderColor = 'var(--border)';  };
-    btn.onclick = () => {
-      Array.from(listEl.children).forEach(c => {
-        c.classList.remove('active');
-        c.style.borderColor = 'var(--border)';
-        c.style.background  = 'var(--surface)';
-        c.style.color       = 'var(--text)';
-      });
-      btn.classList.add('active');
-      btn.style.background  = 'var(--accent)';
-      btn.style.color       = '#fff';
-      btn.style.borderColor = 'var(--accent)';
-      renderMidContent(t);
-    };
-    listEl.appendChild(btn);
+// Src filter
+function filterSrc(s) { currentSrcFilter=s; applySrcFilterUI(); renderGroupList(); }
+function applySrcFilterUI() {
+  document.querySelectorAll('.src-btn').forEach(btn => {
+    const val=btn.dataset.src, isActive=val===currentSrcFilter;
+    btn.classList.toggle('active',isActive);
+    if (!isActive) { btn.style.color=val==='IAI'?'#34d399':val==='IFoA'?'#60a5fa':'var(--text2)'; btn.style.background=''; btn.style.borderColor=''; }
   });
 }
 
-// ── Parse Framework Lines ──────────────────────────────────────────────────
-// parseFrameworkLines removed as it reached EOL (Redundant with nodes)
+// Left pane collapse
+function toggleLeftPane() {
+  leftPaneCollapsed = !leftPaneCollapsed;
+  localStorage.setItem('rv_left_collapsed', leftPaneCollapsed);
+  const pane=document.getElementById('fw-left-pane'), btn=document.getElementById('collapse-btn'), label=document.getElementById('left-pane-label');
+  pane.classList.toggle('collapsed', leftPaneCollapsed);
+  btn.textContent = leftPaneCollapsed ? '›' : '‹';
+  label.style.display = leftPaneCollapsed ? 'none' : '';
+  leftPaneCollapsed ? renderCollapsedTags() : renderGroupList();
+}
 
-// ── Render Mid Pane ────────────────────────────────────────────────────────
-function renderMidContent(theme) {
-  const listEl = document.getElementById('fw-subtopics-list');
-  document.getElementById('fw-mid-title').textContent = theme;
-  document.getElementById('fw-content').innerHTML =
-    '<h2 style="color:var(--text3);text-align:center;margin-top:100px;">Select a Subtopic to view details</h2>';
-
-  // Reset checkbox state for the new topic
-  checkboxState = {};
-  currentSubtopicIdx = null;
-
-  const entry = TOPIC_FRAMEWORKS[theme];
-  if (!entry) {
-    listEl.innerHTML = '<div style="color:var(--text3);font-size:13px;text-align:center;margin-top:40px;">No framework data available yet.</div>';
-    return;
-  }
-
-  // Group content into subtopics — FrameworkParser auto-detects whether h3 or h4
-  // is the section divider (handles standard h4-pattern AND h3-dominant topics like Reinsurance).
-  const content = entry.content || [];
-  const subtopics = FrameworkParser.groupIntoSubtopics(content);
-  const chapterTitle = FrameworkParser.extractHeading(content);
-
-  currentFrameworkData = subtopics;
-  listEl.innerHTML = '';
-
-  if (chapterTitle) {
-    const badge = document.createElement('div');
-    badge.style.cssText = 'font-size:11px; font-weight:600; color:var(--text3); background:var(--surface3); border:1px solid var(--border); border-radius:4px; padding:3px 8px; margin-bottom:8px; line-height:1.5; text-align:center; letter-spacing:0.03em;';
-    badge.textContent = chapterTitle;
-    listEl.appendChild(badge);
-  }
-
-  subtopics.forEach((st, idx) => {
-    // Filter by source if needed
-    if (currentSrcFilter !== 'ALL') {
-      const hasSrc = st.nodes.some(n => {
-        const fullText = (n.text || '') + (n.bold || '');
-        return bulletMatchesSrc(fullText, currentSrcFilter);
-      });
-      if (!hasSrc) return;
-    }
-
-    const btn = document.createElement('div');
-    btn.className = 'subtopic-btn';
-    btn.style.cssText = 'padding:12px 14px; border-radius:6px; cursor:pointer; font-size:13px; font-weight:600; color:var(--text); border:1px solid var(--border); transition:all 0.2s; background:var(--surface2); display:flex; align-items:center; justify-content:space-between; margin-bottom:2px; line-height:1.4;';
-    btn.innerHTML = '<span>' + (recallLeft ? '—' : st.title) + '</span><span style="font-size:16px;color:var(--text3);">›</span>';
-    btn.onclick = () => {
-      if (recallLeft) return;
-      document.querySelectorAll('.subtopic-btn').forEach(b => {
-        b.classList.remove('active');
-        b.style.borderColor = 'var(--border)';
-        b.style.background  = 'var(--surface2)';
-        b.style.color       = 'var(--text)';
-        b.style.transform   = 'translateX(0)';
-      });
-      btn.classList.add('active');
-      btn.style.background  = 'var(--accentbg)';
-      btn.style.color       = 'var(--accent)';
-      btn.style.borderColor = 'var(--accent)';
-      btn.style.transform   = 'translateX(2px)';
-      renderRightContent(idx);
-    };
-    listEl.appendChild(btn);
+function renderCollapsedTags() {
+  const list=document.getElementById('fw-groups-list'); list.innerHTML='';
+  getFilteredGroups().forEach(([name,gdata]) => {
+    const pillar=gdata.pillar, color=pillar?(PILLAR_COLORS[pillar]||'var(--text3)'):'var(--text3)', label=pillar||'—';
+    const el=document.createElement('div'); el.className='collapsed-tag'; el.title=name; el.textContent=label;
+    el.style.cssText='color:'+color+';border-color:'+color+';background:'+color+'18;';
+    if (name===currentGroup) { el.style.background=color; el.style.color='#fff'; }
+    el.onclick=()=>{ leftPaneCollapsed=false; localStorage.setItem('rv_left_collapsed',false); toggleLeftPane(); selectGroup(name); };
+    list.appendChild(el);
   });
 }
 
-// ── Render Right Pane ──────────────────────────────────────────────────────
-function renderRightContent(idx) {
-  const cEl = document.getElementById('fw-content');
-  if (!currentFrameworkData || !currentFrameworkData[idx]) return;
-
-  // Save current subtopic's checkbox states before switching
-  if (currentSubtopicIdx !== null) {
-    const saved = {};
-    cEl.querySelectorAll('input[type="checkbox"]').forEach((cb, i) => {
-      saved[i] = cb.checked;
-    });
-    checkboxState[currentSubtopicIdx] = saved;
-  }
-  currentSubtopicIdx = idx;
-
-  const st = currentFrameworkData[idx];
-  const nodes = st.nodes || [];
-  
-  // Filter nodes by source if needed
-  const filteredNodes = nodes.filter(n => {
-    if (currentSrcFilter === 'ALL') return true;
-    const fullText = (n.text || '') + (n.bold || '');
-    return bulletMatchesSrc(fullText, currentSrcFilter);
+function getFilteredGroups() {
+  return Object.entries(GROUPS).filter(([name,gdata]) => {
+    if (currentPillarFilter!=='ALL' && gdata.pillar!==currentPillarFilter) return false;
+    if (currentSrcFilter!=='ALL') {
+      return (gdata.topics||[]).some(t => {
+        const entry=TOPIC_FRAMEWORKS[t]; if (!entry) return false;
+        return (entry.content||[]).some(n=>bulletMatchesSrc((n.text||'')+(n.bold||''),currentSrcFilter));
+      });
+    }
+    return true;
   });
+}
 
-  const ptCount = FrameworkParser.countPoints(filteredNodes);
+function renderGroupList() {
+  if (leftPaneCollapsed) { renderCollapsedTags(); return; }
+  const list=document.getElementById('fw-groups-list'); list.innerHTML='';
+  const filtered=getFilteredGroups();
+  if (!filtered.length) { list.innerHTML='<div style="color:var(--text3);font-size:12px;text-align:center;margin-top:30px;">No groups for this filter.</div>'; return; }
+  filtered.forEach(([name,gdata]) => {
+    const pillar=gdata.pillar, icon=gdata.icon||'';
+    const el=document.createElement('div'); el.className='group-item'+(name===currentGroup?' active':'');
+    el.innerHTML='<span class="group-item-label">'+icon+' '+name+'</span>'+(pillar?'<span class="ptag '+pillar.toLowerCase()+'">'+pillar+'</span>':'');
+    el.onclick=()=>selectGroup(name);
+    list.appendChild(el);
+  });
+}
 
-  let html = '<div style="margin-bottom:24px; border-bottom:2px solid var(--border); padding-bottom:12px;">'
-           + '<h1 style="color:var(--accent); margin:0; font-family:var(--sans); font-size:22px;">' + st.title + '</h1>'
-           + '</div>';
+function selectGroup(name) {
+  currentGroup=name; currentTopic=null; currentSubtopicIdx=null; currentFrameworkData=null;
+  renderGroupList(); renderTopicList(name);
+  document.getElementById('fw-subtopic-strip').innerHTML='<div style="color:var(--text3);font-size:12px;">Select a topic</div>';
+  document.getElementById('fw-content').innerHTML='<div style="color:var(--text3);text-align:center;margin-top:80px;font-size:13px;">Select a topic from the middle pane</div>';
+  document.getElementById('fw-progress-wrap').style.display='none';
+  setBreadcrumb(name,null,null);
+}
 
-  html += '<div id="fw-bullets-container" style="position:relative; background:var(--surface2); border-left:4px solid var(--accent); padding:20px; border-radius:var(--radius); box-shadow:0 4px 12px rgba(0,0,0,0.1); font-size:15px; line-height:1.7; transition:all 0.3s; min-height:100px;">';
+function renderTopicList(groupName) {
+  const list=document.getElementById('fw-topics-list'), titleEl=document.getElementById('fw-mid-title');
+  const gdata=GROUPS[groupName]; if (!gdata) { list.innerHTML=''; return; }
+  titleEl.textContent=(gdata.icon||'')+' '+groupName;
+  const topics=(gdata.topics||[]).filter(t => {
+    if (currentSrcFilter==='ALL') return true;
+    const entry=TOPIC_FRAMEWORKS[t]; if (!entry) return false;
+    return (entry.content||[]).some(n=>bulletMatchesSrc((n.text||'')+(n.bold||''),currentSrcFilter));
+  });
+  list.innerHTML='';
+  if (!topics.length) { list.innerHTML='<div style="color:var(--text3);font-size:12px;text-align:center;margin-top:30px;">No topics for this filter.</div>'; return; }
+  topics.forEach(t => {
+    const entry=TOPIC_FRAMEWORKS[t], icon2=entry&&entry._meta&&entry._meta.icon?entry._meta.icon:'';
+    const vResult=VALIDATION[t]; let vBadge='';
+    if (vResult&&vResult.status!=='ok') { const vTip=vResult.reasons.map(r=>r.msg).join('&#10;'); vBadge='<span class="v-badge '+vResult.status+'" title="'+vTip+'">'+(vResult.status==='error'?'⚠ ERR':'⚠')+'</span>'; }
+    const el=document.createElement('div'); el.className='topic-item'+(t===currentTopic?' active':'');
+    el.innerHTML='<span style="flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">'+(recallLeft?'—':(icon2+' '+t))+'</span>'+vBadge;
+    el.onclick=()=>{ if (!recallLeft) selectTopic(t); };
+    list.appendChild(el);
+  });
+}
 
+function selectTopic(topicKey) {
+  currentTopic=topicKey; currentSubtopicIdx=null;
+  document.querySelectorAll('.topic-item').forEach(el=>{ el.classList.toggle('active', el.querySelector('span') && el.querySelector('span').textContent.includes(topicKey)); });
+  const entry=TOPIC_FRAMEWORKS[topicKey]; if (!entry) return;
+  const subtopics=FrameworkParser.groupIntoSubtopics(entry.content||[]);
+  currentFrameworkData=subtopics;
+  if (!checkboxState[topicKey]) checkboxState[topicKey]={};
+  renderSubtopicStrip(topicKey,subtopics);
+  setBreadcrumb(currentGroup,topicKey,null);
+  renderProgress(topicKey,subtopics);
+  document.getElementById('fw-content').innerHTML='<div style="color:var(--text3);text-align:center;margin-top:80px;font-size:13px;">Select a subtopic above</div>';
+}
+
+function renderSubtopicStrip(topicKey,subtopics) {
+  const strip=document.getElementById('fw-subtopic-strip'); strip.innerHTML='';
+  if (!subtopics||!subtopics.length) { strip.innerHTML='<div style="color:var(--text3);font-size:12px;">No subtopics found.</div>'; return; }
+  let rendered=0;
+  subtopics.forEach((st,idx) => {
+    if (currentSrcFilter!=='ALL') { const has=st.nodes.some(n=>bulletMatchesSrc((n.text||'')+(n.bold||''),currentSrcFilter)); if (!has) return; }
+    const ptCount=FrameworkParser.countPoints(st.nodes);
+    const btn=document.createElement('button'); btn.className='st-btn'+(idx===currentSubtopicIdx?' active':'');
+    btn.innerHTML=st.title+(ptCount?' <span class="st-btn-count">· '+ptCount+'</span>':'');
+    btn.onclick=()=>selectSubtopic(topicKey,idx);
+    strip.appendChild(btn); rendered++;
+  });
+  if (!rendered) strip.innerHTML='<div style="color:var(--text3);font-size:12px;">No subtopics for this filter.</div>';
+}
+
+function selectSubtopic(topicKey,idx) {
+  currentSubtopicIdx=idx;
+  document.querySelectorAll('.st-btn').forEach((b,i)=>b.classList.toggle('active',i===idx));
+  if (currentFrameworkData&&currentFrameworkData[idx]) setBreadcrumb(currentGroup,topicKey,currentFrameworkData[idx].title);
+  renderRightContent(topicKey,idx);
+}
+
+function renderRightContent(topicKey,idx) {
+  const cEl=document.getElementById('fw-content');
+  if (!currentFrameworkData||!currentFrameworkData[idx]) return;
+  const st=currentFrameworkData[idx];
+  const nodes=(st.nodes||[]).filter(n=>currentSrcFilter==='ALL'||bulletMatchesSrc((n.text||'')+(n.bold||''),currentSrcFilter));
+  const ptCount=FrameworkParser.countPoints(nodes);
+
+  let html='<div class="fw-bullets-container" id="fw-bullets-container">';
   if (recallMid) {
-    html += '<div style="position:absolute; top:12px; right:12px; display:flex; align-items:center; gap:8px; background:var(--surface3); padding:4px 8px; border-radius:4px; border:1px solid var(--border); z-index:10;">'
-          + '<span style="font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;">Reveal ' + ptCount + ' Points</span>'
-          + '<input type="checkbox" onchange="document.getElementById(\'fw-bullets-reveal-box\').style.display=this.checked?\'block\':\'none\';" style="width:16px;height:16px;cursor:pointer;accent-color:var(--accent);">'
-          + '</div>';
-    html += '<div style="color:var(--text3);font-style:italic;margin-bottom:15px;font-size:13px;max-width:70%;line-height:1.4;">'
-          + 'Mental Challenge: Can you recall the ' + ptCount + ' key points for this subtopic?'
-          + '</div>';
-    html += '<div id="fw-bullets-reveal-box" style="display:none;animation:reveal-pulse 0.4s ease-out;">';
+    html+='<div class="recall-overlay">Mental challenge: can you recall the '+ptCount+' key points for <strong>'+st.title+'</strong>?</div>';
+    html+='<div class="recall-reveal-wrap"><span class="recall-reveal-label">Reveal '+ptCount+' points</span><input type="checkbox" onchange="document.getElementById(\'reveal-box\').style.display=this.checked?\'block\':\'none\';" style="width:15px;height:15px;cursor:pointer;accent-color:var(--accent);"></div>';
+    html+='<div id="reveal-box" style="display:none;animation:reveal-pulse 0.4s ease-out;">';
   } else {
-    html += '<div id="fw-bullets-reveal-box" style="display:block;">';
+    html+='<div id="reveal-box">';
   }
+  html+=FrameworkParser.render(nodes,{query:''});
+  html+='</div></div>';
+  cEl.innerHTML=html;
 
-  // Use Centralized Parser for consistent rendering
-  html += FrameworkParser.render(filteredNodes, { query: '' });
-
-  html += '</div>'; // close reveal box
-  html += '</div>'; // close bullets-container
-
-  cEl.innerHTML = html;
-
-  // Add checkboxes to each point manually because Revision.html has its own checkbox logic
-  const pointEls = cEl.querySelectorAll('.fwp-point-content, .fwp-sub-content, .fwp-num-content');
-  pointEls.forEach((pEl, bIdx) => {
-    const cbId = 'cb_' + idx + '_' + bIdx;
-    const cb = document.createElement('input');
-    cb.type = 'checkbox';
-    cb.id = cbId;
-    cb.autocomplete = 'off';
-    cb.style.cssText = 'width:11px;height:11px;flex-shrink:0;margin-left:6px;cursor:pointer;accent-color:var(--accent);opacity:0.45;vertical-align:middle;position:relative;top:-1px;';
-    cb.onchange = () => { cb.style.opacity = cb.checked ? '1' : '0.45'; };
-    cb.title = 'Tick if recalled';
-    
-    // Append to a wrapper
+  const pointEls=cEl.querySelectorAll('.fwp-point-content, .fwp-sub-content, .fwp-num-content');
+  const savedState=(checkboxState[topicKey]&&checkboxState[topicKey][idx])||{};
+  pointEls.forEach((pEl,bIdx) => {
+    const cb=document.createElement('input'); cb.type='checkbox'; cb.autocomplete='off';
+    cb.style.cssText='width:11px;height:11px;flex-shrink:0;margin-left:6px;cursor:pointer;accent-color:var(--accent);opacity:0.4;vertical-align:middle;position:relative;top:-1px;';
+    cb.checked=savedState[bIdx]||false; cb.style.opacity=cb.checked?'1':'0.4';
+    cb.onchange=()=>{ cb.style.opacity=cb.checked?'1':'0.4'; if(!checkboxState[topicKey])checkboxState[topicKey]={}; if(!checkboxState[topicKey][idx])checkboxState[topicKey][idx]={}; checkboxState[topicKey][idx][bIdx]=cb.checked; renderProgress(topicKey,currentFrameworkData); };
     pEl.appendChild(cb);
   });
+  renderProgress(topicKey,currentFrameworkData);
+}
 
-  // Restore saved checkbox states
-  const saved = checkboxState[idx] || {};
-  cEl.querySelectorAll('input[type="checkbox"]').forEach((cb, i) => {
-    cb.checked = saved[i] || false;
-    cb.style.opacity = cb.checked ? '1' : '0.45';
+function renderProgress(topicKey,subtopics) {
+  const wrap=document.getElementById('fw-progress-wrap'), dotsEl=document.getElementById('fw-prog-dots'), fracEl=document.getElementById('fw-prog-frac');
+  if (!subtopics||!subtopics.length) { wrap.style.display='none'; return; }
+  wrap.style.display='flex'; dotsEl.innerHTML='';
+  let done=0;
+  subtopics.forEach((st,idx) => {
+    const saved=(checkboxState[topicKey]&&checkboxState[topicKey][idx])||{};
+    const ptCount=FrameworkParser.countPoints(st.nodes);
+    const isDone=ptCount>0&&Object.values(saved).filter(Boolean).length>=ptCount;
+    if (isDone) done++;
+    const dot=document.createElement('div'); dot.className='prog-dot'+(isDone?' done':''); dot.title=st.title;
+    dotsEl.appendChild(dot);
   });
+  fracEl.textContent=done+'/'+subtopics.length;
 }
 
-// ── Left Recall (hides subtopic names in mid pane) ─────────────────────────
+function setBreadcrumb(group,topic,subtopic) {
+  document.getElementById('bc-group').textContent=group||'—';
+  document.getElementById('bc-topic').textContent=topic||'—';
+  document.getElementById('bc-subtopic').textContent=subtopic||'—';
+}
+
 function toggleRecallLeft() {
-  recallLeft = !recallLeft;
-  localStorage.setItem('rv_recall_left', recallLeft);
-  applyRecallLeftUI();
-
-  // When left recall turns ON, also turn ON mid recall
-  if (recallLeft && !recallMid) {
-    recallMid = true;
-    localStorage.setItem('rv_recall_mid', recallMid);
-    applyRecallMidUI();
-  }
-
-  // Clear right pane when recall turns ON
-  if (recallLeft) {
-    currentSubtopicIdx = null;
-    checkboxState = {};
-    document.getElementById('fw-content').innerHTML =
-      '<h2 style="color:var(--text3);text-align:center;margin-top:100px;">Select a Subtopic to view details</h2>';
-  }
-
-  // Re-render mid pane if a topic is already selected
-  const activeLeft = document.querySelector('#fw-topics-list .active');
-  if (activeLeft) {
-    const topicKey = Object.keys(TOPIC_FRAMEWORKS).find(t => activeLeft.innerHTML.includes(t));
-    if (topicKey) renderMidContent(topicKey);
-  }
+  recallLeft=!recallLeft; localStorage.setItem('rv_recall_left',recallLeft); applyRecallLeftUI();
+  if (recallLeft&&!recallMid) { recallMid=true; localStorage.setItem('rv_recall_mid',recallMid); applyRecallMidUI(); }
+  if (currentGroup) renderTopicList(currentGroup);
+  if (recallLeft) { currentSubtopicIdx=null; document.getElementById('fw-content').innerHTML='<div style="color:var(--text3);text-align:center;margin-top:80px;font-size:13px;">Select a subtopic to view details</div>'; }
 }
+function applyRecallLeftUI() { const btn=document.getElementById('btn-recall-left'); if (!btn) return; btn.textContent=recallLeft?'Recall: ON':'Recall: OFF'; btn.classList.toggle('on',recallLeft); }
 
-function applyRecallLeftUI() {
-  const btn = document.getElementById('btn-recall-left');
-  if (!btn) return;
-  btn.textContent     = recallLeft ? 'Recall: ON' : 'Recall: OFF';
-  btn.style.background  = recallLeft ? 'var(--accent)' : 'var(--surface3)';
-  btn.style.color       = recallLeft ? '#fff'          : 'var(--text2)';
-  btn.style.borderColor = recallLeft ? 'var(--accent)' : 'var(--border)';
-}
-
-// ── Mid Recall (hides bullet text in right pane) ───────────────────────────
 function toggleRecallMid() {
-  recallMid = !recallMid;
-  localStorage.setItem('rv_recall_mid', recallMid);
-  applyRecallMidUI();
-  // Re-render active subtopic if any
-  const activeMid = document.querySelector('#fw-subtopics-list .active');
-  if (activeMid && currentSubtopicIdx !== null) {
-    renderRightContent(currentSubtopicIdx);
-  }
+  recallMid=!recallMid; localStorage.setItem('rv_recall_mid',recallMid); applyRecallMidUI();
+  if (currentTopic&&currentSubtopicIdx!==null) renderRightContent(currentTopic,currentSubtopicIdx);
 }
+function applyRecallMidUI() { const btn=document.getElementById('btn-recall-mid'); if (!btn) return; btn.textContent=recallMid?'Recall: ON':'Recall: OFF'; btn.classList.toggle('on',recallMid); }
 
-function applyRecallMidUI() {
-  const btn = document.getElementById('btn-recall-mid');
-  if (!btn) return;
-  btn.textContent     = recallMid ? 'Recall: ON' : 'Recall: OFF';
-  btn.style.background  = recallMid ? 'var(--accent)' : 'var(--surface3)';
-  btn.style.color       = recallMid ? '#fff'          : 'var(--text2)';
-  btn.style.borderColor = recallMid ? 'var(--accent)' : 'var(--border)';
+function showTooltip(el,tag,desc) {
+  const tt=document.getElementById('fw-tooltip');
+  document.getElementById('fw-tooltip-tag').textContent=tag;
+  document.getElementById('fw-tooltip-desc').textContent=desc;
+  document.getElementById('fw-tooltip-tag').style.color=PILLAR_COLORS[tag]||'var(--accent)';
+  const rect=el.getBoundingClientRect(); tt.style.left=rect.left+'px'; tt.style.top=(rect.bottom+8)+'px'; tt.classList.add('visible');
 }
-
-// ── Tooltip ────────────────────────────────────────────────────────────────
-function showTooltip(el, tag, desc) {
-  const tt    = document.getElementById('fw-tooltip');
-  const tTag  = document.getElementById('fw-tooltip-tag');
-  const tDesc = document.getElementById('fw-tooltip-desc');
-  tTag.textContent  = tag;
-  tDesc.textContent = desc;
-  const c = { P1:'#f87171', P2:'#fbbf24', P3:'#34d399', P4:'#60a5fa', P5:'#a78bfa', P6:'#f472b6' };
-  tTag.style.color = c[tag] || 'var(--accent)';
-  const rect = el.getBoundingClientRect();
-  tt.style.left = rect.left + 'px';
-  tt.style.top  = (rect.bottom + 8) + 'px';
-  tt.classList.add('visible');
-}
-function hideTooltip() {
-  document.getElementById('fw-tooltip').classList.remove('visible');
-}
-
-// ── Fullscreen ─────────────────────────────────────────────────────────────
-function toggleFullscreen() {
-  if (!document.fullscreenElement) {
-    document.documentElement.requestFullscreen && document.documentElement.requestFullscreen();
-  } else {
-    document.exitFullscreen && document.exitFullscreen();
-  }
-}
+function hideTooltip() { document.getElementById('fw-tooltip').classList.remove('visible'); }
+function toggleFullscreen() { if (!document.fullscreenElement) document.documentElement.requestFullscreen&&document.documentElement.requestFullscreen(); else document.exitFullscreen&&document.exitFullscreen(); }
 </script>
 </body>
 </html>
