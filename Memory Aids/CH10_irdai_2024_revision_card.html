@@ -1,0 +1,254 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans)}
+.reg-title{background:#EEEDFE;border:0.5px solid #AFA9EC;border-radius:var(--border-radius-lg);padding:14px 18px;margin-bottom:16px}
+.reg-title p.t1{font-size:14px;font-weight:500;color:#3C3489}
+.reg-title p.t2{font-size:12px;color:#534AB7;margin-top:3px}
+.mc-title{background:#E1F5EE;border:0.5px solid #5DCAA5;border-radius:var(--border-radius-lg);padding:14px 18px;margin:20px 0 16px}
+.mc-title p.t1{font-size:14px;font-weight:500;color:#085041}
+.mc-title p.t2{font-size:12px;color:#0F6E56;margin-top:3px}
+.section-label{font-size:11px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.06em;margin:16px 0 8px}
+.row{display:grid;gap:10px;margin-bottom:10px}
+.row-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.row-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.row-5{grid-template-columns:repeat(5,minmax(0,1fr))}
+.card{border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary);cursor:pointer;transition:border-color .15s}
+.card:hover{border-color:var(--color-border-secondary)}
+.card.active{border-color:#534AB7;border-width:1.5px}
+.card.teal.active{border-color:#0F6E56}
+.card-head{padding:10px 12px 8px;border-bottom:0.5px solid var(--color-border-tertiary)}
+.card-head .ch{font-size:11px;font-weight:500;color:var(--color-text-secondary)}
+.card-head .ct{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-top:2px}
+.card-head .cs{font-size:11px;color:var(--color-text-secondary);margin-top:2px}
+.card-note{padding:10px 12px;font-size:12px;color:var(--color-text-secondary);line-height:1.55;display:none}
+.card.active .card-note{display:block}
+.pill{display:inline-block;font-size:10px;font-weight:500;padding:2px 7px;border-radius:20px;margin-top:4px}
+.pill-purple{background:#EEEDFE;color:#3C3489}
+.pill-teal{background:#E1F5EE;color:#085041}
+.pill-amber{background:#FAEEDA;color:#633806}
+.pill-gray{background:#F1EFE8;color:#444441}
+.pill-red{background:#FCEBEB;color:#791F1F}
+.detail-panel{background:var(--color-background-secondary);border-radius:var(--border-radius-lg);border:0.5px solid var(--color-border-tertiary);padding:14px 16px;margin-top:12px;display:none}
+.detail-panel.show{display:block}
+.detail-panel h3{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:8px}
+.detail-panel ul{padding-left:14px;font-size:12px;color:var(--color-text-secondary);line-height:1.7}
+.detail-panel ul li{margin-bottom:3px}
+.detail-panel .key-item{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-left:3px solid #7F77DD;border-radius:0 var(--border-radius-md) var(--border-radius-md) 0;padding:6px 10px;margin-bottom:6px;font-size:12px;color:var(--color-text-primary)}
+.detail-panel .key-item.teal{border-left-color:#1D9E75}
+.detail-panel .key-item.amber{border-left-color:#BA7517}
+.detail-panel .key-item.red{border-left-color:#E24B4A}
+.tip{background:#FAEEDA;border:0.5px solid #EF9F27;border-radius:var(--border-radius-md);padding:8px 12px;font-size:12px;color:#633806;margin-top:10px}
+.divider{border:none;border-top:0.5px solid var(--color-border-tertiary);margin:20px 0}
+.ask-btn{display:inline-block;margin-top:10px;font-size:12px;padding:5px 12px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);background:transparent;color:var(--color-text-secondary);cursor:pointer}
+.ask-btn:hover{background:var(--color-background-secondary)}
+</style>
+
+<h2 class="sr-only">IRDAI 2024 Regulation and Master Circular — revision structure map</h2>
+
+<div class="reg-title">
+  <p class="t1">IRDAI (Actuarial, Finance and Investment Functions of Insurers) Regulations, 2024</p>
+  <p class="t2">F. No. IRDAI/Reg/10/204/2024 &nbsp;|&nbsp; Notified 20 Mar 2024 &nbsp;|&nbsp; Effective 1 Apr 2024 &nbsp;|&nbsp; 446 pages &nbsp;|&nbsp; Repeals 9 older regulations</p>
+</div>
+
+<div class="section-label">Operative chapters — legal framework</div>
+<div class="row row-3">
+  <div class="card" onclick="toggle(this,'ch1')">
+    <div class="card-head">
+      <div class="ch">Chapter I</div>
+      <div class="ct">Preliminary</div>
+      <div class="cs">Definitions, title, commencement</div>
+    </div>
+    <div class="card-note">Short title, applicability to all insurers including reinsurers. Four key objectives. Formal definitions of UPR, PDR, URR, Technical Liabilities, RSM, Solvency Ratio.</div>
+  </div>
+  <div class="card" onclick="toggle(this,'ch2')">
+    <div class="card-head">
+      <div class="ch">Chapter II</div>
+      <div class="ct">Guiding principles</div>
+      <div class="cs">Board policies, schedule references</div>
+    </div>
+    <div class="card-note">Principles for actuarial, finance and investment functions. Requires board-approved policies for each function. Routes to Schedules I–V for substantive rules.</div>
+  </div>
+  <div class="card" onclick="toggle(this,'ch3')">
+    <div class="card-head">
+      <div class="ch">Chapter III</div>
+      <div class="ct">Miscellaneous</div>
+      <div class="cs">Powers, repeals</div>
+    </div>
+    <div class="card-note">Power to issue circulars, clarifications and directions. Repeals 9 older regulations including ALSM (General Insurance) 2016, ALSM (Life) 2016, Financial Statements Regulations 2002, Appointed Actuary Regulations 2022, Investment Regulations 2016.</div>
+  </div>
+</div>
+
+<div id="ch1" class="detail-panel">
+  <h3>Key definitions from Chapter I</h3>
+  <div class="key-item">UPR — "that part of premium written attributable and to be allocated to succeeding accounting periods"</div>
+  <div class="key-item">PDR — "reserve held in excess of UPR, allowing for expectation that UPR will be insufficient to cover claims and expenses in the unexpired risk period"</div>
+  <div class="key-item teal">URR — "aggregate of UPR and PDR" (this is the total unexpired risk liability on the balance sheet)</div>
+  <div class="key-item amber">Technical Liabilities — "UPR + PDR + Claims Reserves (OS + IBNR + IBNER)" for GI/health insurers</div>
+  <div class="tip">Exam point: URR = UPR + PDR. URR is the regulatory solvency concept. UPR is the accounting component. PDR is the actuarial top-up.</div>
+  <button class="ask-btn" onclick="sendPrompt('What are the four objectives stated in Chapter II of the IRDAI 2024 regulations?')">Ask about the 4 objectives ↗</button>
+</div>
+<div id="ch2" class="detail-panel"></div>
+<div id="ch3" class="detail-panel"></div>
+
+<div class="section-label">Schedules — substantive content (where the real rules are)</div>
+
+<div class="row row-5">
+  <div class="card" onclick="toggle(this,'sch1')">
+    <div class="card-head">
+      <div class="ch">Schedule I</div>
+      <div class="ct">Actuarial functions</div>
+      <span class="pill pill-purple">5 parts</span>
+    </div>
+    <div class="card-note">Largest schedule. Life valuation, general/health valuation, appointed actuary, solvency.</div>
+  </div>
+  <div class="card" onclick="toggle(this,'sch2')">
+    <div class="card-head">
+      <div class="ch">Schedule II</div>
+      <div class="ct">Finance functions</div>
+      <span class="pill pill-amber">3 parts</span>
+    </div>
+    <div class="card-note">Financial statements, accounting policies, UPR calculation method, auditor's report.</div>
+  </div>
+  <div class="card" onclick="toggle(this,'sch3')">
+    <div class="card-head">
+      <div class="ch">Schedule III</div>
+      <div class="ct">Investment functions</div>
+      <span class="pill pill-gray">Investment norms</span>
+    </div>
+    <div class="card-note">Approved investments, ALM, exposure norms, valuation of securities, solvency forms.</div>
+  </div>
+  <div class="card" onclick="toggle(this,'sch4')">
+    <div class="card-head">
+      <div class="ch">Schedule IV</div>
+      <div class="ct">Loans and advances</div>
+      <span class="pill pill-gray">Employee loans</span>
+    </div>
+    <div class="card-note">Rules for loans/advances to employees — eligible purposes, aggregate cap (₹1 crore), board policy requirement.</div>
+  </div>
+  <div class="card" onclick="toggle(this,'sch5')">
+    <div class="card-head">
+      <div class="ch">Schedule V</div>
+      <div class="ct">Inspection and returns</div>
+      <span class="pill pill-gray">Procedural</span>
+    </div>
+    <div class="card-note">Procedure for inspection and supply of copies of returns under Section 20(1) of the Insurance Act.</div>
+  </div>
+</div>
+
+<div id="sch1" class="detail-panel">
+  <h3>Schedule I — the 5 parts</h3>
+  <ul>
+    <li><b>Part I — Definitions:</b> Terms specific to life insurers (math reserves, par/non-par, sum at risk) and general/health insurers (ALAE, IBNR, IBNER, OS Reserves, URR)</li>
+    <li><b>Part II — Appointed Actuary:</b> Eligibility, appointment process, duties, responsibilities, certification requirements. Every GI/health insurer must have at least 1 additional actuary for pricing/valuation beyond the AA.</li>
+    <li><b>Part III — Life insurance valuation:</b> Mathematical reserves, surplus, solvency for life insurers</li>
+    <li><b>Part IV — General/health valuation ★:</b> Assets, Technical Liabilities (URR + Claims Reserve), RSM determination for general insurers and standalone health insurers</li>
+    <li><b>Part V — Reinsurer solvency:</b> Life reinsurance follows Part III rules; general/health reinsurance follows Part IV rules</li>
+  </ul>
+  <div class="key-item teal">Part IV is the primary section for health insurance reserving: URR (UPR + PDR), IBNR, IBNER, Outstanding Claims, and solvency margin for standalone health insurers</div>
+  <div class="tip">Exam point: PDR is maintained at insurer level (minimum zero). Negative PDR in one segment cannot offset another. IRDAI monitors PDR at segmental level for product sustainability.</div>
+  <button class="ask-btn" onclick="sendPrompt('Explain the PDR calculation rules in Part IV of Schedule I of the IRDAI 2024 regulations in detail')">Deep dive on Part IV PDR rules ↗</button>
+</div>
+
+<div id="sch2" class="detail-panel">
+  <h3>Schedule II — UPR calculation (Part II, Clause 4)</h3>
+  <div class="key-item">Marine Hull: 100% of Net Written Premium of preceding 12 months</div>
+  <div class="key-item teal">All other segments (including health): 50% of NWP of preceding 12 months OR proportion of unexpired period to total period of the respective policies</div>
+  <div class="key-item amber">Method must be consistent — change requires prior written approval of Competent Authority</div>
+  <div class="tip">Exam point: The 2024 regulation replaced "1/365th method" (old wording) with "proportion of unexpired period to total period" — conceptually the same, but worded more broadly. The 50% floor is a minimum, not a ceiling.</div>
+  <button class="ask-btn" onclick="sendPrompt('What is the difference between the 50% NWP method and the proportion method for UPR under the 2024 regulations?')">Compare the two UPR methods ↗</button>
+</div>
+
+<div id="sch3" class="detail-panel"></div>
+<div id="sch4" class="detail-panel"></div>
+<div id="sch5" class="detail-panel"></div>
+
+<hr class="divider">
+
+<div class="mc-title">
+  <p class="t1">Master Circular on Actuarial, Finance and Investment Functions of Insurers</p>
+  <p class="t2">Ref: IRDAI/ACTL/CIR/MISC/80/05/2024 &nbsp;|&nbsp; Dated 17 May 2024 &nbsp;|&nbsp; 270 pages &nbsp;|&nbsp; Operational guidance on the 2024 Regulation</p>
+</div>
+
+<div class="section-label">Master circular chapters</div>
+
+<div class="row row-3">
+  <div class="card teal" onclick="toggle(this,'mc1')">
+    <div class="card-head">
+      <div class="ch">Chapter 1</div>
+      <div class="ct">Actuarial function</div>
+      <span class="pill pill-teal">5 sections</span>
+    </div>
+    <div class="card-note">Appointed actuary appointment, valuation guidance for life, GI/health and reinsurance. Section III is key for health insurers.</div>
+  </div>
+  <div class="card teal" onclick="toggle(this,'mc2')">
+    <div class="card-head">
+      <div class="ch">Chapter 2</div>
+      <div class="ct">Finance function</div>
+      <span class="pill pill-teal">7 sections</span>
+    </div>
+    <div class="card-note">Accounting and disclosure requirements, segment-specific guidance, financial statement submission timelines (3 months from year-end or 30 days from board adoption).</div>
+  </div>
+  <div class="card teal" onclick="toggle(this,'mc3')">
+    <div class="card-head">
+      <div class="ch">Chapter 3</div>
+      <div class="ct">Investment function</div>
+      <span class="pill pill-teal">8 sections</span>
+    </div>
+    <div class="card-note">Investment categories, risk management, concurrent audit, valuation guidelines, disclosure and reporting norms, list of repealed circulars, investment category codes.</div>
+  </div>
+</div>
+
+<div id="mc1" class="detail-panel">
+  <h3>Chapter 1 sections</h3>
+  <ul>
+    <li><b>Section I — AA / Mentor / Consulting / Certifying Actuary:</b> Appointment procedure, forms (ACTL-AA-1), duties. Every GI/health insurer needs at least 1 additional actuary for pricing/valuation by Dec 2024.</li>
+    <li><b>Section II — Life insurance valuation:</b> Guidance on mathematical reserves, with-profits fund management (Annexure ACTL-LI-1)</li>
+    <li><b>Section III — GI and standalone health insurance valuation ★:</b> Operational guidance on URR (= UPR + PDR), IBNR, IBNER, claims reserves. Confirms PDR segmental monitoring.</li>
+    <li><b>Section IV — Reinsurance valuation:</b> FRB-specific guidance; aggregate-level claims reserve allowed for motor and health if granular data unavailable</li>
+    <li><b>Section V — Repeal of circulars:</b> Consolidated list of all superseded circulars</li>
+  </ul>
+  <div class="tip">Exam point: The Master Circular defines Net Earned Premium = Net Written Premium adjusted for movement in UPR. URR = UPR + PDR. These definitions in the MC mirror Chapter I of the Regulation exactly.</div>
+  <button class="ask-btn" onclick="sendPrompt('What does Section III of Chapter 1 of the Master Circular say about valuation for standalone health insurers?')">Section III detail ↗</button>
+</div>
+
+<div id="mc2" class="detail-panel">
+  <h3>Chapter 2 key points</h3>
+  <ul>
+    <li>Sec I–II: All insurers must file audited financials within 3 months of year-end or 30 days from board adoption (whichever is earlier)</li>
+    <li>Sec III: Life-specific — bonus philosophy, participating fund disclosures</li>
+    <li>Sec IV: GI/health-specific — accounting for UPR, PDR, IBNR; premium recognition; claims accounting</li>
+    <li>Sec V: FRBs and Lloyd's India specific accounting</li>
+    <li>Sec VI: General provisions for all insurers</li>
+    <li>Sec VII: Procedure for seeking format deviations from IRDAI</li>
+  </ul>
+  <div class="key-item amber">Schedule II of the MC lists all repealed non-life / reinsurer / FRB circulars — useful reference to confirm which old guidance is no longer operative</div>
+</div>
+
+<div id="mc3" class="detail-panel"></div>
+
+<hr class="divider">
+
+<div class="section-label">Quick-reference: what replaced what</div>
+<div style="font-size:12px;color:var(--color-text-secondary);line-height:1.9;background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px 16px;border:0.5px solid var(--color-border-tertiary)">
+  <span style="color:var(--color-text-primary);font-weight:500">ALSM (General Insurance) Regulations 2016</span> → now Schedule I Part IV + Schedule II Part II of the 2024 Regulation<br>
+  <span style="color:var(--color-text-primary);font-weight:500">Financial Statements Regulations 2002 (as amended 2021)</span> → now Schedule II of the 2024 Regulation<br>
+  <span style="color:var(--color-text-primary);font-weight:500">Appointed Actuary Regulations 2022</span> → now Schedule I Part II of the 2024 Regulation<br>
+  <span style="color:var(--color-text-primary);font-weight:500">Investment Regulations 2016</span> → now Schedule III of the 2024 Regulation<br>
+  <span style="color:var(--color-text-primary);font-weight:500">ALSM (Life Insurance) Regulations 2016</span> → now Schedule I Part III of the 2024 Regulation<br>
+  <span style="color:var(--color-text-primary);font-weight:500">All prior actuarial/finance/investment circulars</span> → consolidated into the Master Circular (17 May 2024)
+</div>
+
+<div class="tip" style="margin-top:12px">
+  Exam tip: The 2024 Regulation is principle-based and consolidated. The old regulations had separate documents for solvency, financial statements, investments and appointed actuary. Now all five functions are in one regulation with five schedules, supported by one Master Circular reviewed annually.
+</div>
+
+<script>
+function toggle(card, id) {
+  var panel = document.getElementById(id);
+  var isOpen = card.classList.contains('active');
+  document.querySelectorAll('.card').forEach(function(c){ c.classList.remove('active'); });
+  document.querySelectorAll('.detail-panel').forEach(function(p){ p.classList.remove('show'); });
+  if (!isOpen) { card.classList.add('active'); if(panel) panel.classList.add('show'); }
+}
+</script>
