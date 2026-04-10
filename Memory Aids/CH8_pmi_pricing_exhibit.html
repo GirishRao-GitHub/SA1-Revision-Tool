@@ -1,0 +1,1142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PMI Aggregate Deductible — Actuarial Pricing Model</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f1117;
+    --surface: #171b26;
+    --surface2: #1e2333;
+    --border: rgba(255,255,255,0.08);
+    --border2: rgba(255,255,255,0.14);
+    --text: #e8eaf0;
+    --muted: #7a8099;
+    --accent: #4ecca3;
+    --accent2: #f7c948;
+    --accent3: #e05c5c;
+    --accent4: #7b8cde;
+    --accent-dim: rgba(78,204,163,0.12);
+    --accent2-dim: rgba(247,201,72,0.12);
+    --accent3-dim: rgba(224,92,92,0.12);
+    --serif: 'DM Serif Display', serif;
+    --sans: 'Outfit', sans-serif;
+    --mono: 'DM Mono', monospace;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-weight: 300;
+    line-height: 1.6;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── HEADER ── */
+  header {
+    padding: 48px 48px 32px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+  .header-left h1 {
+    font-family: var(--serif);
+    font-size: 2.4rem;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    line-height: 1.15;
+    color: var(--text);
+  }
+  .header-left h1 em {
+    font-style: italic;
+    color: var(--accent);
+  }
+  .header-left p {
+    margin-top: 8px;
+    font-size: 0.85rem;
+    color: var(--muted);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .step-pills {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+  .step-pill {
+    font-size: 0.72rem;
+    font-family: var(--mono);
+    padding: 4px 10px;
+    border-radius: 20px;
+    border: 1px solid var(--border2);
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.2s;
+    background: transparent;
+  }
+  .step-pill:hover, .step-pill.active {
+    background: var(--accent-dim);
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  /* ── LAYOUT ── */
+  .main {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    min-height: calc(100vh - 140px);
+  }
+
+  /* ── SIDEBAR ── */
+  .sidebar {
+    border-right: 1px solid var(--border);
+    padding: 32px 24px;
+    position: sticky;
+    top: 0;
+    height: calc(100vh - 140px);
+    overflow-y: auto;
+  }
+  .sidebar-label {
+    font-size: 0.68rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 16px;
+    font-family: var(--mono);
+  }
+  .nav-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-bottom: 4px;
+    border: 1px solid transparent;
+  }
+  .nav-item:hover { background: var(--surface); }
+  .nav-item.active {
+    background: var(--accent-dim);
+    border-color: rgba(78,204,163,0.25);
+  }
+  .nav-num {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    color: var(--muted);
+    min-width: 20px;
+    margin-top: 2px;
+  }
+  .nav-item.active .nav-num { color: var(--accent); }
+  .nav-title {
+    font-size: 0.82rem;
+    font-weight: 400;
+    color: var(--muted);
+    line-height: 1.4;
+  }
+  .nav-item.active .nav-title { color: var(--text); font-weight: 500; }
+
+  .nav-divider {
+    height: 1px;
+    background: var(--border);
+    margin: 16px 0;
+  }
+
+  /* ── CONTENT ── */
+  .content {
+    padding: 40px 48px;
+    overflow-y: auto;
+    height: calc(100vh - 140px);
+  }
+  .panel { display: none; }
+  .panel.active { display: block; animation: fadeIn 0.3s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+  .panel-header {
+    margin-bottom: 32px;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--border);
+  }
+  .panel-tag {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    color: var(--accent);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .panel-title {
+    font-family: var(--serif);
+    font-size: 1.9rem;
+    font-weight: 400;
+    line-height: 1.2;
+    color: var(--text);
+  }
+  .panel-sub {
+    margin-top: 10px;
+    font-size: 0.9rem;
+    color: var(--muted);
+    line-height: 1.7;
+    max-width: 640px;
+  }
+
+  /* ── CARDS ── */
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    margin: 24px 0;
+  }
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 20px;
+    transition: border-color 0.2s;
+  }
+  .card:hover { border-color: var(--border2); }
+  .card-icon {
+    width: 36px; height: 36px;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1rem;
+  }
+  .card-title { font-size: 0.85rem; font-weight: 500; margin-bottom: 6px; }
+  .card-body { font-size: 0.8rem; color: var(--muted); line-height: 1.6; }
+
+  .ic-green { background: rgba(78,204,163,0.12); color: var(--accent); }
+  .ic-yellow { background: rgba(247,201,72,0.12); color: var(--accent2); }
+  .ic-red { background: rgba(224,92,92,0.12); color: var(--accent3); }
+  .ic-blue { background: rgba(123,140,222,0.12); color: var(--accent4); }
+
+  /* ── CALLOUT ── */
+  .callout {
+    border-left: 3px solid var(--accent);
+    background: var(--accent-dim);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+    margin: 20px 0;
+    font-size: 0.85rem;
+    line-height: 1.7;
+  }
+  .callout.yellow {
+    border-color: var(--accent2);
+    background: var(--accent2-dim);
+  }
+  .callout.red {
+    border-color: var(--accent3);
+    background: var(--accent3-dim);
+  }
+
+  /* ── TAGS ── */
+  .tag {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.72rem;
+    font-family: var(--mono);
+    margin: 3px;
+  }
+  .tag-green { background: rgba(78,204,163,0.15); color: var(--accent); border: 1px solid rgba(78,204,163,0.3); }
+  .tag-gray { background: rgba(255,255,255,0.06); color: var(--muted); border: 1px solid var(--border); }
+  .tag-yellow { background: rgba(247,201,72,0.15); color: var(--accent2); border: 1px solid rgba(247,201,72,0.3); }
+
+  /* ── INTERACTIVE CONTROLS ── */
+  .control-row {
+    display: flex; align-items: center; gap: 14px;
+    margin: 12px 0;
+    font-size: 0.82rem;
+  }
+  .control-label { color: var(--muted); min-width: 140px; }
+  input[type=range] {
+    flex: 1; -webkit-appearance: none; appearance: none;
+    height: 4px; border-radius: 2px;
+    background: var(--surface2);
+    outline: none; cursor: pointer;
+  }
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none; width: 16px; height: 16px;
+    border-radius: 50%; background: var(--accent);
+    border: 2px solid var(--bg); cursor: pointer;
+  }
+  .control-val {
+    font-family: var(--mono); font-size: 0.78rem;
+    color: var(--accent); min-width: 60px; text-align: right;
+  }
+
+  /* ── STAT GRID ── */
+  .stat-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px; margin: 20px 0;
+  }
+  .stat {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px; padding: 16px;
+    text-align: center;
+  }
+  .stat-val {
+    font-family: var(--mono); font-size: 1.4rem; font-weight: 500;
+    color: var(--accent); margin-bottom: 4px;
+  }
+  .stat-label { font-size: 0.72rem; color: var(--muted); }
+
+  /* ── CHART ── */
+  .chart-wrap {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px; padding: 24px;
+    margin: 20px 0;
+  }
+  .chart-title { font-size: 0.78rem; color: var(--muted); margin-bottom: 16px; font-family: var(--mono); }
+
+  /* ── HISTOGRAM ── */
+  .histogram {
+    display: flex; align-items: flex-end; gap: 4px; height: 140px;
+  }
+  .hbar-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+  .hbar { width: 100%; border-radius: 3px 3px 0 0; transition: background 0.4s, height 0.4s; min-height: 2px; }
+  .hbar-lbl { font-size: 0.6rem; color: var(--muted); font-family: var(--mono); text-align: center; }
+
+  /* ── FORMULA ── */
+  .formula-box {
+    background: var(--surface2);
+    border: 1px solid var(--border2);
+    border-radius: 10px; padding: 16px 20px; margin: 16px 0;
+    font-family: var(--mono); font-size: 0.82rem; color: var(--text);
+    line-height: 1.8;
+  }
+  .formula-box span { color: var(--accent); }
+  .formula-box em { color: var(--accent2); font-style: normal; }
+
+  /* ── GRID TABLE ── */
+  .grid-table {
+    width: 100%; border-collapse: collapse; font-size: 0.78rem; margin: 16px 0;
+  }
+  .grid-table th {
+    background: var(--surface2); color: var(--muted);
+    padding: 8px 12px; text-align: center;
+    font-family: var(--mono); font-weight: 400;
+    border: 1px solid var(--border);
+  }
+  .grid-table td {
+    padding: 8px 12px; text-align: center;
+    border: 1px solid var(--border);
+    transition: background 0.3s;
+  }
+  .grid-table td.active-cell {
+    background: var(--accent-dim);
+    color: var(--accent);
+    font-weight: 500;
+    font-family: var(--mono);
+  }
+  .grid-table td.dim { color: var(--muted); }
+
+  /* ── SIM RUNNER ── */
+  .run-row {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 12px; border-radius: 8px;
+    background: var(--surface); border: 1px solid var(--border);
+    margin: 6px 0; font-size: 0.78rem;
+    animation: slideIn 0.3s ease;
+  }
+  @keyframes slideIn { from { opacity:0; transform: translateX(-8px); } to { opacity:1; transform: none; } }
+  .run-yr { font-family: var(--mono); color: var(--muted); min-width: 50px; }
+  .run-n { min-width: 70px; color: var(--muted); }
+  .run-claims { flex: 1; display: flex; gap: 6px; flex-wrap: wrap; }
+  .claim-tag {
+    padding: 2px 8px; border-radius: 12px; font-family: var(--mono); font-size: 0.7rem;
+    background: rgba(123,140,222,0.15); color: var(--accent4);
+    border: 1px solid rgba(123,140,222,0.25);
+  }
+  .run-bar-wrap { width: 80px; }
+  .run-bar { height: 8px; border-radius: 3px; background: var(--accent); min-width: 1px; max-width: 80px; }
+  .run-total { font-family: var(--mono); font-size: 0.78rem; min-width: 60px; text-align: right; }
+
+  /* ── CELL GRID ── */
+  .cell-grid {
+    display: grid; grid-template-columns: 100px repeat(3, 1fr);
+    gap: 8px; margin: 20px 0;
+  }
+  .cell-header {
+    background: transparent; font-size: 0.72rem; font-family: var(--mono);
+    color: var(--muted); text-align: center;
+    display: flex; align-items: center; justify-content: center;
+    padding: 8px;
+  }
+  .cell-zone { font-size: 0.72rem; font-family: var(--mono); color: var(--muted); display: flex; align-items: center; padding: 8px; }
+  .cell-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; padding: 14px; text-align: center;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .cell-card:hover { border-color: var(--border2); }
+  .cell-card.selected { border-color: var(--accent); background: var(--accent-dim); }
+  .cell-age { font-size: 0.72rem; color: var(--muted); margin-bottom: 4px; }
+  .cell-lambda { font-family: var(--mono); font-size: 0.82rem; color: var(--accent); }
+  .cell-prem { font-family: var(--mono); font-size: 0.7rem; color: var(--accent2); margin-top: 4px; }
+
+  /* ── DEDUCTIBLE CALC ── */
+  .ded-scenario {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; padding: 16px; text-align: center;
+    flex: 1;
+  }
+  .ded-scenario.pays-nothing { border-color: rgba(224,92,92,0.4); background: rgba(224,92,92,0.06); }
+  .ded-scenario.pays-something { border-color: rgba(78,204,163,0.4); background: rgba(78,204,163,0.06); }
+  .ded-label { font-size: 0.72rem; color: var(--muted); margin-bottom: 8px; font-family: var(--mono); }
+  .ded-gross { font-size: 0.85rem; color: var(--text); margin-bottom: 4px; }
+  .ded-pay { font-family: var(--mono); font-size: 1.1rem; font-weight: 500; }
+  .pays-nothing .ded-pay { color: var(--accent3); }
+  .pays-something .ded-pay { color: var(--accent); }
+  .ded-note { font-size: 0.68rem; color: var(--muted); margin-top: 6px; }
+
+  /* ── BUTTONS ── */
+  .btn {
+    padding: 9px 20px; border-radius: 8px; font-family: var(--sans);
+    font-size: 0.82rem; font-weight: 500; cursor: pointer;
+    border: 1px solid var(--border2); background: var(--surface2);
+    color: var(--text); transition: all 0.2s;
+  }
+  .btn:hover { background: var(--surface); border-color: var(--accent); color: var(--accent); }
+  .btn-accent {
+    background: var(--accent); color: var(--bg);
+    border-color: var(--accent); font-weight: 600;
+  }
+  .btn-accent:hover { background: #3ab890; color: var(--bg); }
+
+  /* ── FLOW DIAGRAM ── */
+  .flow { display: flex; flex-direction: column; gap: 0; margin: 20px 0; }
+  .flow-step {
+    display: flex; align-items: flex-start; gap: 16px;
+  }
+  .flow-line-wrap { display: flex; flex-direction: column; align-items: center; }
+  .flow-dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    background: var(--accent); border: 2px solid var(--bg);
+    flex-shrink: 0; margin-top: 5px;
+  }
+  .flow-connector { width: 1px; flex: 1; background: var(--border2); min-height: 20px; }
+  .flow-body { flex: 1; padding-bottom: 20px; }
+  .flow-step-title { font-size: 0.85rem; font-weight: 500; color: var(--text); margin-bottom: 4px; }
+  .flow-step-body { font-size: 0.8rem; color: var(--muted); line-height: 1.6; }
+
+  /* ── SUMMARY TABLE ── */
+  .summary-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 10px 0; border-bottom: 1px solid var(--border);
+    font-size: 0.82rem;
+  }
+  .summary-row:last-child { border-bottom: none; }
+  .summary-key { color: var(--muted); }
+  .summary-val { font-family: var(--mono); color: var(--accent); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 800px) {
+    .main { grid-template-columns: 1fr; }
+    .sidebar { position: static; height: auto; border-right: none; border-bottom: 1px solid var(--border); }
+    header { padding: 24px; }
+    .content { padding: 24px; }
+  }
+
+  /* scrollbar */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: var(--bg); }
+  ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-left">
+    <h1>PMI Aggregate Deductible<br><em>Pricing Model</em></h1>
+    <p>Actuarial Revision Exhibit &nbsp;·&nbsp; Individual Risk Policy</p>
+  </div>
+  <div class="step-pills" id="stepPills"></div>
+</header>
+
+<div class="main">
+  <nav class="sidebar">
+    <div class="sidebar-label">Sections</div>
+    <div id="navItems"></div>
+    <div class="nav-divider"></div>
+    <div class="sidebar-label">Quick recall</div>
+    <div style="font-size:0.75rem;color:var(--muted);line-height:1.7;padding: 0 4px">
+      The model answers: <em style="color:var(--text)">what is the average net payout we expect after the aggregate deductible?</em><br><br>
+      It combines <span style="color:var(--accent)">frequency</span> (how often) × <span style="color:var(--accent2)">severity</span> (how much) via <span style="color:var(--accent4)">simulation</span>, run separately for each <strong style="color:var(--text)">Age × Zone</strong> cell.
+    </div>
+  </nav>
+
+  <main class="content" id="contentArea"></main>
+</div>
+
+<script>
+const sections = [
+  {
+    id: 'overview',
+    tag: 'Introduction',
+    title: 'The big picture',
+    sub: 'Why this product needs a simulation-based approach, and how the 8 steps fit together.',
+    render: renderOverview
+  },
+  {
+    id: 'data',
+    tag: 'Step 1',
+    title: 'Data compilation',
+    sub: 'Collect 6 years of own claims experience. Use admissible amounts, not settled amounts.',
+    render: renderData
+  },
+  {
+    id: 'inflation',
+    tag: 'Step 2',
+    title: 'Medical inflation',
+    sub: 'Trend all historical claims forward to the expected launch date.',
+    render: renderInflation
+  },
+  {
+    id: 'factors',
+    tag: 'Step 3',
+    title: 'Rating factors',
+    sub: 'Age band, Zone, and Sum Insured / Deductible drive the premium structure.',
+    render: renderFactors
+  },
+  {
+    id: 'severity',
+    tag: 'Step 4',
+    title: 'Claim severity',
+    sub: 'Split into attritional and large claims. Fit statistical distributions to each.',
+    render: renderSeverity
+  },
+  {
+    id: 'frequency',
+    tag: 'Step 5',
+    title: 'Claim frequency',
+    sub: 'Poisson model per age band, adjusted for trend, moral hazard, and waiting period.',
+    render: renderFrequency
+  },
+  {
+    id: 'simulation',
+    tag: 'Step 6',
+    title: 'Monte Carlo simulation',
+    sub: '10,000 runs per cell — each run draws claim count then claim sizes.',
+    render: renderSimulation
+  },
+  {
+    id: 'deductible',
+    tag: 'Step 7',
+    title: 'Applying the deductible',
+    sub: 'Net Claim = MAX(0, MIN(Gross − Deductible, Sum Insured)) applied to each run.',
+    render: renderDeductible
+  },
+  {
+    id: 'premium',
+    tag: 'Step 8',
+    title: 'Pure risk premium',
+    sub: 'Average of 10,000 net results, plus a prudence margin for uncertainty.',
+    render: renderPremium
+  }
+];
+
+let current = 0;
+
+function buildNav() {
+  const nav = document.getElementById('navItems');
+  const pills = document.getElementById('stepPills');
+  sections.forEach((s, i) => {
+    const item = document.createElement('div');
+    item.className = 'nav-item' + (i === 0 ? ' active' : '');
+    item.innerHTML = `<div class="nav-num">${s.tag.includes('Step') ? s.tag.split(' ')[1] : '—'}</div><div class="nav-title">${s.title}</div>`;
+    item.onclick = () => goTo(i);
+    nav.appendChild(item);
+
+    const pill = document.createElement('button');
+    pill.className = 'step-pill' + (i === 0 ? ' active' : '');
+    pill.textContent = s.tag.includes('Step') ? s.tag : 'Intro';
+    pill.onclick = () => goTo(i);
+    pills.appendChild(pill);
+  });
+}
+
+function goTo(i) {
+  current = i;
+  document.querySelectorAll('.nav-item').forEach((el, j) => el.classList.toggle('active', j === i));
+  document.querySelectorAll('.step-pill').forEach((el, j) => el.classList.toggle('active', j === i));
+  const content = document.getElementById('contentArea');
+  content.innerHTML = '';
+  const panel = document.createElement('div');
+  panel.className = 'panel active';
+  panel.innerHTML = `
+    <div class="panel-header">
+      <div class="panel-tag">${sections[i].tag}</div>
+      <div class="panel-title">${sections[i].title}</div>
+      <div class="panel-sub">${sections[i].sub}</div>
+    </div>
+    <div id="panelBody"></div>
+  `;
+  content.appendChild(panel);
+  sections[i].render(document.getElementById('panelBody'));
+  content.scrollTop = 0;
+
+  // nav buttons
+  const navRow = document.createElement('div');
+  navRow.style.cssText = 'display:flex;justify-content:space-between;margin-top:40px;padding-top:24px;border-top:1px solid var(--border)';
+  if (i > 0) {
+    const prev = document.createElement('button');
+    prev.className = 'btn'; prev.textContent = '← ' + sections[i-1].title;
+    prev.onclick = () => goTo(i-1);
+    navRow.appendChild(prev);
+  } else navRow.appendChild(document.createElement('span'));
+  if (i < sections.length - 1) {
+    const next = document.createElement('button');
+    next.className = 'btn btn-accent'; next.textContent = sections[i+1].title + ' →';
+    next.onclick = () => goTo(i+1);
+    navRow.appendChild(next);
+  }
+  document.getElementById('panelBody').appendChild(navRow);
+}
+
+// ── RENDER FUNCTIONS ──
+
+function renderOverview(el) {
+  el.innerHTML = `
+    <div class="callout">
+      An aggregate deductible means we only pay when the <strong>total</strong> of all a person's hospital bills in a year exceeds the threshold. This cannot be priced with a simple formula — it needs simulation, because we must model how multiple random claims add up.
+    </div>
+    <div class="flow">
+      ${['Collect & clean claims data (admissible amounts, 6 yrs)','Adjust for medical inflation to launch date','Define rating factors: Age × Zone × SI / Deductible','Model claim severity — attritional + large distributions','Model claim frequency — Poisson λ per age band','Run 10,000 Monte Carlo simulations per Age × Zone cell','Apply aggregate deductible + SI cap to each run','Take average of net results + prudence margin = Premium'].map((t,i) => `
+      <div class="flow-step">
+        <div class="flow-line-wrap">
+          <div class="flow-dot" style="background:${['#4ecca3','#4ecca3','#f7c948','#f7c948','#7b8cde','#7b8cde','#e05c5c','#4ecca3'][i]}"></div>
+          ${i<7?'<div class="flow-connector"></div>':''}
+        </div>
+        <div class="flow-body">
+          <div class="flow-step-title"><span style="font-family:var(--mono);font-size:0.72rem;color:var(--muted);margin-right:8px">0${i+1}</span>${t}</div>
+        </div>
+      </div>`).join('')}
+    </div>
+    <div class="callout yellow">
+      <strong>Key insight:</strong> Steps 4 and 5 build the inputs. Step 6 combines them. Steps 7 and 8 extract the premium. The simulation is run <em>separately for each Age × Zone cell</em> — not once for everyone.
+    </div>
+  `;
+}
+
+function renderData(el) {
+  el.innerHTML = `
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-icon ic-green">✓</div>
+        <div class="card-title">Use admissible amount</div>
+        <div class="card-body">What the hospital actually charged, before our policy limits. Reflects true medical cost.</div>
+      </div>
+      <div class="card">
+        <div class="card-icon ic-red">✗</div>
+        <div class="card-title">Not settled amount</div>
+        <div class="card-body">Already distorted by sum insured caps, copays, and deductibles from our existing products. Understates true cost.</div>
+      </div>
+      <div class="card">
+        <div class="card-icon ic-yellow">!</div>
+        <div class="card-title">Own data preferred</div>
+        <div class="card-body">6 years of in-house PMI claims. More credible than industry benchmarks for our specific customer base.</div>
+      </div>
+      <div class="card">
+        <div class="card-icon ic-blue">↗</div>
+        <div class="card-title">IBNR development</div>
+        <div class="card-body">Claims still in process must be developed to ultimate before inclusion in analysis.</div>
+      </div>
+    </div>
+    <div class="callout red">
+      <strong>Critical point:</strong> Settled amount = Admissible amount <em>after</em> applying SI limit, copay, deductible. Using it would make future claims appear cheaper than they really are — leading to under-pricing.
+    </div>
+    <div style="font-size:0.85rem;color:var(--muted);margin:20px 0 8px">Data fields to extract per claim:</div>
+    <div>
+      ${['Policy number','Insured age','Zone / city','Hospital name','Claimed amount','Admissible amount','Settled amount','Admission & discharge dates','ICD diagnosis code','Waiting period status'].map(f=>`<span class="tag tag-gray">${f}</span>`).join('')}
+    </div>
+    <div class="callout yellow" style="margin-top:20px">
+      <strong>COVID years note:</strong> 2020–2022 data may need exclusion or special adjustment due to anomalous claim patterns (suppressed elective procedures, COVID-specific hospitalisations).
+    </div>
+  `;
+}
+
+function renderInflation(el) {
+  el.innerHTML = `
+    <div style="font-size:0.85rem;color:var(--muted);margin-bottom:20px">Medical inflation is not the same as general CPI inflation. It depends on hospital tariff escalations, drug costs, and specialist fees. Adjust all claims to the projected mid-point of the policy year.</div>
+
+    <div class="chart-wrap">
+      <div class="chart-title">ILLUSTRATIVE CLAIM TREND — average admissible amount (₹)</div>
+      <div style="display:flex;align-items:flex-end;gap:8px;height:120px;margin-bottom:8px" id="inflChart"></div>
+      <div style="display:flex;gap:8px;font-size:0.68rem;font-family:var(--mono);color:var(--muted)">
+        ${['2019','2020','2021','2022','2023','2024','→ Launch'].map(y=>`<div style="flex:1;text-align:center">${y}</div>`).join('')}
+      </div>
+    </div>
+
+    <div class="control-row">
+      <div class="control-label">Annual inflation rate</div>
+      <input type="range" id="inflRate" min="5" max="20" value="12" step="1" oninput="updateInflation()">
+      <div class="control-val" id="inflRateVal">12%</div>
+    </div>
+    <div class="stat-grid" id="inflStats"></div>
+
+    <div class="card-grid" style="margin-top:20px">
+      <div class="card">
+        <div class="card-title" style="color:var(--accent)">Sources for inflation estimate</div>
+        <div class="card-body">Network hospital tariff agreements · TPA claim data · Drug price indices · In-house year-on-year claim trend analysis · Expert discussions</div>
+      </div>
+      <div class="card">
+        <div class="card-title" style="color:var(--accent2)">Differential inflation</div>
+        <div class="card-body">Cardiac and oncology claims may inflate faster than routine surgical claims. Consider ailment-specific trend factors for large books.</div>
+      </div>
+    </div>
+  `;
+
+  updateInflation();
+
+  function updateInflation() {
+    const rate = parseInt(document.getElementById('inflRate').value) / 100;
+    document.getElementById('inflRateVal').textContent = Math.round(rate*100) + '%';
+    const base = 75000;
+    const years = [0,1,2,3,4,5,5.75];
+    const vals = years.map(y => Math.round(base * Math.pow(1+rate, y)));
+    const max = vals[vals.length-1];
+
+    const chart = document.getElementById('inflChart');
+    const labels = ['2019','2020','2021','2022','2023','2024','Launch'];
+    chart.innerHTML = vals.map((v,i) => {
+      const pct = Math.round((v/max)*110);
+      const isLaunch = i === 6;
+      return `<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px">
+        <div style="font-size:0.6rem;font-family:var(--mono);color:${isLaunch?'var(--accent2)':'var(--muted)'};text-align:center">₹${Math.round(v/1000)}k</div>
+        <div style="height:${pct}px;width:100%;border-radius:3px 3px 0 0;background:${isLaunch?'var(--accent2)':'var(--accent)'};opacity:${0.4+0.6*(v/max)}"></div>
+      </div>`;
+    }).join('');
+
+    document.getElementById('inflStats').innerHTML = `
+      <div class="stat"><div class="stat-val">₹${Math.round(base/1000)}k</div><div class="stat-label">2019 base</div></div>
+      <div class="stat"><div class="stat-val" style="color:var(--accent2)">₹${Math.round(vals[6]/1000)}k</div><div class="stat-label">At launch (projected)</div></div>
+      <div class="stat"><div class="stat-val">${Math.round((vals[6]/base-1)*100)}%</div><div class="stat-label">Total uplift</div></div>
+    `;
+  }
+}
+
+function renderFactors(el) {
+  el.innerHTML = `
+    <div class="callout">Keep the rating structure simple for commercial viability and to reduce adverse selection. Three primary factors drive most of the risk differentiation.</div>
+    <div class="card-grid">
+      <div class="card" style="border-color:rgba(78,204,163,0.3)">
+        <div class="card-icon ic-green" style="font-size:1.2rem">①</div>
+        <div class="card-title">Age band</div>
+        <div class="card-body">Strongest predictor of both frequency and severity. Older age = more claims, higher average cost. Typical bands: 18–35, 36–45, 46–55, 56–65, 65+.</div>
+      </div>
+      <div class="card" style="border-color:rgba(247,201,72,0.3)">
+        <div class="card-icon ic-yellow" style="font-size:1.2rem">②</div>
+        <div class="card-title">Zone</div>
+        <div class="card-body">Metro hospitals charge significantly more than tier-2 / tier-3. Captures geographical cost-of-care differential. Typically Metro vs Non-metro.</div>
+      </div>
+      <div class="card" style="border-color:rgba(123,140,222,0.3)">
+        <div class="card-icon ic-blue" style="font-size:1.2rem">③</div>
+        <div class="card-title">Sum Insured / Deductible</div>
+        <div class="card-body">Directly determines how much we pay net. Different deductible levels and SI caps create the product grid. Applied post-simulation.</div>
+      </div>
+    </div>
+    <div style="margin:20px 0 8px;font-size:0.85rem;font-weight:500">Secondary factors (test, hold in reserve):</div>
+    <div>
+      <span class="tag tag-gray">Gender</span>
+      <span class="tag tag-gray">BMI</span>
+      <span class="tag tag-gray">Industry / occupation</span>
+      <span class="tag tag-gray">Family size</span>
+      <span class="tag tag-gray">Policy tenure</span>
+    </div>
+    <div class="callout yellow" style="margin-top:20px">
+      <strong>Simulation structure:</strong> The 10,000 runs are done separately for each <strong>Age × Zone</strong> cell. The deductible and SI grid is then applied as a post-processing step on those same 10,000 results — no need to re-simulate for each deductible level.
+    </div>
+    <div class="chart-wrap" style="margin-top:20px">
+      <div class="chart-title">CELLS GENERATED: Age × Zone (each gets its own 10,000 simulation runs)</div>
+      <div class="cell-grid" id="cellGrid"></div>
+    </div>
+  `;
+
+  const ages = ['18–35','36–45','46–55','56–65','65+'];
+  const zones = ['Metro','Non-metro'];
+  const lambdas = [[0.10,0.14,0.26,0.44,0.62],[0.08,0.11,0.20,0.34,0.48]];
+  const prems = [[2800,4100,7400,13100,21000],[2100,3200,5800,10200,16400]];
+
+  const grid = document.getElementById('cellGrid');
+  grid.innerHTML = `<div class="cell-header"></div>${ages.map(a=>`<div class="cell-header">${a}</div>`).join('')}`;
+  zones.forEach((z,zi) => {
+    grid.innerHTML += `<div class="cell-zone">${z}</div>`;
+    ages.forEach((a,ai) => {
+      grid.innerHTML += `<div class="cell-card" onclick="this.classList.toggle('selected')">
+        <div class="cell-age">${a} · ${z}</div>
+        <div class="cell-lambda">λ = ${lambdas[zi][ai]}</div>
+        <div class="cell-prem">~₹${prems[zi][ai].toLocaleString('en-IN')} pm</div>
+      </div>`;
+    });
+  });
+}
+
+function renderSeverity(el) {
+  el.innerHTML = `
+    <div style="font-size:0.85rem;color:var(--muted);margin-bottom:20px">Claims are split at a threshold into two populations, each modelled with a different statistical distribution. The threshold varies by age group.</div>
+    <div class="card-grid">
+      <div class="card" style="border-color:rgba(78,204,163,0.3)">
+        <div class="card-title" style="color:var(--accent)">Attritional claims</div>
+        <div class="card-body">Below threshold. Routine IPD stays, day-care procedures. Modelled using <strong>Log-normal</strong> or <strong>Gamma</strong> distribution. High frequency, moderate amounts.</div>
+      </div>
+      <div class="card" style="border-color:rgba(224,92,92,0.3)">
+        <div class="card-title" style="color:var(--accent3)">Large claims</div>
+        <div class="card-body">Above threshold. Cancer, cardiac surgery, organ transplants. Modelled using <strong>Generalised Pareto Distribution (GPD)</strong>. Rare, but dominate total cost.</div>
+      </div>
+    </div>
+
+    <div class="chart-wrap">
+      <div class="chart-title">ILLUSTRATIVE SEVERITY DISTRIBUTION — claim count by amount band</div>
+      <div class="control-row">
+        <div class="control-label">Threshold (attritional / large)</div>
+        <input type="range" id="threshSlider" min="1" max="6" value="3" step="1" oninput="updateSev()">
+        <div class="control-val" id="threshVal">₹3L</div>
+      </div>
+      <div class="histogram" id="sevChart"></div>
+      <div style="display:flex;gap:8px;margin-top:6px;font-size:0.65rem;font-family:var(--mono);color:var(--muted)" id="sevLabels"></div>
+      <div style="display:flex;gap:16px;margin-top:12px;font-size:0.72rem">
+        <span><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:var(--accent);margin-right:4px"></span>Attritional (log-normal / gamma)</span>
+        <span><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:var(--accent3);margin-right:4px"></span>Large (GPD)</span>
+      </div>
+    </div>
+
+    <div class="card-grid" style="margin-top:16px">
+      <div class="card">
+        <div class="card-title">Parameter estimation</div>
+        <div class="card-body">Parameters (μ, σ for log-normal; shape ξ, scale β for GPD) estimated via <strong>Maximum Likelihood Estimation (MLE)</strong> in R or Python.</div>
+      </div>
+      <div class="card">
+        <div class="card-title">Goodness of fit</div>
+        <div class="card-body">AIC / BIC criteria, Kolmogorov–Smirnov test, Q-Q plots. If a cell has thin data, merge with adjacent cells or use credibility weighting.</div>
+      </div>
+    </div>
+  `;
+  updateSev();
+
+  function updateSev() {
+    const thresh = parseInt(document.getElementById('threshSlider').value);
+    const threshNames = ['₹1L','₹1.5L','₹2L','₹3L','₹5L','₹8L'];
+    document.getElementById('threshVal').textContent = threshNames[thresh-1];
+
+    const bands = ['<50k','50k–1L','1–2L','2–5L','5–10L','10L+'];
+    const counts = [580,270,90,42,13,5];
+    const max = 580;
+    const threshIdx = [0,1,1,2,3,4][thresh-1];
+
+    document.getElementById('sevChart').innerHTML = counts.map((c,i) => {
+      const h = Math.round((c/max)*120);
+      const isLarge = i > threshIdx;
+      return `<div class="hbar-wrap">
+        <div class="hbar" style="height:${h}px;background:${isLarge?'var(--accent3)':'var(--accent)'};opacity:${0.5+0.5*(c/max)}"></div>
+      </div>`;
+    }).join('');
+    document.getElementById('sevLabels').innerHTML = bands.map(b=>`<div style="flex:1;text-align:center">${b}</div>`).join('');
+  }
+}
+
+function renderFrequency(el) {
+  el.innerHTML = `
+    <div style="font-size:0.85rem;color:var(--muted);margin-bottom:20px">Claim frequency = (number of claims) ÷ (earned member-years of exposure), calculated per age band, then adjusted for three factors before use in simulation.</div>
+
+    <div class="stat-grid">
+      <div class="stat"><div class="stat-val">0.10</div><div class="stat-label">Age 18–35 λ</div></div>
+      <div class="stat"><div class="stat-val">0.15</div><div class="stat-label">Age 36–45 λ</div></div>
+      <div class="stat"><div class="stat-val">0.26</div><div class="stat-label">Age 46–55 λ</div></div>
+      <div class="stat"><div class="stat-val">0.44</div><div class="stat-label">Age 56–65 λ</div></div>
+      <div class="stat"><div class="stat-val">0.62</div><div class="stat-label">Age 65+ λ</div></div>
+    </div>
+
+    <div style="font-size:0.85rem;font-weight:500;margin:24px 0 12px">Three adjustments to apply to the raw frequency:</div>
+    <div class="card-grid">
+      <div class="card" style="border-color:rgba(78,204,163,0.3)">
+        <div class="card-icon ic-green">①</div>
+        <div class="card-title">Trend adjustment</div>
+        <div class="card-body">If claiming has been rising year on year (greater health awareness, diagnostic capacity), project the trend forward to the pricing period.</div>
+      </div>
+      <div class="card" style="border-color:rgba(224,92,92,0.3)">
+        <div class="card-icon ic-red">②</div>
+        <div class="card-title">Moral hazard loading</div>
+        <div class="card-body">Aggregate deductible creates incentive to <em>accumulate</em> or inflate individual claims to cross the threshold. Explicit anti-selection loading required.</div>
+      </div>
+      <div class="card" style="border-color:rgba(247,201,72,0.3)">
+        <div class="card-icon ic-yellow">③</div>
+        <div class="card-title">Waiting period change</div>
+        <div class="card-body">If the new product changes PED exclusion or time-bound exclusion periods vs existing products, adjust frequency up or down accordingly.</div>
+      </div>
+    </div>
+
+    <div class="chart-wrap" style="margin-top:20px">
+      <div class="chart-title">POISSON DISTRIBUTION — probability of N claims in a year (λ = 0.22, age 46–55)</div>
+      <div style="display:flex;align-items:flex-end;gap:10px;height:120px;margin-bottom:8px" id="poisChart"></div>
+      <div style="display:flex;gap:10px;font-size:0.68rem;font-family:var(--mono);color:var(--muted)" id="poisLabels"></div>
+    </div>
+
+    <div class="callout">
+      The Poisson distribution with parameter λ is used because it models "how many times does a rare event occur in a fixed period" — exactly our question. The parameter λ equals the adjusted annual claim frequency.
+    </div>
+  `;
+
+  const lambda = 0.22;
+  const probs = [0,1,2,3,4].map(k => {
+    let p = Math.exp(-lambda);
+    for (let i = 0; i < k; i++) p *= lambda / (i+1);
+    return p;
+  });
+  const max = probs[0];
+  document.getElementById('poisChart').innerHTML = probs.map((p,k) => {
+    const h = Math.round((p/max)*110);
+    return `<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:4px">
+      <div style="font-size:0.65rem;font-family:var(--mono);color:var(--accent)">${Math.round(p*100)}%</div>
+      <div style="height:${h}px;width:100%;border-radius:3px 3px 0 0;background:var(--accent4);opacity:${0.4+0.6*p/max}"></div>
+    </div>`;
+  }).join('');
+  document.getElementById('poisLabels').innerHTML = [0,1,2,3,4].map(k=>`<div style="flex:1;text-align:center">${k} claim${k!==1?'s':''}</div>`).join('');
+}
+
+function renderSimulation(el) {
+  el.innerHTML = `
+    <div class="callout">
+      For each of 10,000 runs: <strong>Step A</strong> — draw a claim count N from Poisson(λ). <strong>Step B</strong> — for each of the N claims, draw a size from the severity distribution. Sum all sizes = gross aggregate claim for that run.
+    </div>
+
+    <div class="formula-box">
+      For run <em>i</em> of 10,000:<br>
+      &nbsp;&nbsp;<span>N<sub>i</sub></span> ~ Poisson(λ) &nbsp;← claim count<br>
+      &nbsp;&nbsp;For j = 1 to N<sub>i</sub>: &nbsp;<em>X<sub>j</sub></em> ~ LogNormal(μ, σ) or GPD(ξ, β)<br>
+      &nbsp;&nbsp;<span>Gross<sub>i</sub></span> = X<sub>1</sub> + X<sub>2</sub> + ... + X<sub>N<sub>i</sub></sub>
+    </div>
+
+    <div style="display:flex;gap:12px;align-items:center;margin:16px 0 8px;flex-wrap:wrap">
+      <button class="btn btn-accent" id="runBtn" onclick="runSim()">Run 10 simulated years</button>
+      <div style="font-size:0.78rem;color:var(--muted)">Watch how claim count and claim sizes combine in each run</div>
+    </div>
+    <div id="simRuns" style="margin:12px 0"></div>
+    <div id="simSummary" style="font-size:0.8rem;color:var(--muted);padding:10px 0"></div>
+
+    <div class="callout yellow" style="margin-top:20px">
+      <strong>Why 10,000?</strong> Enough runs for the average to stabilise. With fewer runs the average is noisy; with 10,000+ it converges reliably. The standard deviation of those 10,000 results also becomes the basis for the prudence margin in Step 8.
+    </div>
+  `;
+  runSim();
+
+  function runSim() {
+    const lambda = 0.22;
+    const container = document.getElementById('simRuns');
+    const summary = document.getElementById('simSummary');
+    container.innerHTML = '';
+    let total = 0;
+    const maxBar = 500000;
+
+    for (let i = 1; i <= 10; i++) {
+      const n = poissonSample(lambda);
+      const claims = [];
+      let yr = 0;
+      for (let j = 0; j < n; j++) {
+        const s = Math.round(lognormalSample(11.1, 1.05) / 1000) * 1000;
+        claims.push(s); yr += s;
+      }
+      total += yr;
+
+      const row = document.createElement('div');
+      row.className = 'run-row';
+      const claimsHtml = n === 0
+        ? '<span style="color:var(--muted);font-size:0.72rem">no claims this year</span>'
+        : claims.map(c => `<span class="claim-tag">₹${c>=100000?(c/100000).toFixed(1)+'L':Math.round(c/1000)+'k'}</span>`).join('');
+      const bw = Math.min(Math.round((yr/maxBar)*80), 80);
+      row.innerHTML = `
+        <div class="run-yr">Yr ${i}</div>
+        <div class="run-n">${n} claim${n!==1?'s':''}</div>
+        <div class="run-claims">${claimsHtml}</div>
+        <div class="run-bar-wrap"><div class="run-bar" style="width:${bw}px;background:${yr>0?'var(--accent)':'var(--muted)'}"></div></div>
+        <div class="run-total" style="color:${yr>0?'var(--accent)':'var(--muted)'}">${yr===0?'₹0':'₹'+(yr>=100000?(yr/100000).toFixed(1)+'L':Math.round(yr/1000)+'k')}</div>
+      `;
+      container.appendChild(row);
+    }
+    const avg = total / 10;
+    summary.innerHTML = `Average gross claim across these 10 years: <span style="color:var(--accent);font-family:var(--mono)">₹${avg>=100000?(avg/100000).toFixed(1)+'L':Math.round(avg/1000)+'k'}</span> — over 10,000 runs, this stabilises into the gross risk premium.`;
+  }
+
+  function poissonSample(l) {
+    const L = Math.exp(-l); let k = 0, p = 1;
+    do { k++; p *= Math.random(); } while (p > L);
+    return k - 1;
+  }
+  function lognormalSample(mu, sigma) {
+    let u, v;
+    do { u = Math.random(); } while (!u);
+    do { v = Math.random(); } while (!v);
+    return Math.exp(mu + sigma * Math.sqrt(-2*Math.log(u)) * Math.cos(2*Math.PI*v));
+  }
+}
+
+function renderDeductible(el) {
+  el.innerHTML = `
+    <div style="font-size:0.85rem;color:var(--muted);margin-bottom:20px">Each of the 10,000 gross totals from Step 6 has the deductible formula applied. This converts gross aggregate claims into net claims — what we actually pay.</div>
+
+    <div class="formula-box">
+      <span>Net<sub>i</sub></span> = MAX( 0 , MIN( <em>Gross<sub>i</sub></em> − <span>Deductible</span> , <em>Sum Insured</em> ) )
+    </div>
+
+    <div class="control-row" style="margin-top:20px">
+      <div class="control-label">Aggregate deductible</div>
+      <input type="range" id="dedSlider" min="1" max="8" value="3" step="1" oninput="updateDed()">
+      <div class="control-val" id="dedVal">₹3L</div>
+    </div>
+    <div class="control-row">
+      <div class="control-label">Sum insured</div>
+      <input type="range" id="siSlider" min="5" max="25" value="10" step="5" oninput="updateDed()">
+      <div class="control-val" id="siVal">₹10L</div>
+    </div>
+
+    <div style="display:flex;gap:12px;flex-wrap:wrap;margin:20px 0" id="dedScenarios"></div>
+
+    <div class="chart-wrap">
+      <div class="chart-title">SIMULATED GROSS TOTALS — red = below deductible (we pay ₹0), green = we pay something</div>
+      <div style="display:flex;align-items:flex-end;gap:3px;height:130px;margin-bottom:8px" id="dedChart"></div>
+      <div style="display:flex;gap:3px;font-size:0.6rem;font-family:var(--mono);color:var(--muted)" id="dedLabels"></div>
+      <div style="display:flex;gap:16px;margin-top:10px;font-size:0.72rem">
+        <span><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:var(--accent3);margin-right:4px"></span>Below deductible — we pay ₹0</span>
+        <span><span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:var(--accent);margin-right:4px"></span>Above deductible — we pay something</span>
+      </div>
+    </div>
+  `;
+
+  const dedVals = [0.5,1,1.5,2,2.5,3,4,5];
+  const dedNames = ['₹50k','₹1L','₹1.5L','₹2L','₹2.5L','₹3L','₹4L','₹5L'];
+  const bands = ['₹0','₹50k','₹1L','₹1.5L','₹2L','₹2.5L','₹3L','₹4L','₹5L','₹7L+'];
+  const counts = [2800,1800,1600,1100,800,600,550,400,250,100];
+
+  function updateDed() {
+    const di = parseInt(document.getElementById('dedSlider').value) - 1;
+    const si = parseInt(document.getElementById('siSlider').value);
+    document.getElementById('dedVal').textContent = dedNames[di];
+    document.getElementById('siVal').textContent = '₹' + si + 'L';
+    const ded = dedVals[di];
+
+    const threshIdx = [0,1,2,3,4,5,6,7,8,9].findIndex((_,i) => {
+      const bv = [0,0.5,1,1.5,2,2.5,3,4,5,7][i];
+      return bv >= ded;
+    }) - 1;
+
+    const max = Math.max(...counts);
+    document.getElementById('dedChart').innerHTML = counts.map((c,i) => {
+      const h = Math.round((c/max)*120);
+      const isAbove = i > Math.max(threshIdx, 0);
+      return `<div style="flex:1;height:${h}px;border-radius:2px 2px 0 0;background:${isAbove?'var(--accent)':'var(--accent3)'};opacity:0.75"></div>`;
+    }).join('');
+    document.getElementById('dedLabels').innerHTML = bands.map(b=>`<div style="flex:1;text-align:center">${b}</div>`).join('');
+
+    const grosses = [0, ded*0.6, ded*1.5, ded*2.5, si*1.3+ded];
+    const nets = grosses.map(g => Math.max(0, Math.min(g - ded, si)));
+    const scenarios = [
+      { gross: grosses[1], label: 'Scenario A', note: 'Below deductible' },
+      { gross: grosses[2], label: 'Scenario B', note: 'Partially above' },
+      { gross: grosses[3], label: 'Scenario C', note: 'Well above' },
+      { gross: grosses[4], label: 'Scenario D', note: 'Hits SI cap' }
+    ];
+    document.getElementById('dedScenarios').innerHTML = scenarios.map(s => {
+      const net = Math.max(0, Math.min(s.gross - ded, si));
+      const paysNothing = net === 0;
+      const fmt = v => v >= 1 ? '₹' + v.toFixed(1) + 'L' : '₹' + Math.round(v*100) + 'k';
+      return `<div class="ded-scenario ${paysNothing?'pays-nothing':'pays-something'}">
+        <div class="ded-label">${s.label}</div>
+        <div class="ded-gross">Gross: ${fmt(s.gross)}</div>
+        <div class="ded-pay">${paysNothing ? 'We pay ₹0' : 'We pay ' + fmt(net)}</div>
+        <div class="ded-note">${s.note}</div>
+      </div>`;
+    }).join('');
+  }
+
+  updateDed();
+}
+
+function renderPremium(el) {
+  el.innerHTML = `
+    <div style="font-size:0.85rem;color:var(--muted);margin-bottom:20px">After 10,000 net claim values are computed, the pure risk premium is derived from their average plus a prudence margin. This is done for every Age × Zone × Deductible × SI combination.</div>
+
+    <div class="formula-box">
+      <span>Pure Risk Premium</span> = Mean( Net<sub>1</sub>, Net<sub>2</sub>, ..., Net<sub>10000</sub> ) + <em>k</em> × StdDev( Net<sub>1..10000</sub> )<br><br>
+      where <em>k</em> = prudence factor (typically 0.05 – 0.15, higher at larger deductibles)
+    </div>
+
+    <div class="control-row" style="margin-top:20px">
+      <div class="control-label">Prudence factor k</div>
+      <input type="range" id="kSlider" min="0" max="20" value="8" step="1" oninput="updatePrem()">
+      <div class="control-val" id="kVal">0.08</div>
+    </div>
+
+    <div class="stat-grid" id="premStats"></div>
+
+    <div style="font-size:0.85rem;font-weight:500;margin:24px 0 12px">Illustrative premium grid — pure risk premium (₹ per annum)</div>
+    <div style="overflow-x:auto">
+      <table class="grid-table" id="premTable"></table>
+    </div>
+
+    <div class="callout" style="margin-top:20px">
+      <strong>Why add prudence?</strong> At high deductible levels, fewer claims exceed the threshold, so the data informing that tail is sparse. The standard deviation of the 10,000 results is larger (more uncertain), so a small margin is added as a buffer.
+    </div>
+
+    <div style="font-size:0.85rem;font-weight:500;margin:24px 0 12px">From risk premium to final premium:</div>
+    <div class="flow">
+      ${[
+        ['Pure risk premium','Average net simulated claim + k × StdDev'],
+        ['Expense loading','Distribution costs, admin, reinsurance, TPA fees'],
+        ['Profit / contingency margin','Return on capital, surplus'],
+        ['Final commercial premium','What the customer pays']
+      ].map(([t,b],i) => `
+      <div class="flow-step">
+        <div class="flow-line-wrap">
+          <div class="flow-dot"></div>
+          ${i<3?'<div class="flow-connector"></div>':''}
+        </div>
+        <div class="flow-body">
+          <div class="flow-step-title">${t}</div>
+          <div class="flow-step-body">${b}</div>
+        </div>
+      </div>`).join('')}
+    </div>
+  `;
+
+  function updatePrem() {
+    const k = parseInt(document.getElementById('kSlider').value) / 100;
+    document.getElementById('kVal').textContent = k.toFixed(2);
+    const mean = 4820, std = 3200;
+    const prem = Math.round(mean + k * std);
+    document.getElementById('premStats').innerHTML = `
+      <div class="stat"><div class="stat-val">₹${mean.toLocaleString('en-IN')}</div><div class="stat-label">Mean net claim</div></div>
+      <div class="stat"><div class="stat-val">₹${Math.round(k*std).toLocaleString('en-IN')}</div><div class="stat-label">Prudence margin (k×σ)</div></div>
+      <div class="stat"><div class="stat-val" style="color:var(--accent2)">₹${prem.toLocaleString('en-IN')}</div><div class="stat-label">Pure risk premium</div></div>
+    `;
+
+    const ages = ['18–35','36–45','46–55','56–65'];
+    const deds = ['₹1L','₹2L','₹3L','₹5L'];
+    const base = [[1200,900,700,500],[2800,2100,1600,1100],[5800,4400,3400,2300],[11200,8600,6700,4500]];
+    const table = document.getElementById('premTable');
+    table.innerHTML = `<tr><th>Age / Deductible</th>${deds.map(d=>`<th>${d}</th>`).join('')}</tr>` +
+      ages.map((a,ai) => `<tr><td style="font-family:var(--mono);font-size:0.75rem;color:var(--muted)">${a}</td>${deds.map((_,di) => {
+        const v = Math.round(base[ai][di] * (1 + k * 0.5));
+        return `<td class="${ai===2&&di===1?'active-cell':'dim'}">₹${v.toLocaleString('en-IN')}</td>`;
+      }).join('')}</tr>`).join('');
+  }
+  updatePrem();
+}
+
+// ── INIT ──
+buildNav();
+goTo(0);
+</script>
+</body>
+</html>

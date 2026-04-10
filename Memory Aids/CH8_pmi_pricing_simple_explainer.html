@@ -1,0 +1,259 @@
+
+<style>
+  .step-nav { display:flex; gap:8px; margin:0 0 20px; flex-wrap:wrap; }
+  .step-btn { padding:6px 14px; border-radius:20px; border:0.5px solid var(--color-border-secondary); background:var(--color-background-secondary); color:var(--color-text-secondary); font-size:13px; cursor:pointer; transition:all .2s; }
+  .step-btn.active { background:var(--color-background-info); color:var(--color-text-info); border-color:var(--color-border-info); font-weight:500; }
+  .step-panel { display:none; }
+  .step-panel.active { display:block; }
+  .analogy-box { background:var(--color-background-secondary); border-left:3px solid var(--color-border-info); border-radius:0 var(--border-radius-md) var(--border-radius-md) 0; padding:14px 16px; margin:14px 0; font-size:14px; line-height:1.7; color:var(--color-text-primary); }
+  .tech-box { background:var(--color-background-primary); border:0.5px solid var(--color-border-tertiary); border-radius:var(--border-radius-md); padding:14px 16px; margin:14px 0; font-size:14px; line-height:1.7; color:var(--color-text-secondary); }
+  .label { font-size:11px; font-weight:500; letter-spacing:.05em; text-transform:uppercase; color:var(--color-text-tertiary); margin-bottom:4px; }
+  .title { font-size:16px; font-weight:500; color:var(--color-text-primary); margin:0 0 6px; }
+  .nav-row { display:flex; justify-content:space-between; margin-top:20px; }
+  .nav-btn { padding:7px 18px; border-radius:var(--border-radius-md); border:0.5px solid var(--color-border-secondary); background:var(--color-background-secondary); color:var(--color-text-primary); font-size:13px; cursor:pointer; }
+  .nav-btn:hover { background:var(--color-background-primary); }
+  .nav-btn:disabled { opacity:.35; cursor:default; }
+  .visual { border-radius:var(--border-radius-md); padding:16px; margin:14px 0; font-size:13px; }
+  .sim-row { display:flex; align-items:center; gap:8px; margin:6px 0; font-size:13px; }
+  .sim-bar { height:14px; border-radius:4px; background:var(--color-background-info); }
+  .chip { display:inline-block; padding:2px 8px; border-radius:10px; font-size:12px; margin:2px; }
+  .chip-b { background:var(--color-background-info); color:var(--color-text-info); }
+  .chip-g { background:var(--color-background-success); color:var(--color-text-success); }
+  .chip-r { background:var(--color-background-danger); color:var(--color-text-danger); }
+  .overview-section { margin:0 0 18px; }
+  .overview-section p { font-size:14px; line-height:1.75; color:var(--color-text-primary); margin:0 0 10px; }
+  .step-row { display:flex; align-items:flex-start; gap:12px; margin:8px 0; }
+  .step-num { min-width:26px; height:26px; border-radius:50%; background:var(--color-background-info); color:var(--color-text-info); font-size:12px; font-weight:500; display:flex; align-items:center; justify-content:center; margin-top:1px; }
+  .step-desc { font-size:13px; line-height:1.6; color:var(--color-text-secondary); }
+  .step-desc strong { font-weight:500; color:var(--color-text-primary); }
+</style>
+
+<h2 class="sr-only">Interactive explainer of the PMI aggregate deductible pricing model in plain language</h2>
+
+<div style="padding:1rem 0 0">
+  <p style="font-size:13px;color:var(--color-text-secondary);margin:0 0 14px">Tap a tab to navigate — start with the overview, then explore each step</p>
+  <div class="step-nav" id="nav"></div>
+  <div id="panels"></div>
+</div>
+
+<script>
+const overview = {
+  isOverview: true,
+  title: "Overview — how the model works",
+  content: `
+    <div class="overview-section">
+      <p>We are building a pricing model for a new type of health insurance product — one with an <strong>aggregate deductible</strong>. This means the policyholder pays all their hospital bills themselves up to a threshold (say ₹3 lakh in a year), and we as the insurer only pay whatever exceeds that threshold.</p>
+      <p>The challenge is: you cannot price this with a simple formula. The amount we pay depends on the <em>total</em> of all claims in a year for one person — which could be one large claim, or several small ones adding up. To handle this, we build a simulation-based model. Here is the logic in plain terms.</p>
+    </div>
+    <div class="overview-section">
+      <p style="font-weight:500;font-size:14px;margin-bottom:10px">The 8 steps at a glance</p>
+      <div class="step-row"><div class="step-num">1</div><div class="step-desc"><strong>Collect and clean data</strong> — pull 6 years of our own claims, using the admissible amount (not the settled amount, which is distorted by existing limits).</div></div>
+      <div class="step-row"><div class="step-num">2</div><div class="step-desc"><strong>Adjust for medical inflation</strong> — trend all historical claims forward to the expected launch date, using hospital tariff trends and expert input.</div></div>
+      <div class="step-row"><div class="step-num">3</div><div class="step-desc"><strong>Choose rating factors</strong> — decide which characteristics (age, zone, sum insured) will drive the premium differences between customers.</div></div>
+      <div class="step-row"><div class="step-num">4</div><div class="step-desc"><strong>Model claim sizes (severity)</strong> — split claims into everyday "attritional" ones and rare "large" ones, then fit statistical distributions to each group separately.</div></div>
+      <div class="step-row"><div class="step-num">5</div><div class="step-desc"><strong>Model claim frequency</strong> — estimate how often a person in each age band makes a claim per year, adjusted for trend, moral hazard, and waiting period changes.</div></div>
+      <div class="step-row"><div class="step-num">6</div><div class="step-desc"><strong>Run the simulation</strong> — like rolling dice 10,000 times: each run draws a random number of claims and a random size for each, producing 10,000 possible "annual claim totals."</div></div>
+      <div class="step-row"><div class="step-num">7</div><div class="step-desc"><strong>Apply the deductible</strong> — for each of the 10,000 simulated totals, calculate what we would actually pay after the aggregate deductible and sum insured cap.</div></div>
+      <div class="step-row"><div class="step-num">8</div><div class="step-desc"><strong>Derive the premium</strong> — take the average of those 10,000 net amounts, add a small prudence margin for uncertainty, and that is the pure risk premium.</div></div>
+    </div>
+    <div class="overview-section">
+      <p>The reason a simulation is needed — rather than a simple formula — is specifically because of the aggregate deductible. Whether we pay anything at all depends on the <em>combined total</em> of all claims in the year, not on any single claim. Only a simulation can model that interaction realistically. Tap the numbered steps above to explore each one in detail.</p>
+    </div>
+    <div class="nav-row">
+      <span></span>
+      <button class="nav-btn" onclick="goTo(1)">Start with Step 1 →</button>
+    </div>
+  `
+};
+
+const steps = [
+  {
+    title: "Step 1 — Collecting and cleaning the data",
+    analogy: `Think of it like a doctor reviewing a patient's full medical history before writing a prescription. We start with 6 years of our own claims records — because our own customers' experience is more reliable than any textbook figure.`,
+    tech: `We pull every claim filed: who made it, their age, their city, the hospital, what was claimed, and what was actually payable (the "admissible" amount). Crucially, we use the admissible amount — not the final payout — because the final payout has already been cut by sum insured limits or copays, which would distort our view of the true medical cost.`,
+    visual: `<div style="display:flex;gap:10px;flex-wrap:wrap">
+      <div style="flex:1;min-width:120px;background:var(--color-background-secondary);border-radius:8px;padding:12px;font-size:12px">
+        <div style="font-weight:500;margin-bottom:6px">Do not use</div>
+        <div style="color:var(--color-text-secondary)">Settled amount<br><span style="font-size:11px">Already cut by SI cap / copay — hides the real cost</span></div>
+      </div>
+      <div style="flex:1;min-width:120px;background:var(--color-background-success);border-radius:8px;padding:12px;font-size:12px">
+        <div style="font-weight:500;margin-bottom:6px;color:var(--color-text-success)">Use this</div>
+        <div style="color:var(--color-text-success)">Admissible amount<br><span style="font-size:11px">What the hospital actually charged (before our limits)</span></div>
+      </div>
+    </div>`
+  },
+  {
+    title: "Step 2 — Adjusting for medical inflation",
+    analogy: `Imagine you're pricing a restaurant menu for next year. A chicken dish cost ₹200 two years ago, ₹240 last year — so you'd expect ~₹280 next year. Medical costs work the same way, just with hospital tariffs instead of ingredients.`,
+    tech: `We trend all historical claims forward to the expected policy launch date. Medical inflation is not the same as general CPI inflation — it depends on our negotiated hospital tariff rates, input cost trends (doctors, equipment, drugs), and discussions with our TPA and medical experts. We apply inflation to the admissible amount, not the settled amount.`,
+    visual: `<div style="font-size:12px">
+      <div style="display:flex;align-items:center;gap:8px;margin:6px 0"><div style="width:60px;color:var(--color-text-secondary)">2020</div><div style="flex:1;height:10px;background:var(--color-background-info);border-radius:4px;width:40%"></div><div style="margin-left:8px">₹80,000 avg claim</div></div>
+      <div style="display:flex;align-items:center;gap:8px;margin:6px 0"><div style="width:60px;color:var(--color-text-secondary)">2022</div><div style="flex:1;height:10px;background:var(--color-background-info);border-radius:4px;width:55%"></div><div style="margin-left:8px">₹1,10,000 avg claim</div></div>
+      <div style="display:flex;align-items:center;gap:8px;margin:6px 0"><div style="width:60px;color:var(--color-text-secondary)">2025</div><div style="flex:1;height:10px;background:var(--color-background-info);border-radius:4px;width:70%"></div><div style="margin-left:8px">₹1,40,000 avg claim</div></div>
+      <div style="display:flex;align-items:center;gap:8px;margin:6px 0"><div style="width:60px;color:var(--color-text-secondary);font-weight:500">Launch</div><div style="flex:1;height:10px;background:#E24B4A;border-radius:4px;width:82%"></div><div style="margin-left:8px;font-weight:500">₹1,65,000 projected</div></div>
+    </div>`
+  },
+  {
+    title: "Step 3 — Choosing the rating factors",
+    analogy: `When you rent a car, the price depends on: your age (young drivers pay more), the city (Mumbai vs Mysuru), and which car category you pick. It doesn't ask about your shoe size — only things that actually predict cost matter.`,
+    tech: `We keep it simple: Age band (biggest predictor of how often and how much people claim), Zone (metro hospitals charge more than tier-2), and Sum Insured / Deductible (directly affects how much we pay). Other factors like gender can be tested but kept in reserve.`,
+    visual: `<div style="display:flex;gap:8px;flex-wrap:wrap">
+      <div class="chip chip-b">Age band</div>
+      <div class="chip chip-b">Zone (metro / non-metro)</div>
+      <div class="chip chip-b">Deductible amount</div>
+      <div class="chip chip-b">Sum insured</div>
+      <div class="chip" style="background:var(--color-background-secondary);color:var(--color-text-tertiary)">Gender (secondary)</div>
+      <div class="chip" style="background:var(--color-background-secondary);color:var(--color-text-tertiary)">BMI (secondary)</div>
+    </div>`
+  },
+  {
+    title: "Step 4 — Modelling claim sizes (severity)",
+    analogy: `Think of claims like rainfall events. Most days have light drizzle (small claims — a routine IPD stay). Occasionally there's a heavy storm (large claims — cancer, cardiac surgery). You need a separate model for each, because the rules governing drizzle and storms are very different.`,
+    tech: `We split claims into "Attritional" (everyday claims, below a threshold) and "Large" (high-cost claims, above the threshold). We then fit standard statistical distributions to each group: typically Log-normal or Gamma for attritional, and Generalized Pareto for large claims. Software tests which distribution fits best.`,
+    visual: `<div style="font-size:12px">
+      <div style="margin-bottom:10px;font-weight:500">Distribution of 1,000 claims (illustrative)</div>
+      <div class="sim-row"><div style="width:90px;color:var(--color-text-secondary)">₹10k–50k</div><div class="sim-bar" style="width:60%"></div><div style="margin-left:6px">600 claims</div></div>
+      <div class="sim-row"><div style="width:90px;color:var(--color-text-secondary)">₹50k–1L</div><div class="sim-bar" style="width:25%"></div><div style="margin-left:6px">250 claims</div></div>
+      <div class="sim-row"><div style="width:90px;color:var(--color-text-secondary)">₹1L–5L</div><div class="sim-bar" style="width:13%"></div><div style="margin-left:6px">130 claims</div></div>
+      <div class="sim-row"><div style="width:90px;color:var(--color-text-secondary)">₹5L+</div><div class="sim-bar" style="width:2%"></div><div style="margin-left:6px">20 claims — large</div></div>
+    </div>`
+  },
+  {
+    title: "Step 5 — Modelling claim frequency",
+    analogy: `We need to know not just how big a claim is, but how often a person makes one. Think of it like asking: on average, how many times a year does someone of age 45 in Mumbai go to hospital? That's the frequency.`,
+    tech: `We calculate the observed claim rate per person per year for each age band, then adjust it for: trend (is claiming going up?), the new deductible structure (people may manipulate small bills to cross the threshold — moral hazard), and changes in waiting periods. We model this frequency using a Poisson distribution, which is the standard statistical model for "how many times does a rare event happen in a fixed period."`,
+    visual: `<div style="font-size:12px">
+      <div style="display:flex;gap:8px;margin-bottom:10px">
+        <div style="flex:1;background:var(--color-background-secondary);border-radius:8px;padding:10px">
+          <div style="font-weight:500;margin-bottom:4px">Age 25–35</div>
+          <div style="font-size:20px;font-weight:500;color:var(--color-text-info)">0.08</div>
+          <div style="color:var(--color-text-secondary)">claims / person / yr</div>
+        </div>
+        <div style="flex:1;background:var(--color-background-secondary);border-radius:8px;padding:10px">
+          <div style="font-weight:500;margin-bottom:4px">Age 46–55</div>
+          <div style="font-size:20px;font-weight:500;color:var(--color-text-info)">0.22</div>
+          <div style="color:var(--color-text-secondary)">claims / person / yr</div>
+        </div>
+        <div style="flex:1;background:var(--color-background-secondary);border-radius:8px;padding:10px">
+          <div style="font-weight:500;margin-bottom:4px">Age 60+</div>
+          <div style="font-size:20px;font-weight:500;color:var(--color-text-info)">0.41</div>
+          <div style="color:var(--color-text-secondary)">claims / person / yr</div>
+        </div>
+      </div>
+      <div style="color:var(--color-text-tertiary)">+ adjustments for trend, moral hazard, waiting period changes</div>
+    </div>`
+  },
+  {
+    title: "Step 6 — The simulation (the core engine)",
+    analogy: `Imagine you roll two dice 10,000 times. Each roll, one die tells you how many hospital visits happen that year, and a second die tells you how expensive each visit is. You add them all up. After 10,000 rolls, you have a realistic picture of all the different ways a year could unfold — from "no claims at all" to "three expensive hospitalisations."`,
+    tech: `We run a Monte Carlo simulation: for each of 10,000 virtual policyholders, we randomly draw a claim count from the Poisson frequency model, then for each claim, randomly draw a claim size from the severity model. The total of all claims in that run = the gross aggregate claim for that simulated year. After 10,000 runs, we have a full distribution of outcomes.`,
+    visual: `<div style="font-size:12px">
+      <div style="font-weight:500;margin-bottom:8px">10,000 simulated annual claim totals (illustrative)</div>
+      <div class="sim-row"><div style="width:70px">₹0</div><div class="sim-bar" style="width:30%"></div><div style="margin-left:6px">30% — no claim</div></div>
+      <div class="sim-row"><div style="width:70px">₹1–2L</div><div class="sim-bar" style="width:40%"></div><div style="margin-left:6px">40% — small</div></div>
+      <div class="sim-row"><div style="width:70px">₹2–5L</div><div class="sim-bar" style="width:20%"></div><div style="margin-left:6px">20% — medium</div></div>
+      <div class="sim-row"><div style="width:70px">₹5L+</div><div class="sim-bar" style="width:10%"></div><div style="margin-left:6px">10% — large</div></div>
+    </div>`
+  },
+  {
+    title: "Step 7 — Applying the deductible",
+    analogy: `An aggregate deductible works like an annual excess on your car insurance. If the deductible is ₹3 lakh, we only pay the amount above ₹3 lakh in total hospital bills for the year. So if someone had ₹2.5L in bills — we pay nothing. If they had ₹7L in bills — we pay ₹4L (the portion above ₹3L).`,
+    tech: `For each of the 10,000 simulated gross totals, we apply the formula: Net Claim = MAX(0, MIN(Gross Total − Deductible, Sum Insured)). This gives us the net amount we'd actually pay. We do this for every combination in our deductible × sum insured grid.`,
+    visual: `<div style="font-size:12px">
+      <div style="font-weight:500;margin-bottom:10px">Example: ₹3L aggregate deductible, ₹10L sum insured</div>
+      <div style="display:flex;gap:8px">
+        <div style="flex:1;background:var(--color-background-secondary);border-radius:8px;padding:10px">
+          <div style="color:var(--color-text-secondary)">Scenario A</div>
+          <div style="font-weight:500">Gross claims: ₹2.5L</div>
+          <div style="color:#E24B4A;font-weight:500">We pay: ₹0</div>
+          <div style="font-size:11px;color:var(--color-text-tertiary)">Below deductible</div>
+        </div>
+        <div style="flex:1;background:var(--color-background-secondary);border-radius:8px;padding:10px">
+          <div style="color:var(--color-text-secondary)">Scenario B</div>
+          <div style="font-weight:500">Gross claims: ₹7L</div>
+          <div style="color:var(--color-text-success);font-weight:500">We pay: ₹4L</div>
+          <div style="font-size:11px;color:var(--color-text-tertiary)">₹7L − ₹3L deductible</div>
+        </div>
+        <div style="flex:1;background:var(--color-background-secondary);border-radius:8px;padding:10px">
+          <div style="color:var(--color-text-secondary)">Scenario C</div>
+          <div style="font-weight:500">Gross claims: ₹15L</div>
+          <div style="color:var(--color-text-success);font-weight:500">We pay: ₹10L</div>
+          <div style="font-size:11px;color:var(--color-text-tertiary)">Capped at SI of ₹10L</div>
+        </div>
+      </div>
+    </div>`
+  },
+  {
+    title: "Step 8 — Arriving at the premium",
+    analogy: `After 10,000 "dice rolls" with the deductible applied, you take the average of what you'd have paid. That's your pure risk premium — the break-even cost. Then you add a small buffer for uncertainty, like a chef adding a little extra salt to be safe.`,
+    tech: `The pure risk premium = average of the 10,000 net simulated values. Because data gets sparse at very high deductible levels, we add a small prudence margin (a fraction of the standard deviation of those 10,000 results). This final number becomes the premium before loading for expenses and profit.`,
+    visual: `<div style="font-size:12px">
+      <div style="display:flex;align-items:flex-end;gap:12px;margin-bottom:12px;flex-wrap:wrap">
+        <div style="text-align:center">
+          <div style="font-size:20px;font-weight:500;color:var(--color-text-info)">₹4,800</div>
+          <div style="color:var(--color-text-secondary)">Average net claim<br>(pure risk)</div>
+        </div>
+        <div style="font-size:20px;color:var(--color-text-tertiary)">+</div>
+        <div style="text-align:center">
+          <div style="font-size:20px;font-weight:500;color:var(--color-text-warning)">₹200</div>
+          <div style="color:var(--color-text-secondary)">Prudence margin<br>(uncertainty buffer)</div>
+        </div>
+        <div style="font-size:20px;color:var(--color-text-tertiary)">=</div>
+        <div style="text-align:center;background:var(--color-background-success);border-radius:8px;padding:10px 14px">
+          <div style="font-size:20px;font-weight:500;color:var(--color-text-success)">₹5,000</div>
+          <div style="color:var(--color-text-success)">Pure risk premium</div>
+        </div>
+      </div>
+      <div style="color:var(--color-text-tertiary);font-size:11px">Final premium = risk premium + expense loading + profit margin</div>
+    </div>`
+  }
+];
+
+const navEl = document.getElementById('nav');
+const panelsEl = document.getElementById('panels');
+
+const overviewBtn = document.createElement('button');
+overviewBtn.className = 'step-btn active';
+overviewBtn.textContent = 'Overview';
+overviewBtn.onclick = () => goTo(0);
+navEl.appendChild(overviewBtn);
+
+steps.forEach((s, i) => {
+  const btn = document.createElement('button');
+  btn.className = 'step-btn';
+  btn.textContent = i + 1;
+  btn.onclick = () => goTo(i + 1);
+  navEl.appendChild(btn);
+});
+
+const overviewPanel = document.createElement('div');
+overviewPanel.className = 'step-panel active';
+overviewPanel.innerHTML = `<div class="title">${overview.title}</div>${overview.content}`;
+panelsEl.appendChild(overviewPanel);
+
+steps.forEach((s, i) => {
+  const div = document.createElement('div');
+  div.className = 'step-panel';
+  div.innerHTML = `
+    <div class="title">${s.title}</div>
+    <div class="label" style="margin-top:14px">The simple way to think about it</div>
+    <div class="analogy-box">${s.analogy}</div>
+    <div class="label">What we actually do</div>
+    <div class="tech-box">${s.tech}</div>
+    <div class="label">Illustration</div>
+    <div class="visual" style="background:var(--color-background-secondary)">${s.visual}</div>
+    <div class="nav-row">
+      <button class="nav-btn" onclick="goTo(${i})">${i === 0 ? '← Overview' : '← Back'}</button>
+      ${i < steps.length - 1
+        ? `<button class="nav-btn" onclick="goTo(${i + 2})">Next →</button>`
+        : `<button class="nav-btn" onclick="sendPrompt('Can you explain Step ' + ${i + 1} + ' in even more detail?')">Ask a follow-up ↗</button>`}
+    </div>
+  `;
+  panelsEl.appendChild(div);
+});
+
+function goTo(i) {
+  document.querySelectorAll('.step-btn').forEach((b, j) => b.classList.toggle('active', j === i));
+  document.querySelectorAll('.step-panel').forEach((p, j) => p.classList.toggle('active', j === i));
+}
+</script>
