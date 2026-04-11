@@ -41,10 +41,14 @@ This folder contains comprehensive SA1 (Health and Care) exam preparation materi
 {
   "label": "Sitting Label",
   "questions": {
-    "Q1": { "marks": X, "question": "...", "themes": [], "parts": { ... } }
+    "Q1": { "marks": X, "scenario": "...", "question": "...", "themes": [], "sections": {...} }
   }
 }
 ```
+
+**Reference Template:** Use `data/iai_0515.json` (May 2015) as the reference template for IAI JSON structure.
+
+**Working Files:** Keep extracted QP and Solution text files in `data/reference_temp/` folder for future reference and debugging.
 
 **After creating JSON:**
 - If new sitting not in SOURCE_FILES list, update `SA1ity_Check.html` to include it
