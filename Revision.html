@@ -5,6 +5,35 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>Revision — Master Exam Frameworks</title>
 <script src="js/FrameworkParser.js"></script>
+<script>
+// Patch: when h4 is the divider, keep h3 nodes inline (as section sub-headers)
+// instead of silently discarding them. Fixes AFI 2024 tab in IRDA Regulations
+// where multiple h3 sub-sections exist within an h4-divided topic.
+document.addEventListener('DOMContentLoaded', function() {
+  const _orig = FrameworkParser.groupIntoSubtopics.bind(FrameworkParser);
+  FrameworkParser.groupIntoSubtopics = function(content) {
+    if (!content || !Array.isArray(content)) return [];
+    const divider = this.detectDividerType(content);
+    if (divider !== 'h4') return _orig(content);
+    const subtopics = [];
+    let current = null;
+    content.forEach(node => {
+      if (node.type === 'h4') {
+        current = { title: node.text || '', nodes: [] };
+        subtopics.push(current);
+      } else if (node.type === 'h3') {
+        // Keep h3 as an inline node (renders as .fwp-h3 section header)
+        if (!current) { current = { title: 'Overview', nodes: [] }; subtopics.push(current); }
+        current.nodes.push(node);
+      } else {
+        if (!current) { current = { title: 'Overview', nodes: [] }; subtopics.push(current); }
+        current.nodes.push(node);
+      }
+    });
+    return subtopics;
+  };
+});
+</script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap');
 
