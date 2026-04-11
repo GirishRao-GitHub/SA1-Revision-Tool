@@ -1,5 +1,7 @@
 # SA1 Exam Study Resources
 
+> **Git Repo:** `github.com/GirishRao-GitHub/SA1-Revision-Tool`
+
 This folder contains comprehensive SA1 (Health and Care) exam preparation materials.
 
 ## Important Landing Page
@@ -50,8 +52,8 @@ This folder contains comprehensive SA1 (Health and Care) exam preparation materi
 ## Available Data Files
 
 ### Practice Questions
-- `iai_*.json` - IAI exam papers (22 sittings: 0317 to 1125)
-- `20XXXX.json` - IFoA exam papers (14 sittings: 201809 to 202509)
+- `iai_*.json` - IAI exam papers (38 sittings: 1106 to 1125)
+- `20XXXX.json` - IFoA exam papers (26 sittings: 200604 to 202509)
 - `SA1PQ*.json` - Additional practice questions (SA1PQ02-26)
 
 ### Revision Materials
