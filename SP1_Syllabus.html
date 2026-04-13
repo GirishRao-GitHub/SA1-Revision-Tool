@@ -832,15 +832,17 @@
   .hidden { display: none !important; }
   strong { color: var(--text-hi); font-weight: 500; }
 
-  /* ── NEXT SECTION BUTTON ── */
+  /* ── PREV / NEXT NAV BAR ── */
   .next-section-bar {
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
     align-items: center;
     margin-top: 48px;
     padding-top: 24px;
     border-top: 1px solid var(--border);
+    gap: 12px;
   }
+  .next-section-bar .spacer { flex: 1; }
   .next-section-btn {
     display: inline-flex;
     align-items: center;
@@ -854,7 +856,6 @@
     padding: 10px 18px;
     cursor: pointer;
     transition: all .18s;
-    text-align: left;
     max-width: 340px;
   }
   .next-section-btn:hover {
@@ -878,14 +879,16 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    max-width: 240px;
+    max-width: 220px;
   }
   .next-section-btn .nsb-arrow {
     font-size: 18px;
     color: var(--accent);
     flex-shrink: 0;
-    margin-left: 4px;
   }
+  /* prev button text aligns right */
+  .prev-section-btn { text-align: right; }
+  .prev-section-btn .nsb-title { text-align: right; }
 
   /* ── SUMMARY VIEW ── */
   .summary-view {
@@ -1483,7 +1486,7 @@ function renderChapterOverview(chNum) {
     </div>`;
   });
   html += `</div>`;
-  html += buildNextButton();
+  html += buildNavBar();
 
   document.getElementById('content-area').innerHTML = html;
   document.getElementById('canvas').scrollTop = 0;
@@ -1553,7 +1556,7 @@ function renderSection(data, secId, scrollToSubId) {
     html += `</div>`;
   });
 
-  html += buildNextButton();
+  html += buildNavBar();
 
   document.getElementById('content-area').innerHTML = html;
   document.getElementById('canvas').scrollTop = 0;
@@ -1571,6 +1574,75 @@ function toggleQA(id) {
 }
 
 // ── NEXT SECTION NAVIGATION ───────────────────────────────
+function getPrevDestination() {
+  const chNum  = activeChapterNum;
+  const secId  = activeSectionId;
+  const data   = CHAPTER_DATA[String(chNum)];
+  if (!data) return null;
+
+  const sections = data.sections;
+
+  if (secId) {
+    const secIdx = sections.findIndex(s => s.id === secId);
+    if (secIdx > 0) {
+      // Previous section in this chapter
+      const prevSec = sections[secIdx - 1];
+      return {
+        chNum, secId: prevSec.id,
+        subId: prevSec.subsections[0].id,
+        label: `${data.chapter} · ${prevSec.id}`,
+        title: prevSec.title,
+        isChapter: false
+      };
+    }
+    // First section — go back to chapter overview
+    return {
+      chNum, secId: null, subId: null,
+      label: `Ch ${chNum}`,
+      title: data.title,
+      isChapter: false,
+      isOverview: true
+    };
+  }
+
+  // On chapter overview — find previous chapter with data
+  const chIdx = CHAPTERS.findIndex(c => c.num === chNum);
+  for (let i = chIdx - 1; i >= 0; i--) {
+    const prevCh   = CHAPTERS[i];
+    const prevData = CHAPTER_DATA[String(prevCh.num)];
+    if (prevData && prevData.sections && prevData.sections.length > 0) {
+      const lastSec = prevData.sections[prevData.sections.length - 1];
+      return {
+        chNum: prevCh.num,
+        secId: lastSec.id,
+        subId: lastSec.subsections[0].id,
+        label: `Ch ${prevCh.num}`,
+        title: prevCh.title,
+        isChapter: true
+      };
+    }
+  }
+  return null;
+}
+
+function navigatePrev() {
+  const dest = getPrevDestination();
+  if (!dest) return;
+  if (dest.isOverview) {
+    activeChapterNum = dest.chNum;
+    activeSectionId  = null;
+    activeSubId      = null;
+    renderNav();
+    renderChapterOverview(dest.chNum);
+  } else {
+    selectSub(dest.chNum, dest.secId, dest.subId);
+  }
+  setTimeout(() => {
+    const el = document.getElementById('nav-ch-' + dest.chNum);
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }, 100);
+}
+
 function getNextDestination() {
   const chNum  = activeChapterNum;
   const secId  = activeSectionId;
@@ -1624,19 +1696,41 @@ function navigateNext() {
   }, 100);
 }
 
-function buildNextButton() {
-  const dest = getNextDestination();
-  if (!dest) return '';
-  const scopeLabel = dest.isChapter ? 'Next Chapter' : 'Next Section';
-  return `
-    <div class="next-section-bar">
+function buildNavBar() {
+  const prev = getPrevDestination();
+  const next = getNextDestination();
+  if (!prev && !next) return '';
+
+  let prevBtn = '';
+  if (prev) {
+    const scopeLabel = prev.isChapter ? 'Previous Chapter' : (prev.isOverview ? 'Chapter Overview' : 'Previous Section');
+    prevBtn = `
+      <button class="next-section-btn prev-section-btn" onclick="navigatePrev()">
+        <span class="nsb-arrow">←</span>
+        <div>
+          <span class="nsb-label">${scopeLabel}</span>
+          <span class="nsb-title">${prev.label} · ${prev.title}</span>
+        </div>
+      </button>`;
+  }
+
+  let nextBtn = '';
+  if (next) {
+    const scopeLabel = next.isChapter ? 'Next Chapter' : 'Next Section';
+    nextBtn = `
       <button class="next-section-btn" onclick="navigateNext()">
         <div>
           <span class="nsb-label">${scopeLabel}</span>
-          <span class="nsb-title">${dest.label} · ${dest.title}</span>
+          <span class="nsb-title">${next.label} · ${next.title}</span>
         </div>
         <span class="nsb-arrow">→</span>
-      </button>
+      </button>`;
+  }
+
+  return `
+    <div class="next-section-bar">
+      ${prevBtn || '<div class="spacer"></div>'}
+      ${nextBtn || '<div class="spacer"></div>'}
     </div>`;
 }
 
