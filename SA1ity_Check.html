@@ -2068,6 +2068,7 @@ function setupQuestion(q) {
 
   let fullContext = "";
   if (currentQ.scenario) fullContext += currentQ.scenario + "<br><br>";
+  if (currentQ.scenario_image) fullContext += `<img src="${currentQ.scenario_image}" style="max-width:100%; border-radius:6px; margin-top:8px; border:1px solid var(--border);" alt="Scenario table"><br><br>`;
 
   // In thematic mode, pulling previous context is super helpful
   if (appMode === 'theme' && currentSub && currentQ.parts) {
@@ -2298,6 +2299,9 @@ async function exportCurrentQuestionDoc() {
   if (q.scenario) {
     html += `<div class="label">Scenario</div><div class="text" style="background:#fefefe; border-left:3px solid #666;">${q.scenario.replace(/\n/g, '<br>')}</div>`;
   }
+  if (q.scenario_image) {
+    html += `<div><img src="${q.scenario_image}" style="max-width:100%; margin-top:8px;" alt="Scenario table"></div>`;
+  }
 
   const processItem = (it, pk) => {
     let content = "";
@@ -2395,6 +2399,9 @@ async function exportSittingSummary() {
     const q = sit.questions[qk];
     if (q.scenario) {
        html += `<div class="label">Scenario</div><div class="text" style="background:#fefefe; border-left:3px solid #666;">${q.scenario.replace(/\n/g, '<br>')}</div>`;
+    }
+    if (q.scenario_image) {
+       html += `<div><img src="${q.scenario_image}" style="max-width:100%; margin-top:8px;" alt="Scenario table"></div>`;
     }
 
     const processItem = (item, pk) => {
@@ -2912,6 +2919,9 @@ function showResultPopup() {
   
   if (q.scenario) {
     html += `<span class="pop-label">Scenario</span><div class="pop-text" style="background:#fff;border-color:#ccc;">${q.scenario}</div>`;
+  }
+  if (q.scenario_image) {
+    html += `<div><img src="${q.scenario_image}" style="max-width:100%; margin-top:8px;" alt="Scenario table"></div>`;
   }
   
   const qLabel = sk ? `${q.label} (Part ${sk})` : q.label;
