@@ -480,6 +480,8 @@ kbd{background:var(--surface2);border:1px solid var(--border2);border-radius:3px
     <button id="src-assignment" class="src-btn" data-src="assignment" onclick="if(confirmChange())setSource('assignment')">Assignment</button>
     <button id="src-sp1" class="src-btn" data-src="sp1" onclick="if(confirmChange())setSource('sp1')">SP1 PQ</button>
     <button id="src-sa1pq" class="src-btn" data-src="sa1pq" onclick="if(confirmChange())setSource('sa1pq')">SA1 PQ</button>
+    <button id="src-sp1ifoa" class="src-btn" data-src="sp1ifoa" onclick="if(confirmChange())setSource('sp1ifoa')">SP1 IFoA</button>
+    <button id="src-sp1iai" class="src-btn" data-src="sp1iai" onclick="if(confirmChange())setSource('sp1iai')">SP1 IAI</button>
   </div>
   <!-- Strategic Pillar Buttons: only visible in Frameworks mode -->
   <div id="pillar-btn-group" style="display:none; gap:2px; align-items:center; background:var(--surface2); padding:2px; border-radius:6px; border:1px solid var(--border); margin-left:12px; flex-shrink:0;">
@@ -504,9 +506,6 @@ kbd{background:var(--surface2);border:1px solid var(--border2);border-radius:3px
       <button id="btn-mode-theme" class="mode-btn" onclick="if(confirmChange())setMode('theme')">Theme</button>
       <button id="btn-mode-frameworks" class="mode-btn" onclick="if(confirmChange())setMode('frameworks')">Frameworks</button>
     </div>
-    <div style="width:2px; height:24px; background:var(--border); margin:0 6px;"></div>
-    <button class="mode-btn" onclick="window.location.href='SA1_Syllabus.html'" title="SA1 Syllabus" style="white-space:nowrap;">SA1 Syllabus</button>
-    <button class="mode-btn" onclick="window.location.href='SP1_Syllabus.html'" title="SP1 Syllabus" style="white-space:nowrap;">SP1 Syllabus</button>
     <div style="width:2px; height:24px; background:var(--border); margin:0 6px;"></div>
     <!-- Utility buttons: icon-only, grouped -->
     <div style="display:flex; gap:2px; align-items:center; background:var(--surface2); padding:2px; border-radius:6px; border:1px solid var(--border);">
@@ -575,6 +574,8 @@ kbd{background:var(--surface2);border:1px solid var(--border2);border-radius:3px
       <button class="portal-btn" onclick="setSource('assignment')">Assignments</button>
       <button class="portal-btn" onclick="setSource('sp1')">SP1 PQ</button>
       <button class="portal-btn" onclick="setSource('sa1pq')">SA1 PQ</button>
+      <button class="portal-btn" onclick="setSource('sp1ifoa')">SP1 IFoA</button>
+      <button class="portal-btn" onclick="setSource('sp1iai')">SP1 IAI</button>
       <button class="portal-btn" onclick="window.location.href='Revision.html'">Revision</button>
       <button class="portal-btn" onclick="window.location.href='SA1_Search.html'">Search</button>
     </div>
@@ -905,7 +906,27 @@ const SOURCE_FILES = {
               'SA1PQ10.json','SA1PQ11.json','SA1PQ12.json','SA1PQ13.json',
               'SA1PQ14.json','SA1PQ15.json','SA1PQ16.json','SA1PQ17.json',
               'SA1PQ18.json','SA1PQ19.json','SA1PQ20.json','SA1PQ21.json',
-              'SA1PQ22.json','SA1PQ23.json','SA1PQ24.json','SA1PQ25.json','SA1PQ26.json']
+              'SA1PQ22.json','SA1PQ23.json','SA1PQ24.json','SA1PQ25.json','SA1PQ26.json'],
+    // SP1 IFoA exam sittings (verified from folder listing)
+    sp1ifoa: [
+      'SP1IFoA201904.json','SP1IFoA201909.json',
+      'SP1IFoA202004.json','SP1IFoA202009.json',
+      'SP1IFoA202104.json','SP1IFoA202109.json',
+      'SP1IFoA202204.json','SP1IFoA202209.json',
+      'SP1IFoA202304.json','SP1IFoA202309.json',
+      'SP1IFoA202404.json','SP1IFoA202409.json',
+      'SP1IFoA202504.json','SP1IFoA202509.json'
+    ],
+    // SP1 IAI exam sittings (verified from repo folder listing)
+    sp1iai: [
+      'SP1IAI201906.json','SP1IAI201911.json',
+      'SP1IAI202011.json',
+      'SP1IAI202103.json','SP1IAI202109.json',
+      'SP1IAI202203.json','SP1IAI202207.json','SP1IAI202212.json',
+      'SP1IAI202305.json','SP1IAI202311.json',
+      'SP1IAI202405.json','SP1IAI202411.json',
+      'SP1IAI202505.json'
+    ]
 };
 
 let currentSource = '';
@@ -1135,14 +1156,18 @@ function updateHeaderUI() {
         sp1: 'SP1<span> / </span>Practice Questions',
         assignment: 'SA1<span> / </span>Assignments',
         iai: 'IAI<span> / </span>Exam Revision',
-        sa1pq: 'SA1<span> / </span>Practice Questions'
+        sa1pq: 'SA1<span> / </span>Practice Questions',
+        sp1ifoa: 'SP1<span> / </span>IFoA Exam Revision',
+        sp1iai: 'SP1<span> / </span>IAI Exam Revision'
     };
     const taglines = {
         ifoa: 'Health and Care Advanced',
         sp1: 'Health and Care Principles',
         assignment: 'SA1 Advanced',
         iai: 'IAI SA1 & SP1',
-        sa1pq: 'SA1 Health and Care Advanced'
+        sa1pq: 'SA1 Health and Care Advanced',
+        sp1ifoa: 'SP1 Health and Care Principles — IFoA',
+        sp1iai: 'SP1 Health and Care Principles — IAI'
     };
     const logoEl = document.querySelector('.logo');
     const tagEl = document.querySelector('.tagline');
