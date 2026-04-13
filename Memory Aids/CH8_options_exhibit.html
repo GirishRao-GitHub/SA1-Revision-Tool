@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SA1 Options Revision Exhibit</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+  :root {
+    --bg: #0e0f14;
+    --surface: #161820;
+    --surface2: #1e2028;
+    --border: #2a2d3a;
+    --ins-accent: #4ade80;
+    --ins-dim: #1a3a26;
+    --fin-accent: #60a5fa;
+    --fin-dim: #1a2a3a;
+    --quiz-accent: #f59e0b;
+    --quiz-dim: #2a2010;
+    --text: #e8eaf0;
+    --text-muted: #7a7f9a;
+    --text-dim: #4a4f6a;
+    --correct: #4ade80;
+    --wrong: #f87171;
+    --radius: 10px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ── Header ── */
+  header {
+    padding: 40px 40px 0;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .kicker {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(28px, 4vw, 46px);
+    line-height: 1.1;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+  h1 em { font-style: italic; color: var(--fin-accent); }
+  .subtitle {
+    color: var(--text-muted);
+    font-size: 14px;
+    font-weight: 300;
+    margin-bottom: 32px;
+  }
+
+  /* ── Mode tabs ── */
+  .mode-bar {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 32px;
+    padding: 0 40px;
+    max-width: 1100px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .mode-btn {
+    padding: 9px 20px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--text-muted);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.3px;
+  }
+  .mode-btn:hover { border-color: var(--text-dim); color: var(--text); }
+  .mode-btn.active { background: var(--text); color: var(--bg); border-color: var(--text); }
+
+  /* ── Main content ── */
+  .content {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 40px 80px;
+  }
+
+  /* ── Section headers ── */
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 20px;
+    margin-top: 40px;
+  }
+  .section-header:first-child { margin-top: 0; }
+  .section-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-weight: 500;
+  }
+  .tag-ins { background: var(--ins-dim); color: var(--ins-accent); }
+  .tag-fin { background: var(--fin-dim); color: var(--fin-accent); }
+  .tag-note { background: var(--quiz-dim); color: var(--quiz-accent); }
+  .section-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 20px;
+    color: var(--text);
+  }
+  .section-line {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* ── REFERENCE CARDS ── */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 14px;
+  }
+
+  .option-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+    overflow: hidden;
+  }
+  .option-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    border-radius: 3px 0 0 3px;
+  }
+  .ins-card::before { background: var(--ins-accent); }
+  .fin-card::before { background: var(--fin-accent); }
+
+  .option-card:hover {
+    background: var(--surface2);
+    border-color: var(--text-dim);
+    transform: translateY(-1px);
+  }
+  .card-name {
+    font-family: 'DM Serif Display', serif;
+    font-size: 17px;
+    margin-bottom: 6px;
+    line-height: 1.2;
+  }
+  .ins-card .card-name { color: var(--ins-accent); }
+  .fin-card .card-name { color: var(--fin-accent); }
+
+  .card-product {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 10px;
+  }
+  .card-body {
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: var(--text-muted);
+  }
+  .card-body strong { color: var(--text); font-weight: 500; }
+
+  /* Expand/collapse */
+  .card-detail {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s ease;
+  }
+  .card-detail.open { max-height: 300px; }
+  .card-detail-inner {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border);
+  }
+  .detail-row {
+    display: flex;
+    gap: 8px;
+    font-size: 12.5px;
+    margin-bottom: 6px;
+    line-height: 1.5;
+  }
+  .detail-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-dim);
+    white-space: nowrap;
+    min-width: 60px;
+    padding-top: 1px;
+  }
+  .detail-val { color: var(--text-muted); }
+  .expand-hint {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--text-dim);
+    margin-top: 10px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* ── Note box ── */
+  .note-box {
+    background: var(--quiz-dim);
+    border: 1px solid rgba(245,158,11,0.2);
+    border-radius: var(--radius);
+    padding: 18px 22px;
+    margin-top: 8px;
+    font-size: 14px;
+    line-height: 1.65;
+    color: #c9a44a;
+  }
+  .note-box strong { color: var(--quiz-accent); }
+
+  /* ── DRILL MODE ── */
+  .drill-wrap { max-width: 700px; margin: 0 auto; }
+  .drill-counter {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-bottom: 24px;
+    letter-spacing: 1px;
+  }
+  .progress-bar {
+    height: 3px;
+    background: var(--border);
+    border-radius: 2px;
+    margin-bottom: 24px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    border-radius: 2px;
+    background: var(--ins-accent);
+    transition: width 0.4s ease;
+  }
+
+  .drill-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 36px;
+    min-height: 240px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .drill-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+  }
+  .drill-card.ins::before { background: var(--ins-accent); }
+  .drill-card.fin::before { background: var(--fin-accent); }
+
+  .drill-type-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 4px;
+    display: inline-block;
+    margin-bottom: 4px;
+  }
+  .drill-type-badge.ins { background: var(--ins-dim); color: var(--ins-accent); }
+  .drill-type-badge.fin { background: var(--fin-dim); color: var(--fin-accent); }
+
+  .drill-question {
+    font-family: 'DM Serif Display', serif;
+    font-size: 22px;
+    line-height: 1.35;
+    color: var(--text);
+  }
+  .drill-subq {
+    font-size: 14px;
+    color: var(--text-muted);
+    font-style: italic;
+  }
+
+  .drill-answer {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 20px;
+    font-size: 14px;
+    line-height: 1.65;
+    color: var(--text-muted);
+    display: none;
+    animation: fadeIn 0.3s ease;
+  }
+  .drill-answer.visible { display: block; }
+  .drill-answer strong { color: var(--text); font-weight: 500; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+  .drill-controls {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+  }
+  .btn {
+    padding: 10px 22px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.18s;
+    letter-spacing: 0.2px;
+  }
+  .btn-reveal {
+    background: var(--surface2);
+    color: var(--text);
+    flex: 1;
+  }
+  .btn-reveal:hover { background: var(--border); }
+  .btn-next {
+    background: var(--text);
+    color: var(--bg);
+    border-color: var(--text);
+  }
+  .btn-next:hover { opacity: 0.85; }
+  .btn-shuffle {
+    background: transparent;
+    color: var(--text-muted);
+  }
+  .btn-shuffle:hover { color: var(--text); border-color: var(--text-dim); }
+
+  /* ── MATCH MODE ── */
+  .match-wrap { max-width: 900px; margin: 0 auto; }
+  .match-instructions {
+    font-size: 13.5px;
+    color: var(--text-muted);
+    margin-bottom: 24px;
+    line-height: 1.6;
+  }
+  .match-instructions strong { color: var(--text); }
+  .match-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  .match-col-header {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 10px;
+    grid-column: span 1;
+  }
+  .match-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+    cursor: pointer;
+    font-size: 13.5px;
+    line-height: 1.4;
+    transition: all 0.18s;
+    user-select: none;
+    min-height: 54px;
+    display: flex;
+    align-items: center;
+  }
+  .match-item:hover:not(.matched):not(.wrong-flash) {
+    border-color: var(--text-dim);
+    background: var(--surface2);
+  }
+  .match-item.selected {
+    border-color: var(--quiz-accent);
+    background: var(--quiz-dim);
+    color: var(--quiz-accent);
+  }
+  .match-item.matched {
+    border-color: var(--correct);
+    background: rgba(74,222,128,0.08);
+    color: var(--correct);
+    cursor: default;
+    opacity: 0.6;
+  }
+  .match-item.wrong-flash {
+    border-color: var(--wrong);
+    background: rgba(248,113,113,0.1);
+    color: var(--wrong);
+    animation: wrongShake 0.4s ease;
+  }
+  @keyframes wrongShake {
+    0%,100%{transform:translateX(0)}
+    25%{transform:translateX(-6px)}
+    75%{transform:translateX(6px)}
+  }
+  .match-name { font-family: 'DM Serif Display', serif; font-size: 15px; }
+  .match-score {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-top: 16px;
+  }
+  .match-score .score-num { color: var(--ins-accent); font-size: 22px; font-weight: 500; }
+  .match-reset {
+    margin-top: 10px;
+  }
+
+  /* result overlay */
+  .result-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(14,15,20,0.9);
+    z-index: 100;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 20px;
+    text-align: center;
+  }
+  .result-overlay.show { display: flex; }
+  .result-emoji { font-size: 56px; }
+  .result-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 36px;
+    color: var(--text);
+  }
+  .result-sub { font-size: 15px; color: var(--text-muted); }
+
+  /* ── hidden panels ── */
+  .panel { display: none; }
+  .panel.active { display: block; }
+
+  /* ── Responsive ── */
+  @media (max-width: 640px) {
+    header, .mode-bar, .content { padding-left: 20px; padding-right: 20px; }
+    .match-grid { grid-template-columns: 1fr; }
+    .cards-grid { grid-template-columns: 1fr; }
+    .drill-card { padding: 24px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="kicker">SA1 · SP1 Exam Revision</div>
+  <h1>Insurance &amp; <em>Financial</em> Options</h1>
+  <p class="subtitle">Strictly from the SP1 / SA1 revision notes · Three revision modes</p>
+</header>
+
+<div class="mode-bar">
+  <button class="mode-btn active" onclick="switchMode('reference')">📋 Reference</button>
+  <button class="mode-btn" onclick="switchMode('drill')">🧠 Flashcard Drill</button>
+  <button class="mode-btn" onclick="switchMode('match')">🎯 Match Game</button>
+</div>
+
+<div class="content">
+
+  <!-- ═══════════════════════════════════ REFERENCE ═══════════════════════════════════ -->
+  <div id="panel-reference" class="panel active">
+
+    <div class="section-header">
+      <span class="section-tag tag-ins">Insurance Options</span>
+      <span class="section-title">Policyholder rights — no re-underwriting</span>
+      <span class="section-line"></span>
+    </div>
+
+    <div class="cards-grid" id="ins-cards"></div>
+
+    <div class="section-header">
+      <span class="section-tag tag-fin">Financial Options</span>
+      <span class="section-title">Embedded financial guarantees</span>
+      <span class="section-line"></span>
+    </div>
+
+    <div class="cards-grid" id="fin-cards"></div>
+
+    <div class="section-header">
+      <span class="section-tag tag-note">Key Distinction</span>
+      <span class="section-title">The rule to remember</span>
+      <span class="section-line"></span>
+    </div>
+    <div class="note-box">
+      <strong>Insurance options</strong> are about <strong>anti-selection risk</strong> — sicker people exercise them, so the insurer pays claims at standard rates for sub-standard lives. Cost ≈ <em>take-up rate × health disadvantage of exercisers</em>.<br><br>
+      <strong>Financial options</strong> are about <strong>investment / economic risk</strong> — the insurer has promised a return or benefit level that may be expensive if markets move adversely. Valued using <em>market-consistent / risk-neutral pricing</em>, not cashflow projections.<br><br>
+      <strong>LTCI is the main exception</strong> in H&amp;C insurance where financial options matter — because reserves are large enough for investment guarantees to be material. For CI, IP and PMI the reserves are usually too small for financial options to be significant.
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════ DRILL ═══════════════════════════════════ -->
+  <div id="panel-drill" class="panel">
+    <div class="drill-wrap">
+      <div class="drill-counter" id="drill-counter">Card 1 of 20</div>
+      <div class="progress-bar"><div class="progress-fill" id="drill-progress"></div></div>
+      <div class="drill-card" id="drill-card">
+        <div>
+          <span class="drill-type-badge" id="drill-badge">Insurance</span>
+          <div class="drill-question" id="drill-q"></div>
+          <div class="drill-subq" id="drill-subq"></div>
+        </div>
+        <div class="drill-answer" id="drill-a"></div>
+      </div>
+      <div class="drill-controls">
+        <button class="btn btn-reveal" id="btn-reveal" onclick="revealAnswer()">Reveal Answer</button>
+        <button class="btn btn-next" id="btn-next" onclick="nextCard()" style="display:none">Next →</button>
+        <button class="btn btn-shuffle" onclick="shuffleDeck()">Shuffle</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════ MATCH ═══════════════════════════════════ -->
+  <div id="panel-match" class="panel">
+    <div class="match-wrap">
+      <p class="match-instructions">
+        Click an <strong>option name</strong> on the left, then click its matching <strong>description</strong> on the right.
+        All 10 pairs from the full list — can you get them all?
+      </p>
+      <div class="match-score">Score: <span class="score-num" id="match-score">0</span> / 10</div>
+      <br>
+      <div class="match-grid">
+        <div class="match-col-header">Option Name</div>
+        <div class="match-col-header">What it allows</div>
+        <div id="match-left" style="display:contents"></div>
+        <div id="match-right" style="display:contents"></div>
+      </div>
+      <button class="btn btn-next match-reset" onclick="initMatch()">↺ Restart Match</button>
+    </div>
+  </div>
+
+</div><!-- /content -->
+
+<!-- Result overlay -->
+<div class="result-overlay" id="result-overlay">
+  <div class="result-emoji">🎉</div>
+  <div class="result-title">All matched!</div>
+  <div class="result-sub">You know your options. Play again?</div>
+  <button class="btn btn-next" onclick="closeOverlay()">↺ Again</button>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════════
+   DATA
+═══════════════════════════════════════════════════ */
+
+const INS_OPTIONS = [
+  {
+    name: "Guaranteed Insurability Option (GIO)",
+    product: "CI · IP",
+    short: "Increase sum assured at life events or intervals without re-underwriting.",
+    detail: [
+      { label: "Who uses it", val: "People whose health has deteriorated — they benefit most from standard rates." },
+      { label: "Anti-sel risk", val: "High — exercisers are sicker than average policyholders." },
+      { label: "Cost basis", val: "Additional loading in original premium; reserving required." },
+      { label: "Key point", val: "Also called a GIO; mentioned in product design as adding risk and cost that must be priced." }
+    ]
+  },
+  {
+    name: "Increase Option — Type 1",
+    product: "CI · IP",
+    short: "Automatic increases built into original contract — either at pre-ordained (fixed %) rates or costed as they arise.",
+    detail: [
+      { label: "Pre-ordained", val: "Higher starting premium; increases in premium and benefit are fixed in advance." },
+      { label: "Costed", val: "Lower starting premium but rises more steeply — priced at current age and term as each increase arises." },
+      { label: "Anti-sel risk", val: "Moderate — increases are automatic so less scope for selective exercise." },
+      { label: "Key point", val: "Still requires adverse selection loading in original premium." }
+    ]
+  },
+  {
+    name: "Increase Option — Type 2",
+    product: "CI · IP",
+    short: "Periodic right to increase benefit by a fixed % via a new policy at then-current age and term — no re-underwriting.",
+    detail: [
+      { label: "Distinction", val: "Unlike Type 1, the policyholder actively chooses to exercise — more scope for anti-selection." },
+      { label: "Anti-sel risk", val: "High — unhealthy lives more likely to exercise the option." },
+      { label: "Key point", val: "Adverse selection loading required in original premium basis." }
+    ]
+  },
+  {
+    name: "Renewal Option",
+    product: "PMI · short-term contracts",
+    short: "Right to renew at policy expiry; insurer cannot cancel but can change premiums.",
+    detail: [
+      { label: "Insurer rights", val: "Can reprice at renewal but must offer cover — cannot refuse renewal." },
+      { label: "Anti-sel risk", val: "Moderate — unhealthy lives are more likely to renew; healthy lives may switch." },
+      { label: "Key point", val: "Different from guaranteed premiums — insurer retains right to change premium, not cover." }
+    ]
+  },
+  {
+    name: "Buy-back Option",
+    product: "Accelerated CI",
+    short: "After a CI claim extinguishes life cover, reinstates mortality cover without fresh underwriting — usually after ≥12 months.",
+    detail: [
+      { label: "Context", val: "Under accelerated CI, a claim pays the sum assured and ends the policy. Buy-back reverses this for the life cover." },
+      { label: "Subsequent CI", val: "Subsequent CI claims are excluded — only life cover is reinstated." },
+      { label: "Anti-sel risk", val: "Limited — post-CI survivors are a defined, known group; uncertainty keeps option price manageable." },
+      { label: "Key point", val: "Keeps the policy alive as life-only cover after a CI claim." }
+    ]
+  },
+  {
+    name: "Option to Renew at Term End",
+    product: "CI",
+    short: "Renew a CI policy at policy expiry without further medical evidence.",
+    detail: [
+      { label: "Distinction", val: "Specifically at term end — not mid-term. The policyholder secures future CI cover at standard rates regardless of health changes during the original term." },
+      { label: "Anti-sel risk", val: "High — those in poor health will disproportionately exercise this." }
+    ]
+  },
+  {
+    name: "Option to Purchase Additional Cover",
+    product: "General",
+    short: "Purchase additional cover at normal premium rates without evidence of health.",
+    detail: [
+      { label: "Context", val: "General morbidity/mortality option — the generic form of the GIO." },
+      { label: "Anti-sel risk", val: "High — only those expecting to claim have strong reason to purchase more cover at standard rates." },
+      { label: "Key point", val: "The fewer people who exercise it, the worse the average health of those who do." }
+    ]
+  },
+  {
+    name: "Continuation Option",
+    product: "Group IP · CI · PMI",
+    short: "When an employee leaves a group scheme, they can continue cover individually without underwriting.",
+    detail: [
+      { label: "Context", val: "Group scheme ends for the individual — continuation option prevents loss of cover." },
+      { label: "Anti-sel risk", val: "High — those with known health deterioration are most likely to exercise this." },
+      { label: "Key point", val: "Terms offered are those for a healthy life at that age — but actual claimants are not all healthy." }
+    ]
+  }
+];
+
+const FIN_OPTIONS = [
+  {
+    name: "Guaranteed Minimum Benefit (unit-linked CI/LTCI)",
+    product: "Unit-linked CI · LTCI",
+    short: "Insurer guarantees the claim benefit will not fall below a minimum even if the unit fund is low — tops up shortfall via a risk charge.",
+    detail: [
+      { label: "Risk", val: "If fund underperforms, insurer must pay the difference — investment risk falls on insurer." },
+      { label: "Funding", val: "Monthly risk charge deducted from unit fund to cover expected cost of making up any shortfall." },
+      { label: "Key point", val: "Ensures a 'reasonable benefit' when claim occurs early before fund has grown." }
+    ]
+  },
+  {
+    name: "Guaranteed Minimum Return on Fund (unit-linked LTCI)",
+    product: "Unit-linked LTCI",
+    short: "Fund guaranteed not to fall below premiums accumulated at a specified rate (e.g. 3% p.a.) — insurer bears investment shortfall.",
+    detail: [
+      { label: "Example", val: "If actual fund = £80,000 but accumulated premiums at 3% = £95,000, insurer pays the £15,000 gap." },
+      { label: "Valuation", val: "Must be valued using market-consistent / option pricing techniques." },
+      { label: "Key point", val: "Explicitly cited in SP1 Ch24 as an example of a guarantee requiring stochastic modelling." }
+    ]
+  },
+  {
+    name: "Guaranteed Conversion Option on CI",
+    product: "CI",
+    short: "Option for policyholder to convert CI policy at a guaranteed rate — a reserve must be held for this option coming into the money.",
+    detail: [
+      { label: "Reserve", val: "An option reserve is held specifically for guaranteed conversion options in SP1 Ch21." },
+      { label: "Risk", val: "If conversion terms become attractive (e.g. interest rates move), many will exercise — insurer faces adverse cashflows." },
+      { label: "Key point", val: "Example of a financial option that the insurer must hold reserves against explicitly." }
+    ]
+  },
+  {
+    name: "Guaranteed Annuity Rate",
+    product: "General / LTCI",
+    short: "Insurer commits to convert a fund to annuity at a guaranteed rate — suddenly bites if interest rates fall below the guaranteed level.",
+    detail: [
+      { label: "Non-linearity", val: "Cited explicitly as an example of non-linearity in capital requirements — when rates fall through the trigger, the cost jumps sharply." },
+      { label: "Valuation", val: "Requires market-consistent stochastic modelling — cannot be priced deterministically." },
+      { label: "Key point", val: "Classic example of why option pricing techniques are needed rather than simple cashflow projections." }
+    ]
+  },
+  {
+    name: "Interest Rate Guarantee",
+    product: "General",
+    short: "Guarantee that policyholder will receive at least a minimum interest rate on their policy — insurer bears investment risk.",
+    detail: [
+      { label: "Capital impact", val: "Cited alongside guaranteed annuity rates as causing non-linear and non-separable capital requirements." },
+      { label: "Valuation", val: "Market-consistent approach required — use risk-neutral valuation or Black-Scholes if applicable." },
+      { label: "Key point", val: "Most H&C products are not exposed to this because reserves are small — LTCI is the main exception." }
+    ]
+  },
+  {
+    name: "Embedded Financial Option (general principle)",
+    product: "Any product with a financial guarantee",
+    short: "Valued in line with the market price of a similar traded option. Where no exact price exists, option pricing techniques + interpolation ensure no arbitrage.",
+    detail: [
+      { label: "Hierarchy", val: "1st: use traded market price. 2nd: option pricing + interpolation. 3rd: simplified approaches (risk-neutral, certainty equivalent, state-price deflators)." },
+      { label: "Key principle", val: "No arbitrage must be maintained — switching between asset classes should not appear to create value." },
+      { label: "Key point", val: "Discounting at risk-free rate with risk allowance elsewhere — consistent with Solvency II BEL approach." }
+    ]
+  },
+  {
+    name: "Equity Put Option (ALM / risk management)",
+    product: "Insurer's own investment portfolio",
+    short: "Used by the insurer itself to protect against a fall in equity portfolio value — a financial option used as an ALM hedge, not embedded in policies.",
+    detail: [
+      { label: "Purpose", val: "Reduces risk-sensitive capital requirements (e.g. SCR under Solvency II) by capping downside." },
+      { label: "Static vs dynamic", val: "Static hedge: set up once against a specific severe scenario. Dynamic: rebalanced frequently to track risk." },
+      { label: "Key point", val: "OTC derivatives used when exchange-traded ones lack sufficient term; price reflects market price of risk." }
+    ]
+  }
+];
+
+/* ═══════════════════════════════════════════════════
+   REFERENCE CARDS
+═══════════════════════════════════════════════════ */
+
+function buildCards() {
+  const insGrid = document.getElementById('ins-cards');
+  const finGrid = document.getElementById('fin-cards');
+
+  INS_OPTIONS.forEach((opt, i) => {
+    insGrid.innerHTML += cardHTML(opt, 'ins', i);
+  });
+  FIN_OPTIONS.forEach((opt, i) => {
+    finGrid.innerHTML += cardHTML(opt, 'fin', i + 100);
+  });
+}
+
+function cardHTML(opt, type, id) {
+  const details = (opt.detail || []).map(d =>
+    `<div class="detail-row"><span class="detail-label">${d.label}</span><span class="detail-val">${d.val}</span></div>`
+  ).join('');
+
+  return `
+    <div class="option-card ${type}-card" onclick="toggleCard('card-${id}')">
+      <div class="card-product">${opt.product}</div>
+      <div class="card-name">${opt.name}</div>
+      <div class="card-body">${opt.short}</div>
+      <div class="card-detail" id="card-${id}">
+        <div class="card-detail-inner">${details}</div>
+      </div>
+      <div class="expand-hint">↓ click for detail</div>
+    </div>`;
+}
+
+function toggleCard(id) {
+  const el = document.getElementById(id);
+  el.classList.toggle('open');
+}
+
+/* ═══════════════════════════════════════════════════
+   DRILL MODE
+═══════════════════════════════════════════════════ */
+
+const DRILL_CARDS = [
+  // Insurance options — identify from description
+  { type: 'ins', q: "What is the Guaranteed Insurability Option?", subq: "Define it and state its main risk.", a: "<strong>Definition:</strong> A contractual right allowing the policyholder to increase the sum assured at specified life events or intervals without providing further evidence of health (no re-underwriting).<br><br><strong>Products:</strong> CI and IP insurance.<br><br><strong>Main risk:</strong> Anti-selection — those who exercise it are, on average, sicker than normal policyholders, so the insurer pays claims at standard rates for sub-standard lives." },
+  { type: 'ins', q: "What is a buy-back option and when does it arise?", subq: "State the product context and what it reinstates.", a: "<strong>Context:</strong> Arises under accelerated CI insurance, where a CI claim pays the sum assured and terminates the policy — including the life cover element.<br><br><strong>What it does:</strong> After the CI claim (usually after ≥12 months), the option allows the policyholder to reinstate the mortality (life) cover without fresh medical underwriting.<br><br><strong>Limits:</strong> Subsequent CI claims are excluded — only life cover is restored. The limited uncertainty actually keeps the option price manageable." },
+  { type: 'ins', q: "Distinguish between Type 1 and Type 2 increase options.", subq: "For each: how does it work and what is the anti-selection risk?", a: "<strong>Type 1:</strong> Increases are built into the original contract and operate automatically. Either pre-ordained (fixed % / index, premiums set in advance) or costed as they arise (priced at current age each time). Lower anti-selection risk because automatic — policyholder cannot selectively exercise.<br><br><strong>Type 2:</strong> Gives the policyholder a periodic right to increase benefit by a fixed % via a new policy at then-current age and term, without re-underwriting. Higher anti-selection risk — unhealthy lives will preferentially exercise. Adverse selection loading required in original premium." },
+  { type: 'ins', q: "What is a continuation option and who benefits most from it?", subq: "State the group scheme context.", a: "<strong>Context:</strong> Arises in group insurance when an employee leaves a group scheme (e.g. changes employer).<br><br><strong>What it allows:</strong> The departing employee can continue the cover individually without individual medical underwriting. Terms offered are those for a healthy life at that age.<br><br><strong>Who benefits most:</strong> Those whose health has deteriorated during the scheme, since they cannot easily obtain standard terms in the open market. This creates significant anti-selection risk." },
+  { type: 'ins', q: "What is the renewal option in the context of PMI?", subq: "What can and cannot the insurer do?", a: "<strong>What it is:</strong> The policyholder has a right to renew the policy at expiry.<br><br><strong>Insurer CAN:</strong> Change the premium at each annual renewal — premiums typically increase with age and medical inflation.<br><br><strong>Insurer CANNOT:</strong> Cancel the policy or refuse to renew. Cover continues as long as the policyholder pays the new premium.<br><br><strong>Distinction:</strong> This is not the same as a guaranteed premium — the insurer retains the right to reprice, but not to withdraw cover." },
+  { type: 'ins', q: "Why is the cost of a morbidity option hard to price accurately?", subq: "State the two key unknown variables.", a: "<strong>Two key unknowns:</strong><br><br>1. <strong>Take-up rate</strong> — what proportion of eligible policyholders will exercise the option, and when? There is limited data on this outside North America.<br><br>2. <strong>Health of exercisers</strong> — how much worse is the morbidity of those who exercise the option compared to a normal select life?<br><br><strong>Key relationship:</strong> The fewer people who exercise, the worse the average health of those who do — because only the sickest have a strong incentive. This makes both variables correlated and difficult to estimate independently." },
+  { type: 'ins', q: "State the consistency requirement when valuing morbidity options.", subq: "Why is this needed?", a: "<strong>Requirement:</strong> If exercisers are assumed to have heavier morbidity than select, then non-exercisers must be assumed to have lighter morbidity — so that the average across all lives in the portfolio remains at the base expected level.<br><br><strong>Why:</strong> Without this, the total portfolio morbidity assumption would be overstated — you cannot load the exerciser group without correspondingly unloading the non-exerciser group. The portfolio-level assumption must remain internally consistent." },
+  { type: 'ins', q: "What are the two main methods for valuing morbidity options, and what are the limitations of each?", subq: "", a: "<strong>Conventional method:</strong> Assume all eligible policyholders take up the option at the maximum additional benefit. Simple to apply, but unrealistic — likely to overstate the cost.<br><br><strong>North American method:</strong> Use realistic take-up rate assumptions that vary by exercise date and type of option. More accurate, but requires credible historical data — which has historically only been available in North America." },
+
+  // Financial options
+  { type: 'fin', q: "What is the core principle for pricing an embedded financial option?", subq: "State the hierarchy of approaches.", a: "<strong>Core principle:</strong> Market-consistent valuation — price the option the same way the financial market would.<br><br><strong>Hierarchy:</strong><br>1. If an exact traded price exists — use it directly.<br>2. If no exact price — use option pricing techniques + interpolation/extrapolation from existing prices, ensuring no arbitrage (switching asset classes should not appear to create value).<br>3. Simplified approaches: risk-neutral valuation, certainty equivalent valuation, state-price deflators." },
+  { type: 'fin', q: "What is a guaranteed annuity rate and why does it cause non-linear capital requirements?", subq: "Use the term 'non-linearity'.", a: "<strong>What it is:</strong> A commitment by the insurer to convert an investment fund to an annuity at a pre-specified guaranteed rate, regardless of prevailing market rates at the time.<br><br><strong>Non-linearity:</strong> The capital requirement is not a smooth linear function of interest rates. The guarantee is harmless when market annuity rates are above the guaranteed rate. But when market rates fall <em>below</em> the guaranteed rate, the cost jumps sharply — the option suddenly 'bites'. This discontinuity means the insurer's capital requirement can spike disproportionately with a small change in rates." },
+  { type: 'fin', q: "Why are financial options generally less of a concern in health and care insurance than in life insurance?", subq: "State the key exception.", a: "<strong>Why less of a concern:</strong> Most H&C products (CI, IP, PMI) are protection products with relatively small reserves. If investment returns are poor, the impact on profitability is limited because there is little investment income to lose.<br><br><strong>Key exception: Pre-funded LTCI.</strong> This product has large reserves that accumulate over many years before claims begin. Investment return is a major pricing assumption, and guarantees on investment returns or benefit levels are therefore material — requiring market-consistent valuation and explicit reserve loading." },
+  { type: 'fin', q: "What is the guaranteed minimum benefit in a unit-linked health policy?", subq: "How is it funded and what risk does it create?", a: "<strong>What it is:</strong> In unit-linked CI and LTCI policies, the insurer guarantees the claim benefit will not fall below a specified minimum, even if the unit fund value is low (e.g. because the claim occurs early before the fund has grown).<br><br><strong>Funding:</strong> A monthly risk charge is deducted from the unit fund to build up a non-unit reserve to meet expected shortfalls.<br><br><strong>Risk created:</strong> The insurer bears the investment risk — if the fund underperforms, the insurer must pay the difference between the fund value and the guaranteed minimum. This is a financial option held by the policyholder." },
+  { type: 'fin', q: "What are state-price deflators and why are they mentioned as an alternative to risk-neutral valuation?", subq: "", a: "<strong>Definition:</strong> Stochastic discount factors that allow liability values to be presented using real-world probability expectations rather than the less intuitive risk-neutral probability measure.<br><br><strong>Why an alternative:</strong> Risk-neutral valuation requires working with adjusted 'risk-neutral' probabilities, which don't correspond to real-world beliefs about future events. State-price deflators let actuaries use real-world probabilities while still achieving a market-consistent result — making the output easier to interpret and communicate to non-technical stakeholders." },
+  { type: 'fin', q: "What is the role of equity put options in a health insurer's ALM strategy?", subq: "Distinguish static from dynamic hedging.", a: "<strong>Role:</strong> Equity put options are used by the insurer (not embedded in policyholder contracts) to protect against a fall in the value of its equity investment portfolio — reducing capital requirements such as the SCR under Solvency II.<br><br><strong>Static hedging:</strong> A derivative position set up once and held to protect against a specific severe adverse scenario (e.g. equity market falling 40%). Not rebalanced.<br><br><strong>Dynamic hedging:</strong> A portfolio of derivatives held and frequently rebalanced as market conditions change, continuously matching the liability's risk sensitivities.<br><br><strong>OTC vs exchange-traded:</strong> OTC derivatives used when exchange-traded options don't have sufficient term; price reflects market price of risk plus bank profit margins." },
+  { type: 'fin', q: "What simplified approaches are used in practice to value embedded financial options?", subq: "Name three and give a brief description of each.", a: "<strong>1. Certainty equivalent valuation:</strong> Replaces uncertain future cashflows with their certainty equivalents — a deterministic approximation that avoids full stochastic modelling.<br><br><strong>2. Risk-neutral valuation:</strong> Uses a risk-neutral probability measure under which all assets grow at the risk-free rate; expected payoffs are discounted at the risk-free rate. Consistent with market prices.<br><br><strong>3. State-price deflators:</strong> Stochastic discount factors that achieve market consistency using real-world probability expectations — conceptually equivalent to risk-neutral valuation but expressed differently.<br><br><strong>Also:</strong> Black-Scholes formula cited as a closed-form deterministic shortcut for pricing specific options/guarantees." }
+];
+
+let deck = [...DRILL_CARDS];
+let currentIdx = 0;
+
+function renderDrillCard() {
+  const card = deck[currentIdx];
+  const total = deck.length;
+  document.getElementById('drill-counter').textContent = `Card ${currentIdx + 1} of ${total}`;
+  document.getElementById('drill-progress').style.width = `${((currentIdx) / total) * 100}%`;
+
+  const dc = document.getElementById('drill-card');
+  dc.className = 'drill-card ' + card.type;
+
+  const badge = document.getElementById('drill-badge');
+  badge.textContent = card.type === 'ins' ? 'Insurance Option' : 'Financial Option';
+  badge.className = 'drill-type-badge ' + card.type;
+
+  document.getElementById('drill-q').textContent = card.q;
+  document.getElementById('drill-subq').textContent = card.subq || '';
+  const ans = document.getElementById('drill-a');
+  ans.className = 'drill-answer';
+  ans.innerHTML = card.a;
+
+  document.getElementById('btn-reveal').style.display = '';
+  document.getElementById('btn-next').style.display = 'none';
+}
+
+function revealAnswer() {
+  document.getElementById('drill-a').classList.add('visible');
+  document.getElementById('btn-reveal').style.display = 'none';
+  document.getElementById('btn-next').style.display = '';
+}
+
+function nextCard() {
+  currentIdx = (currentIdx + 1) % deck.length;
+  renderDrillCard();
+}
+
+function shuffleDeck() {
+  deck = [...DRILL_CARDS].sort(() => Math.random() - 0.5);
+  currentIdx = 0;
+  renderDrillCard();
+}
+
+/* ═══════════════════════════════════════════════════
+   MATCH GAME
+═══════════════════════════════════════════════════ */
+
+const MATCH_PAIRS = [
+  { name: "Guaranteed Insurability Option", desc: "Increase sum assured at life events without re-underwriting" },
+  { name: "Buy-back Option", desc: "Reinstates life cover after an accelerated CI claim" },
+  { name: "Increase Option Type 1", desc: "Automatic increases built into the original contract" },
+  { name: "Increase Option Type 2", desc: "Periodic right to increase via new policy at current age, no re-underwriting" },
+  { name: "Continuation Option", desc: "Employee leaving a group scheme continues cover individually" },
+  { name: "Renewal Option (PMI)", desc: "Insurer cannot cancel but can change premiums at renewal" },
+  { name: "Guaranteed Minimum Benefit", desc: "Unit-linked: insurer tops up shortfall between fund and minimum claim benefit" },
+  { name: "Guaranteed Annuity Rate", desc: "Causes non-linear capital requirements when market rates fall below guaranteed level" },
+  { name: "Guaranteed Conversion Option on CI", desc: "Reserve must be held for this option coming into the money" },
+  { name: "Equity Put Option", desc: "Used by insurer in ALM to protect equity portfolio — not in policyholder contract" }
+];
+
+let selectedLeft = null;
+let selectedRight = null;
+let matchScore = 0;
+let matchedPairs = new Set();
+
+function initMatch() {
+  selectedLeft = null;
+  selectedRight = null;
+  matchScore = 0;
+  matchedPairs = new Set();
+  document.getElementById('match-score').textContent = '0';
+
+  const shuffledPairs = [...MATCH_PAIRS].sort(() => Math.random() - 0.5);
+  const shuffledDescs = [...MATCH_PAIRS].sort(() => Math.random() - 0.5);
+
+  const leftEl = document.getElementById('match-left');
+  const rightEl = document.getElementById('match-right');
+  leftEl.innerHTML = '';
+  rightEl.innerHTML = '';
+
+  shuffledPairs.forEach((pair, i) => {
+    leftEl.innerHTML += `<div class="match-item" id="left-${i}" data-name="${pair.name}" onclick="selectLeft(this)"><span class="match-name">${pair.name}</span></div>`;
+  });
+  shuffledDescs.forEach((pair, i) => {
+    rightEl.innerHTML += `<div class="match-item" id="right-${i}" data-name="${pair.name}" onclick="selectRight(this)">${pair.desc}</div>`;
+  });
+
+  document.getElementById('result-overlay').classList.remove('show');
+}
+
+function selectLeft(el) {
+  if (el.classList.contains('matched')) return;
+  document.querySelectorAll('#match-left .match-item').forEach(e => e.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedLeft = el;
+  checkMatch();
+}
+
+function selectRight(el) {
+  if (el.classList.contains('matched')) return;
+  document.querySelectorAll('#match-right .match-item').forEach(e => e.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedRight = el;
+  checkMatch();
+}
+
+function checkMatch() {
+  if (!selectedLeft || !selectedRight) return;
+  if (selectedLeft.dataset.name === selectedRight.dataset.name) {
+    selectedLeft.classList.remove('selected');
+    selectedRight.classList.remove('selected');
+    selectedLeft.classList.add('matched');
+    selectedRight.classList.add('matched');
+    matchScore++;
+    document.getElementById('match-score').textContent = matchScore;
+    selectedLeft = null;
+    selectedRight = null;
+    if (matchScore === MATCH_PAIRS.length) {
+      setTimeout(() => document.getElementById('result-overlay').classList.add('show'), 400);
+    }
+  } else {
+    const l = selectedLeft, r = selectedRight;
+    l.classList.add('wrong-flash');
+    r.classList.add('wrong-flash');
+    setTimeout(() => {
+      l.classList.remove('wrong-flash', 'selected');
+      r.classList.remove('wrong-flash', 'selected');
+    }, 500);
+    selectedLeft = null;
+    selectedRight = null;
+  }
+}
+
+function closeOverlay() {
+  document.getElementById('result-overlay').classList.remove('show');
+  initMatch();
+}
+
+/* ═══════════════════════════════════════════════════
+   MODE SWITCHING
+═══════════════════════════════════════════════════ */
+
+function switchMode(mode) {
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-' + mode).classList.add('active');
+  event.target.classList.add('active');
+
+  if (mode === 'drill') renderDrillCard();
+  if (mode === 'match') initMatch();
+}
+
+/* ═══════════════════════════════════════════════════
+   INIT
+═══════════════════════════════════════════════════ */
+buildCards();
+</script>
+</body>
+</html>
