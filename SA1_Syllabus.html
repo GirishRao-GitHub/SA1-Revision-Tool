@@ -422,7 +422,7 @@
   .memory-aid-wrapper {
     display: flex;
     flex-direction: column;
-    height: 100%;
+    flex: 1;
     min-height: 0;
   }
   .memory-aid-topbar {
@@ -2546,6 +2546,9 @@ function selectMemoryAid(url, label, aidIdx, chNum) {
   // When navigating via sidebar, clear any previous back-state
   previousMemoryAid = null;
 
+  // Build nav bar (prev/next) — must be called AFTER state is updated above
+  const navBarHtml = buildNavBar();
+
   // Render the topbar shell immediately
   document.getElementById('content-area').innerHTML = `
     <div class="memory-aid-wrapper">
@@ -2558,7 +2561,8 @@ function selectMemoryAid(url, label, aidIdx, chNum) {
       <div id="memory-aid-body" style="flex:1;overflow:hidden;display:flex;align-items:center;justify-content:center;">
         <div style="color:#686c80;font-family:var(--mono);font-size:12px;">Loading…</div>
       </div>
-    </div>`;
+    </div>
+    ${navBarHtml}`;
 
   if (isSvg) {
     // SVGs: fetch and embed inline so they scale properly
