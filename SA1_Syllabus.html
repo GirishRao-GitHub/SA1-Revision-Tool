@@ -1527,6 +1527,7 @@ const MEMORY_AIDS_API = 'https://api.github.com/repos/GirishRao-GitHub/SA1-Revis
 const MEMORY_AIDS_RAW  = 'https://raw.githubusercontent.com/GirishRao-GitHub/SA1-Revision-Tool/main/Memory%20Aids/';
 const MEMORY_AIDS_BY_CHAPTER = {};  // { chapterNum (or 0) → [ { label, url, filename, ext }, … ] }
 let activeMemoryAid = null;  // { label, url }
+let activeMemoryAidIdx = null; // index within MEMORY_AIDS_BY_CHAPTER[activeChapterNum], or null
 let previousMemoryAid = null; // { label, url } — for back navigation from recall board
 const openSections  = new Set(); // "chNum_secId" keys for expanded section rows
 
@@ -1550,8 +1551,9 @@ function renderNav() {
       globalAids.forEach(aid => {
         if (q && !aid.label.toLowerCase().includes(q)) return;
         const isActive = activeMemoryAid && activeMemoryAid.url === aid.url;
+        const gIdx = globalAids.indexOf(aid);
         html += `<div class="nav-memory-aid global ${isActive ? 'active' : ''}"
-          onclick="selectMemoryAid('${aid.url}', '${aid.label.replace(/'/g, "\\'")}')">
+          onclick="selectMemoryAid('${aid.url}', '${aid.label.replace(/'/g, "\\'")}', ${gIdx}, 0)">
           <span class="nav-memory-aid-icon">🧠</span>${aid.label}
         </div>`;
       });
@@ -1633,13 +1635,12 @@ function renderNav() {
       html += `<div class="nav-upload-hint">Notes not yet uploaded</div>`;
     }
 
-    // Inject memory aid entries at the bottom of each chapter's subsection list
     if (hasAids) {
-      chAids.forEach(aid => {
+      chAids.forEach((aid, aidI) => {
         if (q && !aid.label.toLowerCase().includes(q)) return;
         const isActive = activeMemoryAid && activeMemoryAid.url === aid.url;
         html += `<div class="nav-memory-aid ${isActive ? 'active' : ''}"
-          onclick="selectMemoryAid('${aid.url}', '${aid.label.replace(/'/g, "\\'")}')">
+          onclick="selectMemoryAid('${aid.url}', '${aid.label.replace(/'/g, "\\'")}', ${aidI}, ${ch.num})">
           <span class="nav-memory-aid-icon">🧠</span>${aid.label}
         </div>`;
       });
@@ -1653,17 +1654,19 @@ function renderNav() {
 
 function toggleChapter(num) {
   if (activeChapterNum === num) {
-    activeChapterNum = null;
-    activeSectionId  = null;
-    activeSubId      = null;
-    activeMemoryAid  = null;
+    activeChapterNum    = null;
+    activeSectionId     = null;
+    activeSubId         = null;
+    activeMemoryAid     = null;
+    activeMemoryAidIdx  = null;
     clearMemoryAidView();
     renderNav();
     showWelcome();
     document.getElementById('header-chapter-title').textContent = 'Health and Care · All Chapters';
     return;
   }
-  activeMemoryAid  = null;
+  activeMemoryAid     = null;
+  activeMemoryAidIdx  = null;
   clearMemoryAidView();
   activeChapterNum = num;
   activeSectionId  = null;
@@ -1696,10 +1699,11 @@ function toggleSection(secKey) {
 }
 
 function selectSub(chNum, secId, subId) {
-  activeChapterNum = chNum;
-  activeSectionId  = secId;
-  activeSubId      = subId;
-  activeMemoryAid  = null;
+  activeChapterNum    = chNum;
+  activeSectionId     = secId;
+  activeSubId         = subId;
+  activeMemoryAid     = null;
+  activeMemoryAidIdx  = null;
   openSections.add(`${chNum}_${secId}`); // keep parent section open in nav
   clearMemoryAidView();
   renderNav();
@@ -1721,7 +1725,7 @@ function handleScroll() {
 
 // ── VIEW SWITCHING ────────────────────────────────────────
 function setView(v) {
-  if (activeMemoryAid) { clearMemoryAidView(); activeMemoryAid = null; }
+  if (activeMemoryAid) { clearMemoryAidView(); activeMemoryAid = null; activeMemoryAidIdx = null; }
   activeView = v;
   ['notes','flashcards','glossary','framework','summary'].forEach(id => {
     document.getElementById('tab-' + id).classList.toggle('active', id === v);
@@ -1932,107 +1936,178 @@ function toggleQA(id) {
 }
 
 // ── PREV / NEXT SECTION NAVIGATION ───────────────────────
+// Memory aids are treated as virtual stops inserted AFTER the last section
+// of each chapter and BEFORE moving to the next chapter.
+// Order within a chapter: overview → section 1 → … → last section → aid[0] → aid[1] → … → next chapter
+//
+// Global aids (chNum=0) are outside the CHAPTERS array and are NOT included
+// in Prev/Next navigation — they are only accessible via the sidebar.
+// This avoids complex boundary conditions around chapter 0.
+
+// Helper: find the next navigable chapter index (forward) that has sections OR aids
+function _nextNavChIdx(fromChIdx) {
+  for (let i = fromChIdx + 1; i < CHAPTERS.length; i++) {
+    const ch = CHAPTERS[i];
+    const hasData = CHAPTER_DATA[String(ch.num)] &&
+                    CHAPTER_DATA[String(ch.num)].sections &&
+                    CHAPTER_DATA[String(ch.num)].sections.length > 0;
+    const hasAids = (MEMORY_AIDS_BY_CHAPTER[ch.num] || []).length > 0;
+    if (hasData || hasAids) return i;
+  }
+  return -1;
+}
+
+// Helper: find the previous navigable chapter index (backward) that has sections OR aids
+function _prevNavChIdx(fromChIdx) {
+  for (let i = fromChIdx - 1; i >= 0; i--) {
+    const ch = CHAPTERS[i];
+    const hasData = CHAPTER_DATA[String(ch.num)] &&
+                    CHAPTER_DATA[String(ch.num)].sections &&
+                    CHAPTER_DATA[String(ch.num)].sections.length > 0;
+    const hasAids = (MEMORY_AIDS_BY_CHAPTER[ch.num] || []).length > 0;
+    if (hasData || hasAids) return i;
+  }
+  return -1;
+}
+
+// Helper: get the FIRST navigable stop of a chapter (first section, or first aid if no sections)
+function _firstStopOfCh(chNum) {
+  const data  = CHAPTER_DATA[String(chNum)];
+  const aids  = MEMORY_AIDS_BY_CHAPTER[chNum] || [];
+  const ch    = CHAPTERS.find(c => c.num === chNum);
+  if (data && data.sections && data.sections.length > 0) {
+    const sec = data.sections[0];
+    return { chNum, secId: sec.id, subId: sec.subsections[0].id,
+             label: `Ch ${chNum}`, title: ch ? ch.title : '', isChapter: true };
+  }
+  if (aids.length > 0) {
+    return { chNum, isMemoryAid: true, aid: aids[0], aidIdx: 0, isChapter: true };
+  }
+  return null;
+}
+
+// Helper: get the LAST navigable stop of a chapter (last aid if any, else last section)
+function _lastStopOfCh(chNum) {
+  const data = CHAPTER_DATA[String(chNum)];
+  const aids = MEMORY_AIDS_BY_CHAPTER[chNum] || [];
+  const ch   = CHAPTERS.find(c => c.num === chNum);
+  if (aids.length > 0) {
+    const lastAid = aids[aids.length - 1];
+    return { chNum, isMemoryAid: true, aid: lastAid, aidIdx: aids.length - 1, isChapter: true };
+  }
+  if (data && data.sections && data.sections.length > 0) {
+    const lastSec = data.sections[data.sections.length - 1];
+    return { chNum, secId: lastSec.id, subId: lastSec.subsections[0].id,
+             label: `Ch ${chNum}`, title: ch ? ch.title : '', isChapter: true };
+  }
+  return null;
+}
+
 function getPrevDestination() {
   const chNum  = activeChapterNum;
   const secId  = activeSectionId;
   const data   = CHAPTER_DATA[String(chNum)];
-  if (!data) return null;
+  const chAids = MEMORY_AIDS_BY_CHAPTER[chNum] || [];
+  const chIdx  = CHAPTERS.findIndex(c => c.num === chNum);
 
+  // ── Currently viewing a memory aid ──────────────────────
+  if (activeMemoryAid && activeMemoryAidIdx !== null) {
+    if (activeMemoryAidIdx > 0) {
+      const prev = chAids[activeMemoryAidIdx - 1];
+      return { chNum, isMemoryAid: true, aid: prev, aidIdx: activeMemoryAidIdx - 1 };
+    }
+    // First aid — go back to last section of this chapter (if any)
+    if (data && data.sections && data.sections.length > 0) {
+      const lastSec = data.sections[data.sections.length - 1];
+      return { chNum, secId: lastSec.id, subId: lastSec.subsections[0].id,
+               label: `${data.chapter} · ${lastSec.id}`, title: lastSec.title, isChapter: false };
+    }
+    // No sections — go to chapter overview
+    return { chNum, secId: null, subId: null,
+             label: `Ch ${chNum}`, title: data ? data.title : '',
+             isChapter: false, isOverview: true };
+  }
+
+  if (!data) return null;
   const sections = data.sections;
 
   if (secId) {
     const secIdx = sections.findIndex(s => s.id === secId);
     if (secIdx > 0) {
       const prevSec = sections[secIdx - 1];
-      return {
-        chNum, secId: prevSec.id,
-        subId: prevSec.subsections[0].id,
-        label: `${data.chapter} · ${prevSec.id}`,
-        title: prevSec.title,
-        isChapter: false
-      };
+      return { chNum, secId: prevSec.id, subId: prevSec.subsections[0].id,
+               label: `${data.chapter} · ${prevSec.id}`, title: prevSec.title, isChapter: false };
     }
     // First section — back to chapter overview
-    return {
-      chNum, secId: null, subId: null,
-      label: `Ch ${chNum}`,
-      title: data.title,
-      isChapter: false,
-      isOverview: true
-    };
+    return { chNum, secId: null, subId: null,
+             label: `Ch ${chNum}`, title: data.title, isChapter: false, isOverview: true };
   }
 
-  // On chapter overview — find previous chapter with data
-  const chIdx = CHAPTERS.findIndex(c => c.num === chNum);
-  for (let i = chIdx - 1; i >= 0; i--) {
-    const prevCh   = CHAPTERS[i];
-    const prevData = CHAPTER_DATA[String(prevCh.num)];
-    if (prevData && prevData.sections && prevData.sections.length > 0) {
-      const lastSec = prevData.sections[prevData.sections.length - 1];
-      return {
-        chNum: prevCh.num,
-        secId: lastSec.id,
-        subId: lastSec.subsections[0].id,
-        label: `Ch ${prevCh.num}`,
-        title: prevCh.title,
-        isChapter: true
-      };
-    }
-  }
-  return null;
+  // On chapter overview — find previous chapter's last stop
+  if (chIdx < 0) return null;
+  const prevIdx = _prevNavChIdx(chIdx);
+  if (prevIdx < 0) return null;
+  return _lastStopOfCh(CHAPTERS[prevIdx].num);
 }
 
 function getNextDestination() {
   const chNum  = activeChapterNum;
   const secId  = activeSectionId;
   const data   = CHAPTER_DATA[String(chNum)];
-  if (!data) return null;
+  const chAids = MEMORY_AIDS_BY_CHAPTER[chNum] || [];
+  const chIdx  = CHAPTERS.findIndex(c => c.num === chNum);
 
+  // ── Currently viewing a memory aid ──────────────────────
+  if (activeMemoryAid && activeMemoryAidIdx !== null) {
+    if (activeMemoryAidIdx < chAids.length - 1) {
+      const next = chAids[activeMemoryAidIdx + 1];
+      return { chNum, isMemoryAid: true, aid: next, aidIdx: activeMemoryAidIdx + 1 };
+    }
+    // Last aid — advance to first stop of next navigable chapter
+    if (chIdx < 0) return null;
+    const nextIdx = _nextNavChIdx(chIdx);
+    if (nextIdx < 0) return null;
+    return _firstStopOfCh(CHAPTERS[nextIdx].num);
+  }
+
+  if (!data) return null;
   const sections = data.sections;
 
   if (secId) {
     const secIdx = sections.findIndex(s => s.id === secId);
     if (secIdx >= 0 && secIdx < sections.length - 1) {
       const nextSec = sections[secIdx + 1];
-      return {
-        chNum, secId: nextSec.id,
-        subId: nextSec.subsections[0].id,
-        label: `${data.chapter} · ${nextSec.id}`,
-        title: nextSec.title,
-        isChapter: false
-      };
+      return { chNum, secId: nextSec.id, subId: nextSec.subsections[0].id,
+               label: `${data.chapter} · ${nextSec.id}`, title: nextSec.title, isChapter: false };
+    }
+    // Last section — go to first aid of this chapter (if any)
+    if (chAids.length > 0) {
+      return { chNum, isMemoryAid: true, aid: chAids[0], aidIdx: 0 };
     }
   }
 
-  // Last section (or chapter overview) — find next chapter with data
-  const chIdx = CHAPTERS.findIndex(c => c.num === chNum);
-  for (let i = chIdx + 1; i < CHAPTERS.length; i++) {
-    const nextCh   = CHAPTERS[i];
-    const nextData = CHAPTER_DATA[String(nextCh.num)];
-    if (nextData && nextData.sections && nextData.sections.length > 0) {
-      const firstSec = nextData.sections[0];
-      return {
-        chNum: nextCh.num,
-        secId: firstSec.id,
-        subId: firstSec.subsections[0].id,
-        label: `Ch ${nextCh.num}`,
-        title: nextCh.title,
-        isChapter: true
-      };
-    }
-  }
-  return null;
+  // No more sections / no aids (or on overview) — advance to first stop of next navigable chapter
+  if (chIdx < 0) return null;
+  const nextIdx = _nextNavChIdx(chIdx);
+  if (nextIdx < 0) return null;
+  return _firstStopOfCh(CHAPTERS[nextIdx].num);
 }
 
 function navigatePrev() {
   const dest = getPrevDestination();
   if (!dest) return;
   if (dest.isOverview) {
-    activeChapterNum = dest.chNum;
-    activeSectionId  = null;
-    activeSubId      = null;
+    activeChapterNum   = dest.chNum;
+    activeSectionId    = null;
+    activeSubId        = null;
+    activeMemoryAid    = null;
+    activeMemoryAidIdx = null;
+    clearMemoryAidView();
     renderNav();
     renderChapterOverview(dest.chNum);
+  } else if (dest.isMemoryAid) {
+    activeChapterNum = dest.chNum;
+    selectMemoryAid(dest.aid.url, dest.aid.label, dest.aidIdx, dest.chNum);
   } else {
     selectSub(dest.chNum, dest.secId, dest.subId);
   }
@@ -2045,7 +2120,12 @@ function navigatePrev() {
 function navigateNext() {
   const dest = getNextDestination();
   if (!dest) return;
-  selectSub(dest.chNum, dest.secId, dest.subId);
+  if (dest.isMemoryAid) {
+    activeChapterNum = dest.chNum;
+    selectMemoryAid(dest.aid.url, dest.aid.label, dest.aidIdx, dest.chNum);
+  } else {
+    selectSub(dest.chNum, dest.secId, dest.subId);
+  }
   setTimeout(() => {
     const el = document.getElementById('nav-ch-' + dest.chNum);
     if (el) el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
@@ -2059,25 +2139,39 @@ function buildNavBar() {
 
   let prevBtn = '';
   if (prev) {
-    const scopeLabel = prev.isChapter ? 'Previous Chapter' : (prev.isOverview ? 'Chapter Overview' : 'Previous Section');
+    let scopeLabel, navTitle;
+    if (prev.isMemoryAid) {
+      scopeLabel = 'Memory Aid';
+      navTitle   = `Ch ${prev.chNum} · ${prev.aid.label}`;
+    } else {
+      scopeLabel = prev.isChapter ? 'Previous Chapter' : (prev.isOverview ? 'Chapter Overview' : 'Previous Section');
+      navTitle   = `${prev.label} · ${prev.title}`;
+    }
     prevBtn = `
       <button class="next-section-btn prev-section-btn" onclick="navigatePrev()">
         <span class="nsb-arrow">←</span>
         <div>
           <span class="nsb-label">${scopeLabel}</span>
-          <span class="nsb-title">${prev.label} · ${prev.title}</span>
+          <span class="nsb-title">${navTitle}</span>
         </div>
       </button>`;
   }
 
   let nextBtn = '';
   if (next) {
-    const scopeLabel = next.isChapter ? 'Next Chapter' : 'Next Section';
+    let scopeLabel, navTitle;
+    if (next.isMemoryAid) {
+      scopeLabel = 'Memory Aid';
+      navTitle   = `Ch ${next.chNum} · ${next.aid.label}`;
+    } else {
+      scopeLabel = next.isChapter ? 'Next Chapter' : 'Next Section';
+      navTitle   = `${next.label} · ${next.title}`;
+    }
     nextBtn = `
       <button class="next-section-btn" onclick="navigateNext()">
         <div>
           <span class="nsb-label">${scopeLabel}</span>
-          <span class="nsb-title">${next.label} · ${next.title}</span>
+          <span class="nsb-title">${navTitle}</span>
         </div>
         <span class="nsb-arrow">→</span>
       </button>`;
@@ -2416,11 +2510,19 @@ function loadMemoryAids() {
     .catch(() => {}); // Fail silently — memory aids are supplementary
 }
 
-// Called when a memory aid sidebar item is clicked
-function selectMemoryAid(url, label) {
+// Called when a memory aid sidebar item is clicked, or by navigatePrev/Next.
+// aidIdx  — position within the chapter's aids array
+// chNum   — the chapter this aid belongs to (0 for global aids)
+function selectMemoryAid(url, label, aidIdx, chNum) {
+  // Update active chapter if a different chapter's aid was clicked from the sidebar
+  if (typeof chNum === 'number') {
+    activeChapterNum = chNum;
+  }
   activeMemoryAid = { url, label };
   activeSectionId = null;
   activeSubId     = null;
+  // aidIdx is always passed explicitly now (from sidebar onclick or navigatePrev/Next)
+  activeMemoryAidIdx = (typeof aidIdx === 'number') ? aidIdx : null;
   renderNav();
 
   // Update header
