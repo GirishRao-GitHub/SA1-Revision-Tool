@@ -1,8 +1,8 @@
 {
   "_meta": {
-    "title": "SP1 ↔ SA1 Cross-Reference Map",
+    "title": "SP1 \u2194 SA1 Cross-Reference Map",
     "created": "2026-03-30",
-    "description": "Maps each SA1 chapter to the SP1 chapters and sections it builds upon. Used by the SA1 frontend to pull SP1 foundation content alongside SA1 application content. Both JSONs share identical schemas — sections/subsections from SP1_Revision_Notes.json are referenced by id. sa1_chapter keys now match SA1_Revision_Notes.json keys (1-indexed).",
+    "description": "Maps each SA1 chapter to the SP1 chapters and sections it builds upon. Used by the SA1 frontend to pull SP1 foundation content alongside SA1 application content. Both JSONs share identical schemas \u2014 sections/subsections from SP1_Revision_Notes.json are referenced by id. sa1_chapter keys now match SA1_Revision_Notes.json keys (1-indexed). Updated 2026-04-14: added SP1 Ch5 \u00a7\u00a72-4 to SA1 Chs 3 and 5 (group products gap); made SP1 Ch25 \u00a7\u00a71-2 explicit in SA1 Ch21; added SP1 Ch30 \u00a7\u00a72-3 to SA1 Ch23; added SA1 Ch27 \u2192 SP1 Ch31 entry.",
     "schema": {
       "sa1_chapters[].sp1_refs[].chapter": "Key in SP1_Revision_Notes.json",
       "sa1_chapters[].sp1_refs[].sections": "Section ids within that SP1 chapter (null = entire chapter)",
@@ -11,11 +11,11 @@
       "sa1_chapters[].section_map": "Subsection-level alignment where directly comparable (optional, finer grain)"
     },
     "rel_types": {
-      "foundation": "SA1 chapter directly extends the SP1 chapter — SP1 is prerequisite reading",
+      "foundation": "SA1 chapter directly extends the SP1 chapter \u2014 SP1 is prerequisite reading",
       "partial": "Only specific SP1 sections are relevant",
       "extension": "SA1 goes significantly beyond SP1 on same topic (regulation, India-specific, strategy)"
     },
-    "updated": "2026-04-02"
+    "updated": "2026-04-14"
   },
   "sa1_chapters": [
     {
@@ -39,19 +39,19 @@
           "chapter": "1",
           "sections": null,
           "rel": "foundation",
-          "note": "IP policy structure, incapacity definitions, benefit design — SA1 adds India IRDAI-specific IP product features and regulatory constraints."
+          "note": "IP policy structure, incapacity definitions, benefit design \u2014 SA1 adds India IRDAI-specific IP product features and regulatory constraints."
         },
         {
           "chapter": "2",
           "sections": null,
           "rel": "foundation",
-          "note": "CI conditions, definitions, tiered benefits — SA1 extends with Indian market CI landscape and regulatory treatment."
+          "note": "CI conditions, definitions, tiered benefits \u2014 SA1 extends with Indian market CI landscape and regulatory treatment."
         },
         {
           "chapter": "3",
           "sections": null,
           "rel": "foundation",
-          "note": "LTCI pre-funded vs immediate needs, ADL triggers, benefit structures — SA1 covers India-specific long-term care context."
+          "note": "LTCI pre-funded vs immediate needs, ADL triggers, benefit structures \u2014 SA1 covers India-specific long-term care context."
         }
       ],
       "section_map": []
@@ -64,7 +64,7 @@
           "chapter": "4",
           "sections": null,
           "rel": "foundation",
-          "note": "PMI, Health Cash Plans, MME, Personal Accident — SA1 Ch2 covers the same products but from an application and insurer-perspective angle; SP1 Ch4 provides the definitional foundation."
+          "note": "PMI, Health Cash Plans, MME, Personal Accident \u2014 SA1 Ch2 covers the same products but from an application and insurer-perspective angle; SP1 Ch4 provides the definitional foundation."
         },
         {
           "chapter": "5",
@@ -73,6 +73,16 @@
           ],
           "rel": "partial",
           "note": "Group business general principles are relevant context for short-term products; group-specific product sections covered in SA1 Ch3."
+        },
+        {
+          "chapter": "5",
+          "sections": [
+            "2",
+            "3",
+            "4"
+          ],
+          "rel": "partial",
+          "note": "Group IP, CI and PMI product structures from SP1 Ch5 \u00a7\u00a72\u20134 are background knowledge for understanding group variants of short-term products covered in SA1 Ch3."
         }
       ],
       "section_map": [
@@ -117,19 +127,19 @@
           "chapter": "6",
           "sections": null,
           "rel": "foundation",
-          "note": "Customer-perspective product design: needs analysis, cash vs indemnity, peace of mind, guaranteed vs reviewable — SA1 extends to full product cycle analysis and India context."
+          "note": "Customer-perspective product design: needs analysis, cash vs indemnity, peace of mind, guaranteed vs reviewable \u2014 SA1 extends to full product cycle analysis and India context."
         },
         {
           "chapter": "7",
           "sections": null,
           "rel": "foundation",
-          "note": "Insurer and stakeholder constraints, product-specific control procedures — directly relevant to SA1 product analysis framework."
+          "note": "Insurer and stakeholder constraints, product-specific control procedures \u2014 directly relevant to SA1 product analysis framework."
         },
         {
           "chapter": "8",
           "sections": null,
           "rel": "foundation",
-          "note": "Distribution channels, commission structures, effects on experience — SA1 extends with Indian distribution landscape."
+          "note": "Distribution channels, commission structures, effects on experience \u2014 SA1 extends with Indian distribution landscape."
         }
       ],
       "section_map": []
@@ -146,7 +156,7 @@
             "4"
           ],
           "rel": "foundation",
-          "note": "Propensity to buy, regulatory regime, economic influences — SA1 extends with Indian regulatory environment (IRDAI), health financing structures, and market-specific dynamics."
+          "note": "Propensity to buy, regulatory regime, economic influences \u2014 SA1 extends with Indian regulatory environment (IRDAI), health financing structures, and market-specific dynamics."
         },
         {
           "chapter": "10",
@@ -156,7 +166,17 @@
             "3"
           ],
           "rel": "foundation",
-          "note": "State healthcare objectives, co-existence models, funding approaches — directly maps to Indian public healthcare system (Ayushman Bharat, ESIC, CGHS)."
+          "note": "State healthcare objectives, co-existence models, funding approaches \u2014 directly maps to Indian public healthcare system (Ayushman Bharat, ESIC, CGHS)."
+        },
+        {
+          "chapter": "5",
+          "sections": [
+            "2",
+            "3",
+            "4"
+          ],
+          "rel": "partial",
+          "note": "Group IP, CI and PMI product mechanics from SP1 Ch5 \u00a7\u00a72\u20134 underpin SA1 Ch5 \u00a75 on the role of employers in providing health and care benefits."
         }
       ],
       "section_map": []
@@ -173,7 +193,7 @@
             "4"
           ],
           "rel": "extension",
-          "note": "SA1 goes deeper on regulatory and taxation regimes in the Indian context — IRDAI regulations, Indian tax treatment of health premiums, economic drivers specific to India."
+          "note": "SA1 goes deeper on regulatory and taxation regimes in the Indian context \u2014 IRDAI regulations, Indian tax treatment of health premiums, economic drivers specific to India."
         },
         {
           "chapter": "10",
@@ -183,7 +203,7 @@
             "6"
           ],
           "rel": "extension",
-          "note": "Funding approaches and incentives for self-provision — SA1 covers Indian government-funded schemes and private-public interaction in depth."
+          "note": "Funding approaches and incentives for self-provision \u2014 SA1 covers Indian government-funded schemes and private-public interaction in depth."
         }
       ],
       "section_map": []
@@ -196,37 +216,37 @@
           "chapter": "11",
           "sections": null,
           "rel": "foundation",
-          "note": "Modelling approaches (deterministic vs stochastic, multi-state, sensitivity) — SA1 applies these to product design decision-making."
+          "note": "Modelling approaches (deterministic vs stochastic, multi-state, sensitivity) \u2014 SA1 applies these to product design decision-making."
         },
         {
           "chapter": "12",
           "sections": null,
           "rel": "foundation",
-          "note": "Data sources, quality criteria, data by product type — underpins both design and pricing in SA1 context."
+          "note": "Data sources, quality criteria, data by product type \u2014 underpins both design and pricing in SA1 context."
         },
         {
           "chapter": "13",
           "sections": null,
           "rel": "foundation",
-          "note": "General assumption framework: pricing vs reserving vs management accounts basis — SA1 extends with Indian experience data considerations."
+          "note": "General assumption framework: pricing vs reserving vs management accounts basis \u2014 SA1 extends with Indian experience data considerations."
         },
         {
           "chapter": "14",
           "sections": null,
           "rel": "foundation",
-          "note": "Demographic assumptions (incidence, recovery, mortality, lapses) — directly used in SA1 product pricing."
+          "note": "Demographic assumptions (incidence, recovery, mortality, lapses) \u2014 directly used in SA1 product pricing."
         },
         {
           "chapter": "15",
           "sections": null,
           "rel": "foundation",
-          "note": "Financial assumptions (benefit inflation, expenses, commission, investment return) — Indian medical inflation and expense structures are SA1 extensions."
+          "note": "Financial assumptions (benefit inflation, expenses, commission, investment return) \u2014 Indian medical inflation and expense structures are SA1 extensions."
         },
         {
           "chapter": "16",
           "sections": null,
           "rel": "foundation",
-          "note": "New business volume/mix, risk discount rate — SA1 extends with Indian capital market context."
+          "note": "New business volume/mix, risk discount rate \u2014 SA1 extends with Indian capital market context."
         }
       ],
       "section_map": []
@@ -239,25 +259,25 @@
           "chapter": "17",
           "sections": null,
           "rel": "foundation",
-          "note": "Individual business pricing (IP, CI, LTCI, PMI, HCP) — SA1 applies to Indian product structures and IRDAI-compliant designs."
+          "note": "Individual business pricing (IP, CI, LTCI, PMI, HCP) \u2014 SA1 applies to Indian product structures and IRDAI-compliant designs."
         },
         {
           "chapter": "18",
           "sections": null,
           "rel": "foundation",
-          "note": "Group business pricing, experience rating, burning cost — SA1 extends with Indian corporate health market specifics."
+          "note": "Group business pricing, experience rating, burning cost \u2014 SA1 extends with Indian corporate health market specifics."
         },
         {
           "chapter": "19",
           "sections": null,
           "rel": "foundation",
-          "note": "Profit criteria, marketability, capital cost in pricing, premium reviews — SA1 applies these within Indian regulatory constraints."
+          "note": "Profit criteria, marketability, capital cost in pricing, premium reviews \u2014 SA1 applies these within Indian regulatory constraints."
         },
         {
           "chapter": "20",
           "sections": null,
           "rel": "foundation",
-          "note": "Options and guarantees pricing — SA1 covers Indian regulatory requirements on guaranteed products."
+          "note": "Options and guarantees pricing \u2014 SA1 covers Indian regulatory requirements on guaranteed products."
         }
       ],
       "section_map": []
@@ -320,7 +340,7 @@
             "3"
           ],
           "rel": "extension",
-          "note": "SA1 Ch11 covers Solvency II Pillars 2 and 3 (ORSA, governance, reporting) — well beyond SP1 Ch22 scope. SP1 provides the underlying valuation framework only."
+          "note": "SA1 Ch11 covers Solvency II Pillars 2 and 3 (ORSA, governance, reporting) \u2014 well beyond SP1 Ch22 scope. SP1 provides the underlying valuation framework only."
         }
       ],
       "section_map": []
@@ -414,13 +434,12 @@
           "rel": "foundation",
           "note": "SP1 Ch28 covers investment principles, ALM, immunisation, and regulatory investment constraints. SA1 Ch17 extends to ALM strategies, liability-driven investment, and Indian investment regulations."
         },
-{
+        {
           "chapter": "16",
           "sections": null,
           "rel": "foundation",
           "note": "SP1 Ch16 covers Capital Management."
         }
-
       ],
       "section_map": []
     },
@@ -459,7 +478,7 @@
             "4"
           ],
           "rel": "foundation",
-          "note": "SP1 Ch21 embedded value section is the technical foundation. SA1 Ch19 applies EV analysis in detail — source of profit, management information, investor reporting."
+          "note": "SP1 Ch21 embedded value section is the technical foundation. SA1 Ch19 applies EV analysis in detail \u2014 source of profit, management information, investor reporting."
         },
         {
           "chapter": "29",
@@ -478,9 +497,12 @@
       "sp1_refs": [
         {
           "chapter": "25",
-          "sections": null,
+          "sections": [
+            "1",
+            "2"
+          ],
           "rel": "foundation",
-          "note": "SP1 Ch25 (management aims, 11 actuarial problem areas) provides the strategic decision-making framework. SA1 Ch20 applies this to full strategic assessment: financial, operational, regulatory dimensions."
+          "note": "SP1 Ch25 \u00a71 (management aims of company and actuary) frames the strategic context; \u00a72 (11 actuarial problem areas) provides the structured framework SA1 applies to full strategic assessment across financial, operational and regulatory dimensions."
         },
         {
           "chapter": "30",
@@ -502,7 +524,7 @@
           "chapter": "25",
           "sections": null,
           "rel": "foundation",
-          "note": "SA1 Ch21 builds directly on SP1 Ch25 — moves from identifying problems to structuring and justifying recommendations."
+          "note": "SA1 Ch21 builds directly on SP1 Ch25 \u2014 moves from identifying problems to structuring and justifying recommendations."
         },
         {
           "chapter": "30",
@@ -536,6 +558,15 @@
           "sections": null,
           "rel": "partial",
           "note": "SP1 Ch24 external and operational risks (competition, counterparty, regulatory, reputational) are central to SA1 strategy implications analysis."
+        },
+        {
+          "chapter": "30",
+          "sections": [
+            "2",
+            "3"
+          ],
+          "rel": "partial",
+          "note": "SP1 Ch30 \u00a72 (stakeholder perspectives framework) and \u00a73 (ACC applied) are directly relevant to tracing second-order implications of strategic decisions in SA1 Ch23."
         }
       ],
       "section_map": []
@@ -548,7 +579,7 @@
           "chapter": "10",
           "sections": null,
           "rel": "foundation",
-          "note": "SP1 Ch10 is the direct foundation — State provision objectives, co-existence models, funding approaches. SA1 Ch23 extends with comparative international healthcare systems and India's national health architecture."
+          "note": "SP1 Ch10 is the direct foundation \u2014 State provision objectives, co-existence models, funding approaches. SA1 Ch23 extends with comparative international healthcare systems and India's national health architecture."
         }
       ],
       "section_map": []
@@ -562,6 +593,19 @@
           "sections": null,
           "rel": "foundation",
           "note": "SP1 Ch27 on risk management techniques (underwriting, claims management, data controls, TCF, distribution management) is the operational foundation. SA1 Ch24 applies these as best practice frameworks with Indian regulatory context."
+        }
+      ],
+      "section_map": []
+    },
+    {
+      "sa1_chapter": "27",
+      "sa1_title": "Glossary",
+      "sp1_refs": [
+        {
+          "chapter": "31",
+          "sections": null,
+          "rel": "foundation",
+          "note": "SP1 Ch31 Glossary is the direct foundation. Glossary terms were frequently tested in the legacy ST1 exam; SA1 Ch27 extends with SA1-specific terminology."
         }
       ],
       "section_map": []

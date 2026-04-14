@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SA1 · SP1 → SA1 Mapping</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:        #0e0f13;
+    --surface:   #14161c;
+    --border:    #242630;
+    --border-hi: #343646;
+    --text:      #c8cad4;
+    --text-dim:  #686c80;
+    --text-hi:   #eceef6;
+    --accent:    #e8a030;
+    --accent-lo: rgba(232,160,48,.12);
+    --accent-md: rgba(232,160,48,.22);
+    --green:     #4ec994;
+    --green-lo:  rgba(78,201,148,.12);
+    --blue:      #5a9cf8;
+    --blue-lo:   rgba(90,156,248,.12);
+    --red:       #f07070;
+    --red-lo:    rgba(240,112,112,.12);
+    --purple:    #a78bfa;
+    --purple-lo: rgba(167,139,250,.12);
+    --radius:    8px;
+    --mono:      'IBM Plex Mono', monospace;
+    --sans:      'IBM Plex Sans', sans-serif;
+    --serif:     'Playfair Display', serif;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 14px;
+    line-height: 1.6;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* ── HEADER ── */
+  header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 16px;
+    height: 52px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+    flex-shrink: 0;
+    z-index: 10;
+  }
+  .logo {
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--accent);
+    letter-spacing: .04em;
+    white-space: nowrap;
+  }
+  .logo span { color: var(--text-dim); font-weight: 400; }
+  .header-sep { width: 1px; height: 20px; background: var(--border); flex-shrink: 0; }
+  .header-title {
+    font-family: var(--serif);
+    font-size: 14px;
+    color: var(--text-hi);
+    flex: 1;
+  }
+  .back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-dim);
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 4px 10px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all .15s;
+    flex-shrink: 0;
+  }
+  .back-btn:hover { color: var(--accent); border-color: var(--accent); background: var(--accent-lo); }
+
+  /* ── CONTROLS BAR ── */
+  .controls-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+    flex-shrink: 0;
+  }
+  .controls-bar label {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: .03em;
+  }
+  .controls-bar select,
+  .controls-bar input {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 5px 10px;
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--text);
+    outline: none;
+    transition: border-color .15s;
+  }
+  .controls-bar select:focus,
+  .controls-bar input:focus { border-color: var(--accent); }
+  .controls-bar input::placeholder { color: var(--text-dim); }
+
+  .summary-pill {
+    margin-left: auto;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-dim);
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 3px 12px;
+    white-space: nowrap;
+  }
+  .summary-pill span { color: var(--accent); }
+
+  /* ── LEGEND ── */
+  .legend {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    padding: 6px 16px;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg);
+    flex-shrink: 0;
+    flex-wrap: wrap;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-dim);
+  }
+
+  /* ── TABLE WRAPPER ── */
+  .table-wrap {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: auto;
+  }
+  .table-wrap::-webkit-scrollbar { width: 5px; height: 5px; }
+  .table-wrap::-webkit-scrollbar-track { background: transparent; }
+  .table-wrap::-webkit-scrollbar-thumb { background: var(--border-hi); border-radius: 3px; }
+
+  table {
+    width: 100%;
+    min-width: 860px;
+    border-collapse: collapse;
+  }
+  thead {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+  }
+  th {
+    background: var(--surface);
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: .08em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border);
+    text-align: left;
+    white-space: nowrap;
+  }
+  td {
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+    line-height: 1.5;
+  }
+  tr:hover td { background: rgba(255,255,255,.02); }
+
+  /* SA1 chapter group rows — first ref row gets the SA1 label */
+  .sa1-num {
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--accent);
+    white-space: nowrap;
+  }
+  .sa1-title {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-hi);
+  }
+  .sa1-title-cont {
+    color: var(--text-dim);
+    font-size: 12px;
+  }
+
+  /* SP1 ref cells */
+  .sp1-num {
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--blue);
+    white-space: nowrap;
+  }
+  .sp1-title {
+    font-size: 12px;
+    color: var(--text);
+  }
+  .sp1-sec {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-dim);
+    margin-top: 2px;
+  }
+  .note-cell {
+    font-size: 12px;
+    color: var(--text-dim);
+    line-height: 1.5;
+  }
+
+  /* ── BADGES ── */
+  .badge {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 500;
+    padding: 2px 8px;
+    border-radius: 10px;
+    white-space: nowrap;
+    letter-spacing: .02em;
+  }
+  .badge-foundation { background: var(--green-lo);  color: var(--green);  border: 1px solid rgba(78,201,148,.25); }
+  .badge-partial    { background: var(--accent-lo); color: var(--accent); border: 1px solid rgba(232,160,48,.25); }
+  .badge-extension  { background: var(--red-lo);    color: var(--red);    border: 1px solid rgba(240,112,112,.25); }
+
+  /* ── LOADING / ERROR states ── */
+  .state-msg {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    gap: 10px;
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--text-dim);
+    padding: 60px;
+    text-align: center;
+  }
+  .state-msg .icon { font-size: 28px; }
+  .state-msg .err  { color: var(--red); font-size: 12px; max-width: 480px; }
+
+  /* ── COLUMN WIDTHS ── */
+  .col-sa1ch { width: 6%;  }
+  .col-sa1t  { width: 20%; }
+  .col-sp1ch { width: 6%;  }
+  .col-sp1t  { width: 20%; }
+  .col-rel   { width: 10%; }
+  .col-note  { width: 38%; }
+</style>
+</head>
+<body>
+
+<header>
+  <a class="back-btn" href="../index.html">
+    <svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" width="12" height="12">
+      <path d="M7.5 2L3.5 6l4 4"/>
+    </svg>
+    back
+  </a>
+  <div class="header-sep"></div>
+  <div class="logo">SA1 <span>/ memory aids</span></div>
+  <div class="header-sep"></div>
+  <div class="header-title">SP1 → SA1 Chapter Mapping</div>
+</header>
+
+<div class="controls-bar">
+  <label>relationship</label>
+  <select id="relFilter">
+    <option value="">all</option>
+    <option value="foundation">foundation</option>
+    <option value="partial">partial</option>
+    <option value="extension">extension</option>
+  </select>
+
+  <label>SP1 chapter</label>
+  <select id="sp1Filter"><option value="">all</option></select>
+
+  <label>search SA1</label>
+  <input type="text" id="searchBox" placeholder="e.g. pricing, reinsurance…" style="width:180px;">
+
+  <div class="summary-pill" id="summaryPill"><span id="linkCount">—</span> links · <span id="chCount">—</span> SA1 chapters</div>
+</div>
+
+<div class="legend">
+  <div class="legend-item">
+    <span class="badge badge-foundation">foundation</span>
+    SP1 is prerequisite reading
+  </div>
+  <div class="legend-item">
+    <span class="badge badge-partial">partial</span>
+    specific SP1 sections only
+  </div>
+  <div class="legend-item">
+    <span class="badge badge-extension">extension</span>
+    SA1 goes well beyond SP1
+  </div>
+  <div class="legend-item" style="margin-left:auto; font-size:10px; color:var(--text-dim);" id="metaInfo"></div>
+</div>
+
+<div class="table-wrap" id="tableWrap">
+  <div class="state-msg" id="stateMsg">
+    <div class="icon">⟳</div>
+    <div>loading SP1_SA1_Map.json…</div>
+  </div>
+</div>
+
+<script>
+const SP1_TITLES = {
+  "0":"Introduction to Health & Care",
+  "1":"Income Protection Insurance",
+  "2":"Critical Illness Insurance",
+  "3":"Long-term Care Insurance",
+  "4":"Private Medical Insurance & Related Products",
+  "5":"Group Health & Care Insurance Products",
+  "6":"Product Design — Customer Perspective",
+  "7":"Product Design — Insurer & Stakeholder Constraints",
+  "8":"Distribution Channels",
+  "9":"The General Business Environment",
+  "10":"State Healthcare Provision",
+  "11":"Modelling",
+  "12":"Data",
+  "13":"Assumptions (1) — General Considerations",
+  "14":"Assumptions (2) — Demographic Assumptions",
+  "15":"Assumptions (3) — Financial Assumptions",
+  "16":"Assumptions (4) — Other Assumptions",
+  "17":"Pricing (1) — Individual Business",
+  "18":"Pricing (2) — Group Business",
+  "19":"Pricing (3) — Other Considerations",
+  "20":"Pricing (4) — Options & Guarantees",
+  "21":"Reserves & Embedded Value",
+  "22":"Approaches to Reserves & Solvency Capital",
+  "23":"Nature of Risks (1)",
+  "24":"Nature of Risks (2)",
+  "25":"Nature of Risks (3)",
+  "26":"Reinsurance",
+  "27":"Other Risk Management Techniques",
+  "28":"Investment",
+  "29":"Monitoring & Feedback into the Control Cycle",
+  "30":"Problem Solving",
+  "31":"Glossary"
+};
+
+function secLabel(sec) {
+  if (!sec || sec.length === 0) return 'all sections';
+  return '§§ ' + sec.join(', ');
+}
+
+function badgeHtml(rel) {
+  return `<span class="badge badge-${rel}">${rel}</span>`;
+}
+
+function buildTable(data) {
+  const chapters = data.sa1_chapters;
+
+  // populate SP1 filter
+  const sp1Set = new Set();
+  chapters.forEach(ch => ch.sp1_refs.forEach(r => sp1Set.add(r.chapter)));
+  const sp1Sel = document.getElementById('sp1Filter');
+  [...sp1Set].sort((a,b) => +a - +b).forEach(c => {
+    const o = document.createElement('option');
+    o.value = c;
+    o.textContent = `Ch ${c} — ${SP1_TITLES[c] || ''}`;
+    sp1Sel.appendChild(o);
+  });
+
+  // meta info
+  const meta = data._meta;
+  if (meta) {
+    document.getElementById('metaInfo').textContent = `updated ${meta.updated || ''}`;
+  }
+
+  function render() {
+    const relF  = document.getElementById('relFilter').value;
+    const sp1F  = document.getElementById('sp1Filter').value;
+    const query = document.getElementById('searchBox').value.toLowerCase();
+
+    const wrap = document.getElementById('tableWrap');
+
+    // build table
+    let html = `<table>
+      <thead>
+        <tr>
+          <th class="col-sa1ch">SA1 ch</th>
+          <th class="col-sa1t">SA1 title</th>
+          <th class="col-sp1ch">SP1 ch</th>
+          <th class="col-sp1t">SP1 title · sections</th>
+          <th class="col-rel">relationship</th>
+          <th class="col-note">how SA1 builds on SP1</th>
+        </tr>
+      </thead>
+      <tbody>`;
+
+    let totalLinks = 0;
+    let totalChs = 0;
+
+    chapters.forEach(ch => {
+      if (query && !ch.sa1_title.toLowerCase().includes(query)) return;
+
+      const visRefs = ch.sp1_refs.filter(r => {
+        if (relF && r.rel !== relF) return false;
+        if (sp1F && r.chapter !== sp1F) return false;
+        return true;
+      });
+      if (visRefs.length === 0) return;
+
+      totalLinks += visRefs.length;
+      totalChs++;
+
+      visRefs.forEach((ref, i) => {
+        const isFirst = i === 0;
+        html += `<tr>
+          <td class="sa1-num">${isFirst ? ch.sa1_chapter : ''}</td>
+          <td>${isFirst
+            ? `<span class="sa1-title">${ch.sa1_title}</span>`
+            : `<span class="sa1-title-cont">↳</span>`}</td>
+          <td class="sp1-num">${ref.chapter}</td>
+          <td>
+            <div class="sp1-title">${SP1_TITLES[ref.chapter] || ''}</div>
+            <div class="sp1-sec">${secLabel(ref.sections)}</div>
+          </td>
+          <td>${badgeHtml(ref.rel)}</td>
+          <td class="note-cell">${ref.note}</td>
+        </tr>`;
+      });
+    });
+
+    html += '</tbody></table>';
+    wrap.innerHTML = html;
+
+    document.getElementById('linkCount').textContent = totalLinks;
+    document.getElementById('chCount').textContent = totalChs;
+  }
+
+  document.getElementById('relFilter').addEventListener('change', render);
+  document.getElementById('sp1Filter').addEventListener('change', render);
+  document.getElementById('searchBox').addEventListener('input', render);
+
+  render();
+}
+
+// ── FETCH JSON from data folder (one level up from memory_aids) ──
+fetch('../data/SP1_SA1_Map.json')
+  .then(r => {
+    if (!r.ok) throw new Error(`HTTP ${r.status} — ${r.statusText}`);
+    return r.json();
+  })
+  .then(data => {
+    document.getElementById('stateMsg').style.display = 'none';
+    buildTable(data);
+  })
+  .catch(err => {
+    document.getElementById('stateMsg').innerHTML = `
+      <div class="icon">⚠</div>
+      <div>could not load SP1_SA1_Map.json</div>
+      <div class="err">${err.message}<br><br>
+        Make sure this file is served from a local server (e.g. <code>npx serve .</code> from the repo root)
+        and that <code>data/SP1_SA1_Map.json</code> exists.
+      </div>`;
+  });
+</script>
+</body>
+</html>
