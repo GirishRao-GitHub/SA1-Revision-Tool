@@ -1,0 +1,697 @@
+{
+  "_meta": {
+    "title": "Topic Frameworks ↔ SA1 Chapter Map",
+    "created": "2026-04-14",
+    "description": "Maps each SA1 chapter to the Topic_Frameworks.json keys that are most relevant to its content. Used by the SA1 frontend to pull cross-cutting topic content alongside chapter-specific revision notes. Topic keys are exact keys from Topic_Frameworks.json.",
+    "schema": {
+      "sa1_chapters[].sa1_chapter": "Chapter number as string key in SA1_Revision_Notes.json",
+      "sa1_chapters[].sa1_title": "Chapter title",
+      "sa1_chapters[].topic_refs[].topic": "Exact key in Topic_Frameworks.json",
+      "sa1_chapters[].topic_refs[].rel": "Relationship type: 'primary' | 'supporting' | 'contextual'",
+      "sa1_chapters[].topic_refs[].note": "How the topic relates to this chapter",
+      "sa1_chapters[].section_topic_map": "Optional finer-grain: maps SA1 section titles to topic keys"
+    },
+    "rel_types": {
+      "primary": "This topic is a direct match — the chapter is largely about this topic",
+      "supporting": "Topic provides essential supporting content for this chapter",
+      "contextual": "Topic provides useful context or is partially covered in passing"
+    },
+    "integration_notes": {
+      "renderer_hook": "The SA1 renderer already has a SECTION_TOPIC_MAP constant (used by Framework view). This file provides the chapter-level equivalent, enabling a 'Related Topics' panel or inline topic-card injection per chapter.",
+      "deduplication": "Where a topic appears under multiple chapters, the renderer should deduplicate if showing all topics for a session.",
+      "topic_card_display": "Suggested display: in each chapter view, show a 'Related Frameworks' sidebar or collapsible panel listing topic cards from TOPIC_FRAMEWORKS keyed by this map.",
+      "six_pillar_overlay": "The Six Pillar Framework (P1-P6) topic is a meta-topic that overlays all chapters — it should be surfaced as a persistent navigation element rather than tied to individual chapters."
+    }
+  },
+  "sa1_chapters": [
+    {
+      "sa1_chapter": "1",
+      "sa1_title": "Introduction to Subject SA1",
+      "topic_refs": [
+        {
+          "topic": "The Six Pillar Framework (P1-P6)",
+          "rel": "primary",
+          "note": "The Six Pillar Framework is the structural overview introduced in Ch1 — the ACC and product cycle map directly to the six pillars."
+        },
+        {
+          "topic": "Regulation",
+          "rel": "contextual",
+          "note": "High-level regulatory context (IRDAI overview) typically introduced in Ch1."
+        }
+      ],
+      "section_topic_map": []
+    },
+    {
+      "sa1_chapter": "2",
+      "sa1_title": "Long-Term Health & Care Insurance Products",
+      "topic_refs": [
+        {
+          "topic": "Income Protection",
+          "rel": "primary",
+          "note": "IP policy structure, benefit design, definitions — Ch2 covers the SA1 application of SP1 Ch1 material."
+        },
+        {
+          "topic": "Critical Illness",
+          "rel": "primary",
+          "note": "CI product design, condition definitions, tiered benefits — SA1 Ch2 extends SP1 Ch2."
+        },
+        {
+          "topic": "Long-Term Care (LTC)",
+          "rel": "primary",
+          "note": "LTCI pre-funded vs immediate needs, ADL triggers, benefit structures — SA1 Ch2 covers India-specific LTC context."
+        },
+        {
+          "topic": "Disability Definitions",
+          "rel": "supporting",
+          "note": "Disability definitions (own occ, ADL, FAT, PCA) are core to IP and LTCI products in Ch2."
+        },
+        {
+          "topic": "Product Design (Protection)",
+          "rel": "supporting",
+          "note": "Standalone vs rider design, unit-linked variants, options and guarantees — relevant to long-term products."
+        }
+      ],
+      "section_topic_map": [
+        {
+          "sa1_section": "IP Insurance",
+          "topic": "Income Protection"
+        },
+        {
+          "sa1_section": "Critical Illness",
+          "topic": "Critical Illness"
+        },
+        {
+          "sa1_section": "Long-Term Care",
+          "topic": "Long-Term Care (LTC)"
+        },
+        {
+          "sa1_section": "Disability Definitions",
+          "topic": "Disability Definitions"
+        }
+      ]
+    },
+    {
+      "sa1_chapter": "3",
+      "sa1_title": "Short-term Health & Care Insurance Products",
+      "topic_refs": [
+        {
+          "topic": "Private Medical Insurance (PMI)",
+          "rel": "primary",
+          "note": "PMI product mechanics, scope, coverage, NCD, underwriting — core short-term product."
+        },
+        {
+          "topic": "Health Cash Plan",
+          "rel": "primary",
+          "note": "Health cash plan structure, community rating, benefit schedule — directly covered in Ch3."
+        },
+        {
+          "topic": "Major Medical Expenses",
+          "rel": "primary",
+          "note": "MME fixed-benefit surgical schedule — covered in Ch3 alongside PMI."
+        },
+        {
+          "topic": "Accident and Sickness Product",
+          "rel": "primary",
+          "note": "ASU / short-term sickness products — closely linked to IP, covered in Ch3."
+        },
+        {
+          "topic": "Group Products",
+          "rel": "supporting",
+          "note": "Group PMI, group IP variants — group product structures underpin short-term product distribution."
+        },
+        {
+          "topic": "Overseas & Expatriate Business",
+          "rel": "contextual",
+          "note": "Overseas PMI and expatriate products are short-term PMI variants."
+        }
+      ],
+      "section_topic_map": [
+        {
+          "sa1_section": "Private Medical Insurance (PMI)",
+          "topic": "Private Medical Insurance (PMI)"
+        },
+        {
+          "sa1_section": "Health Cash Plans",
+          "topic": "Health Cash Plan"
+        },
+        {
+          "sa1_section": "Major Medical Expense Insurance",
+          "topic": "Major Medical Expenses"
+        }
+      ]
+    },
+    {
+      "sa1_chapter": "4",
+      "sa1_title": "Product Analysis",
+      "topic_refs": [
+        {
+          "topic": "Product Design",
+          "rel": "primary",
+          "note": "Product design framework — target market, benefit design, exclusions, options — maps directly to Ch4 product analysis."
+        },
+        {
+          "topic": "Product Design (Protection)",
+          "rel": "supporting",
+          "note": "Protection-specific design features (riders, unit-linked, GIOs) inform Ch4 product analysis."
+        },
+        {
+          "topic": "Administration",
+          "rel": "supporting",
+          "note": "Admin and IT constraints, TPA management, outsourcing — directly relevant to product analysis."
+        },
+        {
+          "topic": "State Healthcare & Demographics",
+          "rel": "supporting",
+          "note": "Customer needs lifecycle, gap analysis vs state provision — part of Ch4 product analysis framework."
+        }
+      ],
+      "section_topic_map": []
+    },
+    {
+      "sa1_chapter": "5",
+      "sa1_title": "General Business Environment (1)",
+      "topic_refs": [
+        {
+          "topic": "State Healthcare & Demographics",
+          "rel": "primary",
+          "note": "State provision objectives, co-existence, demographic trends — directly maps to Indian public healthcare system."
+        },
+        {
+          "topic": "Regulation",
+          "rel": "primary",
+          "note": "Regulatory regime, IRDAI overview — propensity to buy is shaped by the regulatory environment."
+        },
+        {
+          "topic": "Group Products",
+          "rel": "supporting",
+          "note": "Employer role in health provision — group IP, CI and PMI structures underpin the employer benefits discussion."
+        },
+        {
+          "topic": "Legislation & Taxation",
+          "rel": "supporting",
+          "note": "Economic and tax incentives influencing the business environment."
+        }
+      ],
+      "section_topic_map": []
+    },
+    {
+      "sa1_chapter": "6",
+      "sa1_title": "General Business Environment (2)",
+      "topic_refs": [
+        {
+          "topic": "Regulation",
+          "rel": "primary",
+          "note": "IRDAI regulatory regime, deeper dive — SA1 Ch6 extends the regulatory environment framework."
+        },
+        {
+          "topic": "IRDA Regulations",
+          "rel": "primary",
+          "note": "Specific IRDAI 2024 regulations — health insurance, products, PPH, EOM regulations."
+        },
+        {
+          "topic": "Legislation & Taxation",
+          "rel": "primary",
+          "note": "Indian tax treatment of health premiums (Section 80D), GST impact — directly covered in Ch6."
+        },
+        {
+          "topic": "State Healthcare & Demographics",
+          "rel": "supporting",
+          "note": "Government-funded schemes (Ayushman Bharat), private-public interaction."
+        }
+      ],
+      "section_topic_map": []
+    },
+    {
+      "sa1_chapter": "7",
+      "sa1_title": "Product Design and Pricing (1)",
+      "topic_refs": [
+        {
+          "topic": "Models",
+          "rel": "primary",
+          "note": "Modelling approaches — deterministic vs stochastic, multi-state, sensitivity — the foundation for product design decisions."
+        },
+        {
+          "topic": "Assumptions",
+          "rel": "primary",
+          "note": "Demographic and financial assumptions — Ch7 builds on assumption-setting framework."
+        },
+        {
+          "topic": "Pricing",
+          "rel": "primary",
+          "note": "Pricing methodology — risk premium derivation, formula vs cashflow approach — core Ch7 content."
+        },
+        {
+          "topic": "Data",
+          "rel": "supporting",
+          "note": "Data sources and quality for pricing — directly relevant to Ch7 pricing process."
+        },
+        {
+          "topic": "Product Design",
+          "rel": "supporting",
+          "note": "Product design framework and constraints feed into the pricing model."
+        }
+      ],
+      "section_topic_map": []
+    },
+    {
+      "sa1_chapter": "8",
+      "sa1_title": "Product Design and Pricing (2)",
+      "topic_refs": [
+        {
+          "topic": "Pricing",
+          "rel": "primary",
+          "note": "From risk premium to office premium, profit criteria, marketability, competitiveness — Ch8 extends the pricing build-up."
+        },
+        {
+          "topic": "Pricing & Rating",
+          "rel": "primary",
+          "note": "Rating strategies, NCD, experience rating, reviewable vs guaranteed premiums — directly mapped."
+        },
+        {
+          "topic": "Underwriting",
+          "rel": "supporting",
+          "note": "Underwriting strategy and anti-selection controls interact with pricing decisions."
+        },
+        {
+          "topic": "Models",
+          "rel": "supporting",
+          "note": "Cashflow modelling approach, model office — underpins Ch8 profitability testing."
+        },
+        {
+          "topic": "Assumptions",
+          "rel": "supporting",
+          "note": "New business volume, risk discount rate — Ch16 assumptions directly feed Ch8."
+        }
+      ],
+      "section_topic_map": []
+    },
+    {
+      "sa1_chapter": "9",
+      "sa1_title": "Taxation Environment",
+      "topic_refs": [
+        {
+          "topic": "Legislation & Taxation",
+          "rel": "primary",
+          "note": "Indian tax treatment — Section 80D, GST, tax incentives for health insurance — core Ch9 content."
+        },
+        {
+          "topic": "IRDA Regulations",
+          "rel": "supporting",
+          "note": "IRDAI EOM regulations include taxation and expense constraints."
+        }
+      ],
+      "section_topic_map": []
+    },
+    {
+      "sa1_chapter": "10",
+      "sa1_title": "Approaches to Regulation",
+      "topic_refs": [
+        {
+          "topic": "Regulation",
+          "rel": "primary",
+          "note": "Regulatory frameworks, IRDAI powers, intervention tools, conduct of business — core Ch10 content."
+        },
+        {
+          "topic": "IRDA Regulations",
+          "rel": "primary",
+          "note": "IRDAI 2024 specific regulations: PPH, health insurance, products, AA regulations."
+        },
+        {
+          "topic": "Professional Guidance",
+          "rel": "supporting",
+          "note": "Actuarial professional obligations under IRDAI — AA statutory duties, APS 33/34."
+        }
+      ],
+      "section_topic_map": []
+    },
+    {
+      "sa1_chapter": "11",
+      "sa1_title": "Solvency II (1)",
+      "topic_refs": [
+        {
+          "topic": "Capital & Solvency",
+          "rel": "primary",
+          "note": "Solvency II Pillar 1 — BEL, Risk Margin, SCR, MCR — core Ch11 content."
+        },
+        {
+          "topic": "Risk Management & Capital",
+          "rel": "supporting",
+          "note": "Risk types and quantification underpin Solvency II capital calculations."
+        },
+        {
+          "topic": "Reserving & Valuation",
+          "rel": "supporting",
+          "note": "Reserving principles (BEL, risk margin) directly map to Solvency II requirements."
+        }
+      ],
+      "section_topic_map": []
+    },
+    {
+      "sa1_chapter": "12",
+      "sa1_title": "Solvency II (2)",
+      "topic_refs": [
+        {
+          "topic": "Capital & Solvency",
+          "rel": "primary",
+          "note": "Solvency II Pillars 2 and 3 — ORSA, governance, disclosure — Ch12 extends Pillar 1."
+        },
+        {
+          "topic": "Reporting",
+          "rel": "primary",
+          "note": "Solvency II disclosure requirements, SFCR, RSR — maps to Ch12 reporting content."
+        },
+        {
+          "topic": "Risk Management & Capital",
+          "rel": "supporting",
+          "note": "Risk governance and management framework under Solvency II Pillar 2."
+        }
+      ],
+      "section_topic_map": []
+    },
+    {
+      "sa1_chapter": "13",
+      "sa1_title": "Other Approaches to Solvency Regulation",
+      "topic_refs": [
+        {
+          "topic": "Capital & Solvency",
+          "rel": "primary",
+          "note": "Indian solvency regime (ASM/RSM), RBC transition, comparison with Solvency II — core Ch13 content."
+        },
+        {
+          "topic": "IRDA Regulations",
+          "rel": "primary",
+          "note": "IRDAI 2024 Actuarial, Finance & Investment regulations — solvency requirements specific to India."
+        },
+        {
+          "topic": "Reporting",
+          "rel": "supporting",
+          "note": "IFRS 17 / Ind AS 117, RBC reporting requirements — Ch13 covers transition to new frameworks."
+        }
+      ],
+      "section_topic_map": []
+    },
+    {
+      "sa1_chapter": "14",
+      "sa1_title": "Profit Reporting",
+      "topic_refs": [
+        {
+          "topic": "Reporting",
+          "rel": "primary",
+          "note": "IFRS 17, Solvency II Pillar 3 disclosure, embedded value reporting — core Ch14 content."
+        },
+        {
+          "topic": "Monitoring",
+          "rel": "primary",
+          "note": "Analysis of surplus — surplus sources, investigation framework — mapped directly to Ch14."
+        },
+        {
+          "topic": "Reserving & Valuation",
+          "rel": "supporting",
+          "note": "Reserve movements and valuation basis changes feed into profit reporting."
+        }
+      ],
+      "section_topic_map": []
+    },
+    {
+      "sa1_chapter": "15",
+      "sa1_title": "Professional Standards and Guidance",
+      "topic_refs": [
+        {
+          "topic": "Professional Guidance",
+          "rel": "primary",
+          "note": "Actuarial professional duties, APS/TAS standards, ethics, whistleblowing — core Ch15 content."
+        },
+        {
+          "topic": "APS and GN",
+          "rel": "primary",
+          "note": "Specific APS 33/34 and guidance notes — directly covered in Ch15."
+        },
+        {
+          "topic": "IRDA Regulations",
+          "rel": "supporting",
+          "note": "IRDAI AA Regulations 2022, Appointed Actuary statutory obligations."
+        }
+      ],
+      "section_topic_map": []
+    },
+    {
+      "sa1_chapter": "16",
+      "sa1_title": "Capital Management",
+      "topic_refs": [
+        {
+          "topic": "Risk Management & Capital",
+          "rel": "primary",
+          "note": "Capital optimisation, risk appetite, economic vs regulatory capital, reinsurance and ALM as capital tools."
+        },
+        {
+          "topic": "Capital & Solvency",
+          "rel": "primary",
+          "note": "Solvency ratio management, capital allocation, dividend policy — Ch16 extends solvency framework."
+        },
+        {
+          "topic": "Reinsurance",
+          "rel": "supporting",
+          "note": "Reinsurance as a capital management tool — quota share, XL, financial reinsurance."
+        },
+        {
+          "topic": "Investments",
+          "rel": "supporting",
+          "note": "ALM and investment strategy as capital efficiency tools."
+        }
+      ],
+      "section_topic_map": []
+    },
+    {
+      "sa1_chapter": "17",
+      "sa1_title": "Uses and Benefits of Reinsurance",
+      "topic_refs": [
+        {
+          "topic": "Reinsurance",
+          "rel": "primary",
+          "note": "Reinsurance structures, retention levels, treaty vs facultative, financial reinsurance — core Ch17 content."
+        },
+        {
+          "topic": "Risk Management & Capital",
+          "rel": "supporting",
+          "note": "Reinsurance as a risk mitigation tool — connected to the broader risk management framework."
+        },
+        {
+          "topic": "IRDA Regulations",
+          "rel": "supporting",
+          "note": "IRDAI reinsurance regulations 2024 — FRBs, CBRs, PMC approval requirements."
+        }
+      ],
+      "section_topic_map": []
+    },
+    {
+      "sa1_chapter": "18",
+      "sa1_title": "Asset-Liability Management",
+      "topic_refs": [
+        {
+          "topic": "Investments",
+          "rel": "primary",
+          "note": "Investment strategy, ALM principles, asset characteristics, liability matching — core Ch18 content."
+        },
+        {
+          "topic": "Risk Management & Capital",
+          "rel": "supporting",
+          "note": "ALM as a risk management tool — investment and liquidity risks in the capital framework."
+        },
+        {
+          "topic": "Capital & Solvency",
+          "rel": "supporting",
+          "note": "Investment strategy interacts with solvency capital requirements and free asset position."
+        }
+      ],
+      "section_topic_map": []
+    },
+    {
+      "sa1_chapter": "19",
+      "sa1_title": "Analysis of Experience",
+      "topic_refs": [
+        {
+          "topic": "Monitoring",
+          "rel": "primary",
+          "note": "Experience investigation framework — morbidity, persistency, expense, investment monitoring — Ch19 is the core application."
+        },
+        {
+          "topic": "Data",
+          "rel": "primary",
+          "note": "Data requirements by product type, data quality criteria — directly underpin experience analysis."
+        },
+        {
+          "topic": "Assumptions",
+          "rel": "supporting",
+          "note": "Assumption-setting process feeds from experience analysis results — the A/E feedback loop."
+        }
+      ],
+      "section_topic_map": []
+    },
+    {
+      "sa1_chapter": "20",
+      "sa1_title": "Analysis of Surplus, Embedded Value and Profit",
+      "topic_refs": [
+        {
+          "topic": "Monitoring",
+          "rel": "primary",
+          "note": "Analysis of surplus sources, embedded value reconciliation — Ch20 covers both in depth."
+        },
+        {
+          "topic": "Reporting",
+          "rel": "primary",
+          "note": "EV reporting, investor reporting, IFRS 17 profit emergence — Ch20 connects monitoring to external reporting."
+        },
+        {
+          "topic": "Reserving & Valuation",
+          "rel": "supporting",
+          "note": "Reserve movements and valuation basis changes feed into surplus analysis."
+        }
+      ],
+      "section_topic_map": []
+    },
+    {
+      "sa1_chapter": "21",
+      "sa1_title": "Assessing Strategies",
+      "topic_refs": [
+        {
+          "topic": "The Six Pillar Framework (P1-P6)",
+          "rel": "primary",
+          "note": "Strategy assessment is the culmination of the Six Pillar Framework — Ch21 applies it to full strategic scenarios."
+        },
+        {
+          "topic": "Risk Management & Capital",
+          "rel": "supporting",
+          "note": "Risk framework and capital considerations are central to strategy assessment."
+        },
+        {
+          "topic": "Regulation",
+          "rel": "supporting",
+          "note": "Regulatory constraints and IRDAI obligations shape strategic options."
+        }
+      ],
+      "section_topic_map": []
+    },
+    {
+      "sa1_chapter": "22",
+      "sa1_title": "Recommending Strategies: Full Synthesis",
+      "topic_refs": [
+        {
+          "topic": "The Six Pillar Framework (P1-P6)",
+          "rel": "primary",
+          "note": "Structuring and justifying strategy recommendations — the Six Pillar framework provides the scaffold."
+        },
+        {
+          "topic": "Risk Management & Capital",
+          "rel": "supporting",
+          "note": "Risk-adjusted strategy recommendations require capital and risk framing."
+        },
+        {
+          "topic": "Regulation",
+          "rel": "supporting",
+          "note": "Regulatory compliance and IRDAI obligations must be embedded in strategy recommendations."
+        }
+      ],
+      "section_topic_map": []
+    },
+    {
+      "sa1_chapter": "23",
+      "sa1_title": "Implications of Strategies",
+      "topic_refs": [
+        {
+          "topic": "Risks",
+          "rel": "primary",
+          "note": "Risk taxonomy (17 categories) — second-order strategy implications map directly to risk categories."
+        },
+        {
+          "topic": "Risk Management & Capital",
+          "rel": "primary",
+          "note": "Capital and risk implications of strategic decisions — operational, market, credit risk dimensions."
+        },
+        {
+          "topic": "The Six Pillar Framework (P1-P6)",
+          "rel": "supporting",
+          "note": "Stakeholder perspectives and ACC applied — tracing second-order implications across all pillars."
+        }
+      ],
+      "section_topic_map": []
+    },
+    {
+      "sa1_chapter": "24",
+      "sa1_title": "National Healthcare Systems",
+      "topic_refs": [
+        {
+          "topic": "State Healthcare & Demographics",
+          "rel": "primary",
+          "note": "State provision objectives, co-existence models, funding approaches, international comparisons — Ch24 applies SP1 Ch10 in depth."
+        },
+        {
+          "topic": "Regulation",
+          "rel": "supporting",
+          "note": "Regulatory interaction with national healthcare systems — IRDAI, PMJAY, government policy."
+        },
+        {
+          "topic": "India Market \u2014 Insights & Comparison",
+          "rel": "supporting",
+          "note": "India-specific healthcare system context (Ayushman Bharat, ESIC, CGHS) — comparative market insight."
+        }
+      ],
+      "section_topic_map": []
+    },
+    {
+      "sa1_chapter": "25",
+      "sa1_title": "Best Practice",
+      "topic_refs": [
+        {
+          "topic": "Underwriting",
+          "rel": "primary",
+          "note": "Underwriting best practice — anti-selection controls, policy review, automation governance."
+        },
+        {
+          "topic": "Claims Management",
+          "rel": "primary",
+          "note": "Claims management best practice — triage, fraud detection, declined claims analysis."
+        },
+        {
+          "topic": "Professional Guidance",
+          "rel": "supporting",
+          "note": "Best practice is underpinned by actuarial professional standards and ethics."
+        },
+        {
+          "topic": "Data",
+          "rel": "supporting",
+          "note": "Data quality management is a best practice dimension — experience monitoring feedback."
+        }
+      ],
+      "section_topic_map": []
+    },
+    {
+      "sa1_chapter": "26",
+      "sa1_title": "Solving Complex Issues",
+      "topic_refs": [
+        {
+          "topic": "The Six Pillar Framework (P1-P6)",
+          "rel": "primary",
+          "note": "Solving complex exam-style questions requires applying the Six Pillar Framework as a structured approach."
+        },
+        {
+          "topic": "Risks",
+          "rel": "supporting",
+          "note": "Risk identification across the 17 categories is a core tool for tackling complex issues."
+        }
+      ],
+      "section_topic_map": []
+    },
+    {
+      "sa1_chapter": "27",
+      "sa1_title": "Glossary",
+      "topic_refs": [
+        {
+          "topic": "The Six Pillar Framework (P1-P6)",
+          "rel": "contextual",
+          "note": "Glossary terms span all pillars — the Six Pillar framework provides a useful organisational lens."
+        }
+      ],
+      "section_topic_map": []
+    }
+  ]
+}
