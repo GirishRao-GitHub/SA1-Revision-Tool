@@ -2030,6 +2030,12 @@ function getPrevDestination() {
 
   // ── Currently viewing a memory aid ──────────────────────
   if (activeMemoryAid && activeMemoryAidIdx !== null) {
+    // Global aids (chNum=0): no Prev before the first, else previous aid
+    if (chNum === 0) {
+      if (activeMemoryAidIdx === 0) return null;
+      const prev = chAids[activeMemoryAidIdx - 1];
+      return { chNum, isMemoryAid: true, aid: prev, aidIdx: activeMemoryAidIdx - 1 };
+    }
     if (activeMemoryAidIdx > 0) {
       const prev = chAids[activeMemoryAidIdx - 1];
       return { chNum, isMemoryAid: true, aid: prev, aidIdx: activeMemoryAidIdx - 1 };
@@ -2077,6 +2083,17 @@ function getNextDestination() {
 
   // ── Currently viewing a memory aid ──────────────────────
   if (activeMemoryAid && activeMemoryAidIdx !== null) {
+    // Global aids (chNum=0): next aid, or first stop of first navigable chapter after last aid
+    if (chNum === 0) {
+      if (activeMemoryAidIdx < chAids.length - 1) {
+        const next = chAids[activeMemoryAidIdx + 1];
+        return { chNum, isMemoryAid: true, aid: next, aidIdx: activeMemoryAidIdx + 1 };
+      }
+      // Last global aid — advance to first navigable chapter
+      const firstIdx = _nextNavChIdx(-1);
+      if (firstIdx < 0) return null;
+      return _firstStopOfCh(CHAPTERS[firstIdx].num);
+    }
     if (activeMemoryAidIdx < chAids.length - 1) {
       const next = chAids[activeMemoryAidIdx + 1];
       return { chNum, isMemoryAid: true, aid: next, aidIdx: activeMemoryAidIdx + 1 };
