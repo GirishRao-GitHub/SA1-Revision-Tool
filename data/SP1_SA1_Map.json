@@ -2,7 +2,7 @@
   "_meta": {
     "title": "SP1 \u2194 SA1 Cross-Reference Map",
     "created": "2026-03-30",
-    "description": "Maps each SA1 chapter to the SP1 chapters and sections it builds upon. Used by the SA1 frontend to pull SP1 foundation content alongside SA1 application content. Both JSONs share identical schemas \u2014 sections/subsections from SP1_Revision_Notes.json are referenced by id. sa1_chapter keys now match SA1_Revision_Notes.json keys (1-indexed). Updated 2026-04-14: added SP1 Ch5 \u00a7\u00a72-4 to SA1 Chs 3 and 5 (group products gap); made SP1 Ch25 \u00a7\u00a71-2 explicit in SA1 Ch21; added SP1 Ch30 \u00a7\u00a72-3 to SA1 Ch23; added SA1 Ch27 \u2192 SP1 Ch31 entry.",
+    "description": "Maps each SA1 chapter to the SP1 chapters and sections it builds upon. Used by the SA1 frontend to pull SP1 foundation content alongside SA1 application content. Both JSONs share identical schemas \u2014 sections/subsections from SP1_Revision_Notes.json are referenced by id. sa1_chapter keys now match SA1_Revision_Notes.json keys (1-indexed). Updated 2026-04-14: added SP1 Ch5 \u00a7\u00a72-4 to SA1 Chs 3 and 5 (group products gap); made SP1 Ch25 \u00a7\u00a71-2 explicit in SA1 Ch21; added SP1 Ch30 \u00a7\u00a72-3 to SA1 Ch23; added SA1 Ch27 \u2192 SP1 Ch31 entry. SP1 Ch21 \u00a7\u00a71-3 (reserves) added to SA1 Chs 11, 12, 19 to close reserving content gap.",
     "schema": {
       "sa1_chapters[].sp1_refs[].chapter": "Key in SP1_Revision_Notes.json",
       "sa1_chapters[].sp1_refs[].sections": "Section ids within that SP1 chapter (null = entire chapter)",
@@ -324,6 +324,15 @@
           ],
           "rel": "foundation",
           "note": "SP1 Ch22 covers solvency capital requirements and market-consistent valuation in general. SA1 Ch10 specifically covers Solvency II Pillar 1 framework, SCR and MCR formulae."
+        },
+        {
+          "chapter": "21",
+          "sections": [
+            "1",
+            "2"
+          ],
+          "rel": "foundation",
+          "note": "SP1 Ch21 \u00a7\u00a71\u20132 (purpose of reserves and types of reserve \u2014 supervisory, realistic, IBNR, UPR) are the technical foundation for Solvency II technical provisions valuation covered in SA1 Ch11."
         }
       ],
       "section_map": []
@@ -341,6 +350,15 @@
           ],
           "rel": "extension",
           "note": "SA1 Ch11 covers Solvency II Pillars 2 and 3 (ORSA, governance, reporting) \u2014 well beyond SP1 Ch22 scope. SP1 provides the underlying valuation framework only."
+        },
+        {
+          "chapter": "21",
+          "sections": [
+            "2",
+            "3"
+          ],
+          "rel": "foundation",
+          "note": "SP1 Ch21 \u00a7\u00a72\u20133 (reserve types and statistical/case estimation methods) underpin the detailed technical provisions calculations and data quality requirements in SA1 Ch12."
         }
       ],
       "section_map": []
@@ -464,6 +482,14 @@
           ],
           "rel": "partial",
           "note": "Demographic assumption process from SP1 Ch14 is the analytical foundation for SA1 experience investigations."
+        },
+        {
+          "chapter": "21",
+          "sections": [
+            "3"
+          ],
+          "rel": "partial",
+          "note": "SP1 Ch21 \u00a73 (statistical and case estimates) is directly relevant to SA1 Ch19's analysis of claims and exposure, and the construction of experience-based reserve estimates."
         }
       ],
       "section_map": []
