@@ -955,6 +955,21 @@
     gap: 12px;
   }
   .next-section-bar .spacer { flex: 1; }
+  /* Compact variant used inside the memory aid view (no scroll room) */
+  .next-section-bar.compact {
+    margin-top: 0;
+    padding: 6px 12px;
+    border-top: 1px solid var(--border);
+    background: var(--surface);
+    flex-shrink: 0;
+  }
+  .next-section-bar.compact .next-section-btn {
+    padding: 5px 12px;
+    border-radius: 5px;
+  }
+  .next-section-bar.compact .nsb-arrow { font-size: 14px; }
+  .next-section-bar.compact .nsb-label { font-size: 8px; }
+  .next-section-bar.compact .nsb-title { font-size: 11px; max-width: 280px; }
   .next-section-btn {
     display: inline-flex;
     align-items: center;
@@ -1708,7 +1723,10 @@ function selectSub(chNum, secId, subId) {
   clearMemoryAidView();
   renderNav();
   const data = CHAPTER_DATA[String(chNum)];
-  if (data) renderSection(data, secId, subId);
+  if (data) {
+    document.getElementById('header-chapter-title').textContent = `Ch ${chNum} · ${data.title}`;
+    renderSection(data, secId, subId);
+  }
 }
 
 function handleSearch() {
@@ -2132,7 +2150,7 @@ function navigateNext() {
   }, 100);
 }
 
-function buildNavBar() {
+function buildNavBar(compact) {
   const prev = getPrevDestination();
   const next = getNextDestination();
   if (!prev && !next) return '';
@@ -2178,7 +2196,7 @@ function buildNavBar() {
   }
 
   return `
-    <div class="next-section-bar">
+    <div class="next-section-bar${compact ? ' compact' : ''}">
       ${prevBtn || '<div class="spacer"></div>'}
       ${nextBtn || '<div class="spacer"></div>'}
     </div>`;
@@ -2547,7 +2565,7 @@ function selectMemoryAid(url, label, aidIdx, chNum) {
   previousMemoryAid = null;
 
   // Build nav bar (prev/next) — must be called AFTER state is updated above
-  const navBarHtml = buildNavBar();
+  const navBarHtml = buildNavBar(true);
 
   // Render the topbar shell immediately
   document.getElementById('content-area').innerHTML = `
