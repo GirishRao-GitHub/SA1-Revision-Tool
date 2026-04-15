@@ -42,7 +42,7 @@
 html,body{min-height:100%;background:var(--slate-50);color:var(--slate-800);font-family:var(--font-body);font-size:14px;line-height:1.5}
 
 /* ── Header ── */
-.app-header{background:var(--navy);padding:20px 28px 0;border-bottom:3px solid var(--amber)}
+.app-header{background:var(--navy);border-bottom:3px solid var(--amber)}
 .app-header-top{display:flex;align-items:flex-start;gap:16px;margin-bottom:18px}
 .header-badge{background:var(--amber);color:var(--navy);font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border-radius:var(--radius-sm);white-space:nowrap;margin-top:4px}
 .header-title{color:#fff;font-size:20px;font-weight:600;letter-spacing:-.01em}
@@ -55,7 +55,9 @@ html,body{min-height:100%;background:var(--slate-50);color:var(--slate-800);font
 .tab-btn:hover:not(.active){color:var(--slate-200)}
 
 /* ── Main content ── */
-.app-body{padding:24px 28px;max-width:960px}
+.app-body{padding:24px 28px;max-width:960px;margin:0 auto}
+.app-header{display:flex;flex-direction:column;align-items:center}
+.app-header-inner{width:100%;max-width:960px;padding:20px 28px 0}
 
 /* ── Panels ── */
 .panel{display:none}.panel.active{display:block}
@@ -163,6 +165,7 @@ html,body{min-height:100%;background:var(--slate-50);color:var(--slate-800);font
 <body>
 
 <header class="app-header">
+  <div class="app-header-inner">
   <div class="app-header-top">
     <div>
       <div class="header-title">Solvency II — Pillar I Aggregation Engine</div>
@@ -175,6 +178,7 @@ html,body{min-height:100%;background:var(--slate-50);color:var(--slate-800);font
     <button class="tab-btn" onclick="showTab('workings')">Aggregation workings</button>
     <button class="tab-btn" onclick="showTab('summary')">SCR / MCR summary</button>
     <button class="tab-btn" onclick="showTab('eligibility')">Capital eligibility</button>
+  </div>
   </div>
 </header>
 
