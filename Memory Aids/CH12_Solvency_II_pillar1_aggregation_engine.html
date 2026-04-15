@@ -145,6 +145,40 @@ html,body{min-height:100%;background:var(--slate-50);color:var(--slate-800);font
 /* ── Note box ── */
 .note-box{font-size:11.5px;color:var(--slate-500);background:var(--slate-50);border-radius:var(--radius-md);padding:12px 16px;margin:12px 0;line-height:1.65;border-left:3px solid var(--slate-300)}
 
+/* ── TP import banner ── */
+.tp-import-banner{background:linear-gradient(135deg,var(--navy) 0%,var(--navy-mid) 100%);border-radius:var(--radius-lg);padding:14px 18px;margin-bottom:14px;display:flex;align-items:center;gap:14px;box-shadow:var(--shadow-md)}
+.tp-import-icon{width:36px;height:36px;background:rgba(245,158,11,.15);border:1.5px solid var(--amber);border-radius:var(--radius-md);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.tp-import-text{flex:1}
+.tp-import-title{color:#fff;font-size:12px;font-weight:600;margin-bottom:2px}
+.tp-import-sub{color:var(--slate-400);font-size:11px}
+.tp-import-badge{background:var(--amber);color:var(--navy);font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px;white-space:nowrap;letter-spacing:.04em}
+
+/* ── Asset sub-section ── */
+.asset-sub{background:var(--slate-50);border:1px solid var(--slate-100);border-radius:var(--radius-md);padding:12px 14px;margin-bottom:10px}
+.asset-sub-title{font-size:10px;font-weight:700;color:var(--slate-500);text-transform:uppercase;letter-spacing:.07em;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.asset-sub-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.asset-total-row{display:flex;align-items:center;gap:12px;margin-top:10px;padding-top:10px;border-top:1px dashed var(--slate-200)}
+.asset-total-label{font-size:11px;font-weight:600;color:var(--slate-600);flex:1}
+.asset-total-value{font-size:14px;font-weight:700;font-family:var(--font-mono);color:var(--navy)}
+
+/* ── TP derived row ── */
+.tp-derived-row{display:flex;align-items:center;gap:12px;margin-top:10px;padding:8px 12px;background:var(--amber-light);border-radius:var(--radius-md);border:1px solid #FDE68A}
+.tp-derived-label{font-size:11px;font-weight:600;color:var(--amber-dark);flex:1}
+.tp-derived-value{font-size:14px;font-weight:700;font-family:var(--font-mono);color:var(--amber-dark)}
+
+/* ── Tier chip ── */
+.tier-chip{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:700;letter-spacing:.04em}
+.tier-chip.t1{background:#D1FAE5;color:#065F46}
+.tier-chip.t2{background:#DBEAFE;color:#1E40AF}
+.tier-chip.t3{background:#FEE2E2;color:#991B1B}
+
+/* ── Info tooltip ── */
+.info-icon{display:inline-flex;align-items:center;justify-content:center;width:14px;height:14px;border-radius:50%;background:var(--slate-200);color:var(--slate-500);font-size:9px;font-weight:700;cursor:help;flex-shrink:0;margin-left:3px;vertical-align:middle}
+.info-icon:hover{background:var(--navy);color:#fff}
+
+/* ── Derived sum field ── */
+.derived-sum{padding:7px 10px;font-size:13px;font-family:var(--font-mono);border:1.5px dashed var(--amber);border-radius:var(--radius-md);background:var(--amber-light);color:var(--amber-dark);font-weight:600;width:100%}
+
 /* ── Step badge ── */
 .step-badge{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;background:var(--navy);color:#fff;border-radius:50%;font-size:11px;font-weight:700;margin-right:6px;flex-shrink:0}
 
@@ -278,6 +312,202 @@ html,body{min-height:100%;background:var(--slate-50);color:var(--slate-800);font
     </div>
   </div>
 
+  <!-- ══ ASSETS ══ -->
+  <div class="sec-hd">
+    <div class="sec-hd-line" style="background:var(--teal)"></div>
+    <div class="sec-hd-text">Solvency II Balance Sheet — Assets</div>
+    <div class="sec-hd-note">Art. 75 Dir. 2009/138/EC · Prudent person principle</div>
+  </div>
+  <div class="card">
+    <div class="submod-note" style="border-left-color:var(--teal)">Assets are valued at market value (quoted prices) or mark-to-model where no active market exists. Reinsurance recoverables are shown gross (adjusted for expected default). Participations = ≥20% voting rights, valued market-consistently. Total assets feed into own funds = Assets − Technical Provisions.</div>
+
+    <!-- Investments -->
+    <div class="asset-sub">
+      <div class="asset-sub-title"><span class="asset-sub-dot" style="background:#1E3F6B"></span>A1 — Investments (Art. 132 — Prudent Person Principle)</div>
+      <div class="input-grid">
+        <div class="input-group"><label>Government bonds <span class="info-icon" title="Quoted market price; risk-free or near risk-free. Used as basis for risk-free yield curve.">i</span> (£m)</label><input type="number" id="ast_govbond" value="1200" min="0" oninput="liveAssets()"></div>
+        <div class="input-group"><label>Corporate bonds <span class="info-icon" title="Quoted price. Spread = default risk premium + illiquidity premium. Matching/volatility adjustment may apply.">i</span> (£m)</label><input type="number" id="ast_corpbond" value="800" min="0" oninput="liveAssets()"></div>
+        <div class="input-group"><label>Equities — listed <span class="info-icon" title="Quoted market price. Subject to equity stress (type 1) under market risk SCR.">i</span> (£m)</label><input type="number" id="ast_eq_listed" value="300" min="0" oninput="liveAssets()"></div>
+        <div class="input-group"><label>Equities — unlisted / other <span class="info-icon" title="Mark-to-model. Subject to equity stress (type 2 / other) under market risk SCR.">i</span> (£m)</label><input type="number" id="ast_eq_other" value="50" min="0" oninput="liveAssets()"></div>
+        <div class="input-group"><label>Property <span class="info-icon" title="Mark-to-model; valued at market value. Subject to property stress module.">i</span> (£m)</label><input type="number" id="ast_property" value="200" min="0" oninput="liveAssets()"></div>
+        <div class="input-group"><label>Collective investment undertakings <span class="info-icon" title="Look-through to underlying assets required where possible (Art. 84 Del. Reg.).">i</span> (£m)</label><input type="number" id="ast_ciu" value="100" min="0" oninput="liveAssets()"></div>
+        <div class="input-group"><label>Derivatives <span class="info-icon" title="Only for risk reduction or efficient portfolio management (Art. 132(4)). Mark-to-model if unquoted.">i</span> (£m)</label><input type="number" id="ast_deriv" value="20" min="0" oninput="liveAssets()"></div>
+        <div class="input-group"><label>Deposits &amp; cash <span class="info-icon" title="Bank deposits and cash equivalents. Subject to counterparty default (Type 1) module.">i</span> (£m)</label><input type="number" id="ast_cash" value="150" min="0" oninput="liveAssets()"></div>
+        <div class="input-group"><label>Other investments <span class="info-icon" title="Infrastructure, private debt, etc. APRA/PPP applies; must be able to manage non-standard assets before investing.">i</span> (£m)</label><input type="number" id="ast_other_inv" value="30" min="0" oninput="liveAssets()"></div>
+      </div>
+      <div class="asset-total-row">
+        <span class="asset-total-label">A1 Total investments</span>
+        <span class="asset-total-value" id="tot_investments">£2,850.0m</span>
+      </div>
+    </div>
+
+    <!-- Reinsurance recoverables -->
+    <div class="asset-sub">
+      <div class="asset-sub-title"><span class="asset-sub-dot" style="background:var(--teal)"></span>A2 — Reinsurance recoverables (gross asset, net of expected default)</div>
+      <div class="input-grid">
+        <div class="input-group"><label>RI recoverable — SLT life/health <span class="info-icon" title="Gross RI recoverable on long-term (SLT) contracts. Must be adjusted for expected loss due to reinsurer default using PD × LGD.">i</span> (£m)</label><input type="number" id="ast_ri_slt" value="250" min="0" oninput="liveAssets()"></div>
+        <div class="input-group"><label>RI recoverable — Non-SLT health <span class="info-icon" title="Gross RI recoverable on short-term (Non-SLT / PMI) contracts. Credit risk adjustment for reinsurer default applies.">i</span> (£m)</label><input type="number" id="ast_ri_nslt" value="40" min="0" oninput="liveAssets()"></div>
+        <div class="input-group"><label>Expected default adjustment <span class="info-icon" title="Downward adjustment to RI asset for probability of reinsurer default (PD × LGD). Usually small for highly-rated reinsurers; enters counterparty default SCR module.">i</span> (£m, negative)</label><input type="number" id="ast_ri_default" value="-8" oninput="liveAssets()"></div>
+      </div>
+      <div class="asset-total-row">
+        <span class="asset-total-label">A2 Net reinsurance recoverables</span>
+        <span class="asset-total-value" id="tot_ri">£282.0m</span>
+      </div>
+    </div>
+
+    <!-- Participations -->
+    <div class="asset-sub">
+      <div class="asset-sub-title"><span class="asset-sub-dot" style="background:#7F77DD"></span>A3 — Participations (≥ 20% voting rights; Art. 13(20) Dir. 2009/138/EC)</div>
+      <div class="input-grid">
+        <div class="input-group"><label>Related insurance undertakings <span class="info-icon" title="Market-consistent value of insurance subsidiaries / associates with ≥20% voting rights. Subject to group deductions if double use of capital.">i</span> (£m)</label><input type="number" id="ast_part_ins" value="0" min="0" oninput="liveAssets()"></div>
+        <div class="input-group"><label>Other participations (e.g. outsourcing subs) <span class="info-icon" title="Non-insurance entities (e.g. IT outsourcing subsidiary). Valued mark-to-market or mark-to-model.">i</span> (£m)</label><input type="number" id="ast_part_other" value="0" min="0" oninput="liveAssets()"></div>
+      </div>
+      <div class="asset-total-row">
+        <span class="asset-total-label">A3 Total participations</span>
+        <span class="asset-total-value" id="tot_participations">£0.0m</span>
+      </div>
+    </div>
+
+    <!-- Other assets -->
+    <div class="asset-sub">
+      <div class="asset-sub-title"><span class="asset-sub-dot" style="background:var(--slate-400)"></span>A4 — Other balance sheet assets</div>
+      <div class="input-grid">
+        <div class="input-group"><label>Deferred tax asset <span class="info-icon" title="Deferred tax assets arise where carrying value of assets < tax base. Recognised only to extent of expected future taxable profits (Adj_DT in SCR).">i</span> (£m)</label><input type="number" id="ast_dta" value="0" min="0" oninput="liveAssets()"></div>
+        <div class="input-group"><label>Receivables &amp; other assets <span class="info-icon" title="Premium receivables, intermediary balances, accrued income, etc. Type 2 counterparty default exposure.">i</span> (£m)</label><input type="number" id="ast_receivables" value="80" min="0" oninput="liveAssets()"></div>
+        <div class="input-group"><label>Intangible assets (at Solvency II value) <span class="info-icon" title="Goodwill = zero under SII. Other intangibles recognised only if marketable separately and measurable reliably. Subject to intangibles SCR module.">i</span> (£m)</label><input type="number" id="ast_intangibles" value="0" min="0" oninput="liveAssets()"></div>
+      </div>
+      <div class="asset-total-row">
+        <span class="asset-total-label">A4 Other assets</span>
+        <span class="asset-total-value" id="tot_other_assets">£80.0m</span>
+      </div>
+    </div>
+
+    <!-- Grand total assets -->
+    <div style="background:var(--navy);border-radius:var(--radius-md);padding:12px 16px;display:flex;align-items:center;gap:12px;margin-top:4px">
+      <span style="color:var(--slate-300);font-size:12px;font-weight:600;flex:1">Total Solvency II Assets (A1+A2+A3+A4)</span>
+      <span style="color:#fff;font-size:18px;font-weight:700;font-family:var(--font-mono)" id="tot_assets_grand">£3,212.0m</span>
+    </div>
+  </div>
+
+  <!-- ══ TECHNICAL PROVISIONS ══ -->
+  <div class="sec-hd">
+    <div class="sec-hd-line" style="background:var(--teal)"></div>
+    <div class="sec-hd-text">Technical Provisions — from external TP / BEL tool</div>
+    <div class="sec-hd-note">Art. 76–86 Dir. 2009/138/EC · BEL + Risk Margin · Market-consistent</div>
+  </div>
+  <div class="card">
+
+    <div class="tp-import-banner">
+      <div class="tp-import-icon">
+        <svg width="18" height="18" fill="none" stroke="var(--amber)" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+      </div>
+      <div class="tp-import-text">
+        <div class="tp-import-title">Paste outputs from your external TP (BEL + RM) tool below</div>
+        <div class="tp-import-sub">BEL = PV of best-estimate future cashflows discounted at EIOPA risk-free curve (± matching / volatility adjustment). Risk Margin = cost-of-capital method at 6% p.a. over run-off SCR. TP = BEL + RM. Negative BEL is permitted.</div>
+      </div>
+      <div class="tp-import-badge">External tool</div>
+    </div>
+
+    <!-- SLT Health TP -->
+    <div class="asset-sub" style="border-color:var(--teal);border-left:3px solid var(--teal)">
+      <div class="asset-sub-title"><span class="asset-sub-dot" style="background:var(--teal)"></span>SLT Health — Long-term (IP, stand-alone CI, LTC) — Art. 77 · Similar-to-Life</div>
+      <div class="input-grid">
+        <div class="input-group">
+          <label>BEL — SLT disability/morbidity <span class="info-icon" title="Best-estimate liability for income protection and disability claims: PV(future benefits + expenses − future premiums) discounted at EIOPA risk-free curve. Includes IBNR, active life reserves and disabled life reserves.">i</span> (£m)</label>
+          <input type="number" id="bel_slt_disab" value="2800" oninput="liveTP()">
+        </div>
+        <div class="input-group">
+          <label>BEL — SLT mortality / CI <span class="info-icon" title="Best-estimate liability for stand-alone critical illness and mortality cover. Accelerated CI is classified as life (not SLT health).">i</span> (£m)</label>
+          <input type="number" id="bel_slt_mort" value="600" oninput="liveTP()">
+        </div>
+        <div class="input-group">
+          <label>BEL — SLT longevity / LTC annuities <span class="info-icon" title="Best-estimate for long-term care annuities and longevity-exposed liabilities. Illiquidity premium / matching adjustment may be applicable.">i</span> (£m)</label>
+          <input type="number" id="bel_slt_long" value="300" oninput="liveTP()">
+        </div>
+        <div class="input-group">
+          <label>BEL — SLT lapse &amp; expenses <span class="info-icon" title="Best-estimate of lapse and expense components. Future expenses must include overhead allocation + inflation. Closure reserve not required under SII.">i</span> (£m)</label>
+          <input type="number" id="bel_slt_other" value="150" oninput="liveTP()">
+        </div>
+        <div class="input-group">
+          <label>Risk Margin — SLT health <span class="info-icon" title="Cost-of-capital risk margin for SLT health: RM = Σ_t [ 6% × SCR_non-hedgeable(t) / (1+r_t)^t ]. Covers insurance risk, reinsurance credit risk, operational risk, residual market risk.">i</span> (£m)</label>
+          <input type="number" id="rm_slt" value="180" min="0" oninput="liveTP()">
+        </div>
+        <div class="input-group">
+          <label>Discount rate adjustment applied? <span class="info-icon" title="Select MA if matching adjustment approved; VA if volatility adjustment applied; neither if standard risk-free curve only.">i</span></label>
+          <select id="dr_adj_slt" style="padding:7px 10px;font-size:12px;border:1.5px solid var(--slate-200);border-radius:var(--radius-md);background:#fff;color:var(--slate-800);font-family:var(--font-body)">
+            <option value="none">None (risk-free curve only)</option>
+            <option value="ma">Matching Adjustment (MA)</option>
+            <option value="va">Volatility Adjustment (VA)</option>
+          </select>
+        </div>
+      </div>
+      <div class="asset-total-row">
+        <span class="asset-total-label">SLT BEL (sum of components)</span>
+        <span class="asset-total-value" id="tot_bel_slt">£3,850.0m</span>
+      </div>
+      <div class="tp-derived-row" style="margin-top:8px">
+        <span class="tp-derived-label">TP — SLT health (BEL + RM)</span>
+        <span class="tp-derived-value" id="tot_tp_slt">£4,030.0m</span>
+      </div>
+    </div>
+
+    <!-- Non-SLT Health TP -->
+    <div class="asset-sub" style="border-color:#7F77DD;border-left:3px solid #7F77DD;margin-top:12px">
+      <div class="asset-sub-title"><span class="asset-sub-dot" style="background:#7F77DD"></span>Non-SLT Health — Short-term / annually renewable (PMI) — Non-life techniques</div>
+      <div class="submod-note" style="margin-bottom:12px">Under Solvency II, PMI is classified Non-SLT. Contract boundary = end of policy year. UPR/URR approach replaced by BEL (claims reserve + premium provision). IBNR and IBNER included in BEL.</div>
+      <div class="input-grid">
+        <div class="input-group">
+          <label>BEL — claims provisions (IBNR + O/S) <span class="info-icon" title="Best-estimate of outstanding claims, IBNR and IBNER for PMI. Chain-ladder / BF methods output to be pasted here.">i</span> (£m)</label>
+          <input type="number" id="bel_nslt_claims" value="180" min="0" oninput="liveTP()">
+        </div>
+        <div class="input-group">
+          <label>BEL — premium provision (URR equivalent) <span class="info-icon" title="Best-estimate of future cashflows on unexpired risk (equivalent of URR). Can be negative if premiums are adequate.">i</span> (£m)</label>
+          <input type="number" id="bel_nslt_prem" value="60" oninput="liveTP()">
+        </div>
+        <div class="input-group">
+          <label>Risk Margin — Non-SLT health <span class="info-icon" title="Cost-of-capital risk margin for Non-SLT: typically smaller and shorter-duration than SLT. Diversification across lines permitted up to legal entity level.">i</span> (£m)</label>
+          <input type="number" id="rm_nslt" value="15" min="0" oninput="liveTP()">
+        </div>
+        <div class="input-group">
+          <label>Discount rate adjustment applied? <span class="info-icon" title="Volatility adjustment may apply to Non-SLT. Matching adjustment generally not available due to short duration and withdrawal risk.">i</span></label>
+          <select id="dr_adj_nslt" style="padding:7px 10px;font-size:12px;border:1.5px solid var(--slate-200);border-radius:var(--radius-md);background:#fff;color:var(--slate-800);font-family:var(--font-body)">
+            <option value="none">None (risk-free curve only)</option>
+            <option value="va">Volatility Adjustment (VA)</option>
+          </select>
+        </div>
+      </div>
+      <div class="asset-total-row">
+        <span class="asset-total-label">Non-SLT BEL (claims + premium provision)</span>
+        <span class="asset-total-value" id="tot_bel_nslt">£240.0m</span>
+      </div>
+      <div class="tp-derived-row" style="margin-top:8px">
+        <span class="tp-derived-label">TP — Non-SLT health (BEL + RM)</span>
+        <span class="tp-derived-value" id="tot_tp_nslt">£255.0m</span>
+      </div>
+    </div>
+
+    <!-- TP Grand total -->
+    <div style="background:linear-gradient(135deg,var(--navy-mid),var(--navy-light));border-radius:var(--radius-md);padding:14px 16px;margin-top:12px">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+        <span style="color:var(--slate-300);font-size:11px;font-weight:600;flex:1">Total BEL (SLT + Non-SLT)</span>
+        <span style="color:var(--amber-light);font-size:14px;font-weight:700;font-family:var(--font-mono)" id="tot_bel_all">£4,090.0m</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+        <span style="color:var(--slate-300);font-size:11px;font-weight:600;flex:1">Total Risk Margin (SLT + Non-SLT)</span>
+        <span style="color:var(--amber-light);font-size:14px;font-weight:700;font-family:var(--font-mono)" id="tot_rm_all">£195.0m</span>
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;border-top:1px solid rgba(255,255,255,.15);padding-top:10px">
+        <span style="color:#fff;font-size:13px;font-weight:700;flex:1">Total Technical Provisions (BEL + RM)</span>
+        <span style="color:#fff;font-size:20px;font-weight:700;font-family:var(--font-mono)" id="tot_tp_all">£4,285.0m</span>
+      </div>
+    </div>
+
+    <!-- Own funds bridge note -->
+    <div class="note-box" style="margin-top:14px">
+      <strong>Own funds = Total Assets − Total Technical Provisions − Other liabilities.</strong> The basic own funds figure flows from the balance sheet. The tiered breakdown below lets you classify available own funds by quality. Note: Goodwill = £0 under Solvency II; deferred tax assets are only recognised to the extent of expected future taxable profits.
+    </div>
+  </div>
+
   <!-- Operational risk -->
   <div class="sec-hd">
     <div class="sec-hd-line"></div>
@@ -285,11 +515,18 @@ html,body{min-height:100%;background:var(--slate-50);color:var(--slate-800);font
     <div class="sec-hd-note">Higher of 3% × premiums or 0.45%/0.30% × TPs</div>
   </div>
   <div class="card">
+    <div class="submod-note">Earned premiums and total TPs feed directly from the sections above (auto-derived). Override only if your earned premium differs from written premium (e.g. mid-year growth). TPs used are total BEL+RM for each segment.</div>
     <div class="input-grid">
       <div class="input-group"><label>Earned premiums — SLT / life (£m)</label><input type="number" id="prem_life" value="500" min="0"></div>
       <div class="input-group"><label>Earned premiums — Non-SLT / non-life (£m)</label><input type="number" id="prem_nl" value="0" min="0"></div>
-      <div class="input-group"><label>Technical provisions — SLT / life (£m)</label><input type="number" id="tp_life" value="4000" min="0"></div>
-      <div class="input-group"><label>Technical provisions — Non-SLT / non-life (£m)</label><input type="number" id="tp_nl" value="0" min="0"></div>
+      <div class="input-group">
+        <label>TP — SLT / life (auto from TP tool, £m)</label>
+        <input type="number" id="tp_life" class="derived" readonly tabindex="-1">
+      </div>
+      <div class="input-group">
+        <label>TP — Non-SLT / non-life (auto from TP tool, £m)</label>
+        <input type="number" id="tp_nl" class="derived" readonly tabindex="-1">
+      </div>
     </div>
   </div>
 
@@ -318,13 +555,63 @@ html,body{min-height:100%;background:var(--slate-50);color:var(--slate-800);font
   <!-- Capital resources -->
   <div class="sec-hd">
     <div class="sec-hd-line"></div>
-    <div class="sec-hd-text">Capital resources — own funds</div>
+    <div class="sec-hd-text">Capital resources — own funds (tiered)</div>
   </div>
   <div class="card">
-    <div class="input-grid">
-      <div class="input-group"><label>Tier 1 — basic own funds (£m)</label><input type="number" id="t1" value="1800" min="0"></div>
-      <div class="input-group"><label>Tier 2 — own funds (£m)</label><input type="number" id="t2" value="300" min="0"></div>
-      <div class="input-group"><label>Tier 3 — own funds (£m)</label><input type="number" id="t3" value="80" min="0"></div>
+    <div class="submod-note">Own funds = Basic Own Funds + Ancillary Own Funds (subject to prior supervisory approval). Basic own funds are tiered by loss-absorbency and permanence. <strong>SCR: ≥50% Tier 1, &lt;15% Tier 3. MCR: ≥80% Tier 1, 0% Tier 3.</strong></div>
+
+    <!-- Tier 1 -->
+    <div class="asset-sub" style="border-left:3px solid var(--green)">
+      <div class="asset-sub-title"><span class="asset-sub-dot" style="background:var(--green)"></span>Tier 1 — highest quality (most loss-absorbent &amp; permanent)</div>
+      <div class="submod-note" style="margin-bottom:10px">Paid-up ordinary share capital; retained earnings; share premium account; reconciliation reserve (excess of SII assets over SII liabilities less other Tier 1 items). Freely available to absorb losses; no maturity; no obligation to pay distributions.</div>
+      <div class="input-grid">
+        <div class="input-group"><label>Paid-up ordinary share capital <span class="info-icon" title="Fully paid ordinary shares. The most pure form of Tier 1. Ranks last in wind-up.">i</span> (£m)</label><input type="number" id="t1_shares" value="200" min="0" oninput="liveOF()"></div>
+        <div class="input-group"><label>Share premium account <span class="info-icon" title="Premium above par value received on share issuance.">i</span> (£m)</label><input type="number" id="t1_shareprem" value="300" min="0" oninput="liveOF()"></div>
+        <div class="input-group"><label>Reconciliation reserve <span class="info-icon" title="SII excess of assets over liabilities less other Tier 1 items. Captures the difference between SII balance sheet and GAAP balance sheet.">i</span> (£m)</label><input type="number" id="t1_recon" value="1000" min="0" oninput="liveOF()"></div>
+        <div class="input-group"><label>Retained earnings &amp; other reserves <span class="info-icon" title="Accumulated retained profits not yet classified elsewhere.">i</span> (£m)</label><input type="number" id="t1_retained" value="200" min="0" oninput="liveOF()"></div>
+        <div class="input-group"><label>Tier 1 subordinated debt (restricted T1) <span class="info-icon" title="Subordinated liabilities that are sufficiently subordinated, permanent and loss-absorbent to qualify as restricted Tier 1 (e.g. perpetual contingent convertibles). Capped at 20% of total Tier 1.">i</span> (£m)</label><input type="number" id="t1_subdebt" value="100" min="0" oninput="liveOF()"></div>
+      </div>
+      <div class="asset-total-row">
+        <span class="asset-total-label">Total Tier 1</span>
+        <span class="asset-total-value" id="tot_t1">£1,800.0m</span>
+      </div>
+    </div>
+
+    <!-- Tier 2 -->
+    <div class="asset-sub" style="border-left:3px solid #3B82F6;margin-top:10px">
+      <div class="asset-sub-title"><span class="asset-sub-dot" style="background:#3B82F6"></span>Tier 2 — basic &amp; ancillary own funds</div>
+      <div class="submod-note" style="margin-bottom:10px">Subordinated liabilities with maturity ≥10 years; Tier 2 preference shares; callable instruments. Less loss-absorbent than Tier 1 but still substantial. Ancillary Tier 2 (e.g. letters of credit) requires prior supervisory approval.</div>
+      <div class="input-grid">
+        <div class="input-group"><label>Tier 2 subordinated debt <span class="info-icon" title="Dated subordinated debt with original maturity ≥10 years. Must rank after policyholder claims in wind-up.">i</span> (£m)</label><input type="number" id="t2_subdebt" value="200" min="0" oninput="liveOF()"></div>
+        <div class="input-group"><label>Tier 2 preference shares <span class="info-icon" title="Preference shares with fixed dividend; loss-absorbent but with dividend obligation. Classified Tier 2 if terms preclude Tier 1.">i</span> (£m)</label><input type="number" id="t2_prefs" value="50" min="0" oninput="liveOF()"></div>
+        <div class="input-group"><label>Ancillary Tier 2 (approved) <span class="info-icon" title="Callable capital, letters of credit, guarantees — supervisory approval required before recognition. Represents capital that could be called in adverse circumstances.">i</span> (£m)</label><input type="number" id="t2_ancillary" value="50" min="0" oninput="liveOF()"></div>
+      </div>
+      <div class="asset-total-row">
+        <span class="asset-total-label">Total Tier 2</span>
+        <span class="asset-total-value" id="tot_t2">£300.0m</span>
+      </div>
+    </div>
+
+    <!-- Tier 3 -->
+    <div class="asset-sub" style="border-left:3px solid var(--red);margin-top:10px">
+      <div class="asset-sub-title"><span class="asset-sub-dot" style="background:var(--red)"></span>Tier 3 — lowest quality (deferred tax &amp; short-dated subordinated items)</div>
+      <div class="submod-note" style="margin-bottom:10px">Deferred tax assets (net); subordinated liabilities not qualifying for Tier 1/2. Limited to &lt;15% of SCR; <strong>cannot</strong> be used to cover MCR. Must be basic own funds.</div>
+      <div class="input-grid">
+        <div class="input-group"><label>Net deferred tax asset <span class="info-icon" title="Net deferred tax assets arising from temporary differences. Recognised only if probable that sufficient future taxable profit will be available. Loss-absorbent only via Adj_DT in SCR.">i</span> (£m)</label><input type="number" id="t3_dta" value="40" min="0" oninput="liveOF()"></div>
+        <div class="input-group"><label>Other Tier 3 subordinated items <span class="info-icon" title="Subordinated liabilities that do not meet Tier 1 or Tier 2 criteria (e.g. maturity < 5 years, or with incentives to redeem). Very limited capital credit.">i</span> (£m)</label><input type="number" id="t3_other" value="40" min="0" oninput="liveOF()"></div>
+      </div>
+      <div class="asset-total-row">
+        <span class="asset-total-label">Total Tier 3</span>
+        <span class="asset-total-value" id="tot_t3">£80.0m</span>
+      </div>
+    </div>
+
+    <!-- Summary -->
+    <div style="background:var(--navy);border-radius:var(--radius-md);padding:12px 16px;margin-top:12px;display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:12px;align-items:center">
+      <div><div style="color:var(--slate-400);font-size:10px;font-weight:600;text-transform:uppercase;margin-bottom:3px">Tier 1</div><div style="color:#fff;font-size:16px;font-weight:700;font-family:var(--font-mono)" id="of_t1_disp">£1,800m</div></div>
+      <div><div style="color:var(--slate-400);font-size:10px;font-weight:600;text-transform:uppercase;margin-bottom:3px">Tier 2</div><div style="color:#fff;font-size:16px;font-weight:700;font-family:var(--font-mono)" id="of_t2_disp">£300m</div></div>
+      <div><div style="color:var(--slate-400);font-size:10px;font-weight:600;text-transform:uppercase;margin-bottom:3px">Tier 3</div><div style="color:#fff;font-size:16px;font-weight:700;font-family:var(--font-mono)" id="of_t3_disp">£80m</div></div>
+      <div><div style="color:var(--amber);font-size:10px;font-weight:600;text-transform:uppercase;margin-bottom:3px">Total Own Funds</div><div style="color:var(--amber);font-size:16px;font-weight:700;font-family:var(--font-mono)" id="of_total_disp">£2,180m</div></div>
     </div>
   </div>
 
@@ -449,8 +736,69 @@ function showTab(id){
 
 function v(id){return parseFloat(document.getElementById(id).value)||0;}
 function fmt(n){return n.toFixed(1);}
+function fmtM(n){return '£'+n.toFixed(1)+'m';}
 
 let chartInst=null;
+
+// ── Live asset totals ──
+function liveAssets(){
+  const inv=v('ast_govbond')+v('ast_corpbond')+v('ast_eq_listed')+v('ast_eq_other')+v('ast_property')+v('ast_ciu')+v('ast_deriv')+v('ast_cash')+v('ast_other_inv');
+  const ri=v('ast_ri_slt')+v('ast_ri_nslt')+v('ast_ri_default');
+  const part=v('ast_part_ins')+v('ast_part_other');
+  const other=v('ast_dta')+v('ast_receivables')+v('ast_intangibles');
+  const grand=inv+ri+part+other;
+  document.getElementById('tot_investments').textContent=fmtM(inv);
+  document.getElementById('tot_ri').textContent=fmtM(ri);
+  document.getElementById('tot_participations').textContent=fmtM(part);
+  document.getElementById('tot_other_assets').textContent=fmtM(other);
+  document.getElementById('tot_assets_grand').textContent=fmtM(grand);
+}
+
+// ── Live TP totals — also drives op-risk tp_life / tp_nl readonly fields ──
+function liveTP(){
+  const belSlt=v('bel_slt_disab')+v('bel_slt_mort')+v('bel_slt_long')+v('bel_slt_other');
+  const rmSlt=v('rm_slt');
+  const tpSlt=belSlt+rmSlt;
+
+  const belNslt=v('bel_nslt_claims')+v('bel_nslt_prem');
+  const rmNslt=v('rm_nslt');
+  const tpNslt=belNslt+rmNslt;
+
+  document.getElementById('tot_bel_slt').textContent=fmtM(belSlt);
+  document.getElementById('tot_tp_slt').textContent=fmtM(tpSlt);
+  document.getElementById('tot_bel_nslt').textContent=fmtM(belNslt);
+  document.getElementById('tot_tp_nslt').textContent=fmtM(tpNslt);
+  document.getElementById('tot_bel_all').textContent=fmtM(belSlt+belNslt);
+  document.getElementById('tot_rm_all').textContent=fmtM(rmSlt+rmNslt);
+  document.getElementById('tot_tp_all').textContent=fmtM(tpSlt+tpNslt);
+
+  // Push to op-risk derived fields
+  document.getElementById('tp_life').value=tpSlt.toFixed(1);
+  document.getElementById('tp_nl').value=tpNslt.toFixed(1);
+}
+
+// ── Live own-funds totals ──
+function liveOF(){
+  const t1=v('t1_shares')+v('t1_shareprem')+v('t1_recon')+v('t1_retained')+v('t1_subdebt');
+  const t2=v('t2_subdebt')+v('t2_prefs')+v('t2_ancillary');
+  const t3=v('t3_dta')+v('t3_other');
+  document.getElementById('tot_t1').textContent=fmtM(t1);
+  document.getElementById('tot_t2').textContent=fmtM(t2);
+  document.getElementById('tot_t3').textContent=fmtM(t3);
+  document.getElementById('of_t1_disp').textContent='£'+t1.toFixed(0)+'m';
+  document.getElementById('of_t2_disp').textContent='£'+t2.toFixed(0)+'m';
+  document.getElementById('of_t3_disp').textContent='£'+t3.toFixed(0)+'m';
+  document.getElementById('of_total_disp').textContent='£'+(t1+t2+t3).toFixed(0)+'m';
+}
+
+// Aggregate Tier helpers — used by calculate()
+function getT1(){return v('t1_shares')+v('t1_shareprem')+v('t1_recon')+v('t1_retained')+v('t1_subdebt');}
+function getT2(){return v('t2_subdebt')+v('t2_prefs')+v('t2_ancillary');}
+function getT3(){return v('t3_dta')+v('t3_other');}
+// TP helpers
+function getTPLife(){return (v('bel_slt_disab')+v('bel_slt_mort')+v('bel_slt_long')+v('bel_slt_other'))+v('rm_slt');}
+function getTPNl(){return (v('bel_nslt_claims')+v('bel_nslt_prem'))+v('rm_nslt');}
+
 
 function aggCorr(vals,corr){
   let sum=0;
@@ -485,10 +833,9 @@ function calculate(){
   // ── Non-SLT sub-modules ──
   const nslt_pr=Math.max(0,v('nslt_premres'));
   const nslt_lap=Math.max(0,v('nslt_lapse'));
-  // Correlation between premium/reserve risk and lapse = 0
   const nslt=Math.sqrt(nslt_pr*nslt_pr+nslt_lap*nslt_lap);
 
-  // Update derived fields
+  // Update derived SLT/Non-SLT fields
   document.getElementById('scr_slt').value=slt.toFixed(1);
   document.getElementById('scr_nonslt').value=nslt.toFixed(1);
 
@@ -514,8 +861,12 @@ function calculate(){
   const bscrBase=aggCorr([mkt,def,life,scr_health,nl],bscrCorr);
   const bscr=Math.sqrt(Math.max(0,bscrBase*bscrBase+intg*intg));
 
-  // ── Op risk ──
-  const premLife=v('prem_life'),premNl=v('prem_nl'),tpLife=v('tp_life'),tpNl=v('tp_nl');
+  // ── Op risk — use TP values derived from BEL+RM tool ──
+  const premLife=v('prem_life'),premNl=v('prem_nl');
+  const tpLife=getTPLife(), tpNl=getTPNl();
+  // keep readonly fields synced
+  document.getElementById('tp_life').value=tpLife.toFixed(1);
+  document.getElementById('tp_nl').value=tpNl.toFixed(1);
   const op_prem=0.03*premLife+0.03*premNl;
   const op_tp=0.0045*tpLife+0.003*tpNl;
   const scr_op=Math.max(op_prem,op_tp);
@@ -531,8 +882,8 @@ function calculate(){
   const mcr=Math.max(mcr_floor,Math.min(mcr_cap,mcr_linear));
   const mcr_binding=mcr===mcr_floor?'Floor (25% × SCR)':mcr===mcr_cap?'Cap (45% × SCR)':'Linear formula';
 
-  // ── Own funds ──
-  const t1=v('t1'),t2=v('t2'),t3=v('t3');
+  // ── Own funds — aggregated from tiered inputs ──
+  const t1=getT1(), t2=getT2(), t3=getT3();
   const totalOF=t1+t2+t3;
   const surplus=totalOF-scr;
 
@@ -680,6 +1031,9 @@ function calculate(){
   setTimeout(()=>showTab('summary'),50);
 }
 
+liveAssets();
+liveTP();
+liveOF();
 calculate();
 </script>
 </body>
