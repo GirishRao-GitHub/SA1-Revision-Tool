@@ -185,7 +185,7 @@ html,body{min-height:100%;background:var(--slate-50);color:var(--slate-800);font
     <div class="app-header-top">
       <div>
         <div class="header-title">Solvency II — Pillar I Aggregation Engine <span style="font-size:13px;color:var(--amber);font-weight:400">· Enhanced with Full Balance Sheet</span></div>
-        <div class="header-sub">Health &amp; Care insurer (IP, CI, LTCI, PMI — group &amp; individual). Balance sheet tab shows base and stressed values side-by-side. Stressed balance sheet feeds all SCR, MCR and capital calculations. SA1 / Ch 11–12.</div>
+        <div class="header-sub">Mid-sized Health &amp; Care insurer — IP dominant (IP, CI, LTCI, PMI). Base assets £1,075m · SLT TPs £450m · Total own funds £509m · SCR ~£214m · SCR ratio ~160%. Bugs fixed: Art.226 intangibles (additive), Art.218 SCR_op cap, Art.82 MCR T3 eligibility.</div>
       </div>
       <div class="header-badge">SA1 / Ch 12</div>
     </div>
@@ -224,45 +224,45 @@ html,body{min-height:100%;background:var(--slate-50);color:var(--slate-800);font
           <tbody>
             <tr class="section-hd"><td colspan="3">A1 — Investments (Prudent Person Principle)</td></tr>
             <tr><td class="indent">Government bonds</td>
-              <td><input class="bs-input" id="b_govbond" type="number" value="1200" oninput="liveBS()"></td>
-              <td><input class="bs-input stress-input" id="s_govbond" type="number" value="1164" oninput="liveBS()"></td></tr>
+              <td><input class="bs-input" id="b_govbond" type="number" value="400" oninput="liveBS()"></td>
+              <td><input class="bs-input stress-input" id="s_govbond" type="number" value="376" oninput="liveBS()"></td></tr>
             <tr><td class="indent">Corporate bonds</td>
-              <td><input class="bs-input" id="b_corpbond" type="number" value="800" oninput="liveBS()"></td>
-              <td><input class="bs-input stress-input" id="s_corpbond" type="number" value="736" oninput="liveBS()"></td></tr>
+              <td><input class="bs-input" id="b_corpbond" type="number" value="250" oninput="liveBS()"></td>
+              <td><input class="bs-input stress-input" id="s_corpbond" type="number" value="213" oninput="liveBS()"></td></tr>
             <tr><td class="indent">Equities — listed</td>
-              <td><input class="bs-input" id="b_eq_listed" type="number" value="300" oninput="liveBS()"></td>
-              <td><input class="bs-input stress-input" id="s_eq_listed" type="number" value="219" oninput="liveBS()"></td></tr>
+              <td><input class="bs-input" id="b_eq_listed" type="number" value="80" oninput="liveBS()"></td>
+              <td><input class="bs-input stress-input" id="s_eq_listed" type="number" value="59" oninput="liveBS()"></td></tr>
             <tr><td class="indent">Equities — unlisted</td>
-              <td><input class="bs-input" id="b_eq_other" type="number" value="50" oninput="liveBS()"></td>
-              <td><input class="bs-input stress-input" id="s_eq_other" type="number" value="37" oninput="liveBS()"></td></tr>
+              <td><input class="bs-input" id="b_eq_other" type="number" value="20" oninput="liveBS()"></td>
+              <td><input class="bs-input stress-input" id="s_eq_other" type="number" value="15" oninput="liveBS()"></td></tr>
             <tr><td class="indent">Property</td>
-              <td><input class="bs-input" id="b_property" type="number" value="200" oninput="liveBS()"></td>
-              <td><input class="bs-input stress-input" id="s_property" type="number" value="175" oninput="liveBS()"></td></tr>
+              <td><input class="bs-input" id="b_property" type="number" value="60" oninput="liveBS()"></td>
+              <td><input class="bs-input stress-input" id="s_property" type="number" value="49" oninput="liveBS()"></td></tr>
             <tr><td class="indent">Collective investment undertakings</td>
-              <td><input class="bs-input" id="b_ciu" type="number" value="100" oninput="liveBS()"></td>
-              <td><input class="bs-input stress-input" id="s_ciu" type="number" value="90" oninput="liveBS()"></td></tr>
+              <td><input class="bs-input" id="b_ciu" type="number" value="40" oninput="liveBS()"></td>
+              <td><input class="bs-input stress-input" id="s_ciu" type="number" value="34" oninput="liveBS()"></td></tr>
             <tr><td class="indent">Derivatives (positive FV)</td>
-              <td><input class="bs-input" id="b_deriv" type="number" value="20" oninput="liveBS()"></td>
-              <td><input class="bs-input stress-input" id="s_deriv" type="number" value="18" oninput="liveBS()"></td></tr>
+              <td><input class="bs-input" id="b_deriv" type="number" value="5" oninput="liveBS()"></td>
+              <td><input class="bs-input stress-input" id="s_deriv" type="number" value="5" oninput="liveBS()"></td></tr>
             <tr><td class="indent">Deposits &amp; cash</td>
-              <td><input class="bs-input" id="b_cash" type="number" value="150" oninput="liveBS()"></td>
-              <td><input class="bs-input stress-input" id="s_cash" type="number" value="150" oninput="liveBS()"></td></tr>
+              <td><input class="bs-input" id="b_cash" type="number" value="80" oninput="liveBS()"></td>
+              <td><input class="bs-input stress-input" id="s_cash" type="number" value="80" oninput="liveBS()"></td></tr>
             <tr><td class="indent">Other investments</td>
-              <td><input class="bs-input" id="b_other_inv" type="number" value="30" oninput="liveBS()"></td>
-              <td><input class="bs-input stress-input" id="s_other_inv" type="number" value="30" oninput="liveBS()"></td></tr>
+              <td><input class="bs-input" id="b_other_inv" type="number" value="15" oninput="liveBS()"></td>
+              <td><input class="bs-input stress-input" id="s_other_inv" type="number" value="15" oninput="liveBS()"></td></tr>
             <tr class="subtotal"><td>A1 Total investments</td>
               <td id="tot_A1_base">—</td><td id="tot_A1_stress" class="stressed">—</td></tr>
 
             <tr class="section-hd"><td colspan="3">A2 — Reinsurance recoverables (gross, net of default adj)</td></tr>
             <tr><td class="indent">RI recoverable — SLT (IP/CI/LTCI) <span class="tag-lt">LT</span></td>
-              <td><input class="bs-input" id="b_ri_slt" type="number" value="250" oninput="liveBS()"></td>
-              <td><input class="bs-input stress-input" id="s_ri_slt" type="number" value="243" oninput="liveBS()"></td></tr>
+              <td><input class="bs-input" id="b_ri_slt" type="number" value="70" oninput="liveBS()"></td>
+              <td><input class="bs-input stress-input" id="s_ri_slt" type="number" value="68" oninput="liveBS()"></td></tr>
             <tr><td class="indent">RI recoverable — Non-SLT (PMI) <span class="tag-st">ST</span></td>
-              <td><input class="bs-input" id="b_ri_nslt" type="number" value="40" oninput="liveBS()"></td>
-              <td><input class="bs-input stress-input" id="s_ri_nslt" type="number" value="39" oninput="liveBS()"></td></tr>
+              <td><input class="bs-input" id="b_ri_nslt" type="number" value="15" oninput="liveBS()"></td>
+              <td><input class="bs-input stress-input" id="s_ri_nslt" type="number" value="15" oninput="liveBS()"></td></tr>
             <tr><td class="indent">Expected default adj (negative)</td>
-              <td><input class="bs-input" id="b_ri_default" type="number" value="-8" oninput="liveBS()"></td>
-              <td><input class="bs-input stress-input" id="s_ri_default" type="number" value="-9" oninput="liveBS()"></td></tr>
+              <td><input class="bs-input" id="b_ri_default" type="number" value="-2" oninput="liveBS()"></td>
+              <td><input class="bs-input stress-input" id="s_ri_default" type="number" value="-2.5" oninput="liveBS()"></td></tr>
             <tr class="subtotal"><td>A2 Net RI recoverables</td>
               <td id="tot_A2_base">—</td><td id="tot_A2_stress" class="stressed">—</td></tr>
 
@@ -278,11 +278,11 @@ html,body{min-height:100%;background:var(--slate-50);color:var(--slate-800);font
 
             <tr class="section-hd"><td colspan="3">A4 — Other assets</td></tr>
             <tr><td class="indent">Deferred tax asset</td>
-              <td><input class="bs-input" id="b_dta" type="number" value="40" oninput="liveBS()"></td>
-              <td><input class="bs-input stress-input" id="s_dta" type="number" value="55" oninput="liveBS()"></td></tr>
+              <td><input class="bs-input" id="b_dta" type="number" value="12" oninput="liveBS()"></td>
+              <td><input class="bs-input stress-input" id="s_dta" type="number" value="22" oninput="liveBS()"></td></tr>
             <tr><td class="indent">Receivables &amp; other</td>
-              <td><input class="bs-input" id="b_receivables" type="number" value="80" oninput="liveBS()"></td>
-              <td><input class="bs-input stress-input" id="s_receivables" type="number" value="80" oninput="liveBS()"></td></tr>
+              <td><input class="bs-input" id="b_receivables" type="number" value="30" oninput="liveBS()"></td>
+              <td><input class="bs-input stress-input" id="s_receivables" type="number" value="30" oninput="liveBS()"></td></tr>
             <tr><td class="indent">Intangible assets (nil under SII)</td>
               <td><input class="bs-input" id="b_intangibles" type="number" value="0" oninput="liveBS()"></td>
               <td><input class="bs-input stress-input" id="s_intangibles" type="number" value="0" oninput="liveBS()"></td></tr>
@@ -311,59 +311,59 @@ html,body{min-height:100%;background:var(--slate-50);color:var(--slate-800);font
           <tbody>
             <tr class="section-hd"><td colspan="3">Technical Provisions — Health SLT <span class="tag-lt">LT</span></td></tr>
             <tr><td class="indent">BEL — disability/morbidity (IP) <span class="tag-grp">GRP</span><span class="tag-ind">IND</span></td>
-              <td><input class="bs-input" id="b_bel_slt_disab" type="number" value="1200" oninput="liveBS()"></td>
-              <td><input class="bs-input stress-input" id="s_bel_slt_disab" type="number" value="1650" oninput="liveBS()"></td></tr>
+              <td><input class="bs-input" id="b_bel_slt_disab" type="number" value="280" oninput="liveBS()"></td>
+              <td><input class="bs-input stress-input" id="s_bel_slt_disab" type="number" value="320" oninput="liveBS()"></td></tr>
             <tr><td class="indent">BEL — Critical Illness <span class="tag-grp">GRP</span><span class="tag-ind">IND</span></td>
-              <td><input class="bs-input" id="b_bel_slt_ci" type="number" value="250" oninput="liveBS()"></td>
-              <td><input class="bs-input stress-input" id="s_bel_slt_ci" type="number" value="283" oninput="liveBS()"></td></tr>
+              <td><input class="bs-input" id="b_bel_slt_ci" type="number" value="70" oninput="liveBS()"></td>
+              <td><input class="bs-input stress-input" id="s_bel_slt_ci" type="number" value="78" oninput="liveBS()"></td></tr>
             <tr><td class="indent">BEL — LTCI annuities <span class="tag-ind">IND</span></td>
-              <td><input class="bs-input" id="b_bel_slt_ltci" type="number" value="180" oninput="liveBS()"></td>
-              <td><input class="bs-input stress-input" id="s_bel_slt_ltci" type="number" value="204" oninput="liveBS()"></td></tr>
+              <td><input class="bs-input" id="b_bel_slt_ltci" type="number" value="50" oninput="liveBS()"></td>
+              <td><input class="bs-input stress-input" id="s_bel_slt_ltci" type="number" value="56" oninput="liveBS()"></td></tr>
             <tr><td class="indent">BEL — lapse &amp; expense element</td>
-              <td><input class="bs-input" id="b_bel_slt_other" type="number" value="80" oninput="liveBS()"></td>
-              <td><input class="bs-input stress-input" id="s_bel_slt_other" type="number" value="96" oninput="liveBS()"></td></tr>
+              <td><input class="bs-input" id="b_bel_slt_other" type="number" value="25" oninput="liveBS()"></td>
+              <td><input class="bs-input stress-input" id="s_bel_slt_other" type="number" value="28" oninput="liveBS()"></td></tr>
             <tr><td class="indent">Risk Margin — SLT health</td>
-              <td><input class="bs-input" id="b_rm_slt" type="number" value="90" oninput="liveBS()"></td>
-              <td><input class="bs-input stress-input" id="s_rm_slt" type="number" value="90" oninput="liveBS()"></td></tr>
+              <td><input class="bs-input" id="b_rm_slt" type="number" value="25" oninput="liveBS()"></td>
+              <td><input class="bs-input stress-input" id="s_rm_slt" type="number" value="27" oninput="liveBS()"></td></tr>
             <tr class="subtotal"><td>TP — Health SLT (BEL+RM)</td>
               <td id="tot_tp_slt_base">—</td><td id="tot_tp_slt_stress" class="stressed">—</td></tr>
 
             <tr class="section-hd"><td colspan="3">Technical Provisions — Health NSLT <span class="tag-st">ST</span></td></tr>
             <tr><td class="indent">BEL — PMI claims prov (IBNR+O/S) <span class="tag-grp">GRP</span><span class="tag-ind">IND</span></td>
-              <td><input class="bs-input" id="b_bel_nslt_claims" type="number" value="120" oninput="liveBS()"></td>
-              <td><input class="bs-input stress-input" id="s_bel_nslt_claims" type="number" value="146" oninput="liveBS()"></td></tr>
+              <td><input class="bs-input" id="b_bel_nslt_claims" type="number" value="60" oninput="liveBS()"></td>
+              <td><input class="bs-input stress-input" id="s_bel_nslt_claims" type="number" value="70" oninput="liveBS()"></td></tr>
             <tr><td class="indent">BEL — premium provision (UPR/URR) <span class="tag-grp">GRP</span><span class="tag-ind">IND</span></td>
-              <td><input class="bs-input" id="b_bel_nslt_prem" type="number" value="35" oninput="liveBS()"></td>
-              <td><input class="bs-input stress-input" id="s_bel_nslt_prem" type="number" value="35" oninput="liveBS()"></td></tr>
+              <td><input class="bs-input" id="b_bel_nslt_prem" type="number" value="20" oninput="liveBS()"></td>
+              <td><input class="bs-input stress-input" id="s_bel_nslt_prem" type="number" value="20" oninput="liveBS()"></td></tr>
             <tr><td class="indent">Risk Margin — Non-SLT health</td>
-              <td><input class="bs-input" id="b_rm_nslt" type="number" value="8" oninput="liveBS()"></td>
-              <td><input class="bs-input stress-input" id="s_rm_nslt" type="number" value="8" oninput="liveBS()"></td></tr>
+              <td><input class="bs-input" id="b_rm_nslt" type="number" value="6" oninput="liveBS()"></td>
+              <td><input class="bs-input stress-input" id="s_rm_nslt" type="number" value="6" oninput="liveBS()"></td></tr>
             <tr class="subtotal"><td>TP — Health NSLT (BEL+RM)</td>
               <td id="tot_tp_nslt_base">—</td><td id="tot_tp_nslt_stress" class="stressed">—</td></tr>
 
             <tr class="section-hd"><td colspan="3">Other liabilities</td></tr>
             <tr><td class="indent">Deferred tax liabilities</td>
-              <td><input class="bs-input" id="b_dtl" type="number" value="25" oninput="liveBS()"></td>
-              <td><input class="bs-input stress-input" id="s_dtl" type="number" value="25" oninput="liveBS()"></td></tr>
+              <td><input class="bs-input" id="b_dtl" type="number" value="10" oninput="liveBS()"></td>
+              <td><input class="bs-input stress-input" id="s_dtl" type="number" value="10" oninput="liveBS()"></td></tr>
             <tr><td class="indent">Derivatives — negative FV</td>
-              <td><input class="bs-input" id="b_deriv_neg" type="number" value="5" oninput="liveBS()"></td>
-              <td><input class="bs-input stress-input" id="s_deriv_neg" type="number" value="8" oninput="liveBS()"></td></tr>
+              <td><input class="bs-input" id="b_deriv_neg" type="number" value="2" oninput="liveBS()"></td>
+              <td><input class="bs-input stress-input" id="s_deriv_neg" type="number" value="3" oninput="liveBS()"></td></tr>
             <tr><td class="indent">Payables &amp; trade creditors</td>
-              <td><input class="bs-input" id="b_payables" type="number" value="45" oninput="liveBS()"></td>
-              <td><input class="bs-input stress-input" id="s_payables" type="number" value="45" oninput="liveBS()"></td></tr>
+              <td><input class="bs-input" id="b_payables" type="number" value="18" oninput="liveBS()"></td>
+              <td><input class="bs-input stress-input" id="s_payables" type="number" value="18" oninput="liveBS()"></td></tr>
             <tr class="subtotal"><td>Other liabilities (excl. sub debt)</td>
               <td id="tot_otherliab_base">—</td><td id="tot_otherliab_stress" class="stressed">—</td></tr>
 
             <tr class="section-hd"><td colspan="3">Subordinated liabilities (on-BS own funds)</td></tr>
             <tr><td class="indent">Restricted T1 sub debt</td>
-              <td><input class="bs-input" id="b_sub_t1" type="number" value="100" oninput="liveBS()"></td>
-              <td><input class="bs-input stress-input" id="s_sub_t1" type="number" value="100" oninput="liveBS()"></td></tr>
+              <td><input class="bs-input" id="b_sub_t1" type="number" value="30" oninput="liveBS()"></td>
+              <td><input class="bs-input stress-input" id="s_sub_t1" type="number" value="30" oninput="liveBS()"></td></tr>
             <tr><td class="indent">T2 subordinated debt</td>
-              <td><input class="bs-input" id="b_sub_t2d" type="number" value="200" oninput="liveBS()"></td>
-              <td><input class="bs-input stress-input" id="s_sub_t2d" type="number" value="200" oninput="liveBS()"></td></tr>
+              <td><input class="bs-input" id="b_sub_t2d" type="number" value="60" oninput="liveBS()"></td>
+              <td><input class="bs-input stress-input" id="s_sub_t2d" type="number" value="60" oninput="liveBS()"></td></tr>
             <tr><td class="indent">T2 preference shares</td>
-              <td><input class="bs-input" id="b_sub_t2p" type="number" value="50" oninput="liveBS()"></td>
-              <td><input class="bs-input stress-input" id="s_sub_t2p" type="number" value="50" oninput="liveBS()"></td></tr>
+              <td><input class="bs-input" id="b_sub_t2p" type="number" value="0" oninput="liveBS()"></td>
+              <td><input class="bs-input stress-input" id="s_sub_t2p" type="number" value="0" oninput="liveBS()"></td></tr>
             <tr class="subtotal"><td>Total subordinated liabilities</td>
               <td id="tot_subliab_base">—</td><td id="tot_subliab_stress" class="stressed">—</td></tr>
 
@@ -372,23 +372,23 @@ html,body{min-height:100%;background:var(--slate-50);color:var(--slate-800);font
 
             <tr class="section-hd"><td colspan="3">Own Funds (Assets − Liabilities)</td></tr>
             <tr class="equity"><td class="indent">Paid-up ordinary share capital</td>
-              <td><input class="bs-input" id="b_t1_shares" type="number" value="200" oninput="liveBS()"></td>
-              <td><input class="bs-input stress-input" id="s_t1_shares" type="number" value="200" oninput="liveBS()"></td></tr>
+              <td><input class="bs-input" id="b_t1_shares" type="number" value="80" oninput="liveBS()"></td>
+              <td><input class="bs-input stress-input" id="s_t1_shares" type="number" value="80" oninput="liveBS()"></td></tr>
             <tr class="equity"><td class="indent">Share premium account</td>
-              <td><input class="bs-input" id="b_t1_prem" type="number" value="150" oninput="liveBS()"></td>
-              <td><input class="bs-input stress-input" id="s_t1_prem" type="number" value="150" oninput="liveBS()"></td></tr>
+              <td><input class="bs-input" id="b_t1_prem" type="number" value="50" oninput="liveBS()"></td>
+              <td><input class="bs-input stress-input" id="s_t1_prem" type="number" value="50" oninput="liveBS()"></td></tr>
             <tr class="equity"><td class="indent">Retained earnings &amp; other reserves</td>
-              <td><input class="bs-input" id="b_t1_retained" type="number" value="180" oninput="liveBS()"></td>
-              <td><input class="bs-input stress-input" id="s_t1_retained" type="number" value="180" oninput="liveBS()"></td></tr>
+              <td><input class="bs-input" id="b_t1_retained" type="number" value="100" oninput="liveBS()"></td>
+              <td><input class="bs-input stress-input" id="s_t1_retained" type="number" value="100" oninput="liveBS()"></td></tr>
             <tr class="equity"><td class="indent">T3 — net deferred tax asset</td>
-              <td><input class="bs-input" id="b_t3_dta" type="number" value="40" oninput="liveBS()"></td>
-              <td><input class="bs-input stress-input" id="s_t3_dta" type="number" value="55" oninput="liveBS()"></td></tr>
+              <td><input class="bs-input" id="b_t3_dta" type="number" value="12" oninput="liveBS()"></td>
+              <td><input class="bs-input stress-input" id="s_t3_dta" type="number" value="22" oninput="liveBS()"></td></tr>
             <tr class="equity"><td class="indent">T3 — other</td>
-              <td><input class="bs-input" id="b_t3_other" type="number" value="20" oninput="liveBS()"></td>
-              <td><input class="bs-input stress-input" id="s_t3_other" type="number" value="20" oninput="liveBS()"></td></tr>
+              <td><input class="bs-input" id="b_t3_other" type="number" value="0" oninput="liveBS()"></td>
+              <td><input class="bs-input stress-input" id="s_t3_other" type="number" value="0" oninput="liveBS()"></td></tr>
             <tr class="equity"><td class="indent">T2 ancillary (off-BS, approved)</td>
-              <td><input class="bs-input" id="b_t2_anc" type="number" value="50" oninput="liveBS()"></td>
-              <td><input class="bs-input stress-input" id="s_t2_anc" type="number" value="50" oninput="liveBS()"></td></tr>
+              <td><input class="bs-input" id="b_t2_anc" type="number" value="0" oninput="liveBS()"></td>
+              <td><input class="bs-input stress-input" id="s_t2_anc" type="number" value="0" oninput="liveBS()"></td></tr>
             <tr class="equity"><td class="indent">Reconciliation reserve (auto-derived)</td>
               <td><input class="bs-input recon-derived" id="b_recon" type="number" readonly></td>
               <td><input class="bs-input stress-derived" id="s_recon" type="number" readonly></td></tr>
@@ -448,12 +448,12 @@ html,body{min-height:100%;background:var(--slate-50);color:var(--slate-800);font
     <div class="card-title"><span class="card-title-accent"></span>Capital charge for each SLT risk (stressed NAV – base NAV, £m)</div>
     <div class="submod-note">Each charge = max(0, NAV<sub>base</sub> − NAV<sub>stressed</sub>). Key stresses: mortality +15%; longevity −20%; disability +35% yr1 / +25% ongoing; mass lapse; expense +10% + 1% inflation; revision +4% annuity amounts.</div>
     <div class="input-grid">
-      <div class="input-group"><label>Mortality risk (£m)</label><input type="number" id="slt_mort" value="120" min="0" oninput="liveAll()"></div>
-      <div class="input-group"><label>Longevity risk (£m)</label><input type="number" id="slt_long" value="80" min="0" oninput="liveAll()"></div>
-      <div class="input-group"><label>Disability / Morbidity risk (£m) <span style="color:var(--stress);font-weight:600">[auto]</span></label><input type="number" id="slt_disab" value="450" min="0" oninput="liveAll()"></div>
-      <div class="input-group"><label>Lapse risk (£m)</label><input type="number" id="slt_lapse" value="150" min="0" oninput="liveAll()"></div>
-      <div class="input-group"><label>Expense risk (£m)</label><input type="number" id="slt_exp" value="200" min="0" oninput="liveAll()"></div>
-      <div class="input-group"><label>Revision risk (£m)</label><input type="number" id="slt_rev" value="30" min="0" oninput="liveAll()"></div>
+      <div class="input-group"><label>Mortality risk (£m)</label><input type="number" id="slt_mort" value="30" min="0" oninput="liveAll()"></div>
+      <div class="input-group"><label>Longevity risk (£m)</label><input type="number" id="slt_long" value="20" min="0" oninput="liveAll()"></div>
+      <div class="input-group"><label>Disability / Morbidity risk (£m) <span style="color:var(--stress);font-weight:600">[auto]</span></label><input type="number" id="slt_disab" value="60" min="0" oninput="liveAll()"></div>
+      <div class="input-group"><label>Lapse risk (£m)</label><input type="number" id="slt_lapse" value="40" min="0" oninput="liveAll()"></div>
+      <div class="input-group"><label>Expense risk (£m)</label><input type="number" id="slt_exp" value="50" min="0" oninput="liveAll()"></div>
+      <div class="input-group"><label>Revision risk (£m)</label><input type="number" id="slt_rev" value="8" min="0" oninput="liveAll()"></div>
     </div>
     <div style="margin-top:14px">
       <div class="sec-hd-text" style="font-size:10px;color:var(--slate-400);margin-bottom:6px">SLT health correlation matrix (Annex II, Del. Reg. 2015/35)</div>
@@ -488,8 +488,8 @@ html,body{min-height:100%;background:var(--slate-50);color:var(--slate-800);font
     <div class="card-title"><span class="card-title-accent"></span>Capital charge for each Non-SLT risk (£m)</div>
     <div class="submod-note">Premium &amp; reserve risk uses volume measure × σ × confidence factor. Lapse = mass-lapse scenario. Correlation between sub-modules = 0 (Annex XIII). <strong>[auto]</strong> = populated from stressed balance sheet NSLT TP movement.</div>
     <div class="input-grid">
-      <div class="input-group"><label>Premium &amp; Reserve risk (£m) <span style="color:var(--stress);font-weight:600">[auto]</span></label><input type="number" id="nslt_premres" value="220" min="0" oninput="liveAll()"></div>
-      <div class="input-group"><label>Lapse risk (£m)</label><input type="number" id="nslt_lapse" value="120" min="0" oninput="liveAll()"></div>
+      <div class="input-group"><label>Premium &amp; Reserve risk (£m) <span style="color:var(--stress);font-weight:600">[auto]</span></label><input type="number" id="nslt_premres" value="10" min="0" oninput="liveAll()"></div>
+      <div class="input-group"><label>Lapse risk (£m)</label><input type="number" id="nslt_lapse" value="25" min="0" oninput="liveAll()"></div>
     </div>
     <div style="margin-top:12px;display:flex;align-items:center;gap:10px">
       <div class="input-group" style="max-width:220px">
@@ -509,7 +509,7 @@ html,body{min-height:100%;background:var(--slate-50);color:var(--slate-800);font
   <div class="card">
     <div class="submod-note">Mass accident + accident concentration + pandemic scenarios (Art. 160–162). Enter the combined CAT SCR (computed externally or from standardised scenario).</div>
     <div class="input-grid">
-      <div class="input-group"><label>CAT health SCR (£m)</label><input type="number" id="scr_cat" value="100" min="0" oninput="liveAll()"></div>
+      <div class="input-group"><label>CAT health SCR (£m)</label><input type="number" id="scr_cat" value="30" min="0" oninput="liveAll()"></div>
     </div>
   </div>
 
@@ -521,8 +521,8 @@ html,body{min-height:100%;background:var(--slate-50);color:var(--slate-800);font
   <div class="card">
     <div class="submod-note"><strong>[auto]</strong> = market risk is auto-populated from the total stressed investment loss on the balance sheet (A1 base − A1 stressed).</div>
     <div class="input-grid">
-      <div class="input-group"><label>Market risk SCR (£m) <span style="color:var(--stress);font-weight:600">[auto]</span></label><input type="number" id="scr_mkt" value="300" min="0" oninput="liveAll()"></div>
-      <div class="input-group"><label>Counterparty default SCR (£m)</label><input type="number" id="scr_def" value="50" min="0" oninput="liveAll()"></div>
+      <div class="input-group"><label>Market risk SCR (£m) <span style="color:var(--stress);font-weight:600">[auto]</span></label><input type="number" id="scr_mkt" value="104" min="0" oninput="liveAll()"></div>
+      <div class="input-group"><label>Counterparty default SCR (£m)</label><input type="number" id="scr_def" value="18" min="0" oninput="liveAll()"></div>
       <div class="input-group"><label>Life underwriting SCR (£m)</label><input type="number" id="scr_life" value="0" min="0" oninput="liveAll()"></div>
       <div class="input-group"><label>Non-life underwriting SCR (£m)</label><input type="number" id="scr_nl" value="0" min="0" oninput="liveAll()"></div>
       <div class="input-group"><label>Intangibles SCR (£m)</label><input type="number" id="scr_int" value="0" min="0" oninput="liveAll()"></div>
@@ -539,9 +539,9 @@ html,body{min-height:100%;background:var(--slate-50);color:var(--slate-800);font
     <div class="asset-sub" style="border-left:3px solid var(--green)">
       <div class="asset-sub-title"><span class="asset-sub-dot" style="background:var(--green)"></span>Tier 1</div>
       <div class="input-grid">
-        <div class="input-group"><label>Paid-up ordinary shares (£m)</label><input type="number" id="t1_shares" value="200" min="0" oninput="liveAll()"></div>
-        <div class="input-group"><label>Share premium (£m)</label><input type="number" id="t1_shareprem" value="150" min="0" oninput="liveAll()"></div>
-        <div class="input-group"><label>Retained earnings (£m)</label><input type="number" id="t1_retained" value="180" min="0" oninput="liveAll()"></div>
+        <div class="input-group"><label>Paid-up ordinary shares (£m)</label><input type="number" id="t1_shares" value="80" min="0" oninput="liveAll()"></div>
+        <div class="input-group"><label>Share premium (£m)</label><input type="number" id="t1_shareprem" value="50" min="0" oninput="liveAll()"></div>
+        <div class="input-group"><label>Retained earnings (£m)</label><input type="number" id="t1_retained" value="100" min="0" oninput="liveAll()"></div>
         <div class="input-group"><label>Reconciliation reserve (auto, £m)</label><input type="number" id="t1_recon" class="recon-derived" readonly tabindex="-1"></div>
         <div class="input-group"><label>Restricted T1 sub debt (mirrored, £m)</label><input type="number" id="t1_subdebt" class="derived" readonly tabindex="-1" value="100"></div>
       </div>
@@ -553,15 +553,15 @@ html,body{min-height:100%;background:var(--slate-50);color:var(--slate-800);font
       <div class="input-grid">
         <div class="input-group"><label>T2 sub debt (mirrored, £m)</label><input type="number" id="t2_subdebt" class="derived" readonly tabindex="-1" value="200"></div>
         <div class="input-group"><label>T2 preference shares (mirrored, £m)</label><input type="number" id="t2_prefs" class="derived" readonly tabindex="-1" value="50"></div>
-        <div class="input-group"><label>Ancillary T2 — off-BS (£m)</label><input type="number" id="t2_ancillary" value="50" min="0" oninput="liveAll()"></div>
+        <div class="input-group"><label>Ancillary T2 — off-BS (£m)</label><input type="number" id="t2_ancillary" value="0" min="0" oninput="liveAll()"></div>
       </div>
       <div class="asset-total-row"><span class="asset-total-label">Total Tier 2</span><span class="asset-total-value" id="tot_t2">£—</span></div>
     </div>
     <div class="asset-sub" style="border-left:3px solid var(--red);margin-top:10px">
       <div class="asset-sub-title"><span class="asset-sub-dot" style="background:var(--red)"></span>Tier 3</div>
       <div class="input-grid">
-        <div class="input-group"><label>Net DTA (£m)</label><input type="number" id="t3_dta" value="40" min="0" oninput="liveAll()"></div>
-        <div class="input-group"><label>Other T3 (£m)</label><input type="number" id="t3_other" value="20" min="0" oninput="liveAll()"></div>
+        <div class="input-group"><label>Net DTA (£m)</label><input type="number" id="t3_dta" value="22" min="0" oninput="liveAll()"></div>
+        <div class="input-group"><label>Other T3 (£m)</label><input type="number" id="t3_other" value="0" min="0" oninput="liveAll()"></div>
       </div>
       <div id="t3_cap_warn" class="err-box" style="margin-top:8px">Tier 3 exceeds 15% of SCR.</div>
       <div class="asset-total-row"><span class="asset-total-label">Total Tier 3</span><span class="asset-total-value" id="tot_t3">£—</span></div>
@@ -604,8 +604,8 @@ html,body{min-height:100%;background:var(--slate-50);color:var(--slate-800);font
   <div class="card">
     <div class="submod-note">TPs auto-derived from stressed BEL+RM above. Enter earned premiums.</div>
     <div class="input-grid">
-      <div class="input-group"><label>Earned premiums — SLT / life (£m)</label><input type="number" id="prem_life" value="500" min="0" oninput="liveAll()"></div>
-      <div class="input-group"><label>Earned premiums — Non-SLT / non-life (£m)</label><input type="number" id="prem_nl" value="180" min="0" oninput="liveAll()"></div>
+      <div class="input-group"><label>Earned premiums — SLT / life (£m)</label><input type="number" id="prem_life" value="150" min="0" oninput="liveAll()"></div>
+      <div class="input-group"><label>Earned premiums — Non-SLT / non-life (£m)</label><input type="number" id="prem_nl" value="100" min="0" oninput="liveAll()"></div>
       <div class="input-group"><label>TP — SLT / life (auto, £m)</label><input type="number" id="tp_life" class="derived" readonly tabindex="-1"></div>
       <div class="input-group"><label>TP — Non-SLT / non-life (auto, £m)</label><input type="number" id="tp_nl" class="derived" readonly tabindex="-1"></div>
     </div>
@@ -618,8 +618,8 @@ html,body{min-height:100%;background:var(--slate-50);color:var(--slate-800);font
   </div>
   <div class="card">
     <div class="input-grid">
-      <div class="input-group"><label>Adj — loss absorbing capacity (£m, negative)</label><input type="number" id="adj" value="-30" oninput="liveAll()"></div>
-      <div class="input-group"><label>Capital at risk — SLT health (£m)</label><input type="number" id="car_slt" value="2000" min="0" oninput="liveAll()"></div>
+      <div class="input-group"><label>Adj — loss absorbing capacity (£m, negative)</label><input type="number" id="adj" value="-8" oninput="liveAll()"></div>
+      <div class="input-group"><label>Capital at risk — SLT health (£m)</label><input type="number" id="car_slt" value="600" min="0" oninput="liveAll()"></div>
       <div class="input-group"><label>Capital at risk — life (£m)</label><input type="number" id="car_life" value="0" min="0" oninput="liveAll()"></div>
       <div class="input-group"><label>MCR factor — SLT health</label><input type="number" id="mcr_fac_slt" value="0.0035" step="0.0001" min="0" oninput="liveAll()"></div>
       <div class="input-group"><label>MCR factor — life without profits</label><input type="number" id="mcr_fac_life" value="0.0015" step="0.0001" min="0" oninput="liveAll()"></div>
@@ -880,12 +880,12 @@ function computeSCR(){
   const health=aggCorr([slt,nslt,cat],hCorr);
   const bscrCorr=[[1,.25,.25,.25,.25],[.25,1,.25,.25,.5],[.25,.25,1,.25,0],[.25,.25,.25,1,0],[.25,.5,0,0,1]];
   const bscrBase=aggCorr([v('scr_mkt'),v('scr_def'),v('scr_life'),health,v('scr_nl')],bscrCorr);
-  const bscr=Math.sqrt(Math.max(0,bscrBase*bscrBase+v('scr_int')*v('scr_int')));
+  const bscr=bscrBase+v('scr_int');// Art.226(1): intangibles SCR added arithmetically
   const s=bsStress();
   const tpLife=s.tpSlt, tpNl=s.tpNslt;
   const op_prem=0.03*v('prem_life')+0.03*v('prem_nl');
   const op_tp=0.0045*tpLife+0.003*tpNl;
-  const scr_op=Math.max(op_prem,op_tp);
+  const scr_op=Math.min(0.3*bscr,Math.max(op_prem,op_tp));// Art.218: capped at 30% of BSCR
   const scr=bscr+scr_op+v('adj');
   const mcr_linear=v('mcr_fac_slt')*v('car_slt')+v('mcr_fac_life')*v('car_life')+v('mcr_fac_tp')*tpNl+v('mcr_fac_prem')*v('prem_nl');
   const mcr=Math.max(0.25*scr,Math.min(0.45*scr,mcr_linear));
@@ -1033,7 +1033,7 @@ function calculate(){
   const t1Pct_scr=(T1/scr*100).toFixed(1), t3Pct_scr=(T3/scr*100).toFixed(1);
   const t1Pct_mcr=(T1/mcr*100).toFixed(1);
   const scr_t1_ok=T1/scr>=0.5, scr_t3_ok=T3/scr<0.15;
-  const mcr_t1_ok=T1/mcr>=0.8, mcr_t3_ok=T3===0;
+  const mcr_t1_ok=T1/mcr>=0.8, mcr_t3_ok=T1>=mcr;// Art.82: T3 ineligible for MCR; passes if T1 alone covers MCR
   const scr_cov_ok=totalOF>=scr, mcr_cov_ok=totalOF>=mcr;
   function chk(ok,p,f){return `<span class="badge ${ok?'badge-ok':'badge-fail'}">${ok?p:f}</span>`;}
 
@@ -1054,7 +1054,7 @@ function calculate(){
       <h4>MCR coverage — £${fmt(mcr)}m</h4>
       <div class="elig-row"><span>Total own funds ≥ MCR</span>${chk(mcr_cov_ok,'Covered','Breach')}</div>
       <div class="elig-row"><span>T1 ≥ 80% of MCR (need £${fmt(0.8*mcr)}m, held £${fmt(T1)}m)</span>${chk(mcr_t1_ok,'Pass '+t1Pct_mcr+'%','Fail '+t1Pct_mcr+'%')}</div>
-      <div class="elig-row"><span>No T3 against MCR (held £${fmt(T3)}m)</span>${chk(mcr_t3_ok,'Pass','Fail')}</div>
+      <div class="elig-row"><span>T1 alone covers MCR (Art.82, held £${fmt(T1)}m)</span>${chk(mcr_t3_ok,'Pass','Fail')}</div>
     </div>
     <div class="elig-card" style="grid-column:1/-1">
       <h4>Balance sheet &amp; solvency position (stressed)</h4>
