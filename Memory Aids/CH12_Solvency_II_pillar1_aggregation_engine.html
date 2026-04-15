@@ -1,0 +1,314 @@
+
+<h2 class="sr-only">Solvency II Pillar I Aggregation and Reporting Engine — enter capital charges by risk module to compute SCR, MCR, and capital eligibility.</h2>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans)}
+.eng-wrap{padding:1rem 0;max-width:900px}
+.eng-tabs{display:flex;gap:4px;border-bottom:0.5px solid var(--color-border-tertiary);margin-bottom:1.5rem}
+.eng-tab{padding:8px 16px;font-size:13px;cursor:pointer;border:none;background:none;color:var(--color-text-secondary);border-bottom:2px solid transparent;margin-bottom:-0.5px;transition:color .15s}
+.eng-tab.active{color:var(--color-text-primary);border-bottom-color:var(--color-text-primary);font-weight:500}
+.eng-tab:hover:not(.active){color:var(--color-text-primary)}
+.eng-panel{display:none}.eng-panel.active{display:block}
+.sec-title{font-size:13px;font-weight:500;color:var(--color-text-secondary);text-transform:uppercase;letter-spacing:.04em;margin-bottom:12px;margin-top:1.5rem}
+.sec-title:first-child{margin-top:0}
+.input-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-bottom:1rem}
+.input-group{display:flex;flex-direction:column;gap:4px}
+.input-group label{font-size:12px;color:var(--color-text-secondary)}
+.input-group input{padding:7px 10px;font-size:13px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);background:var(--color-background-primary);color:var(--color-text-primary);width:100%}
+.input-group input:focus{outline:none;border-color:var(--color-border-primary);box-shadow:0 0 0 2px rgba(128,128,128,.12)}
+.hint{font-size:11px;color:var(--color-text-tertiary)}
+.calc-btn{margin-top:1rem;padding:9px 24px;font-size:13px;font-weight:500;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);cursor:pointer;background:var(--color-background-primary);color:var(--color-text-primary);transition:background .15s}
+.calc-btn:hover{background:var(--color-background-secondary)}
+.metric-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin:1rem 0}
+.metric{background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:12px 14px}
+.metric .m-label{font-size:11px;color:var(--color-text-secondary);margin-bottom:4px}
+.metric .m-val{font-size:20px;font-weight:500;color:var(--color-text-primary)}
+.metric .m-val.ok{color:#1D9E75}.metric .m-val.warn{color:#BA7517}.metric .m-val.fail{color:#E24B4A}
+.workings-table{width:100%;border-collapse:collapse;font-size:13px;margin-top:.5rem}
+.workings-table th{text-align:left;padding:7px 10px;font-size:11px;font-weight:500;color:var(--color-text-secondary);border-bottom:0.5px solid var(--color-border-tertiary)}
+.workings-table td{padding:7px 10px;border-bottom:0.5px solid var(--color-border-tertiary);color:var(--color-text-primary)}
+.workings-table tr:last-child td{border-bottom:none}
+.workings-table .subtotal td{font-weight:500;background:var(--color-background-secondary)}
+.workings-table .total td{font-weight:500;border-top:0.5px solid var(--color-border-primary)}
+.badge{display:inline-block;padding:2px 8px;border-radius:var(--border-radius-md);font-size:11px;font-weight:500}
+.badge-ok{background:#E1F5EE;color:#0F6E56}.badge-fail{background:#FCEBEB;color:#A32D2D}.badge-warn{background:#FAEEDA;color:#854F0B}
+.elig-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:1rem 0}
+.elig-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:14px 16px}
+.elig-card h4{font-size:12px;font-weight:500;color:var(--color-text-secondary);margin-bottom:10px}
+.elig-row{display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:0.5px solid var(--color-border-tertiary);font-size:12px}
+.elig-row:last-child{border-bottom:none}
+.note-box{font-size:12px;color:var(--color-text-secondary);background:var(--color-background-secondary);border-radius:var(--border-radius-md);padding:10px 14px;margin-top:1rem;line-height:1.6}
+.corr-grid{display:grid;grid-template-columns:auto repeat(5,1fr);gap:1px;font-size:11px;margin:1rem 0;background:var(--color-border-tertiary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-md);overflow:hidden}
+.corr-cell{background:var(--color-background-primary);padding:6px 8px;text-align:center}
+.corr-cell.hdr{background:var(--color-background-secondary);font-weight:500;color:var(--color-text-secondary)}
+.corr-cell.diag{background:var(--color-background-secondary);color:var(--color-text-primary);font-weight:500}
+@media(max-width:480px){.elig-grid{grid-template-columns:1fr}}
+</style>
+
+<div class="eng-wrap">
+<div style="margin-bottom:1.5rem">
+  <p style="font-size:18px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px">Solvency II Pillar I aggregation engine</p>
+  <p style="font-size:13px;color:var(--color-text-secondary)">Enter capital charges from your actuarial models. The engine applies Annex IV correlation matrices, computes SCR/MCR, and checks capital eligibility.</p>
+</div>
+
+<div class="eng-tabs">
+  <button class="eng-tab active" onclick="showTab('inputs')">Inputs</button>
+  <button class="eng-tab" onclick="showTab('workings')">Aggregation workings</button>
+  <button class="eng-tab" onclick="showTab('summary')">SCR / MCR summary</button>
+  <button class="eng-tab" onclick="showTab('eligibility')">Capital eligibility</button>
+</div>
+
+<div id="tab-inputs" class="eng-panel active">
+  <p class="sec-title">Health insurance risk module</p>
+  <p class="hint" style="margin-bottom:12px">Enter the capital charge (stressed BEL − base BEL) for each sub-module.</p>
+  <div class="input-grid">
+    <div class="input-group"><label>SCR — SLT health (£m)</label><input type="number" id="scr_slt" value="614.3" min="0"></div>
+    <div class="input-group"><label>SCR — Non-SLT health (£m)</label><input type="number" id="scr_nonslt" value="250" min="0"></div>
+    <div class="input-group"><label>SCR — CAT health (£m)</label><input type="number" id="scr_cat" value="100" min="0"></div>
+  </div>
+
+  <p class="sec-title">Other BSCR modules</p>
+  <div class="input-grid">
+    <div class="input-group"><label>Market risk SCR (£m)</label><input type="number" id="scr_mkt" value="300" min="0"></div>
+    <div class="input-group"><label>Counterparty default SCR (£m)</label><input type="number" id="scr_def" value="50" min="0"></div>
+    <div class="input-group"><label>Life underwriting SCR (£m)</label><input type="number" id="scr_life" value="0" min="0"></div>
+    <div class="input-group"><label>Non-life underwriting SCR (£m)</label><input type="number" id="scr_nl" value="0" min="0"></div>
+    <div class="input-group"><label>Intangibles SCR (£m)</label><input type="number" id="scr_int" value="0" min="0"></div>
+  </div>
+
+  <p class="sec-title">Operational risk (SCR_op)</p>
+  <p class="hint" style="margin-bottom:12px">Use the higher of the premium-based and TP-based charges. Alternatively enter the computed SCR_op directly.</p>
+  <div class="input-grid">
+    <div class="input-group"><label>Earned premiums — life (£m)</label><input type="number" id="prem_life" value="500" min="0"></div>
+    <div class="input-group"><label>Earned premiums — non-life (£m)</label><input type="number" id="prem_nl" value="0" min="0"></div>
+    <div class="input-group"><label>Technical provisions — life (£m)</label><input type="number" id="tp_life" value="4000" min="0"></div>
+    <div class="input-group"><label>Technical provisions — non-life (£m)</label><input type="number" id="tp_nl" value="0" min="0"></div>
+  </div>
+
+  <p class="sec-title">Adjustments</p>
+  <div class="input-grid">
+    <div class="input-group"><label>Loss absorbing capacity adj, Adj (£m, enter as negative)</label><input type="number" id="adj" value="-30" ></div>
+  </div>
+
+  <p class="sec-title">MCR volume measures</p>
+  <div class="input-grid">
+    <div class="input-group"><label>Capital at risk — SLT health (£m)</label><input type="number" id="car_slt" value="2000" min="0"></div>
+    <div class="input-group"><label>Capital at risk — life (£m)</label><input type="number" id="car_life" value="0" min="0"></div>
+    <div class="input-group"><label>MCR factor — SLT health</label><input type="number" id="mcr_fac_slt" value="0.0035" step="0.0001" min="0"></div>
+    <div class="input-group"><label>MCR factor — life without profits</label><input type="number" id="mcr_fac_life" value="0.0015" step="0.0001" min="0"></div>
+    <div class="input-group"><label>TP factor — Non-SLT health</label><input type="number" id="mcr_fac_tp" value="0.05" step="0.001" min="0"></div>
+    <div class="input-group"><label>Premium factor — Non-SLT health</label><input type="number" id="mcr_fac_prem" value="0.07" step="0.001" min="0"></div>
+  </div>
+
+  <p class="sec-title">Capital resources (own funds)</p>
+  <div class="input-grid">
+    <div class="input-group"><label>Tier 1 basic own funds (£m)</label><input type="number" id="t1" value="1800" min="0"></div>
+    <div class="input-group"><label>Tier 2 own funds (£m)</label><input type="number" id="t2" value="300" min="0"></div>
+    <div class="input-group"><label>Tier 3 own funds (£m)</label><input type="number" id="t3" value="80" min="0"></div>
+  </div>
+
+  <button class="calc-btn" onclick="calculate()">Calculate SCR, MCR &amp; eligibility →</button>
+</div>
+
+<div id="tab-workings" class="eng-panel">
+  <p class="sec-title">Step 1 — Health module aggregation (Annex IV, 3×3)</p>
+  <div class="corr-grid" id="health-corr">
+    <div class="corr-cell hdr"></div><div class="corr-cell hdr">SLT</div><div class="corr-cell hdr">Non-SLT</div><div class="corr-cell hdr">CAT</div>
+    <div class="corr-cell hdr">SLT</div><div class="corr-cell diag">1.00</div><div class="corr-cell">0.50</div><div class="corr-cell">0.25</div>
+    <div class="corr-cell hdr">Non-SLT</div><div class="corr-cell">0.50</div><div class="corr-cell diag">1.00</div><div class="corr-cell">0.25</div>
+    <div class="corr-cell hdr">CAT</div><div class="corr-cell">0.25</div><div class="corr-cell">0.25</div><div class="corr-cell diag">1.00</div>
+  </div>
+  <table class="workings-table" id="tbl-health"></table>
+
+  <p class="sec-title" style="margin-top:1.5rem">Step 2 — BSCR aggregation (Annex IV, 5×5 cross-module)</p>
+  <div class="corr-grid" style="grid-template-columns:auto repeat(5,1fr)" id="bscr-corr">
+    <div class="corr-cell hdr"></div><div class="corr-cell hdr">Mkt</div><div class="corr-cell hdr">Def</div><div class="corr-cell hdr">Life</div><div class="corr-cell hdr">Health</div><div class="corr-cell hdr">NL</div>
+    <div class="corr-cell hdr">Mkt</div><div class="corr-cell diag">1.00</div><div class="corr-cell">0.25</div><div class="corr-cell">0.25</div><div class="corr-cell">0.25</div><div class="corr-cell">0.25</div>
+    <div class="corr-cell hdr">Def</div><div class="corr-cell">0.25</div><div class="corr-cell diag">1.00</div><div class="corr-cell">0.25</div><div class="corr-cell">0.25</div><div class="corr-cell">0.50</div>
+    <div class="corr-cell hdr">Life</div><div class="corr-cell">0.25</div><div class="corr-cell">0.25</div><div class="corr-cell diag">1.00</div><div class="corr-cell">0.25</div><div class="corr-cell">0.00</div>
+    <div class="corr-cell hdr">Health</div><div class="corr-cell">0.25</div><div class="corr-cell">0.25</div><div class="corr-cell">0.25</div><div class="corr-cell diag">1.00</div><div class="corr-cell">0.00</div>
+    <div class="corr-cell hdr">NL</div><div class="corr-cell">0.25</div><div class="corr-cell">0.50</div><div class="corr-cell">0.00</div><div class="corr-cell">0.00</div><div class="corr-cell diag">1.00</div>
+  </div>
+  <table class="workings-table" id="tbl-bscr"></table>
+
+  <p class="sec-title" style="margin-top:1.5rem">Step 3 — Operational risk (SCR_op)</p>
+  <table class="workings-table" id="tbl-op"></table>
+
+  <p class="sec-title" style="margin-top:1.5rem">Step 4 — Overall SCR</p>
+  <table class="workings-table" id="tbl-scr"></table>
+
+  <p class="sec-title" style="margin-top:1.5rem">Step 5 — MCR (linear formula + cap/floor)</p>
+  <table class="workings-table" id="tbl-mcr"></table>
+</div>
+
+<div id="tab-summary" class="eng-panel">
+  <p class="sec-title">Key outputs</p>
+  <div class="metric-row" id="summary-metrics"></div>
+  <div style="position:relative;width:100%;height:280px;margin-top:1rem">
+    <canvas id="scr-chart" role="img" aria-label="Bar chart showing SCR component breakdown"></canvas>
+  </div>
+  <div class="note-box">SCR = BSCR + SCR_op + Adj. The BSCR already reflects diversification between the five risk modules via the Annex IV correlation matrix. SCR_op is added without diversification credit. Adj is the loss absorbing capacity of technical provisions and deferred taxes (typically negative, reducing the SCR).</div>
+</div>
+
+<div id="tab-eligibility" class="eng-panel">
+  <p class="sec-title">Tier summary</p>
+  <div class="metric-row" id="elig-metrics"></div>
+  <div class="elig-grid" id="elig-cards"></div>
+  <div class="note-box">SCR: at least 50% must be Tier 1; Tier 3 must be less than 15% of SCR. MCR: at least 80% must be Tier 1; no Tier 3 permitted. Basic own funds = Tier 1 + Tier 2 + Tier 3. Ancillary own funds require prior supervisory approval and are not included here.</div>
+</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<script>
+function showTab(id){
+  document.querySelectorAll('.eng-tab').forEach((t,i)=>{
+    const ids=['inputs','workings','summary','eligibility'];
+    t.classList.toggle('active',ids[i]===id);
+  });
+  document.querySelectorAll('.eng-panel').forEach(p=>{
+    p.classList.toggle('active',p.id==='tab-'+id);
+  });
+}
+
+function v(id){return parseFloat(document.getElementById(id).value)||0;}
+function fmt(n){return n.toFixed(1);}
+
+let chartInst=null;
+
+function aggCorr(vals, corr){
+  let sum=0;
+  for(let i=0;i<vals.length;i++)for(let j=0;j<vals.length;j++) sum+=corr[i][j]*vals[i]*vals[j];
+  return Math.sqrt(Math.max(0,sum));
+}
+
+function rows(arr){return arr.map(r=>`<tr class="${r[2]||''}"><td>${r[0]}</td><td style="text-align:right;font-variant-numeric:tabular-nums">${r[1]}</td></tr>`).join('');}
+
+function calculate(){
+  const slt=Math.max(0,v('scr_slt')), nslt=Math.max(0,v('scr_nonslt')), cat=Math.max(0,v('scr_cat'));
+  const mkt=Math.max(0,v('scr_mkt')), def=Math.max(0,v('scr_def')), life=Math.max(0,v('scr_life')), nl=Math.max(0,v('scr_nl')), intg=Math.max(0,v('scr_int'));
+  const premLife=v('prem_life'), premNl=v('prem_nl'), tpLife=v('tp_life'), tpNl=v('tp_nl');
+  const adj=v('adj');
+
+  const healthCorr=[[1,.5,.25],[.5,1,.25],[.25,.25,1]];
+  const scr_health=aggCorr([slt,nslt,cat],healthCorr);
+
+  const bscrCorr=[
+    [1,.25,.25,.25,.25],
+    [.25,1,.25,.25,.5],
+    [.25,.25,1,.25,0],
+    [.25,.25,.25,1,0],
+    [.25,.5,0,0,1]
+  ];
+  const bscrBase=aggCorr([mkt,def,life,scr_health,nl],bscrCorr);
+  const bscr=Math.sqrt(Math.max(0,bscrBase*bscrBase+intg*intg));
+
+  const op_prem=Math.max(0.03*premLife+0.03*premNl);
+  const op_tp=Math.max(0.0045*tpLife+0.003*tpNl);
+  const scr_op=Math.max(op_prem,op_tp);
+
+  const scr=bscr+scr_op+adj;
+
+  const carSlt=v('car_slt'), carLife=v('car_life');
+  const mcrFacSlt=v('mcr_fac_slt'), mcrFacLife=v('mcr_fac_life');
+  const mcrFacTp=v('mcr_fac_tp'), mcrFacPrem=v('mcr_fac_prem');
+  const mcr_linear=mcrFacSlt*carSlt+mcrFacLife*carLife+mcrFacTp*tpNl+mcrFacPrem*premNl;
+  const mcr_floor=0.25*scr, mcr_cap=0.45*scr;
+  const mcr=Math.max(mcr_floor,Math.min(mcr_cap,mcr_linear));
+  const mcr_binding=mcr===mcr_floor?'Floor (25% SCR)':mcr===mcr_cap?'Cap (45% SCR)':'Linear formula';
+
+  const t1=v('t1'), t2=v('t2'), t3=v('t3');
+  const totalOF=t1+t2+t3;
+  const surplus=totalOF-scr;
+
+  document.getElementById('tbl-health').innerHTML=`<thead><tr><th>Component</th><th>Value (£m)</th></tr></thead><tbody>`+
+    rows([['SLT health SCR',fmt(slt),''],['Non-SLT health SCR',fmt(nslt),''],['CAT health SCR',fmt(cat),''],
+      ['Health module SCR (diversified)',fmt(scr_health),'subtotal']])+`</tbody>`;
+
+  document.getElementById('tbl-bscr').innerHTML=`<thead><tr><th>Module</th><th>SCR (£m)</th></tr></thead><tbody>`+
+    rows([['Market risk',fmt(mkt),''],['Counterparty default',fmt(def),''],['Life underwriting',fmt(life),''],
+      ['Health (from step 1)',fmt(scr_health),''],['Non-life underwriting',fmt(nl),''],
+      ['Intangibles (added quadratically)',fmt(intg),''],['BSCR (diversified)',fmt(bscr),'subtotal']])+`</tbody>`;
+
+  document.getElementById('tbl-op').innerHTML=`<thead><tr><th>Measure</th><th>Value (£m)</th></tr></thead><tbody>`+
+    rows([['3% × earned premiums life + 3% × earned premiums non-life',fmt(op_prem),''],
+      ['0.45% × TP life + 0.30% × TP non-life',fmt(op_tp),''],
+      ['SCR_op (higher of above)',fmt(scr_op),'subtotal']])+`</tbody>`;
+
+  document.getElementById('tbl-scr').innerHTML=`<thead><tr><th>Item</th><th>£m</th></tr></thead><tbody>`+
+    rows([['BSCR',fmt(bscr),''],['+ SCR_op',fmt(scr_op),''],['+ Adj (loss absorbing capacity)',fmt(adj),''],
+      ['Overall SCR',fmt(scr),'total']])+`</tbody>`;
+
+  document.getElementById('tbl-mcr').innerHTML=`<thead><tr><th>Step</th><th>£m</th></tr></thead><tbody>`+
+    rows([['Linear MCR formula result',fmt(mcr_linear),''],['Floor = 25% × SCR',fmt(mcr_floor),''],
+      ['Cap = 45% × SCR',fmt(mcr_cap),''],['MCR (binding: '+mcr_binding+')',fmt(mcr),'total']])+`</tbody>`;
+
+  const sm=document.getElementById('summary-metrics');
+  sm.innerHTML=`
+    <div class="metric"><div class="m-label">BSCR</div><div class="m-val">£${fmt(bscr)}m</div></div>
+    <div class="metric"><div class="m-label">SCR_op</div><div class="m-val">£${fmt(scr_op)}m</div></div>
+    <div class="metric"><div class="m-label">Adj</div><div class="m-val">£${fmt(adj)}m</div></div>
+    <div class="metric"><div class="m-label">Overall SCR</div><div class="m-val">£${fmt(scr)}m</div></div>
+    <div class="metric"><div class="m-label">MCR</div><div class="m-val">£${fmt(mcr)}m</div></div>
+    <div class="metric"><div class="m-label">Total own funds</div><div class="m-val">£${fmt(totalOF)}m</div></div>
+    <div class="metric"><div class="m-label">Surplus above SCR</div><div class="m-val ${surplus>=0?'ok':'fail'}">£${fmt(surplus)}m</div></div>
+    <div class="metric"><div class="m-label">Solvency ratio</div><div class="m-val ${totalOF/scr>=1?'ok':'fail'}">${(totalOF/scr*100).toFixed(0)}%</div></div>
+  `;
+
+  const chartData=[mkt,def,life,scr_health,nl,scr_op];
+  const chartLabels=['Market','Counterparty default','Life u/w','Health','Non-life','Op risk'];
+  const colors=['#378ADD','#D4537E','#1D9E75','#BA7517','#7F77DD','#888780'];
+  if(chartInst){chartInst.destroy();}
+  chartInst=new Chart(document.getElementById('scr-chart'),{
+    type:'bar',
+    data:{labels:chartLabels,datasets:[{label:'SCR component (£m)',data:chartData,backgroundColor:colors,borderWidth:0}]},
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:d=>`£${d.raw.toFixed(1)}m`}}},scales:{y:{grid:{color:'rgba(128,128,128,.1)'},ticks:{callback:v=>`£${v}m`}},x:{grid:{display:false}}}}
+  });
+
+  const t1Pct_scr=(t1/scr*100).toFixed(1);
+  const t3Pct_scr=(t3/scr*100).toFixed(1);
+  const t1Pct_mcr=(t1/mcr*100).toFixed(1);
+  const t3Pct_mcr=(t3/mcr*100).toFixed(1);
+  const scr_t1_ok=t1/scr>=0.5;
+  const scr_t3_ok=t3/scr<0.15;
+  const mcr_t1_ok=t1/mcr>=0.8;
+  const mcr_t3_ok=t3===0;
+  const scr_cov_ok=totalOF>=scr;
+  const mcr_cov_ok=totalOF>=mcr;
+
+  document.getElementById('elig-metrics').innerHTML=`
+    <div class="metric"><div class="m-label">Tier 1 own funds</div><div class="m-val">£${fmt(t1)}m</div></div>
+    <div class="metric"><div class="m-label">Tier 2 own funds</div><div class="m-val">£${fmt(t2)}m</div></div>
+    <div class="metric"><div class="m-label">Tier 3 own funds</div><div class="m-val">£${fmt(t3)}m</div></div>
+    <div class="metric"><div class="m-label">Total own funds</div><div class="m-val">£${fmt(totalOF)}m</div></div>
+  `;
+
+  function chk(ok,pass,fail){return `<span class="badge ${ok?'badge-ok':'badge-fail'}">${ok?pass:fail}</span>`;}
+
+  document.getElementById('elig-cards').innerHTML=`
+    <div class="elig-card">
+      <h4>SCR coverage (overall SCR = £${fmt(scr)}m)</h4>
+      <div class="elig-row"><span>Total own funds ≥ SCR</span>${chk(scr_cov_ok,'Covered','Breach')}</div>
+      <div class="elig-row"><span>Tier 1 ≥ 50% of SCR (req: £${fmt(0.5*scr)}m, held: £${fmt(t1)}m)</span>${chk(scr_t1_ok,'Pass '+t1Pct_scr+'%','Fail '+t1Pct_scr+'%')}</div>
+      <div class="elig-row"><span>Tier 3 < 15% of SCR (req: &lt;£${fmt(0.15*scr)}m, held: £${fmt(t3)}m)</span>${chk(scr_t3_ok,'Pass '+t3Pct_scr+'%','Fail '+t3Pct_scr+'%')}</div>
+    </div>
+    <div class="elig-card">
+      <h4>MCR coverage (MCR = £${fmt(mcr)}m)</h4>
+      <div class="elig-row"><span>Total own funds ≥ MCR</span>${chk(mcr_cov_ok,'Covered','Breach')}</div>
+      <div class="elig-row"><span>Tier 1 ≥ 80% of MCR (req: £${fmt(0.8*mcr)}m, held: £${fmt(t1)}m)</span>${chk(mcr_t1_ok,'Pass '+t1Pct_mcr+'%','Fail '+t1Pct_mcr+'%')}</div>
+      <div class="elig-row"><span>No Tier 3 against MCR (held: £${fmt(t3)}m)</span>${chk(mcr_t3_ok,'Pass','Fail')}</div>
+    </div>
+    <div class="elig-card" style="grid-column:1/-1">
+      <h4>Solvency position summary</h4>
+      <div class="elig-row"><span>SCR coverage ratio</span><span style="font-weight:500">${(totalOF/scr*100).toFixed(0)}% ${chk(scr_cov_ok,'','— BREACH')}</span></div>
+      <div class="elig-row"><span>MCR coverage ratio</span><span style="font-weight:500">${(totalOF/mcr*100).toFixed(0)}% ${chk(mcr_cov_ok,'','— BREACH')}</span></div>
+      <div class="elig-row"><span>Surplus / (deficit) above SCR</span><span style="font-weight:500;color:${surplus>=0?'#1D9E75':'#E24B4A'}">£${fmt(surplus)}m</span></div>
+    </div>
+  `;
+
+  showTab('workings');
+  setTimeout(()=>showTab('summary'),50);
+}
+
+calculate();
+</script>
