@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Solvency II Prototype: BEL & Risk Margin (Health Insurer)</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            font-family: system-ui, 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+        }
+        body {
+            background: #eef2f5;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 28px;
+            box-shadow: 0 12px 28px rgba(0,0,0,0.08);
+            overflow-x: auto;
+            padding: 20px 24px 32px 24px;
+        }
+        h1 {
+            font-size: 1.7rem;
+            margin: 0 0 0.2rem 0;
+            color: #0a2b3e;
+        }
+        .sub {
+            color: #2c6979;
+            border-left: 4px solid #2c6979;
+            padding-left: 16px;
+            margin: 8px 0 24px 0;
+            font-weight: 500;
+        }
+        .badge {
+            background: #d0e6ed;
+            color: #0a4b5e;
+            border-radius: 40px;
+            padding: 4px 12px;
+            font-size: 0.8rem;
+            display: inline-block;
+            margin-bottom: 16px;
+        }
+        .grid-2col {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+        .card {
+            background: #f9fbfd;
+            border-radius: 20px;
+            border: 1px solid #dee4e9;
+            padding: 18px 20px;
+            flex: 1;
+            min-width: 260px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+        }
+        .card h3 {
+            margin-top: 0;
+            margin-bottom: 16px;
+            font-weight: 600;
+            color: #1f5068;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .param-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+            align-items: baseline;
+        }
+        .param-label {
+            font-weight: 500;
+            color: #2c3e4e;
+        }
+        input, select {
+            background: white;
+            border: 1px solid #cbdbe2;
+            border-radius: 14px;
+            padding: 6px 12px;
+            font-size: 0.9rem;
+            width: 130px;
+            text-align: right;
+        }
+        input:focus {
+            outline: none;
+            border-color: #2c7a8c;
+            box-shadow: 0 0 0 2px rgba(44,122,140,0.2);
+        }
+        .model-points-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+            margin: 16px 0 24px 0;
+            background: white;
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+        .model-points-table th {
+            background: #e6f0f3;
+            padding: 12px 8px;
+            text-align: center;
+            font-weight: 600;
+            color: #144e66;
+        }
+        .model-points-table td {
+            border-bottom: 1px solid #e2e8f0;
+            padding: 10px 8px;
+            text-align: center;
+        }
+        .stress-badge {
+            background: #fff1e0;
+            border-radius: 20px;
+            padding: 2px 8px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+        .results-area {
+            background: linear-gradient(135deg, #f0f6fa 0%, #ffffff 100%);
+            border-radius: 24px;
+            padding: 18px 24px;
+            margin: 20px 0 24px 0;
+            border: 1px solid #cde3ec;
+        }
+        .result-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            flex-wrap: wrap;
+            padding: 8px 0;
+            border-bottom: 1px dashed #cbdde6;
+        }
+        .result-label {
+            font-weight: 600;
+            color: #1a4e63;
+        }
+        .result-value {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 700;
+            font-size: 1.3rem;
+            color: #0f3b48;
+        }
+        button {
+            background: #1f6e7a;
+            border: none;
+            color: white;
+            font-weight: 600;
+            padding: 10px 20px;
+            border-radius: 40px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: 0.1s;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+        button:hover {
+            background: #0e5864;
+            transform: scale(0.98);
+        }
+        .footnote {
+            font-size: 0.75rem;
+            color: #5c6f82;
+            margin-top: 28px;
+            border-top: 1px solid #dce5ec;
+            padding-top: 16px;
+            text-align: center;
+        }
+        .highlight {
+            background: #eaf9e6;
+            border-radius: 12px;
+            padding: 2px 8px;
+        }
+        @media (max-width: 700px) {
+            .container {
+                padding: 16px;
+            }
+            .model-points-table th, .model-points-table td {
+                padding: 6px 4px;
+                font-size: 0.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>🧾 Solvency II Prototype</h1>
+    <div class="sub">Best Estimate Liabilities (BEL) + Risk Margin (RM) | Normal & Stressed scenarios</div>
+    <div class="badge">⚡ simplified illustration – long & short term products | cost-of-capital RM (6%)</div>
+
+    <!-- Global assumptions -->
+    <div class="grid-2col">
+        <div class="card">
+            <h3>📐 Financial assumptions</h3>
+            <div class="param-row"><span class="param-label">Risk-free rate (discount)</span><input type="number" id="riskFree" step="0.001" value="0.03"></div>
+            <div class="param-row"><span class="param-label">Cost of Capital (CoC)</span><input type="number" id="cocRate" step="0.005" value="0.06"></div>
+            <div class="param-row"><span class="param-label">SCR / BEL(t) ratio</span><input type="number" id="scrRatio" step="0.01" value="0.20"></div>
+            <div class="param-row"><span class="param-label">Expense per policy (€)</span><input type="number" id="expensePerYear" step="5" value="50"></div>
+        </div>
+        <div class="card">
+            <h3>⚠️ Stress factors</h3>
+            <div class="param-row"><span class="param-label">Mortality / morbidity stress</span><input type="number" id="mortStress" step="0.05" value="1.20"></div>
+            <div class="param-row"><span class="param-label">Expense stress</span><input type="number" id="expStress" step="0.1" value="1.15"></div>
+            <div class="param-row"><span class="param-label">Lapse/other (not used but illustrative)</span><input type="number" id="otherStress" step="0.1" value="1.0"></div>
+        </div>
+    </div>
+
+    <!-- Model points (short + long) -->
+    <h3>📋 Model points (liability cohorts)</h3>
+    <table class="model-points-table" id="modelPointsTable">
+        <thead>
+            <tr><th>Product</th><th>Term (yrs)</th><th>Sum Assured (€)</th><th>Annual Premium (€)</th><th>Base mort/morb rate (yr1)</th><th>Mortality stress?</th><th>Expense stress?</th><th>Age start</th></tr>
+        </thead>
+        <tbody id="modelPointsBody">
+            <!-- data will be injected via JS -->
+        </tbody>
+    </table>
+    <div style="display: flex; justify-content: flex-end; margin-top: 8px;"><button id="recalcBtn">⟳ Recalculate BEL & Risk Margin</button></div>
+
+    <!-- Results dashboard -->
+    <div class="results-area">
+        <h3 style="margin-top: 0;">📊 Solvency metrics (normal vs stressed)</h3>
+        <div class="result-row"><span class="result-label">📌 BEL normal (total)</span><span class="result-value" id="belNormalVal">— €</span></div>
+        <div class="result-row"><span class="result-label">⚠️ BEL stressed (total)</span><span class="result-value" id="belStressedVal">— €</span></div>
+        <div class="result-row"><span class="result-label">📉 Delta BEL (stress loss)</span><span class="result-value" id="deltaBel">— €</span></div>
+        <div class="result-row"><span class="result-label">🏦 Simplified SCR(0) (loss)</span><span class="result-value" id="scrZero">— €</span></div>
+        <div class="result-row"><span class="result-label">🧾 Risk Margin (CoC method)</span><span class="result-value" id="riskMarginVal">— €</span></div>
+        <div class="result-row"><span class="result-label">🔒 Total Capital Required (SCR(0)+RM)</span><span class="result-value" id="totalCapital">— €</span></div>
+    </div>
+
+    <!-- Explanation -->
+    <div class="footnote">
+        💡 <strong>Simplified methodology:</strong> BEL = PV(net outflows: claims + expenses – premiums). Stressed scenario applies product-specific shocks (mortality/expense).<br>
+        Risk Margin = CoC × Σ [ SCR(t) / (1+r)^t ] with SCR(t) = (SCR to BEL ratio) × BEL_undiscounted(t). Long-tail products increase RM. Not fully actuarial but shows interactions.
+    </div>
+</div>
+
+<script>
+    // --- Model point definitions (short + long term)
+    const modelPointsData = [
+        { id: 0, product: "Term Life 10yr", term: 10, sumAssured: 100000, premium: 300, baseRate: 0.002, mortStress: true, expStress: false, ageStart: 40, rateIncrease: 1.05 },
+        { id: 1, product: "Whole Life (Long)", term: 50, sumAssured: 50000, premium: 800, baseRate: 0.008, mortStress: true, expStress: false, ageStart: 50, rateIncrease: 1.04 },
+        { id: 2, product: "Critical Illness 5yr", term: 5, sumAssured: 75000, premium: 400, baseRate: 0.003, mortStress: false, expStress: true, ageStart: 35, rateIncrease: 1.02 },
+        { id: 3, product: "Income Protection", term: 20, sumAssured: 30000, premium: 1200, baseRate: 0.001, mortStress: false, expStress: false, ageStart: 45, rateIncrease: 1.03 }
+    ];
+
+    function renderModelPointsTable() {
+        const tbody = document.getElementById('modelPointsBody');
+        tbody.innerHTML = '';
+        modelPointsData.forEach(mp => {
+            const row = tbody.insertRow();
+            row.insertCell(0).innerText = mp.product;
+            row.insertCell(1).innerText = mp.term;
+            row.insertCell(2).innerText = mp.sumAssured.toLocaleString();
+            row.insertCell(3).innerText = mp.premium.toLocaleString();
+            row.insertCell(4).innerText = mp.baseRate;
+            row.insertCell(5).innerHTML = mp.mortStress ? '<span class="stress-badge">✔️ YES</span>' : '<span class="stress-badge">❌ NO</span>';
+            row.insertCell(6).innerHTML = mp.expStress ? '<span class="stress-badge">✔️ YES</span>' : '<span class="stress-badge">❌ NO</span>';
+            row.insertCell(7).innerText = mp.ageStart;
+        });
+    }
+
+    // Helper: get mortality rate for a given year (age-based trending)
+    function getMortalityRate(mp, year, isStressed, globalStressFactor, expenseStressAppliedFlag) {
+        // year is 1-indexed
+        let rate = mp.baseRate * Math.pow(mp.rateIncrease, year - 1);
+        // cap at reasonable max for illustration (avoid > 0.3)
+        rate = Math.min(rate, 0.25);
+        if (isStressed && mp.mortStress) {
+            rate = rate * globalStressFactor;
+        }
+        return Math.min(rate, 0.4);
+    }
+
+    // Calculate BEL for a single model point under normal or stressed scenario
+    // returns object: { pvSum, cashflowsPerYear (undiscounted array for SCR(t)), yearsArray }
+    function computeBELForModelPoint(mp, isStressed, riskFree, expensePerPolicy, stressMortFactor, stressExpenseFactor) {
+        const term = mp.term;
+        let pvTotal = 0;
+        let undiscountedCashflows = new Array(term).fill(0);
+        
+        for (let year = 1; year <= term; year++) {
+            // mortality rate for this year
+            let mortRate = getMortalityRate(mp, year, isStressed, stressMortFactor, false);
+            // Expected claim = sumAssured * mortality rate
+            let expectedClaim = mp.sumAssured * mortRate;
+            // Expenses: apply expense stress if product has expense stress flag and we are in stressed scenario
+            let expense = expensePerPolicy;
+            if (isStressed && mp.expStress) {
+                expense = expense * stressExpenseFactor;
+            }
+            let premium = mp.premium;
+            // Net cash flow = claims + expenses - premiums (outflow positive, inflow negative)
+            let netCashFlow = expectedClaim + expense - premium;
+            undiscountedCashflows[year-1] = netCashFlow;
+            // discount factor
+            let df = 1 / Math.pow(1 + riskFree, year);
+            pvTotal += netCashFlow * df;
+        }
+        return { pv: pvTotal, yearlyUndiscounted: undiscountedCashflows };
+    }
+
+    // For RM: we need BEL(t) approximation = cumulative undiscounted cash flows from year t to end? but simplified:
+    // SCR(t) = scrRatio * max(0, BEL_undiscounted_remaining(t)) 
+    // we'll define BEL_undiscounted(t) as absolute cumulative PV-like but easier: use sum of future undiscounted cashflows from year t to end (proxy of liability)
+    function computeRiskMargin(modelPointsData, isStressedParams, riskFree, scrRatio, coc, globalMortStress, globalExpStress, normalExpense) {
+        // For stressed scenario we need BEL(t) undiscounted proxy for each future year -> SCR(t) = scrRatio * |future net outflow|
+        // But to illustrate, we compute for each model point the undiscounted future cashflows after each year, sum across points, then SCR(t) = scrRatio * max(0, futureOutflows).
+        // We'll consider projection years up to maxTerm = 50 (whole life)
+        const maxTerm = 50;
+        // create array of length maxTerm+1 (year index 1..maxTerm)
+        let totalFutureOutflowUndisc = new Array(maxTerm+1).fill(0);
+        
+        // for each model point, compute for each year t the undiscounted cumulative remaining cashflow from t to end
+        modelPointsData.forEach(mp => {
+            const term = mp.term;
+            // get yearly net cashflows (undiscounted) under stressed scenario (because SCR(t) is stressed projection)
+            let yearlyCf = new Array(term).fill(0);
+            for (let yr = 1; yr <= term; yr++) {
+                let mortRate = getMortalityRate(mp, yr, true, globalMortStress, false);
+                let expectedClaim = mp.sumAssured * mortRate;
+                let expense = normalExpense;
+                if (mp.expStress) expense = expense * globalExpStress;
+                let net = expectedClaim + expense - mp.premium;
+                yearlyCf[yr-1] = net;
+            }
+            // for each start year t (1-indexed) sum cashflows from t-1 to end
+            for (let t = 1; t <= term; t++) {
+                let sumFuture = 0;
+                for (let j = t; j <= term; j++) {
+                    sumFuture += yearlyCf[j-1];
+                }
+                // only positive liability side (if negative, we consider 0, but for safety we keep positive outflow)
+                if (sumFuture > 0) {
+                    totalFutureOutflowUndisc[t] += sumFuture;
+                }
+            }
+            // terms beyond product's term -> no contribution
+        });
+        
+        // Now compute SCR(t) = scrRatio * totalFutureOutflowUndisc[t] (proxy for BEL(t) liability)
+        let scrSumDiscounted = 0;
+        for (let t = 1; t <= maxTerm; t++) {
+            let scrT = scrRatio * totalFutureOutflowUndisc[t];
+            let df = 1 / Math.pow(1 + riskFree, t);
+            scrSumDiscounted += scrT * df;
+        }
+        let riskMargin = coc * scrSumDiscounted;
+        return { riskMargin, scrSumDiscounted, scrProfile: totalFutureOutflowUndisc };
+    }
+
+    // Compute total BEL normal and stressed across all model points
+    function computeTotalBELs() {
+        const riskFree = parseFloat(document.getElementById('riskFree').value);
+        const expensePerPolicy = parseFloat(document.getElementById('expensePerYear').value);
+        const mortStressFactor = parseFloat(document.getElementById('mortStress').value);
+        const expStressFactor = parseFloat(document.getElementById('expStress').value);
+        
+        let totalBelNormal = 0;
+        let totalBelStressed = 0;
+        let perProductNormal = [];
+        let perProductStressed = [];
+        
+        modelPointsData.forEach(mp => {
+            const normalRes = computeBELForModelPoint(mp, false, riskFree, expensePerPolicy, mortStressFactor, expStressFactor);
+            const stressedRes = computeBELForModelPoint(mp, true, riskFree, expensePerPolicy, mortStressFactor, expStressFactor);
+            totalBelNormal += normalRes.pv;
+            totalBelStressed += stressedRes.pv;
+            perProductNormal.push({ product: mp.product, bel: normalRes.pv, cashflows: normalRes.yearlyUndiscounted });
+            perProductStressed.push({ product: mp.product, bel: stressedRes.pv, cashflows: stressedRes.yearlyUndiscounted });
+        });
+        
+        return { totalBelNormal, totalBelStressed, perProductNormal, perProductStressed, riskFree, expensePerPolicy, mortStressFactor, expStressFactor };
+    }
+    
+    // Full refresh of UI and compute SCR + RM
+    function refreshAll() {
+        const riskFree = parseFloat(document.getElementById('riskFree').value);
+        const coc = parseFloat(document.getElementById('cocRate').value);
+        const scrRatio = parseFloat(document.getElementById('scrRatio').value);
+        const expensePerPolicy = parseFloat(document.getElementById('expensePerYear').value);
+        const mortStressFactor = parseFloat(document.getElementById('mortStress').value);
+        const expStressFactor = parseFloat(document.getElementById('expStress').value);
+        
+        // 1) BEL normal & stressed
+        const { totalBelNormal, totalBelStressed } = computeTotalBELs();
+        
+        // 2) Risk Margin calculation (using stressed scenario for future SCR profile)
+        const { riskMargin } = computeRiskMargin(modelPointsData, true, riskFree, scrRatio, coc, mortStressFactor, expStressFactor, expensePerPolicy);
+        
+        // 3) Simplified SCR(0) = max(0, BEL_stressed - BEL_normal) -> represents the loss under stress
+        let deltaBel = totalBelStressed - totalBelNormal;
+        let scrZero = Math.max(0, deltaBel);
+        
+        // 4) total capital = SCR(0) + RM
+        let totalCapital = scrZero + riskMargin;
+        
+        // format euros
+        const formatEur = (val) => new Intl.NumberFormat('en-IE', { style: 'currency', currency: 'EUR', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(val);
+        const formatEurDec = (val) => new Intl.NumberFormat('en-IE', { style: 'currency', currency: 'EUR', minimumFractionDigits: 0, maximumFractionDigits: 0 }).format(val);
+        
+        document.getElementById('belNormalVal').innerHTML = formatEur(totalBelNormal);
+        document.getElementById('belStressedVal').innerHTML = formatEur(totalBelStressed);
+        document.getElementById('deltaBel').innerHTML = formatEur(deltaBel);
+        document.getElementById('scrZero').innerHTML = formatEur(scrZero);
+        document.getElementById('riskMarginVal').innerHTML = formatEur(riskMargin);
+        document.getElementById('totalCapital').innerHTML = formatEur(totalCapital);
+        
+        // Optional extra detail (tooltip for per product breakdown) -> we could add a small table but show summary in console? For user, we add dynamic message.
+        const belDetails = computeTotalBELs();
+        let detailsMsg = `📈 Per product BEL (normal): `;
+        belDetails.perProductNormal.forEach(p => { detailsMsg += `${p.product}: ${formatEur(p.bel)}  `; });
+        console.log(detailsMsg);
+        // Also show small status on page as extra insight (non-intrusive)
+        let extraDiv = document.getElementById('extraPerfMsg');
+        if (!extraDiv) {
+            const newDiv = document.createElement('div');
+            newDiv.id = 'extraPerfMsg';
+            newDiv.style.fontSize = '0.75rem';
+            newDiv.style.marginTop = '12px';
+            newDiv.style.background = '#f4f9fe';
+            newDiv.style.padding = '8px 12px';
+            newDiv.style.borderRadius = '16px';
+            newDiv.style.color = '#2c5f6e';
+            document.querySelector('.results-area').appendChild(newDiv);
+            extraDiv = newDiv;
+        }
+        let shortDetails = belDetails.perProductNormal.map(p => `${p.product.split(' ')[0]}: ${formatEur(p.bel)}`).join(' | ');
+        let stressedDetails = belDetails.perProductStressed.map(p => `${p.product.split(' ')[0]}: ${formatEur(p.bel)}`).join(' | ');
+        extraDiv.innerHTML = `🔍 <strong>Breakdown (normal)</strong> ${shortDetails}<br>⚠️ <strong>Breakdown (stressed)</strong> ${stressedDetails}<br>💡 RM driven by long-tail (Whole Life: 50y) increases discounted SCR(t).`;
+    }
+    
+    // initial render table and compute
+    renderModelPointsTable();
+    refreshAll();
+    
+    // attach recalc button
+    document.getElementById('recalcBtn').addEventListener('click', () => {
+        refreshAll();
+    });
+    
+    // also add listeners to input fields to auto-refresh (optional)
+    const inputs = document.querySelectorAll('input');
+    inputs.forEach(inp => {
+        inp.addEventListener('input', () => refreshAll());
+    });
+    
+    // Additional fix for consistency: ensure the model points data can be edited in future but we keep static demo.
+    // Simulate stress scenario adjustments.
+</script>
+</body>
+</html>
