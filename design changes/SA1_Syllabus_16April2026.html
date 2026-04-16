@@ -614,81 +614,6 @@
   .subsection-block:nth-child(2) { animation-delay: .05s; }
   .subsection-block:nth-child(3) { animation-delay: .1s; }
 
-  /* ── MY NOTES ── */
-  .my-notes-wrap {
-    margin-top: 14px;
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    background: var(--surface);
-    overflow: hidden;
-    transition: border-color .15s;
-  }
-  .my-notes-wrap:focus-within {
-    border-color: var(--accent);
-  }
-  .my-notes-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 7px 12px;
-    background: rgba(232,160,48,.07);
-    border-bottom: 1px solid var(--border);
-    font-family: var(--mono);
-    font-size: 11px;
-    color: var(--accent);
-    letter-spacing: .04em;
-    user-select: none;
-    cursor: pointer;
-  }
-  .my-notes-header:hover { background: var(--accent-lo); }
-  .my-notes-saved-badge {
-    font-size: 10px;
-    color: var(--green);
-    opacity: 0;
-    transition: opacity .4s;
-  }
-  .my-notes-saved-badge.show { opacity: 1; }
-  .my-notes-body { display: block; }
-  .my-notes-body.collapsed { display: none; }
-  .my-notes-textarea {
-    width: 100%;
-    min-height: 110px;
-    max-height: 400px;
-    resize: vertical;
-    background: transparent;
-    border: none;
-    outline: none;
-    color: var(--text);
-    font-family: var(--sans);
-    font-size: 14px;
-    line-height: 1.7;
-    padding: 10px 14px;
-    caret-color: var(--accent);
-  }
-  .my-notes-textarea::placeholder { color: var(--text-dim); }
-  .my-notes-footer {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 6px 12px;
-    border-top: 1px solid var(--border);
-    font-family: var(--mono);
-    font-size: 10px;
-    color: var(--text-dim);
-  }
-  .my-notes-save-btn {
-    background: var(--accent-lo);
-    border: 1px solid var(--accent);
-    color: var(--accent);
-    font-family: var(--mono);
-    font-size: 10px;
-    padding: 3px 10px;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background .15s;
-  }
-  .my-notes-save-btn:hover { background: var(--accent-md); }
-
   .subsection-header {
     display: flex;
     align-items: center;
@@ -2008,31 +1933,12 @@ function renderSection(data, secId, scrollToSubId) {
           </div>`).join('')}`;
     }
 
-    html += `
-    <div class="my-notes-wrap" id="notes-wrap-${sub.id}">
-      <div class="my-notes-header" onclick="toggleNotesPanel('${sub.id}')">
-        <span>✏️ My Notes</span>
-        <span class="my-notes-saved-badge" id="badge-${sub.id}">✓ saved</span>
-      </div>
-      <div class="my-notes-body" id="notes-body-${sub.id}">
-        <textarea class="my-notes-textarea" id="note-${sub.id}"
-          placeholder="Write your own notes, mnemonics, exam tips…"
-          oninput="scheduleAutoSave('${sub.id}')"
-          onblur="saveNote('${sub.id}')"></textarea>
-        <div class="my-notes-footer">
-          <span>auto-saved on blur · stored in this browser</span>
-          <button class="my-notes-save-btn" onclick="saveNote('${sub.id}')">Save now</button>
-        </div>
-      </div>
-    </div>`;
-
     html += `</div>`;
   });
 
   html += buildNavBar();
 
   document.getElementById('content-area').innerHTML = html;
-  loadAllNotesIntoDOM();
   document.getElementById('canvas').scrollTop = 0;
 
   if (scrollToSubId) {
@@ -3065,45 +2971,6 @@ function renderFrameworkForChapter(chNum) {
   document.getElementById('content-area').innerHTML = heroHtml + sectionsHtml;
   document.getElementById('canvas').scrollTop = 0;
 }
-
-
-  // ── MY NOTES (localStorage) ──────────────────────────────
-  const NOTE_PREFIX = 'sa1-note::';
-  let _autoSaveTimers = {};
-
-  function saveNote(subId) {
-    const ta = document.getElementById('note-' + subId);
-    if (!ta) return;
-    localStorage.setItem(NOTE_PREFIX + subId, ta.value);
-    const badge = document.getElementById('badge-' + subId);
-    if (badge) {
-      badge.classList.add('show');
-      setTimeout(() => badge.classList.remove('show'), 1800);
-    }
-  }
-
-  function scheduleAutoSave(subId) {
-    clearTimeout(_autoSaveTimers[subId]);
-    _autoSaveTimers[subId] = setTimeout(() => saveNote(subId), 1200);
-  }
-
-  function loadAllNotesIntoDOM() {
-    document.querySelectorAll('.my-notes-textarea').forEach(ta => {
-      const subId = ta.id.replace('note-', '');
-      const saved = localStorage.getItem(NOTE_PREFIX + subId);
-      if (saved) {
-        ta.value = saved;
-        // show badge briefly to indicate notes exist
-        const badge = document.getElementById('badge-' + subId);
-        if (badge) { badge.classList.add('show'); setTimeout(() => badge.classList.remove('show'), 1200); }
-      }
-    });
-  }
-
-  function toggleNotesPanel(subId) {
-    const body = document.getElementById('notes-body-' + subId);
-    if (body) body.classList.toggle('collapsed');
-  }
 
 </script>
 </body>
