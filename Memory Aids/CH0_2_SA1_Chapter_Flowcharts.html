@@ -204,8 +204,16 @@
     padding: 40px 48px 60px;
   }
 
-  .chapter-panel { display: none; animation: fadeIn 0.25s ease; }
-  .chapter-panel.active { display: block; }
+  .chapter-panel {
+    display: block;
+    margin-bottom: 56px;
+    padding-bottom: 48px;
+    border-bottom: 1px solid var(--border);
+  }
+  .chapter-panel:last-child {
+    border-bottom: none;
+    margin-bottom: 0;
+  }
 
   @keyframes fadeIn {
     from { opacity: 0; transform: translateY(6px); }
@@ -416,7 +424,7 @@ function buildPanels() {
   const content = document.getElementById('content');
   DATA.forEach((ch, i) => {
     const panel = document.createElement('div');
-    panel.className = 'chapter-panel' + (i === 0 ? ' active' : '');
+    panel.className = 'chapter-panel';
     panel.id = `panel-${i}`;
 
     const totalSubsCount = totalSubs(ch);
@@ -470,14 +478,31 @@ function buildPanels() {
 }
 
 function switchChapter(idx) {
+  const panel = document.getElementById(`panel-${idx}`);
+  if (panel) {
+    const content = document.getElementById('content');
+    content.scrollTo({ top: panel.offsetTop - 24, behavior: 'smooth' });
+  }
   document.querySelectorAll('.ch-btn').forEach((b, i) => {
     b.classList.toggle('active', i === idx);
   });
-  document.querySelectorAll('.chapter-panel').forEach((p, i) => {
-    p.classList.toggle('active', i === idx);
-  });
-  document.getElementById('content').scrollTop = 0;
 }
+
+// Scroll spy: highlight sidebar item matching the chapter currently in view
+(function setupScrollSpy() {
+  const content = document.getElementById('content');
+  content.addEventListener('scroll', () => {
+    const panels = document.querySelectorAll('.chapter-panel');
+    const scrollTop = content.scrollTop;
+    let activeIdx = 0;
+    panels.forEach((panel, i) => {
+      if (panel.offsetTop - 60 <= scrollTop) activeIdx = i;
+    });
+    document.querySelectorAll('.ch-btn').forEach((b, i) => {
+      b.classList.toggle('active', i === activeIdx);
+    });
+  });
+})();
 
 buildSidebar();
 buildPanels();
