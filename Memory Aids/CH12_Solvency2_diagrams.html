@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Solvency II — Key Diagrams</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink:       #1a1a2e;
+    --deep:      #16213e;
+    --mid:       #0f3460;
+    --accent:    #e94560;
+    --gold:      #c9a84c;
+    --mist:      #f0f4f8;
+    --pale:      #e8edf3;
+    --rule:      #c5cdd9;
+    --white:     #ffffff;
+    --mono:      'DM Mono', monospace;
+    --serif:     'Source Serif 4', Georgia, serif;
+    --display:   'Playfair Display', 'Times New Roman', serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--mist);
+    color: var(--ink);
+    font-family: var(--serif);
+    font-weight: 300;
+    font-size: 15px;
+    line-height: 1.65;
+  }
+
+  /* ── Header ── */
+  header {
+    background: var(--deep);
+    color: var(--white);
+    padding: 56px 48px 44px;
+    border-bottom: 3px solid var(--gold);
+  }
+  header .eyebrow {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 14px;
+  }
+  header h1 {
+    font-family: var(--display);
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 700;
+    line-height: 1.15;
+    margin-bottom: 10px;
+  }
+  header p {
+    font-size: 13.5px;
+    color: #b0bec8;
+    max-width: 620px;
+  }
+
+  /* ── Nav ── */
+  nav {
+    background: var(--deep);
+    padding: 0 48px 28px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  nav a {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-decoration: none;
+    color: #8fa4b8;
+    border: 1px solid #2e4460;
+    padding: 5px 12px;
+    border-radius: 2px;
+    transition: all 0.2s;
+  }
+  nav a:hover { color: var(--white); border-color: var(--gold); }
+
+  /* ── Main layout ── */
+  main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 60px 40px 80px;
+    display: flex;
+    flex-direction: column;
+    gap: 72px;
+  }
+
+  /* ── Diagram card ── */
+  .card {
+    background: var(--white);
+    border-left: 4px solid var(--gold);
+    box-shadow: 0 2px 18px rgba(26,26,46,0.07);
+    padding: 40px 44px;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 0.55s ease forwards;
+  }
+  .card:nth-child(1)  { animation-delay: 0.05s }
+  .card:nth-child(2)  { animation-delay: 0.12s }
+  .card:nth-child(3)  { animation-delay: 0.19s }
+  .card:nth-child(4)  { animation-delay: 0.26s }
+  .card:nth-child(5)  { animation-delay: 0.33s }
+  .card:nth-child(6)  { animation-delay: 0.40s }
+  .card:nth-child(7)  { animation-delay: 0.47s }
+  .card:nth-child(8)  { animation-delay: 0.54s }
+  @keyframes fadeUp {
+    to { opacity: 1; transform: none; }
+  }
+
+  .card-header { margin-bottom: 28px; }
+  .card-tag {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--accent);
+    display: block;
+    margin-bottom: 6px;
+  }
+  .card h2 {
+    font-family: var(--display);
+    font-size: 1.35rem;
+    font-weight: 600;
+    color: var(--deep);
+    line-height: 1.25;
+  }
+  .card .subtitle {
+    margin-top: 6px;
+    font-size: 13px;
+    color: #6b7a8d;
+    font-style: italic;
+  }
+
+  /* ── SVG containers ── */
+  .diagram-wrap {
+    overflow-x: auto;
+  }
+  svg { display: block; }
+
+  /* ── Shared SVG text styles ── */
+  .label-sm  { font: 12px var(--serif); fill: var(--ink); }
+  .label-md  { font: 13px/1.3 var(--serif); fill: var(--ink); }
+  .label-lg  { font: 600 14px var(--serif); fill: var(--white); }
+  .label-dark { font: 600 13px var(--serif); fill: var(--deep); }
+  .label-gold { font: 600 12px var(--mono); fill: var(--gold); letter-spacing: 0.05em; }
+  .label-note { font: italic 11.5px var(--serif); fill: #7a8899; }
+
+  /* ── Correlation matrix tables ── */
+  .matrix-wrap {
+    overflow-x: auto;
+    margin-top: 4px;
+  }
+  table.corr {
+    border-collapse: collapse;
+    font-family: var(--mono);
+    font-size: 12px;
+    width: 100%;
+  }
+  table.corr th, table.corr td {
+    border: 1px solid var(--rule);
+    padding: 8px 12px;
+    text-align: center;
+    white-space: nowrap;
+  }
+  table.corr thead th {
+    background: var(--deep);
+    color: var(--white);
+    font-size: 11px;
+    letter-spacing: 0.04em;
+  }
+  table.corr tbody tr:first-child td { font-weight: 600; }
+  table.corr tbody td:first-child {
+    background: var(--pale);
+    font-weight: 600;
+    text-align: left;
+    font-family: var(--serif);
+    font-size: 12.5px;
+    color: var(--deep);
+  }
+  table.corr .diag { background: #e8f0fb; font-weight: 700; color: var(--mid); }
+  table.corr .pos-high  { background: #fff3cd; color: #7a5a00; }
+  table.corr .pos-med   { background: #fef9ee; color: #5a4a00; }
+  table.corr .neg       { background: #fde8ec; color: #9c1a2a; }
+  table.corr .zero      { color: #aab; }
+
+  /* ── Footer ── */
+  footer {
+    text-align: center;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: #8fa4b8;
+    padding: 28px;
+    background: var(--deep);
+    border-top: 1px solid #2e4460;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <p class="eyebrow">SA1 · Chapters 11 &amp; 12 · IFE 2024</p>
+  <h1>Solvency II — Key Diagrams</h1>
+  <p>All structural diagrams from Chapters 11 and 12, reproduced faithfully with concise labels. Handwritten annotations excluded.</p>
+</header>
+
+<nav>
+  <a href="#fig11-1">Fig 11.1 Three Pillars</a>
+  <a href="#fig12-1">Fig 12.1 Balance Sheet</a>
+  <a href="#fig12-2">Fig 12.2 Technical Provisions</a>
+  <a href="#fig12-3">Fig 12.3 SCR Risk Tree</a>
+  <a href="#fig12-4">Fig 12.4 Supervisory Levels</a>
+  <a href="#corr-slt">SLT Correlation Matrix</a>
+  <a href="#corr-health">Health Sub-module Correlations</a>
+  <a href="#corr-bscr">BSCR Correlation Matrix</a>
+</nav>
+
+<main>
+
+  <!-- ═══════════════════════════════════════════
+       FIGURE 11.1 — THREE-PILLAR FRAMEWORK
+  ════════════════════════════════════════════ -->
+  <div class="card" id="fig11-1">
+    <div class="card-header">
+      <span class="card-tag">Figure 11.1</span>
+      <h2>The Solvency II Three-Pillar Framework</h2>
+      <p class="subtitle">The three pillars work together: quantitative standards, qualitative governance, and market transparency.</p>
+    </div>
+    <div class="diagram-wrap">
+      <svg viewBox="0 0 860 340" xmlns="http://www.w3.org/2000/svg" width="100%" style="min-width:580px">
+        <!-- Roof -->
+        <polygon points="430,18 820,80 40,80" fill="#0f3460" opacity="0.92"/>
+        <text x="430" y="60" text-anchor="middle" font-family="'Playfair Display',serif" font-size="15" font-weight="600" fill="white">Three-Pillar Approach</text>
+
+        <!-- Pillar 1 -->
+        <rect x="40" y="85" width="230" height="230" rx="3" fill="#16213e"/>
+        <rect x="40" y="85" width="230" height="36" rx="3" fill="#e94560"/>
+        <text x="155" y="109" text-anchor="middle" font-family="'DM Mono',monospace" font-size="11" font-weight="500" fill="white" letter-spacing="0.08em">PILLAR 1</text>
+        <text x="155" y="134" text-anchor="middle" font-family="'Playfair Display',serif" font-size="13" font-weight="600" fill="white">Quantitative</text>
+        <text x="155" y="150" text-anchor="middle" font-family="'Playfair Display',serif" font-size="13" font-weight="600" fill="white">Requirements</text>
+        <!-- bullets -->
+        <circle cx="65" cy="176" r="3" fill="#c9a84c"/>
+        <text x="76" y="180" font-family="'Source Serif 4',serif" font-size="12" fill="#cbd8e4">Balance sheet valuation</text>
+        <circle cx="65" cy="200" r="3" fill="#c9a84c"/>
+        <text x="76" y="204" font-family="'Source Serif 4',serif" font-size="12" fill="#cbd8e4">Minimum Capital Req (MCR)</text>
+        <circle cx="65" cy="224" r="3" fill="#c9a84c"/>
+        <text x="76" y="228" font-family="'Source Serif 4',serif" font-size="12" fill="#cbd8e4">Solvency Capital Req (SCR)</text>
+        <!-- label bottom -->
+        <line x1="40" y1="260" x2="270" y2="260" stroke="#2e4460" stroke-width="1"/>
+        <text x="155" y="278" text-anchor="middle" font-family="'Source Serif 4',serif" font-size="11.5" font-style="italic" fill="#8fa4b8">Market-consistent valuation</text>
+        <text x="155" y="295" text-anchor="middle" font-family="'Source Serif 4',serif" font-size="11.5" font-style="italic" fill="#8fa4b8">Risk-based capital requirements</text>
+
+        <!-- Pillar 2 -->
+        <rect x="315" y="85" width="230" height="230" rx="3" fill="#16213e"/>
+        <rect x="315" y="85" width="230" height="36" rx="3" fill="#e94560"/>
+        <text x="430" y="109" text-anchor="middle" font-family="'DM Mono',monospace" font-size="11" font-weight="500" fill="white" letter-spacing="0.08em">PILLAR 2</text>
+        <text x="430" y="134" text-anchor="middle" font-family="'Playfair Display',serif" font-size="13" font-weight="600" fill="white">Qualitative Requirements</text>
+        <text x="430" y="150" text-anchor="middle" font-family="'Playfair Display',serif" font-size="13" font-weight="600" fill="white">&amp; Supervisory Review</text>
+        <circle cx="340" cy="176" r="3" fill="#c9a84c"/>
+        <text x="351" y="180" font-family="'Source Serif 4',serif" font-size="12" fill="#cbd8e4">Governance requirements</text>
+        <circle cx="340" cy="200" r="3" fill="#c9a84c"/>
+        <text x="351" y="204" font-family="'Source Serif 4',serif" font-size="12" fill="#cbd8e4">ORSA — Own Risk &amp; Solvency</text>
+        <circle cx="340" cy="224" r="3" fill="#c9a84c"/>
+        <text x="351" y="228" font-family="'Source Serif 4',serif" font-size="12" fill="#cbd8e4">Supervisory review process</text>
+        <line x1="315" y1="260" x2="545" y2="260" stroke="#2e4460" stroke-width="1"/>
+        <text x="430" y="278" text-anchor="middle" font-family="'Source Serif 4',serif" font-size="11.5" font-style="italic" fill="#8fa4b8">Business governance</text>
+        <text x="430" y="295" text-anchor="middle" font-family="'Source Serif 4',serif" font-size="11.5" font-style="italic" fill="#8fa4b8">Risk-based supervision</text>
+
+        <!-- Pillar 3 -->
+        <rect x="590" y="85" width="230" height="230" rx="3" fill="#16213e"/>
+        <rect x="590" y="85" width="230" height="36" rx="3" fill="#e94560"/>
+        <text x="705" y="109" text-anchor="middle" font-family="'DM Mono',monospace" font-size="11" font-weight="500" fill="white" letter-spacing="0.08em">PILLAR 3</text>
+        <text x="705" y="134" text-anchor="middle" font-family="'Playfair Display',serif" font-size="13" font-weight="600" fill="white">Reporting, Disclosure</text>
+        <text x="705" y="150" text-anchor="middle" font-family="'Playfair Display',serif" font-size="13" font-weight="600" fill="white">&amp; Market Discipline</text>
+        <circle cx="615" cy="176" r="3" fill="#c9a84c"/>
+        <text x="626" y="180" font-family="'Source Serif 4',serif" font-size="12" fill="#cbd8e4">SFCR — public annual report</text>
+        <circle cx="615" cy="200" r="3" fill="#c9a84c"/>
+        <text x="626" y="204" font-family="'Source Serif 4',serif" font-size="12" fill="#cbd8e4">RSR — private supervisory report</text>
+        <circle cx="615" cy="224" r="3" fill="#c9a84c"/>
+        <text x="626" y="228" font-family="'Source Serif 4',serif" font-size="12" fill="#cbd8e4">QRT — quantitative templates</text>
+        <line x1="590" y1="260" x2="820" y2="260" stroke="#2e4460" stroke-width="1"/>
+        <text x="705" y="278" text-anchor="middle" font-family="'Source Serif 4',serif" font-size="11.5" font-style="italic" fill="#8fa4b8">Disclosure &amp; transparency</text>
+        <text x="705" y="295" text-anchor="middle" font-family="'Source Serif 4',serif" font-size="11.5" font-style="italic" fill="#8fa4b8">Transparent markets</text>
+      </svg>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════
+       FIGURE 12.1 — BALANCE SHEET
+  ════════════════════════════════════════════ -->
+  <div class="card" id="fig12-1">
+    <div class="card-header">
+      <span class="card-tag">Figure 12.1</span>
+      <h2>Solvency II Balance Sheet — Health &amp; Care Insurer</h2>
+      <p class="subtitle">Assets must at minimum cover technical provisions (BEL + Risk Margin), MCR and SCR. Surplus sits above SCR. Ineligible capital cannot be counted.</p>
+    </div>
+    <div class="diagram-wrap">
+      <svg viewBox="0 0 760 420" xmlns="http://www.w3.org/2000/svg" width="100%" style="min-width:520px">
+
+        <!-- Left: Own funds column -->
+        <!-- Ineligible -->
+        <rect x="40" y="30" width="200" height="55" fill="#d0d7e2" stroke="#b0bbcc" stroke-width="1"/>
+        <text x="140" y="60" text-anchor="middle" font-family="'Source Serif 4',serif" font-size="12.5" fill="#4a5568">Ineligible Capital</text>
+        <text x="140" y="76" text-anchor="middle" font-family="'Source Serif 4',serif" font-size="10.5" fill="#8090a0">(not counted towards SCR/MCR)</text>
+
+        <!-- Ancillary own funds -->
+        <rect x="40" y="90" width="200" height="60" fill="#bdc7d8" stroke="#a0acbe" stroke-width="1"/>
+        <text x="140" y="122" text-anchor="middle" font-family="'Source Serif 4',serif" font-size="12.5" fill="#4a5568">Ancillary Own Funds</text>
+        <text x="140" y="138" text-anchor="middle" font-family="'Source Serif 4',serif" font-size="10.5" fill="#6070a0">(callable in adverse circumstances)</text>
+
+        <!-- BOF brace -->
+        <line x1="245" y1="155" x2="255" y2="155" stroke="#8090a0" stroke-width="1"/>
+        <line x1="245" y1="155" x2="245" y2="355" stroke="#8090a0" stroke-width="1"/>
+        <line x1="245" y1="355" x2="255" y2="355" stroke="#8090a0" stroke-width="1"/>
+        <text x="262" y="265" text-anchor="start" font-family="'DM Mono',monospace" font-size="11" fill="#8090a0" transform="rotate(-90,262,265)">Basic Own Funds</text>
+
+        <!-- OWN FUNDS brace -->
+        <line x1="18" y1="30" x2="28" y2="30" stroke="#c9a84c" stroke-width="1.5"/>
+        <line x1="18" y1="30" x2="18" y2="355" stroke="#c9a84c" stroke-width="1.5"/>
+        <line x1="18" y1="355" x2="28" y2="355" stroke="#c9a84c" stroke-width="1.5"/>
+        <text x="8" y="200" text-anchor="middle" font-family="'Source Serif 4',serif" font-size="12" fill="#c9a84c" transform="rotate(-90,8,200)">Own Funds</text>
+
+        <!-- Basic own funds band -->
+        <rect x="40" y="155" width="200" height="200" fill="#a8b6cc" stroke="#90a0ba" stroke-width="1" opacity="0.3"/>
+        <text x="140" y="260" text-anchor="middle" font-family="'Source Serif 4',serif" font-size="11" fill="#4a5568">(Basic Own Funds)</text>
+
+        <!-- Surplus -->
+        <rect x="40" y="155" width="200" height="65" fill="#4d7fa6" stroke="#3a6a8c" stroke-width="1.5"/>
+        <text x="140" y="192" text-anchor="middle" font-family="'Source Serif 4',serif" font-size="13" font-weight="600" fill="white">Surplus</text>
+        <text x="140" y="208" text-anchor="middle" font-family="'Source Serif 4',serif" font-size="10.5" fill="#cde" font-style="italic">(own funds above SCR)</text>
+
+        <!-- SCR bar -->
+        <rect x="40" y="224" width="200" height="50" fill="#0f3460" stroke="#0a2040" stroke-width="1.5"/>
+        <text x="140" y="254" text-anchor="middle" font-family="'DM Mono',monospace" font-size="13" font-weight="500" fill="white">SCR</text>
+
+        <!-- MCR bar -->
+        <rect x="40" y="278" width="200" height="35" fill="#16213e" stroke="#0a1530" stroke-width="1.5"/>
+        <text x="140" y="300" text-anchor="middle" font-family="'DM Mono',monospace" font-size="13" font-weight="500" fill="#c9a84c">MCR</text>
+
+        <!-- Assets column -->
+        <rect x="400" y="30" width="200" height="325" fill="#eef2f7" stroke="#c5cdd9" stroke-width="1.5"/>
+        <text x="500" y="120" text-anchor="middle" font-family="'Source Serif 4',serif" font-size="12.5" fill="#4a5568">Assets covering</text>
+        <text x="500" y="138" text-anchor="middle" font-family="'Source Serif 4',serif" font-size="12.5" fill="#4a5568">technical provisions,</text>
+        <text x="500" y="156" text-anchor="middle" font-family="'Source Serif 4',serif" font-size="12.5" fill="#4a5568">other liabilities,</text>
+        <text x="500" y="174" text-anchor="middle" font-family="'Source Serif 4',serif" font-size="12.5" fill="#4a5568">MCR and SCR</text>
+
+        <!-- Tech provisions brace on right -->
+        <line x1="605" y1="155" x2="615" y2="155" stroke="#c9a84c" stroke-width="1.5"/>
+        <line x1="615" y1="155" x2="615" y2="355" stroke="#c9a84c" stroke-width="1.5"/>
+        <line x1="605" y1="355" x2="615" y2="355" stroke="#c9a84c" stroke-width="1.5"/>
+        <text x="628" y="262" text-anchor="middle" font-family="'Source Serif 4',serif" font-size="12" fill="#c9a84c" transform="rotate(90,628,262)">Technical Provisions</text>
+
+        <!-- Liabilities column -->
+        <rect x="400" y="155" width="200" height="65" fill="#4d7fa6" stroke="#3a6a8c" stroke-width="1.5"/>
+        <text x="500" y="191" text-anchor="middle" font-family="'Source Serif 4',serif" font-size="13" font-weight="600" fill="white">Surplus</text>
+
+        <rect x="400" y="224" width="200" height="50" fill="#0f3460" stroke="#0a2040" stroke-width="1.5"/>
+        <text x="500" y="254" text-anchor="middle" font-family="'DM Mono',monospace" font-size="13" fill="white">SCR</text>
+
+        <rect x="400" y="278" width="200" height="35" fill="#16213e" stroke="#0a1530" stroke-width="1.5"/>
+        <text x="500" y="300" text-anchor="middle" font-family="'DM Mono',monospace" font-size="13" fill="#c9a84c">MCR</text>
+
+        <!-- Risk margin -->
+        <rect x="400" y="317" width="200" height="38" fill="#d4a843" stroke="#b8902a" stroke-width="1.5"/>
+        <text x="500" y="341" text-anchor="middle" font-family="'Source Serif 4',serif" font-size="12.5" font-weight="600" fill="#3a2800">Risk Margin</text>
+
+        <!-- BEL -->
+        <rect x="400" y="358" width="200" height="72" fill="#c9a84c" stroke="#a88830" stroke-width="1.5" opacity="0.85"/>
+        <text x="500" y="388" text-anchor="middle" font-family="'Source Serif 4',serif" font-size="12.5" font-weight="600" fill="#2a1a00">Best Estimate</text>
+        <text x="500" y="406" text-anchor="middle" font-family="'Source Serif 4',serif" font-size="12.5" font-weight="600" fill="#2a1a00">Liability (BEL)</text>
+
+        <!-- Other liabilities at bottom of assets col -->
+        <rect x="400" y="434" width="200" height="36" fill="#d0d7e2" stroke="#b0bbcc" stroke-width="1"/>
+        <text x="500" y="456" text-anchor="middle" font-family="'Source Serif 4',serif" font-size="12" fill="#4a5568">Other Liabilities</text>
+
+        <!-- Also extend BEL in left column region for completeness -->
+        <rect x="40" y="317" width="200" height="38" fill="#d4a843" stroke="#b8902a" stroke-width="1.5"/>
+        <text x="140" y="341" text-anchor="middle" font-family="'Source Serif 4',serif" font-size="12.5" font-weight="600" fill="#3a2800">Risk Margin</text>
+
+        <rect x="40" y="358" width="200" height="72" fill="#c9a84c" stroke="#a88830" stroke-width="1.5" opacity="0.85"/>
+        <text x="140" y="388" text-anchor="middle" font-family="'Source Serif 4',serif" font-size="12.5" font-weight="600" fill="#2a1a00">Best Estimate</text>
+        <text x="140" y="406" text-anchor="middle" font-family="'Source Serif 4',serif" font-size="12.5" font-weight="600" fill="#2a1a00">Liability (BEL)</text>
+
+        <rect x="40" y="434" width="200" height="36" fill="#d0d7e2" stroke="#b0bbcc" stroke-width="1"/>
+        <text x="140" y="456" text-anchor="middle" font-family="'Source Serif 4',serif" font-size="12" fill="#4a5568">Other Liabilities</text>
+
+        <!-- column headers -->
+        <text x="140" y="22" text-anchor="middle" font-family="'DM Mono',monospace" font-size="11" fill="#8090a0" letter-spacing="0.1em">OWN FUNDS SIDE</text>
+        <text x="500" y="22" text-anchor="middle" font-family="'DM Mono',monospace" font-size="11" fill="#8090a0" letter-spacing="0.1em">LIABILITIES SIDE</text>
+
+        <!-- divider -->
+        <line x1="310" y1="15" x2="310" y2="475" stroke="#c5cdd9" stroke-width="1" stroke-dasharray="5,4"/>
+        <text x="310" y="12" text-anchor="middle" font-family="'DM Mono',monospace" font-size="10" fill="#aab">= </text>
+      </svg>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════
+       FIGURE 12.2 — TECHNICAL PROVISIONS
+  ════════════════════════════════════════════ -->
+  <div class="card" id="fig12-2">
+    <div class="card-header">
+      <span class="card-tag">Figure 12.2</span>
+      <h2>Valuation of Technical Provisions</h2>
+      <p class="subtitle">Hedgeable cashflows are valued at market price directly. Non-hedgeable cashflows require a BEL (discounted expected cashflows) plus a Risk Margin (cost-of-capital method at 6% p.a.).</p>
+    </div>
+    <div class="diagram-wrap">
+      <svg viewBox="0 0 700 300" xmlns="http://www.w3.org/2000/svg" width="100%" style="min-width:480px">
+        <!-- Root -->
+        <rect x="270" y="20" width="160" height="44" rx="3" fill="#0f3460"/>
+        <text x="350" y="47" text-anchor="middle" font-family="'Playfair Display',serif" font-size="14" font-weight="600" fill="white">Technical Provisions</text>
+
+        <!-- Root splits -->
+        <line x1="350" y1="64" x2="350" y2="90" stroke="#8090a0" stroke-width="1.5"/>
+        <line x1="350" y1="90" x2="160" y2="90" stroke="#8090a0" stroke-width="1.5"/>
+        <line x1="350" y1="90" x2="540" y2="90" stroke="#8090a0" stroke-width="1.5"/>
+        <line x1="160" y1="90" x2="160" y2="112" stroke="#8090a0" stroke-width="1.5"/>
+        <line x1="540" y1="90" x2="540" y2="112" stroke="#8090a0" stroke-width="1.5"/>
+
+        <!-- Hedgeable -->
+        <rect x="70" y="112" width="180" height="44" rx="3" fill="#16213e" stroke="#c9a84c" stroke-width="1.5"/>
+        <text x="160" y="138" text-anchor="middle" font-family="'Source Serif 4',serif" font-size="13" font-weight="600" fill="#c9a84c">Hedgeable</text>
+
+        <!-- Non-hedgeable -->
+        <rect x="450" y="112" width="180" height="44" rx="3" fill="#16213e" stroke="#4d7fa6" stroke-width="1.5"/>
+        <text x="540" y="138" text-anchor="middle" font-family="'Source Serif 4',serif" font-size="13" font-weight="600" fill="#90c4e8">Non-Hedgeable</text>
+
+        <!-- Hedgeable arrow down -->
+        <line x1="160" y1="156" x2="160" y2="196" stroke="#c9a84c" stroke-width="1.5"/>
+        <polygon points="155,190 165,190 160,200" fill="#c9a84c"/>
+        <rect x="70" y="200" width="180" height="52" rx="3" fill="#d4a843" opacity="0.85"/>
+        <text x="160" y="224" text-anchor="middle" font-family="'Source Serif 4',serif" font-size="13" font-weight="600" fill="#2a1a00">Market Valuation</text>
+        <text x="160" y="242" text-anchor="middle" font-family="'Source Serif 4',serif" font-size="10.5" fill="#5a3a00" font-style="italic">= market value of hedging instrument</text>
+
+        <!-- Non-hedgeable splits -->
+        <line x1="540" y1="156" x2="540" y2="182" stroke="#4d7fa6" stroke-width="1.5"/>
+        <line x1="540" y1="182" x2="430" y2="182" stroke="#4d7fa6" stroke-width="1.5"/>
+        <line x1="540" y1="182" x2="650" y2="182" stroke="#4d7fa6" stroke-width="1.5"/>
+        <line x1="430" y1="182" x2="430" y2="200" stroke="#4d7fa6" stroke-width="1.5"/>
+        <line x1="650" y1="182" x2="650" y2="200" stroke="#4d7fa6" stroke-width="1.5"/>
+
+        <rect x="350" y="200" width="160" height="52" rx="3" fill="#0f3460"/>
+        <text x="430" y="224" text-anchor="middle" font-family="'Source Serif 4',serif" font-size="13" font-weight="600" fill="white">Best Estimate</text>
+        <text x="430" y="241" text-anchor="middle" font-family="'DM Mono',monospace" font-size="12" fill="#c9a84c">BEL</text>
+        <text x="430" y="264" text-anchor="middle" font-family="'Source Serif 4',serif" font-size="10.5" fill="#8090a0" font-style="italic">PV of expected cashflows</text>
+        <text x="430" y="278" text-anchor="middle" font-family="'Source Serif 4',serif" font-size="10.5" fill="#8090a0" font-style="italic">discounted at risk-free rate</text>
+
+        <rect x="570" y="200" width="160" height="52" rx="3" fill="#16213e" stroke="#d4a843" stroke-width="1.5"/>
+        <text x="650" y="224" text-anchor="middle" font-family="'Source Serif 4',serif" font-size="13" font-weight="600" fill="#d4a843">Risk Margin</text>
+        <text x="650" y="241" text-anchor="middle" font-family="'DM Mono',monospace" font-size="12" fill="#8090a0">RM</text>
+        <text x="650" y="264" text-anchor="middle" font-family="'Source Serif 4',serif" font-size="10.5" fill="#8090a0" font-style="italic">Cost-of-capital method</text>
+        <text x="650" y="278" text-anchor="middle" font-family="'Source Serif 4',serif" font-size="10.5" fill="#8090a0" font-style="italic">6% p.a. on non-hedgeable SCR</text>
+      </svg>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════
+       FIGURE 12.3 — SCR RISK TREE
+  ════════════════════════════════════════════ -->
+  <div class="card" id="fig12-3">
+    <div class="card-header">
+      <span class="card-tag">Figure 12.3</span>
+      <h2>Standard Formula SCR — Insurance Risk Sub-Module Structure</h2>
+      <p class="subtitle">The SCR is built up from individual risk modules, aggregated using prescribed correlation matrices. For SA1, focus is on the Health insurance module. Life and Non-Life are shown for completeness.</p>
+    </div>
+    <div class="diagram-wrap">
+      <svg viewBox="0 0 980 580" xmlns="http://www.w3.org/2000/svg" width="100%" style="min-width:700px">
+
+        <!-- ── Level 0: SCR ── -->
+        <rect x="390" y="12" width="200" height="40" rx="3" fill="#e94560"/>
+        <text x="490" y="37" text-anchor="middle" font-family="'DM Mono',monospace" font-size="15" font-weight="500" fill="white" letter-spacing="0.1em">SCR</text>
+        <text x="490" y="60" text-anchor="middle" font-family="'Source Serif 4',serif" font-size="10" fill="#8090a0">BSCR + SCR_op + Adj</text>
+
+        <!-- L0→L1 lines -->
+        <line x1="490" y1="52" x2="490" y2="80" stroke="#8090a0" stroke-width="1.5"/>
+        <line x1="490" y1="80" x2="310" y2="80" stroke="#8090a0" stroke-width="1.5"/>
+        <line x1="490" y1="80" x2="670" y2="80" stroke="#8090a0" stroke-width="1.5"/>
+        <!-- Adj -->
+        <line x1="310" y1="80" x2="310" y2="95" stroke="#8090a0" stroke-width="1.5"/>
+        <rect x="238" y="95" width="145" height="34" rx="2" fill="#455a70"/>
+        <text x="310" y="117" text-anchor="middle" font-family="'Source Serif 4',serif" font-size="11" fill="white">Adj</text>
+        <text x="310" y="143" text-anchor="middle" font-family="'Source Serif 4',serif" font-size="9.5" fill="#8090a0">Loss-absorbing capacity</text>
+        <text x="310" y="155" text-anchor="middle" font-family="'Source Serif 4',serif" font-size="9.5" fill="#8090a0">of TPs &amp; deferred tax</text>
+        <!-- BSCR -->
+        <line x1="490" y1="80" x2="490" y2="95" stroke="#8090a0" stroke-width="1.5"/>
+        <rect x="420" y="95" width="140" height="34" rx="2" fill="#0f3460"/>
+        <text x="490" y="117" text-anchor="middle" font-family="'DM Mono',monospace" font-size="12" fill="white">BSCR</text>
+        <!-- Operational -->
+        <line x1="670" y1="80" x2="670" y2="95" stroke="#8090a0" stroke-width="1.5"/>
+        <rect x="598" y="95" width="145" height="34" rx="2" fill="#455a70"/>
+        <text x="670" y="117" text-anchor="middle" font-family="'Source Serif 4',serif" font-size="11" fill="white">Operational Risk</text>
+        <text x="670" y="143" text-anchor="middle" font-family="'Source Serif 4',serif" font-size="9.5" fill="#8090a0">% earned premiums</text>
+        <text x="670" y="155" text-anchor="middle" font-family="'Source Serif 4',serif" font-size="9.5" fill="#8090a0">+ % tech provisions</text>
+
+        <!-- ── Level 1: BSCR modules ── -->
+        <line x1="490" y1="129" x2="490" y2="168" stroke="#8090a0" stroke-width="1.5"/>
+        <line x1="100" y1="168" x2="880" y2="168" stroke="#8090a0" stroke-width="1.5"/>
+
+        <!-- Market -->
+        <line x1="100" y1="168" x2="100" y2="185" stroke="#8090a0" stroke-width="1.5"/>
+        <rect x="38" y="185" width="124" height="34" rx="2" fill="#1a4060"/>
+        <text x="100" y="207" text-anchor="middle" font-family="'Source Serif 4',serif" font-size="12" font-weight="600" fill="white">Market</text>
+
+        <!-- Health (highlighted) -->
+        <line x1="270" y1="168" x2="270" y2="185" stroke="#e94560" stroke-width="2"/>
+        <rect x="200" y="185" width="140" height="34" rx="2" fill="#e94560"/>
+        <text x="270" y="207" text-anchor="middle" font-family="'DM Mono',monospace" font-size="13" fill="white" font-weight="500">Health ★</text>
+
+        <!-- Default -->
+        <line x1="450" y1="168" x2="450" y2="185" stroke="#8090a0" stroke-width="1.5"/>
+        <rect x="385" y="185" width="130" height="34" rx="2" fill="#1a4060"/>
+        <text x="450" y="207" text-anchor="middle" font-family="'Source Serif 4',serif" font-size="12" fill="white">Default</text>
+
+        <!-- Life -->
+        <line x1="620" y1="168" x2="620" y2="185" stroke="#8090a0" stroke-width="1.5"/>
+        <rect x="555" y="185" width="130" height="34" rx="2" fill="#1a4060"/>
+        <text x="620" y="207" text-anchor="middle" font-family="'Source Serif 4',serif" font-size="12" fill="white">Life</text>
+
+        <!-- Non-Life -->
+        <line x1="790" y1="168" x2="790" y2="185" stroke="#8090a0" stroke-width="1.5"/>
+        <rect x="722" y="185" width="136" height="34" rx="2" fill="#1a4060"/>
+        <text x="790" y="207" text-anchor="middle" font-family="'Source Serif 4',serif" font-size="12" fill="white">Non-Life</text>
+
+        <!-- Intangible note -->
+        <line x1="910" y1="168" x2="910" y2="185" stroke="#8090a0" stroke-width="1.5"/>
+        <rect x="862" y="185" width="100" height="34" rx="2" fill="#455a70"/>
+        <text x="910" y="207" text-anchor="middle" font-family="'Source Serif 4',serif" font-size="11" fill="#ccd">Intangible</text>
+
+        <!-- ── Level 2: Health sub-modules ── -->
+        <line x1="270" y1="219" x2="270" y2="250" stroke="#e94560" stroke-width="1.5"/>
+        <line x1="120" y1="250" x2="420" y2="250" stroke="#e94560" stroke-width="1.5"/>
+        <line x1="120" y1="250" x2="120" y2="268" stroke="#e94560" stroke-width="1.5"/>
+        <line x1="270" y1="250" x2="270" y2="268" stroke="#e94560" stroke-width="1.5"/>
+        <line x1="420" y1="250" x2="420" y2="268" stroke="#e94560" stroke-width="1.5"/>
+
+        <!-- SLT Health -->
+        <rect x="38" y="268" width="164" height="34" rx="2" fill="#c9274a"/>
+        <text x="120" y="290" text-anchor="middle" font-family="'DM Mono',monospace" font-size="11.5" fill="white">SLT Health</text>
+
+        <!-- Catastrophe -->
+        <rect x="196" y="268" width="148" height="34" rx="2" fill="#c9274a"/>
+        <text x="270" y="290" text-anchor="middle" font-family="'DM Mono',monospace" font-size="11.5" fill="white">Catastrophe</text>
+
+        <!-- Non-SLT -->
+        <rect x="352" y="268" width="136" height="34" rx="2" fill="#c9274a"/>
+        <text x="420" y="290" text-anchor="middle" font-family="'DM Mono',monospace" font-size="11.5" fill="white">Non-SLT</text>
+
+        <!-- ── Level 3: SLT sub-risks ── -->
+        <line x1="120" y1="302" x2="120" y2="330" stroke="#8090a0" stroke-width="1.2"/>
+        <line x1="38" y1="330" x2="202" y2="330" stroke="#8090a0" stroke-width="1.2"/>
+        <!-- SLT risk boxes -->
+        <!-- column: Disability/Morb -->
+        <line x1="38" y1="330" x2="38" y2="345" stroke="#8090a0" stroke-width="1.2"/>
+        <rect x="8" y="345" width="60" height="30" rx="2" fill="#e8edf3" stroke="#c5cdd9"/>
+        <text x="38" y="358" text-anchor="middle" font-family="'Source Serif 4',serif" font-size="9.5" fill="#2a3a50">Disability/</text>
+        <text x="38" y="370" text-anchor="middle" font-family="'Source Serif 4',serif" font-size="9.5" fill="#2a3a50">Morbidity</text>
+
+        <line x1="68" y1="330" x2="68" y2="345" stroke="#8090a0" stroke-width="1.2"/>
+        <rect x="38" y="345" width="60" height="30" rx="2" fill="#e8edf3" stroke="#c5cdd9"/>
+        <text x="68" y="366" text-anchor="middle" font-family="'Source Serif 4',serif" font-size="9.5" fill="#2a3a50">Mortality</text>
+
+        <line x1="98" y1="330" x2="98" y2="345" stroke="#8090a0" stroke-width="1.2"/>
+        <rect x="68" y="345" width="60" height="30" rx="2" fill="#e8edf3" stroke="#c5cdd9"/>
+        <text x="98" y="366" text-anchor="middle" font-family="'Source Serif 4',serif" font-size="9.5" fill="#2a3a50">Longevity</text>
+
+        <line x1="128" y1="330" x2="128" y2="345" stroke="#8090a0" stroke-width="1.2"/>
+        <rect x="98" y="345" width="60" height="30" rx="2" fill="#e8edf3" stroke="#c5cdd9"/>
+        <text x="128" y="366" text-anchor="middle" font-family="'Source Serif 4',serif" font-size="9.5" fill="#2a3a50">Lapse</text>
+
+        <line x1="158" y1="330" x2="158" y2="345" stroke="#8090a0" stroke-width="1.2"/>
+        <rect x="128" y="345" width="60" height="30" rx="2" fill="#e8edf3" stroke="#c5cdd9"/>
+        <text x="158" y="366" text-anchor="middle" font-family="'Source Serif 4',serif" font-size="9.5" fill="#2a3a50">Expense</text>
+
+        <line x1="188" y1="330" x2="188" y2="345" stroke="#8090a0" stroke-width="1.2"/>
+        <rect x="158" y="345" width="60" height="30" rx="2" fill="#e8edf3" stroke="#c5cdd9"/>
+        <text x="188" y="366" text-anchor="middle" font-family="'Source Serif 4',serif" font-size="9.5" fill="#2a3a50">Revision</text>
+
+        <!-- SLT label -->
+        <text x="120" y="400" text-anchor="middle" font-family="'Source Serif 4',serif" font-size="10" fill="#8090a0" font-style="italic">Combined via SLT correlation matrix</text>
+
+        <!-- Level 3: CAT sub-risks -->
+        <line x1="270" y1="302" x2="270" y2="330" stroke="#8090a0" stroke-width="1.2"/>
+        <line x1="220" y1="330" x2="320" y2="330" stroke="#8090a0" stroke-width="1.2"/>
+
+        <line x1="220" y1="330" x2="220" y2="345" stroke="#8090a0" stroke-width="1.2"/>
+        <rect x="188" y="345" width="64" height="30" rx="2" fill="#f0e8ea" stroke="#d0b0b5"/>
+        <text x="220" y="358" text-anchor="middle" font-family="'Source Serif 4',serif" font-size="9" fill="#5a2a2a">Mass</text>
+        <text x="220" y="370" text-anchor="middle" font-family="'Source Serif 4',serif" font-size="9" fill="#5a2a2a">Accident</text>
+
+        <line x1="270" y1="330" x2="270" y2="345" stroke="#8090a0" stroke-width="1.2"/>
+        <rect x="254" y="345" width="64" height="30" rx="2" fill="#f0e8ea" stroke="#d0b0b5"/>
+        <text x="270" y="358" text-anchor="middle" font-family="'Source Serif 4',serif" font-size="9" fill="#5a2a2a">Concentrn</text>
+        <text x="270" y="370" text-anchor="middle" font-family="'Source Serif 4',serif" font-size="9" fill="#5a2a2a">Accident</text>
+
+        <line x1="320" y1="330" x2="320" y2="345" stroke="#8090a0" stroke-width="1.2"/>
+        <rect x="296" y="345" width="64" height="30" rx="2" fill="#f0e8ea" stroke="#d0b0b5"/>
+        <text x="328" y="362" text-anchor="middle" font-family="'Source Serif 4',serif" font-size="9" fill="#5a2a2a">Pandemic</text>
+
+        <!-- Level 3: Non-SLT sub-risks -->
+        <line x1="420" y1="302" x2="420" y2="330" stroke="#8090a0" stroke-width="1.2"/>
+        <line x1="380" y1="330" x2="460" y2="330" stroke="#8090a0" stroke-width="1.2"/>
+
+        <line x1="380" y1="330" x2="380" y2="345" stroke="#8090a0" stroke-width="1.2"/>
+        <rect x="342" y="345" width="76" height="30" rx="2" fill="#e8edf3" stroke="#c5cdd9"/>
+        <text x="380" y="358" text-anchor="middle" font-family="'Source Serif 4',serif" font-size="9.5" fill="#2a3a50">Premium &amp;</text>
+        <text x="380" y="370" text-anchor="middle" font-family="'Source Serif 4',serif" font-size="9.5" fill="#2a3a50">Reserve</text>
+
+        <line x1="460" y1="330" x2="460" y2="345" stroke="#8090a0" stroke-width="1.2"/>
+        <rect x="424" y="345" width="72" height="30" rx="2" fill="#e8edf3" stroke="#c5cdd9"/>
+        <text x="460" y="366" text-anchor="middle" font-family="'Source Serif 4',serif" font-size="9.5" fill="#2a3a50">Lapse</text>
+
+        <!-- Life column: simplified -->
+        <line x1="620" y1="219" x2="620" y2="250" stroke="#8090a0" stroke-width="1.2"/>
+        <line x1="560" y1="250" x2="680" y2="250" stroke="#8090a0" stroke-width="1.2"/>
+        <line x1="560" y1="250" x2="560" y2="268" stroke="#8090a0" stroke-width="1.2"/>
+        <rect x="510" y="268" width="100" height="30" rx="2" fill="#e8edf3" stroke="#c5cdd9"/>
+        <text x="560" y="280" text-anchor="middle" font-family="'Source Serif 4',serif" font-size="9.5" fill="#4a5568">Mortality</text>
+        <text x="560" y="292" text-anchor="middle" font-family="'Source Serif 4',serif" font-size="9.5" fill="#4a5568">Longevity…</text>
+        <line x1="680" y1="250" x2="680" y2="268" stroke="#8090a0" stroke-width="1.2"/>
+        <rect x="630" y="268" width="100" height="30" rx="2" fill="#e8edf3" stroke="#c5cdd9"/>
+        <text x="680" y="280" text-anchor="middle" font-family="'Source Serif 4',serif" font-size="9.5" fill="#4a5568">Disability</text>
+        <text x="680" y="292" text-anchor="middle" font-family="'Source Serif 4',serif" font-size="9.5" fill="#4a5568">Lapse…CAT</text>
+
+        <!-- Market column: simplified -->
+        <line x1="100" y1="219" x2="100" y2="250" stroke="#8090a0" stroke-width="1.2"/>
+        <line x1="38" y1="250" x2="162" y2="250" stroke="#8090a0" stroke-width="1.2" stroke-dasharray="3,3"/>
+        <rect x="8" y="250" width="60" height="26" rx="2" fill="#e8edf3" stroke="#c5cdd9"/>
+        <text x="38" y="266" text-anchor="middle" font-family="'Source Serif 4',serif" font-size="9" fill="#4a5568">Equity</text>
+        <rect x="72" y="250" width="60" height="26" rx="2" fill="#e8edf3" stroke="#c5cdd9"/>
+        <text x="102" y="262" text-anchor="middle" font-family="'Source Serif 4',serif" font-size="9" fill="#4a5568">Interest</text>
+        <text x="102" y="273" text-anchor="middle" font-family="'Source Serif 4',serif" font-size="9" fill="#4a5568">Rate…</text>
+
+        <!-- Non-Life column: simplified -->
+        <line x1="790" y1="219" x2="790" y2="250" stroke="#8090a0" stroke-width="1.2"/>
+        <line x1="730" y1="250" x2="850" y2="250" stroke="#8090a0" stroke-width="1.2" stroke-dasharray="3,3"/>
+        <rect x="700" y="250" width="60" height="26" rx="2" fill="#e8edf3" stroke="#c5cdd9"/>
+        <text x="730" y="266" text-anchor="middle" font-family="'Source Serif 4',serif" font-size="9" fill="#4a5568">Prem/Res</text>
+        <rect x="764" y="250" width="60" height="26" rx="2" fill="#e8edf3" stroke="#c5cdd9"/>
+        <text x="794" y="262" text-anchor="middle" font-family="'Source Serif 4',serif" font-size="9" fill="#4a5568">Lapse</text>
+        <text x="794" y="273" text-anchor="middle" font-family="'Source Serif 4',serif" font-size="9" fill="#4a5568">CAT</text>
+
+        <!-- Legend -->
+        <rect x="600" y="420" width="14" height="14" fill="#e94560"/>
+        <text x="620" y="432" font-family="'Source Serif 4',serif" font-size="11" fill="#4a5568">Health module (SA1 focus)</text>
+        <rect x="600" y="445" width="14" height="14" fill="#1a4060"/>
+        <text x="620" y="457" font-family="'Source Serif 4',serif" font-size="11" fill="#4a5568">Other BSCR modules</text>
+        <rect x="600" y="470" width="14" height="14" fill="#e8edf3" stroke="#c5cdd9"/>
+        <text x="620" y="482" font-family="'Source Serif 4',serif" font-size="11" fill="#4a5568">Sub-risks within modules</text>
+
+        <!-- NOTE: Correlations applied at each level -->
+        <text x="490" y="550" text-anchor="middle" font-family="'Source Serif 4',serif" font-size="11" fill="#8090a0" font-style="italic">Aggregation at every level uses √(Σᵢ Σⱼ Corrᵢⱼ × SCRᵢ × SCRⱼ)</text>
+      </svg>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════
+       FIGURE 12.4 — SUPERVISORY INTERVENTION
+  ════════════════════════════════════════════ -->
+  <div class="card" id="fig12-4">
+    <div class="card-header">
+      <span class="card-tag">Figure 12.4</span>
+      <h2>Supervisory Intervention Levels</h2>
+      <p class="subtitle">Two rungs of a 'ladder'. Breaching the SCR triggers a recovery plan (6 months to rectify). Breaching the MCR triggers a short-term finance scheme (3 months) — ultimately, the company may lose authorisation.</p>
+    </div>
+    <div class="diagram-wrap">
+      <svg viewBox="0 0 700 360" xmlns="http://www.w3.org/2000/svg" width="100%" style="min-width:480px">
+        <!-- Available capital (left bar) -->
+        <rect x="60" y="40" width="130" height="280" rx="3" fill="#eef2f7" stroke="#c5cdd9" stroke-width="1.5"/>
+        <text x="125" y="25" text-anchor="middle" font-family="'DM Mono',monospace" font-size="11" fill="#6b7a8d" letter-spacing="0.08em">AVAILABLE</text>
+
+        <!-- Own funds in excess -->
+        <rect x="60" y="40" width="130" height="120" rx="3" fill="#4d7fa6"/>
+        <text x="125" y="95" text-anchor="middle" font-family="'Source Serif 4',serif" font-size="11.5" fill="white">Own funds in</text>
+        <text x="125" y="110" text-anchor="middle" font-family="'Source Serif 4',serif" font-size="11.5" fill="white">excess of capital</text>
+        <text x="125" y="125" text-anchor="middle" font-family="'Source Serif 4',serif" font-size="11.5" fill="white">requirements</text>
+
+        <!-- Supervisory intervention zone -->
+        <rect x="60" y="163" width="130" height="80" fill="#f3c677" opacity="0.7"/>
+        <text x="125" y="197" text-anchor="middle" font-family="'Source Serif 4',serif" font-size="11" fill="#5a3a00">Supervisory</text>
+        <text x="125" y="212" text-anchor="middle" font-family="'Source Serif 4',serif" font-size="11" fill="#5a3a00">intervention zone</text>
+
+        <!-- Regulatory action zone -->
+        <rect x="60" y="247" width="130" height="73" rx="3" fill="#e94560" opacity="0.8"/>
+        <text x="125" y="278" text-anchor="middle" font-family="'Source Serif 4',serif" font-size="11" fill="white">Regulatory action</text>
+        <text x="125" y="294" text-anchor="middle" font-family="'Source Serif 4',serif" font-size="11" fill="white">(MCR breached)</text>
+
+        <!-- Required capital (right bar) -->
+        <text x="520" y="25" text-anchor="middle" font-family="'DM Mono',monospace" font-size="11" fill="#6b7a8d" letter-spacing="0.08em">REQUIRED</text>
+
+        <!-- SCR bar -->
+        <rect x="420" y="40" width="200" height="120" rx="3" fill="#0f3460"/>
+        <text x="520" y="107" text-anchor="middle" font-family="'DM Mono',monospace" font-size="16" font-weight="500" fill="white" letter-spacing="0.1em">SCR</text>
+        <text x="520" y="128" text-anchor="middle" font-family="'Source Serif 4',serif" font-size="10" fill="#8fa4b8" font-style="italic">1st point of intervention</text>
+        <text x="520" y="142" text-anchor="middle" font-family="'Source Serif 4',serif" font-size="10" fill="#8fa4b8" font-style="italic">VaR 99.5% over 1 year</text>
+
+        <!-- MCR bar -->
+        <rect x="420" y="247" width="200" height="73" rx="3" fill="#e94560"/>
+        <text x="520" y="291" text-anchor="middle" font-family="'DM Mono',monospace" font-size="16" font-weight="500" fill="white" letter-spacing="0.1em">MCR</text>
+        <text x="520" y="310" text-anchor="middle" font-family="'Source Serif 4',serif" font-size="10" fill="#fcc" font-style="italic">Ultimate point · VaR 85% · 1 yr</text>
+        <text x="520" y="324" text-anchor="middle" font-family="'Source Serif 4',serif" font-size="10" fill="#fcc" font-style="italic">25%–45% of SCR (floor/cap)</text>
+
+        <!-- Dashed lines -->
+        <line x1="200" y1="163" x2="420" y2="163" stroke="#0f3460" stroke-width="1.5" stroke-dasharray="6,4"/>
+        <line x1="200" y1="247" x2="420" y2="247" stroke="#e94560" stroke-width="1.5" stroke-dasharray="6,4"/>
+
+        <!-- Arrow going down on left -->
+        <line x1="28" y1="40" x2="28" y2="320" stroke="#c5cdd9" stroke-width="1.5"/>
+        <polygon points="23,315 33,315 28,325" fill="#c5cdd9"/>
+        <polygon points="23,45 33,45 28,35" fill="#c5cdd9"/>
+
+        <!-- Labels on axis -->
+        <text x="14" y="188" text-anchor="middle" font-family="'Source Serif 4',serif" font-size="11" fill="#8090a0" transform="rotate(-90,14,188)">Capital level</text>
+
+        <!-- SCR action note -->
+        <text x="270" y="150" text-anchor="middle" font-family="'Source Serif 4',serif" font-size="10.5" fill="#4a5568" font-style="italic">SCR breach: recovery plan</text>
+        <text x="270" y="163" text-anchor="middle" font-family="'Source Serif 4',serif" font-size="10.5" fill="#4a5568" font-style="italic">within 2 mths; rectify in 6 mths</text>
+
+        <text x="270" y="237" text-anchor="middle" font-family="'Source Serif 4',serif" font-size="10.5" fill="#9c1a2a" font-style="italic">MCR breach: finance scheme</text>
+        <text x="270" y="249" text-anchor="middle" font-family="'Source Serif 4',serif" font-size="10.5" fill="#9c1a2a" font-style="italic">within 1 mth; rectify in 3 mths</text>
+      </svg>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════
+       SLT HEALTH CORRELATION MATRIX
+  ════════════════════════════════════════════ -->
+  <div class="card" id="corr-slt">
+    <div class="card-header">
+      <span class="card-tag">Correlation Matrix — SLT Health Risk Module</span>
+      <h2>SLT Health: Internal Sub-Risk Correlations</h2>
+      <p class="subtitle">Used to aggregate the six individual risk SCRs within the SLT Health module. Note: Mortality and Longevity are negatively correlated (−25%) as they pull in opposite directions.</p>
+    </div>
+    <div class="matrix-wrap">
+      <table class="corr">
+        <thead>
+          <tr>
+            <th>i \ j</th>
+            <th>Mortality</th>
+            <th>Longevity</th>
+            <th>Disability / Morbidity</th>
+            <th>Lapse</th>
+            <th>Expense</th>
+            <th>Revision</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Mortality</td>
+            <td class="diag">100%</td>
+            <td class="neg">−25%</td>
+            <td class="pos-med">25%</td>
+            <td class="zero">0%</td>
+            <td class="pos-med">25%</td>
+            <td class="zero">0%</td>
+          </tr>
+          <tr>
+            <td>Longevity</td>
+            <td class="neg">−25%</td>
+            <td class="diag">100%</td>
+            <td class="zero">0%</td>
+            <td class="pos-med">25%</td>
+            <td class="pos-med">25%</td>
+            <td class="pos-med">25%</td>
+          </tr>
+          <tr>
+            <td>Disability / Morbidity</td>
+            <td class="pos-med">25%</td>
+            <td class="zero">0%</td>
+            <td class="diag">100%</td>
+            <td class="zero">0%</td>
+            <td class="pos-high">50%</td>
+            <td class="zero">0%</td>
+          </tr>
+          <tr>
+            <td>Lapse</td>
+            <td class="zero">0%</td>
+            <td class="pos-med">25%</td>
+            <td class="zero">0%</td>
+            <td class="diag">100%</td>
+            <td class="pos-high">50%</td>
+            <td class="zero">0%</td>
+          </tr>
+          <tr>
+            <td>Expense</td>
+            <td class="pos-med">25%</td>
+            <td class="pos-med">25%</td>
+            <td class="pos-high">50%</td>
+            <td class="pos-high">50%</td>
+            <td class="diag">100%</td>
+            <td class="pos-high">50%</td>
+          </tr>
+          <tr>
+            <td>Revision</td>
+            <td class="zero">0%</td>
+            <td class="pos-med">25%</td>
+            <td class="zero">0%</td>
+            <td class="zero">0%</td>
+            <td class="pos-high">50%</td>
+            <td class="diag">100%</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════
+       HEALTH SUB-MODULE CORRELATIONS
+  ════════════════════════════════════════════ -->
+  <div class="card" id="corr-health">
+    <div class="card-header">
+      <span class="card-tag">Correlation Matrix — Health Module Aggregation</span>
+      <h2>Health Module: SLT / Non-SLT / CAT Correlations</h2>
+      <p class="subtitle">After calculating SCR_SLT, SCR_Non-SLT and SCR_CAT separately, these three are combined using this matrix to produce SCR_Health. Source: QIS5 specification.</p>
+    </div>
+    <div class="matrix-wrap">
+      <table class="corr">
+        <thead>
+          <tr>
+            <th>i \ j</th>
+            <th>SLT Health</th>
+            <th>Non-SLT Health</th>
+            <th>CAT</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>SLT Health</td>
+            <td class="diag">100%</td>
+            <td class="pos-high">50%</td>
+            <td class="pos-med">25%</td>
+          </tr>
+          <tr>
+            <td>Non-SLT Health</td>
+            <td class="pos-high">50%</td>
+            <td class="diag">100%</td>
+            <td class="pos-med">25%</td>
+          </tr>
+          <tr>
+            <td>CAT</td>
+            <td class="pos-med">25%</td>
+            <td class="pos-med">25%</td>
+            <td class="diag">100%</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+  <!-- ═══════════════════════════════════════════
+       BSCR CORRELATION MATRIX
+  ════════════════════════════════════════════ -->
+  <div class="card" id="corr-bscr">
+    <div class="card-header">
+      <span class="card-tag">Correlation Matrix — BSCR Aggregation</span>
+      <h2>BSCR: Cross-Module Correlations</h2>
+      <p class="subtitle">Used to combine the five main risk modules into the Basic SCR. The intangibles module is added separately (no diversification). Note Life and Non-Life are assumed uncorrelated (0%).</p>
+    </div>
+    <div class="matrix-wrap">
+      <table class="corr">
+        <thead>
+          <tr>
+            <th>i \ j</th>
+            <th>Market</th>
+            <th>Default</th>
+            <th>Life</th>
+            <th>Health</th>
+            <th>Non-Life</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Market</td>
+            <td class="diag">100%</td>
+            <td class="pos-med">25%</td>
+            <td class="pos-med">25%</td>
+            <td class="pos-med">25%</td>
+            <td class="pos-med">25%</td>
+          </tr>
+          <tr>
+            <td>Default</td>
+            <td class="pos-med">25%</td>
+            <td class="diag">100%</td>
+            <td class="pos-med">25%</td>
+            <td class="pos-med">25%</td>
+            <td class="pos-high">50%</td>
+          </tr>
+          <tr>
+            <td>Life</td>
+            <td class="pos-med">25%</td>
+            <td class="pos-med">25%</td>
+            <td class="diag">100%</td>
+            <td class="pos-med">25%</td>
+            <td class="zero">0%</td>
+          </tr>
+          <tr>
+            <td>Health</td>
+            <td class="pos-med">25%</td>
+            <td class="pos-med">25%</td>
+            <td class="pos-med">25%</td>
+            <td class="diag">100%</td>
+            <td class="zero">0%</td>
+          </tr>
+          <tr>
+            <td>Non-Life</td>
+            <td class="pos-med">25%</td>
+            <td class="pos-high">50%</td>
+            <td class="zero">0%</td>
+            <td class="zero">0%</td>
+            <td class="diag">100%</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  SA1 Chapters 11 &amp; 12 · IFE 2024 Examinations · Solvency II current as at May 2023 · All content subject to ongoing regulatory evolution
+</footer>
+
+</body>
+</html>
