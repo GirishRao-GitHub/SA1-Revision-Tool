@@ -512,12 +512,53 @@ html,body{min-height:100%;background:var(--slate-50);color:var(--slate-800);font
   <!-- Market risk -->
   <div class="sec-hd">
     <div class="sec-hd-line"></div>
+    <div class="sec-hd-text">Market risk module — sub-module stresses</div>
+    <div class="sec-hd-note">Annex IV, Del. Reg. 2015/35 — 6×6 correlation matrix + illiquidity premium</div>
+  </div>
+  <div class="card">
+    <div class="card-title"><span class="card-title-accent"></span>Capital charge for each market risk sub-module (£m)</div>
+    <div class="submod-note">Interest rate, equity, property and spread charges are <strong>auto-populated</strong> from the matching stressed balance sheet lines (A1 Δ). Currency, concentration and illiquidity premium must be entered manually. SCR<sub>mkt</sub> is then derived via the 6×6 Annex IV matrix; illiquidity premium is added arithmetically (no diversification, Art. 105(5)(g)).</div>
+    <div class="input-grid">
+      <div class="input-group"><label>Interest rate risk (£m) <span class="field-badge-auto">AUTO</span></label><input type="number" id="mkt_ir" value="0" min="0" class="scr-auto" readonly tabindex="-1"></div>
+      <div class="input-group"><label>Equity risk (£m) <span class="field-badge-auto">AUTO</span></label><input type="number" id="mkt_eq" value="0" min="0" class="scr-auto" readonly tabindex="-1"></div>
+      <div class="input-group"><label>Property risk (£m) <span class="field-badge-auto">AUTO</span></label><input type="number" id="mkt_prop" value="0" min="0" class="scr-auto" readonly tabindex="-1"></div>
+      <div class="input-group"><label>Spread risk (£m) <span class="field-badge-auto">AUTO</span></label><input type="number" id="mkt_sp" value="0" min="0" class="scr-auto" readonly tabindex="-1"></div>
+      <div class="input-group"><label>Currency risk (£m) <span class="field-badge-manual">MANUAL</span></label><input type="number" id="mkt_curr" value="0" min="0" class="scr-manual" oninput="liveAll()"></div>
+      <div class="input-group"><label>Concentration risk (£m) <span class="field-badge-manual">MANUAL</span></label><input type="number" id="mkt_conc" value="0" min="0" class="scr-manual" oninput="liveAll()"></div>
+      <div class="input-group"><label>Illiquidity premium risk (£m) <span class="field-badge-manual">MANUAL</span></label><input type="number" id="mkt_ilp" value="0" min="0" class="scr-manual" oninput="liveAll()"></div>
+    </div>
+    <div style="margin-top:14px">
+      <div class="sec-hd-text" style="font-size:10px;color:var(--slate-400);margin-bottom:6px">Market risk correlation matrix — interest rate up scenario (A=0) / down scenario (A=0.5) — Annex IV, Table 1</div>
+      <div class="corr-wrap">
+        <table class="corr-table">
+          <tr><th class="row-hdr"></th><th>Int rate</th><th>Equity</th><th>Property</th><th>Spread</th><th>Currency</th><th>Conc.</th></tr>
+          <tr><th class="row-hdr">Interest rate</th><td class="diag">1.00</td><td class="zero">0 / 0.50</td><td class="zero">0 / 0.50</td><td class="zero">0 / 0.50</td><td class="high">0.25</td><td class="zero">0</td></tr>
+          <tr><th class="row-hdr">Equity</th><td class="zero">0 / 0.50</td><td class="diag">1.00</td><td class="high">0.75</td><td class="high">0.75</td><td class="high">0.25</td><td class="zero">0</td></tr>
+          <tr><th class="row-hdr">Property</th><td class="zero">0 / 0.50</td><td class="high">0.75</td><td class="diag">1.00</td><td class="high">0.50</td><td class="high">0.25</td><td class="zero">0</td></tr>
+          <tr><th class="row-hdr">Spread</th><td class="zero">0 / 0.50</td><td class="high">0.75</td><td class="high">0.50</td><td class="diag">1.00</td><td class="high">0.25</td><td class="zero">0</td></tr>
+          <tr><th class="row-hdr">Currency</th><td class="high">0.25</td><td class="high">0.25</td><td class="high">0.25</td><td class="high">0.25</td><td class="diag">1.00</td><td class="zero">0</td></tr>
+          <tr><th class="row-hdr">Concentration</th><td class="zero">0</td><td class="zero">0</td><td class="zero">0</td><td class="zero">0</td><td class="zero">0</td><td class="diag">1.00</td></tr>
+        </table>
+      </div>
+      <div class="note-box" style="margin-top:8px;font-size:10.5px">A = 0 when interest rate upward scenario produces the higher SCR<sub>mkt,int</sub> (typical for asset-heavy books); A = 0.5 when downward scenario dominates (typical for annuity/long-liability books). This tool applies <strong>A = 0</strong> as the default (upward scenario). Illiquidity premium risk is added without diversification after matrix aggregation.</div>
+    </div>
+    <div style="margin-top:12px;display:flex;align-items:center;gap:10px">
+      <div class="input-group" style="max-width:240px">
+        <label>SCR — Market risk (derived, £m)</label>
+        <input type="number" id="scr_mkt" class="derived" readonly tabindex="-1">
+      </div>
+      <div style="font-size:11px;color:var(--slate-400);margin-top:18px">Aggregated via 6×6 matrix + ILP added arithmetically</div>
+    </div>
+  </div>
+
+  <!-- Other BSCR modules -->
+  <div class="sec-hd">
+    <div class="sec-hd-line"></div>
     <div class="sec-hd-text">Other BSCR modules</div>
   </div>
   <div class="card">
-    <div class="submod-note">Market risk is <strong>auto-populated</strong> from the total stressed investment loss on the balance sheet (A1 base − A1 stressed). All other charges are entered manually.</div>
+    <div class="submod-note">Remaining BSCR modules entered manually. Market risk above feeds into the BSCR aggregation automatically.</div>
     <div class="input-grid">
-      <div class="input-group"><label>Market risk SCR (£m) <span class="field-badge-auto">AUTO</span></label><input type="number" id="scr_mkt" value="104" min="0" class="scr-auto" oninput="liveAll()"></div>
       <div class="input-group"><label>Counterparty default SCR (£m) <span class="field-badge-manual">MANUAL</span></label><input type="number" id="scr_def" value="18" min="0" class="scr-manual" oninput="liveAll()"></div>
       <div class="input-group"><label>Life underwriting SCR (£m) <span class="field-badge-manual">MANUAL</span></label><input type="number" id="scr_life" value="0" min="0" class="scr-manual" oninput="liveAll()"></div>
       <div class="input-group"><label>Non-life underwriting SCR (£m) <span class="field-badge-manual">MANUAL</span></label><input type="number" id="scr_nl" value="0" min="0" class="scr-manual" oninput="liveAll()"></div>
@@ -632,6 +673,19 @@ html,body{min-height:100%;background:var(--slate-50);color:var(--slate-800);font
 
 <!-- ══════════════ WORKINGS PANEL ══════════════ -->
 <div id="tab-workings" class="panel">
+  <div class="sec-hd" style="margin-top:0"><span class="step-badge" style="background:var(--teal)">0</span><div class="sec-hd-text">Market risk — 6×6 sub-module matrix (Annex IV, A=0 upward scenario) + ILP</div></div>
+  <div class="corr-wrap" style="margin-bottom:10px">
+    <table class="corr-table">
+      <tr><th class="row-hdr"></th><th>Int rate</th><th>Equity</th><th>Property</th><th>Spread</th><th>Currency</th><th>Conc.</th></tr>
+      <tr><th class="row-hdr">Interest rate</th><td class="diag">1.00</td><td class="zero">0</td><td class="zero">0</td><td class="zero">0</td><td class="high">0.25</td><td class="zero">0</td></tr>
+      <tr><th class="row-hdr">Equity</th><td class="zero">0</td><td class="diag">1.00</td><td class="high">0.75</td><td class="high">0.75</td><td class="high">0.25</td><td class="zero">0</td></tr>
+      <tr><th class="row-hdr">Property</th><td class="zero">0</td><td class="high">0.75</td><td class="diag">1.00</td><td class="high">0.50</td><td class="high">0.25</td><td class="zero">0</td></tr>
+      <tr><th class="row-hdr">Spread</th><td class="zero">0</td><td class="high">0.75</td><td class="high">0.50</td><td class="diag">1.00</td><td class="high">0.25</td><td class="zero">0</td></tr>
+      <tr><th class="row-hdr">Currency</th><td class="high">0.25</td><td class="high">0.25</td><td class="high">0.25</td><td class="high">0.25</td><td class="diag">1.00</td><td class="zero">0</td></tr>
+      <tr><th class="row-hdr">Concentration</th><td class="zero">0</td><td class="zero">0</td><td class="zero">0</td><td class="zero">0</td><td class="zero">0</td><td class="diag">1.00</td></tr>
+    </table>
+  </div>
+  <table class="wt" id="tbl-mkt"></table>
   <div class="sec-hd" style="margin-top:0"><span class="step-badge">1</span><div class="sec-hd-text">SLT health — 6×6 matrix aggregation</div></div>
   <div class="corr-wrap" style="margin-bottom:10px">
     <table class="corr-table">
@@ -883,10 +937,13 @@ function liveBS(){
     `<tr class="stress-total"><td colspan="3" style="font-family:var(--font-body)">SCR = max(0, Base own funds − Stressed own funds)</td><td>${fmtM(Math.max(0,b.totOF-s.totOF))}</td></tr>`;
   document.getElementById('nav-impact-body').innerHTML=impactHTML;
 
-  // Auto-populate SCR market charge from BS investment delta only
-  // Actuarial sub-module charges (slt_disab, nslt_premres) are manual — not overwritten here
-  const mktCharge=Math.max(0,b.A1-s.A1);
-  document.getElementById('scr_mkt').value=mktCharge.toFixed(1);
+  // Auto-populate market risk sub-module charges from matching BS investment lines
+  const mkt_ir=Math.max(0,bv('govbond')-sv('govbond'));
+  const mkt_eq=Math.max(0,(bv('eq_listed')+bv('eq_other')+bv('ciu'))-(sv('eq_listed')+sv('eq_other')+sv('ciu')));
+  const mkt_prop=Math.max(0,bv('property')-sv('property'));
+  const mkt_sp=Math.max(0,bv('corpbond')-sv('corpbond'));
+  const setMkt=(id,val)=>{const el=document.getElementById(id);if(el){el.value=val.toFixed(1);}};
+  setMkt('mkt_ir',mkt_ir); setMkt('mkt_eq',mkt_eq); setMkt('mkt_prop',mkt_prop); setMkt('mkt_sp',mkt_sp);
 
   // Sync own funds to stressed values
   document.getElementById('t1_shares').value=sv('t1_shares').toFixed(1);
@@ -948,18 +1005,31 @@ function computeSCR(){
   const cat=v('scr_cat');
   const hCorr=[[1,.5,.25],[.5,1,.25],[.25,.25,1]];
   const health=aggCorr([slt,nslt,cat],hCorr);
+  // Market risk: 6×6 Annex IV matrix (A=0, interest rate upward scenario)
+  const mktCorr=[
+    [1,   0,    0,    0,    0.25, 0],
+    [0,   1,    0.75, 0.75, 0.25, 0],
+    [0,   0.75, 1,    0.50, 0.25, 0],
+    [0,   0.75, 0.50, 1,    0.25, 0],
+    [0.25,0.25, 0.25, 0.25, 1,   0],
+    [0,   0,    0,    0,    0,   1]
+  ];
+  const mktBase=aggCorr([v('mkt_ir'),v('mkt_eq'),v('mkt_prop'),v('mkt_sp'),v('mkt_curr'),v('mkt_conc')],mktCorr);
+  const mkt=mktBase+v('mkt_ilp');// ILP added arithmetically — no diversification
+  // Update derived scr_mkt display
+  const mktEl=document.getElementById('scr_mkt');if(mktEl)mktEl.value=mkt.toFixed(1);
   const bscrCorr=[[1,.25,.25,.25,.25],[.25,1,.25,.25,.5],[.25,.25,1,.25,0],[.25,.25,.25,1,0],[.25,.5,0,0,1]];
-  const bscrBase=aggCorr([v('scr_mkt'),v('scr_def'),v('scr_life'),health,v('scr_nl')],bscrCorr);
-  const bscr=bscrBase+v('scr_int');// Art.226(1): intangibles SCR added arithmetically
+  const bscrBase=aggCorr([mkt,v('scr_def'),v('scr_life'),health,v('scr_nl')],bscrCorr);
+  const bscr=bscrBase+v('scr_int');
   const s=bsStress();
   const tpLife=s.tpSlt, tpNl=s.tpNslt;
   const op_prem=0.03*v('prem_life')+0.03*v('prem_nl');
   const op_tp=0.0045*tpLife+0.003*tpNl;
-  const scr_op=Math.min(0.3*bscr,Math.max(op_prem,op_tp));// Art.218: capped at 30% of BSCR
+  const scr_op=Math.min(0.3*bscr,Math.max(op_prem,op_tp));
   const scr=bscr+scr_op+v('adj');
   const mcr_linear=v('mcr_fac_slt')*v('car_slt')+v('mcr_fac_life')*v('car_life')+v('mcr_fac_tp')*tpNl+v('mcr_fac_prem')*v('prem_nl');
   const mcr=Math.max(0.25*scr,Math.min(0.45*scr,mcr_linear));
-  return {slt,nslt,cat,health,bscr,scr_op,scr,mcr,tpLife,tpNl,op_prem,op_tp};
+  return {slt,nslt,cat,health,mkt,bscr,scr_op,scr,mcr,tpLife,tpNl,op_prem,op_tp,mktBase,mkt_ir:v('mkt_ir'),mkt_eq:v('mkt_eq'),mkt_prop:v('mkt_prop'),mkt_sp:v('mkt_sp'),mkt_curr:v('mkt_curr'),mkt_conc:v('mkt_conc'),mkt_ilp:v('mkt_ilp')};
 }
 
 function getT1(){
@@ -1021,7 +1091,7 @@ function rows(arr){
 
 function calculate(){
   const res=computeSCR();
-  const {slt,nslt,cat,health,bscr,scr_op,scr,mcr,tpLife,tpNl,op_prem,op_tp}=res;
+  const {slt,nslt,cat,health,mkt,mktBase,bscr,scr_op,scr,mcr,tpLife,tpNl,op_prem,op_tp}=res;
   const adj=v('adj');
   const s=bsStress(), b=bsBase();
   const T1=s.T1, T2=s.T2, T3=s.T3, totalOF=s.totOF;
@@ -1029,6 +1099,21 @@ function calculate(){
   const mcr_floor=0.25*scr, mcr_cap=0.45*scr;
   const mcr_linear=v('mcr_fac_slt')*v('car_slt')+v('mcr_fac_life')*v('car_life')+v('mcr_fac_tp')*tpNl+v('mcr_fac_prem')*v('prem_nl');
   const mcr_binding=mcr===mcr_floor?'Floor (25%×SCR)':mcr===mcr_cap?'Cap (45%×SCR)':'Linear formula';
+
+  // Step 0: Market risk sub-module aggregation
+  document.getElementById('tbl-mkt').innerHTML=
+    `<thead><tr><th>Market risk sub-module</th><th style="text-align:right">SCR (£m)</th></tr></thead><tbody>`+
+    rows([
+      ['Interest rate risk (A1: govt bonds Δ, upward scenario)',fmt(v('mkt_ir')),''],
+      ['Equity risk (A1: equities + CIUs Δ)',fmt(v('mkt_eq')),''],
+      ['Property risk (A1: property Δ)',fmt(v('mkt_prop')),''],
+      ['Spread risk (A1: corp bonds Δ)',fmt(v('mkt_sp')),''],
+      ['Currency risk (manual)',fmt(v('mkt_curr')),''],
+      ['Concentration risk (manual)',fmt(v('mkt_conc')),''],
+      ['Market SCR (6×6 diversified, excl. ILP)',fmt(mktBase),'subtotal'],
+      ['Illiquidity premium risk (manual, added arithmetically)',fmt(v('mkt_ilp')),''],
+      ['SCR — Market risk (total)',fmt(mkt),'total']
+    ])+`</tbody>`;
 
   document.getElementById('tbl-slt').innerHTML=
     `<thead><tr><th>SLT sub-module</th><th style="text-align:right">SCR (£m)</th></tr></thead><tbody>`+
@@ -1044,7 +1129,7 @@ function calculate(){
 
   document.getElementById('tbl-bscr').innerHTML=
     `<thead><tr><th>BSCR module</th><th style="text-align:right">SCR (£m)</th></tr></thead><tbody>`+
-    rows([['Market risk (auto: A1 base − A1 stressed)',fmt(v('scr_mkt')),''],['Counterparty default',fmt(v('scr_def')),''],['Life underwriting',fmt(v('scr_life')),''],['Health (step 3)',fmt(health),''],['Non-life underwriting',fmt(v('scr_nl')),''],['Intangibles',fmt(v('scr_int')),''],['BSCR (diversified)',fmt(bscr),'subtotal']])+`</tbody>`;
+    rows([['Market risk (diversified sub-modules)',fmt(mkt),''],['Counterparty default',fmt(v('scr_def')),''],['Life underwriting',fmt(v('scr_life')),''],['Health (step 3)',fmt(health),''],['Non-life underwriting',fmt(v('scr_nl')),''],['Intangibles',fmt(v('scr_int')),''],['BSCR (diversified)',fmt(bscr),'subtotal']])+`</tbody>`;
 
   document.getElementById('tbl-op').innerHTML=
     `<thead><tr><th>Op risk measure</th><th style="text-align:right">£m</th></tr></thead><tbody>`+
@@ -1373,6 +1458,7 @@ const TEACHING_DEFAULTS={
   slt_mort:0,slt_long:0,slt_disab:0,slt_lapse:0,slt_exp:0,slt_rev:0,
   nslt_premres:0,nslt_lapse:0,scr_cat:0,
   scr_def:0,scr_life:0,scr_nl:0,scr_int:0,
+  mkt_curr:0,mkt_conc:0,mkt_ilp:0,
   adj:0,
 };
 
