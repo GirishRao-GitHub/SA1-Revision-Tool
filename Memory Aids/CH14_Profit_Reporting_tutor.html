@@ -1,0 +1,485 @@
+
+<h2 class="sr-only">SA1 Chapter 14 — Profit Reporting interactive study tool with topic cards, memory aids, and practice questions</h2>
+
+<style>
+.ch14-wrap { font-family: var(--font-sans); padding: 0.5rem 0 2rem; }
+.ch14-header { margin-bottom: 1.5rem; }
+.ch14-header h1 { font-size: 20px; font-weight: 500; color: var(--color-text-primary); margin: 0 0 4px; }
+.ch14-header p { font-size: 13px; color: var(--color-text-secondary); margin: 0; }
+.tab-bar { display: flex; gap: 4px; margin-bottom: 1.5rem; border-bottom: 0.5px solid var(--color-border-tertiary); padding-bottom: 0; }
+.tab-btn { font-size: 13px; font-weight: 500; color: var(--color-text-secondary); background: none; border: none; padding: 6px 14px 10px; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -0.5px; transition: color 0.15s; border-radius: 0; }
+.tab-btn.active { color: var(--color-text-primary); border-bottom-color: var(--color-text-primary); }
+.tab-btn:hover:not(.active) { color: var(--color-text-primary); }
+.section { display: none; }
+.section.active { display: block; }
+
+.topic-card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1rem 1.25rem; margin-bottom: 0.75rem; }
+.topic-card-header { display: flex; align-items: center; justify-content: space-between; cursor: pointer; }
+.topic-card-header h3 { font-size: 14px; font-weight: 500; color: var(--color-text-primary); margin: 0; }
+.topic-card-header .tag { font-size: 11px; padding: 2px 8px; border-radius: var(--border-radius-md); background: var(--color-background-info); color: var(--color-text-info); }
+.topic-card-header .chevron { font-size: 12px; color: var(--color-text-secondary); transition: transform 0.2s; }
+.topic-card-header .chevron.open { transform: rotate(180deg); }
+.topic-body { display: none; margin-top: 0.75rem; padding-top: 0.75rem; border-top: 0.5px solid var(--color-border-tertiary); }
+.topic-body.open { display: block; }
+.topic-body p { font-size: 13px; color: var(--color-text-secondary); line-height: 1.6; margin: 0 0 0.5rem; }
+.topic-body ul { font-size: 13px; color: var(--color-text-secondary); line-height: 1.7; margin: 0; padding-left: 1.25rem; }
+.topic-body li { margin-bottom: 4px; }
+.formula-box { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 0.75rem 1rem; margin: 0.5rem 0; font-size: 13px; color: var(--color-text-primary); font-family: var(--font-mono); }
+
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-bottom: 0.75rem; }
+.metric-card { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 0.75rem 1rem; }
+.metric-label { font-size: 12px; color: var(--color-text-secondary); margin-bottom: 4px; }
+.metric-val { font-size: 16px; font-weight: 500; color: var(--color-text-primary); }
+
+.aid-card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1rem 1.25rem; margin-bottom: 0.75rem; }
+.aid-header { margin-bottom: 0.75rem; }
+.aid-code { font-size: 22px; font-weight: 500; font-family: var(--font-mono); color: var(--color-text-primary); letter-spacing: 4px; }
+.aid-phrase { font-size: 12px; color: var(--color-text-secondary); margin-top: 2px; font-style: italic; }
+.aid-title { font-size: 13px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 6px; }
+.aid-items { display: flex; flex-direction: column; gap: 6px; }
+.aid-item { display: flex; gap: 10px; align-items: flex-start; }
+.aid-letter { font-size: 15px; font-weight: 500; font-family: var(--font-mono); color: var(--color-text-info); min-width: 16px; }
+.aid-word { font-size: 13px; font-weight: 500; color: var(--color-text-primary); }
+.aid-detail { font-size: 12px; color: var(--color-text-secondary); margin-top: 2px; line-height: 1.5; }
+
+.pq-card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1.25rem; margin-bottom: 1rem; }
+.pq-meta { display: flex; gap: 8px; margin-bottom: 0.75rem; align-items: center; }
+.pq-label { font-size: 12px; font-weight: 500; color: var(--color-text-primary); }
+.pq-mark { font-size: 12px; padding: 2px 8px; background: var(--color-background-warning); color: var(--color-text-warning); border-radius: var(--border-radius-md); }
+.pq-theme { font-size: 11px; padding: 2px 8px; background: var(--color-background-secondary); color: var(--color-text-secondary); border-radius: var(--border-radius-md); }
+.pq-q { font-size: 13px; color: var(--color-text-primary); line-height: 1.6; margin-bottom: 0.75rem; font-weight: 500; }
+.pq-synopsis { font-size: 12px; color: var(--color-text-secondary); font-style: italic; margin-bottom: 0.75rem; line-height: 1.5; }
+.reveal-btn { font-size: 12px; font-weight: 500; background: none; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); padding: 6px 14px; cursor: pointer; color: var(--color-text-primary); transition: background 0.15s; }
+.reveal-btn:hover { background: var(--color-background-secondary); }
+.answer-box { display: none; margin-top: 0.75rem; border-top: 0.5px solid var(--color-border-tertiary); padding-top: 0.75rem; }
+.answer-box.open { display: block; }
+.answer-section { margin-bottom: 0.75rem; }
+.answer-section-title { font-size: 12px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 4px; }
+.answer-points { list-style: none; padding: 0; margin: 0; }
+.answer-points li { font-size: 12px; color: var(--color-text-secondary); line-height: 1.6; padding: 3px 0 3px 14px; position: relative; border-bottom: 0.5px solid var(--color-border-tertiary); }
+.answer-points li:last-child { border-bottom: none; }
+.answer-points li::before { content: '▸'; position: absolute; left: 0; color: var(--color-text-info); font-size: 10px; top: 5px; }
+
+.overview-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 0.75rem; margin-bottom: 1.5rem; }
+.ov-card { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 0.75rem; }
+.ov-num { font-size: 11px; color: var(--color-text-secondary); margin-bottom: 4px; }
+.ov-label { font-size: 13px; font-weight: 500; color: var(--color-text-primary); }
+
+.comparison-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin: 0.75rem 0; }
+.comp-col { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 0.75rem; }
+.comp-col h4 { font-size: 13px; font-weight: 500; color: var(--color-text-primary); margin: 0 0 6px; }
+.comp-col ul { font-size: 12px; color: var(--color-text-secondary); line-height: 1.6; margin: 0; padding-left: 1.1rem; }
+</style>
+
+<div class="ch14-wrap">
+  <div class="ch14-header">
+    <h1>SA1 — Chapter 14: Profit reporting</h1>
+    <p>Syllabus objectives 2.3 &amp; 2.5 — financial reporting, regulatory frameworks, and jurisdiction comparisons</p>
+  </div>
+
+  <div class="tab-bar">
+    <button class="tab-btn active" onclick="switchTab('overview')">Overview</button>
+    <button class="tab-btn" onclick="switchTab('ifrs17')">IFRS 17 deep dive</button>
+    <button class="tab-btn" onclick="switchTab('aids')">Memory aids</button>
+    <button class="tab-btn" onclick="switchTab('pq')">Practice questions</button>
+  </div>
+
+  <div id="overview" class="section active">
+    <div class="overview-grid">
+      <div class="ov-card"><div class="ov-num">Section 1</div><div class="ov-label">Statutory reporting</div></div>
+      <div class="ov-card"><div class="ov-num">Section 2</div><div class="ov-label">IFRS standards</div></div>
+      <div class="ov-card"><div class="ov-num">Section 3</div><div class="ov-label">US GAAP</div></div>
+      <div class="ov-card"><div class="ov-num">Section 4</div><div class="ov-label">Supplementary value reporting</div></div>
+    </div>
+
+    <div class="topic-card">
+      <div class="topic-card-header" onclick="toggleCard(this)">
+        <h3>Purpose and users of financial reporting</h3>
+        <div style="display:flex;gap:8px;align-items:center"><span class="tag">Foundation</span><span class="chevron">▼</span></div>
+      </div>
+      <div class="topic-body">
+        <p>Health and care insurers report regularly on their financial position for a range of users.</p>
+        <ul>
+          <li>Regulators — assess solvency position and available capital</li>
+          <li>Shareholders — assess profit and value creation (statutory accounts)</li>
+          <li>Creditors, employees, tax inspectors, general public</li>
+        </ul>
+        <p>Two key purposes: <strong>demonstrate assets cover liabilities</strong> and <strong>show size and source of profits</strong>. Financial statements include balance sheet, revenue/profit statement, and disclosure notes.</p>
+      </div>
+    </div>
+
+    <div class="topic-card">
+      <div class="topic-card-header" onclick="toggleCard(this)">
+        <h3>Key design decisions for accounting standards</h3>
+        <div style="display:flex;gap:8px;align-items:center"><span class="tag">Concepts</span><span class="chevron">▼</span></div>
+      </div>
+      <div class="topic-body">
+        <ul>
+          <li><strong>Rules-based vs principles-based</strong> — IFRS and US GAAP are both principles-based; management can exercise discretion, but this risks manipulation and reduces comparability</li>
+          <li><strong>Going-concern vs wind-up basis</strong> — profit measures assume going concern (will keep selling business)</li>
+          <li><strong>Profit recognition timing</strong> — accruals basis (when earned/incurred), not when cash received/paid</li>
+          <li><strong>Consolidation rules</strong> — netting of reinsurance, derivatives, subsidiaries affects balance sheet size</li>
+          <li><strong>Calculation complexity</strong> — stochastic models take time; timeliness vs accuracy trade-off</li>
+          <li><strong>Reporting basis</strong> — best estimate vs prudent assumptions. Newer standards use best estimate + explicit risk margin</li>
+          <li><strong>Consistency</strong> — statutory standards require cross-industry comparability (e.g. FTSE investors compare insurers with miners)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="topic-card">
+      <div class="topic-card-header" onclick="toggleCard(this)">
+        <h3>IFRS 17 vs IFRS 4 — why IFRS 17?</h3>
+        <div style="display:flex;gap:8px;align-items:center"><span class="tag">Key exam area</span><span class="chevron">▼</span></div>
+      </div>
+      <div class="topic-body">
+        <p>IFRS 17 took effect 1 January 2023. It replaced IFRS 4 which had three main criticisms ("ACE"):</p>
+        <div class="comparison-row">
+          <div class="comp-col">
+            <h4>IFRS 4 problem</h4>
+            <ul>
+              <li>Profits sensitive to reserving assumptions (small changes → big P&amp;L swings)</li>
+              <li>No comparability — each company could use different local standards</li>
+              <li>Premiums &amp; profits recognised too early for long-term contracts</li>
+            </ul>
+          </div>
+          <div class="comp-col">
+            <h4>IFRS 17 solution</h4>
+            <ul>
+              <li>CSM absorbs non-economic assumption changes → profit driven by actual experience</li>
+              <li>Single global principle-based standard with extensive disclosure requirements</li>
+              <li>CSM defers profit and releases it over the coverage period</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="topic-card">
+      <div class="topic-card-header" onclick="toggleCard(this)">
+        <h3>US GAAP vs IFRS — key differences</h3>
+        <div style="display:flex;gap:8px;align-items:center"><span class="tag">Comparison</span><span class="chevron">▼</span></div>
+      </div>
+      <div class="topic-body">
+        <ul>
+          <li><strong>Insurance contract definition</strong> — US GAAP splits H&amp;C products into 3 categories: traditional non-linked, unit-linked/with-profits/investment/limited pay, non-unitised with-profits</li>
+          <li><strong>Compliance statement</strong> — IFRS requires explicit unreserved compliance statement; US GAAP does not</li>
+          <li><strong>Historical cost</strong> — US GAAP values assets at acquisition cost; IFRS uses fair value (via IFRS 9)</li>
+          <li><strong>Matching principle</strong> — US GAAP uses DAC (Deferred Acquisition Cost) to match expenses with revenues; also uses DPL (Deferred Profit Liability)</li>
+          <li><strong>Offsetting derivatives</strong> — US GAAP: offsetting optional; IFRS: required when conditions are met</li>
+          <li><strong>Asset classification</strong> — US GAAP: trading / available-for-sale / held-to-maturity; IFRS 9: FVPL / FVOCI / Amortised Cost</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="topic-card">
+      <div class="topic-card-header" onclick="toggleCard(this)">
+        <h3>Supplementary value-based reporting (EV)</h3>
+        <div style="display:flex;gap:8px;align-items:center"><span class="tag">Section 4</span><span class="chevron">▼</span></div>
+      </div>
+      <div class="topic-body">
+        <p>Some H&amp;C companies report embedded values (EV) to inform shareholders of the true economic value of their interest and changes over time.</p>
+        <p><strong>EV = PV of expected future transfers to shareholders from existing business + net assets attributable to shareholders</strong></p>
+        <p>Components: Free surplus + Required capital − cost of holding capital + PVIF (present value of in-force business)</p>
+        <p>Standards developed to improve consistency: EEV (European EV principles) and MCEV (Market Consistent EV). Note: EEV and MCEV are outside the SA1 syllabus.</p>
+        <p>Under Solvency II, many EU companies no longer publish EV because the 'information gap' EV filled is now much smaller — accounting and solvency reporting are both moving towards market-consistent valuations.</p>
+      </div>
+    </div>
+  </div>
+
+  <div id="ifrs17" class="section">
+    <div class="grid-2">
+      <div class="metric-card"><div class="metric-label">Default model</div><div class="metric-val">GMM / BBA</div></div>
+      <div class="metric-card"><div class="metric-label">For participation features</div><div class="metric-val">VFA</div></div>
+      <div class="metric-card"><div class="metric-label">Short-term simplified</div><div class="metric-val">PAA</div></div>
+      <div class="metric-card"><div class="metric-label">Effective date (global)</div><div class="metric-val">1 Jan 2023</div></div>
+    </div>
+
+    <div class="topic-card">
+      <div class="topic-card-header" onclick="toggleCard(this)">
+        <h3>Three measurement models — GVP</h3>
+        <div style="display:flex;gap:8px;align-items:center"><span class="tag">Core</span><span class="chevron">▼</span></div>
+      </div>
+      <div class="topic-body">
+        <ul>
+          <li><strong>GMM (General Measurement Model)</strong> — also called BBA (Building Block Approach). Default for all contracts. Appropriate for traditional long-term H&amp;C: term assurance, income protection, critical illness, without-profit annuities</li>
+          <li><strong>VFA (Variable Fee Approach)</strong> — mandatory for direct participation features (unit-linked, with-profits / DPF). CSM is "unlocked" when discount rate changes, absorbing the gain/loss rather than hitting P&amp;L</li>
+          <li><strong>PAA (Premium Allocation Approach)</strong> — simplified model for short-term contracts (similar to unearned premium reserve). Not covered further in SA1 subject</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="topic-card">
+      <div class="topic-card-header" onclick="toggleCard(this)">
+        <h3>GMM building blocks — BEL, RA, CSM</h3>
+        <div style="display:flex;gap:8px;align-items:center"><span class="tag">Core</span><span class="chevron">▼</span></div>
+      </div>
+      <div class="topic-body">
+        <div class="formula-box">Total liability = BEL + RA + CSM</div>
+        <ul>
+          <li><strong>BEL (Best Estimate Liability)</strong> — PV of probability-weighted future net cashflows, discounted at market-observable rates. Calculated like Solvency II BEL. Can be negative for profitable regular-premium contracts</li>
+          <li><strong>RA (Risk Adjustment)</strong> — compensation for non-financial, non-market risks. Calculated via VaR, CTE, or CoC. Confidence level chosen by insurer (not specified by IFRS 17). Calculated allowing for diversification but attributed to individual contracts</li>
+          <li><strong>CSM (Contractual Service Margin)</strong> — "future profit" or "unearned profit". Set at inception so total liability = initial net cashflow (zero day-one profit). Released over the coverage period using coverage units (e.g. policies in-force). Annual cohort grouping applies</li>
+        </ul>
+        <div class="formula-box">CSM at inception = (Initial premium − Initial expenses) − (BEL + RA)</div>
+        <p>CSM can never be negative. If BEL + RA &gt; initial net cashflow, the shortfall is recognised immediately as a loss.</p>
+      </div>
+    </div>
+
+    <div class="topic-card">
+      <div class="topic-card-header" onclick="toggleCard(this)">
+        <h3>CSM — four key properties (NORA)</h3>
+        <div style="display:flex;gap:8px;align-items:center"><span class="tag">High-yield</span><span class="chevron">▼</span></div>
+      </div>
+      <div class="topic-body">
+        <ul>
+          <li><strong>Never negative</strong> — floors at zero. Losses recognised immediately</li>
+          <li><strong>Offsets non-economic assumption changes</strong> — changes to morbidity, mortality, expense assumptions adjust CSM first, not P&amp;L. Only if CSM insufficient does the shortfall hit P&amp;L. Economic changes (discount rates) go straight to P&amp;L under GMM</li>
+          <li><strong>Released over coverage period</strong> — written down in line with coverage units. Contracts grouped in annual cohorts (policies more than 1 year apart cannot be grouped)</li>
+          <li><strong>At-inception = day-one profit</strong> — ensures zero profit on day of sale; all loadings are deferred into the CSM</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="topic-card">
+      <div class="topic-card-header" onclick="toggleCard(this)">
+        <h3>GMM vs VFA — critical comparison</h3>
+        <div style="display:flex;gap:8px;align-items:center"><span class="tag">Exam favourite</span><span class="chevron">▼</span></div>
+      </div>
+      <div class="topic-body">
+        <div class="comparison-row">
+          <div class="comp-col">
+            <h4>GMM</h4>
+            <ul>
+              <li>Discount rate from market-observable data</li>
+              <li>When rate rises: BEL &amp; RA fall → gain goes straight to P&amp;L</li>
+              <li>CSM not unlocked for discount rate changes</li>
+              <li>Higher P&amp;L volatility from interest rate movements</li>
+              <li>Used for: term assurance, IP, CI, without-profit annuities</li>
+            </ul>
+          </div>
+          <div class="comp-col">
+            <h4>VFA</h4>
+            <ul>
+              <li>Discount rate references the underlying asset pool</li>
+              <li>When rate rises: BEL &amp; RA fall → CSM is unlocked (increased)</li>
+              <li>Profit absorbed by CSM, released gradually as CSM unwinds</li>
+              <li>Lower P&amp;L volatility — rate movements buffered by CSM</li>
+              <li>Used for: unit-linked, with-profits (DPF)</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="topic-card">
+      <div class="topic-card-header" onclick="toggleCard(this)">
+        <h3>Three transition approaches — FMF</h3>
+        <div style="display:flex;gap:8px;align-items:center"><span class="tag">Transition</span><span class="chevron">▼</span></div>
+      </div>
+      <div class="topic-body">
+        <ul>
+          <li><strong>FRA (Full Retrospective Approach)</strong> — preferred. Use if practicable. Apply IFRS 17 as if it always existed — full historical look-back to calculate the transitional CSM for all in-force business</li>
+          <li><strong>MRA (Modified Retrospective Approach)</strong> — if FRA not practicable. Simplified using available reasonable information. Achieves closest result to FRA</li>
+          <li><strong>FVA (Fair Value Approach)</strong> — last resort. Transitional CSM = fair value of policies minus fulfilment cashflows at transition date. No historical data required</li>
+        </ul>
+        <p>The transitional CSM was a major challenge for insurers at the 1 Jan 2023 implementation date — required looking back through historical data to reconstruct what the initial CSM would have been for each policy.</p>
+      </div>
+    </div>
+
+    <div class="topic-card">
+      <div class="topic-card-header" onclick="toggleCard(this)">
+        <h3>Contract profitability categories</h3>
+        <div style="display:flex;gap:8px;align-items:center"><span class="tag">IFRS 17</span><span class="chevron">▼</span></div>
+      </div>
+      <div class="topic-body">
+        <p>Under IFRS 17, profitable and unprofitable contracts must not be offset. Each policy categorised as:</p>
+        <ul>
+          <li><strong>Loss-making at inception</strong> — loss recognised immediately (CSM cannot absorb it)</li>
+          <li><strong>Profitable with no significant risk of making a loss</strong> — CSM positive, released over term</li>
+          <li><strong>Any other profitable contracts</strong> — profitable at inception but may become loss-making over time; requires significant systems/process changes to monitor</li>
+        </ul>
+        <p>This deliberate asymmetry (losses immediate; profits deferred) is a key feature of IFRS 17.</p>
+      </div>
+    </div>
+  </div>
+
+  <div id="aids" class="section">
+    <div id="aids-container"></div>
+  </div>
+
+  <div id="pq" class="section">
+    <div id="pq-container"></div>
+    <button style="font-size:13px;padding:8px 16px;border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);background:none;cursor:pointer;color:var(--color-text-primary);margin-top:0.5rem;" onclick="sendPrompt('Can you give me a new practice question on IFRS 17 and the CSM, similar to exam standard?')">Generate a new practice question ↗</button>
+  </div>
+</div>
+
+<script>
+const AIDS = [
+  { id:'IFRS17-01', title:'GMM three components', code:'BRC', phrase:'Bears Roam Carefully', items:[
+    {letter:'B',word:'BEL — Best Estimate Liability',detail:'PV of probability-weighted future net cashflows. Can be negative for profitable regular-premium contracts.'},
+    {letter:'R',word:'RA — Risk Adjustment',detail:'Compensation for non-market / non-financial risk. Calculated via VaR, CTE, or CoC. Confidence level: insurer\'s choice — not specified by IFRS 17.'},
+    {letter:'C',word:'CSM — Contractual Service Margin',detail:'Unearned / future profit. Never negative. Released over coverage period using coverage units (e.g. policies in-force). Annual cohort grouping applies.'}
+  ]},
+  { id:'IFRS17-02', title:'Three measurement models', code:'GVP', phrase:'Good Values Pay', items:[
+    {letter:'G',word:'GMM — General Measurement Model',detail:'Default for all contracts. Also called BBA (Building Block Approach). Used for long-term health: term assurance, IP, CI, without-profit annuities.'},
+    {letter:'V',word:'VFA — Variable Fee Approach',detail:'Mandatory for direct participation features (unit-linked, with-profits / DPF). CSM unlocked when discount rate changes — absorbs gain/loss rather than hitting P&L.'},
+    {letter:'P',word:'PAA — Premium Allocation Approach',detail:'Simplified model for short-term contracts (<1yr). Similar to unearned premium reserve. NOT covered further in SA1 subject.'}
+  ]},
+  { id:'IFRS17-03', title:'Three criticisms of IFRS 4 — solved by IFRS 17', code:'ACE', phrase:'IFRS 4 failed to ACE it', items:[
+    {letter:'A',word:'Assumption sensitivity',detail:'Profits were highly sensitive to reserving assumptions; small changes caused large P&L swings. IFRS 17 fix: CSM buffers assumption changes.'},
+    {letter:'C',word:'Comparability gap',detail:'Even within a single country, insurers used incomparable methodologies. IFRS 17 fix: single principle-based global standard.'},
+    {letter:'E',word:'Early profit recognition',detail:'Profit recognised at inception for contracts providing 20-30 years of coverage. IFRS 17 fix: CSM defers profit to be released over the coverage period.'}
+  ]},
+  { id:'IFRS17-04', title:'Three transition approaches — in order of preference', code:'FMF', phrase:'Full Meets Fair', items:[
+    {letter:'F',word:'FRA — Full Retrospective Approach',detail:'Preferred. Use if practicable. Apply IFRS 17 as if it always existed — complete historical look-back.'},
+    {letter:'M',word:'MRA — Modified Retrospective Approach',detail:'If FRA not practicable. Simplified version using available reasonable and supportable information. Achieves closest outcome to FRA.'},
+    {letter:'F',word:'FVA — Fair Value Approach',detail:'Last resort. CSM = Fair value of policies minus Fulfilment cashflows at transition date. No historical data required.'}
+  ]},
+  { id:'IFRS17-05', title:'CSM four key properties', code:'NORA', phrase:'NORA holds the future profit', items:[
+    {letter:'N',word:'Never negative',detail:'If BEL + RA exceeds initial net cashflow, the shortfall is recognised immediately as a loss. CSM floors at zero.'},
+    {letter:'O',word:'Offsets assumption changes',detail:'Changes to non-investment assumptions (e.g. morbidity rates) adjust the CSM first, not P&L. Stabilises reported profit.'},
+    {letter:'R',word:'Released over coverage period',detail:'Written down over policy term using coverage unit measure (e.g. policies in-force). Annual cohorts — policies >1yr apart cannot be grouped.'},
+    {letter:'A',word:'At-inception = day-one profit',detail:'CSM = (Initial premium − Initial expenses) − (BEL + RA). Captures exactly the profit that would otherwise have been recognised on day one.'}
+  ]},
+  { id:'IFRS17-06', title:'RA calculation methods', code:'VCC', phrase:'Very Careful Costing', items:[
+    {letter:'V',word:'VaR — Value at Risk',detail:'Quantile of the loss distribution. Confidence level chosen by insurer (not specified by IFRS 17). Simpler to calculate.'},
+    {letter:'C',word:'CTE — Conditional Tail Expectation',detail:'Also called CVaR or Tail VaR. Average loss beyond the VaR threshold. Captures the tail more fully. Preferred by many actuaries.'},
+    {letter:'C',word:'CoC — Cost of Capital',detail:'Similar to Solvency II risk margin. RA = PV of cost of holding required capital over the remaining coverage period. Familiar to actuaries.'}
+  ]},
+  { id:'IFRS17-07', title:'Eight IFRS principles (IAS 1)', code:'FGA CCROU', phrase:'Fair Gorillas Are Clearly Correct, Reporting Under Orders', items:[
+    {letter:'F',word:'Fair representation',detail:'Statements must present fairly the financial position, performance and cash flows — the \'true and fair view\' requirement.'},
+    {letter:'G',word:'Going concern',detail:'Entity assumed to continue in operation for the foreseeable future. Opposite = wind-up / break-up basis — frequently tested exam distinction.'},
+    {letter:'A',word:'Accruals based',detail:'Revenue recorded when earned; expenses when incurred — regardless of when cash is received or paid.'},
+    {letter:'C',word:'Comparability',detail:'Presentation and classification retained from period to period unless change justified by changed circumstances or new IFRS.'},
+    {letter:'C',word:'Compliance',detail:'Explicit and unreserved statement required if claiming IFRS compliance. Must comply with ALL requirements. US GAAP does NOT require this.'},
+    {letter:'R',word:'Reporting period',detail:'Presumed at least annual. If period changes, entity must disclose reason and state amounts are not entirely comparable.'},
+    {letter:'O',word:'Offsetting',detail:'Assets and liabilities, income and expenses, generally may NOT be offset. Under US GAAP, offsetting of derivatives is optional; under IFRS it is required when stated conditions are met.'},
+    {letter:'U',word:'Understandability',detail:'Financial information should be understandable to users with knowledge of business, economic activity and accounting. Complexity is not a reason to exclude information.'}
+  ]}
+];
+
+const PQS = [
+  { label:'Question 14.1', marks:7, themes:['IFRS 17','Profit Reporting','Health Insurance'],
+    question:'Discuss how the contractual service margin (CSM) under IFRS 17 acts to smooth the emergence of reported profit.',
+    synopsis:'Initial CSM = zero profit at inception; profit loadings released smoothly via CSM write-down; losses recognised immediately (CSM cannot be negative); CSM absorbs non-economic assumption changes; does not absorb actual experience or economic assumption changes under GMM; VFA unlocks CSM for discount rate changes',
+    sections:{
+      'Initial CSM':[
+        'When a contract is written, an initial CSM is set up which results in zero profit at that point. [1]',
+        'CSM = (Initial premium − Initial expenses) − (BEL + RA). Without the CSM, profit loadings over the contract term would be capitalised at inception. [1]',
+        'Instead, profit loadings are released smoothly over the policy term by writing the CSM down gradually (ie releasing it) over the policy term. [½]',
+        'However, if there is a loss, it is recognised immediately because the CSM cannot be negative. Hence losses are not smoothed over the policy term. [½+½]'
+      ],
+      'Assumption changes and experience':[
+        'The CSM smooths profit emergence through its absorption of assumption changes. [½]',
+        'If non-economic assumptions (eg mortality, expenses) are amended, the resultant change in BEL and RA is absorbed by the CSM — total liability unchanged. [1]',
+        'However, if the CSM is not large enough to absorb an increase in BEL and RA due to a non-economic assumption change, the shortfall is recognised immediately as a loss. [½]',
+        'The CSM does not absorb the direct impact of actual experience differing from expected, nor economic assumption changes (eg discount rates) under GMM. [½+½]',
+        'However, under VFA (applicable to unit-linked business), the CSM is unlocked at each future period to absorb the change in BEL + RA due to a discount rate change. [1+½]'
+      ]
+    }
+  },
+  { label:'Question 14.2', marks:1, themes:['US GAAP','Profit Reporting','Accounting'],
+    question:'Outline the main principles underlying US GAAP.',
+    synopsis:'Fair representation, going concern, compliance, historical cost, revenue recognition, matching, full disclosure, objectivity, consistency, offsetting',
+    sections:{
+      'Principles':[
+        'Fair representation — financial statements must present fairly the financial position, performance and cashflows of an entity.',
+        'Going concern — normally prepared on a going-concern basis, unless liquidation is imminent.',
+        'Compliance — an entity that claims compliance with US GAAP must comply with all requirements.',
+        'Historical cost — companies should value assets and liabilities at acquisition cost rather than at fair market value.',
+        'Revenue recognition — revenue recorded when earned, not received. Losses must be recognised when they become probable.',
+        'Matching — expenses matched with revenues wherever reasonable. Expenses recognised when work contributes to revenue, not when incurred.',
+        'Full disclosure — information disclosed should be sufficient to make a judgement whilst keeping costs of preparation reasonable.',
+        'Objectivity — information should be factual and verifiable as far as possible.',
+        'Consistency — information should be presented consistently from period to period.',
+        'Offsetting — assets and liabilities, income and expenses, may generally not be offset.'
+      ]
+    }
+  },
+  { label:'Question 14.3', marks:1, themes:['IFRS 17','IFRS 4','Profit Reporting','Accounting'],
+    question:'Explain how IFRS 17 addresses the main criticisms of IFRS 4.',
+    synopsis:'ACE: Assumption sensitivity (CSM offsets non-economic changes); Comparability gap (single global standard with extensive disclosures); Early profit recognition (CSM defers profit and releases over policy term)',
+    sections:{
+      'Assumption sensitivity':[
+        'Under IFRS 4, profits were highly sensitive to reserving assumptions. Under IFRS 17 GMM, the CSM offsets non-economic assumption changes. Profit is therefore more affected by changes in actual experience.'
+      ],
+      'Lack of comparability':[
+        'Under IFRS 4, companies could report profits using various methods including local accounting standards, leading to incomparable results even within a single country.',
+        'IFRS 17 is a comprehensive international standard applied to all types of H&C contracts with extensive disclosure requirements, making it easier to compare results between insurers.'
+      ],
+      'Early recognition of premiums and profit':[
+        'IFRS 4 recognised premiums and profits too early within the policy term.',
+        'Under IFRS 17 GMM, a CSM is established at inception equal to the day-one profit. The CSM is released over the term of the policy to reflect profit emerging — so profits are recognised when they occur, not upfront.'
+      ]
+    }
+  }
+];
+
+function renderAids() {
+  const c = document.getElementById('aids-container');
+  c.innerHTML = AIDS.map(a => `
+    <div class="aid-card">
+      <div class="aid-header">
+        <div class="aid-code">${a.code}</div>
+        <div class="aid-phrase">"${a.phrase}"</div>
+      </div>
+      <div class="aid-title">${a.title}</div>
+      <div class="aid-items">
+        ${a.items.map(i => `<div class="aid-item"><div><div style="display:flex;gap:8px;align-items:baseline"><span class="aid-letter">${i.letter}</span><span class="aid-word">${i.word}</span></div><div class="aid-detail">${i.detail}</div></div></div>`).join('')}
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderPQs() {
+  const c = document.getElementById('pq-container');
+  c.innerHTML = PQS.map((q, qi) => `
+    <div class="pq-card">
+      <div class="pq-meta">
+        <span class="pq-label">${q.label}</span>
+        <span class="pq-mark">${q.marks} mark${q.marks > 1 ? 's' : ''}</span>
+        ${q.themes.map(t => `<span class="pq-theme">${t}</span>`).join('')}
+      </div>
+      <div class="pq-q">${q.question}</div>
+      <div class="pq-synopsis"><em>Hint:</em> ${q.synopsis}</div>
+      <button class="reveal-btn" onclick="toggleAnswer(${qi})">Show model answer</button>
+      <div class="answer-box" id="ans-${qi}">
+        ${Object.entries(q.sections).map(([sec, pts]) => `
+          <div class="answer-section">
+            <div class="answer-section-title">${sec}</div>
+            <ul class="answer-points">
+              ${pts.map(p => `<li>${p}</li>`).join('')}
+            </ul>
+          </div>
+        `).join('')}
+        <button class="reveal-btn" onclick="sendPrompt('Can you explain the answer to ${q.label.toLowerCase()} on ${q.question.substring(0,50)}... in more depth?')" style="margin-top:8px;">Ask for deeper explanation ↗</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function toggleAnswer(qi) {
+  const box = document.getElementById('ans-' + qi);
+  const btn = box.previousElementSibling;
+  const isOpen = box.classList.contains('open');
+  box.classList.toggle('open');
+  btn.textContent = isOpen ? 'Show model answer' : 'Hide model answer';
+}
+
+function switchTab(tab) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById(tab).classList.add('active');
+  event.target.classList.add('active');
+}
+
+function toggleCard(header) {
+  const body = header.nextElementSibling;
+  const chevron = header.querySelector('.chevron');
+  body.classList.toggle('open');
+  chevron.classList.toggle('open');
+}
+
+renderAids();
+renderPQs();
+</script>

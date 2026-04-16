@@ -2008,20 +2008,21 @@ function renderSection(data, secId, scrollToSubId) {
           </div>`).join('')}`;
     }
 
+    const noteKey = 'ch' + activeChapterNum + '-' + sub.id;
     html += `
-    <div class="my-notes-wrap" id="notes-wrap-${sub.id}">
-      <div class="my-notes-header" onclick="toggleNotesPanel('${sub.id}')">
+    <div class="my-notes-wrap" id="notes-wrap-${noteKey}">
+      <div class="my-notes-header" onclick="toggleNotesPanel('${noteKey}')">
         <span>✏️ My Notes</span>
-        <span class="my-notes-saved-badge" id="badge-${sub.id}">✓ saved</span>
+        <span class="my-notes-saved-badge" id="badge-${noteKey}">✓ saved</span>
       </div>
-      <div class="my-notes-body" id="notes-body-${sub.id}">
-        <textarea class="my-notes-textarea" id="note-${sub.id}"
+      <div class="my-notes-body" id="notes-body-${noteKey}">
+        <textarea class="my-notes-textarea" id="note-${noteKey}"
           placeholder="Write your own notes, mnemonics, exam tips…"
-          oninput="scheduleAutoSave('${sub.id}')"
-          onblur="saveNote('${sub.id}')"></textarea>
+          oninput="scheduleAutoSave('${noteKey}')"
+          onblur="saveNote('${noteKey}')"></textarea>
         <div class="my-notes-footer">
           <span>auto-saved on blur · stored in this browser</span>
-          <button class="my-notes-save-btn" onclick="saveNote('${sub.id}')">Save now</button>
+          <button class="my-notes-save-btn" onclick="saveNote('${noteKey}')">Save now</button>
         </div>
       </div>
     </div>`;
