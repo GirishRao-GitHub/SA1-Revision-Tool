@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Solvency Margin – Health Insurance | IRDAI Actuarial Regulations 2024</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&family=Source+Sans+Pro:wght@300;400;600;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Source Sans Pro', Arial, sans-serif;
+    background: #f0f0f0;
+    color: #1a1a1a;
+    font-size: 11pt;
+    line-height: 1.55;
+  }
+
+  .page {
+    width: 210mm;
+    min-height: 297mm;
+    background: #ffffff;
+    margin: 20px auto;
+    padding: 20mm 22mm 18mm 22mm;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.15);
+    page-break-after: always;
+    position: relative;
+  }
+
+  /* Header band */
+  .page-header {
+    border-top: 6px solid #1a3a5c;
+    border-bottom: 2px solid #c8a84b;
+    padding: 10px 0 8px 0;
+    margin-bottom: 18px;
+  }
+
+  .header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+
+  .doc-label {
+    font-size: 7.5pt;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #c8a84b;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+
+  h1 {
+    font-family: 'Merriweather', Georgia, serif;
+    font-size: 17pt;
+    font-weight: 700;
+    color: #1a3a5c;
+    line-height: 1.25;
+  }
+
+  .sub-title {
+    font-size: 9pt;
+    color: #555;
+    margin-top: 4px;
+  }
+
+  .page-num {
+    font-size: 8pt;
+    color: #888;
+    text-align: right;
+    min-width: 60px;
+  }
+
+  /* Section headings */
+  h2 {
+    font-family: 'Merriweather', Georgia, serif;
+    font-size: 11.5pt;
+    font-weight: 700;
+    color: #1a3a5c;
+    margin: 16px 0 6px 0;
+    padding-bottom: 4px;
+    border-bottom: 1.5px solid #dce6f0;
+  }
+
+  h3 {
+    font-size: 10pt;
+    font-weight: 700;
+    color: #2c5282;
+    margin: 12px 0 4px 0;
+  }
+
+  p {
+    margin-bottom: 8px;
+    text-align: justify;
+  }
+
+  /* Regulation citation pill */
+  .reg-cite {
+    display: inline-block;
+    background: #eaf1fb;
+    border: 1px solid #b8d0ec;
+    color: #1a3a5c;
+    font-size: 7.5pt;
+    font-weight: 600;
+    padding: 1px 6px;
+    border-radius: 3px;
+    margin-left: 4px;
+    white-space: nowrap;
+  }
+
+  /* Formula boxes */
+  .formula-box {
+    background: #f4f8ff;
+    border-left: 4px solid #1a3a5c;
+    border: 1px solid #c0d4ec;
+    border-left-width: 4px;
+    padding: 10px 14px;
+    margin: 10px 0;
+    font-family: 'Courier New', monospace;
+    font-size: 10pt;
+  }
+
+  .formula-box .formula-title {
+    font-family: 'Source Sans Pro', sans-serif;
+    font-size: 8pt;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #c8a84b;
+    font-weight: 700;
+    margin-bottom: 5px;
+  }
+
+  .formula-main {
+    font-size: 11pt;
+    font-weight: bold;
+    color: #1a3a5c;
+    text-align: center;
+    padding: 4px 0;
+  }
+
+  /* Two-column for RSM1/RSM2 */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin: 10px 0;
+  }
+
+  .rsm-box {
+    background: #fffdf4;
+    border: 1px solid #e2d08a;
+    border-top: 3px solid #c8a84b;
+    padding: 8px 10px;
+    border-radius: 2px;
+  }
+
+  .rsm-box .rsm-title {
+    font-weight: 700;
+    font-size: 9.5pt;
+    color: #7a5c00;
+    margin-bottom: 4px;
+  }
+
+  .rsm-box p {
+    font-size: 9pt;
+    margin-bottom: 4px;
+    text-align: left;
+  }
+
+  /* Table */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 9pt;
+    margin: 10px 0;
+  }
+
+  th {
+    background: #1a3a5c;
+    color: white;
+    padding: 6px 8px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 8.5pt;
+  }
+
+  td {
+    padding: 5px 8px;
+    border-bottom: 1px solid #e0e8f0;
+    vertical-align: top;
+  }
+
+  tr:nth-child(even) td { background: #f7fafd; }
+
+  /* Key terms */
+  .definition-grid {
+    margin: 8px 0;
+  }
+
+  .def-item {
+    display: grid;
+    grid-template-columns: 32% 68%;
+    gap: 0;
+    border-bottom: 1px solid #eef0f3;
+    padding: 5px 0;
+  }
+
+  .def-term {
+    font-weight: 700;
+    color: #1a3a5c;
+    font-size: 9.5pt;
+    padding-right: 10px;
+  }
+
+  .def-desc {
+    font-size: 9pt;
+    color: #333;
+  }
+
+  /* Callout box */
+  .callout {
+    background: #fff8e6;
+    border: 1px solid #f0d060;
+    border-left: 4px solid #c8a84b;
+    padding: 8px 12px;
+    margin: 10px 0;
+    font-size: 9.5pt;
+  }
+
+  .callout strong { color: #7a5c00; }
+
+  /* Inadmissible assets list */
+  ul.asset-list {
+    list-style: none;
+    padding: 0;
+    margin: 6px 0;
+  }
+
+  ul.asset-list li {
+    padding: 2px 0 2px 16px;
+    position: relative;
+    font-size: 9pt;
+    color: #333;
+  }
+
+  ul.asset-list li::before {
+    content: "✕";
+    position: absolute;
+    left: 0;
+    color: #c0392b;
+    font-size: 8pt;
+    top: 3px;
+  }
+
+  /* Footer */
+  .page-footer {
+    position: absolute;
+    bottom: 12mm;
+    left: 22mm;
+    right: 22mm;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid #dce6f0;
+    padding-top: 5px;
+    font-size: 7.5pt;
+    color: #999;
+  }
+
+  .badge {
+    display: inline-block;
+    background: #1a3a5c;
+    color: white;
+    font-size: 7pt;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 2px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  /* Solvency ratio threshold indicator */
+  .threshold-bar {
+    display: flex;
+    align-items: stretch;
+    margin: 10px 0;
+    height: 34px;
+    border-radius: 3px;
+    overflow: hidden;
+    font-size: 8.5pt;
+    font-weight: 700;
+  }
+
+  .th-red {
+    background: #e74c3c;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+  }
+
+  .th-amber {
+    background: #f39c12;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+  }
+
+  .th-green {
+    background: #27ae60;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 2;
+  }
+
+  .section-divider {
+    height: 1px;
+    background: linear-gradient(to right, #1a3a5c, #c8a84b, transparent);
+    margin: 14px 0;
+  }
+
+  @media print {
+    body { background: white; }
+    .page { margin: 0; box-shadow: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════ PAGE 1 ═══════════════════════════════════════════ -->
+<div class="page">
+
+  <div class="page-header">
+    <div class="header-top">
+      <div>
+        <div class="doc-label">Technical Reference Document · Insurance Regulation</div>
+        <h1>Solvency Margin Computation<br>for Health Insurance Companies</h1>
+        <div class="sub-title">As prescribed under <strong>IRDAI (Actuarial, Finance and Investment Functions of Insurers) Regulations, 2024</strong></div>
+      </div>
+      <div class="page-num">Page 1 of 2</div>
+    </div>
+  </div>
+
+  <!-- 1. Overview -->
+  <h2>1. Overview and Regulatory Framework</h2>
+  <p>
+    The Insurance Regulatory and Development Authority of India (IRDAI) notified the <em>IRDAI (Actuarial, Finance and Investment Functions of Insurers) Regulations, 2024</em> (vide F.No. IRDAI/Reg/10/204/2024, dated 20 March 2024), which came into force on 1 April 2024. These regulations consolidated and superseded several earlier regulations, including the erstwhile <em>IRDAI (Assets, Liabilities and Solvency Margin of General Insurance Business) Regulations, 2016</em>. <span class="reg-cite">Schedule I, Part IV</span>
+  </p>
+  <p>
+    For standalone health insurers and health insurance business written by general insurers, the solvency framework is governed primarily under <strong>Part IV of Schedule I</strong> of the 2024 Regulations. The fundamental principle, stated in Chapter II, is that the solvency margin of every insurer must be maintained at least at the control level at all times. <span class="reg-cite">Chapter II, Clause 4(2)</span>
+  </p>
+  <p>
+    The <strong>Solvency Ratio</strong> is defined as the ratio of the <em>Available Solvency Margin (ASM)</em> to the <em>Required Solvency Margin (RSM)</em>. Every insurer must maintain a minimum Solvency Ratio of <strong>1.5 (150%)</strong> — the statutory control level under Section 64VA of the Insurance Act, 1938. <span class="reg-cite">Regulation 3(1)(xii)</span>
+  </p>
+
+  <div class="formula-box">
+    <div class="formula-title">Core Formula — Solvency Ratio</div>
+    <div class="formula-main">Solvency Ratio = Available Solvency Margin (ASM) ÷ Required Solvency Margin (RSM)</div>
+  </div>
+
+  <div class="section-divider"></div>
+
+  <!-- 2. Key Definitions -->
+  <h2>2. Key Definitions</h2>
+  <div class="definition-grid">
+    <div class="def-item">
+      <div class="def-term">Available Solvency Margin (ASM)</div>
+      <div class="def-desc">For a health or general insurer: the excess of the value of admissible assets (in both policyholders' and shareholders' funds) over the sum of <em>Technical Liabilities</em> and all other liabilities. <span class="reg-cite">Reg. 3(1)(v)</span></div>
+    </div>
+    <div class="def-item">
+      <div class="def-term">Required Solvency Margin (RSM)</div>
+      <div class="def-desc">The minimum capital buffer computed as per Part IV of Schedule I, subject to a floor of 50% of the minimum paid-up capital under Section 6 of the Insurance Act (₹100 crore for health insurers). <span class="reg-cite">Reg. 3(1)(xi)</span></div>
+    </div>
+    <div class="def-item">
+      <div class="def-term">Technical Liabilities</div>
+      <div class="def-desc">Provisions covering all liabilities under health (re)insurance contracts, including specific provisions for adverse deviations, comprising Unexpired Risk Reserves (UPR + PDR) and Claims Reserves (OS + IBNR). <span class="reg-cite">Reg. 3(1)(xiii)</span></div>
+    </div>
+    <div class="def-item">
+      <div class="def-term">Premium Deficiency Reserve (PDR)</div>
+      <div class="def-desc">Reserve held in addition to UPR where the unearned premium is insufficient to cover expected claims and expenses for unexpired risks. Negative PDR for any line shall not be set off against another. <span class="reg-cite">Reg. 3(1)(x)</span></div>
+    </div>
+  </div>
+
+  <div class="section-divider"></div>
+
+  <!-- 3. Step 1 – Compute ASM -->
+  <h2>3. Step 1 — Computation of Available Solvency Margin (ASM)</h2>
+  <p>
+    All assets must be valued in accordance with Schedule II (Finance Functions) of the 2024 Regulations. Certain assets are treated as <strong>inadmissible</strong> (valued at zero) for the purposes of solvency computation. For health insurers, these include: <span class="reg-cite">Schedule I, Part IV</span>
+  </p>
+  <ul class="asset-list">
+    <li>Agents' and intermediaries' balances and outstanding premiums in India, unrealised beyond 30 days</li>
+    <li>Premium receivables under State/Central Government sponsored schemes, unrealised beyond 365 days</li>
+    <li>Sundry debts, advances and receivables of an unrealisable character</li>
+    <li>Furniture, fixtures, dead stock and stationery</li>
+    <li>Deferred expenses and fictitious assets (other than prepaid expenses)</li>
+    <li>Reinsurers' balances outstanding for more than 120 days</li>
+    <li>Investments representing unclaimed amounts and accrued income thereon</li>
+    <li>Intangible assets (e.g., software, trademarks) — treated as inadmissible</li>
+  </ul>
+  <p style="margin-top:6px;">
+    <strong>ASM = [Admissible Assets] − [Technical Liabilities + Other Liabilities]</strong>
+  </p>
+
+  <div class="page-footer">
+    <div><span class="badge">IRDAI 2024</span> &nbsp; Actuarial, Finance and Investment Functions of Insurers Regulations, 2024</div>
+    <div>Prepared for reference purposes only · April 2026</div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════ PAGE 2 ═══════════════════════════════════════════ -->
+<div class="page">
+
+  <div class="page-header">
+    <div class="header-top">
+      <div>
+        <div class="doc-label">Technical Reference Document · Insurance Regulation</div>
+        <h1>Solvency Margin Computation<br>for Health Insurance Companies</h1>
+        <div class="sub-title">IRDAI (Actuarial, Finance and Investment Functions of Insurers) Regulations, 2024 — <em>continued</em></div>
+      </div>
+      <div class="page-num">Page 2 of 2</div>
+    </div>
+  </div>
+
+  <!-- 4. Step 2 – Compute RSM -->
+  <h2>4. Step 2 — Computation of Required Solvency Margin (RSM)</h2>
+  <p>
+    The RSM for health insurance business is computed by calculating two separate margins — <strong>RSM 1</strong> (premium-based) and <strong>RSM 2</strong> (claims-based) — and taking the <em>higher</em> of the two. Personal Accident and Travel insurance (domestic and overseas) are explicitly clubbed with Health for this computation per regulatory clarification. <span class="reg-cite">Schedule I, Part IV; IRDAI Circular</span>
+  </p>
+
+  <div class="two-col">
+    <div class="rsm-box">
+      <div class="rsm-title">RSM 1 — Premium-Based Margin</div>
+      <p><strong>Rate:</strong> 20% of the higher of:</p>
+      <p>(a) Gross Written Premiums (trailing 12 months or trailing 36 months ÷ 3, whichever is higher) <strong>×</strong> Factor A</p>
+      <p>(b) Net Written Premiums (after reinsurance)</p>
+      <p><strong>Factor A</strong> = Net Incurred Claims ÷ Gross Incurred Claims (subject to a minimum of 50%), reflecting the retention ratio and reinsurance credit. <span class="reg-cite">Schedule I, Part IV</span></p>
+    </div>
+    <div class="rsm-box">
+      <div class="rsm-title">RSM 2 — Claims-Based Margin</div>
+      <p><strong>Rate:</strong> 30% of the higher of:</p>
+      <p>(a) Gross Incurred Claims (trailing 12 months or trailing 36 months ÷ 3, whichever is higher) <strong>×</strong> Factor B</p>
+      <p>(b) Net Incurred Claims (after reinsurance recoveries)</p>
+      <p><strong>Factor B</strong> = Net Incurred Claims ÷ Gross Incurred Claims (subject to a minimum of 50%), the same retention ratio as used for RSM 1. <span class="reg-cite">Schedule I, Part IV</span></p>
+    </div>
+  </div>
+
+  <div class="formula-box">
+    <div class="formula-title">RSM Determination Formula</div>
+    <div class="formula-main">RSM = MAX(RSM 1, RSM 2) &nbsp;|&nbsp; Subject to floor of 50% × Minimum Capital (₹100 Cr)</div>
+  </div>
+
+  <p>
+    The 12-month vs. 36-month averaging rule ensures that RSM reflects sustained trends rather than one-time premium or claims spikes, reducing procyclicality. Each health segment line (Group Health, Individual Health, Government Schemes, etc.) is computed separately and then aggregated.
+  </p>
+
+  <div class="section-divider"></div>
+
+  <!-- 5. Technical Liabilities -->
+  <h2>5. Valuation of Technical Liabilities (Health)</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>Component</th>
+        <th>Nature</th>
+        <th>Methodology</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Unearned Premium Reserve (UPR)</strong></td>
+        <td>Unexpired Risk</td>
+        <td>Premium attributable to unexpired risk period; pro-rata basis for short-duration health policies.</td>
+      </tr>
+      <tr>
+        <td><strong>Premium Deficiency Reserve (PDR)</strong></td>
+        <td>Unexpired Risk</td>
+        <td>Held when expected claims + expenses exceed UPR. Appointed Actuary certifies using sound actuarial principles; negative PDR for one line cannot offset another.</td>
+      </tr>
+      <tr>
+        <td><strong>Outstanding Claims Reserve (OS)</strong></td>
+        <td>Claims Reserve</td>
+        <td>Case-by-case estimate of all reported but unsettled claims, including Allocated Loss Adjustment Expenses (ALAE).</td>
+      </tr>
+      <tr>
+        <td><strong>IBNR Reserve</strong></td>
+        <td>Claims Reserve</td>
+        <td>Includes IBNER (development on reported claims), claims in transit, and pure IBNR, estimated by the Appointed Actuary using statistical methods (e.g., chain-ladder). Negative IBNR for any year of occurrence must be re-examined and, if mathematically unavoidable, ignored (not netted).</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="section-divider"></div>
+
+  <!-- 6. Control Level & Regulatory Action -->
+  <h2>6. Control Level, Reporting and Regulatory Consequences</h2>
+  <p>
+    Every health insurer must maintain its ASM at a level that is not less than <strong>100% of RSM</strong> and not less than <strong>50% of minimum paid-up capital</strong> under Section 6 of the Insurance Act (whichever is higher). The statutory control level that triggers regulatory intervention is a <strong>Solvency Ratio below 150%</strong>. <span class="reg-cite">Section 64VA, Insurance Act 1938</span>
+  </p>
+
+  <div class="threshold-bar">
+    <div class="th-red">Below 100% — Critical: Regulatory Action</div>
+    <div class="th-amber">100%–150% — Warning: Corrective Plan Required</div>
+    <div class="th-green">≥ 150% — Compliant (Minimum Control Level)</div>
+  </div>
+
+  <p>
+    If the solvency ratio falls below 150%, IRDAI may require the insurer to submit a corrective financial plan within six months. Failure to restore solvency may result in restrictions on writing new business, direction by IRDAI under Section 64VA(2)/(3), or appointment of an administrator.
+  </p>
+
+  <div class="callout">
+    <strong>Reporting Obligation:</strong> The Solvency Statement (Form IRDAI-HI-SM or equivalent) must be certified by the Appointed Actuary and filed quarterly. The Appointed Actuary must certify that all technical liabilities are fair and reasonable and that the solvency position has been determined in accordance with the 2024 Regulations. Computer software written down value (WDV) is now an admissible asset per the IRDAI Master Circular (May 2024). <span class="reg-cite">Schedule I, Part II; Master Circular 2024</span>
+  </div>
+
+  <div class="section-divider"></div>
+
+  <!-- 7. Appointed Actuary -->
+  <h2>7. Role of the Appointed Actuary</h2>
+  <p>
+    The Appointed Actuary bears primary responsibility for the integrity of the solvency computation. Under the 2024 Regulations, the Appointed Actuary for a health insurer must be a Fellow Member of the Institute of Actuaries of India (IAI) with a valid Certificate of Practice (COP) in health/general insurance. The Appointed Actuary must certify the valuation of Technical Liabilities (including PDR and IBNR), the computation of ASM and RSM, and that the insurer's solvency margin complies with regulatory requirements. <span class="reg-cite">Schedule I, Part II</span>
+  </p>
+
+  <div class="page-footer">
+    <div><span class="badge">IRDAI 2024</span> &nbsp; Actuarial, Finance and Investment Functions of Insurers Regulations, 2024</div>
+    <div>Prepared for reference purposes only · April 2026</div>
+  </div>
+</div>
+
+</body>
+</html>
