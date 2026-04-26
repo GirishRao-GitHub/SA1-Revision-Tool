@@ -1652,7 +1652,6 @@
   <div class="header-sep"></div>
   <div class="chapter-title" id="header-chapter-title">Health and Care · All Chapters</div>
   <div class="view-tabs">
-    <button class="view-tab active" onclick="setView('notes')" id="tab-notes">Notes</button>
     <button class="view-tab" onclick="setView('flashcards')" id="tab-flashcards">Flashcards</button>
     <button class="view-tab" onclick="setView('glossary')" id="tab-glossary">Glossary</button>
     <button class="view-tab" onclick="setView('framework')" id="tab-framework">Framework</button>
@@ -2089,7 +2088,7 @@ function handleScroll() {
 function setView(v) {
   if (activeMemoryAid) { clearMemoryAidView(); activeMemoryAid = null; activeMemoryAidIdx = null; }
   activeView = v;
-  ['notes','flashcards','glossary','framework','summary'].forEach(id => {
+  ['flashcards','glossary','framework','summary'].forEach(id => {
     document.getElementById('tab-' + id).classList.toggle('active', id === v);
   });
   if (activeChapterNum !== null) {
