@@ -1,0 +1,129 @@
+
+<div id="container" style="padding:20px 16px 16px;"></div>
+<script>
+const isDark = matchMedia('(prefers-color-scheme: dark)').matches;
+const clr = isDark ? '#c2c0b6' : '#1a1a1a';
+const ns = 'http://www.w3.org/2000/svg';
+const svg = document.createElementNS(ns, 'svg');
+svg.setAttribute('width','100%');
+document.getElementById('container').appendChild(svg);
+
+function mk(tag, attrs, parent) {
+  const e = document.createElementNS(ns, tag);
+  for (const [k,v] of Object.entries(attrs)) e.setAttribute(k, String(v));
+  (parent||svg).appendChild(e); return e;
+}
+function hline(x, y, w, dashed) {
+  mk('line',{x1:x,y1:y,x2:x+w,y2:y,stroke:clr,'stroke-width':1,...(dashed?{'stroke-dasharray':'5,3'}:{})});
+}
+function bracketL(x, y1, y2) {
+  mk('line',{x1:x,y1:y1,x2:x,y2:y2,stroke:clr,'stroke-width':1});
+  mk('line',{x1:x,y1:y1,x2:x+7,y2:y1,stroke:clr,'stroke-width':1});
+  mk('line',{x1:x,y1:y2,x2:x+7,y2:y2,stroke:clr,'stroke-width':1});
+}
+function bracketR(x, y1, y2) {
+  mk('line',{x1:x,y1:y1,x2:x,y2:y2,stroke:clr,'stroke-width':1});
+  mk('line',{x1:x,y1:y1,x2:x-7,y2:y1,stroke:clr,'stroke-width':1});
+  mk('line',{x1:x,y1:y2,x2:x-7,y2:y2,stroke:clr,'stroke-width':1});
+}
+function txt(lines, cx, cy, size, anchor) {
+  if (typeof lines === 'string') lines = [lines];
+  const lh = size * 1.45;
+  const sy = cy - (lines.length - 1) * lh / 2;
+  lines.forEach((ln, i) => {
+    mk('text',{x:cx, y:sy+i*lh,'text-anchor':anchor||'middle',
+      'dominant-baseline':'central','font-size':size,
+      'font-family':'var(--font-sans),sans-serif',fill:clr
+    }).textContent = ln;
+  });
+}
+
+// ── Layout (unchanged) ────────────────────────────
+const TOP = 65;
+const LX  = 225;
+const BW  = 165;
+const GAP = 20;
+const RX  = LX + BW + GAP;
+
+const HI = 55;
+const HA = 72;
+const HB = 72;
+const HC = 215;
+const LH = HI + HA + HB + HC;
+
+const RS = TOP + HI;
+const RH = LH - HI;
+
+const rSurp  = 62;
+const rSCR   = 52;
+const rMCR   = 30;
+const rRM    = 46;   // reduced from 72
+const rBEL   = 132;  // absorbs the difference
+const rOther = RH - rSurp - rSCR - rMCR - rRM - rBEL;
+
+// ── Left box ──────────────────────────────────────
+mk('rect',{x:LX,y:TOP,width:BW,height:LH,fill:'transparent',stroke:clr,'stroke-width':1});
+hline(LX, TOP+HI,       BW, true);
+hline(LX, TOP+HI+HA+HB, BW, true);
+
+txt('Ineligible capital',      LX+BW/2, TOP+HI/2, 13);
+txt(['Ancillary','own funds'], LX+BW/2, TOP+HI+HA/2, 13);
+txt(['Basic own','funds'],     LX+BW/2, TOP+HI+HA+HB/2, 13);
+
+// ── Right box ─────────────────────────────────────
+mk('rect',{x:RX,y:RS,width:BW,height:RH,fill:'transparent',stroke:clr,'stroke-width':1});
+
+let ry = RS + rSurp;
+hline(RX, ry, BW, false);
+ry += rSCR; hline(RX, ry, BW, true);
+ry += rMCR; hline(RX, ry, BW, false);
+ry += rRM;  hline(RX, ry, BW, true);
+ry += rBEL; hline(RX, ry, BW, false);
+
+txt('Surplus',            RX+BW/2, RS+rSurp/2, 13);
+txt('SCR',                RX+BW/2, RS+rSurp+rSCR/2, 13);
+txt('MCR',                RX+BW/2, RS+rSurp+rSCR+rMCR/2, 12);
+txt('Risk margin',        RX+BW/2, RS+rSurp+rSCR+rMCR+rRM/2, 13);
+txt(['Best','estimate','liability'], RX+BW/2, RS+rSurp+rSCR+rMCR+rRM+rBEL/2, 13);
+txt('Other liabilities',  RX+BW/2, RS+rSurp+rSCR+rMCR+rRM+rBEL+rOther/2, 13);
+
+// ── Own funds bracket ─────────────────────────────
+const OF_Y1 = TOP + HI;
+const OF_Y2 = TOP + HI + HA + HB;
+const OF_X  = LX - 12;
+bracketL(OF_X, OF_Y1, OF_Y2);
+txt(['Own','funds'], OF_X - 42, (OF_Y1+OF_Y2)/2, 12);
+
+// ── Assets covering bracket ───────────────────────
+const AC_Y1 = TOP + HI + (HA + HB) / 2;
+const AC_Y2 = TOP + LH;
+const AC_X  = LX - 95;
+bracketL(AC_X, AC_Y1, AC_Y2);
+
+const acMid = (AC_Y1 + AC_Y2) / 2;
+const foH = 90;
+const fo = document.createElementNS(ns, 'foreignObject');
+fo.setAttribute('x', '2');
+fo.setAttribute('y', String(acMid - foH/2));
+fo.setAttribute('width', String(AC_X - 6));
+fo.setAttribute('height', String(foH));
+const d = document.createElement('div');
+d.style.cssText = `font-size:11px;color:${clr};text-align:center;line-height:1.45;font-family:var(--font-sans),sans-serif;`;
+d.textContent = 'Assets covering technical provisions, other liabilities, MCR and SCR';
+fo.appendChild(d); svg.appendChild(fo);
+
+// ── Technical provisions bracket ──────────────────
+const TP_Y1 = RS + rSurp + rSCR + rMCR;
+const TP_Y2 = RS + rSurp + rSCR + rMCR + rRM + rBEL;
+const TP_X  = RX + BW + 12;
+bracketR(TP_X, TP_Y1, TP_Y2);
+txt(['Technical','provisions'], TP_X + 52, (TP_Y1+TP_Y2)/2, 12);
+
+// ── Caption ───────────────────────────────────────
+const capY = TOP + LH + 26;
+mk('text',{x:LX+BW+GAP/2, y:capY,'text-anchor':'middle','dominant-baseline':'central',
+  'font-size':13,'font-weight':500,'font-family':'var(--font-sans),sans-serif',fill:clr
+}).textContent = 'Figure 12.1: Assets and liabilities of a health and care insurer';
+
+svg.setAttribute('viewBox', `0 0 680 ${capY+20}`);
+</script>
