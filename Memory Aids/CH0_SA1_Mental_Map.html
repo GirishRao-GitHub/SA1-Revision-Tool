@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SA1 Mental Map</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0c12;
+    --surface: #111420;
+    --surface2: #181c2a;
+    --border: rgba(255,255,255,0.08);
+    --text: #e8eaf0;
+    --muted: #7880a0;
+    --P1: #c8f135; --P1bg: rgba(200,241,53,0.08);
+    --P2: #5be8c8; --P2bg: rgba(91,232,200,0.08);
+    --P3: #f4a347; --P3bg: rgba(244,163,71,0.08);
+    --P4: #e85b8a; --P4bg: rgba(232,91,138,0.08);
+    --P5: #8ab4f8; --P5bg: rgba(138,180,248,0.08);
+    --P6: #d0a0f0; --P6bg: rgba(208,160,240,0.08);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    padding: 24px 20px 60px;
+  }
+  h1 {
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    letter-spacing: 0.15em;
+    color: var(--muted);
+    text-transform: uppercase;
+    text-align: center;
+    margin-bottom: 8px;
+  }
+  .subtitle {
+    text-align: center;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+  .tagline {
+    text-align: center;
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 28px;
+  }
+
+  /* Search */
+  .search-wrap {
+    max-width: 500px;
+    margin: 0 auto 32px;
+    position: relative;
+  }
+  .search-wrap input {
+    width: 100%;
+    padding: 12px 20px 12px 44px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 30px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .search-wrap input:focus { border-color: rgba(255,255,255,0.25); }
+  .search-wrap::before {
+    content: '⌕';
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 18px;
+    color: var(--muted);
+    pointer-events: none;
+  }
+  .search-wrap input::placeholder { color: var(--muted); }
+
+  /* Pillar grid */
+  .pillar-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+    max-width: 1100px;
+    margin: 0 auto 24px;
+  }
+  @media(max-width:700px) { .pillar-grid { grid-template-columns: 1fr 1fr; } }
+  @media(max-width:480px) { .pillar-grid { grid-template-columns: 1fr; } }
+
+  .pillar-card {
+    border-radius: 14px;
+    border: 1.5px solid transparent;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.2s;
+    overflow: hidden;
+  }
+  .pillar-card:hover { transform: translateY(-2px); }
+  .pillar-header {
+    padding: 16px 18px 14px;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .pillar-id {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    background: rgba(0,0,0,0.3);
+    padding: 3px 8px;
+    border-radius: 20px;
+    white-space: nowrap;
+    margin-top: 2px;
+  }
+  .pillar-info { flex: 1; }
+  .pillar-name { font-size: 14px; font-weight: 600; line-height: 1.3; }
+  .pillar-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 6px;
+  }
+  .pillar-weight {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    opacity: 0.7;
+  }
+  .pillar-count {
+    font-size: 11px;
+    opacity: 0.6;
+  }
+  .pillar-chevron {
+    font-size: 12px;
+    opacity: 0.5;
+    transition: transform 0.2s;
+    margin-top: 3px;
+  }
+  .pillar-card.open .pillar-chevron { transform: rotate(180deg); }
+
+  /* Groups panel */
+  .pillar-body { display: none; border-top: 1px solid var(--border); }
+  .pillar-card.open .pillar-body { display: block; }
+
+  .group-item { padding: 12px 18px; border-bottom: 1px solid var(--border); cursor: pointer; }
+  .group-item:last-child { border-bottom: none; }
+  .group-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+  .group-name {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    opacity: 0.7;
+  }
+  .group-chevron { font-size: 10px; opacity: 0.4; transition: transform 0.2s; }
+  .group-item.open .group-chevron { transform: rotate(180deg); }
+
+  /* Topics */
+  .topics-list { display: none; margin-top: 10px; }
+  .group-item.open .topics-list { display: block; }
+
+  .topic-item {
+    border-radius: 8px;
+    margin-bottom: 6px;
+    overflow: hidden;
+    background: rgba(0,0,0,0.2);
+  }
+  .topic-header {
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .topic-header:hover { background: rgba(255,255,255,0.04); }
+  .topic-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .topic-name { font-size: 13px; font-weight: 500; flex: 1; }
+  .topic-chevron { font-size: 9px; opacity: 0.35; transition: transform 0.2s; }
+  .topic-item.open .topic-chevron { transform: rotate(180deg); }
+
+  /* Angles */
+  .angles-list { display: none; padding: 4px 12px 10px 26px; }
+  .topic-item.open .angles-list { display: flex; flex-wrap: wrap; gap: 5px; }
+  .angle-tag {
+    font-size: 11px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    transition: all 0.15s;
+    cursor: default;
+  }
+
+  /* Mnemonic strip */
+  .mnemonic-strip {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    padding: 8px 18px;
+    letter-spacing: 0.05em;
+    opacity: 0.5;
+    border-top: 1px solid var(--border);
+  }
+
+  /* Legend */
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .legend-dot { width: 8px; height: 8px; border-radius: 50%; }
+
+  /* Search results */
+  .search-results {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: none;
+  }
+  .search-results.active { display: block; }
+  .result-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px 16px;
+    margin-bottom: 8px;
+  }
+  .result-path {
+    font-size: 11px;
+    color: var(--muted);
+    font-family: 'Space Mono', monospace;
+    margin-bottom: 4px;
+  }
+  .result-name { font-size: 14px; font-weight: 600; }
+  .result-angles { font-size: 12px; color: var(--muted); margin-top: 4px; }
+  mark { background: rgba(255,220,50,0.35); color: inherit; border-radius: 2px; padding: 0 2px; }
+
+  .expand-all {
+    text-align: center;
+    margin-bottom: 16px;
+  }
+  .expand-all button {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 12px;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    margin: 0 4px;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .expand-all button:hover { border-color: rgba(255,255,255,0.25); color: var(--text); }
+</style>
+</head>
+<body>
+
+<h1>SA1 · Health & Care Insurance</h1>
+<div class="subtitle">Mental Architecture Map</div>
+<div class="tagline">6 Pillars → 13 Groups → 35+ Topics → Sub-angles</div>
+
+<div class="search-wrap">
+  <input type="text" id="searchInput" placeholder="Search any topic, angle, or keyword…" oninput="handleSearch(this.value)">
+</div>
+
+<div class="expand-all">
+  <button onclick="expandAll()">Expand All</button>
+  <button onclick="collapseAll()">Collapse All</button>
+</div>
+
+<div class="legend" id="legend"></div>
+<div class="pillar-grid" id="pillarGrid"></div>
+<div class="search-results" id="searchResults"></div>
+
+<script>
+const DATA = [
+  {
+    id:'P1', name:'Products & Distribution', weight:'~12%', color:'#c8f135',
+    mnemonic:'CLIP-GDA · CI · LTC · IP · PMI · Group · Design · Admin',
+    groups:[
+      { name:'Long-Term Products', topics:[
+        { name:'Income Protection (IP)', angles:['Core Purpose & Complexity','Deferred Period Design','Own Occ Definition','Benefit Escalation','Premium Waiver','NCD / No-Claims Discount'] },
+        { name:'Critical Illness (CI)', angles:['Standalone vs Accelerated','Condition List & Definitions','Benefit Payment Trigger','Partial/Tiered Payments','CI Pricing','CI Underwriting'] },
+        { name:'Long-Term Care (LTC)', angles:['ADL Triggers','Pre-funded vs Immediate Needs','Benefit Structures','India LTC Context','LTCI Pricing','Sustainability Issues'] },
+        { name:'Disability Definitions', angles:['Own Occupation','Any Occupation','ADL-based','FAT / PCA','Activities of Daily Work'] },
+      ]},
+      { name:'Short-Term Products', topics:[
+        { name:'Private Medical Insurance (PMI)', angles:['Indemnity vs Benefit Basis','Coverage Scope','NCD Mechanics','PMI Underwriting','PMI Pricing','PMI Claims Control'] },
+        { name:'Health Cash Plan', angles:['Community Rating','Fixed Benefit Schedule','Low Premium Market'] },
+        { name:'Major Medical Expenses', angles:['Surgical Schedule','Fixed-Benefit Design','Sum Insured Structures'] },
+        { name:'Accident & Sickness (ASU)', angles:['Short-term IP','Short Deferred Period','ASU vs Long-term IP'] },
+        { name:'Overseas & Expatriate', angles:['IPMI Structure','Expat PMI Variants','Geographic Coverage'] },
+      ]},
+      { name:'Group Products', topics:[
+        { name:'Group Products', angles:['Definition & Legal Requirements','Common Sponsor','Experience Rating','Free Cover Limit','Anti-Selection Controls','Group vs Individual Pricing'] },
+      ]},
+      { name:'Product Design & Admin', topics:[
+        { name:'Product Design', angles:['Target Market','Benefit Design','Scope & Coverage','Options & Guarantees','Exclusions','Gap Analysis vs State Provision'] },
+        { name:'Product Design (Protection)', angles:['Standalone vs Rider','Unit-Linked Variants','GIOs & Convertibility','Waiver Options'] },
+        { name:'Administration', angles:['IT Systems','TPA Management','Outsourcing Decisions','Claims Admin','Policy Admin'] },
+        { name:'State Healthcare & Demographics', angles:['State vs Private Role','Gap Analysis','Demographic Trends','PMJAY & Govt Schemes','Propensity to Buy'] },
+      ]},
+      { name:'India Market', topics:[
+        { name:'India Market Insights', angles:['SAHI vs General Insurer','Mandatory Products','Market Growth Data','Fraud & Non-Payables','ICR Benchmarks','Portability Rules'] },
+      ]},
+    ]
+  },
+  {
+    id:'P2', name:'Pricing & Underwriting', weight:'~26%', color:'#5be8c8',
+    mnemonic:'PADUM · Pricing · Assumptions · Data · Underwriting · Models',
+    groups:[
+      { name:'Pricing Framework', topics:[
+        { name:'Pricing (Product-specific)', angles:['Accelerated CI Pricing','Standalone CI Pricing','IP Pricing','LTCI Pricing','PMI Pricing','Profit Signature Method'] },
+        { name:'Pricing & Rating Strategies', angles:['Community Rating','Risk Rating','NCD Design','Experience Rating','Premium Loadings','Rate Change Process'] },
+        { name:'Assumptions', angles:['General Principles','Process for Setting','Consistency Principle','Pricing vs Reserving vs EV','Demographic Assumptions','Economic/Investment Assumptions'] },
+        { name:'Data', angles:['Relevant','Credible','Available','Reliable','Internal vs External Sources','Data Limitations for India'] },
+        { name:'Models', angles:['Core Purpose','Profit Test Model','New Business Model','Existing Business Model','Stochastic Models','Model Validation'] },
+      ]},
+      { name:'Underwriting', topics:[
+        { name:'Underwriting', angles:['Objective','Methods (Full/Non-Med/Med)','Alternative Approaches','Underwriting Outcomes','Operational Issues','Group vs Individual UW'] },
+      ]},
+    ]
+  },
+  {
+    id:'P3', name:'Claims Management', weight:'~20%', color:'#f4a347',
+    mnemonic:'NAC-RPS · Notify · Assess · Control · Rehabilitate · Pay · Settle',
+    groups:[
+      { name:'Claims', topics:[
+        { name:'Claims Management', angles:['Notification & Proof','Assessment / Triage','Control & Mitigation','Rehabilitation (IP)','Payment / Settlement','Fraud Detection & Control'] },
+      ]},
+    ]
+  },
+  {
+    id:'P4', name:'Risk Mgmt & Reinsurance', weight:'~14%', color:'#e85b8a',
+    mnemonic:'RRCA · Risks · Risk Mgmt · Capital/Solvency · Arrangements',
+    groups:[
+      { name:'Risk Identification', topics:[
+        { name:'Risks', angles:['Model Risk','Parameter Risk','Random Fluctuations','External Data Mismatch','Expanding Funnel of Doubt','Emerging / Systemic Risks'] },
+      ]},
+      { name:'Risk Management', topics:[
+        { name:'Risk Management & Capital', angles:['Risk Type Classification','Risk Quantification','Mitigation Techniques','Capital Role','ALM Matching'] },
+        { name:'Capital & Solvency', angles:['Role of Capital','SCR Calculation','MCR Calculation','ORSA / ICAAP','T1/T2/T3 Eligible Capital','Capital Management Actions'] },
+      ]},
+      { name:'Reinsurance', topics:[
+        { name:'Reinsurance', angles:['Reasons for Reinsurance','Types of Business','Proportional (QS/Surplus)','Non-Proportional (XL/Stop Loss)','Financial Reinsurance','Retention Level Determination'] },
+      ]},
+    ]
+  },
+  {
+    id:'P5', name:'Valuation, Data & Investments', weight:'~23%', color:'#8ab4f8',
+    mnemonic:'RAIM · Reserving · Assumptions · Investments · Monitoring',
+    groups:[
+      { name:'Reserving & Valuation', topics:[
+        { name:'Reserving & Valuation', angles:['Reserve Components','Reserving Methods','LT vs ST Differences','Prudence Margins','IBNR','UPR / AURR'] },
+        { name:'Monitoring', angles:['Key Factors to Monitor','Monitoring Process','Selective Lapses','Future Influences','PMI Monitoring','IP Monitoring'] },
+        { name:'Model Office', angles:['Model Office Framework','New Business Strain','Profit Emergence Pattern','Sensitivity Testing'] },
+        { name:'Investments', angles:['Core ALM Tension','Govt Bond Matching','Corporate Bonds','Equities','Property','Liquidity Management'] },
+      ]},
+      { name:'Reporting Frameworks', topics:[
+        { name:'Solvency II', angles:['Pillar 1 (SCR/MCR)','Pillar 2 (ORSA/Governance)','Pillar 3 (Reporting/Disclosure)','Risk Margin','Technical Provisions','Eligible Capital Tiers'] },
+        { name:'IFRS 17', angles:['General Measurement Model (GMM)','Premium Allocation Approach (PAA)','Variable Fee Approach (VFA)','CSM Mechanics','Risk Adjustment','Onerous Contracts'] },
+      ]},
+    ]
+  },
+  {
+    id:'P6', name:'Regulation & Professionalism', weight:'~13%', color:'#d0a0f0',
+    mnemonic:'RLT-PA · Regulation · Legislation/Tax · Professionalism · APS/GN',
+    groups:[
+      { name:'Regulation', topics:[
+        { name:'Regulation (General)', angles:['2024 Key Updates','Prudential Norms','State Interaction','Conduct of Business','Capital Frameworks','Policyholder Protection'] },
+        { name:'IRDAI Regulations (2024)', angles:['Products Regulation & PMC','Appointed Actuary Role','Solvency Framework','Reserving Requirements','Investment Norms','Moratorium & PED Rules'] },
+        { name:'Legislation & Taxation', angles:['Tax Treatment of Premiums','Tax Treatment of Benefits','Legal Framework','Policy Condition Requirements'] },
+      ]},
+      { name:'Professionalism', topics:[
+        { name:'Professional Guidance', angles:['Actuarial Duties','Code of Conduct','Conflicts of Interest','Whistleblowing','Appointed Actuary Duties'] },
+        { name:'APS and GN', angles:['APS 34 (With-Profits)','APS 11','Relevant GNs for SA1','IAI Standards'] },
+      ]},
+    ]
+  },
+];
+
+// Build legend
+const legendEl = document.getElementById('legend');
+DATA.forEach(p => {
+  legendEl.innerHTML += `<div class="legend-item"><div class="legend-dot" style="background:${p.color}"></div>${p.id} · ${p.name}</div>`;
+});
+
+// Build pillar grid
+const grid = document.getElementById('pillarGrid');
+DATA.forEach(p => {
+  const topicCount = p.groups.reduce((s,g) => s + g.topics.length, 0);
+  const card = document.createElement('div');
+  card.className = 'pillar-card';
+  card.style.background = `${p.color}10`;
+  card.style.borderColor = `${p.color}30`;
+  card.dataset.pillar = p.id;
+
+  let groupsHtml = '';
+  p.groups.forEach((g,gi) => {
+    let topicsHtml = '';
+    g.topics.forEach((t,ti) => {
+      const anglesHtml = t.angles.map(a => `<span class="angle-tag">${a}</span>`).join('');
+      topicsHtml += `
+        <div class="topic-item" onclick="toggleTopic(this,event)">
+          <div class="topic-header">
+            <div class="topic-dot" style="background:${p.color}"></div>
+            <span class="topic-name">${t.name}</span>
+            <span class="topic-chevron">▼</span>
+          </div>
+          <div class="angles-list">${anglesHtml}</div>
+        </div>`;
+    });
+    groupsHtml += `
+      <div class="group-item" onclick="toggleGroup(this,event)">
+        <div class="group-header">
+          <span class="group-name">${g.name}</span>
+          <span class="group-chevron">▼</span>
+        </div>
+        <div class="topics-list">${topicsHtml}</div>
+      </div>`;
+  });
+
+  card.innerHTML = `
+    <div class="pillar-header" onclick="togglePillar(this.parentElement)">
+      <div>
+        <div class="pillar-id" style="color:${p.color}">${p.id}</div>
+      </div>
+      <div class="pillar-info">
+        <div class="pillar-name">${p.name}</div>
+        <div class="pillar-meta">
+          <span class="pillar-weight" style="color:${p.color}">${p.weight}</span>
+          <span class="pillar-count">${topicCount} topics</span>
+        </div>
+      </div>
+      <span class="pillar-chevron">▼</span>
+    </div>
+    <div class="pillar-body">
+      ${groupsHtml}
+      <div class="mnemonic-strip">◈ ${p.mnemonic}</div>
+    </div>`;
+  grid.appendChild(card);
+});
+
+function togglePillar(card) {
+  card.classList.toggle('open');
+}
+function toggleGroup(el, e) {
+  e.stopPropagation();
+  el.classList.toggle('open');
+}
+function toggleTopic(el, e) {
+  e.stopPropagation();
+  el.classList.toggle('open');
+}
+
+function expandAll() {
+  document.querySelectorAll('.pillar-card').forEach(c => c.classList.add('open'));
+  document.querySelectorAll('.group-item').forEach(g => g.classList.add('open'));
+  document.querySelectorAll('.topic-item').forEach(t => t.classList.add('open'));
+}
+function collapseAll() {
+  document.querySelectorAll('.pillar-card,.group-item,.topic-item').forEach(el => el.classList.remove('open'));
+}
+
+// Search
+function handleSearch(q) {
+  const resultsEl = document.getElementById('searchResults');
+  const gridEl = document.getElementById('pillarGrid');
+  if (!q.trim()) {
+    resultsEl.classList.remove('active');
+    resultsEl.innerHTML = '';
+    gridEl.style.display = '';
+    document.getElementById('legend').style.display = '';
+    document.querySelector('.expand-all').style.display = '';
+    return;
+  }
+  gridEl.style.display = 'none';
+  document.getElementById('legend').style.display = 'none';
+  document.querySelector('.expand-all').style.display = 'none';
+  resultsEl.classList.add('active');
+
+  const ql = q.toLowerCase();
+  let html = '';
+  let count = 0;
+  DATA.forEach(p => {
+    p.groups.forEach(g => {
+      g.topics.forEach(t => {
+        const nameMatch = t.name.toLowerCase().includes(ql);
+        const groupMatch = g.name.toLowerCase().includes(ql);
+        const matchAngles = t.angles.filter(a => a.toLowerCase().includes(ql));
+        if (nameMatch || groupMatch || matchAngles.length) {
+          count++;
+          const hl = (str) => str.replace(new RegExp(`(${q})`, 'gi'), '<mark>$1</mark>');
+          html += `
+            <div class="result-card" style="border-left:3px solid ${p.color}">
+              <div class="result-path" style="color:${p.color}">${p.id} · ${p.name}  →  ${g.name}</div>
+              <div class="result-name">${hl(t.name)}</div>
+              ${matchAngles.length ? `<div class="result-angles">${matchAngles.map(a => `<span class="angle-tag" style="display:inline-block;margin:2px">${hl(a)}</span>`).join('')}</div>` : ''}
+            </div>`;
+        }
+      });
+    });
+  });
+  if (!count) html = `<div style="text-align:center;color:var(--muted);padding:40px">No matches for "<strong>${q}</strong>"</div>`;
+  resultsEl.innerHTML = html;
+}
+</script>
+</body>
+</html>

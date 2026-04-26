@@ -1395,6 +1395,246 @@
     max-width: 300px;
     line-height: 1.6;
   }
+
+  /* ── ALL NOTES BUTTON ── */
+  .all-notes-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--accent);
+    background: var(--accent-lo);
+    border: 1px solid var(--accent);
+    border-radius: 5px;
+    padding: 4px 10px;
+    cursor: pointer;
+    transition: all .15s;
+    white-space: nowrap;
+    flex-shrink: 0;
+    letter-spacing: .03em;
+  }
+  .all-notes-btn:hover {
+    background: var(--accent-md);
+  }
+  .all-notes-btn-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    flex-shrink: 0;
+  }
+
+  /* ── NOTES MODAL ── */
+  .notes-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.65);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    animation: fadeIn .15s ease;
+  }
+  .notes-modal-overlay.hidden { display: none; }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+  .notes-modal {
+    background: var(--surface);
+    border: 1px solid var(--border-hi);
+    border-radius: 12px;
+    width: 100%;
+    max-width: 760px;
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 24px 80px rgba(0,0,0,.6);
+    animation: slideUp .18s ease;
+  }
+  @keyframes slideUp { from { transform: translateY(16px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+  .notes-modal-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+  .notes-modal-title {
+    font-family: var(--serif);
+    font-size: 18px;
+    color: var(--text-hi);
+    flex: 1;
+  }
+  .notes-modal-count {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--accent);
+    background: var(--accent-lo);
+    border: 1px solid rgba(232,160,48,.25);
+    border-radius: 10px;
+    padding: 2px 9px;
+  }
+  .notes-modal-close {
+    width: 28px;
+    height: 28px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text-dim);
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all .15s;
+    flex-shrink: 0;
+  }
+  .notes-modal-close:hover { border-color: var(--red); color: var(--red); background: var(--red-lo); }
+
+  .notes-modal-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 20px;
+    border-bottom: 1px solid var(--border);
+    flex-shrink: 0;
+    background: rgba(255,255,255,.02);
+  }
+  .notes-modal-toolbar-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    flex: 1;
+  }
+  .notes-export-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--green);
+    background: var(--green-lo);
+    border: 1px solid rgba(78,201,148,.35);
+    border-radius: 5px;
+    padding: 5px 12px;
+    cursor: pointer;
+    transition: all .15s;
+    white-space: nowrap;
+  }
+  .notes-export-btn:hover { background: rgba(78,201,148,.22); border-color: var(--green); }
+
+  .notes-modal-body {
+    overflow-y: auto;
+    flex: 1;
+    padding: 20px;
+  }
+  .notes-modal-body::-webkit-scrollbar { width: 5px; }
+  .notes-modal-body::-webkit-scrollbar-track { background: transparent; }
+  .notes-modal-body::-webkit-scrollbar-thumb { background: var(--border-hi); border-radius: 3px; }
+
+  .notes-modal-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 24px;
+    gap: 12px;
+    text-align: center;
+    color: var(--text-dim);
+  }
+  .notes-modal-empty-icon { font-size: 36px; opacity: .5; }
+  .notes-modal-empty-text { font-size: 14px; line-height: 1.6; max-width: 280px; }
+
+  /* Chapter group */
+  .nm-chapter-group { margin-bottom: 28px; }
+  .nm-chapter-heading {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 10px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .nm-chapter-badge {
+    background: var(--accent-lo);
+    border: 1px solid rgba(232,160,48,.2);
+    border-radius: 3px;
+    padding: 1px 6px;
+    font-size: 9px;
+  }
+
+  /* Section group */
+  .nm-section-group { margin-bottom: 16px; padding-left: 2px; }
+  .nm-section-heading {
+    font-family: var(--sans);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+  }
+  .nm-section-id {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--text-dim);
+    background: var(--border);
+    padding: 1px 5px;
+    border-radius: 3px;
+    flex-shrink: 0;
+  }
+
+  /* Note card */
+  .nm-note-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    margin-bottom: 10px;
+    overflow: hidden;
+  }
+  .nm-note-card-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    border-bottom: 1px solid var(--border);
+    background: rgba(232,160,48,.05);
+  }
+  .nm-sub-id {
+    font-family: var(--mono);
+    font-size: 9px;
+    color: var(--accent);
+    background: var(--accent-lo);
+    padding: 1px 6px;
+    border-radius: 3px;
+    flex-shrink: 0;
+  }
+  .nm-sub-title {
+    font-size: 12px;
+    color: var(--text-hi);
+    font-weight: 500;
+  }
+  .nm-note-text {
+    padding: 10px 14px;
+    font-family: var(--sans);
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.7;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
 </style>
 </head>
 <body>
@@ -1418,7 +1658,36 @@
     <button class="view-tab" onclick="setView('framework')" id="tab-framework">Framework</button>
     <button class="view-tab" onclick="setView('summary')" id="tab-summary">Summary</button>
   </div>
+  <div class="header-sep"></div>
+  <button class="all-notes-btn" onclick="openAllNotesModal()" title="View all my notes">
+    <span class="all-notes-btn-dot"></span>
+    My Notes
+  </button>
 </header>
+
+<!-- ── ALL NOTES MODAL ─────────────────────────────────────── -->
+<div class="notes-modal-overlay hidden" id="notes-modal-overlay" onclick="closeAllNotesModal(event)">
+  <div class="notes-modal" id="notes-modal">
+    <div class="notes-modal-header">
+      <div class="notes-modal-title">&#9998;&#65039; My Notes</div>
+      <div class="notes-modal-count" id="notes-modal-count">0 notes</div>
+      <button class="notes-modal-close" onclick="closeAllNotesModalDirect()" title="Close">&#x2715;</button>
+    </div>
+    <div class="notes-modal-toolbar">
+      <span class="notes-modal-toolbar-label">All saved notes across chapters</span>
+      <button class="notes-export-btn" onclick="exportNotesAsDoc()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Save as .doc
+      </button>
+    </div>
+    <div class="notes-modal-body" id="notes-modal-body">
+      <div class="notes-modal-empty">
+        <div class="notes-modal-empty-icon">&#128237;</div>
+        <div class="notes-modal-empty-text">No notes yet. Start writing in any subsection notes box and they will appear here.</div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
 
@@ -3104,6 +3373,161 @@ function renderFrameworkForChapter(chNum) {
   function toggleNotesPanel(subId) {
     const body = document.getElementById('notes-body-' + subId);
     if (body) body.classList.toggle('collapsed');
+  }
+
+  // ── ALL NOTES MODAL ──────────────────────────────────────
+
+  function gatherAllNotes() {
+    const prefix = NOTE_PREFIX;
+    const entries = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (!key.startsWith(prefix)) continue;
+      const val = localStorage.getItem(key);
+      if (!val || !val.trim()) continue;
+      const raw = key.slice(prefix.length);
+      const match = raw.match(/^ch(\d+)-(.+)$/);
+      if (!match) continue;
+      const chNum = parseInt(match[1], 10);
+      const subId = match[2];
+      entries.push({ chNum, subId, text: val.trim() });
+    }
+    entries.sort((a, b) => {
+      if (a.chNum !== b.chNum) return a.chNum - b.chNum;
+      return a.subId.localeCompare(b.subId, undefined, { numeric: true });
+    });
+    return entries;
+  }
+
+  function resolveNoteLabel(chNum, subId) {
+    const data = CHAPTER_DATA[String(chNum)];
+    const chInfo = CHAPTERS.find(c => c.num === chNum);
+    const chapterTitle = data ? data.title : (chInfo ? chInfo.title : 'Chapter ' + chNum);
+    if (!data) return { chapterTitle, sectionId: null, sectionTitle: null, subTitle: subId };
+    for (const sec of (data.sections || [])) {
+      for (const sub of (sec.subsections || [])) {
+        if (sub.id === subId) {
+          return { chapterTitle, sectionId: sec.id, sectionTitle: sec.title, subTitle: sub.title };
+        }
+      }
+    }
+    return { chapterTitle, sectionId: null, sectionTitle: null, subTitle: subId };
+  }
+
+  function escHtml(s) {
+    if (!s) return '';
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  function buildModalGroups(entries) {
+    const byChapter = {};
+    entries.forEach(e => {
+      const lbl = resolveNoteLabel(e.chNum, e.subId);
+      if (!byChapter[e.chNum]) byChapter[e.chNum] = { title: lbl.chapterTitle, sections: {} };
+      const secKey = lbl.sectionId || '__none__';
+      if (!byChapter[e.chNum].sections[secKey]) {
+        byChapter[e.chNum].sections[secKey] = { id: lbl.sectionId, title: lbl.sectionTitle, subs: [] };
+      }
+      byChapter[e.chNum].sections[secKey].subs.push({ subId: e.subId, subTitle: lbl.subTitle, text: e.text });
+    });
+    return byChapter;
+  }
+
+  function openAllNotesModal() {
+    const entries = gatherAllNotes();
+    const overlay = document.getElementById('notes-modal-overlay');
+    const body    = document.getElementById('notes-modal-body');
+    const count   = document.getElementById('notes-modal-count');
+
+    count.textContent = entries.length + (entries.length === 1 ? ' note' : ' notes');
+
+    if (entries.length === 0) {
+      body.innerHTML = '<div class="notes-modal-empty"><div class="notes-modal-empty-icon">&#128237;</div><div class="notes-modal-empty-text">No notes yet. Start writing in any subsection notes box and they will appear here.</div></div>';
+    } else {
+      const byChapter = buildModalGroups(entries);
+      let html = '';
+      Object.keys(byChapter).sort((a,b) => +a - +b).forEach(chNum => {
+        const ch = byChapter[chNum];
+        html += '<div class="nm-chapter-group"><div class="nm-chapter-heading"><span class="nm-chapter-badge">Ch ' + chNum + '</span>' + escHtml(ch.title) + '</div>';
+        Object.keys(ch.sections).forEach(secKey => {
+          const sec = ch.sections[secKey];
+          html += '<div class="nm-section-group">';
+          if (sec.id) {
+            html += '<div class="nm-section-heading"><span class="nm-section-id">' + escHtml(sec.id) + '</span>' + escHtml(sec.title || '') + '</div>';
+          }
+          sec.subs.forEach(sub => {
+            html += '<div class="nm-note-card"><div class="nm-note-card-header"><span class="nm-sub-id">' + escHtml(sub.subId) + '</span><span class="nm-sub-title">' + escHtml(sub.subTitle) + '</span></div><div class="nm-note-text">' + escHtml(sub.text) + '</div></div>';
+          });
+          html += '</div>';
+        });
+        html += '</div>';
+      });
+      body.innerHTML = html;
+    }
+
+    overlay.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeAllNotesModal(e) {
+    if (e.target === document.getElementById('notes-modal-overlay')) {
+      closeAllNotesModalDirect();
+    }
+  }
+
+  function closeAllNotesModalDirect() {
+    document.getElementById('notes-modal-overlay').classList.add('hidden');
+    document.body.style.overflow = '';
+  }
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      const overlay = document.getElementById('notes-modal-overlay');
+      if (overlay && !overlay.classList.contains('hidden')) closeAllNotesModalDirect();
+    }
+  });
+
+  function exportNotesAsDoc() {
+    const entries = gatherAllNotes();
+    if (entries.length === 0) { alert('No notes to export.'); return; }
+
+    const byChapter = buildModalGroups(entries);
+
+    let docHtml = "<!DOCTYPE html><html><head><meta charset='utf-8'><title>SA1 Revision Notes</title>";
+    docHtml += "<style>body{font-family:Calibri,sans-serif;font-size:11pt;color:#1a1a1a;margin:2cm;line-height:1.5;}";
+    docHtml += "h1{font-size:17pt;color:#b06800;border-bottom:2pt solid #b06800;padding-bottom:4pt;margin-top:24pt;margin-bottom:8pt;}";
+    docHtml += "h2{font-size:13pt;color:#333;margin-top:16pt;margin-bottom:4pt;}";
+    docHtml += "h3{font-size:10.5pt;color:#666;font-style:italic;margin-top:10pt;margin-bottom:2pt;}";
+    docHtml += ".note{background:#fffbf2;border-left:3pt solid #e8a030;padding:6pt 10pt;margin:4pt 0 10pt;white-space:pre-wrap;font-size:10.5pt;}";
+    docHtml += ".doc-title{font-size:22pt;font-weight:bold;color:#222;margin-bottom:4pt;}";
+    docHtml += ".doc-meta{font-size:9pt;color:#888;margin-bottom:24pt;}";
+    docHtml += "hr{border:none;border-top:1pt solid #e0e0e0;margin:14pt 0;}";
+    docHtml += "</style></head><body>";
+    docHtml += "<p class='doc-title'>SA1 &middot; My Revision Notes</p>";
+    docHtml += "<p class='doc-meta'>Exported " + new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'}) + "</p>";
+
+    Object.keys(byChapter).sort((a,b)=>+a-+b).forEach(chNum => {
+      const ch = byChapter[chNum];
+      docHtml += "<h1>Chapter " + chNum + " &mdash; " + escHtml(ch.title) + "</h1>";
+      Object.keys(ch.sections).forEach(secKey => {
+        const sec = ch.sections[secKey];
+        if (sec.id) docHtml += "<h2>" + escHtml(sec.id) + " &nbsp; " + escHtml(sec.title||'') + "</h2>";
+        sec.subs.forEach(sub => {
+          docHtml += "<h3>" + escHtml(sub.subId) + " &nbsp; " + escHtml(sub.subTitle) + "</h3>";
+          docHtml += "<div class='note'>" + escHtml(sub.text) + "</div>";
+        });
+      });
+      docHtml += "<hr>";
+    });
+
+    docHtml += "</body></html>";
+
+    const blob = new Blob([docHtml], { type: 'application/msword' });
+    const url  = URL.createObjectURL(blob);
+    const a    = document.createElement('a');
+    a.href = url; a.download = 'SA1_My_Notes.doc';
+    document.body.appendChild(a); a.click();
+    setTimeout(() => { URL.revokeObjectURL(url); a.remove(); }, 500);
   }
 
 </script>
