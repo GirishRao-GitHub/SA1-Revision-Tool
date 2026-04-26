@@ -1,0 +1,1296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reinsurance Structures — SA1 Revision Exhibit</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #1e3a5f;
+  --navy-light: #2d5282;
+  --slate: #334155;
+  --bg: #f0f4f8;
+  --white: #ffffff;
+  --border: #cbd5e1;
+  --text: #1e293b;
+  --text-muted: #64748b;
+
+  --primary-bg: #1d4ed8; --primary-text: #fff;
+  --used-bg: #047857;    --used-text: #fff;
+  --limited-bg: #b45309; --limited-text: #fff;
+  --na-bg: #94a3b8;      --na-text: #fff;
+  --na-cell: #e8edf3;
+
+  --iai-bg: #1e40af; --iai-text: #fff;
+  --ifo-bg: #6d28d9; --ifo-text: #fff;
+  --tag-n-bg: #fef3c7; --tag-n-text: #78350f;
+  --tag-d-bg: #d1fae5; --tag-d-text: #065f46;
+  --tag-r-bg: #fee2e2; --tag-r-text: #991b1b;
+
+  --shadow: 0 4px 24px rgba(0,0,0,0.15);
+  --radius: 6px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'IBM Plex Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+/* ── PAGE HEADER ── */
+.page-header {
+  background: var(--navy);
+  color: white;
+  padding: 20px 28px 16px;
+  border-bottom: 3px solid #3b82f6;
+}
+.page-header h1 { font-size: 18px; font-weight: 700; letter-spacing: 0.02em; }
+.page-header p  { font-size: 12px; color: #94a3b8; margin-top: 4px; }
+
+/* ── KEY INSIGHT BANNER ── */
+.insight-banner {
+  margin: 14px 28px;
+  background: #fff8e1;
+  border-left: 4px solid #f59e0b;
+  border-radius: 0 var(--radius) var(--radius) 0;
+  padding: 10px 14px;
+  font-size: 12px;
+  line-height: 1.6;
+}
+.insight-banner strong { color: #92400e; }
+
+/* ── LEGEND ── */
+.legend {
+  display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
+  margin: 0 28px 12px;
+  padding: 10px 14px;
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-size: 11.5px;
+}
+.legend-title { font-weight: 700; color: var(--slate); margin-right: 6px; }
+.badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 3px;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  cursor: default;
+}
+.badge.primary { background: var(--primary-bg); color: var(--primary-text); }
+.badge.used    { background: var(--used-bg);    color: var(--used-text);    }
+.badge.limited { background: var(--limited-bg); color: var(--limited-text); }
+.badge.na      { background: var(--na-bg);      color: var(--na-text);      }
+.legend-sep { color: var(--border); }
+
+/* ── TABLE WRAPPER ── */
+.table-wrapper {
+  margin: 0 28px 28px;
+  overflow-x: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+/* ── THE TABLE ── */
+table {
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+  min-width: 1000px;
+}
+
+/* Column group header row */
+th.colgroup-header {
+  background: var(--navy);
+  color: white;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 7px 10px;
+  text-align: center;
+  border-right: 2px solid rgba(255,255,255,0.2);
+}
+th.colgroup-header.proportional { background: #1e4d8c; }
+th.colgroup-header.nonprop      { background: #4c1d95; }
+th.colgroup-header.alt-col      { background: #064e3b; }
+th.colgroup-header.product-col  { background: var(--navy); }
+
+/* Column sub-headers */
+th.col-header {
+  background: #e8eef7;
+  color: var(--slate);
+  font-size: 11.5px;
+  font-weight: 700;
+  padding: 7px 10px;
+  text-align: center;
+  border-right: 1px solid var(--border);
+  border-bottom: 2px solid var(--border);
+  vertical-align: bottom;
+  white-space: nowrap;
+}
+th.col-header.proportional { background: #dbeafe; color: #1e40af; }
+th.col-header.nonprop      { background: #ede9fe; color: #5b21b6; }
+th.col-header.alt-col      { background: #d1fae5; color: #065f46; }
+th.col-header.product-col  { background: #f8fafc; color: var(--navy); text-align: left; }
+
+/* Product group rows */
+tr.product-group-row td {
+  background: var(--slate);
+  color: white;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 5px 12px;
+}
+
+/* Product name cell (first column) */
+td.product-name {
+  background: #f8fafc;
+  font-weight: 600;
+  font-size: 12.5px;
+  color: var(--navy);
+  padding: 8px 12px;
+  border-right: 2px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+  vertical-align: top;
+  min-width: 90px;
+}
+
+/* Data cells */
+td.cell {
+  padding: 0;
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+  min-width: 130px;
+  max-width: 180px;
+}
+td.cell:last-child { border-right: none; }
+
+.cell-inner {
+  padding: 8px 9px;
+  cursor: pointer;
+  height: 100%;
+  transition: background 0.12s;
+  min-height: 70px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.cell-inner:hover { background: rgba(59,130,246,0.06); }
+
+/* N/A cell styling */
+td.cell.na-cell {
+  background:
+    repeating-linear-gradient(
+      -45deg,
+      var(--na-cell),
+      var(--na-cell) 6px,
+      #dde4ed 6px,
+      #dde4ed 7px
+    );
+}
+td.cell.na-cell .cell-inner:hover { background: rgba(0,0,0,0.04); }
+
+.cell-badge-row { display: flex; align-items: center; justify-content: space-between; }
+
+.cell-badge {
+  display: inline-block;
+  padding: 2px 7px;
+  border-radius: 3px;
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+.cell-badge.primary { background: var(--primary-bg); color: var(--primary-text); }
+.cell-badge.used    { background: var(--used-bg);    color: var(--used-text);    }
+.cell-badge.limited { background: var(--limited-bg); color: var(--limited-text); }
+.cell-badge.na      { background: var(--na-bg);      color: var(--na-text);      }
+
+.expand-icon {
+  color: var(--text-muted);
+  font-size: 10px;
+  flex-shrink: 0;
+  margin-left: 4px;
+}
+
+.cell-summary {
+  font-size: 11.5px;
+  color: var(--text);
+  line-height: 1.45;
+}
+td.cell.na-cell .cell-summary { color: #64748b; font-style: italic; }
+
+/* Has-tags indicator */
+.has-tags-dot {
+  display: inline-block;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: #f59e0b;
+  margin-left: 4px;
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+
+/* ── MODAL ── */
+.modal-overlay {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,0.55);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+}
+.modal-overlay.open { display: flex; }
+
+.modal {
+  background: white;
+  border-radius: 10px;
+  box-shadow: var(--shadow);
+  max-width: 640px;
+  width: 100%;
+  max-height: 88vh;
+  overflow-y: auto;
+  animation: modalIn 0.15s ease;
+}
+@keyframes modalIn {
+  from { opacity:0; transform: scale(0.97) translateY(8px); }
+  to   { opacity:1; transform: scale(1) translateY(0); }
+}
+
+.modal-header {
+  padding: 16px 20px 12px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  position: sticky;
+  top: 0;
+  background: white;
+  z-index: 1;
+}
+.modal-title-block {}
+.modal-product { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.07em; font-weight: 600; }
+.modal-col { font-size: 16px; font-weight: 700; color: var(--navy); }
+
+.modal-close {
+  background: none; border: none; cursor: pointer;
+  font-size: 20px; color: var(--text-muted); line-height: 1;
+  padding: 0 4px; flex-shrink: 0;
+  transition: color 0.1s;
+}
+.modal-close:hover { color: var(--text); }
+
+.modal-body { padding: 16px 20px 20px; }
+
+.modal-status-row {
+  display: flex; align-items: center; gap: 10px; margin-bottom: 14px;
+}
+.modal-badge {
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+.modal-badge.primary { background: var(--primary-bg); color: white; }
+.modal-badge.used    { background: var(--used-bg);    color: white; }
+.modal-badge.limited { background: var(--limited-bg); color: white; }
+.modal-badge.na      { background: var(--na-bg);      color: white; }
+
+.modal-content {
+  font-size: 12.5px;
+  line-height: 1.65;
+  color: var(--text);
+}
+.modal-content ul { padding-left: 18px; margin-top: 6px; }
+.modal-content li { margin-bottom: 4px; }
+.modal-content p  { margin-bottom: 8px; }
+.modal-content p:last-child { margin-bottom: 0; }
+.modal-content strong { color: var(--navy); }
+
+/* Exam tags section */
+.exam-tags-section { margin-top: 16px; border-top: 1px solid var(--border); padding-top: 14px; }
+.exam-tags-title {
+  font-size: 10.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--text-muted);
+  margin-bottom: 9px;
+}
+.tag-item {
+  display: flex; align-items: flex-start; gap: 7px;
+  margin-bottom: 8px; font-size: 11.5px;
+}
+.tag-body {
+  display: inline-block;
+  padding: 1px 7px;
+  border-radius: 3px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  flex-shrink: 0;
+  font-family: 'IBM Plex Mono', monospace;
+}
+.tag-body.iai { background: var(--iai-bg); color: var(--iai-text); }
+.tag-body.ifo { background: var(--ifo-bg); color: var(--ifo-text); }
+.tag-ref {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--slate);
+  flex-shrink: 0;
+}
+.tag-type {
+  display: inline-block;
+  padding: 1px 5px;
+  border-radius: 3px;
+  font-size: 9.5px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.tag-type.N { background: var(--tag-n-bg); color: var(--tag-n-text); }
+.tag-type.D { background: var(--tag-d-bg); color: var(--tag-d-text); }
+.tag-type.R { background: var(--tag-r-bg); color: var(--tag-r-text); }
+.tag-marks { color: var(--text-muted); font-size: 10.5px; flex-shrink: 0; }
+.tag-desc  { color: var(--text); font-size: 11.5px; }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 700px) {
+  .page-header, .insight-banner, .legend, .table-wrapper { margin-left: 12px; margin-right: 12px; }
+}
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1>Reinsurance Structures by Product — SA1 Revision Exhibit</h1>
+  <p>Sources: SA1 Ch17 · SP1 Ch26 &nbsp;|&nbsp; Click any cell to expand full detail and exam tags &nbsp;|&nbsp; 🟡 dot = past paper examined</p>
+</div>
+
+<div class="insight-banner">
+  <strong>⚠ KEY EXAM INSIGHT — Non-Proportional Structures and Long-Term Products:</strong><br>
+  For individual long-term products (IP, CI, LTCI), <strong>Risk XL</strong>, <strong>Aggregate XL</strong> and <strong>Cat XL</strong> are generally <strong>NOT APPLICABLE</strong>.
+  The reason is structural: the sum insured is <em>fixed and known at inception</em>, so individual claim amounts cannot exceed the sum insured — meaning XL attachment is impossible.
+  Proportional structures (QS and Surplus) are the primary tools. For <strong>group schemes</strong>, however, non-proportional structures are fully relevant because correlated claim events create genuine aggregate and catastrophe exposure.
+</div>
+
+<div class="legend">
+  <span class="legend-title">STATUS:</span>
+  <span class="badge primary">PRIMARY</span> Main structure for this product type
+  <span class="legend-sep">|</span>
+  <span class="badge used">USED</span> Applicable and commonly used
+  <span class="legend-sep">|</span>
+  <span class="badge limited">LIMITED</span> Occasionally applicable / edge cases
+  <span class="legend-sep">|</span>
+  <span class="badge na">N/A</span> Not applicable in normal practice
+  <span class="legend-sep">&nbsp;&nbsp;</span>
+  <span style="font-size:11px;">🟡 = Examined in past papers</span>
+</div>
+
+<div class="table-wrapper">
+<table id="ri-table">
+  <!-- JS renders here -->
+</table>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModalOnBg(event)">
+  <div class="modal" id="modal">
+    <div class="modal-header">
+      <div class="modal-title-block">
+        <div class="modal-product" id="modal-product-label"></div>
+        <div class="modal-col" id="modal-col-label"></div>
+      </div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-status-row">
+        <span class="modal-badge" id="modal-badge"></span>
+      </div>
+      <div class="modal-content" id="modal-content"></div>
+      <div class="exam-tags-section" id="modal-tags-section" style="display:none">
+        <div class="exam-tags-title">● Examined In</div>
+        <div id="modal-tags"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ─────────────────────────────────────────────
+   DATA
+───────────────────────────────────────────── */
+
+const COLS = [
+  { id:'qs',      label:'Quota Share',            group:'Proportional',     groupClass:'proportional' },
+  { id:'surplus', label:'Surplus',                group:'Proportional',     groupClass:'proportional' },
+  { id:'riskxl',  label:'Risk XL',                group:'Non-Proportional', groupClass:'nonprop' },
+  { id:'aggxl',   label:'Agg XL / Stop Loss',     group:'Non-Proportional', groupClass:'nonprop' },
+  { id:'catxl',   label:'Cat XL',                 group:'Non-Proportional', groupClass:'nonprop' },
+  { id:'alt',     label:'Alternatives / Notes',   group:'',                 groupClass:'alt-col' }
+];
+
+const PRODUCT_GROUPS = [
+  { label:'Short-Term Products', products:[
+    { id:'pmi',    label:'PMI' },
+    { id:'hcash',  label:'Health Cash' },
+    { id:'dental', label:'Dental' },
+    { id:'optical',label:'Optical' }
+  ]},
+  { label:'Long-Term Products', products:[
+    { id:'ip',   label:'IP' },
+    { id:'ci',   label:'CI' },
+    { id:'ltci', label:'LTCI' }
+  ]},
+  { label:'Group Schemes', products:[
+    { id:'groupip',  label:'Group IP' },
+    { id:'groupci',  label:'Group CI' },
+    { id:'grouppmi', label:'Group PMI' }
+  ]}
+];
+
+// status: 'primary' | 'used' | 'limited' | 'na'
+// tags: [{ body:'IAI'|'IFoA', sitting:'Nov 2012', q:'Q1(iv)', type:'N'|'D'|'R', marks:6, desc:'...' }]
+
+const CELLS = {
+
+  /* ── PMI ── */
+  pmi_qs: {
+    status:'primary',
+    summary:'Original-terms only. Spreads parameter risk; ideal for new PMI market entry.',
+    detail:`<p><strong>Original-terms QS only</strong> for short-term indemnity business. Spreads parameter risk — especially valuable when entering new PMI markets or geographies.</p>
+    <ul>
+      <li>Improves solvency ratio: reduces net written premiums, increasing free assets/NWP</li>
+      <li>Commission receipt helps finance initial market-entry costs</li>
+      <li>Enables reciprocal business arrangements with other health insurers</li>
+      <li>Low initial retention with planned increase as cedant expertise builds</li>
+    </ul>`,
+    tags:[
+      {body:'IAI',sitting:'Nov 2012',q:'Q1(iv)',type:'N',marks:6,desc:'Calculate 50/50 QS effect on P&L and regulatory capital'},
+      {body:'IAI',sitting:'Nov 2012',q:'Q1(v)', type:'R',marks:4,desc:'Recommend QS vs Risk XL with justification'},
+      {body:'IAI',sitting:'May 2015',q:'Q1(vi)',type:'D',marks:3,desc:'Best RI type for new indemnity health product'}
+    ]
+  },
+  pmi_surplus: {
+    status:'na',
+    summary:'PMI is indemnity-based; individual claim amount unknown at inception — no fixed sum insured to set retention.',
+    detail:`<p><em>Not applicable.</em> PMI is an indemnity product — the individual claim amount is unknown at policy inception. There is no fixed sum insured from which a surplus retention can be defined. Quota share and Risk XL are the appropriate structures.</p>`,
+    tags:[]
+  },
+  pmi_riskxl: {
+    status:'primary',
+    summary:'Primary NP tool for PMI. Covers excess individual claims (e.g. £150k xs £50k). Stability clause and co-participation essential.',
+    detail:`<p><strong>Primary non-proportional tool for PMI</strong> — covers the excess of any single claim above a retention (e.g. £150k xs £50k).</p>
+    <ul>
+      <li>Targets large individual treatment costs: cancer, organ transplants, complex surgery</li>
+      <li><strong>Stability clause essential:</strong> retention/limit indexed to medical inflation to preserve real value</li>
+      <li>Multiple stacking layers purchased; layers must be contiguous to avoid gaps</li>
+      <li><strong>Co-participation</strong> (e.g. 90% reinsurer): preserves cedant claims management incentive</li>
+      <li>No RI commission under XL; profit commission possible for lower layers</li>
+    </ul>`,
+    tags:[
+      {body:'IAI',sitting:'Nov 2012',q:'Q1(iv)',type:'N',marks:6,desc:'Calculate Risk XL (individual claims layer) vs QS'},
+      {body:'IAI',sitting:'Nov 2012',q:'Q1(v)', type:'R',marks:4,desc:'Recommend QS vs Risk XL'},
+      {body:'IFoA',sitting:'Apr 2021',q:'Q1(v)',type:'D',marks:4,desc:'Government RI fund covering individual claims above threshold'}
+    ]
+  },
+  pmi_aggxl: {
+    status:'used',
+    summary:'Stop loss as % of earned premiums (e.g. 105–125% band). Reinsurer covers ~80% within layer; 20% co-participation.',
+    detail:`<p>Stop loss expressed as a <strong>% of earned premiums</strong> (e.g. lower limit 105%, upper limit 125%). Expressed as % — not absolute amounts — to prevent volume gaming.</p>
+    <ul>
+      <li>Reinsurer typically covers 80% within layer; cedant retains 20% co-participation</li>
+      <li>Reinsurers reluctant to offer: impose co-participation and/or UW oversight conditions</li>
+      <li><strong>Example:</strong> Earned premiums £292m, claims £333m (ratio 114%) → recovery = 80% × (£333m − £306.6m) = £21.1m</li>
+    </ul>`,
+    tags:[
+      {body:'IAI',sitting:'Nov 2012',q:'Q1(ii)',type:'D',marks:8,desc:'Uses of RI including aggregate stop loss'},
+      {body:'IFoA',sitting:'Apr 2021',q:'Q1(v)',type:'D',marks:4,desc:'Government aggregate stop loss cover for PMI insurers'}
+    ]
+  },
+  pmi_catxl: {
+    status:'used',
+    summary:'Triggered when aggregate losses from a single event (epidemic, flood) exceed retention. Pandemic cover rarely available.',
+    detail:`<p>Triggered when aggregate losses from a <strong>single event</strong> (e.g. epidemic, flood, climate event) exceed the retention.</p>
+    <ul>
+      <li>Pandemic cover generally unavailable at affordable premiums; government backstop may be the only option</li>
+      <li>Cat XL most relevant for portfolio-wide PMI events affecting large numbers simultaneously</li>
+    </ul>`,
+    tags:[
+      {body:'IFoA',sitting:'Sep 2023',q:'Q1(iii)',type:'D',marks:10,desc:'PMI flood/climate risk — Cat XL as mitigation'},
+      {body:'IAI',sitting:'Nov 2011',q:'Q6(ii)', type:'D',marks:6, desc:'Risk mitigation tools including catastrophe RI'}
+    ]
+  },
+  pmi_alt: {
+    status:'used',
+    summary:'Badging/fronting; portfolio transfer (indemnity vs assumption); reciprocal QS for geographic diversification.',
+    detail:`<ul>
+      <li><strong>Badging/fronting:</strong> specialist reinsurer is effective risk carrier; direct insurer lends brand/distribution</li>
+      <li><strong>Portfolio transfer via indemnity reinsurance</strong> (original insurer retains liability) or <strong>assumption reinsurance</strong> (full transfer — requires regulatory approval)</li>
+      <li>Reciprocal QS with another insurer for geographic diversification</li>
+      <li>Increased co-payment/deductible design to limit own exposure</li>
+    </ul>`,
+    tags:[
+      {body:'IFoA',sitting:'Sep 2022',q:'Q1(vii)',type:'D',marks:4,desc:'Portfolio transfer: indemnity vs assumption reinsurance'}
+    ]
+  },
+
+  /* ── HEALTH CASH ── */
+  hcash_qs: {
+    status:'primary',
+    summary:'High-volume, homogeneous, low-value claims make QS administratively efficient. Solvency relief for rapid portfolio growth.',
+    detail:`<p><strong>Primary reinsurance method</strong> — original terms only. High-volume, homogeneous, low-value claims profile makes QS administratively efficient.</p>
+    <ul>
+      <li>Solvency relief and capacity building for rapid portfolio growth</li>
+      <li>Commission supports expense recovery on high-volume servicing infrastructure</li>
+      <li>Reciprocal arrangements possible with other health cash writers</li>
+    </ul>`,
+    tags:[
+      {body:'IFoA',sitting:'Apr 2024',q:'Q3(i)',type:'D',marks:11,desc:'Hospital cash product design (RI as a design consideration)'}
+    ]
+  },
+  hcash_surplus: {
+    status:'na',
+    summary:'Capital relief from surplus would be immaterial given small individual claim amounts. QS is sufficient.',
+    detail:`<p><em>Generally not used.</em> Although benefits are paid at a fixed daily/event rate, individual amounts are small and the capital relief from surplus would be immaterial. QS is the sufficient and preferred structure.</p>`,
+    tags:[]
+  },
+  hcash_riskxl: {
+    status:'na',
+    summary:'Individual claim amounts are small and capped per event/night — XL will never realistically attach.',
+    detail:`<p><em>Practically not applicable.</em> Individual claim amounts are small and capped per event/night. There is no realistic scenario in which an individual claim would exceed any meaningful XL attachment point.</p>`,
+    tags:[]
+  },
+  hcash_aggxl: {
+    status:'limited',
+    summary:'Possible vs unusually high-frequency year (e.g. flu pandemic increasing hospital admissions). Less common than for PMI.',
+    detail:`<p>Possible protection against an unusually high-frequency year (e.g. flu pandemic increasing hospital admissions across the portfolio).</p>
+    <ul>
+      <li>Stop loss expressed as % of earned premiums</li>
+      <li>Less commonly used than for PMI given smaller and more predictable individual amounts</li>
+    </ul>`,
+    tags:[]
+  },
+  hcash_catxl: {
+    status:'na',
+    summary:'Individual health cash claims are small. A catastrophic event raises frequency, not severity — Aggregate XL is more appropriate.',
+    detail:`<p><em>Limited applicability.</em> Health cash claims are individually small. A catastrophic event could increase claim frequency, but the total aggregate impact rarely warrants dedicated Cat XL. Aggregate XL/stop loss is the more appropriate protection against frequency events.</p>`,
+    tags:[]
+  },
+  hcash_alt: {
+    status:'used',
+    summary:'Badging with specialist health cash reinsurer. Pool arrangements. Co-payment/excess design to reduce frequency.',
+    detail:`<ul>
+      <li>Badging with specialist health cash reinsurer</li>
+      <li>Pool arrangement with other health cash providers</li>
+      <li>Co-payment/excess design to reduce frequency of small claims</li>
+    </ul>`,
+    tags:[]
+  },
+
+  /* ── DENTAL ── */
+  dental_qs: {
+    status:'primary',
+    summary:'Primary structure for new entrants with limited experience data. Manages parameter risk from dental inflation.',
+    detail:`<p><strong>Primary reinsurance method</strong> — original terms. Useful for new entrants with limited experience data.</p>
+    <ul>
+      <li>Parameter risk (treatment cost trends, dental inflation) managed through QS</li>
+      <li>Low initial retention appropriate; increased as claims data accumulates</li>
+    </ul>`,
+    tags:[]
+  },
+  dental_surplus: {
+    status:'na',
+    summary:'Dental policies are indemnity/scheduled-benefit with small individual claim caps — surplus is impractical.',
+    detail:`<p><em>Not applicable.</em> Dental policies are generally indemnity or scheduled-benefit products with small individual claim caps, making surplus reinsurance impractical.</p>`,
+    tags:[]
+  },
+  dental_riskxl: {
+    status:'na',
+    summary:'Individual dental claims rarely large enough for XL to attach meaningfully.',
+    detail:`<p><em>Unlikely to be needed.</em> Individual dental claims rarely reach a size sufficient for XL to attach meaningfully. Even complex dental work is small relative to any realistic attachment point for a health insurer.</p>`,
+    tags:[]
+  },
+  dental_aggxl: {
+    status:'limited',
+    summary:'Possible if the dental portfolio is large and aggregate claim costs are volatile. Relevant where dental inflation spikes unexpectedly.',
+    detail:`<p>Possible use if the dental portfolio is large and aggregate claim costs volatile.</p>
+    <ul>
+      <li>Relevant where dental inflation spikes unexpectedly, affecting aggregate claims ratios</li>
+    </ul>`,
+    tags:[]
+  },
+  dental_catxl: {
+    status:'na',
+    summary:'Dental claims are not driven by single catastrophic events.',
+    detail:`<p><em>Not applicable.</em> Dental claims are not driven by single catastrophic events. The risk profile does not lend itself to Cat XL.</p>`,
+    tags:[]
+  },
+  dental_alt: {
+    status:'used',
+    summary:'Badging with dental specialist. Network/managed care arrangements. Prior authorisation to control individual claim size.',
+    detail:`<ul>
+      <li>Badging with dental specialist reinsurer</li>
+      <li>Network/managed care arrangements (contain costs via provider fee agreements)</li>
+      <li>Prior authorisation/referral management to control individual claim size</li>
+    </ul>`,
+    tags:[]
+  },
+
+  /* ── OPTICAL ── */
+  optical_qs: {
+    status:'limited',
+    summary:'Only viable reinsurance form. Very small/capped amounts make RI rarely practical; useful only if optical bundled in wider health plan.',
+    detail:`<p>Only viable reinsurance form for optical given very small and capped claim amounts.</p>
+    <ul>
+      <li>In practice often retained fully; small amounts and high predictability make RI impractical on a standalone basis</li>
+      <li>QS useful only if optical is embedded in a wider health plan where overall RI arrangements apply</li>
+    </ul>`,
+    tags:[]
+  },
+  optical_surplus: {
+    status:'na',
+    summary:'Optical benefits are fixed/capped and individually very small — no meaningful surplus retention can be set.',
+    detail:`<p><em>Not applicable.</em> Optical benefits are fixed/capped and individually very small. There is no meaningful basis for a surplus retention.</p>`,
+    tags:[]
+  },
+  optical_riskxl: {
+    status:'na',
+    summary:'Optical claim amounts are trivial relative to any realistic XL attachment point.',
+    detail:`<p><em>Not applicable.</em> Optical claim amounts are trivial relative to any realistic XL attachment point. This structure has no role in optical reinsurance.</p>`,
+    tags:[]
+  },
+  optical_aggxl: {
+    status:'na',
+    summary:'Rarely used in isolation. If bundled in a wider health plan, overall plan stop loss may implicitly cover optical volatility.',
+    detail:`<p><em>Rarely used in isolation.</em> If optical is bundled in a wider health plan, the overall plan stop loss may implicitly cover optical aggregate volatility. Standalone optical aggregate XL is not commonly purchased.</p>`,
+    tags:[]
+  },
+  optical_catxl: {
+    status:'na',
+    summary:'Not applicable.',
+    detail:`<p><em>Not applicable.</em> Optical claims are not driven by catastrophic events and the individual amounts are trivially small.</p>`,
+    tags:[]
+  },
+  optical_alt: {
+    status:'used',
+    summary:'Often bundled with other health benefits; RI applied at plan level. Managed network. Volume limits and scheduled benefit caps.',
+    detail:`<ul>
+      <li>Often bundled with other health benefits — reinsurance applied at overall plan level</li>
+      <li>Managed network/preferred optical provider arrangements</li>
+      <li>Volume limits and scheduled benefit caps serve as self-contained risk controls</li>
+    </ul>`,
+    tags:[]
+  },
+
+  /* ── IP ── */
+  ip_qs: {
+    status:'primary',
+    summary:'Common entry-market structure. Risk premium QS preferred. Finances new business strain. Profit commission clause aligns incentives.',
+    detail:`<p><strong>Common entry-market structure</strong> — original terms or risk premium basis. Risk premium QS preferred: reinsurer sets own rates independently of cedant pricing.</p>
+    <ul>
+      <li>Yearly risk premiums or net level premium arrangements</li>
+      <li>Low initial retention increasing as cedant builds underwriting expertise and claims data</li>
+      <li>Finances new business strain via reinsurance commission</li>
+      <li><strong>Profit commission clause</strong> aligns incentives on morbidity experience</li>
+    </ul>`,
+    tags:[]
+  },
+  ip_surplus: {
+    status:'primary',
+    summary:'Main long-term IP structure. Fixed monthly/weekly benefit creates a definable SAR. Retention per policy (e.g. £75k SAR).',
+    detail:`<p><strong>Main long-term IP reinsurance structure.</strong> Fixed monthly/weekly benefit creates a definable sum at risk.</p>
+    <ul>
+      <li>Retention set per policy (e.g. £75k SAR); proportion above retention ceded</li>
+      <li>Particularly relevant for high-sum IP covers on key employees or high earners</li>
+      <li>Very large IP sums may be reinsured facultatively due to individual risk nature</li>
+      <li>More efficient than QS at targeting genuine large exposures</li>
+    </ul>`,
+    tags:[]
+  },
+  ip_riskxl: {
+    status:'na',
+    summary:'Sum insured is fixed and known at inception — individual claim amounts cannot exceed it. XL would rarely attach.',
+    detail:`<p><em>Generally not applicable to individual long-term IP.</em> The sum insured is fixed and known at inception, so individual claim amounts will not exceed the sum insured. XL would rarely attach — this is the structural reason non-proportional does not work for individual LT products.</p>`,
+    tags:[]
+  },
+  ip_aggxl: {
+    status:'na',
+    summary:'Individual long-term IP profits not sufficiently volatile for stop loss. Proportional RI achieves the necessary smoothing.',
+    detail:`<p><em>Not applicable.</em> Profits on individual long-term IP contracts are not usually sufficiently volatile to warrant stop loss. Smoothing is achieved more efficiently through proportional reinsurance (QS and surplus).</p>`,
+    tags:[]
+  },
+  ip_catxl: {
+    status:'na',
+    summary:'Limited for individual IP book. Correlated mass disability events are more a concern in group IP schemes.',
+    detail:`<p><em>Limited for individual IP book.</em> Correlated mass disability events — the scenario that would trigger Cat XL — are more a concern in group IP where all members share the same employer/occupation. For an individual IP book, portfolio diversification typically limits this exposure.</p>`,
+    tags:[]
+  },
+  ip_alt: {
+    status:'used',
+    summary:'Financial RI (risk premium + financing element). Deposits back. Badging/fronting. Technical assistance. Securitisation (limited under SII).',
+    detail:`<ul>
+      <li><strong>Financial reinsurance:</strong> risk premium RI with financing element to fund new business strain</li>
+      <li><strong>Deposits back:</strong> reinsurer deposits its reserve share with cedant, retaining investment income and reducing default risk</li>
+      <li><strong>Badging:</strong> specialist underwriter acts as effective carrier; insurer fronts with full RI</li>
+      <li><strong>Technical assistance:</strong> UW guidelines, claims management, data provision</li>
+      <li>Securitisation of IP portfolio (limited under Solvency II)</li>
+    </ul>`,
+    tags:[]
+  },
+
+  /* ── CI ── */
+  ci_qs: {
+    status:'primary',
+    summary:'Important for new CI entrants — reinsurer provides product design, rating, UW and claims support. Risk premium basis preferred.',
+    detail:`<p><strong>Important for new CI entrants</strong> — reinsurer provides product design, rating, UW, and claims adjudication support.</p>
+    <ul>
+      <li>Parameter risk: medical advances make QS valuable to share uncertainty on CI incidence</li>
+      <li>Risk premium basis preferred for long-term CI</li>
+      <li><strong>Profit commission clause</strong> — insurer recovers share of profits if CI experience favourable</li>
+    </ul>`,
+    tags:[
+      {body:'IFoA',sitting:'Sep 2020',q:'Q3(iii)',type:'D',marks:15,desc:'CI reviewable premium review — RI rate adjustability'}
+    ]
+  },
+  ci_surplus: {
+    status:'primary',
+    summary:'Primary structure for individual CI. Fixed lump-sum benefit is a natural surplus basis (e.g. retain £100k; cede excess).',
+    detail:`<p><strong>Primary structure for individual CI</strong> — fixed lump-sum benefit is a natural surplus basis.</p>
+    <ul>
+      <li>Retention set in monetary terms (e.g. £100k per policy); excess ceded</li>
+      <li>High lump sums for younger, high-income individuals reinsured efficiently</li>
+      <li><strong>Example:</strong> Retention £100k; CI sum insured £250k → 60% ceded to reinsurer</li>
+      <li>Facultative RI for atypical medical histories or very large CI policies outside treaty terms</li>
+    </ul>`,
+    tags:[]
+  },
+  ci_riskxl: {
+    status:'na',
+    summary:'Fixed lump sum benefit known at inception — XL would never attach on individual CI policies.',
+    detail:`<p><em>Not applicable to individual CI.</em> The benefit is a fixed lump sum. The claim amount is definitively known at inception — XL cannot attach because there is no excess beyond the defined sum insured.</p>`,
+    tags:[]
+  },
+  ci_aggxl: {
+    status:'na',
+    summary:'Not commonly used for individual CI. Surplus RI is the preferred smoothing tool.',
+    detail:`<p><em>Not commonly used.</em> Individual CI portfolios do not typically exhibit the aggregate volatility that warrants stop loss. Surplus RI is the preferred smoothing tool. Aggregate XL could theoretically protect a portfolio heavily concentrated by condition, but this is rare.</p>`,
+    tags:[]
+  },
+  ci_catxl: {
+    status:'na',
+    summary:'New insured condition industry-wide typically managed through policy/treaty terms, not Cat XL.',
+    detail:`<p><em>Limited for individual CI.</em> A new insured condition being added industry-wide could generate a surge in claims — but this risk is typically addressed through policy terms and treaty conditions rather than Cat XL.</p>`,
+    tags:[]
+  },
+  ci_alt: {
+    status:'used',
+    summary:'Financial RI, deposits back, badging/fronting, reinsurer tech assistance (CI incidence tables, medical UW), retrocession.',
+    detail:`<ul>
+      <li>Financial reinsurance to fund new business strain on long-term CI portfolios</li>
+      <li>Deposits back arrangement on proportional CI RI</li>
+      <li>Badging/fronting with specialist CI reinsurer for complex CI covers</li>
+      <li><strong>Reinsurer technical assistance:</strong> CI incidence tables, medical UW guidance, new condition pricing data</li>
+      <li>Retrocession by reinsurer to further spread CI risk</li>
+    </ul>`,
+    tags:[
+      {body:'IFoA',sitting:'Sep 2024',q:'Q2(iii)',type:'D',marks:5, desc:'CI mental health conditions — reinsurer data and UW expertise'},
+      {body:'IFoA',sitting:'Apr 2022',q:'Q2(ii)', type:'D',marks:8, desc:'Actions to reduce adverse CI claims (RI as control measure)'}
+    ]
+  },
+
+  /* ── LTCI ── */
+  ltci_qs: {
+    status:'primary',
+    summary:'Critical for LTCI entrants — limited market data; reinsurer expertise essential. Risk premium strongly preferred.',
+    detail:`<p><strong>Critical for LTCI entrants</strong> — limited market experience data; reinsurer expertise essential.</p>
+    <ul>
+      <li>Risk premium basis <strong>strongly preferred</strong>: long-term premium commitments make original-terms QS impractical</li>
+      <li>Low initial retention with phased increase as cedant builds LTCI claims experience</li>
+      <li>Reinsurer provides care cost trend data, longevity assumptions, cognitive impairment incidence</li>
+    </ul>`,
+    tags:[
+      {body:'IFoA',sitting:'Sep 2019',q:'Q1(iii)',type:'D',marks:13,desc:'LTCI product design: RI as a key design factor'}
+    ]
+  },
+  ltci_surplus: {
+    status:'limited',
+    summary:'Applicable where LTCI is pre-funded (fixed benefit) with large SAR. Less relevant for indemnity LTCI (actual care costs reimbursed).',
+    detail:`<p>Applicable where LTCI is written on a <strong>pre-funded (fixed benefit) basis</strong> with a large sum at risk.</p>
+    <ul>
+      <li>Pre-funded LTCI for younger policyholders builds large reserves — large SAR exposures suit surplus RI</li>
+      <li><strong>Less relevant for indemnity LTCI</strong> (actual care costs reimbursed) where claim size is unknown at outset</li>
+    </ul>`,
+    tags:[]
+  },
+  ltci_riskxl: {
+    status:'na',
+    summary:'Limited. Uncapped indemnity care costs are theoretically possible but managed via product caps and proportional RI.',
+    detail:`<p><em>Limited applicability for individual LTCI.</em> If indemnity-based with uncapped care costs, large individual claims are theoretically possible — but more commonly managed via product caps and proportional reinsurance.</p>`,
+    tags:[]
+  },
+  ltci_aggxl: {
+    status:'na',
+    summary:'Rarely used. Long-term care costs relatively predictable at portfolio level once mature. Proportional RI preferred.',
+    detail:`<p><em>Aggregate XL rarely used for individual LTCI.</em> Long-term care costs are relatively predictable at portfolio level once the book matures. Parameter risk is better managed through proportional RI with rate adjustment rights.</p>`,
+    tags:[
+      {body:'IFoA',sitting:'Apr 2021',q:'Q3(iii)',type:'D',marks:10,desc:'LTCI experience factors — RI rate adjustment'}
+    ]
+  },
+  ltci_catxl: {
+    status:'na',
+    summary:'LTCI risks (longevity, cognitive decline trends) are slow-moving systemic trends — not single-event catastrophes.',
+    detail:`<p><em>Not commonly used.</em> LTCI risks — longevity drift, cognitive impairment trends — are slow-moving and systemic rather than triggered by single catastrophic events. Cat XL is not the appropriate structure.</p>`,
+    tags:[]
+  },
+  ltci_alt: {
+    status:'used',
+    summary:'Financial RI (crucial — LTCI generates significant new business strain). Reinsurer tech assistance. Badging. Retrocession.',
+    detail:`<ul>
+      <li><strong>Financial reinsurance — important:</strong> LTCI generates significant new business strain; reinsurer can finance via commission with clawback on lapse</li>
+      <li><strong>Reinsurer technical assistance — crucial:</strong> access to aggregate care cost data from multiple cedants; longevity and cognitive impairment trend research</li>
+      <li><strong>Badging:</strong> reinsurer acts as effective underwriter given specialist complexity of LTCI</li>
+      <li>Retrocession: reinsurer may retrocede LTCI risk to further diversify longevity/morbidity correlation</li>
+      <li>Securitisation (limited under Solvency II)</li>
+    </ul>`,
+    tags:[
+      {body:'IFoA',sitting:'Sep 2019',q:'Q1(iii)',type:'D',marks:13,desc:'LTCI: financial RI and reinsurer technical assistance'}
+    ]
+  },
+
+  /* ── GROUP IP ── */
+  groupip_qs: {
+    status:'used',
+    summary:'Improves capacity for large group IP schemes where aggregate SAR would otherwise be prohibitive. Manages concentration risk.',
+    detail:`<p>Proportional QS used to improve capacity on large group IP schemes.</p>
+    <ul>
+      <li>Enables insurer to accept large group schemes where aggregate SAR would otherwise be prohibitive</li>
+      <li>Original terms or risk premium basis; risk premium common for longer-term group IP covers</li>
+      <li>Concentration risk by occupation/industry managed through QS</li>
+    </ul>`,
+    tags:[]
+  },
+  groupip_surplus: {
+    status:'used',
+    summary:'Caps individual member SAR within the group scheme. Retention per life; excess ceded. More targeted than QS for high-benefit members.',
+    detail:`<p>Used to cap individual member SAR within a group scheme.</p>
+    <ul>
+      <li>Retention set per individual life; excess SAR ceded to reinsurer</li>
+      <li>Key employee/director IP with very high SAR may need facultative RI outside treaty terms</li>
+      <li>More targeted than QS — retains full premium income on low-benefit members; only reinsures high-benefit members</li>
+    </ul>`,
+    tags:[]
+  },
+  groupip_riskxl: {
+    status:'limited',
+    summary:'Possible where individual member benefit is salary-linked (not fixed/capped). High earners can generate large individual claims.',
+    detail:`<p>Possible for group IP where individual member benefit is not fixed/capped (e.g. income replacement at % of final salary).</p>
+    <ul>
+      <li>Large earners may generate large individual claims that XL can cover</li>
+      <li>More commonly managed through surplus RI which operates before XL is needed</li>
+    </ul>`,
+    tags:[]
+  },
+  groupip_aggxl: {
+    status:'primary',
+    summary:'Critical for group IP — correlated risks: disease outbreak, economic downturn causing stress claims. Co-participation required.',
+    detail:`<p><strong>Critical for group IP</strong> — group schemes are prone to accumulation of correlated risks.</p>
+    <ul>
+      <li>Infectious disease outbreak at one employer → multiple simultaneous IP claims</li>
+      <li>Regional economic downturn causing stress-related claims across employer group</li>
+      <li>Aggregate XL and stop loss treated equivalently here — morbidity is the single peril</li>
+      <li>Co-participation required; cedant retains proportion within layer</li>
+    </ul>`,
+    tags:[
+      {body:'IFoA',sitting:'Sep 2021',q:'Q3(iv)',type:'D',marks:21,desc:'Group PMI→IP switch: correlated claim accumulation risk'}
+    ]
+  },
+  groupip_catxl: {
+    status:'used',
+    summary:'Single catastrophic event (explosion, mass toxic exposure) triggering many simultaneous IP claims across a group.',
+    detail:`<p>Single catastrophic event can trigger many simultaneous IP claims.</p>
+    <ul>
+      <li>Workplace explosion, chemical plant accident, mass toxic exposure affecting all employees</li>
+      <li>Multiple group schemes in same geographic area or industry exposed to common catastrophe</li>
+      <li>May also be triggered by a group-wide occupational health screening programme</li>
+    </ul>`,
+    tags:[
+      {body:'IFoA',sitting:'Sep 2021',q:'Q3(iv)',type:'D',marks:21,desc:'Group IP: single event causing multiple simultaneous IP claims'}
+    ]
+  },
+  groupip_alt: {
+    status:'used',
+    summary:'Portfolio stop loss. Experience rating and profit sharing. Self-insurance/captive. Managed rehabilitation. Reinsurer tech assistance.',
+    detail:`<ul>
+      <li>Aggregate XL/stop loss for portfolio-level protection against correlated claims</li>
+      <li>Scheme-level experience rating and profit sharing to align insurer/client incentives</li>
+      <li>Self-insurance/captive arrangement for largest employers</li>
+      <li>Managed rehabilitation services as claims management tool reducing aggregate IP cost</li>
+      <li>Reinsurer technical assistance: UW guidelines for high-risk occupations, return-to-work protocols</li>
+    </ul>`,
+    tags:[]
+  },
+
+  /* ── GROUP CI ── */
+  groupci_qs: {
+    status:'used',
+    summary:'Capacity building when insurer lacks capital for large group CI schemes. Solvency capital relief. Commission for scheme admin.',
+    detail:`<p>QS to improve capacity when insurer lacks sufficient capital to accept large group CI schemes.</p>
+    <ul>
+      <li>Solvency capital requirements reduced in line with proportion ceded</li>
+      <li>Useful where group CI portfolio is concentrated by industry</li>
+      <li>Commission supports scheme administration and acquisition expenses</li>
+    </ul>`,
+    tags:[]
+  },
+  groupci_surplus: {
+    status:'used',
+    summary:'Group CI has fixed lump sums per member — natural surplus basis. High-earner members with large CI sums ceded above retention.',
+    detail:`<p>Surplus used to cap individual member CI sum insured within the group scheme.</p>
+    <ul>
+      <li>Group CI with fixed lump-sum benefits per member: natural surplus basis</li>
+      <li>High-earner members with large CI sums (e.g. 4× salary) ceded above retention</li>
+      <li>Facultative RI for individuals with atypical medical history outside standard treaty limits</li>
+    </ul>`,
+    tags:[]
+  },
+  groupci_riskxl: {
+    status:'na',
+    summary:'Fixed lump sum per member — surplus RI is the appropriate tool. XL has no meaningful role at the individual level.',
+    detail:`<p><em>Not typical for group CI.</em> The benefit is a fixed lump sum per member. Surplus RI is the appropriate tool. XL has no meaningful role at the individual level — the exposure is captured by surplus.</p>`,
+    tags:[]
+  },
+  groupci_aggxl: {
+    status:'used',
+    summary:'Group CI prone to correlated events: legal change to CI definition, employer screening programme, new condition added to wording.',
+    detail:`<p>Group CI is prone to correlated claim events justifying aggregate XL.</p>
+    <ul>
+      <li>Legal change or court ruling altering CI definition could trigger many simultaneous CI claims</li>
+      <li>Employer-sponsored group screening programme generating excess claims</li>
+      <li>New CI condition added to industry wording generating unexpected additional claims</li>
+    </ul>`,
+    tags:[]
+  },
+  groupci_catxl: {
+    status:'used',
+    summary:'Chemical explosion, mass toxic exposure, pandemic (respiratory/neurological CI) — especially for high-hazard occupations.',
+    detail:`<p>Single catastrophic event causing multiple simultaneous CI diagnoses.</p>
+    <ul>
+      <li>Chemical plant explosion, mass toxic exposure causing simultaneous CI diagnoses</li>
+      <li>Pandemic triggering many CI claims (e.g. long-term respiratory or neurological conditions)</li>
+      <li>Particularly relevant for groups in high-hazard occupations or geographic areas</li>
+    </ul>`,
+    tags:[]
+  },
+  groupci_alt: {
+    status:'used',
+    summary:'Aggregate stop loss. Reinsurer UW/claims oversight. CI definition management. Employer captives. Reinsurer CI incidence data.',
+    detail:`<ul>
+      <li>Aggregate XL/stop loss to protect overall group CI portfolio loss ratio</li>
+      <li>Reinsurer UW and claims oversight — mandatory review for large CI claims</li>
+      <li>Definition management: careful drafting of CI conditions to control claim trigger</li>
+      <li>Employer self-insurance/captive for very large employer group CI schemes</li>
+      <li>Reinsurer technical assistance: CI incidence data by occupation/industry; new condition pricing</li>
+    </ul>`,
+    tags:[]
+  },
+
+  /* ── GROUP PMI ── */
+  grouppmi_qs: {
+    status:'primary',
+    summary:'Enables acceptance of large corporate group PMI schemes. Original terms. Solvency relief. Commission reduces net scheme cost.',
+    detail:`<p>Proportional QS specifically cited for group medical insurance to improve capacity.</p>
+    <ul>
+      <li>Original terms only (short-term indemnity basis)</li>
+      <li>Enables insurer to accept large corporate group PMI schemes</li>
+      <li>Reduces solvency capital requirements proportionally</li>
+      <li>Commission reduces net scheme cost; used to offer competitive group premiums</li>
+      <li>Reciprocal QS arrangements for cross-geographic diversification</li>
+    </ul>`,
+    tags:[
+      {body:'IFoA',sitting:'Sep 2021',q:'Q3(iv)',type:'D',marks:21,desc:'Group PMI→IP switch: QS used for group PMI capacity'},
+      {body:'IFoA',sitting:'Apr 2025',q:'Q3(i)', type:'D',marks:6, desc:'In-house group scheme closure — failure of RI arrangement cited'}
+    ]
+  },
+  grouppmi_surplus: {
+    status:'na',
+    summary:'Group PMI is indemnity-based — individual member claim amount unknown at policy inception.',
+    detail:`<p><em>Not applicable.</em> Group PMI is indemnity-based. Individual member claim amount is unknown at policy inception. QS and Risk XL are the appropriate structures.</p>`,
+    tags:[]
+  },
+  grouppmi_riskxl: {
+    status:'used',
+    summary:'Per person per year basis. Targets high-cost group members (cancer, transplants). Stability clause and co-participation essential.',
+    detail:`<p>Risk XL operates per individual member's claims (per person per year basis).</p>
+    <ul>
+      <li>Targets high-cost group members: cancer treatment, organ transplants, complex chronic conditions</li>
+      <li>Cover expressed per life (e.g. £150k xs £50k per member per year)</li>
+      <li><strong>Stability clause</strong> for medical inflation essential on large group schemes with multi-year treaty</li>
+      <li>Co-participation maintains group scheme manager's incentive to authorise treatment carefully</li>
+    </ul>`,
+    tags:[]
+  },
+  grouppmi_aggxl: {
+    status:'used',
+    summary:'Stop loss on total group scheme claims ratio. Relevant where one large scheme dominates. Co-participation and reporting oversight required.',
+    detail:`<p>Stop loss on total group scheme claims ratio — expressed as % of group premium income.</p>
+    <ul>
+      <li>Relevant where one large group scheme dominates the portfolio and aggregate experience is volatile</li>
+      <li>Infectious disease outbreak spreading through workforce → elevated aggregate PMI claims</li>
+      <li>Reinsurer imposes co-participation and may require claims reporting oversight</li>
+      <li>Stop loss limits as % of earned premium to prevent adverse scheme expansion gaming</li>
+    </ul>`,
+    tags:[
+      {body:'IFoA',sitting:'Sep 2021',q:'Q3(iv)',type:'D',marks:21,desc:'Group PMI: aggregate experience and claims management'}
+    ]
+  },
+  grouppmi_catxl: {
+    status:'used',
+    summary:'Single event/epidemic sweeping workforce. Pandemic cover generally unavailable — government backstop more common.',
+    detail:`<p>Single event affecting multiple group members simultaneously.</p>
+    <ul>
+      <li>Workplace accident, building contamination, epidemic sweeping through workforce</li>
+      <li>Pandemic cover generally unavailable at affordable terms — government backstop more common</li>
+      <li>Concentration risk: insurer with few large group PMI schemes is especially exposed</li>
+    </ul>`,
+    tags:[]
+  },
+  grouppmi_alt: {
+    status:'used',
+    summary:'Individual scheme + portfolio stop loss. Badging. Network management. Self-insure/captive. Experience rating. Reinsurer tech assistance.',
+    detail:`<ul>
+      <li>Aggregate XL/stop loss at both individual scheme and portfolio level</li>
+      <li>Badging: specialist health insurer underwrites group PMI; direct insurer provides brand/distribution front</li>
+      <li>Network management/managed care (preferred provider networks, pre-authorisation)</li>
+      <li>Large employer self-insurance/captive — group takes own risk; insurer acts as TPA</li>
+      <li>Retrospective experience rating/profit share with employer</li>
+      <li>Reinsurer technical assistance on group scheme UW, claims adjudication, and data analytics</li>
+    </ul>`,
+    tags:[
+      {body:'IFoA',sitting:'Apr 2025',q:'Q3(i)', type:'D',marks:6,desc:'In-house scheme closure: self-insure vs transfer to insurer'},
+      {body:'IFoA',sitting:'Apr 2025',q:'Q3(ii)',type:'D',marks:4,desc:'Stakeholders include insurer, reinsurer, and scheme members'}
+    ]
+  }
+};
+
+/* ─────────────────────────────────────────────
+   RENDER TABLE
+───────────────────────────────────────────── */
+function buildTable() {
+  const table = document.getElementById('ri-table');
+
+  // ── Row 1: column group headers ──
+  const gr1 = document.createElement('tr');
+  // Product column
+  const thProduct = document.createElement('th');
+  thProduct.className = 'colgroup-header product-col';
+  thProduct.rowSpan = 2;
+  thProduct.textContent = 'Product';
+  gr1.appendChild(thProduct);
+
+  // Proportional (2 cols)
+  const thProp = document.createElement('th');
+  thProp.className = 'colgroup-header proportional';
+  thProp.colSpan = 2;
+  thProp.textContent = 'Proportional';
+  gr1.appendChild(thProp);
+
+  // Non-Proportional (3 cols)
+  const thNP = document.createElement('th');
+  thNP.className = 'colgroup-header nonprop';
+  thNP.colSpan = 3;
+  thNP.textContent = 'Non-Proportional';
+  gr1.appendChild(thNP);
+
+  // Alternatives
+  const thAlt = document.createElement('th');
+  thAlt.className = 'colgroup-header alt-col';
+  thAlt.textContent = 'Alternatives / Notes';
+  gr1.appendChild(thAlt);
+  table.appendChild(gr1);
+
+  // ── Row 2: column sub-headers ──
+  const gr2 = document.createElement('tr');
+  COLS.forEach(col => {
+    const th = document.createElement('th');
+    th.className = `col-header ${col.groupClass}`;
+    th.textContent = col.label;
+    gr2.appendChild(th);
+  });
+  table.appendChild(gr2);
+
+  // ── Data rows ──
+  PRODUCT_GROUPS.forEach(group => {
+    // Group header row
+    const groupRow = document.createElement('tr');
+    groupRow.className = 'product-group-row';
+    const groupTd = document.createElement('td');
+    groupTd.colSpan = COLS.length + 1;
+    groupTd.textContent = group.label;
+    groupRow.appendChild(groupTd);
+    table.appendChild(groupRow);
+
+    // Product rows
+    group.products.forEach(product => {
+      const tr = document.createElement('tr');
+
+      // Product name cell
+      const nameTd = document.createElement('td');
+      nameTd.className = 'product-name';
+      nameTd.textContent = product.label;
+      tr.appendChild(nameTd);
+
+      // Data cells
+      COLS.forEach(col => {
+        const key = `${product.id}_${col.id}`;
+        const cellData = CELLS[key];
+        const td = document.createElement('td');
+        td.className = `cell${cellData.status === 'na' ? ' na-cell' : ''}`;
+
+        const inner = document.createElement('div');
+        inner.className = 'cell-inner';
+        inner.onclick = () => openModal(key, product.label, col.label);
+
+        // Badge row
+        const badgeRow = document.createElement('div');
+        badgeRow.className = 'cell-badge-row';
+
+        const badge = document.createElement('span');
+        badge.className = `cell-badge ${cellData.status}`;
+        badge.textContent = cellData.status === 'na' ? 'N / A'
+          : cellData.status === 'primary' ? 'PRIMARY'
+          : cellData.status === 'limited' ? 'LIMITED'
+          : 'USED';
+        badgeRow.appendChild(badge);
+
+        const rightIcons = document.createElement('span');
+        rightIcons.style.display = 'flex'; rightIcons.style.alignItems = 'center'; rightIcons.style.gap = '2px';
+        if (cellData.tags && cellData.tags.length > 0) {
+          const dot = document.createElement('span');
+          dot.className = 'has-tags-dot';
+          dot.title = 'Past paper examined';
+          rightIcons.appendChild(dot);
+        }
+        const icon = document.createElement('span');
+        icon.className = 'expand-icon';
+        icon.textContent = '↗';
+        rightIcons.appendChild(icon);
+        badgeRow.appendChild(rightIcons);
+
+        inner.appendChild(badgeRow);
+
+        // Summary
+        const summary = document.createElement('div');
+        summary.className = 'cell-summary';
+        summary.textContent = cellData.summary;
+        inner.appendChild(summary);
+
+        td.appendChild(inner);
+        tr.appendChild(td);
+      });
+
+      table.appendChild(tr);
+    });
+  });
+}
+
+/* ─────────────────────────────────────────────
+   MODAL
+───────────────────────────────────────────── */
+function openModal(key, productLabel, colLabel) {
+  const cellData = CELLS[key];
+  if (!cellData) return;
+
+  document.getElementById('modal-product-label').textContent = productLabel;
+  document.getElementById('modal-col-label').textContent = colLabel;
+
+  const badge = document.getElementById('modal-badge');
+  badge.className = `modal-badge ${cellData.status}`;
+  badge.textContent = cellData.status === 'na' ? 'NOT APPLICABLE'
+    : cellData.status === 'primary' ? 'PRIMARY'
+    : cellData.status === 'limited' ? 'LIMITED'
+    : 'USED';
+
+  document.getElementById('modal-content').innerHTML = cellData.detail;
+
+  const tagsSection = document.getElementById('modal-tags-section');
+  const tagsContainer = document.getElementById('modal-tags');
+  tagsContainer.innerHTML = '';
+
+  if (cellData.tags && cellData.tags.length > 0) {
+    tagsSection.style.display = 'block';
+    cellData.tags.forEach(t => {
+      const item = document.createElement('div');
+      item.className = 'tag-item';
+
+      const bodyChip = document.createElement('span');
+      bodyChip.className = `tag-body ${t.body === 'IAI' ? 'iai' : 'ifo'}`;
+      bodyChip.textContent = t.body;
+      item.appendChild(bodyChip);
+
+      const ref = document.createElement('span');
+      ref.className = 'tag-ref';
+      ref.textContent = `${t.sitting} ${t.q}`;
+      item.appendChild(ref);
+
+      const typeChip = document.createElement('span');
+      typeChip.className = `tag-type ${t.type}`;
+      typeChip.title = t.type === 'N' ? 'Numerical' : t.type === 'D' ? 'Descriptive' : 'Recommendation';
+      typeChip.textContent = `[${t.type}]`;
+      item.appendChild(typeChip);
+
+      const marks = document.createElement('span');
+      marks.className = 'tag-marks';
+      marks.textContent = `${t.marks}m`;
+      item.appendChild(marks);
+
+      const desc = document.createElement('span');
+      desc.className = 'tag-desc';
+      desc.textContent = t.desc;
+      item.appendChild(desc);
+
+      tagsContainer.appendChild(item);
+    });
+  } else {
+    tagsSection.style.display = 'none';
+  }
+
+  document.getElementById('modal-overlay').classList.add('open');
+  document.getElementById('modal').scrollTop = 0;
+}
+
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('open');
+}
+
+function closeModalOnBg(e) {
+  if (e.target === document.getElementById('modal-overlay')) closeModal();
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+/* ─────────────────────────────────────────────
+   INIT
+───────────────────────────────────────────── */
+buildTable();
+</script>
+</body>
+</html>
