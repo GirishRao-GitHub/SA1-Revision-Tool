@@ -1,0 +1,290 @@
+
+<h2 class="sr-only">Underwriting framework for Health and Care Insurance — PACED memory tool</h2>
+<style>
+  .uw-root { font-family: var(--font-sans); padding: 0.5rem 0 2rem; }
+  .uw-title { font-size: 13px; color: var(--color-text-tertiary); letter-spacing: 0.08em; text-transform: uppercase; margin: 0 0 6px; }
+  .uw-heading { font-size: 22px; font-weight: 500; color: var(--color-text-primary); margin: 0 0 4px; }
+  .uw-sub { font-size: 14px; color: var(--color-text-secondary); margin: 0 0 24px; }
+  .mnemonic-strip { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
+  .mnem-letter { width: 52px; height: 52px; border-radius: var(--border-radius-md); display: flex; flex-direction: column; align-items: center; justify-content: center; cursor: pointer; border: 0.5px solid var(--color-border-tertiary); background: var(--color-background-secondary); transition: border-color 0.15s; user-select: none; }
+  .mnem-letter:hover { border-color: var(--color-border-secondary); }
+  .mnem-letter.active { border-width: 1.5px; }
+  .mnem-letter.p-active { border-color: #185FA5; background: #E6F1FB; }
+  .mnem-letter.a-active { border-color: #3B6D11; background: #EAF3DE; }
+  .mnem-letter.c-active { border-color: #854F0B; background: #FAEEDA; }
+  .mnem-letter.e-active { border-color: #A32D2D; background: #FCEBEB; }
+  .mnem-letter.d-active { border-color: #533AB7; background: #EEEDFE; }
+  .ml-char { font-size: 22px; font-weight: 500; line-height: 1; }
+  .ml-word { font-size: 9px; color: var(--color-text-secondary); margin-top: 2px; }
+  .ml-char.p { color: #185FA5; } .ml-char.a { color: #3B6D11; }
+  .ml-char.c { color: #854F0B; } .ml-char.e { color: #A32D2D; }
+  .ml-char.d { color: #533AB7; }
+  .panel { border-radius: var(--border-radius-lg); border: 0.5px solid var(--color-border-tertiary); background: var(--color-background-primary); margin-bottom: 12px; overflow: hidden; }
+  .panel-header { padding: 14px 16px; display: flex; align-items: center; gap: 12px; cursor: pointer; }
+  .panel-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .panel-label { font-size: 15px; font-weight: 500; color: var(--color-text-primary); flex: 1; }
+  .panel-tag { font-size: 11px; padding: 3px 8px; border-radius: 100px; }
+  .panel-body { padding: 0 16px 16px; display: none; }
+  .panel-body.open { display: block; }
+  .mini-title { font-size: 11px; font-weight: 500; color: var(--color-text-tertiary); letter-spacing: 0.06em; text-transform: uppercase; margin: 12px 0 8px; }
+  .pill-row { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+  .pill { font-size: 12px; padding: 4px 10px; border-radius: 100px; border: 0.5px solid var(--color-border-tertiary); color: var(--color-text-secondary); }
+  .bullet-list { margin: 0; padding: 0; list-style: none; }
+  .bullet-list li { font-size: 14px; color: var(--color-text-primary); padding: 5px 0 5px 18px; border-bottom: 0.5px solid var(--color-border-tertiary); position: relative; line-height: 1.5; }
+  .bullet-list li:last-child { border-bottom: none; }
+  .bullet-list li::before { content: '—'; position: absolute; left: 0; color: var(--color-text-tertiary); }
+  .note-box { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 10px 12px; margin-top: 10px; font-size: 13px; color: var(--color-text-secondary); line-height: 1.6; }
+  .note-box strong { color: var(--color-text-primary); font-weight: 500; }
+  .traffic-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 10px; }
+  .tcard { border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-tertiary); padding: 10px 12px; }
+  .tcard-head { font-size: 13px; font-weight: 500; margin-bottom: 4px; }
+  .tcard-body { font-size: 12px; color: var(--color-text-secondary); line-height: 1.5; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .gcard { border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-tertiary); padding: 10px 12px; background: var(--color-background-secondary); }
+  .gcard-head { font-size: 12px; font-weight: 500; margin-bottom: 6px; }
+  .gcard-item { font-size: 12px; color: var(--color-text-secondary); padding: 3px 0; border-bottom: 0.5px solid var(--color-border-tertiary); }
+  .gcard-item:last-child { border-bottom: none; }
+  .exam-section { margin-top: 20px; border-top: 0.5px solid var(--color-border-tertiary); padding-top: 16px; }
+  .exam-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 8px; margin-top: 10px; }
+  .exam-card { border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-tertiary); padding: 10px 12px; background: var(--color-background-primary); }
+  .exam-card-tag { font-size: 11px; font-weight: 500; color: var(--color-text-tertiary); margin-bottom: 4px; }
+  .exam-card-text { font-size: 12px; color: var(--color-text-secondary); line-height: 1.5; }
+  .recall-bar { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: 10px 14px; margin-top: 20px; display: flex; align-items: center; gap: 10px; border: 0.5px solid var(--color-border-tertiary); }
+  .recall-bar span { font-size: 13px; color: var(--color-text-secondary); flex: 1; }
+  .recall-btn { font-size: 12px; padding: 6px 14px; border-radius: var(--border-radius-md); border: 0.5px solid var(--color-border-secondary); background: transparent; cursor: pointer; color: var(--color-text-primary); }
+  .recall-btn:hover { background: var(--color-background-secondary); }
+</style>
+
+<div class="uw-root">
+  <p class="uw-title">Health & Care Insurance</p>
+  <h1 class="uw-heading">Underwriting — complete summary</h1>
+  <p class="uw-sub">Everything organised under one master mnemonic. Click any letter or panel to expand.</p>
+
+  <div class="mnemonic-strip" id="mnemStrip">
+    <div class="mnem-letter active p-active" onclick="togglePanel('P')">
+      <span class="ml-char p">P</span><span class="ml-word">Purpose</span>
+    </div>
+    <div class="mnem-letter" onclick="togglePanel('A')">
+      <span class="ml-char a">A</span><span class="ml-word">Approaches</span>
+    </div>
+    <div class="mnem-letter" onclick="togglePanel('C')">
+      <span class="ml-char c">C</span><span class="ml-word">Collection</span>
+    </div>
+    <div class="mnem-letter" onclick="togglePanel('E')">
+      <span class="ml-char e">E</span><span class="ml-word">End decisions</span>
+    </div>
+    <div class="mnem-letter" onclick="togglePanel('D')">
+      <span class="ml-char d">D</span><span class="ml-word">Differences</span>
+    </div>
+  </div>
+
+  <div class="panel" id="panel-P">
+    <div class="panel-header" onclick="togglePanel('P')">
+      <div class="panel-dot" style="background:#378ADD;"></div>
+      <span class="panel-label">P — Purpose of underwriting</span>
+      <span class="panel-tag" style="background:#E6F1FB;color:#185FA5;">4 A's</span>
+    </div>
+    <div class="panel-body open" id="body-P">
+      <div class="note-box">Remember: <strong>"4 A's"</strong> — Anti-selection · Allocation · Avoidance of over-insurance · Alignment with pricing</div>
+      <ul class="bullet-list" style="margin-top:12px;">
+        <li><strong>Anti-selection prevention</strong> — stops high-risk lives getting cover at standard rates; both claim frequency and average claim cost are affected</li>
+        <li><strong>Allocation to homogeneous risk groups</strong> — classification so the expected experience of each group matches its premium; ensures fairness across policyholders</li>
+        <li><strong>Avoidance of over-insurance</strong> — financial underwriting caps benefit relative to pre-claim income; prevents incentive not to return to work (IP)</li>
+        <li><strong>Alignment of actual experience with pricing assumptions</strong> — the underwriter enforces the risk group boundaries set by the pricing actuary; keeps claims close to what was priced</li>
+      </ul>
+      <div class="note-box" style="margin-top:10px;">Exam tip: framing the purpose before describing the process earns marks. Lead with "Underwriting achieves fair risk classification by…"</div>
+    </div>
+  </div>
+
+  <div class="panel" id="panel-A">
+    <div class="panel-header" onclick="togglePanel('A')">
+      <div class="panel-dot" style="background:#639922;"></div>
+      <span class="panel-label">A — Approaches (3 types)</span>
+      <span class="panel-tag" style="background:#EAF3DE;color:#3B6D11;">Full · Moratorium · MHD</span>
+    </div>
+    <div class="panel-body" id="body-A">
+      <div class="note-box">Think of a <strong>traffic light</strong> — strictest to loosest. Full = red (check everything). Moratorium = amber (check at claim). MHD = green (no check).</div>
+      <div class="traffic-row" style="margin-top:12px;">
+        <div class="tcard" style="border-color:#E24B4A;background:#FCEBEB;">
+          <div class="tcard-head" style="color:#A32D2D;">Full medical UW</div>
+          <div class="tcard-body">Evidence at entry. Clear certainty for policyholder. Most common for long-term products (IP, CI). Costliest per policy. Outcomes: accept / load / exclude / decline.</div>
+        </div>
+        <div class="tcard" style="border-color:#EF9F27;background:#FAEEDA;">
+          <div class="tcard-head" style="color:#854F0B;">Moratorium</div>
+          <div class="tcard-body">No UW at entry. PECs excluded for first 2–3 consecutive clean years (5-yr lookback). Check at claim stage. Suited to PMI and group CI. Cheaper upfront.</div>
+        </div>
+        <div class="tcard" style="border-color:#1D9E75;background:#E1F5EE;">
+          <div class="tcard-head" style="color:#0F6E56;">MHD (disregarded)</div>
+          <div class="tcard-body">No exclusions for pre-existing conditions. Greatest anti-selection risk — priced accordingly. Most common: group PMI. Also offered on transfer from group to individual PMI.</div>
+        </div>
+      </div>
+      <p class="mini-title">Moratorium mechanics (exam favourite)</p>
+      <ul class="bullet-list">
+        <li>Lookback period: conditions existing in the ~5 years before inception are excluded</li>
+        <li>Clean period: exclusion is waived after ~2–3 consecutive years with no treatment or symptoms</li>
+        <li>Clock resets if treatment is received — another consecutive clean period must run</li>
+        <li>Advantage: immediate cover offered, lower per-policy UW cost; disadvantage: policyholder uncertainty, reputational risk from claim refusals</li>
+      </ul>
+      <p class="mini-title">PMI renewal UW terms</p>
+      <ul class="bullet-list">
+        <li>No Worse Terms (NWT) — new insurer accepts on terms at least as comprehensive as old policy</li>
+        <li>CPME — NWT with only the original exclusions carried forward</li>
+        <li>Switch — changing insurer at renewal, sometimes with simplified UW (declaration of good health only)</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="panel" id="panel-C">
+    <div class="panel-header" onclick="togglePanel('C')">
+      <div class="panel-dot" style="background:#EF9F27;"></div>
+      <span class="panel-label">C — Collection of evidence</span>
+      <span class="panel-tag" style="background:#FAEEDA;color:#854F0B;">PMMS + F</span>
+    </div>
+    <div class="panel-body" id="body-C">
+      <div class="note-box">Remember: <strong>PMMS + F</strong> — Proposal form, Medical attendant report, Medical examination, Specialist tests + Financial underwriting</div>
+      <ul class="bullet-list" style="margin-top:12px;">
+        <li><strong>Proposal form</strong> — factual questions only (within the proposer's knowledge); age, gender, occupation, residence, smoker status, BMI, medical & family history</li>
+        <li><strong>Primary Medical Attendant Report (PMAR)</strong> — report from the applicant's GP; required above certain sum-at-risk thresholds (non-medical limits)</li>
+        <li><strong>Medical examination</strong> — independent examination by a doctor/nurse appointed by the insurer; used for larger or higher-risk cases</li>
+        <li><strong>Specialist tests</strong> — e.g. HIV test, blood tests; triggered by specific risk factors or very large benefit amounts</li>
+        <li><strong>Financial underwriting</strong> — salary/earnings evidence; caps benefit to a replacement ratio (prevents over-insurance and removes incentive not to return to work)</li>
+      </ul>
+      <p class="mini-title">Non-medical risk factors also collected</p>
+      <div class="pill-row">
+        <span class="pill">Occupation / class</span>
+        <span class="pill">Leisure pursuits</span>
+        <span class="pill">Country of residence</span>
+        <span class="pill">Overseas travel plans</span>
+      </div>
+      <p class="mini-title">Non-medical limits (when to escalate)</p>
+      <ul class="bullet-list">
+        <li>Thresholds vary by age and benefit type; e.g. IP sum-at-risk &lt;£X → proposal form only; £X–£Y → PMAR; &gt;£Y → full examination</li>
+        <li>Higher sum-at-risk = more UW effort; also varies by product (CI thresholds often at £100k+)</li>
+        <li>Consent of proposer required before accessing sources 2–4</li>
+      </ul>
+      <div class="note-box" style="margin-top:10px;"><strong>Psychosocial factors (IP)</strong> — Predictive flags that go beyond reported medical conditions: GP attendance patterns inconsistent with known problems; poor work-attendance history; adverse life events; poor resilience to common but unexplained symptoms (fatigue, headaches). Some insurers ask "how much time did you take off?" rather than listing conditions.</div>
+    </div>
+  </div>
+
+  <div class="panel" id="panel-E">
+    <div class="panel-header" onclick="togglePanel('E')">
+      <div class="panel-dot" style="background:#E24B4A;"></div>
+      <span class="panel-label">E — End decisions (outcomes)</span>
+      <span class="panel-tag" style="background:#FCEBEB;color:#A32D2D;">LEAD + P</span>
+    </div>
+    <div class="panel-body" id="body-E">
+      <div class="note-box">Remember: <strong>LEAD + P</strong> — Load, Exclude, Accept standard, Decline, Postpone</div>
+      <ul class="bullet-list" style="margin-top:12px;">
+        <li><strong>Load</strong> — accept with a higher premium to reflect elevated risk; most common outcome for sub-standard but insurable risks in long-term products</li>
+        <li><strong>Exclude</strong> — accept but with a named condition excluded from cover; most common for PMI where specific PEC exclusions apply</li>
+        <li><strong>Accept at standard terms</strong> — the desired outcome for most cases; insurer aims to keep loaded/declined cases to a minimum to avoid bad feeling and distributor deterrence</li>
+        <li><strong>Decline</strong> — risk too high to quantify or price; generates bad feeling and extra admin; a last resort</li>
+        <li><strong>Postpone</strong> — risk is elevated but temporary (e.g. recent operation, ongoing treatment); review at a later date</li>
+      </ul>
+      <p class="mini-title">Additional decision tools</p>
+      <div class="pill-row">
+        <span class="pill">Reduced benefit</span>
+        <span class="pill">Alternative product</span>
+        <span class="pill">100% facultative reinsurance (zero retention)</span>
+      </div>
+      <p class="mini-title">Misrepresentation at claims stage — 3 categories</p>
+      <ul class="bullet-list">
+        <li><strong>Innocent</strong> (honest & reasonable) → pay claim in full</li>
+        <li><strong>Careless</strong> (insufficient care, not deliberate) → proportionate remedy (e.g. reduce payout)</li>
+        <li><strong>Deliberate / reckless</strong> → void policy from inception; most severe cases only</li>
+      </ul>
+      <div class="note-box" style="margin-top:10px;"><strong>Non-contestability clause:</strong> after a defined period (often 2 years) on risk, the insurer cannot void a claim for careless or innocent misrepresentation — only outright fraud. Simplifies claims management for both parties.</div>
+    </div>
+  </div>
+
+  <div class="panel" id="panel-D">
+    <div class="panel-header" onclick="togglePanel('D')">
+      <div class="panel-dot" style="background:#7F77DD;"></div>
+      <span class="panel-label">D — Differences: group vs individual</span>
+      <span class="panel-tag" style="background:#EEEDFE;color:#533AB7;">FAME</span>
+    </div>
+    <div class="panel-body" id="body-D">
+      <div class="note-box">Remember: <strong>FAME</strong> — Free Cover Limit, Actively at work, Moratorium/MHD preferred, Experience assessed at group average</div>
+      <div class="grid2" style="margin-top:12px;">
+        <div class="gcard">
+          <div class="gcard-head" style="color:#533AB7;">Group UW features</div>
+          <div class="gcard-item">Free Cover Limit — no individual UW below threshold; FCL higher for larger/compulsory schemes</div>
+          <div class="gcard-item">"Actively at work" on day cover starts — cheap, verifiable from HR records</div>
+          <div class="gcard-item">MHD or moratorium more common than full medical UW</div>
+          <div class="gcard-item">UW done at group level — some unhealthy lives acceptable if balanced by healthy ones</div>
+          <div class="gcard-item">Take-over terms for schemes transferring from another insurer</div>
+        </div>
+        <div class="gcard">
+          <div class="gcard-head" style="color:#185FA5;">Individual UW features</div>
+          <div class="gcard-item">Full medical UW standard for long-term (IP, CI, LTCI)</div>
+          <div class="gcard-item">Moratorium standard for individual PMI</div>
+          <div class="gcard-item">Greater anti-selection risk — customer chooses insurer and benefit level</div>
+          <div class="gcard-item">Non-medical limits trigger escalating evidence requirements</div>
+          <div class="gcard-item">Psychosocial factors more relevant (especially IP)</div>
+        </div>
+      </div>
+      <p class="mini-title">Anti-selection controls unique to group</p>
+      <ul class="bullet-list">
+        <li>Minimum scheme size and minimum take-up rate (voluntary schemes)</li>
+        <li>Benefits linked to salary formula (reduces adverse selection vs. self-chosen amounts)</li>
+        <li>Compulsory membership — greatest protection against anti-selection</li>
+        <li>"Once only" UW on group IP — full UW at entry, no further UW on future benefit increases</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="exam-section">
+    <p class="mini-title">Exam-specific angles (frequently tested)</p>
+    <div class="exam-grid">
+      <div class="exam-card">
+        <div class="exam-card-tag">Online / simplified UW</div>
+        <div class="exam-card-text">Fewer questions → speed & cost savings but higher non-disclosure risk, anti-selection, reinsurer renegotiation, and morbidity deterioration. Must still allow adequate risk assessment.</div>
+      </div>
+      <div class="exam-card">
+        <div class="exam-card-tag">Automated / tele-UW</div>
+        <div class="exam-card-text">Speed, consistency, cost savings. Risks: no human judgement, underwriters lose skill on routine cases, periodic sampling vs human decisions needed.</div>
+      </div>
+      <div class="exam-card">
+        <div class="exam-card-tag">Claims underwriting</div>
+        <div class="exam-card-text">Even with full UW at entry, insurer must check at claim stage for non-disclosure and consistency with original proposal data. Liaison between UW and claims teams is critical.</div>
+      </div>
+      <div class="exam-card">
+        <div class="exam-card-tag">Genetics restrictions</div>
+        <div class="exam-card-text">Cannot require genetic tests or use results in most markets. Creates anti-selection risk. Insurer must price or exclude broadly. Ban reduces UW accuracy — may force broader exclusions or higher premiums.</div>
+      </div>
+      <div class="exam-card">
+        <div class="exam-card-tag">Data science in UW</div>
+        <div class="exam-card-text">Banking / wearables / social media data for risk classification. Benefits: automated UW, better risk selection. Risks: data privacy, regulatory constraints, algorithmic bias, ethics.</div>
+      </div>
+      <div class="exam-card">
+        <div class="exam-card-tag">Reinsurer UW support</div>
+        <div class="exam-card-text">UW manuals, training, facultative capacity for large cases, claims control. Particularly vital for new products or markets where insurer lacks own experience data.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="recall-bar">
+    <span>Test your recall — can you recite all 5 letters of PACED and each sub-mnemonic?</span>
+    <button class="recall-btn" onclick="sendPrompt('Quiz me on underwriting — ask me one question at a time about the PACED framework ↗')">Start quiz ↗</button>
+  </div>
+</div>
+
+<script>
+const panels = ['P','A','C','E','D'];
+const colorMap = { P:'p-active', A:'a-active', C:'c-active', E:'e-active', D:'d-active' };
+
+function togglePanel(id) {
+  const body = document.getElementById('body-' + id);
+  const isOpen = body.classList.contains('open');
+  body.classList.toggle('open', !isOpen);
+  const letters = document.querySelectorAll('.mnem-letter');
+  letters.forEach((el, i) => {
+    const letter = panels[i];
+    el.classList.remove('active', 'p-active','a-active','c-active','e-active','d-active');
+    const b = document.getElementById('body-' + letter);
+    if (b && b.classList.contains('open')) {
+      el.classList.add('active', colorMap[letter]);
+    }
+  });
+}
+</script>
