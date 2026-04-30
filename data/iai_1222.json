@@ -3,28 +3,26 @@
   "questions": {
     "Q1i": {
       "marks": 18,
-      "scenario": "An insurer has four lines of health business: Individual IP (mean=85cr, SD=25cr), Group CI (mean=75cr, SD=30cr), LTCI (mean=90cr, SD=5cr), and PMI (mean=75cr, SD=15cr). It is considering stop-loss reinsurance and has asked you to rank the products by stop-loss premium for three different treaty structures.",
-      "question": "Rank the four products by stop-loss premium for: (a) XS 70 crores; (b) XS 100 crores; (c) XS 90 crores capped at 25 crores. [6 each = 18]",
+      "scenario": "You are working in a large Indian Health & Care Insurance company for which the total claims (in INR crores) for IP, CI, LTCI & PMI Lines Of Business (LOB), over the last 5 Financial Years (FY) are provided below:\n\nFY / LOB | IP  | CI  | LTCI | PMI\n2017-18  | 77  | 67  | 69   | 40\n2018-19  | 87  | 107 | 75   | 104\n2019-20  | 63  | 53  | 76   | 30\n2020-21  | 23  | 55  | 81   | 76\n2021-22  | 75  | 43  | 49   | 50\nMean     | 65  | 65  | 70   | 60\nSD       | 25  | 25  | 12.5 | 30\n\nThe company is evaluating proposals for stop loss reinsurance arrangements on each of the LOBs separately. The volume of portfolio for each LOB remained almost static over the years.",
+      "question": "On the basis of these statistics, explain with reasons, which LOB should have the largest and smallest risk premiums for each of the following stop loss covers in turn:\na) 100% of excess claims over INR 70 crores. [6]\nb) 100% of excess claims over INR 100 crores. [6]\nc) 100% of excess claims over INR 90 crores, capped at INR 25 crores. [6]",
       "sections": {
         "a) XS 70 crores": [
-          "LTCI will have the highest probability of making a recovery under this contract \u2014 for a symmetrical distribution the chance of exceeding the mean is 50%. For LTCI, 70 cr is well below the mean of 90 cr, so recovery is highly likely.",
-          "For IP or CI, 70 cr is about 0.2 standard deviations below the mean, making recovery a little less likely than for LTCI.",
-          "However, 90 cr is only 1 SD above the mean for IP/CI, and 2 SD above is 115 cr/135 cr. This shows that the chance of a large recovery is greater for IP or CI than for LTCI.",
-          "PMI makes a recovery when the result is 0.33 standard deviations below the mean \u2014 slightly less likely than IP or CI. However, 2 SD above the mean is 105 cr for PMI, showing somewhat greater chance of large recovery than IP/CI.",
-          "It seems clear that LTCI will have the smallest stop-loss premium because it is much less variable (SD only 5 cr). The overall result between PMI and IP/CI is a close call depending on the assumed distribution of the loss ratio.",
-          "Ranking (highest to lowest premium): PMI \u2248 IP/CI > LTCI."
+          "LTCI will have the highest probability of making a recovery under this contract. For a symmetrical distribution the chance of exceeding the mean is 50%. For one skew to the right, the probability is somewhat under 50%.",
+          "However, for LTCI to exceed 95 cr, for example, the result would have to be more than two standard deviations above the mean. The chance of this for the normal distribution is only about 2½%. For other distributions the probability may be of a similar order (possibly a little larger).",
+          "IP or CI make a recovery when the result is 0.2 standard deviations above the mean. This is a little less likely than LTCI making a recovery. However, 90 cr is only 1 s.d. above the mean, and 2 s.d. above is 115 cr. This shows that the chance of a large recovery is greater for IP or CI than for LTCI. The premium for IP or CI seems likely to be bigger than that for LTCI (although this is not totally conclusive).",
+          "PMI makes a recovery when the result is 0.33 standard deviations above the mean. This is a little less likely than IP or CI making a recovery. However, 90 cr is only 1 s.d. above the mean, and 2 s.d. above is 120 cr. This shows that the chance of a large recovery is somewhat greater for PMI than for IP or CI.",
+          "It seems clear that LTCI will have the smallest premium, because it is much less variable. The overall result between PMI and IP/CI seems to us to be a close call and the result of the calculations may well depend on the assumed distribution of the loss ratio."
         ],
         "b) XS 100 crores": [
-          "PMI will have the greatest chance of any recovery (100 cr is 1.67 SD above mean of 75 cr) and also the greatest chance of a large recovery.",
-          "IP or CI will have the next greatest chance (100 cr is about 0.6 SD above mean for IP, 0.83 SD above mean for CI).",
-          "LTCI will have the least chance of any recovery (100 cr is 2 SD above mean of 90 cr) and also the least chance of a large recovery.",
-          "Ranking (highest to lowest premium): PMI > CI > IP > LTCI."
+          "PMI will have the greatest chance of any recovery and also the greatest chance of a large recovery.",
+          "LTCI will have the least chance of any recovery and also the least chance of a large recovery.",
+          "Hence PMI should have the largest premium, IP and CI the next and LTCI has the smallest."
         ],
         "c) XS 90 crores capped at 25 crores": [
-          "In terms of standard deviations above the mean, the layer runs: IP: +1.0 to +2.0; CI: +0.5 to +1.67; LTCI: +0.0 to +3.6 (but very unlikely to reach upper); PMI: +1.0 to +1.8 (cap reached within 1.8 SD).",
-          "Whenever the upper limit of this layer is breached (likeliest for PMI given its volatility relative to the layer), a full recovery of 25 cr is made.",
-          "It is clear that the premium order must be the same as in (b): PMI should have the largest premium, CI next, IP next and LTCI has the smallest.",
-          "Using a statistical package we can get the pure premiums by fitting suitable distributions (log-Normal, Gamma etc.) with the same moments as the empirical distributions."
+          "This time we have, in terms of standard deviations above the mean, the layer:\nIP or CI : +1.0 to +2.0\nLTCI : +1.6 to +3.6\nPMI : +1.0 to +1.8",
+          "Whenever the upper limit of this layer is breached (likeliest for PMI) a full recovery of 25 cr is made.",
+          "So it is clear that the premium order must be the same as in (b), ie PMI should have the largest premium, IP and CI the next and LTCI has the smallest.",
+          "Using a statistical package we can get the pure premiums by fitting suitable distributions (logNormal, Gamma etc) with the same moments as the empirical distributions."
         ]
       },
       "themes": [
@@ -34,22 +32,14 @@
     },
     "Q1ii": {
       "marks": 6,
-      "scenario": "Same as Q1(i). You have been asked to price the stop-loss reinsurance using burning cost methodology.",
-      "question": "Calculate the burning cost pure premiums for each product and each treaty structure, and comment on the results compared to the analytical approach in Q1(i).",
+      "scenario": "Same as Q1(i).",
+      "question": "To compare the quoted reinsurance premiums, your manager asked you to calculate the historic burning cost pure premium for each LOB and for each of the stop loss covers. Provide your calculations and comment on your answers. [6]",
       "sections": {
         "Burning cost calculation": [
-          "The burning cost pure premiums are the average past recoveries if the cover had been in place throughout: (XS 70 cr) IP: 5.8 cr; CI: 7.4 cr; LTCI: 4.4 cr; PMI: 8 cr. (XS 100 cr) IP: 0 cr; CI: 1.4 cr; LTCI: 0 cr; PMI: 0.8 cr. (XS 90 cr, capped 25 cr) IP: 0 cr; CI: 3.4 cr; LTCI: 0 cr; PMI: 2.8 cr.",
-          "These are dramatically different from the results in part (i). CI always has a much larger burning cost and hence should have higher premium than IP.",
-          "PMI is not the largest for XS 100 cr or XS 90 cr capped at 25 cr \u2014 CI is. This contradicts the analytical approach.",
-          "IP and LTCI each have zero burning cost for XS 100 cr and XS 90 cr (capped at 25 cr) \u2014 implying zero premium, which seems inappropriate as there is presumably still some probability of a recovery being made in the future."
-        ],
-        "Limitations of burning cost vs analytical": [
-          "Clearly neither the analytical approach alone, nor the burning cost alone, provides a suitable way to rate a stop-loss treaty.",
-          "The analytical approach penalises IP relative to CI, although past experience suggests that when CI makes a loss at all it makes a relatively big loss \u2014 which is exactly what unlimited or high-layer stop-loss cover is protecting against.",
-          "It seems inappropriate to have a zero pure premium for XS 100 cr or XS 90 cr capped 25 cr to IP or LTCI, despite there presumably being some chance that a recovery would be made in future.",
-          "The ideal is to decide what the prospective distribution of the total claims for any line of business is, then calculate the pure premium for any layer directly from that distribution. To make as good a job as possible, we would study all relevant historical information for the risk and also all others that could shed light on the distribution.",
-          "Key adjustments needed: changes in the precise cover provided; the effect of inflation and the measure which correctly accounts for the mix of past claims and next year's prospective claims; the business cycle (e.g. if a portfolio increases next year by 10%, claims will increase by a factor close to that).",
-          "The ideal practical approach would probably be to do as much as possible analytically, then pass those results to a highly skilled health underwriter for them to estimate a suitable risk premium, taking the analytical results as part of their deliberations."
+          "The burning costs pure premiums are just the average past recoveries, if the cover had been in place throughout. These are as follows:\n(XS 70 cr)  IP: 5.8 cr  CI: 7.4 cr  LTCI: 4.4 cr  PMI: 8 cr\n(XS 100 cr)  IP: 0 cr  CI: 1.4 cr  LTCI: 0 cr  PMI: 0.8 cr\n(XS 90 cr, capped at 25 cr)  IP: 0 cr  CI: 3.4 cr  LTCI: 0 cr  PMI: 2.8 cr",
+          "These are dramatically different from the results in part (i). Now CI always has a much larger burning cost & hence should have higher premium than IP.",
+          "PMI is not the largest for XS 100 cr or XS 90 cr (capped at 25 cr), but CI is.",
+          "IP and LTCI each have no burning cost at all for XS 100 cr and XS 90 cr (capped at 25 cr)."
         ]
       },
       "themes": [
@@ -60,15 +50,17 @@
     },
     "Q1iii": {
       "marks": 8,
-      "scenario": "Same as Q1(i-ii). You are advising on the overall approach to rating a stop-loss treaty.",
-      "question": "Describe the ideal approach to rating a stop-loss reinsurance treaty.",
+      "scenario": "Same as Q1(i).",
+      "question": "Describe briefly the evaluation process of a stop loss treaty. [8]",
       "sections": {
-        "Ideal approach to stop-loss rating": [
-          "Clearly neither the burning cost approach alone, nor the analytical approach alone, provides a suitable way to rate a stop-loss treaty.",
-          "The ideal would be to decide what the prospective distribution of the total claims for any line of business is, and then calculate the pure premium for any layer of cover directly from that distribution \u2014 whether it is an analytical or empirical distribution, using a suitable computer package.",
-          "To make as good a job as possible of this, we would study all relevant historical information for the risk, and also all others that could shed light on the distribution for this risk.",
-          "We would need to be careful about the effects of changes in: the precise cover provided (if it is reducing, future claim amounts will not be as bad as past ones); the effect of inflation and the measure which correctly accounts for the mix of past claims and next year's prospective claims from this portfolio; the business cycle (e.g. if a portfolio increases next year by 10%, claims next year will increase by a factor close to that).",
-          "The ideal practical approach would probably be to do as much as possible analytically, then look at the result on various bases (including burning cost and analytical distributions), then pass those results to a highly skilled health underwriter for them to estimate a suitable risk premium, taking the analytical results as part of their deliberations."
+        "Evaluation of a stop loss treaty": [
+          "Clearly neither (ii) nor (iii), by itself, provides a suitable way to rate a stop loss treaty.",
+          "In particular (i) penalises IP relative to CI, although past experience suggests that when CI makes a loss at all it makes a relatively big loss – which is exactly what unlimited or high layer stop loss cover is protecting against.",
+          "In (ii) it seems inappropriate to have a zero pure premium for cover XS 100 cr or XS 90 cr, capped 25 cr to IP or LTCI, despite there (presumably) being some chance that a recovery would be made in the future.",
+          "The ideal would be to decide, somehow, what the prospective distribution of the total claims for any LOB is. We could then calculate the pure premium for any layer of cover directly from that distribution. Whether it is an analytical or empirical one, we could do this given a suitable computer package or a very large envelope to write on the back of.",
+          "So, then, we just need to decide what the distribution of next year's gross claim is. To make as good a job as possible of this, we would study all relevant historical information for the risk, and also all others that could shed some light on the distribution for this risk.",
+          "We would need to be careful about the effects of changes in lots of factors, including the precise cover provided, if it's reducing then future claim amounts will not be as bad as past ones; the effect of inflation and, in particular, the measure which correctly accounts for the mix of past claims and next year's prospective claims from this portfolio; the business cycle, eg if a portfolio increases next year by 10% but other things are equal, then claim next year will increase by a factor close to that.",
+          "The ideal practical approach would probably be to do as much as possible analytically. Then look at the result on various bases (including (i) and (ii)), then pass those results to a highly skilled health underwriter for them to estimate a suitable risk premium, taking the analytical results as part of their deliberations."
         ]
       },
       "themes": [
@@ -80,12 +72,12 @@
     },
     "Q1iv": {
       "marks": 5,
-      "scenario": "An insurer is considering applying a matching adjustment to its discount rate for a block of long-term care insurance (LTCI) business. On 50% of the backing assets, an additional yield of 1.50% is available. The default risk on these assets is estimated at 0.50%.",
-      "question": "Q1(iv) State the conditions required to apply a matching adjustment and calculate the extent of the matching adjustment. [5]",
+      "scenario": "Your company has an overseas subsidiary health and care insurance company that is subject to the EU Solvency II regime & has recently ceased to transact new business. The in-force business comprises Impaired life Immediate Annuities, unit-linked and conventional pre-funded long-term care insurance policies and long term critical illness insurance contracts. The pre-funded long-term care insurance policies (both unit-linked & conventional) have the option of paying unlimited top-up premiums during the terms of the policies where each top up premium adds benefits in the policy equivalent to the single premium of same amount. The Impaired Life Immediate Annuity portfolio has backing assets of Government & Corporate bonds at 50:50 ratio. The corporate bond yield spread is 1.50% p.a. in which 0.50% p.a. corresponds to default risk and the Government bond yield are considered as risk free rates. You have been asked to determine the embedded value of the subsidiary to evaluate an offer made for buying the subsidiary. The embedded value is determined as the sum of net assets (defined as the excess of assets over both liabilities and solvency capital requirements) and Present Value of the In-Force business (PVIF) component.",
+      "question": "List down the conditions to be satisfied in order to use 'matching adjustment' for valuation of the Impaired Life Immediate Annuity portfolio. Also indicate the expected extent of the 'matching adjustment'. [5]",
       "sections": {
         "Matching adjustment conditions and calculation": [
-          "Conditions for applying a matching adjustment: (a) Must be approved by the regulator; (b) Long-term predictable liabilities \u2014 no surrender is allowed; (c) The key liability risks are longevity and expense; (d) Assets are ring-fenced and no pre-mature redemption is allowed; (e) The assets (bonds) are matched by nature, term and currency of the expected benefits.",
-          "Calculation: On 50% of the backing assets, 1.50% of additional yield is available. Excluding 0.50% for default risk, the overall additional yield = 50% \u00d7 (1.50% \u2212 0.50%) = 0.50%. Assuming the term of the assets and liabilities are matched, the extent of the matching adjustment is 0.50% p.a."
+          "Conditions:\na. Must be approved by the regulator\nb. Long term predictable liabilities – No surrender is allowed\nc. The key liability risks are longevity & expense\nd. Assets are ring fenced and no pre-mature redemption is allowed\ne. The assets (bonds) are matched by nature, term & currency of the expected benefits",
+          "On 50% of the backing assets, 1.50% of additional yield is available. Excluding 0.50% for default risk, the overall additional yield 50%*(1.50% - 0.50%) = 0.50%. Assuming the term of the assets and liabilities are matched, the extent of the matching adjustment is 0.50% p.a."
         ]
       },
       "themes": [
@@ -95,8 +87,8 @@
     },
     "Q1v": {
       "marks": 10,
-      "scenario": "An insurer has acquired a block of unit-linked LTCI business. You have been asked to prepare an EV calculation for this block.",
-      "question": "Describe the method for calculating the Embedded Value of the acquired LTCI business.",
+      "scenario": "Same as Q1(iv).",
+      "question": "Describe the method to calculate the embedded value as defined above. [10]",
       "sections": {
         "Net assets": [
           "The net assets will be the total assets in excess of those covering the technical provisions plus SCR under Solvency II.",
@@ -104,13 +96,11 @@
         ],
         "PVIF (Present Value of In-Force)": [
           "The PVIF is the present value of future shareholder cashflows projected to emerge from the assets backing the liabilities.",
-          "Under Solvency II, the PVIF includes the release of the risk margin component of the technical provisions and the release of the SCR. These amounts may be reduced to allow for the cost of holding this required capital (i.e. frictional costs such as taxation and agency costs).",
-          "The PVIF also represents the release of any margins if there are places where the assumptions underlying the best estimate liabilities are not in line with the company's best estimate assumptions \u2014 for example, if the best estimate liabilities have been determined using a constrained discount rate or including premiums up to some restrictive contract boundary.",
+          "Under Solvency II, the PVIF includes the release of the risk margin component of the technical provisions and the release of the SCR. These amounts may be reduced to allow for the cost of holding this required capital, ie frictional costs such as taxation and agency costs.",
+          "The PVIF also represents the release of any margins if there are places where the assumptions underlying the best estimate liabilities are not in line with the company's best estimate assumptions – for example, if the best estimate liabilities have been determined using a constrained discount rate or including premiums up to some restrictive contract boundary.",
           "To calculate the PVIF, a model would be used to project future cashflows on the business and the future supervisory reserves and capital requirements. In the case of the unit-linked LTCI business, both the unit and non-unit funds would be projected, as the non-unit cashflows depend on the size of the unit fund.",
-          "A set of assumptions will be needed to project the future cashflows, including investment returns, mortality, expenses, withdrawals, inflation and so on. The current and likely future tax position of the company must also be considered \u2014 tax should therefore be dealt with at a global level."
-        ],
-        "Model points and discount rate": [
-          "The in-force policies may be modelled individually, but this may not be practical due to IT limitations or limited access to data. The in-force business could then be represented by a number of sample policies (model points). The contracts will be split by class (unit-linked and without-profits treated separately), then into smaller groups by product type, policy term, sales method etc.",
+          "A set of assumptions will be needed to project the future cashflows, including investment returns, mortality, expenses, withdrawals, inflation and so on. The current and likely future tax position of the company must also be considered. This will depend upon the company's mix of business. Tax should therefore be dealt with at a global level. These projections would enable the transfers to the shareholders in each future year to be determined.",
+          "The in-force policies may be modelled individually, but this may not be practical due to IT limitations or limited access to the data of the target company. The in-force business could then be represented by a number of sample policies (model points). The contracts will be split by class, most notably unit-linked and without-profits contracts treated separately. They will then be split into smaller groups, eg by product type, policy term, sales method etc.",
           "The PVIF will be the present value of the shareholder transfer arising each year. The discount rate may allow for a risk margin.",
           "If the embedded value calculation is performed on a market-consistent basis, the investment return and discount rate assumptions will be based on risk-free rates, and separate allowance would need to be made to allow for non-hedgeable risks."
         ]
@@ -127,13 +117,13 @@
     },
     "Q1vi": {
       "marks": 3,
-      "scenario": "Same as Q1(v). The unit-linked LTCI policies have a provision for top-up premiums which act as recurrent single premiums. The question arises as to how future top-up premiums should be treated in the EV calculation.",
-      "question": "Discuss how future top-up premiums should be treated in the EV calculation.",
+      "scenario": "Same as Q1(iv). The pre-funded long-term care insurance policies (both unit-linked & conventional) have the option of paying unlimited top-up premiums during the terms of the policies where each top up premium adds benefits in the policy equivalent to the single premium of same amount.",
+      "question": "Discuss how you would treat the top-up option for long-term care insurance policies in the embedded value calculation. [3]",
       "sections": {
         "Treatment of top-up premiums in EV": [
-          "Because the contracts have the provision of top-up premiums which act as recurrent single premiums, it is difficult to judge what future premiums under the contracts are likely to be. There is scope for discussion as to whether the future premiums should be regarded as part of the in-force business.",
-          "This is similar to the issue of establishing the contract boundary for these contracts for Solvency II purposes \u2014 although a different treatment may be adopted for this embedded value (where the treatment is unconstrained) than for Solvency II (which must comply with the regulations).",
-          "Possible approaches: (1) Treat as new business and therefore ignore future contributions to in-force business \u2014 the purchaser might prefer this, but may be difficult to justify; however, if this is the treatment adopted by the company under Solvency II, this may strengthen the argument. (2) Allow for future premiums on some assumptions \u2014 these may be best estimate, although the purchaser may prefer prudent assumptions and might assume high rates of withdrawal and of ceasing contributions."
+          "Because the contracts have the provision of top-up premiums which act as recurrent single premium, it is difficult to judge what future premiums under the contracts are likely to be. There is scope for discussion as to whether the future premiums should be regarded as part of the in-force business.",
+          "This is similar to the issue of establishing the contract boundary for these contracts for Solvency II purposes – although a different treatment may be adopted for this embedded value (where the treatment is unconstrained) than for Solvency II (which must comply with the regulations).",
+          "This gives a number of possible approaches, for example:\n1. Treat as new business and therefore ignore future contributions to in-force business. The purchaser might prefer this but you may not & it may be difficult to justify. However, if this is the treatment adopted by the company under Solvency II, this may strengthen the argument for adopting this approach.\n2. Allow for future premiums on some assumptions. These may be best estimate, although the purchaser may prefer prudent assumptions and so might assume high rates of withdrawal and of ceasing contributions."
         ]
       },
       "themes": [
@@ -145,16 +135,21 @@
     },
     "Q2i": {
       "marks": 5,
-      "scenario": "WTH is a life and health insurance company that has been offering health insurance products for the last five years in Country A. WTH is now planning to launch an individual Income Protection (IP) product in Country A, where IP insurance is currently not available. WTH is also planning to enter Country B with a similar product.",
-      "question": "Outline the typical key features of an individual income protection insurance product.",
+      "scenario": "WayToHealth (WTH) is an insurer operating in a developed country 'A' with well-regulated health and care insurance industry for many years. It specializes in individual long-term income protection insurance with premium rates guaranteed for the full duration of the policy.",
+      "question": "Outline the typical key features of an individual income protection insurance product. [5]",
       "sections": {
         "Key features of individual IP": [
-          "Provides insured with regular income during periods when the insured is unable to work due to illness or incapacity. The policy may have several exclusions such that not all illnesses/injuries may be covered (e.g. mental illness).",
-          "Policy term typically runs up to retirement (e.g. age 60) but could be for a fixed term. Regular premiums paid by insured (e.g. yearly, half-yearly, quarterly or monthly). Premiums can be level or increasing in line with an index. Waiver of premium whilst claim is in payment.",
-          "There can be multiple periods of sickness benefits paid during policy term. Typically includes a deferred period \u2014 e.g. a policy with a 4-week deferred period will commence income payments once the policyholder has been off work for 4 weeks.",
-          "Typically includes a linked claims period \u2014 after a claim has ended, if the policyholder goes off work again for the same reason within, say, a 12-month period, a new deferred period will not apply.",
-          "Benefits can be level or increasing in line with an index. Benefits could escalate differently in and out of claim. Benefits limited to prevent over-insurance \u2014 limit based on a percentage of salary (gross or net of tax) at date of incapacity. Benefits may reduce or cease after a specified period.",
-          "Definitions of incapacity \u2014 occupation based (e.g. unable to do 'own' occupation) or activity based (e.g. unable to carry out 4 out of 6 activities of daily living such as washing, bathing etc.).",
+          "Provides insured with regular income during periods when the insured is unable to work due to illness or incapacity.",
+          "The policy may have several exclusions such that not all illnesses/injuries may be covered eg. Mental illness.",
+          "Policy term typically runs up to retirement e.g., age 60 but could be for a fixed term.",
+          "Regular premiums paid by insured – e.g., yearly, half-yearly, quarterly or monthly. Premiums can be level or increasing in line with an index.",
+          "Waiver of premium whilst claim in payment.",
+          "There can be multiple periods of sickness benefits paid during policy term.",
+          "Typically includes a Deferred period – e.g., a policy with a 4-week deferred period will commence income payments once the policyholder has been off work for a period of 4 weeks.",
+          "Typically includes a linked claims period – After a claim has ended, if your client goes off work again for the same reason within, say, a 12-month period, a new deferred period will not apply.",
+          "Benefits can be level or increasing in line with an index. Benefits could escalate differently in and out of claim.",
+          "Benefits limited to prevent over insurance. Limit based on a percentage of salary (gross or net of tax) at date of incapacity. Benefits may reduce or cease after a specified period.",
+          "Definitions of incapacity – occupation based e.g., unable to do 'own' occupation. Or activity based – e.g., unable to carry out 4 out 6 activities of daily living such as washing, bathing etc.",
           "There may be rehabilitation/counselling services to facilitate earlier return to work."
         ]
       },
@@ -166,26 +161,30 @@
     },
     "Q2ii": {
       "marks": 7,
-      "scenario": "Same as Q2(i). WTH is deciding whether to offer guaranteed or reviewable premium rates for the IP product.",
-      "question": "Explain the advantages and disadvantages to WTH of offering guaranteed premium rates for the IP product.",
+      "scenario": "Same as Q2(i).",
+      "question": "Explain the advantages and disadvantages to WTH of offering guaranteed premium rates. [7]",
       "sections": {
         "Advantages of guaranteed premium rates": [
-          "Increase in sales as policyholders would like certainty in terms of the premium payable throughout the term of the policy \u2014 particularly the case if the competition is not offering guaranteed rates and WTH's pricing is not out of line with the market.",
-          "No risk of bad publicity and reputational risks associated with reviewable rates. Likely lower level of regulatory scrutiny compared to reviewable rates.",
-          "Less issue of selective lapsation \u2014 since the premium rate is fixed there is no direct trigger for policyholders to be actively looking for better rates. More certainty with respect to the lapse assumption compared to reviewable rates.",
-          "System administration is easier and less expensive compared to reviewable rates."
+          "Increase in sales as the policyholders would like certainty in terms of the premium payable throughout the term of the policy.",
+          "This is particularly the case if the competition is not offering guarantee and WTH pricing is not out of line with the market.",
+          "No risk of bad publicity and hence reputations risks associated with reviewable rates.",
+          "Likely lower level of regulatory scrutiny compared to reviewable rates.",
+          "Less issue of selective lapsation since the premium rate is fixed there is no direct trigger for policyholders to be actively looking for better rates.",
+          "More certainty with respect to lapse assumption compared to reviewable rate.",
+          "System – administration is easier and less expensive compared to reviewable rates."
         ],
         "Disadvantages of guaranteed premium rates": [
-          "There will be heavy reliance on the sufficiency of pricing data and credibility of experience at outset, as the insurer does not have the option to fine-tune premium rates on written business in the future.",
-          "Profitability may decrease as the company does not have the option to change premiums if actual experience turns out to be worse than the original pricing assumptions.",
-          "Reinsurance \u2014 it may be difficult to obtain reinsurance as some reinsurers in the market may not offer guaranteed terms.",
-          "Reserving requirements for guaranteed business are likely to be higher than those for reviewable business as there is no option to change premium rates. Capital requirements are similarly likely to be higher.",
-          "Decrease in sales if the premium is higher due to higher reserving/capital requirements \u2014 particularly the case if competition is offering significantly lower rates with a reviewable structure."
+          "There will be heavy reliance on sufficiency of pricing data and credibility of experience at outset as the insurer does not have the option to fine tune the premium rates on written business in the future.",
+          "Profitability – may decrease as the company does not have the option to change premiums if the actual experience turns out to be worse than the original pricing assumptions.",
+          "Reinsurance – it may be difficult to obtain reinsurance as some reinsurers in the market may not offer guaranteed terms.",
+          "Reserving – reserving requirements for guaranteed business are likely to be higher than those for reviewable business as there is no option to change premium rates.",
+          "Capital requirements – for the same reason as above, capital requirements for guaranteed business are likely to be higher than those for reviewable business.",
+          "Decrease in sales – if the premium is higher due to higher reserving/capital requirements.",
+          "This is particularly the case if the competition is offering significantly lower rates with reviewable structure."
         ]
       },
       "themes": [
         "Data",
-        "Group Products",
         "Models",
         "Pricing",
         "Regulation",
@@ -196,21 +195,28 @@
     },
     "Q2iii": {
       "marks": 6,
-      "scenario": "Same as Q2(i). WTH is considering offering an 'accident-only' variant of the IP product.",
-      "question": "Outline the possible reasons why WTH may consider offering an accident-only IP product, and the risks associated with such a product.",
+      "scenario": "Same as Q2(i). The Sales Director of WTH suggested that an income protection product covering only disabilities caused by accidents should be explored.",
+      "question": "Outline the possible reasons for the suggestion and the risks associated with such a product. [6]",
       "sections": {
         "Possible reasons for accident-only IP": [
           "Differentiated product offering from competition.",
-          "Better alignment to need for certain categories of target market \u2014 e.g. young lives in blue collar industries.",
-          "Significant claim adjudication challenges with respect to sickness disabilities. Bad publicity/repudiation risk due to claim declinature for sickness claims leading to disgruntled policyholders. Insurance ombudsman/court rulings against the insurer for most sickness IP claims.",
-          "Claim adjudication is more objective/easier for injuries than sickness. Simplified underwriting which is a main hurdle for sales.",
-          "Long-term guarantee is less risky with 'accident only' vs 'accident plus sickness'. Less exposure to epidemics and pandemics."
+          "Better alignment to need for certain categories of target market – eg. Young lives at blue collar industries etc.",
+          "Significant claim adjudication challenges with respect to sickness disabilities.",
+          "Bad publicity/Repudiation risk due to claim declinature for sickness claims leading to disgruntled policyholders.",
+          "Insurance ombudsman/court rulings against the insurer for most of the sickness IP claims.",
+          "Claim adjudication more objective/easier for injuries than sickness.",
+          "Simplify underwriting which is a main hurdle for sales.",
+          "Long-term guarantee is less risky with 'accident only' vs 'accident plus sickness'.",
+          "Less exposure to epidemics and pandemics."
         ],
         "Risks of accident-only IP": [
-          "Accident and sickness gets blurred for certain disabilities \u2014 e.g. falling due to sickness and getting hurt, road accidents caused by fatigue due to sickness. Risk of having to pay claims not envisaged at pricing. Risk of bad publicity/repudiation if claims are denied in such instances.",
-          "Anti-selection \u2014 those with greater exposure to accidents picking up the cover. Underwriting might help to an extent but would defeat the objective of simplified issue.",
-          "Risk of pricing mis-estimation in the absence of incidence and termination data that clearly splits out cause of disability, occupation, industry, age, gender etc.",
-          "Risk of decreased profitability if actual target segment is different from expected. Selective lapsation from the current product and entry into this product, causing profitability challenges for other products. Distribution churning from existing product into the new product since first year commission tends to be higher than renewal commission."
+          "Accident/sickness gets blurred for certain disabilities – e.g., falling due to sickness and getting hurt, road accidents caused by fatigue due to sickness etc.",
+          "So, the risk of having to end up paying claims not envisaged at pricing. Risk of bad publicity/repudiation if claims are denied in such instances.",
+          "Anti-selection – those that have greater exposure to accidents picking up the cover; underwriting might help to an extent but would defeat the objective of simplified issue.",
+          "Risk of pricing mis-estimation in the absence of incidence and termination data that clearly split out cause of disability, occupation, industry, age, gender etc.",
+          "Risk of decreased profitability due to actual target segment different from expected.",
+          "Selective lapsation from the current product and entry into this product – causing profitability challenges for other products.",
+          "Distribution churning from existing product into the new product since first year commission tends to be higher than renewal commission."
         ]
       },
       "themes": [
@@ -224,27 +230,50 @@
     },
     "Q2iv": {
       "marks": 12,
-      "scenario": "Same as Q2(i). WTH is considering entering Country B with an IP product. Country B has no existing IP insurance market.",
-      "question": "Describe the factors that should be considered by WTH before deciding on whether to enter Country B with an IP product.",
+      "scenario": "WTH is exploring expansion into a developing country 'B' where the State provides no disability or sickness benefits to its citizens. While there is a large health insurance market, Income protection insurance is virtually non-existent in Country B.",
+      "question": "Describe the factors that should be considered by WTH before deciding on entering Country B. [12]",
       "sections": {
-        "Demand and competition": [
-          "Would there be sufficient demand to sell volumes? No state provision and no IP insurance means this is a greenfield opportunity with potential for sufficient volume of sales.",
-          "Are there personal tax incentives that might make the product more attractive? How aware are customers of the need for IP? How are they currently addressing the need? Would the product be affordable? Would carry out a survey to assess these. New company in the market \u2014 consumer confidence in the company/brand and in the product.",
-          "Any previous attempts from outside companies \u2014 if so, why did they not enter? Generally, how profitable is the health insurance market in Country B \u2014 if existing insurers (though with different products) are not making money, why should WTH?"
+        "Demand": [
+          "Would there be sufficient demand to sell volumes?",
+          "No state provision & no IP insurance and so this green field and potential for sufficient volume of sales.",
+          "Are there personal tax incentives that might make the product more attractive?",
+          "How aware the customers of the need for IP? How are they currently addressing the need?",
+          "Would the product be affordable? Would carry out a survey to assess these.",
+          "New company in the market – consumer confidence in the company/brand and in the product."
         ],
-        "Data and capital/regulatory": [
-          "Availability of relevant and sufficient data to price \u2014 disability incidence, termination split by risk factors such as age, gender, occupation, income etc.",
-          "Licensing requirements. Capital/solvency requirements. Expense overruns/new business strain. Reserving/financial reporting requirements. Restrictions on product design/investments.",
-          "Regulations of distributors (e.g. commission levels)/sales process. Contract law/employment law. How evolved are the insurance ombudsman/insurance legal systems?"
+        "Competition": [
+          "Any previous attempts from outside companies – if so, why did they not enter?",
+          "Generally, how profitable the health insurance market in the Country B.",
+          "If the existing insurers (though different product) are not making money, why should you?"
         ],
-        "Distribution channels and talent": [
-          "Availability of qualified salespeople/training required. Potential channels and how evolved they are \u2014 own sales force, bancassurance, independent advice, direct to customer.",
-          "Availability/hiring of key staff. Administrative and claims systems. Availability of service partners (e.g. disability rehabilitation/counselling). Possibilities for outsourcing."
+        "Data": [
+          "Availability of relevant and sufficient data to price.",
+          "Disability incidence, termination split by risk factors such as age, gender, occupation, income etc."
         ],
-        "Profitability and other factors": [
-          "Demographics/demand projections. Profitability levels and projected growth. Investment returns. Regulatory limitations on profitability. Cultural impacts on propensity to claim/lapse. Repatriation of profits. Corporate tax.",
-          "Willingness of reinsurers to support business. Health care infrastructure \u2014 hospitals and doctors (referrals, reports) \u2014 how does this product's underwriting and claim processing fit with that infrastructure?",
-          "Potential for fraud. Modelling and profit testing. Would buying fully/partially an existing insurer in Country B be a better alternative?"
+        "Capital/regulatory/legal": [
+          "Licensing requirements; Capital/solvency requirements; expense overruns/new business strains.",
+          "Reserving/financial reporting requirements; Restrictions on product design/investments.",
+          "Regulations of distributors (eg. Commission levels)/sales process.",
+          "Contract law/employment law. How evolved are the insurance ombudsman/insurance legal systems?"
+        ],
+        "Distribution channels": [
+          "Availability of qualified salespeople/training required.",
+          "Potential channels and how evolved they are – own sales force, bancassurance, independent advice, direct to customer."
+        ],
+        "Talent/resources": [
+          "Availability/hiring of key staff; administrative and claims systems.",
+          "Availability of service partners (eg. disability rehabilitation/counselling); possibilities for outsourcing."
+        ],
+        "Profitability": [
+          "Demographics/demand projections; profitability levels and projected growth; investment returns.",
+          "Regulatory limitations on profitability; cultural impacts on propensity to claim/lapse.",
+          "Repatriation of profits; Corporate tax."
+        ],
+        "Others": [
+          "Willingness of reinsurers to support business.",
+          "Health care infrastructure – hospitals and doctors (referrals, reports) and how this product underwriting and claim processing fit with that infrastructure.",
+          "Potential for fraud; modelling and profit testing.",
+          "Would buying fully/partially an existing insurer in the Country be a better alternative?"
         ]
       },
       "themes": [
@@ -262,15 +291,15 @@
     },
     "Q2v": {
       "marks": 5,
-      "scenario": "Same as Q2(i). WTH is comparing the rating factors it would use for the IP product in Country A (where it has five years of experience) versus Country B (a new market).",
-      "question": "Explain the differences in rating factors WTH would use for the IP product in Country A versus Country B.",
+      "scenario": "Same as Q2(i) and Q2(iv).",
+      "question": "How would the premium rating factors differ between country 'A' and country 'B' and why? [5]",
       "sections": {
         "Rating factor differences A vs B": [
-          "Country A is more matured/developed and so will have adequate data/experience for segmented pricing \u2014 therefore will tend to have a higher number of rating factors than Country B.",
-          "Typical rating factors for IP include: age; gender; occupation; location; income level; type of disability definition; length of deferred period; level of replacement ratio.",
-          "Given Country B is new to IP, the following will likely inhibit segmented pricing: data limitations (availability and quality); need to keep the rating structure simple to make it easier for distribution to sell; need to keep the rating structure simple for customers to understand.",
-          "Also, given the riskiness with any new product with no locally relevant experience, WTH will be reluctant to offer certain features and hence premium rating factors \u2014 for example, higher replacement ratio or 'own occupation' disability definition.",
-          "In both countries, regulations may limit the rating factors that can be applied \u2014 for example, no gender discrimination; no discrimination due to place of residence of the policyholder within the country."
+          "'A' is more matured/developed and so will have adequate data/experience for segmented pricing – therefore, will tend to have higher number of rating factors than B.",
+          "Typical rating factors for IP include: Age; Gender; Occupation; Location; Income level; Type of disability definition; Length of deferred period; Level of replacement ratio.",
+          "Given 'B' is new to IP the following will likely inhibit segmented pricing: Data limitations – availability and quality; Need to keep the rating structure simple to make it easier for distribution to sell; Need to keep the rating structure simple for to make it easier for customers to understand.",
+          "Also, given the riskiness with any new product with no locally relevant experience, WTH will be reluctant to offer certain features and hence premium rating factors – for example, higher replacement ratio / 'own occupation' disability definition.",
+          "In both countries, regulations may limit the rating factors that can be applied – for example, no gender discrimination; no discrimination due to place of residence of the policyholder within the country."
         ]
       },
       "themes": [
@@ -283,15 +312,21 @@
     },
     "Q2vi": {
       "marks": 5,
-      "scenario": "Same as Q2(i). WTH has decided to launch the IP product in Country B with a reviewable premium structure \u2014 specifically, premiums guaranteed for the first 5 years and reviewable thereafter.",
-      "question": "Suggest reasons why WTH has decided on a reviewable premium rate structure with a 5-year initial guarantee for the Country B product.",
+      "scenario": "WTH decided to enter Country B with reviewable premium rates product sold only via its website. The premium rates are guaranteed for the first 5 years and reviewable yearly thereafter.",
+      "question": "Discuss the possible reasons behind WTH's decision. [5]",
       "sections": {
         "Reasons for reviewable rates with 5-year guarantee": [
-          "Market research has shown there is a viable market opportunity. Higher internet adaptability for buying health insurance online and so website distribution. Decided to target younger lives and so internet distribution \u2014 due to lower risk and more incentive to return to work.",
+          "Market research shown that there is viable market opportunity.",
+          "Higher internet adaptability for buying health insurance online and so website distribution.",
+          "Decided to target younger lives and so internet distribution – due to lower risk and like more incentive to return to work.",
           "Other types of distribution not making economic sense due to higher costs and lack of available qualified resources.",
-          "Onerous capital requirements for full guarantees and so reviewable rates are preferred. Lack of relevant data makes a reviewable proposition a less risky way to start. Market is used to reviewable health insurance and so the approach is aligned.",
-          "Research/survey has shown some initial period of guarantee is important to gain traction for the product. The '5-years' initial guarantee period allows enough data to be gathered before the premium review.",
-          "Regulations require at least 5-years guarantee. The initial guarantee likely encourages good early-duration persistency when asset share is negative."
+          "Onerous capital requirements for guarantees and so reviewable rates.",
+          "Lack of relevant data makes reviewable proposition is less risky way to start.",
+          "Market is used to reviewable health insurance and so the approach is aligned.",
+          "Research/survey shown some initial period of guarantee is important to gain traction for the product.",
+          "'5-years' initial guarantee period allows enough data to be gathered before premium review.",
+          "Regulations require at least 5-years guarantee.",
+          "The initial guarantee likely encourages good early duration persistency when asset share is negative."
         ]
       },
       "themes": [
@@ -305,25 +340,31 @@
     },
     "Q2vii": {
       "marks": 10,
-      "scenario": "Same as Q2(vi). WTH has been writing the IP product in Country B for 5 years and is now carrying out its first premium review.",
-      "question": "Describe the premium review process WTH should follow.",
+      "scenario": "Same as Q2(vi).",
+      "question": "Describe how the premium rates review process will work. [10]",
       "sections": {
         "Experience investigation": [
           "Morbidity experience data should be collected since the last pricing or premium review date, whichever is the latest.",
-          "Incidence rates and termination rates will be looked at for each homogeneous group split by: age; gender; occupation (if known); location/area of residence; income level; duration from entry; underwriting method; income replacement ratio; type of disability definition; length of waiting period.",
-          "Mortality experience is also an important component of the investigation. Analysis of type of claim (accident or sickness), and ideally subdivided into causes \u2014 type of accident/sickness that led to disability.",
-          "Exposure calculation \u2014 important to ensure that only lives insured in the investigation period under consideration are included. Equally important to ensure that claims are grouped so that the exposure and claims correspond. Adjustments to 'exposed to risk' will need to be made for withdrawals (lapse/free-look cancellation), on a life-by-life basis using the date of entry and/or exit.",
-          "A vs E \u2014 the insurer needs to monitor the actual claims experience against the expected level, by issue year (to reflect underwriting implications) and by calendar year (to reflect the general claims environment).",
-          "Expense analysis \u2014 monitor actual expenses incurred against expected level, split by initial, renewal and claims expenses, allowing for inflation since the last analysis and excluding any one-off expenses.",
-          "Lapse investigation \u2014 actual to expected lapses, by duration given the long-term nature of the product. Investment income \u2014 actual to expected (though with regular premiums, the significance of investment income is likely to be low)."
+          "Incidence rates & termination rates will be looked at for each homogeneous group and split into: age; gender; occupation (if known); location/area of residence; income level; duration from entry; underwriting method; Income replacement ratio; Type of disability definition; Length of waiting period.",
+          "Mortality experience is also an important component of the investigation.",
+          "Analysis type of claim (accident or sickness) and ideally subdivided into causes – type of accident/sickness that led to disability.",
+          "Exposure calculation – important to ensure that only lives insured in the investigation period under consideration are included in the figures; equally important to ensure that claims are grouped so that the exposure and claims correspond.",
+          "Adjustments to 'exposed to risk' will need to be made for withdrawals (lapse/freelook cancellation). The adjustments should be made on a life-by-life basis using the date of entry and/or exit from the investigation.",
+          "A vs E – the insurer needs to monitor the actual claims experience against the expected level, by issue year (to reflect underwriting implications) & by calendar year (to reflect to general claim environment).",
+          "Expense analysis – needs to monitor the actual expenses incurred against the expected level: Split by initial, renewal and claims expenses; Allowing for inflation since the last analysis; Excluding any one-off expenses.",
+          "Lapse investigation – actual to expected lapses, by duration given the long-term nature of the product.",
+          "Investment income – actual to expected; with regular premium, the significance of investment income is likely to be low."
         ],
         "Assumption revision and profit testing": [
-          "The best estimate assumptions will need to be revised based on the results of the experience investigations, allowing for sufficiency and credibility of own data, and making appropriate allowance for expectations of future trends in incidence and termination rates.",
-          "The risk discount rate will be based on the insurer's required profit margin at the original pricing date, but the risk-free rate should be consistent with current economic conditions. Investment return will need to be consistent with the risk discount rate and expense inflation.",
-          "For each policy/model point, cashflows will be projected forward from the premium review date to the end of the policy term. The net projected cashflows will then be discounted at the risk discount rate. The profitability criterion based on the latest assumptions should be compared with that used in the last review.",
-          "This will allow WTH to decide if the rates should be adjusted to maintain the level of profitability of the policies concerned when they were priced. Consider if there is scope to reduce rates based on the outcome of the analysis if excess profits are expected.",
-          "Consider how the results of any review are communicated to policyholders. Ensure the policyholders are given sufficient time to make decisions about whether to continue with cover, particularly when rates are increased.",
-          "Weight the risk of selective withdrawal and potential impact on volume to cover overheads if rates are increased. Consider impact of any changes that could be made to the underwriting/claims/other processes before deciding on the rate increase \u2014 rate increase is the last resort if nothing else can be tweaked to improve the experience."
+          "The best estimate assumptions will need to be revised based on the results of the experience investigations mentioned above, allowing for sufficiency and credibility of own data; make appropriate allowance for expectations of future trends in incidence & termination rates.",
+          "The risk discount rate will be based on the insurer's required profit margin at the original pricing date, but the risk-free rate should be consistent with current economic conditions and other financial assumptions.",
+          "Investment return will need be consistent with risk discount rate and expense inflation.",
+          "For each policy/model point, cashflows will be projected forward from the premium review date to the end of the policy term. The net projected cashflows will then be discounted at a rate of interest, the risk discount rate.",
+          "The profitability criterion based on the latest assumptions should be compared with that used in the last review. This will allow WTH to decide if the rates should be adjusted to maintain the level of profitability of the policies concerned when they were priced.",
+          "Consider if there is scope to reduce rates based on the outcome of the analysis if excess profits are expected.",
+          "Consider how the results of any review are communicated to policyholders. Ensure the policyholders are given sufficient time to make any decisions about whether to continue with cover particularly when rates are increased.",
+          "Weight the risk of selective withdrawal, potential impact volume to cover overheads etc. if rates are increased.",
+          "Consider impact of any changes that could be made to the underwriting/claims/other processes before deciding on the rate increase – so, rate increase is the last resort if nothing else can be tweaked to improve the experience."
         ]
       },
       "themes": [
