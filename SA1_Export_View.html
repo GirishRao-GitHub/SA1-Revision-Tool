@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>SA1 Export View</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0d0f14;
+  --surface: #151923;
+  --surface2: #1c2230;
+  --surface3: #242b3d;
+  --border: #2a324b;
+  --border2: #363f5f;
+  --text: #e2e4ed;
+  --text2: #949ebf;
+  --text3: #565f80;
+  --accent: #8b5cf6;
+  --accent2: #7c3aed;
+  --green: #2ecc71;
+  --greenbg: #0d2a1a;
+  --amber: #f1c40f;
+  --amberbg: #2a240a;
+  --blue: #60a5fa;
+  --bluebg: #0a1628;
+  --purple: #a78bfa;
+  --red: #e74c3c;
+  --redbg: #2a0f0f;
+  --radius: 6px;
+  --mono: 'IBM Plex Mono', monospace;
+  --sans: 'IBM Plex Sans', sans-serif;
+}
+
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh;display:flex;flex-direction:column;}
+
+/* ── TOP BAR ── */
+.topbar{background:var(--surface);border-bottom:1px solid var(--border);padding:10px 20px;display:flex;align-items:center;gap:12px;flex-wrap:wrap;}
+.logo{font-family:var(--mono);font-weight:600;font-size:15px;color:var(--accent);letter-spacing:.05em;white-space:nowrap;}
+.logo .dim{color:var(--text3);}
+.logo .sub{color:var(--text2);font-weight:400;}
+.topbar-actions{margin-left:auto;display:flex;align-items:center;gap:6px;}
+.top-btn{font-family:var(--mono);font-size:11px;font-weight:600;padding:4px 12px;border-radius:4px;cursor:pointer;background:var(--surface2);border:1px solid var(--border2);color:var(--text2);transition:all .2s;}
+.top-btn:hover{background:var(--surface3);color:var(--text);}
+.top-btn.print-btn{background:var(--greenbg);border-color:var(--green);color:var(--green);}
+.top-btn.print-btn:hover{background:var(--green);color:#000;}
+.top-btn.close-btn{border-color:var(--red);color:var(--red);}
+.top-btn.close-btn:hover{background:var(--red);color:#fff;}
+
+/* ── SOURCE NAV ── */
+.source-nav{display:flex;align-items:center;padding:6px 12px;background:var(--surface);border-bottom:1px solid var(--border);gap:4px;overflow-x:auto;}
+.src-btn{padding:3px 12px;font-size:11px;font-weight:700;font-family:var(--sans);border-radius:4px;border:1px solid var(--border2);background:var(--surface2);color:var(--text2);cursor:pointer;transition:all .2s;text-transform:uppercase;letter-spacing:.03em;white-space:nowrap;}
+.src-btn:hover{background:var(--surface3);color:var(--text);}
+.src-btn.active{background:var(--accent);color:#fff;border-color:var(--accent);}
+
+/* ── CONTROLS BAR ── */
+.controls{display:flex;align-items:center;gap:8px;padding:7px 14px;background:var(--surface2);border-bottom:1px solid var(--border);flex-wrap:wrap;}
+.ctrl-label{font-size:10px;color:var(--text3);font-family:var(--mono);text-transform:uppercase;letter-spacing:.06em;}
+.ctrl-select{font-family:var(--mono);font-size:12px;padding:4px 8px;background:var(--surface);border:1px solid var(--border2);color:var(--text);border-radius:4px;cursor:pointer;min-width:180px;}
+.ctrl-select:disabled{opacity:.5;cursor:default;}
+.ctrl-btn{font-family:var(--mono);font-size:11px;font-weight:600;padding:4px 12px;border-radius:4px;cursor:pointer;border:1px solid var(--border2);background:var(--surface);color:var(--text2);transition:all .2s;}
+.ctrl-btn:hover{background:var(--surface3);color:var(--text);}
+.ctrl-btn.primary{background:var(--accent);color:#fff;border-color:var(--accent);}
+.ctrl-btn.all-btn{background:var(--amberbg);border-color:var(--amber);color:var(--amber);}
+.ctrl-btn.all-btn:hover{background:var(--amber);color:#000;}
+
+/* ── STATUS BAR ── */
+#status-bar{padding:5px 16px;font-size:11px;color:var(--text3);font-family:var(--mono);border-bottom:1px solid var(--border);background:var(--bg);min-height:26px;letter-spacing:.02em;}
+
+/* ── RENDER AREA ── */
+#render-area{padding:28px 24px;max-width:980px;margin:0 auto;flex:1;}
+
+/* ── EMPTY STATE ── */
+.empty-state{text-align:center;padding:80px 20px;color:var(--text3);font-family:var(--mono);font-size:13px;line-height:2;}
+.empty-state .big{font-size:32px;display:block;margin-bottom:12px;opacity:.3;}
+
+/* ── SITTING BLOCK ── */
+.sitting-block{margin-bottom:56px;}
+.sitting-header{font-family:var(--mono);font-size:13px;font-weight:600;color:var(--accent);border-bottom:2px solid var(--accent);padding-bottom:8px;margin-bottom:24px;letter-spacing:.06em;text-transform:uppercase;display:flex;align-items:center;gap:10px;}
+.sitting-header .sitting-stats{font-size:10px;color:var(--text3);font-weight:400;margin-left:auto;letter-spacing:.03em;}
+
+/* ── QUESTION BLOCK ── */
+.q-block{margin-bottom:28px;border:1px solid var(--border);border-radius:8px;overflow:hidden;background:var(--surface);}
+.q-header{background:var(--surface2);padding:9px 16px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);}
+.q-label{font-family:var(--mono);font-weight:600;font-size:13px;color:var(--text);}
+.q-marks{font-family:var(--mono);font-size:10px;color:var(--text3);background:var(--surface3);padding:2px 8px;border-radius:4px;border:1px solid var(--border2);}
+
+/* ── SCENARIO ── */
+.scenario-block{padding:12px 16px;background:#11151e;border-bottom:1px solid var(--border);font-size:12.5px;color:var(--text2);line-height:1.65;white-space:pre-wrap;}
+.scenario-label{font-size:9px;font-family:var(--mono);text-transform:uppercase;color:var(--text3);letter-spacing:.08em;margin-bottom:6px;}
+
+/* ── PART BLOCK ── */
+.part-block{padding:16px 18px;border-bottom:1px solid var(--border);}
+.part-block:last-child{border-bottom:none;}
+.part-header{display:flex;align-items:center;gap:8px;margin-bottom:12px;}
+.part-label{font-family:var(--mono);font-size:11px;font-weight:600;color:var(--amber);text-transform:uppercase;letter-spacing:.06em;padding:2px 8px;background:var(--amberbg);border:1px solid var(--amber)44;border-radius:4px;}
+.part-marks{font-family:var(--mono);font-size:10px;color:var(--text3);}
+
+/* ── QUESTION TEXT ── */
+.q-text{font-size:13px;color:var(--text);line-height:1.7;margin-bottom:14px;white-space:pre-wrap;}
+
+/* ── FIELD LABELS ── */
+.field-label{font-size:9.5px;font-family:var(--mono);text-transform:uppercase;letter-spacing:.07em;margin-bottom:5px;display:flex;align-items:center;gap:5px;}
+.field-label.ans-lbl{color:var(--blue);}
+.field-label.notes-lbl{color:var(--purple);}
+.field-label.sol-lbl{color:var(--green);}
+.field-label.time-lbl{color:var(--text3);margin-bottom:10px;}
+
+/* ── ANSWER BOX ── */
+.ans-box{background:var(--bluebg);border:1px solid #60a5fa33;border-left:3px solid var(--blue);border-radius:4px;padding:10px 13px;font-size:13px;color:var(--text);line-height:1.7;white-space:pre-wrap;margin-bottom:12px;font-family:var(--sans);}
+.ans-box.empty{color:var(--text3);font-style:italic;font-size:12px;}
+
+/* ── NOTES BOX ── */
+.notes-box{background:#16122a;border:1px solid #a78bfa33;border-left:3px solid var(--purple);border-radius:4px;padding:10px 13px;font-size:12px;color:var(--text2);line-height:1.65;white-space:pre-wrap;margin-bottom:12px;}
+
+/* ── DIVIDER ── */
+.field-divider{height:1px;background:var(--border);margin:14px 0;}
+
+/* ── MODEL SOLUTION ── */
+.sol-box{background:#0b1a12;border:1px solid #2ecc7122;border-left:3px solid var(--green);border-radius:4px;padding:10px 13px;}
+.sol-head{font-family:var(--mono);font-size:10px;font-weight:600;color:var(--green);margin-top:10px;margin-bottom:5px;letter-spacing:.04em;text-transform:uppercase;}
+.sol-head:first-child{margin-top:0;}
+.sol-ul{list-style:none;padding-left:0;}
+.sol-ul li{font-size:12.5px;color:var(--text2);line-height:1.65;margin-bottom:3px;padding-left:14px;position:relative;}
+.sol-ul li::before{content:'·';position:absolute;left:3px;color:var(--green);font-size:16px;line-height:1.2;}
+
+/* ═══════════════════════════════════════════
+   PRINT STYLES
+   ═══════════════════════════════════════════ */
+@media print {
+  body{background:#fff;color:#000;}
+  .topbar,.source-nav,.controls,#status-bar{display:none!important;}
+  #render-area{max-width:100%;padding:0;}
+  .sitting-block{page-break-after:always;}
+  .sitting-block:last-child{page-break-after:auto;}
+  .sitting-header{color:#1e1b4b;border-color:#1e1b4b;font-size:14px;}
+  .sitting-stats{display:none;}
+  .q-block{border:1px solid #ccc;border-radius:4px;margin-bottom:20px;page-break-inside:avoid;background:#fff;}
+  .q-header{background:#f4f4f7;border-color:#ccc;}
+  .q-label{color:#000;}
+  .q-marks{background:#e8e8f0;color:#444;border-color:#ccc;}
+  .scenario-block{background:#fafaf7;color:#333;border-color:#ccc;}
+  .scenario-label{color:#666;}
+  .part-label{color:#92400e;background:#fffbeb;border-color:#fbbf24;}
+  .part-marks{color:#666;}
+  .q-text{color:#111;}
+  .field-label.ans-lbl{color:#1d4ed8;}
+  .field-label.notes-lbl{color:#6d28d9;}
+  .field-label.sol-lbl{color:#15803d;}
+  .field-label.time-lbl{color:#666;}
+  .ans-box{background:#eff6ff;border-color:#bfdbfe;border-left-color:#2563eb;color:#1e293b;}
+  .ans-box.empty{color:#94a3b8;}
+  .notes-box{background:#f5f3ff;border-color:#ddd6fe;border-left-color:#7c3aed;color:#374151;}
+  .field-divider{background:#ddd;}
+  .sol-box{background:#f0fdf4;border-color:#bbf7d0;border-left-color:#16a34a;}
+  .sol-head{color:#15803d;}
+  .sol-ul li{color:#374151;}
+  .sol-ul li::before{color:#16a34a;}
+}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="logo">SA1<span class="dim">ity</span> <span class="dim">·</span> <span class="sub">Export View</span></div>
+  <div class="topbar-actions">
+    <button class="top-btn print-btn" onclick="window.print()">&#128438; Print / Save PDF</button>
+    <button class="top-btn close-btn" onclick="window.close()">&#10005; Close</button>
+  </div>
+</div>
+
+<!-- SOURCE NAV -->
+<div class="source-nav">
+  <button class="src-btn" data-src="ifoa"       onclick="selectSource('ifoa')">IFoA SA1</button>
+  <button class="src-btn" data-src="iai"         onclick="selectSource('iai')">IAI SA1</button>
+  <button class="src-btn" data-src="sp1"         onclick="selectSource('sp1')">SP1 Chapters</button>
+  <button class="src-btn" data-src="sp1ifoa"     onclick="selectSource('sp1ifoa')">SP1 IFoA</button>
+  <button class="src-btn" data-src="sp1iai"      onclick="selectSource('sp1iai')">SP1 IAI</button>
+  <button class="src-btn" data-src="sa1pq"       onclick="selectSource('sa1pq')">SA1 PQ</button>
+  <button class="src-btn" data-src="assignment"  onclick="selectSource('assignment')">Assignments</button>
+</div>
+
+<!-- CONTROLS -->
+<div class="controls">
+  <span class="ctrl-label">Sitting</span>
+  <select id="sitting-select" class="ctrl-select" onchange="onSittingChange()" disabled>
+    <option value="">— select a source first —</option>
+  </select>
+  <button class="ctrl-btn primary" onclick="renderSelected()">&#9654; View Selected</button>
+  <button class="ctrl-btn all-btn" onclick="renderAll()">&#128196; All Sittings</button>
+</div>
+
+<!-- STATUS -->
+<div id="status-bar">Loading attempts data&hellip;</div>
+
+<!-- RENDER AREA -->
+<div id="render-area">
+  <div class="empty-state">
+    <span class="big">&#128196;</span>
+    Select a source tab, then choose a sitting.<br>
+    Use <strong>All Sittings</strong> to render the full source at once.
+  </div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════════
+// SOURCE FILE MAP  (mirrors SA1ity_Check.html SOURCE_FILES)
+// ═══════════════════════════════════════════════════════════
+const SOURCE_FILES = {
+  ifoa: [
+    '201709','201804','201809','201904','201909',
+    '202004','202009','202104','202109','202204',
+    '202209','202304','202309','202404','202409','202504','202509'
+  ],
+  iai: [
+    'iai_1106','iai_1107','iai_0509','iai_1109','iai_0510','iai_1110',
+    'iai_0511','iai_1111','iai_0512','iai_1112','iai_0513','iai_1113',
+    'iai_0514','iai_1114','iai_0515','iai_1115','iai_0416','iai_0916',
+    'iai_0317','iai_0917','iai_0318','iai_0918','iai_0619','iai_1119',
+    'iai_1120','iai_0321','iai_0921','iai_0322','iai_0722','iai_1222',
+    'iai_0523','iai_1123','iai_0524','iai_1124','iai_0525','iai_1125'
+  ],
+  sp1: [
+    'Ch00','Ch01','Ch02','Ch03','Ch04','Ch05','Ch06','Ch07','Ch08','Ch09',
+    'Ch10','Ch11','Ch12','Ch13','Ch14','Ch15','Ch16','Ch17','Ch18','Ch19',
+    'Ch20','Ch21','Ch22','Ch23','Ch24','Ch25','Ch26','Ch27','Ch28','Ch29','Ch30'
+  ],
+  sp1ifoa: [
+    'SP1IFoA201904','SP1IFoA201909','SP1IFoA202004','SP1IFoA202009',
+    'SP1IFoA202104','SP1IFoA202109','SP1IFoA202204','SP1IFoA202209',
+    'SP1IFoA202304','SP1IFoA202309','SP1IFoA202404','SP1IFoA202409',
+    'SP1IFoA202504','SP1IFoA202509'
+  ],
+  sp1iai: [
+    'SP1IAI201906','SP1IAI201911','SP1IAI202011','SP1IAI202103',
+    'SP1IAI202109','SP1IAI202203','SP1IAI202207','SP1IAI202212',
+    'SP1IAI202305','SP1IAI202311','SP1IAI202405','SP1IAI202411','SP1IAI202505'
+  ],
+  sa1pq: [
+    'SA1PQ02','SA1PQ03','SA1PQ04','SA1PQ05','SA1PQ06','SA1PQ07',
+    'SA1PQ08','SA1PQ09','SA1PQ10','SA1PQ11','SA1PQ12','SA1PQ13',
+    'SA1PQ14','SA1PQ15','SA1PQ16','SA1PQ17','SA1PQ18','SA1PQ19',
+    'SA1PQ20','SA1PQ21','SA1PQ22','SA1PQ23','SA1PQ24','SA1PQ25','SA1PQ26'
+  ],
+  assignment: ['X1','X2','X3','X4','X5','X6']
+};
+
+const SOURCE_LABELS = {
+  ifoa:'IFoA SA1', iai:'IAI SA1', sp1:'SP1 Chapters',
+  sp1ifoa:'SP1 IFoA', sp1iai:'SP1 IAI', sa1pq:'SA1 PQ', assignment:'Assignments'
+};
+
+// ═══════════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════════
+let ATTEMPTS = {};       // flat key→value from sa1_attempts.json
+let SITTINGS = {};       // ak → sitting JSON
+let LOADED   = new Set();
+let currentSrc = null;
+
+// ═══════════════════════════════════════════════════════════
+// KEY HELPERS  (identical construction to SA1ity_Check.html)
+// ═══════════════════════════════════════════════════════════
+const ansKey     = (ak, qk, sk) => `sa1_e_ans_${ak}_${qk}_${sk}`;
+const notesKey   = (ak, qk, sk) => `sa1_e_notes_${ak}_${qk}_${sk}`;
+const elapsedKey = (ak, qk, sk) => `sa1_e_elapsed_${ak}_${qk}_${sk}`;
+
+function getAns(ak, qk, sk)     { return ATTEMPTS[ansKey(ak, qk, sk)]     || ''; }
+function getNotes(ak, qk, sk)   { return ATTEMPTS[notesKey(ak, qk, sk)]   || ''; }
+function getElapsed(ak, qk, sk) { return parseInt(ATTEMPTS[elapsedKey(ak, qk, sk)] || '0', 10); }
+
+function fmtTime(secs) {
+  if (!secs) return '';
+  const m = Math.floor(secs / 60), s = secs % 60;
+  return `${m}m ${String(s).padStart(2,'0')}s`;
+}
+
+// ═══════════════════════════════════════════════════════════
+// INIT — load attempts from repo file
+// ═══════════════════════════════════════════════════════════
+window.onload = async function() {
+  setStatus('Loading sa1_attempts.json…');
+  try {
+    const res = await fetch('data/sa1_attempts.json');
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    ATTEMPTS = await res.json();
+    const count = Object.keys(ATTEMPTS).filter(k => k.startsWith('sa1_e_ans_') && ATTEMPTS[k]).length;
+    setStatus(`Ready — ${count} recorded answers found. Select a source to begin.`);
+  } catch(e) {
+    setStatus(`⚠  Could not load data/sa1_attempts.json — ${e.message}`);
+  }
+};
+
+// ═══════════════════════════════════════════════════════════
+// SOURCE SELECTION — lazy fetch sitting files
+// ═══════════════════════════════════════════════════════════
+async function selectSource(src) {
+  currentSrc = src;
+  document.querySelectorAll('.src-btn').forEach(b => b.classList.toggle('active', b.dataset.src === src));
+
+  const sel = document.getElementById('sitting-select');
+  sel.innerHTML = '<option value="">Loading…</option>';
+  sel.disabled = true;
+  setStatus(`Loading ${SOURCE_LABELS[src]}…`);
+
+  if (!LOADED.has(src)) {
+    const files = SOURCE_FILES[src] || [];
+    await Promise.all(files.map(ak =>
+      fetch(`data/${ak}.json`)
+        .then(r => r.ok ? r.json().then(d => { SITTINGS[ak] = d; }) : null)
+        .catch(() => null)
+    ));
+    LOADED.add(src);
+  }
+
+  const available = (SOURCE_FILES[src] || []).filter(ak => SITTINGS[ak]);
+  sel.innerHTML = '<option value="">— choose a sitting —</option>';
+  available.forEach(ak => {
+    const opt = document.createElement('option');
+    opt.value = ak;
+    opt.textContent = SITTINGS[ak].label || ak;
+    sel.appendChild(opt);
+  });
+  sel.disabled = false;
+
+  // Count attempted across this source
+  let att = 0, total = 0;
+  available.forEach(ak => countAttempts(ak, d => { att += d.attempted; total += d.total; }));
+  setStatus(`${SOURCE_LABELS[src]} — ${available.length} sittings | ${att}/${total} parts attempted. Select a sitting or click All.`);
+  document.getElementById('render-area').innerHTML =
+    '<div class="empty-state"><span class="big">&#128196;</span>Choose a sitting above, or click <strong>All Sittings</strong>.</div>';
+}
+
+function onSittingChange() {
+  const ak = document.getElementById('sitting-select').value;
+  if (ak) renderSelected();
+}
+
+// ═══════════════════════════════════════════════════════════
+// COUNT HELPERS
+// ═══════════════════════════════════════════════════════════
+function countAttempts(ak, cb) {
+  const sit = SITTINGS[ak];
+  if (!sit || !sit.questions) return cb({ attempted: 0, total: 0 });
+  let total = 0, attempted = 0;
+  Object.entries(sit.questions).forEach(([qk, q]) => {
+    if (q.parts && Object.keys(q.parts).length) {
+      Object.keys(q.parts).forEach(pk => {
+        total++;
+        if (getAns(ak, qk, pk)) attempted++;
+      });
+    } else {
+      total++;
+      if (getAns(ak, qk, null)) attempted++;
+    }
+  });
+  cb({ attempted, total });
+}
+
+// ═══════════════════════════════════════════════════════════
+// RENDER CONTROLS
+// ═══════════════════════════════════════════════════════════
+function renderSelected() {
+  const ak = document.getElementById('sitting-select').value;
+  if (!ak || !SITTINGS[ak]) { setStatus('Please select a sitting first.'); return; }
+  doRender([ak]);
+}
+
+function renderAll() {
+  if (!currentSrc) { setStatus('Please select a source first.'); return; }
+  const aks = (SOURCE_FILES[currentSrc] || []).filter(ak => SITTINGS[ak]);
+  if (!aks.length) { setStatus('No sittings loaded for this source.'); return; }
+  doRender(aks);
+}
+
+// ═══════════════════════════════════════════════════════════
+// MAIN RENDER
+// ═══════════════════════════════════════════════════════════
+function doRender(aks) {
+  let html = '';
+  let totalAtt = 0, totalParts = 0;
+
+  for (const ak of aks) {
+    const sit = SITTINGS[ak];
+    if (!sit || !sit.questions) continue;
+
+    let sittingAtt = 0, sittingTotal = 0;
+    // pre-count for header badge
+    Object.entries(sit.questions).forEach(([qk, q]) => {
+      if (q.parts && Object.keys(q.parts).length) {
+        Object.keys(q.parts).forEach(pk => {
+          sittingTotal++;
+          if (getAns(ak, qk, pk)) sittingAtt++;
+        });
+      } else {
+        sittingTotal++;
+        if (getAns(ak, qk, null)) sittingAtt++;
+      }
+    });
+    totalAtt   += sittingAtt;
+    totalParts += sittingTotal;
+
+    html += `<div class="sitting-block">`;
+    html += `<div class="sitting-header">${esc(sit.label || ak)}
+               <span class="sitting-stats">${sittingAtt} / ${sittingTotal} attempted</span>
+             </div>`;
+
+    Object.entries(sit.questions).forEach(([qk, q]) => {
+      html += renderQuestion(ak, qk, q);
+    });
+
+    html += `</div>`;
+  }
+
+  document.getElementById('render-area').innerHTML =
+    html || '<div class="empty-state"><span class="big">&#128196;</span>Nothing to render.</div>';
+
+  setStatus(`Rendered ${aks.length} sitting(s) — ${totalAtt} / ${totalParts} parts attempted.`);
+}
+
+// ═══════════════════════════════════════════════════════════
+// QUESTION RENDERER
+// ═══════════════════════════════════════════════════════════
+function renderQuestion(ak, qk, q) {
+  const marksTag = q.marks ? `<span class="q-marks">${q.marks} marks</span>` : '';
+  let html = `<div class="q-block">`;
+  html += `<div class="q-header"><span class="q-label">${esc(q.label || qk)}</span>${marksTag}</div>`;
+
+  if (q.scenario) {
+    html += `<div class="scenario-block"><div class="scenario-label">Scenario</div>${esc(q.scenario)}</div>`;
+  }
+  if (q.scenario_image) {
+    html += `<div style="padding:8px 16px;background:#11151e;border-bottom:1px solid var(--border);">
+               <img src="${q.scenario_image}" style="max-width:100%;border-radius:4px;" alt="Scenario">
+             </div>`;
+  }
+
+  const hasParts = q.parts && Object.keys(q.parts).length > 0;
+  if (hasParts) {
+    Object.entries(q.parts).forEach(([pk, part]) => {
+      html += renderPart(ak, qk, pk, part);
+    });
+  } else {
+    html += renderPart(ak, qk, null, q);
+  }
+
+  html += `</div>`;
+  return html;
+}
+
+// ═══════════════════════════════════════════════════════════
+// PART / SECTION RENDERER
+// ═══════════════════════════════════════════════════════════
+function renderPart(ak, qk, sk, item) {
+  const ans     = getAns(ak, qk, sk);
+  const notes   = getNotes(ak, qk, sk);
+  const elapsed = getElapsed(ak, qk, sk);
+  const timeStr = fmtTime(elapsed);
+  const isParted = sk !== null;
+
+  let html = `<div class="part-block">`;
+
+  // Part header (only when question has parts)
+  if (isParted) {
+    const mTag = item.marks ? `<span class="part-marks">${item.marks} marks</span>` : '';
+    html += `<div class="part-header">
+               <span class="part-label">Part ${esc(sk)}</span>${mTag}
+             </div>`;
+  }
+
+  // Question text
+  const qText = item.question || (!isParted ? '' : item.label) || '';
+  if (qText) html += `<div class="q-text">${esc(qText)}</div>`;
+
+  // Time spent
+  if (timeStr) {
+    html += `<div class="field-label time-lbl">&#9200; ${timeStr}</div>`;
+  }
+
+  // ── YOUR ANSWER ──
+  html += `<div class="field-label ans-lbl">&#9654; Your Answer</div>`;
+  if (ans) {
+    html += `<div class="ans-box">${esc(ans)}</div>`;
+  } else {
+    html += `<div class="ans-box empty">&#8212; not attempted &#8212;</div>`;
+  }
+
+  // ── NOTES ──
+  if (notes) {
+    html += `<div class="field-label notes-lbl">&#9654; Notes</div>`;
+    html += `<div class="notes-box">${esc(notes)}</div>`;
+  }
+
+  // ── MODEL SOLUTION ──
+  if (item.sections && Object.keys(item.sections).length > 0) {
+    html += `<div class="field-divider"></div>`;
+    html += `<div class="field-label sol-lbl">&#9654; Model Solution</div>`;
+    html += `<div class="sol-box">`;
+    Object.entries(item.sections).forEach(([head, bullets]) => {
+      html += `<div class="sol-head">${esc(head)}</div>`;
+      html += `<ul class="sol-ul">`;
+      (bullets || []).forEach(b => { html += `<li>${esc(b)}</li>`; });
+      html += `</ul>`;
+    });
+    html += `</div>`;
+  }
+
+  html += `</div>`;
+  return html;
+}
+
+// ═══════════════════════════════════════════════════════════
+// UTILITIES
+// ═══════════════════════════════════════════════════════════
+function esc(str) {
+  return String(str || '')
+    .replace(/&/g,  '&amp;')
+    .replace(/</g,  '&lt;')
+    .replace(/>/g,  '&gt;')
+    .replace(/\n/g, '<br>');
+}
+
+function setStatus(msg) {
+  document.getElementById('status-bar').textContent = msg;
+}
+</script>
+</body>
+</html>
