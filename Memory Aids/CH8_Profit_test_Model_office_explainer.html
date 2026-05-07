@@ -1,0 +1,240 @@
+
+<style>
+  .step-dot { width:10px;height:10px;border-radius:50%;background:var(--color-border-secondary);display:inline-block;transition:background .3s; }
+  .step-dot.active { background:var(--color-text-primary); }
+  .card-box { background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.25rem; }
+  .section-pill { display:inline-block;font-size:12px;font-weight:500;padding:3px 10px;border-radius:20px;margin-bottom:8px; }
+  .pill-blue { background:var(--color-background-info);color:var(--color-text-info); }
+  .pill-teal { background:#E1F5EE;color:#0F6E56; }
+  @media (prefers-color-scheme: dark) { .pill-teal { background:#04342C;color:#5DCAA5; } }
+  .pill-amber { background:#FAEEDA;color:#854F0B; }
+  @media (prefers-color-scheme: dark) { .pill-amber { background:#412402;color:#FAC775; } }
+  .flow-row { display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin:8px 0; }
+  .flow-box { font-size:12px;padding:5px 10px;border-radius:6px;border:0.5px solid var(--color-border-secondary);background:var(--color-background-secondary);color:var(--color-text-primary);white-space:nowrap; }
+  .flow-arrow { font-size:14px;color:var(--color-text-tertiary); }
+  .highlight-box { border-left:3px solid;padding:8px 12px;border-radius:0 6px 6px 0;margin:8px 0;font-size:13px;line-height:1.6; }
+  .hl-blue { border-color:#378ADD;background:var(--color-background-info);color:var(--color-text-primary); }
+  .hl-teal { border-color:#1D9E75;background:#E1F5EE;color:var(--color-text-primary); }
+  @media (prefers-color-scheme: dark) { .hl-teal { background:#04342C; } }
+  .hl-amber { border-color:#BA7517;background:#FAEEDA;color:var(--color-text-primary); }
+  @media (prefers-color-scheme: dark) { .hl-amber { background:#412402; } }
+  .method-grid { display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:10px; }
+  .method-card { background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:8px;padding:10px;font-size:12px;line-height:1.5; }
+  .method-card strong { font-size:12px;font-weight:500;display:block;margin-bottom:4px; }
+  .nav-btn { font-size:13px;padding:6px 16px;cursor:pointer;border:0.5px solid var(--color-border-secondary);border-radius:6px;background:var(--color-background-secondary);color:var(--color-text-primary); }
+  .nav-btn:hover { background:var(--color-background-tertiary); }
+  .nav-btn:disabled { opacity:0.35;cursor:default; }
+  .big-label { font-size:22px;font-weight:500;margin:0 0 4px;color:var(--color-text-primary); }
+  .sub-label { font-size:14px;color:var(--color-text-secondary);margin:0 0 14px; }
+  .cf-row { display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:0.5px solid var(--color-border-tertiary);font-size:13px; }
+  .cf-row:last-child { border-bottom:none; }
+  .cf-neg { color:#A32D2D; }
+  .cf-pos { color:#0F6E56; }
+  .timeline { display:flex;gap:0;align-items:stretch;margin:10px 0; }
+  .yr-block { flex:1;text-align:center;font-size:11px;color:var(--color-text-secondary);border-right:0.5px solid var(--color-border-tertiary);padding:4px 2px; }
+  .yr-block:last-child { border-right:none; }
+  .yr-val { font-size:12px;font-weight:500;margin-top:2px; }
+</style>
+
+<div id="explainer" style="padding:4px 0 8px;">
+
+  <div id="step-0" class="step-panel">
+    <p class="big-label">Two lenses on the same question</p>
+    <p class="sub-label">How much margin do we need in the pricing basis?</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+      <div class="card-box" style="cursor:pointer;border:1.5px solid #378ADD;" onclick="goTo(1)">
+        <span class="section-pill pill-blue">Zoom: one policy</span>
+        <div style="font-size:15px;font-weight:500;margin:6px 0 4px;">Single policy profit test</div>
+        <div style="font-size:13px;color:var(--color-text-secondary);line-height:1.6;">Project cashflows for one representative policy. Test how sensitive profit is to bad experience. Set the Risk Discount Rate (RDR) margin accordingly.</div>
+        <div style="margin-top:10px;font-size:12px;color:var(--color-text-info);">Click to explore →</div>
+      </div>
+      <div class="card-box" style="cursor:pointer;border:1.5px solid #1D9E75;" onclick="goTo(4)">
+        <span class="section-pill pill-teal">Zoom: whole company</span>
+        <div style="font-size:15px;font-weight:500;margin:6px 0 4px;">Model office</div>
+        <div style="font-size:13px;color:var(--color-text-secondary);line-height:1.6;">Scale up to the full portfolio. Ask: does this product threaten the company's solvency or embedded value if experience turns bad?</div>
+        <div style="margin-top:10px;font-size:12px;color:#0F6E56;">Click to explore →</div>
+      </div>
+    </div>
+    <div style="margin-top:12px;" class="highlight-box hl-amber">
+      <strong style="font-size:12px;">The key link:</strong> The single policy test tells you the right margin per policy. The model office tells you whether that margin is sufficient to keep the whole company safe.
+    </div>
+  </div>
+
+  <div id="step-1" class="step-panel" style="display:none;">
+    <span class="section-pill pill-blue">Single policy profit test — step 1</span>
+    <p class="big-label">Start with one model policy</p>
+    <p class="sub-label">Pick a "representative" policyholder and project what happens over the policy's lifetime</p>
+    <div class="card-box">
+      <div style="font-size:13px;font-weight:500;margin-bottom:10px;color:var(--color-text-secondary);">Cashflows for a 10-year critical illness policy (illustrative)</div>
+      <div class="cf-row"><span>Year 1 premium income</span><span class="cf-pos">+£1,200</span></div>
+      <div class="cf-row"><span>Year 1 claims &amp; expenses</span><span class="cf-neg">−£980</span></div>
+      <div class="cf-row"><span>Year 1 net cashflow</span><span class="cf-pos">+£220</span></div>
+      <div style="height:1px;background:var(--color-border-secondary);margin:8px 0;"></div>
+      <div style="font-size:12px;color:var(--color-text-tertiary);margin-bottom:6px;">Project this year by year for the full policy term...</div>
+      <div class="timeline">
+        <div class="yr-block">Yr 1<div class="yr-val cf-pos">+£220</div></div>
+        <div class="yr-block">Yr 2<div class="yr-val cf-pos">+£190</div></div>
+        <div class="yr-block">Yr 3<div class="yr-val cf-neg">−£50</div></div>
+        <div class="yr-block">Yr 4<div class="yr-val cf-pos">+£170</div></div>
+        <div class="yr-block">Yr 5<div class="yr-val cf-pos">+£140</div></div>
+        <div class="yr-block">...</div>
+        <div class="yr-block">Yr 10<div class="yr-val cf-pos">+£80</div></div>
+      </div>
+    </div>
+    <div class="highlight-box hl-blue" style="margin-top:10px;">
+      These cashflows depend on assumptions: claim rates, lapses, inflation, investment return. The <strong>uncertainty in these assumptions</strong> is exactly what the margin is meant to cover.
+    </div>
+  </div>
+
+  <div id="step-2" class="step-panel" style="display:none;">
+    <span class="section-pill pill-blue">Single policy profit test — step 2</span>
+    <p class="big-label">Discount to a single NPV</p>
+    <p class="sub-label">Collapse the cashflow stream into one number using the Risk Discount Rate (RDR)</p>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+      <div class="card-box">
+        <div style="font-size:13px;font-weight:500;margin-bottom:8px;">No margin case</div>
+        <div style="font-size:12px;color:var(--color-text-secondary);margin-bottom:10px;">RDR = 8% (base required return, stripped of any safety margin)</div>
+        <div style="font-size:22px;font-weight:500;color:#0F6E56;">NPV = +£42</div>
+        <div style="font-size:12px;color:var(--color-text-secondary);margin-top:4px;">Just barely profitable</div>
+      </div>
+      <div class="card-box">
+        <div style="font-size:13px;font-weight:500;margin-bottom:8px;">With margin</div>
+        <div style="font-size:12px;color:var(--color-text-secondary);margin-bottom:10px;">RDR = 11% (base + 3% margin for risk)</div>
+        <div style="font-size:22px;font-weight:500;color:#A32D2D;">NPV = −£18</div>
+        <div style="font-size:12px;color:var(--color-text-secondary);margin-top:4px;">Requires higher premium to be viable</div>
+      </div>
+    </div>
+    <div class="highlight-box hl-blue" style="margin-top:10px;">
+      The margin in the RDR is the lever. A higher RDR means you need a higher premium to achieve a positive NPV — that extra premium is the buffer against bad experience.
+    </div>
+    <div style="margin-top:8px;font-size:13px;color:var(--color-text-secondary);">So the question becomes: <em>how big should that margin be?</em> That's what the sensitivity analysis answers.</div>
+  </div>
+
+  <div id="step-3" class="step-panel" style="display:none;">
+    <span class="section-pill pill-blue">Single policy profit test — step 3</span>
+    <p class="big-label">Test with adverse experience</p>
+    <p class="sub-label">Three ways to stress-test the assumptions and find the right margin</p>
+    <div class="method-grid">
+      <div class="method-card">
+        <strong>Deterministic sensitivity</strong>
+        Manually shift each assumption to its plausible worst case (e.g. claims 20% higher, lapses double). Re-run the NPV. See how much the RDR needs to rise to stay profitable.
+        <div style="margin-top:6px;color:var(--color-text-tertiary);">Simple, transparent, easy to explain to management.</div>
+      </div>
+      <div class="method-card">
+        <strong>Stochastic model</strong>
+        Assign probability distributions to each assumption. Run thousands of simulated futures. The spread of NPV outcomes directly tells you the variance — and hence the required margin.
+        <div style="margin-top:6px;color:var(--color-text-tertiary);">More rigorous, but distributions are hard to define for lapses/social trends.</div>
+      </div>
+      <div class="method-card">
+        <strong>Analytical methods</strong>
+        Use maths (e.g. variance formulas) to propagate uncertainty from assumptions through to NPV, without simulation. Limited to variables with tractable distributions.
+        <div style="margin-top:6px;color:var(--color-text-tertiary);">Efficient but only works for certain variable types.</div>
+      </div>
+    </div>
+    <div class="highlight-box hl-blue" style="margin-top:10px;">
+      <strong>Output of this step:</strong> A chosen RDR margin (e.g. +3%) that makes the product financially resilient to the range of plausible bad outcomes — for one policy.
+    </div>
+  </div>
+
+  <div id="step-4" class="step-panel" style="display:none;">
+    <span class="section-pill pill-teal">Model office — step 1</span>
+    <p class="big-label">Scale up to the whole company</p>
+    <p class="sub-label">The single policy test is about one policy. The model office asks: what happens to the whole firm?</p>
+    <div class="flow-row">
+      <div class="flow-box" style="background:var(--color-background-info);border-color:#378ADD;">1 model policy</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box">× projected new business volume</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box">New product portfolio</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box" style="background:#E1F5EE;border-color:#1D9E75;color:#085041;">+ existing book</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-box" style="background:#E1F5EE;border-color:#1D9E75;color:#085041;">Full company model</div>
+    </div>
+    <div style="margin-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+      <div class="card-box">
+        <div style="font-size:13px;font-weight:500;margin-bottom:6px;">Question 1: Future solvency</div>
+        <div style="font-size:13px;color:var(--color-text-secondary);line-height:1.6;">Does the new product cause the company's free assets to fall dangerously low if claims experience is bad? Could it trigger a regulatory solvency breach?</div>
+      </div>
+      <div class="card-box">
+        <div style="font-size:13px;font-weight:500;margin-bottom:6px;">Question 2: Embedded value</div>
+        <div style="font-size:13px;color:var(--color-text-secondary);line-height:1.6;">Does the product create or destroy shareholder value? A profitable single policy might still damage embedded value if it increases aggregate risk significantly.</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="step-5" class="step-panel" style="display:none;">
+    <span class="section-pill pill-teal">Model office — step 2</span>
+    <p class="big-label">Run further sensitivity tests</p>
+    <p class="sub-label">Same idea as single policy, but now seeing the whole-company impact</p>
+    <div class="card-box" style="margin-bottom:10px;">
+      <div style="font-size:13px;font-weight:500;margin-bottom:8px;">Example: What if claims are 15% higher than expected?</div>
+      <div class="cf-row"><span style="font-size:13px;">Impact on single policy NPV</span><span class="cf-neg">−£22</span></div>
+      <div class="cf-row"><span style="font-size:13px;">Impact on company free assets (projected)</span><span class="cf-neg">−£4.2m</span></div>
+      <div class="cf-row"><span style="font-size:13px;">Impact on embedded value</span><span class="cf-neg">−£11.8m</span></div>
+      <div class="cf-row"><span style="font-size:13px;">Solvency coverage ratio</span><span class="cf-neg">142% → 118%</span></div>
+    </div>
+    <div class="highlight-box hl-teal">
+      The model office might reveal that a particular assumption — say, <strong>lapse rates</strong> — matters far more to company-level solvency than the single policy test suggested. This can feed back and change the margins the actuary chooses.
+    </div>
+    <div style="margin-top:8px;font-size:13px;color:var(--color-text-secondary);">This is the feedback loop: model office insights → revised view of financial significance → revised margins.</div>
+  </div>
+
+  <div id="step-6" class="step-panel" style="display:none;">
+    <span class="section-pill pill-amber">Putting it together</span>
+    <p class="big-label">How the two tools interact</p>
+    <p class="sub-label">They answer different questions and inform each other</p>
+    <div class="flow-row" style="justify-content:center;flex-direction:column;align-items:flex-start;gap:8px;">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <div class="flow-box" style="background:var(--color-background-info);border-color:#378ADD;min-width:180px;text-align:center;">Single policy profit test</div>
+        <div style="font-size:13px;color:var(--color-text-secondary);">→ What RDR margin makes <em>one</em> policy viable under stress?</div>
+      </div>
+      <div style="padding-left:20px;font-size:13px;color:var(--color-text-tertiary);">↓ feeds margin into pricing</div>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <div class="flow-box" style="background:#E1F5EE;border-color:#1D9E75;color:#085041;min-width:180px;text-align:center;">Model office</div>
+        <div style="font-size:13px;color:var(--color-text-secondary);">→ Does that margin protect the <em>whole company</em> under stress?</div>
+      </div>
+      <div style="padding-left:20px;font-size:13px;color:var(--color-text-tertiary);">↓ may suggest larger margins are needed</div>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <div class="flow-box" style="background:#FAEEDA;border-color:#BA7517;color:#633806;min-width:180px;text-align:center;">Final pricing basis</div>
+        <div style="font-size:13px;color:var(--color-text-secondary);">→ Margins that balance risk, competition &amp; return on capital</div>
+      </div>
+    </div>
+    <div class="highlight-box hl-amber" style="margin-top:14px;">
+      <strong style="font-size:12px;">Exam tip:</strong> The model office doesn't replace the single policy test — it adds a layer. The single policy test sets the per-policy margin. The model office validates (or challenges) that choice at the company level. Both are needed.
+    </div>
+  </div>
+
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-top:20px;padding-top:12px;border-top:0.5px solid var(--color-border-tertiary);">
+    <button class="nav-btn" id="prev-btn" onclick="navigate(-1)" disabled>← Back</button>
+    <div style="display:flex;gap:6px;" id="dots"></div>
+    <button class="nav-btn" id="next-btn" onclick="navigate(1)">Next →</button>
+  </div>
+</div>
+
+<script>
+const TOTAL = 7;
+let cur = 0;
+function renderDots() {
+  const d = document.getElementById('dots');
+  d.innerHTML = '';
+  for (let i=0;i<TOTAL;i++) {
+    const s = document.createElement('span');
+    s.className = 'step-dot' + (i===cur?' active':'');
+    s.style.cursor='pointer';
+    s.onclick = () => goTo(i);
+    d.appendChild(s);
+  }
+}
+function goTo(n) {
+  document.getElementById('step-'+cur).style.display='none';
+  cur=n;
+  document.getElementById('step-'+cur).style.display='';
+  document.getElementById('prev-btn').disabled = cur===0;
+  document.getElementById('next-btn').disabled = cur===TOTAL-1;
+  document.getElementById('next-btn').textContent = cur===TOTAL-1 ? 'Done' : 'Next →';
+  renderDots();
+}
+function navigate(dir) { if(cur+dir>=0 && cur+dir<TOTAL) goTo(cur+dir); }
+renderDots();
+</script>
